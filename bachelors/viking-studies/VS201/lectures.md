@@ -1,684 +1,218 @@
-# VS201: Old Norse Language II (Poetry & Sagas)
-## Bachelor of Science in Viking Studies — University of Yggdrasil, 2040
+# VS201: The Viking Age in European Context — Trade, Politics, and Cultural Exchange
+## Bachelor of Arts in Viking Studies — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Description:** | VS202
+**Description:** The Viking Age as a European phenomenon — trade networks, political interactions, and cultural exchange between Scandinavia and the wider world
 
 ---
 
-## Lectures
+## Lecture 1: The Viking Age as a European Phenomenon — Beyond the Raiding Narrative
 
-ᚠ **Lecture 1: Introduction to Old Norse Language II (Poetry & Sagas)**
+The popular image of Vikings as raiders who burst out of Scandinavia to terrorize innocent monasteries is only half the story. The Viking Age was fundamentally a period of **European integration** — the Scandinavian world became connected to the rest of Europe through trade, migration, political alliance, and cultural exchange.
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+The **Viking diaspora** created new political entities across Europe: the Danelaw in England, the Duchy of Normandy, the Kingdom of the Isles in Scotland, the Earldom of Orkney, the Kingdom of Dublin, the Kievan Rus, the Varangian Guard in Byzantium, and settlements in Iceland, Greenland, and Vinland. Each of these was a site of cultural hybridity — not pure Norse outposts but new societies created by the encounter between Scandinavians and local populations.
 
----
-
-### Overview
-
-This lecture explores foundations aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how foundations-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How foundations perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to introduction to old norse language ii (poetry & sagas)
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do foundations considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**The Trade Revolution:** Viking Age trade connected Scandinavia to every major economic zone in the northern hemisphere: the Islamic Caliphate (via the Volga route), Byzantium (via the Dnieper route), the Frankish Empire (via the Rhine and North Sea), the British Isles (via the Irish Sea and North Sea), and the Baltic (via the Amber routes). The flow of silver from the Islamic world into Scandinavia (over 80,000 dirhams in hoards) transformed the Scandinavian economy from prestige-goods exchange to monetized trade.
 
 ---
 
-ᚢ **Lecture 2: Core Concepts of Old Norse Language II (Poetry & Sagas)**
+## Lecture 2: Vikings and the Frankish Empire — From Raiding to Settlement
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**The Early Raids (c. 799-840s):** Norse raids on the Frankish coast began in the 790s (the first recorded raid on the Frankish coast was in 799, targeting the monastery of Noirmoutier). The raids intensified in the 830s-840s as internal Frankish divisions (the civil wars between Louis the Pious's sons) created opportunities.
 
----
+**The Seine and Loire Raids (c. 840-911):** Norse fleets sailed up the Seine (reaching Paris repeatedly in the 860s-880s) and the Loire, establishing permanent bases on river islands and coastal inlets. The most famous Seine raider was Ragnar (traditionally identified with the semi-legendary Ragnarr Loðbrók), whose fleet besieged Paris in 845.
 
-### Overview
+**The Treaty of Saint-Clair-sur-Epte (911):** The Frankish king Charles the Simple granted territory around the lower Seine to the Norse chieftain Rollo (Hrólfr) in exchange for baptism, an oath of loyalty, and a promise to defend the coast against other Vikings. The territory became the Duchy of Normandy — "land of the Northmen."
 
-This lecture explores concepts aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how concepts-level understanding shapes both theory and practice.
+**Norman Identity:** Within three generations, the Normans had adopted French language, French law, French customs, and Catholic Christianity. They became the most militarily effective state in Western Europe — conquering southern Italy and Sicily (1020s-1090s) and England (1066). The Norman conquest of England is, in a sense, the last Viking invasion.
 
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How concepts perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to core concepts of old norse language ii (poetry & sagas)
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do concepts considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Archaeological Evidence:** The Rouen region shows significant Scandinavian settlement in the 10th century (grave goods, place-names, and DNA evidence), but by the 11th century, the Scandinavian material signature has largely disappeared. The Normans assimilated faster than any other Viking diaspora community.
 
 ---
 
-ᚦ **Lecture 3: Historical Context and Evolution**
+## Lecture 3: Vikings and the Anglo-Saxon World — From Raiders to Kings
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**The First Raids (793-850s):** The sack of Lindisfarne (793) inaugurated the Viking Age in England. Early raids targeted isolated monasteries and coastal communities. The Anglo-Saxon Chronicle records increasing frequency and severity through the 830s-840s.
 
----
+**The Great Heathen Army (865-878):** Led by the sons of Ragnarr Loðbrók, the army conquered Northumbria (866-867), East Anglia (869-870), and much of Mercia (873-874). King Alfred of Wessex was forced into hiding in the Somerset marshes (878) before rallying to victory at the Battle of Edington.
 
-### Overview
+**The Danelaw (878-954):** The Treaty of Wedmore (878) established the boundary between English and Danish territory. The Danelaw was governed by Danish law (Dena lagu), had Danish place-names (>1,500 by/thorp/thwaite/ness names), and Danish personal names. The Coppergate excavation in York revealed a thriving Norse city with international trade, woodworking, metalworking, and silk.
 
-This lecture explores history aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how history-level understanding shapes both theory and practice.
+**The Second Viking Age (980-1066):** The 980s saw renewed Viking raids under the kings of Denmark. Æthelred the Unready's reign (978-1016) was marked by increasingly desperate attempts to buy off the Vikings with danegeld (tribute payments totaling over 250,000 pounds of silver). Æthelred's most infamous act was the St. Brice's Day Massacre (1002), the wholesale killing of Danes in England.
 
-### Key Topics
+**Cnut the Great (1016-1035):** King of Denmark, England, Norway, and parts of Sweden — the most powerful ruler in northern Europe. Cnut's empire was held together by his personal authority and disintegrated within a decade of his death.
 
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How history perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to historical context and evolution
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do history considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**The Norman Conquest (1066):** William of Normandy (a Viking descendant) defeated Harold Godwinson at Hastings. The last Viking invasion of England was also the most consequential — it transformed English language, law, architecture, and political culture permanently.
 
 ---
 
-ᚬ **Lecture 4: Theoretical Framework**
+## Lecture 4: Vikings in Ireland and Scotland — Towns, Trade, and the Kingdom of the Isles
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**Ireland (c. 795-1014):** The first Viking raid on Ireland was recorded in the Annals of Ulster for 795 CE. The initial phase (795-830s) was pure raiding, targeting monasteries and churches. From the 830s, Vikings began establishing **longphorts** (ship camps) — fortified bases on rivers and lakes — that evolved into permanent towns.
 
----
+**The Five Norse Towns:** Dublin, Waterford, Cork, Limerick, and Wexford were all founded as Viking trading towns. Dublin became the largest slave market in the Viking world. The Irish annals record the kings of Dublin alternatively allying with and fighting Irish kings.
 
-### Overview
+**The Battle of Clontarf (1014):** The Irish high king Brian Bóruma defeated the Dublin Vikings and their Leinster allies. Clontarf is traditionally seen as the end of Viking power in Ireland, but the Norse towns continued to thrive. The 2040 interpretation: Clontarf was primarily an Irish dynastic conflict in which the Dublin Vikings were involved as allies, not the decisive battle of Irish Viking history.
 
-This lecture explores theory aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how theory-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How theory perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to theoretical framework
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do theory considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Scotland and the Kingdom of the Isles:** The Hebrides, Orkney, Shetland, and the Isle of Man were all under Norse control from the 9th century. The Kingdom of the Isles (Suðreyjar) was a Norse-Gaelic polity ruled by the Crovan dynasty from c. 1079-1266. The Earldom of Orkney was one of the most powerful Norse political entities, controlling much of northern Scotland. Place-names in the Hebrides, Caithness, and Sutherland are predominantly Norse. The Norn language (a Norse dialect) was spoken in Shetland and Orkney until the 18th century.
 
 ---
 
-ᚱ **Lecture 5: Key Methods and Approaches**
+## Lecture 5: Vikings in the East — The Rus, Byzantium, and the Silk Road
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**The Rus and the Birth of Russia:** Norse traders/raiders (Varangians, from væringjar — "sworn companions") established trading emporia along the Russian river routes in the 8th-9th centuries. The Primary Chronicle records the "invitation to the Varangians" (862 CE): the Slavic and Finnic tribes asked the Varangian brothers Rurik, Sineus, and Truvor to rule over them.
 
----
+**The Two River Routes:**
+- Volga Route — Baltic → Novgorod (Hólmgarðr) → Volga → Caspian → Baghdad. Traded furs, slaves, honey, and amber for silver dirhams and luxury goods.
+- Dnieper Route — Baltic → Novgorod → Kyiv (Kænugarðr) → Dnieper → Black Sea → Constantinople (Miklagarðr). The route of the Varangian Guard.
 
-### Overview
+**The Varangian Guard (est. 988 CE):** The Byzantine emperor's elite bodyguard, primarily composed of Norsemen and later Anglo-Saxons. Most famous member: Haraldr Sigurðarson (Harald Hardrada), future king of Norway, who served c. 1034-1042.
 
-This lecture explores methods aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how methods-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How methods perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to key methods and approaches
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do methods considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Archaeological Evidence:** Birka (Sweden), Staraja Ladoga (Russia), and Kyiv (Ukraine) have all produced enormous quantities of Islamic dirhams, Byzantine silk, and Chinese luxury goods. The over 80,000 dirhams found in Scandinavian hoards attest to the extraordinary volume of east-west trade.
 
 ---
 
-ᚴ **Lecture 6: Practical Applications I**
+## Lecture 6: Vikings in the North Atlantic — Iceland, Greenland, and Vinland
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**Iceland (c. 870-930 CE):** Settled by Norse colonists (primarily from western Norway) and Celtic slaves/servants. The Alþingi (founded 930 CE) is one of the oldest parliamentary institutions. The Icelandic Free State had laws but no executive — enforcement was private, leading to cycles of feud documented in the sagas.
 
----
+**Greenland (c. 985-1450):** Founded by Eiríkr rauði (Erik the Red). The Eastern and Western Settlements peaked at 2,500-5,000 inhabitants with 16 churches and a bishopric. The colonies survived ~500 years before disappearing c. 1450. Modern explanations: climate change (Little Ice Age), trade disruption, Inuit conflict, cultural inflexibility.
 
-### Overview
-
-This lecture explores practice1 aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how practice1-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How practice1 perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications i
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice1 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Vinland (c. 1000 CE):** Leifr Eiríksson landed in North America c. 1000 CE. L'Anse aux Meadows (Newfoundland) is the only confirmed pre-Columbian Norse site — a base camp with Norse-style buildings, a forge, and butternuts (which don't grow north of New Brunswick, suggesting southern exploration). Þorfinnr Karlsefni's permanent settlement attempt (c. 1010 CE) was abandoned after conflicts with Indigenous peoples (Skrælingjar).
 
 ---
 
-ᚺ **Lecture 7: Practical Applications II**
+## Lecture 7: Viking Economy — Silver, Slaves, and Luxury Goods
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+The Viking economy was fundamentally a **silver economy**. Coins were weighed and cut (hack silver), not counted. The most significant source was Islamic dirhams (over 80,000 found in Scandinavian hoards). The flow peaks 950s-960s and declines with the Samanid dynasty's collapse.
 
----
+**Slave Trade:** Vikings were major slave traders. Dublin was the largest slave market. Slaves (þrælar) were captured in raids on the British Isles, the Baltic, and the Slavic lands. The word "slave" derives from "Slav." Slavery in Viking society was legal, widespread, and economically significant.
 
-### Overview
-
-This lecture explores practice2 aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how practice2-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How practice2 perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications ii
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice2 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Luxury Goods:** Silk (from Byzantium and China), glass beads (from the Islamic world), wine (from Frankia), woolen cloth (from England and Flanders), walrus ivory (from the Arctic), falcons (from Scandinavia to the Islamic world) — all moved through Viking trade networks.
 
 ---
 
-ᚾ **Lecture 8: Advanced Topics in Old Norse Language II (Poetry & Sagas)**
+## Lecture 8: Viking Law and Governance — The Thing System
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+The **thing** (þing) was a periodic assembly of free men performing legislative, judicial, and executive functions. Key assemblies: Alþingi (Iceland, 930 CE), Gulaþing (W. Norway), Frostuþing (N. Norway).
 
----
+Thing functions: passing laws, settling disputes, trying criminal cases, Electing kings and bishops, arranging marriages and property transfers. Within the community of free men, the thing was egalitarian — poorest farmer = richest chieftain. Excluded: women, slaves, foreigners.
 
-### Overview
-
-This lecture explores advanced aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how advanced-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How advanced perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to advanced topics in old norse language ii (poetry & sagas)
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do advanced considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Law Codes:** The Gulaþing Law (c. 900s, written c. 1100s) is the oldest surviving Norse law code. It covers property, inheritance, marriage, manslaughter, theft, and religious practice. The Grágás (Icelandic, c. 1117-1260s) is the most detailed.
 
 ---
 
-ᛁ **Lecture 9: Interdisciplinary Connections**
+## Lecture 9: Christianity and the Viking World — Conversion as Political Strategy
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**Denmark (Harald Bluetooth, c. 965 CE):** Pragmatic conversion — Christianity offered literate clergy, continental alliances, and centralized religious authority.
 
----
+**Norway (Olav Tryggvason 995-1000, St. Olav 1015-1030):** Violent forced conversion, church-building.
 
-### Overview
+**Iceland (Alþingi, 999/1000 CE):** Democratic decision. Pagan lawspeaker chose Christianity with three concessions.
 
-This lecture explores connections aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how connections-level understanding shapes both theory and practice.
+**Sweden (c. 1000-1100 CE):** Slowest. Temple at Uppsala active in 1070s.
 
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How connections perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to interdisciplinary connections
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do connections considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Impact of Conversion:** Writing (Latin alphabet), church organization, political centralization, cultural transformation (church art, monastic schools), social change (monogamy, slavery restrictions, infanticide prohibition), end of the Viking Age (Christian kings couldn't raid Christian monasteries with religious justification).
 
 ---
 
-ᛃ **Lecture 10: Ethical Considerations and Societal Impact**
+## Lecture 10: Vikings and the Islamic World — Trade, Diplomacy, and Cultural Exchange
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**The Dirham Economy:** Over 80,000 Islamic silver dirhams found in Scandinavian hoards. Mints: Baghdad, Samarkand, Damascus, Cairo. The dirham flow (9th-10th centuries) is the largest single source of evidence for Viking-Islamic trade.
 
----
+**Ibn Fadlan's Account (922 CE):** The most detailed eyewitness description of a Viking ship funeral (Rus, on the Volga). Describes: the preparation of the dead chieftain, the slave girl who volunteers to die with him, the ritual funeral, and the burning of the ship. Also describes Norse hygiene (or lack thereof), trade practices, and social customs.
 
-### Overview
+**Arabic Sources on the Rus:** Ibn Fadlan, al-Mas'udi, al-Istakhri, Ibn Hawqal — all describe the Rus as traders who brought furs, slaves, honey, and amber south and returned with silver, silk, and luxury goods.
 
-This lecture explores ethics aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how ethics-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How ethics perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to ethical considerations and societal impact
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do ethics considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Cultural Artifacts:** Islamic coins in Viking hoards, Kufic inscriptions on Viking jewelry, silk from Byzantium and China in Norse graves, Islamic glass beads in Viking trading towns. The ring found at Birka with a Kufic inscription reading "Allah" is testament to direct cultural contact.
 
 ---
 
-ᛇ **Lecture 11: Current Research and Future Directions**
+## Lecture 11: The End of the Viking Age — Decline, Transformation, or Evolution?
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**Why Did the Viking Age End?**
 
----
+Multiple factors, none sufficient alone:
+1. **Christianization** — Converted kings couldn't raid Christians with religious justification
+2. **Political centralization** — Stronger kingdoms in England, Frankia, and Scandinavia made raiding more difficult
+3. **Economic transformation** — Trade replaced raiding as the primary source of wealth
+4. **Climate change** — The Medieval Warm Period made agriculture more productive in Scandinavia
+5. **Cultural assimilation** — Viking diaspora communities assimilated into local cultures
 
-### Overview
-
-This lecture explores research aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how research-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How research perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to current research and future directions
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do research considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**The 2040 Position:** The Viking Age didn't "end" — it evolved. The same Norse communities that raided in the 9th century traded in the 10th and governed in the 11th. The skills that made the Vikings effective raiders (shipbuilding, navigation, military organization) were redirected into trade, governance, and colonization.
 
 ---
 
-ᛈ **Lecture 12: Synthesis and Comprehensive Review**
+## Lecture 12: Vikings in the Modern World — Heritage, Identity, and the Politics of the Past
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Degree:** Bachelor of Science in Viking Studies, 2040
+**The Viking Revival (19th century):** Romantic nationalism, Wagner's operas, Viking museums, and the construction of a "pure" Scandinavian heritage. Used by Danish, Swedish, and Norwegian nationalists to construct national identity.
 
----
+**Nazi Appropriation:** The SS used runic symbols, the concept of "Aryan" heritage drew on 19th-century Norse romanticism, and Viking imagery was weaponized for racist ideology.
 
-### Overview
+**Contemporary White Supremacist Use:** Viking symbols (Þórr's hammer, runes, the Irminsul) are used by white supremacist groups. The 2040 academic position: Vikings were not white supremacists. Norse mythology is world cultural heritage.
 
-This lecture explores synthesis aspects of old norse language ii (poetry & sagas), building on foundational knowledge from previous sessions. By 2040, | vs202, and this session examines how synthesis-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to old norse language ii (poetry & sagas)
-- **Topic 2:** How synthesis perspectives reshape our understanding of | vs202
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Viking Studies program
-
-### Lecture Notes
-
-The field of old norse language ii (poetry & sagas) has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | vs202 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern old norse language ii (poetry & sagas)
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to synthesis and comprehensive review
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of old norse language ii (poetry & sagas) evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do synthesis considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**The 2040 Challenge:** How do we study the Viking past responsibly in an era of political appropriation? What obligations do scholars have to counter racist narratives? How do we make Viking Studies inclusive and rigorous?
 
 ---
 
 ## Assignments
 
+### Assignment 1: Comparative Analysis — Viking Encounters with Three Civilizations
 
-### Assignment 1: Foundational Exercise
+**Objective:** Compare Viking interactions with three different civilizations.
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Type:** Foundational Exercise  
-**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of old norse language ii (poetry & sagas).
+Compare and contrast Viking interactions with: (A) the Frankish Empire, (B) the Anglo-Saxon kingdoms, and (C) the Islamic Caliphate. For each: describe the nature of contact (raiding, trading, settlement), the cultural exchange that occurred, the long-term impact, and the primary sources. Then analyze: what factors explain the differences in Viking behavior toward each civilization?
 
-**Task:** Complete a set of exercises that demonstrate mastery of core concepts in old norse language ii (poetry & sagas). Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
+**Deliverables:** 3000-3500 word comparative essay, comparison table, annotated bibliography (minimum 12 sources).
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 3 (see course schedule for exact date)
+**Grading Rubric:** Comparison quality (30%), evidence engagement (25%), analysis depth (25%), writing quality (20%).
 
 ---
 
+### Assignment 2: Mapping Viking Trade Networks — GIS and Network Analysis
 
-### Assignment 2: Applied Analysis
+**Objective:** Use digital mapping and network analysis to visualize Viking trade routes.
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Type:** Applied Analysis  
-**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of old norse language ii (poetry & sagas).
+Create a digital map showing: Islamic dirham hoards (use the UoY Digital Numismatics Lab database), major trading towns (Hedeby, Birka, Kaupang, Ribe, York, Dublin, Staraja Ladoga, Kyiv), river routes (Volga, Dnieper, Seine, Loire, Thames), and sea routes. Then analyze: which trade routes carried the most silver? Which towns were most central? How did the network change over time?
 
-**Task:** Analyze a real-world scenario related to | vs202. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
+**Deliverables:** Annotated digital map, 2000-2500 word network analysis, route chronology table, annotated bibliography (minimum 8 sources).
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 6 (see course schedule for exact date)
+**Grading Rubric:** Map accuracy (25%), network analysis (30%), chronological analysis (25%), writing quality (20%).
 
 ---
 
+### Assignment 3: The Danelaw — Cultural Hybridity in Viking Age England
 
-### Assignment 3: Research & Synthesis
+**Objective:** Analyze the cultural hybridity of the Danelaw through archaeological and textual evidence.
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Type:** Research & Synthesis  
-**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of old norse language ii (poetry & sagas).
+Examine: place-name evidence (>1,500 Norse place-names), the Coppergate excavation (York), legal evidence (Dena lagu vs. English law), linguistic evidence (Norse loanwords in English), and artistic evidence (Anglo-Scandinavian sculpture). Argue: was the Danelaw a Scandinavian colony, a cultural hybrid, or something else entirely?
 
-**Task:** Conduct research on a contemporary issue in old norse language ii (poetry & sagas). Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
+**Deliverables:** 3500-4000 word analytical essay, place-name analysis table (minimum 30 Norse place-names with etymologies), annotated bibliography (minimum 15 sources).
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 9 (see course schedule for exact date)
+**Grading Rubric:** Evidence engagement (30%), argument quality (30%), cultural hybridity analysis (25%), writing quality (15%).
 
 ---
 
+### Assignment 4: Primary Source Portfolio — Vikings in the Islamic World
 
-### Assignment 4: Design & Implementation
+**Objective:** Develop primary source analysis skills using Arabic and Persian sources on the Rus.
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Type:** Design & Implementation  
-**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of old norse language ii (poetry & sagas).
+Choose THREE of the following Arabic texts: (A) Ibn Fadlan's account of the Rus funeral (922 CE), (B) al-Mas'udi's description of the Rus (943 CE), (C) Ibn Hawqal's account of Rus trade (977 CE), (D) al-Istakhri's description of the Khazars and Rus (c. 950 CE). For each: identify the author, date, purpose, and biases; analyze what the source tells us about Rus-Islamic relations; compare with archaeological and Norse textual evidence; assess reliability.
 
-**Task:** Design and prototype a solution to a problem in old norse language ii (poetry & sagas). Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
+**Deliverables:** 3000-3500 word source portfolio, source reliability table, cross-reference table, annotated bibliography (minimum 10 sources).
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 12 (see course schedule for exact date)
+**Grading Rubric:** Source analysis quality (30%), cross-referencing (25%), bias detection (25%), writing quality (20%).
 
 ---
 
+### Assignment 5: The End of the Viking Age — A 2040 Debate
 
-### Assignment 5: Comprehensive Project
+**Objective:** Engage with a major historiographical debate — what ended the Viking Age?
 
-**Course:** VS201 — Old Norse Language II (Poetry & Sagas)  
-**Type:** Comprehensive Project  
-**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of old norse language ii (poetry & sagas).
+Write a position paper arguing for ONE of the following explanations and against the others: (A) Christianization, (B) political centralization, (C) economic transformation, (D) environmental change, (E) cultural assimilation, (F) the Viking Age didn't end — it evolved.
 
-**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in old norse language ii (poetry & sagas). Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
+Your paper must: summarize each explanation with supporting evidence, present your chosen explanation with detailed evidence, explain why alternative explanations are insufficient, acknowledge the limitations of your position, and propose a synthesis or refinement.
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
+**Deliverables:** 4000-5000 word position paper, evidence table (minimum 20 items), annotated bibliography (minimum 15 sources).
 
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 15 (see course schedule for exact date)
-
----
-
+**Grading Rubric:** Thesis and argument (25%), evidence quality (25%), counter-argument engagement (25%), synthesis (15%), writing quality (10%).
