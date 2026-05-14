@@ -30,6 +30,25 @@
 | nyflotli-daemon | project | Root enforcement daemon with 6-phase boot + 5 functional modules |
 | runascript-schema | project | Declarative schema language for MemCube type/attribute/constraint definitions |
 | memory-retrieval | project | 5-index strategy + ranked fusion + progressive summarization + salience pruning |
+| gatt-verification-kernel | project | Gátt of Proof: 4-layer Wyrd verification (Urðr/Verðandi/Skuld/Norn), root lock, proof-carrying injections, Heimdall monitor+protocol |
+| narrative-engine | project | Skald's Loom: Nine-World registers, 5 thematic vectors, TensionManager, NarrativePerceiver, 70/30 NPC guidance |
+| bifrost-distributed-os | project | Bifröst Protocol: Cognitive CAP, vector clocks, entity resolution, distributed MuninnGate 3-level policies, Þing consensus |
+| bifrost-reality-virtual-bridge | project | Reality-Virtual bridging: 5 grounding types, ontological reconciliation, drift detection/correction, sensor fusion, predictive bridging, bidirectional bridge |
+| compositional-verification | project | Verify components independently with pre/post/invariant specs, compose verified results, minimal TCB |
+| dramatic-register-system | project | Nine-World register transitions driven by tension/theme scores, smooth/sharp/forbidden transitions |
+| heimdall-intrusion-detection | project | Heimdall Monitor (policy per-op) + Protocol (pattern/anomaly/profiling), 4 attack patterns including gradual drift |
+| edge-cloud-cognition | project | Edge-Cloud split: lightweight edge for fast decisions, heavyweight cloud for deep reasoning, confidence-threshold escalation |
+
+---
+
+## Batch 4: OS301, WM301, OS307, WM305
+
+| File | Course | Key Concepts Absorbed |
+|------|--------|----------------------|
+| `OS301_ingestion.md` | Verification Kernels (The Gátt of Proof) | Wyrd 4-layer verification, WSL specification language, root lock invariant, proof-carrying injections, Heimdall monitor+protocol, compositional verification, complete verification kernel TCB |
+| `WM301_ingestion.md` | Narrative Engines (The Skald's Loom) | Nine-World narrative framework, dramatic register transitions, character arcs (positive/negative/flat), thematic development vectors, TensionManager blending, Skald's Loom architecture, NPC guidance, narrative quality metrics |
+| `OS307_ingestion.md` | Distributed AI OS (Bifröst: Bridge Between Worlds) | Cognitive CAP theorem, vector clocks + conflict resolution, Bifröst Protocol messaging, entity resolution, distributed MuninnGate 3-level policies, edge-cloud architecture, fault tolerance, federated privacy (differential), Þing consensus, memory replication levels |
+| `WM305_ingestion.md` | Reality-Virtual Bridging (Bifröst: Between Realms) | Grounding (5 types), ontological reconciliation (3 strategies), drift detection/correction, sensor fusion, predictive bridging, bidirectional bridge (perception+action), human-in-the-loop Midgard Bridge, failure modes, scalability |
 
 ---
 
@@ -51,3 +70,12 @@
 | Huginn (Thought) | Retrieval system |
 | Wyrd (Fate) | Commitment web protocol |
 | Rúnascript | Declarative schema language for MemCubes |
+| Gátt (Gate) | Verification kernel — the gate through which all behavior must pass |
+| Wyrd (Fate) | 4-layer temporal verification framework (Urðr/Verðandi/Skuld/Norn) |
+| Root Lock | Canonical identity immutability invariant — identity hash checked on every transition |
+| Heimdall | Runtime verification monitor + intrusion detection protocol |
+| Skald's Loom | Narrative engine weaving plot/character/theme/tension/register threads |
+| Nine Worlds (Ásgarðr through Hel) | Dramatic register system mapped to emotional tones |
+| Bifröst (Rainbow Bridge) | Distributed AI OS communication protocol + reality-virtual bridge |
+| Þing (Assembly) | Distributed consensus protocol for agent state changes |
+| Cognitive CAP | CAP theorem adapted for cognitive systems (choose availability over consistency) |
