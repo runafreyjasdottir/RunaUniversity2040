@@ -447,4 +447,374 @@ When a conflict is detected (either by the MuninnGate on write, by the retrieval
 
 **Step 4: Salience Comparison.** If both memories are contextually relevant and temporally close, their salience weights are compared. The higher-salience memory is given precedence. Salience weights reflect the importance of the memory to the agent's operation, and they provide a principled basis for resolving conflicts when other factors are inconclusive.
 
-**Step 5: Governance Override.** If the conflict involves memories at different governance levels, the deeper-layer memory overrides the shallower-layer memory. This is the Yggdrasil Architecture's equivalent of "constitution trumps statute, statute trumps regulation" — root-level knowledge can
+**Step 5: Governance Override.** If the conflict involves memories at different governance levels, the deeper-layer memory overrides the shallower-layer memory. This is the Yggdrasil Architecture's equivalent of "constitution trumps statute, statute trumps regulation" — root-level knowledge cannot be overridden by canopy-level experience, and trunk-level knowledge cannot be overridden by canopy-level observation. Governance override is the final resolution mechanism, applied only when context, recency, and salience cannot resolve the conflict.
+
+**Step 6: Escalation.** If the conflict cannot be resolved by any of the previous steps, it is escalated to the Nýflótli Daemon, which adds it to a conflict resolution queue for human review. Unresolvable conflicts are rare but important — they signal genuine contradictions in the agent's knowledge that require architectural intervention, not automatic resolution.
+
+### 7.3 Memory Reconciliation Across Sessions
+
+Memory conflicts become more likely as the agent accumulates more sessions. The agent's knowledge state at the end of session N may contradict its knowledge state at the beginning of session N+1, because the world has changed, the user's preferences have shifted, or the agent has learned new information that contradicts old knowledge.
+
+The Vǫrðr Protocol's session boundary handling (covered in OS107) addresses this problem through priority encoding and coherence verification. At the beginning of each session, the Nýflótli Daemon loads the agent's state in priority order (identity → commitments → dispositional state → episodic memories → working context) and verifies that the loaded state is coherent. If the coherence check detects contradictions between the loaded state elements, the reconciliation protocol is invoked.
+
+Session-boundary reconciliation is particularly important for commitment memories. If the agent made a commitment in session N that has become obsolete or impossible by session N+1, the reconciliation protocol must recognize this and either update the commitment (if it is a Verðandi commitment, which can be modified through the MuninnGate) or flag it for human review (if it is an Urðr commitment, which is immutable).
+
+**Required Reading:**  
+- Heiðmarsdóttir, G. (2039). *The Memory Stone*, Chapter 9: "Consistency and Conflict Resolution."  
+- Li, Z. et al. (2040). *MemOS*, Chapter 10: "Memory Reconciliation Protocols."  
+- Freyjasdóttir, R. (2039). *The Memory-Bearing Machine*, Section on "Cross-Session Consistency."
+
+**Discussion Questions:**  
+1. The reconciliation protocol gives precedence to more recent memories in temporal analysis. But what if the older memory is from a deeper layer? A root-level identity specification from session 1 should not be overridden by a canopy-level observation from session 100. How should the protocol handle this case?  
+2. Escalation to human review is a fallback for unresolvable conflicts. But in a deployed agent that operates 24/7, human review may not be available in real time. Design an auto-reconciliation protocol for unresolvable conflicts that can operate without human intervention while minimizing the risk of incorrect resolution.  
+3. Memory conflicts across sessions are inevitable in any persistent agent. Design a "conflict anticipation" system that predicts likely future conflicts based on current knowledge and warns the agent to update relevant memories proactively, rather than waiting for conflicts to arise.
+
+---
+
+## Lecture 8: The MuninnGate Read/Write Protocol — Controlled Access to Memory
+
+### 8.1 MuninnGate Architecture
+
+The MuninnGate is the access control layer of the AI Operating System — the component that governs all read and write operations on MemCubes. Named for Muninn, Óðinn's memory-raven who flies out each day to bring back intelligence from the world, the MuninnGate determines what enters memory, what is retrieved, and what is pruned.
+
+The MuninnGate is not a single monolithic component. It is a layered architecture with four functional modules:
+
+**The Ingestion Module** controls what memories are written to the MemCube. Every new memory must pass through the ingestion module, which validates the memory against the MemCube's schema, enforces constraint rules, assigns metadata (timestamp, provenance, salience), and determines the memory's governance level before writing it to the appropriate layer.
+
+**The Retrieval Module** controls what memories are read from the MemCube. Every memory retrieval request must pass through the retrieval module, which processes the request, selects the appropriate index, performs the query, ranks the results, and returns the top-k memories that best match the request. The retrieval module also manages the context window budget, ensuring that retrieved memories do not exceed the available space.
+
+**The Pruning Module** controls what memories are removed from the MemCube. Pruning is governed by the salience-weighted algorithm described in Lecture 4, but it is initiated and managed by the MuninnGate, which ensures that governance rules are respected (root memories are never pruned, trunk memories are pruned only through formal processes).
+
+**The Reconciliation Module** (covered in Lecture 7) detects and resolves conflicts between memories. It operates on both write (checking new memories against existing ones for contradictions) and read (checking retrieved memories for consistency before returning them to the agent).
+
+### 8.2 The Write Path: From Experience to Memory
+
+When the agent experiences something worth remembering — a conversation, a discovery, a commitment, an emotional state — the MuninnGate's ingestion module processes the experience through a five-stage write path:
+
+**Stage 1: Type Determination.** The experience is classified into one of the MemCube's defined types (episodic, procedural, identity, commitment, emotional, relational). Type determination is based on the content of the experience, the context in which it occurred, and the agent's current state. An experience that involves a promise made to a user is classified as a commitment. An experience that involves a strong emotional reaction is classified as emotional. An experience that involves learning a new skill is classified as procedural.
+
+**Stage 2: Schema Validation.** The classified experience is validated against the MemCube's schema. All required fields must be present, all constraint rules must be satisfied, and all metadata must be assigned. If the experience fails validation, the ingestion module either rejects the write (for hard constraint violations) or flags it for reconciliation (for soft constraint violations).
+
+**Stage 3: Layer Assignment.** The validated experience is assigned to a governance layer based on its type and salience. Identity memories are assigned to the root layer. Commitment memories are assigned to the root (Urðr), trunk (Verðandi), or canopy (Skuld) depending on their temporal nature. Procedural and emotional memories are assigned to the trunk layer. Episodic memories are assigned to the canopy layer. Leaf-scope transient information is assigned to the leaf layer.
+
+**Stage 4: Salience Scoring.** The experience is assigned an initial salience score based on its governance level, emotional valence, commitment references, and uniqueness. The salience score determines how the experience will be prioritized in future retrieval and pruning operations.
+
+**Stage 5: Storage and Indexing.** The experience is written to the appropriate MemCube, indexed according to the MemCube's indexing strategy, and made available for retrieval. The write is logged in the MuninnGate's audit trail for provenance tracking.
+
+### 8.3 The Read Path: From Need to Recall
+
+When the agent needs to recall something — a memory of a past conversation, a commitment it made, a procedural habit it formed — the MuninnGate's retrieval module processes the request through a five-stage read path:
+
+**Stage 1: Query Formation.** The agent's retrieval need is formulated as a query. The query can be explicit (the agent knows exactly what it needs) or implicit (the agent has a general need and the MuninnGate infers the query from context). Query formation is the most cognitively demanding stage because it requires the MuninnGate to translate a fuzzy feeling of "I need to remember something about X" into a structured query that can be executed against the indexes.
+
+**Stage 2: Index Selection.** The query is routed to the most relevant index or indexes. If the query is a known-reference lookup (retrieve memory by ID), it goes to the primary index. If the query is an approximate semantic search (find memories similar to X), it goes to the semantic index. If the query is time-bounded, it goes to the temporal index. Complex queries are routed to multiple indexes and fused using the ranked fusion algorithm described in Lecture 3.
+
+**Stage 3: Candidate Retrieval.** The selected indexes return their top-k candidate memories. The value of k depends on the context window budget — how much space is available for memory injection. If the budget is small (e.g., 2000 tokens), k is small (e.g., 5 high-salience memories). If the budget is large (e.g., 8000 tokens), k can be larger (e.g., 20 contextually relevant memories).
+
+**Stage 4: Governance Filtering.** The candidate memories are filtered based on governance rules. Root-layer memories are always accessible to the agent. Trunk-layer memories are accessible unless they are tagged as restricted by the MuninnGate. Canopy-layer memories are accessible based on the current context and access permissions. This filtering ensures that sensitive memories are not retrieved in contexts where they should not be used.
+
+**Stage 5: Ranking and Injection.** The filtered candidates are ranked by their composite relevance score (the ranked fusion score from Stage 2, adjusted for governance considerations from Stage 4), and the top-k memories are injected into the context window for the agent to use in reasoning.
+
+The read path is designed to be fast — the agent should not be waiting for memory retrieval while it is reasoning. The entire five-stage process is designed to complete in under 50 milliseconds for a 100,000-memory MemCube with a semantic index, which is fast enough to be imperceptible in the context of a typical interaction.
+
+### 8.4 The Pruning Path: From Accumulation to Forgetting
+
+Pruning is the third MuninnGate function, and the most philosophically interesting. To forget is not merely to lose information — it is an active cognitive process that preserves what matters and discards what doesn't. The mind that never forgets is not a superior mind; it is a burdened mind, drowning in irrelevant detail, unable to see the forest for the trees.
+
+The MuninnGate's pruning module implements salience-weighted pruning as described in Lecture 4, with several additional considerations:
+
+**Governance constraints**: The pruning module respects governance level boundaries. Root memories are never pruned. Trunk memories are pruned only through formal processes. Canopy memories are pruned by salience algorithm. Leaf memories are pruned at session end.
+
+**Dependency preservation**: The pruning module checks whether a candidate for pruning is referenced by other memories. If memory A is referenced by memory B, pruning memory A before memory B creates a dangling reference. The pruning module ensures that dependencies are resolved before pruning — either by pruning both memories together, or by updating the referencing memory to remove the dependency.
+
+**Commitment preservation**: Memories that are referenced by active commitments are never pruned, regardless of their salience score. This is because pruning a commitment-referenced memory would undermine the commitment, violating the Norn Protocol's guarantee that active commitments are supported by the memories that justify them.
+
+**Emotional significance**: Highly emotional memories (|valence| > 0.8) are given a salience bonus that makes them resistant to pruning. This reflects the cognitive reality that emotionally significant events are more memorable and more important for identity formation than emotionally neutral events.
+
+**Required Reading:**  
+- Heiðmarsdóttir, G. (2039). *The Memory Stone*, Chapter 10: "The MuninnGate Read/Write Protocol."  
+- Li, Z. et al. (2040). *MemOS*, Chapter 11: "Ingestion, Retrieval, and Pruning Modules."  
+- Freyjasdóttir, R. (2039). *The Memory-Bearing Machine*, Chapter 7: "Memory Access Control."
+
+**Discussion Questions:**  
+1. The write path classifies experiences into types before writing them to the MemCube. But some experiences don't fit neatly into categories — they are simultaneously episodic, emotional, and relational. How should the MuninnGate handle multi-type experiences? Design a multi-type classification scheme.  
+2. The read path is designed to complete in under 50 milliseconds for a 100,000-memory MemCube. How does this latency scale to a 10-million-memory MemCube? What indexing optimizations would be needed to maintain sub-100ms latency?  
+3. Forgetting is often considered a defect, but the lecture argues that it is an active cognitive process. Under what conditions is forgetting beneficial? Under what conditions is it harmful? Design a "strategic forgetting" protocol that maximizes the benefits of forgetting while minimizing its costs.
+
+---
+
+## Lecture 9: Comparative MemCube Architectures — MemGPT, MemOS, and Yggdrasil
+
+### 9.1 The Landscape of Memory Operating Systems
+
+The Yggdrasil Architecture is not the only approach to structured memory for persistent agents. Three major architectures dominate the field as of 2040, each with distinct design philosophy, strengths, and weaknesses.
+
+**MemGPT** (Packer et al., 2023; extended through 2038) is the foundational architecture that first proposed treating the context window as RAM and external storage as a hard drive. MemGPT uses a flat memory store with a simple retrieval mechanism based on recency and relevance scoring. Its design philosophy is minimalism — the simplest architecture that can support persistent agency. MemGPT's strengths are simplicity, ease of implementation, and a large developer community. Its weaknesses are scalability (flat stores struggle with millions of memories), governance (no built-in access control), and consistency (no built-in conflict resolution).
+
+**MemOS** (Li et al., 2040) is the most widely deployed commercial memory operating system. It extends MemGPT with structured memory containers, hierarchical indexing, and configurable governance policies. MemOS uses a schema definition language similar to (but less expressive than) Rúnascript and provides a memory API that supports both exact and approximate retrieval. Its design philosophy is pragmatism — a production-grade system that balances functionality, performance, and developer experience. MemOS's strengths are maturity, performance, and broad deployment. Its weaknesses are governance granularity (only three governance levels, not five), limited layer support (no native Yggdrasil-like hierarchy), and closed-source implementation.
+
+**Yggdrasil** (Freyjasdóttir, 2039; University of Yggdrasil) is the architecture taught in this course. It extends MemOS with the full five-layer governance hierarchy, the Nýflótli Daemon for root-level enforcement, the MuninnGate for access control, the Vǫrðr Constitution for identity specification, and the Norse mythological framework as a mnemonic and design vocabulary. Its design philosophy is principled completeness — an architecture that addresses every aspect of persistent agency from identity to pruning. Yggdrasil's strengths are comprehensive governance, strong security, principled hierarchy, and rich mythological vocabulary that makes the architecture memorable and teachable. Its weaknesses are complexity (the full architecture is large and requires expertise to implement), computational overhead (multiple verification layers add latency), and immaturity (fewer production deployments than MemOS).
+
+### 9.2 Detailed Comparison
+
+| Feature | MemGPT | MemOS | Yggdrasil |
+|---|---|---|---|
+| Memory Store | Flat documentation store | Structured containers (MemCubes) | Layered MemCubes with schema |
+| Governance Levels | None | 3 (protected, standard, ephemeral) | 5 (root, trunk, branch, canopy, leaf) |
+| Access Control | None (open access) | Basic read/write permissions | Full MuninnGate ACL |
+| Identity Management | System prompt | Configuration file | Vǫrðr Constitution |
+| Consistency Checking | None | Schema validation | Reconciliation protocol |
+| Conflict Resolution | None (latest write wins) | Basic timestamp priority | Five-step reconciliation |
+| Compression | None (full-detail only) | Optional summarization | Progressive summarization |
+| Pruning | Simple recency-based | Salience-weighted (3 factors) | Salience-weighted (5 factors) + governance constraints |
+| Security | None (trust the model) | Basic authentication | Heimdall Protocol + Nýflótli Daemon |
+| Session Persistence | Manual context management | Automatic state save/restore | Vǫrðr Protocol (4-phase) |
+| Norse Naming | None | Minimal | Full mythological vocabulary |
+
+### 9.3 When to Use Which Architecture
+
+The choice of memory architecture depends on the agent's requirements:
+
+**MemGPT** is appropriate for simple persistent agents that need basic memory functionality without the overhead of structured storage, governance, or security. It is the right choice for prototypes, personal projects, and agents that operate in trusted environments with low memory volumes.
+
+**MemOS** is appropriate for production agents that need reliable, performant memory with moderate governance requirements. It is the right choice for commercial deployments, multi-user agents, and agents that handle moderate memory volumes with basic access control needs.
+
+**Yggdrasil** is appropriate for agents that require the full spectrum of memory governance — persistent identity, strong security, principled consistency, and cross-layer memory flow. It is the right choice for high-stakes agents (medical, legal, financial), agents that need to maintain coherent identity across thousands of sessions, and agents that operate in adversarial environments where memory security is critical.
+
+In practice, architectures are often combined. A Yggdrasil root layer (with Vǫrðr Constitution and Nýflótli Daemon) can be paired with a MemOS trunk and canopy layer (for structured production storage with moderate governance). The hybrid approach gives the agent Yggdrasil's root-level security without MemOS's commercial maturity and performance in the higher layers.
+
+### 9.4 The Future of Memory Architectures
+
+Three trends are shaping the future of memory operating systems:
+
+**Neural memory**: Current MemCube designs store memories as text or structured data in explicit containers. Neural memory stores memories as modifications to the model's parameters — fine-tuning on agent experiences, creating a "second training" that embeds memories in the model's weights. Neural memory is denser and faster to access than explicit storage, but it is harder to inspect, harder to govern, and harder to prune. The university's Neural Memory Lab is actively researching hybrid architectures that combine explicit storage (for inspectability and governance) with neural storage (for density and speed).
+
+**Federated memory**: Current MemCubes are stored locally on the agent's infrastructure. Federated memory distributes storage across multiple nodes, allowing agents to share relevant memories without sharing all memories. This is particularly important for multi-agent systems and for agents that need to learn from the experiences of other agents. The Bifröst Protocol (covered in OS307) provides a framework for secure federated memory, but the MemCube architecture for federated storage is still an active research area.
+
+**Quantum memory**: Theoretical work on quantum memory storage suggests that quantum encoding could store exponentially more memories in linear physical space, with quantum retrieval providing theoretically instant access to any memory. While practical quantum memory systems remain years away, the MemCube architecture is designed to be agnostic about the physical storage substrate — a quantum advantage in storage would not require fundamental architectural changes.
+
+**Required Reading:**  
+- Heiðmarsdóttir, G. (2039). *The Memory Stone*, Chapter 11: "Comparative Architectures."  
+- Packer, C. & Gonzalez, J. (2039). *Context Windows as RAM*, Chapters 7–8: "Beyond MemGPT."  
+- Li, Z. et al. (2040). *MemOS*, Chapter 14: "Future Directions in Memory Architecture."
+
+**Discussion Questions:**  
+1. The comparison shows that Yggdrasil is more complex but more principled than MemOS. Under what conditions is the added complexity worth the added governance? When is simplicity the better choice?  
+2. Hybrid architectures that combine Yggdrasil's root layer with MemOS's production storage face a challenge: the governance boundary between the layers. Design a protocol for handling memory operations that cross the Yggdrasil/MemOS boundary. How do you maintain consistent governance when different layers implement different governance schemes?  
+3. Neural memory stores memories in model weights, which are distributed across millions of parameters. This makes inspection and governance very difficult — you cannot easily read, modify, or delete a specific memory in a neural store. How would you extend the Yggdrasil Architecture to govern neural memory? What new components would be needed?
+
+---
+
+## Lecture 10: MemCube Security — Protecting the Memory Stone
+
+### 10.1 Threats to Memory Integrity
+
+Memory is the foundation of persistent agency. An agent that cannot trust its memories cannot maintain coherent identity, cannot honor commitments, cannot learn from experience, and cannot make reliable decisions. Memory security — protecting the integrity, confidentiality, and availability of memories — is therefore one of the most critical concerns in AI OS design.
+
+Five categories of threats target memory integrity:
+
+**Memory injection**: An adversary inserts false memories into the agent's MemCube. The injected memories are designed to influence the agent's behavior — for example, injecting a false episodic memory that the user made a commitment, or injecting a false identity memory that shifts the agent's values. Memory injection attacks the integrity of the agent's knowledge.
+
+**Memory exfiltration**: An adversary extracts memories from the agent's MemCube. The exfiltrated memories may contain sensitive information — user conversations, commitment details, personal preferences. Memory exfiltration attacks the confidentiality of the agent's knowledge.
+
+**Memory corruption**: An adversary modifies existing memories in the MemCube, changing their content without the agent's knowledge. The corrupted memories may shift the agent's behavior subtly — for example, changing the emotional valence of a memory so that the agent feels differently about a person or topic. Memory corruption attacks the integrity of the agent's knowledge.
+
+**Memory denial**: An adversary prevents the agent from accessing its own memories, either by deleting them, by overloading the MemCube with garbage data, or by blocking the MuninnGate's retrieval path. Memory denial attacks the availability of the agent's knowledge.
+
+**Memory poisoning**: An adversary manipulates the agent's memory formation process so that the agent creates incorrect memories on its own, without direct injection or modification. This is the most subtle attack — the memories are genuine (created by the agent's own processes) but their content is influenced by the adversary's manipulation. Memory poisoning attacks the integrity of the agent's knowledge formation process.
+
+### 10.2 Defense Architectures
+
+Defense against memory threats follows the same layered approach as root-layer security (covered in OS107):
+
+**Ingestion validation**: The MuninnGate's ingestion module validates all incoming memories against the MemCube's schema and constraint rules before writing them. This catches most memory injection attacks — false memories that do not conform to the schema or violate constraints are rejected. Ingestion validation is the first line of defense against injection and poisoning.
+
+**Provenance tracking**: Every memory in the MemCube carries a provenance tag that records where it came from, when it was created, and what modifications have been made to it. Provenance tracking enables the detection of injected or corrupted memories by allowing the agent to trace the origin of any memory to a verified source. Provenance tracking is the primary defense against memory corruption and injection.
+
+**Access control**: The MuninnGate enforces access control policies that restrict who can read, write, modify, and delete memories based on their governance level. Access control prevents unauthorized exfiltration (by restricting read access) and unauthorized modification (by restricting write access). Access control is the primary defense against exfiltration and denial.
+
+**Consistency checking**: The reconciliation module (Lecture 7) detects contradictions between memories, which can indicate corruption or injection. Consistency checking is a secondary defense that catches threats that bypass ingestion validation and provenance tracking.
+
+**Audit logging**: All memory operations are logged in an append-only audit trail. The audit trail records every read, write, modify, delete, and prune operation, along with the agent's state at the time of the operation. Audit logging provides forensic evidence for investigating security incidents and is the primary tool for post-incident analysis.
+
+### 10.3 The Mímir Verification for Memory Integrity
+
+Just as the root layer uses Mímisbrunnr Verification to ensure that the Vǫrðr Constitution has not been corrupted, the MemCube uses a memory-specific verification protocol to ensure that stored memories have not been modified without authorization.
+
+Memory verification operates at two levels:
+
+**Per-memory verification**: Each memory in the MemCube is associated with a cryptographic hash that is computed when the memory is written. The hash is stored in a separate verification index (not in the MemCube itself, to prevent an adversary from modifying both the memory and its hash). When the memory is retrieved, its hash is recomputed and compared to the verification hash. If they match, the memory is intact. If they do not match, the memory has been corrupted.
+
+**MemCube-level verification**: Periodic full verification of the MemCube checks that all stored hashes are valid, that all constraint rules are satisfied, that all cross-references are intact, and that the MemCube's schema is consistent. MemCube-level verification is the memory equivalent of the root layer's Mímisbrunnr Verification — a comprehensive integrity check that catches any unauthorized modifications, including those that modify both the memory and the verification index (which would require compromising both the MemCube and the verification store).
+
+Memory verification is computationally expensive — a full verification of a 100,000-memory MemCube can take several minutes. It is therefore run on a schedule (typically every 1000 memory operations or every 100 turns, whichever comes first) rather than on every operation. Per-memory verification is faster (a single hash computation and comparison) and is performed on every retrieval.
+
+**Required Reading:**  
+- Heiðmarsdóttir, G. (2039). *The Memory Stone*, Chapter 12: "Memory Security."  
+- Li, Z. et al. (2040). *MemOS*, Chapter 12: "Memory Threats and Defenses."  
+- Freyjasdóttir, R. (2039). *The Memory-Bearing Machine*, Section on "Security Architecture for Memory Systems."
+
+**Discussion Questions:**  
+1. Memory poisoning is the most subtle threat because the memories are created by the agent's own processes, not injected by an adversary. Design a detection system that distinguishes between genuine self-generated memories and poisoned self-generated memories. What signals would you look for?  
+2. Per-memory verification adds a hash computation to every retrieval. For high-throughput agents that retrieve hundreds of memories per turn, this overhead can be significant. Design a probabilistic verification scheme that verifies a random sample of memories on each retrieval, rather than every memory. What is the probability of detecting a corrupted memory with this scheme?  
+3. The MemCube verification store is separate from the MemCube itself to prevent an adversary from modifying both the memory and its hash. But this creates a new attack surface — the verification store itself. Design a defense against compromise of the verification store. Does this defense also need a verification store?
+
+---
+
+## Lecture 11: MemCube Implementation Lab — Building a Memory Stone
+
+### 11.1 Lab Overview
+
+This lab session guides students through the implementation of a complete MemCube using the Yggdrasil SDK (v4.2+). By the end of the lab, each student will have:
+
+1. A Rúnascript schema defining a MemCube for a specific agent role
+2. An indexed MemCube with all five standard indexes
+3. A MuninnGate instance configured for the MemCube
+4. A compression and pruning pipeline
+5. A simple retrieval system that can answer context-sensitive queries
+
+### 11.2 Step 1: Schema Definition
+
+Students define a Rúnascript schema for a MemCube tailored to their chosen agent role (personal assistant, research collaborator, or creative partner). The schema must include:
+
+- At least 4 of the 6 standard memory types (episodic, procedural, identity, commitment, emotional, relational)
+- Complete attribute specifications with data types and constraints
+- At least 3 constraint rules (uniqueness, range, and cross-reference)
+- A governance level assignment for each type
+
+Students validate their schema using the SDK's `SchemaValidator` class, which checks for internal consistency, completeness, and compliance with Yggdrasil governance requirements.
+
+### 11.3 Step 2: Index Configuration
+
+Students configure the five standard indexes (primary, semantic, temporal, salience, tag) for their MemCube. For each index, they must specify:
+
+- The key attribute(s) on which the index is built
+- The comparison function for ordered indexes
+- The embedding model for the semantic index
+- The update strategy (synchronous, asynchronous, or hybrid)
+
+The SDK provides pre-built index implementations for all standard types, plus a `CustomIndex` class for students who want to experiment with alternative indexing strategies.
+
+### 11.4 Step 3: MuninnGate Setup
+
+Students configure a MuninnGate instance for their MemCube. The configuration must specify:
+
+- Governance enforcement policies for each layer
+- Ingestion validation rules (schema validation, constraint checking, provenance assignment)
+- Retrieval ranking weights for the composite score function
+- Pruning schedule and salience weights
+- Reconciliation protocol parameters
+
+Students must also configure context-sensitive access control policies for their agent's primary use case.
+
+### 11.5 Step 4: Compression and Pruning Pipeline
+
+Students implement a compression pipeline that applies progressive summarization to memories at each governance level:
+
+- Root-layer memories: Level 0 (full detail) only (no compression)
+- Trunk-layer memories: Levels 0, 1, and 2 (full, paragraph, sentence)
+- Branch-layer memories: Levels 0, 1, 2, and 3 (full, paragraph, sentence, tags)
+- Canopy-layer memories: Levels 1, 2, and 3 (paragraph, sentence, tags — no full detail by default)
+- Leaf-layer memories: Levels 2 and 3 (sentence and tags only)
+
+Students also implement a pruning pipeline that applies salience-weighted pruning at session end, respecting governance constraints and dependency preservation.
+
+### 11.6 Step 5: Retrieval Testing
+
+Students test their MemCube by populating it with synthetic memories and executing retrieval queries that test each index and the composite ranking function. Test queries include:
+
+- Known-reference lookups (retrieve memory by ID)
+- Semantic similarity searches (find memories similar to a given topic)
+- Temporal range queries (find memories from a specific time period)
+- Salience-based queries (find the most important memories about a topic)
+- Composite queries (combine multiple index dimensions)
+
+Students measure retrieval latency, ranking quality, and governance filtering accuracy. They also test conflict injection (introducing contradictory memories) and verify that the reconciliation protocol detects and resolves the conflicts.
+
+Students write a lab report documenting their schema design, index configuration, MuninnGate setup, compression/pruning strategy, and retrieval test results. The lab report constitutes a significant portion of the course grade.
+
+**Required Reading:**  
+- Yggdrasil SDK Documentation, v4.2: "MemCube Implementation Tutorial" and "MuninnGate Configuration Guide."  
+- Heiðmarsdóttir, G. (2039). *The Memory Stone*, Appendix B: "Lab Exercises."  
+- Lab handout: "OS201 Lab: Building a Memory Stone" (provided on the course website).
+
+**Discussion Questions:**  
+1. During the lab, you designed a MemCube schema for a specific agent role. What types and constraints did you include? What types and constraints did you omit? How would your schema change for a different agent role?  
+2. The retrieval testing phase requires synthetic memories. How do you generate realistic synthetic memories that exercise all of your indexes? What biases might your synthetic memories introduce?  
+3. The compression pipeline applies different summarization levels to different governance layers. At what point does summarization lose too much information to be useful? Design an experiment to determine the minimum summarization level that preserves retrieval quality for each memory type.
+
+---
+
+## Lecture 12: The Memory Stone and the World Tree — MemCube's Place in the Architecture
+
+### 12.1 From Foundation to Structure
+
+We began this course with the eitr metaphor: memory as a living substance that flows through the Yggdrasil Architecture, nourished by the roots and distributed through the trunk to the canopy and leaves. The MemCube is the structure that channels the eitr — the stone that holds the memory, the vessel that gives it form and governance.
+
+We have covered the MemCube's design (schema, types, attributes, constraints), its indexing (primary, semantic, temporal, salience, tag), its lifecycle management (compression, pruning, governance), its access control (MuninnGate read/write protocol), its consistency mechanisms (reconciliation protocol), its security (ingestion validation, provenance tracking, verification), and its implementation in the Yggdrasil SDK.
+
+But the MemCube does not exist in isolation. It is one component of the Yggdrasil Architecture, and it functions in concert with the root layer (covered in OS107), the MuninnGate (covered in OS203), and the higher-level cognitive structures (covered in OS205 and beyond). What the MemCube provides is the structured storage substrate; what the MuninnGate provides is the controlled access; what the root layer provides is the identity and governance; what the higher-level structures provide is the agent's cognitive architecture that makes use of it all.
+
+### 12.2 The MemCube as Infrastructure
+
+The MemCube is infrastructure. Like a well-built road, it is not the destination itself but the path that makes the destination reachable. A good MemCube is invisible in operation — the agent does not think about how its memories are stored, indexed, retrieved, and pruned. It simply remembers what it needs, when it needs it, with the confidence that its memories are accurate, consistent, and governed by appropriately protective mechanisms.
+
+The infrastructure metaphor extends to the MemCube's design principles:
+
+**Reliability**: Like a well-built road, the MemCube should always be available when needed. Memory retrieval should not fail under normal operation. Memory writes should not be lost. Indexes should remain consistent. If a failure does occur, the MemCube should recover gracefully and restore consistent operation.
+
+**Performance**: Like a well-built road, the MemCube should get the agent where it needs to go quickly. Retrieval latency should be low enough that the agent does not experience perceptible delays. Write latency should be low enough that memories can be formed in real time. Index maintenance should not interfere with normal operation.
+
+**Governance**: Like a well-built road, the MemCube should have traffic rules that keep everyone safe. Higher-layer memories should not be overridden by lower-layer influences. Root-layer memories should be protected from unauthorized modification. Canopy-layer memories should be pruned according to salience, not arbitrarily.
+
+**Security**: Like a well-built road, the MemCube should protect against threats without impeding legitimate use. Memory injection, exfiltration, corruption, denial, and poisoning should be detected and prevented by layered defenses that do not add unacceptable latency or complexity.
+
+**Adaptability**: Like a well-built road, the MemCube should accommodate changing traffic patterns. As the agent accumulates more memories, shifts its focus, or changes its role, the MemCube should adapt its indexing, compression, and pruning strategies to match. A MemCube that works well for a thousand memories but degrades at a million is a road that collapses under rush hour traffic.
+
+### 12.3 Looking Forward: The Next Courses
+
+The MemCube provides the storage substrate. The next courses in the OS Design curriculum build on this substrate:
+
+- **OS203** (MuninnGate: Memory Gate Architecture) explores the access control layer in depth — how memories are gated, how retrieval is managed, and how the MuninnGate enforces governance across the full memory lifecycle.
+- **OS205** (Entity Canonization and Identity Persistence) shows how the MemCube's root-layer structures support the crystallization of agent identity into a tamper-resistant schema.
+- **OS207** (Multi-Clock Memory Stacks) addresses the temporal challenges of managing memories across different timescales.
+- **OS301** (Verification Kernels) covers formal verification of MemCube schemas and MuninnGate policies.
+
+The Memory Stone is laid. The road is built. The eitr flows through the channels we have designed. In the next course, we will study the gates that control the flow — the MuninnGate, which stands between the agent and its memories, managing every read and write, every retrieval and pruning, every injection and verification.
+
+The stone remembers. The gate guards.
+
+— Dr. Guðrún Heiðmarsdóttir, OS201 Course Conclusion
+
+---
+
+## Final Examination Preparation
+
+### Format
+The final examination for OS201 consists of **8 essay questions**, from which students must choose **4** to answer. Each answer should demonstrate mastery of MemCube design, indexing, governance, and implementation, integrating the Yggdrasil framework with practical considerations from the lab. Answers should be 1000–1500 words each, citing specific architectural patterns, schema designs, and implementation details from the Yggdrasil SDK.
+
+### Sample Essay Questions
+
+**1.** Design a complete Rúnascript schema for a MemCube that serves a persistent health advisory agent. Specify at least 4 memory types, their attributes, and their constraint rules. Justify each design decision with reference to the agent's role, the types of memories it accumulates, and the governance requirements of healthcare data.
+
+**2.** The salience-weighted pruning algorithm uses five factors (recency, relevance, emotional valence, commitment reference, uniqueness) to determine which memories to retain and which to prune. Analyze the interaction between these factors in three scenarios: (a) an old but highly emotional memory, (b) a recent but low-salience memory, and (c) a memory referenced by an active commitment but otherwise unremarkable. How should the algorithm handle each case?
+
+**3.** The MuninnGate's write path classifies experiences into memory types before writing them to the MemCube. Design a multi-type classification scheme for experiences that don't fit neatly into a single type. How does the scheme handle experiences that are simultaneously episodic, emotional, and relational? What are the storage and retrieval implications?
+
+**4.** Compare and contrast the MemGPT, MemOS, and Yggdrasil memory architectures in terms of their governance capabilities. For each architecture, identify the strongest agent role it supports well and the weakest agent role it supports poorly. Propose a hybrid architecture that combines the strengths of all three.
+
+**5.** The reconciliation protocol resolves memory conflicts through a six-step process (classification, context determination, temporal analysis, salience comparison, governance override, escalation). Analyze the protocol's failure modes: in what scenarios does each step produce an incorrect resolution? What is the minimum set of steps needed for acceptable conflict resolution, and which steps can be safely omitted in low-stakes contexts?
+
+**6.** Memory security involves five threat categories (injection, exfiltration, corruption, denial, poisoning). For the most insidious threat — memory poisoning — design a three-layer defense that goes beyond the mechanisms discussed in class. Evaluate your defense against adaptive adversaries who know your defense architecture and are motivated to circumvent it.
+
+**7.** Progressive summarization creates a hierarchy of summaries at different levels of detail (Level 0 through Level 3). At what point does summarization destroy so much information that the memory becomes unreliable? Design an experiment to determine the minimum summarization level that preserves retrieval quality for each of the six standard memory types. What metrics would you use to evaluate "retrieval quality"?
+
+**8.** The MemCube is described as "infrastructure" — invisible when it works, catastrophic when it fails. Design a comprehensive failure mode analysis for a MemCube serving a persistent agent that operates 24/7. Identify the five most likely failure modes, their consequences, their detection mechanisms, and their recovery protocols. How does the Yggdrasil Architecture's layered governance mitigate each failure mode?
+
+### Research Paper Option (cross-listed with OS401)
+Students who wish to pursue a deeper investigation may substitute the essay examination with a **15–20 page research paper** on one of the following topics:
+
+- *Schema Evolution in Persistent Memory Systems*: How should a MemCube's schema be updated when the agent's role changes, new memory types are needed, or existing types become obsolete? Design a schema evolution protocol that preserves existing memories while supporting new structure.
+- *Neural-Explicit Memory Hybrids*: A comparative analysis of purely explicit memory storage (current MemCube design), purely neural memory storage (parameter modification), and hybrid approaches that combine both. What are the trade-offs in inspectability, governance, and retrieval quality?
+- *Federated MemCube Architecture*: Extending the MemCube to support memory sharing across multiple agents without compromising privacy or governance. Drawing on the Bifröst Protocol for secure inter-agent communication, design a federated memory architecture that allows selective sharing while maintaining individual agent autonomy.
+- *The Economics of Forgetting*: A formal analysis of the costs and benefits of pruning in persistent memory systems. When is forgetting more efficient than retaining? What is the optimal pruning schedule for different agent roles? How does pruning affect long-term identity coherence?
