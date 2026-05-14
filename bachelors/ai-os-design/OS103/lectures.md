@@ -364,3 +364,36 @@ But the core insight remains: **the prompt is the program**. Whether the program
 *"Huginn flies out each morning, seeking thought. Muninn follows, seeking memory. The prompt is where thought and memory meet — where intention becomes specification, and specification becomes identity."*
 
 — Dr. Þóra Sigurðardóttir, OS103 Course Conclusion
+
+---
+
+## Final Examination Preparation
+
+### Format
+The final examination for OS103 consists of **8 essay questions**, from which students must choose **4** to answer. Each answer should demonstrate mastery of prompt engineering for persistent agents, integrating technical architectures from OS101 with the design patterns explored in this course. Answers should be 800–1200 words each, citing specific prompt architectures, memory injection patterns, and security considerations where relevant.
+
+### Sample Essay Questions
+
+**1.** Compare and contrast the "prompt as conversation" paradigm with the "prompt as constitution" paradigm. Construct an adversarial scenario in which a conversational prompt fails and a constitutional prompt succeeds, then analyze why the constitutional architecture provides superior resistance to manipulation.
+
+**2.** Design a complete boot sequence for a persistent autonomous agent that operates in a medical advisory capacity. Specify each layer of the boot process (Identity → Memory → Commitments → Personality → Procedures → Security), and explain how the ordering affects the agent's downstream behavior. What happens if any single layer fails to load?
+
+**3.** The MuninnGate memory injection system and the Wyrd Protocol commitment web are often described as complementary systems — one retrieves the past, the other constrains the future. Design a scenario in which these two systems conflict (e.g., a memory that suggests one course of action, a commitment that demands another). How should the agent resolve this conflict? Propose a formal resolution protocol.
+
+**4.** Evaluate the three guardrail architectures for recursive self-prompting (Immutable Core, Approval Gate, Drift Detection). In what contexts would each architecture alone be sufficient? In what contexts would all three be necessary? Propose a hybrid architecture that optimally balances stability and adaptability for a creative AI agent.
+
+**5.** The security landscape of prompt-level OS control includes direct injection, indirect injection, memory poisoning, constitutional drift, and side-channel extraction. Rank these threats by severity for a persistent agent that interacts with untrusted users. Design a layered defense architecture that addresses the top three threats and explain how the defense layers interact.
+
+**6.** Design a Stochastic Personality Engine for a specific domain (creative writing, code review, or crisis counseling). Specify the personality pool, sampling weights, and the resolution protocol for when sampled values conflict. How does stochastic variation produce "felt aliveness" without undermining reliability?
+
+**7.** Analyze the prompt-memory feedback loop as a control system. Identify the feedback mechanisms, potential instabilities (oscillation, drift, resonance), and stabilization strategies. Compare this to classical control theory — where are the analogies informative, and where do they break down?
+
+**8.** The course argues that prompt engineering is evolving from manual instruction design toward intent-based prompting, learned optimization, and constitutional self-refinement. Evaluate each trend for its implications on the relationship between human designers and autonomous agents. Does the increasing automation of prompt design threaten the "verifiability" property that makes constitutions superior to conversations? Defend your position with specific technical arguments.
+
+### Research Paper Option (400-level students)
+Students enrolled at the 400-level (cross-listed with OS401) may substitute the essay examination with a **15–20 page research paper** on one of the following topics:
+
+- *Constitutional Amendment Protocols for Persistent Autonomous Agents*: A formal specification of how agents should propose, verify, and ratify modifications to their own governing documents.
+- *Memory Poisoning as a Novel Attack Surface*: Classification, detection, and remediation of adversarial content injected through agent memory systems.
+- *The Ethics of Stochastic Personhood*: When bounded randomness in an agent's personality makes it genuinely unpredictable, how should we evaluate moral responsibility for its actions?
+- *Comparative Prompt Architectures*: A cross-cultural analysis, drawing on Norse concepts of *vǫrðr* (warden-spirits) and * ørlǫg* (fate-layers) to develop new prompt governance models.
