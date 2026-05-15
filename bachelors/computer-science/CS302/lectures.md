@@ -2,683 +2,371 @@
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Description:** Lexing, parsing, IR, optimization, LLVM, JIT, AOT
+**Prerequisites:** CS201 — Data Structures & Algorithms II; CS202 — Programming Languages & Paradigms  
+**Description:** Rigorous introduction to compiler construction: lexical analysis, parsing (LL, LR, GLR), semantic analysis, intermediate representations, dataflow analysis, optimisation (constant propagation, dead code elimination, loop transformations, register allocation), code generation, and runtime systems. Covers LLVM IR and pass infrastructure, Just-In-Time compilation, and Ahead-Of-Time compilation. Lab work uses the Yggdrasil Mimir Compilation Cluster building a full compiler for a C-like language targeting RISC-V and x86-64.
 
 ---
 
-## Lectures
+## Lecture 1: The Architecture of Translation — Why Compilers Matter and How They Think
 
-ᚠ **Lecture 1: Introduction to Compiler Design & Code Generation**
+A compiler is a translator that maps from a source language (the programmer's mental model) to a target language (the machine's execution model). This translation is not mere substitution — it is a deep structural transformation that preserves semantics while changing representation. The compiler must understand both languages intimately: the source language's type system, control flow, and concurrency model, and the target language's instruction set, memory hierarchy, and pipeline constraints. The gap between these two models is the compiler's problem space, and the quality of the compiled code depends on how thoroughly the compiler bridges this gap.
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The **compiler pipeline** is traditionally described in phases: lexing → parsing → semantic analysis → IR generation → optimisation → code generation → assembly → linking. Each phase transforms the program representation: the lexer transforms characters into tokens, the parser transforms tokens into an abstract syntax tree (AST), semantic analysis transforms the AST into a typed AST, IR generation transforms the typed AST into a control-flow graph (CFG) in intermediate representation, optimisation transforms the CFG into a more efficient CFG, and code generation transforms the CFG into machine instructions. Each phase is a self-contained transformation with a clear input and output — this modularity is both the compiler's strength (each phase can be developed, tested, and debugged independently) and its limitation (phase boundaries can lose information that would be useful to later phases).
 
----
+**Just-in-time (JIT) compilation** blurs the traditional boundaries. A JIT compiler starts by interpreting or compiling with minimal optimisation, profiles the running program to identify hot spots, and then recompiles those hot spots with aggressive optimisation. The JVM's HotSpot compiler, V8's TurboFan, and LLVM's ORC JIT all use this approach. JIT compilation has access to runtime information (actual type profiles, branch frequencies, memory access patterns) that an ahead-of-time (AOT) compiler cannot see, enabling speculative optimisations (inlining a virtual call based on observed type profiles, eliminating a branch based on observed branch probabilities). The cost is startup latency (the JIT must compile hot code before it can run fast) and memory overhead (compiled code and profile data must be kept in memory).
 
-### Overview
+**Ahead-of-time (AOT) compilation** compiles the entire program before execution, trading runtime flexibility for predictable performance. AOT compilers have the advantage of whole-program visibility (they can see all call sites, all type definitions, all control flow) and unlimited compilation time (they can spend as long as they need on each function). The cost is that they must make optimisation decisions without runtime information — they must guess which branches are likely, which types dominate, and which functions are hot. Profile-guided optimisation (PGO) bridges this gap: the program is first compiled with instrumentation, run on representative workloads to collect profiles, and then recompiled with the profiles as additional input. PGO typically improves performance by 5–15% on real-world workloads.
 
-This lecture explores foundations aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how foundations-level understanding shapes both theory and practice.
+The **Yggdrasil Compilation Lab** uses the LLVM infrastructure as the primary compiler framework. Students build a compiler for a C-like language called **YggLang** that supports structs, pointers, arrays, functions, and a module system. The compiler targets RISC-V (the instruction set of the Mimir Cluster's node processors) and x86-64 (for testing on development machines). Each lecture builds one phase of the compiler; by the end of the course, students have a complete compiler that generates optimised code for both architectures. The lab emphasises correctness over performance: a correct but slow compiler is worth more than a fast but wrong compiler, because correctness is the foundation on which all optimisation is built.
 
-### Key Topics
+The fundamental tension in compiler design is between **simplicity** and **performance**. A simple compiler (like the ones students build in the first few weeks) translates each construct directly and predictably. A sophisticated compiler (like LLVM at -O3) makes thousands of optimisation decisions based on heuristics, profiles, and mathematical properties. The simple compiler is easier to understand, debug, and trust; the sophisticated compiler produces faster code. The art of compiler engineering is knowing when to be simple and when to be sophisticated — and ensuring that the sophisticated compiler is still correct when it is being clever.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How foundations perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Required Reading:**
+- Aho, Lam, Sethi & Ullman, *Compilers: Principles, Techniques, and Tools* (2nd ed., 2006/2040), chs. 1–2
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed., 2022/2040), chs. 1–3
+- Lattner & Adve, "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation," *CGO '04* (2004): 75–88
 
-### Lecture Notes
-
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to introduction to compiler design & code generation
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do foundations considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. The compiler pipeline is traditionally described as a sequence of independent phases. What information is lost at each phase boundary? How does LLVM's multi-level IR address this problem?
+2. JIT compilers have access to runtime information that AOT compilers lack. Give three specific optimisations that a JIT can perform but an AOT compiler cannot. What are the risks of these optimisations?
+3. A correct compiler is worth more than a fast compiler. But in practice, how do you verify that a compiler is correct? What are the limits of testing, and what role does formal verification play?
 
 ---
 
-ᚢ **Lecture 2: Core Concepts of Compiler Design & Code Generation**
+## Lecture 2: Lexical Analysis — From Characters to Tokens
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Lexical analysis** (lexing, scanning) is the first phase of the compiler: it transforms a stream of characters into a stream of **tokens**, each annotated with a type (identifier, keyword, integer literal, operator, etc.) and a value (the lexeme — the actual string of characters that the token represents). The lexer is the compiler's first abstraction barrier: it hides the details of whitespace, comments, and character encoding, providing the parser with a clean, structured input stream.
 
----
+**Regular expressions** are the formal foundation of lexical analysis. A regular expression r denotes a regular language L(r) — a set of strings that can be recognised by a finite automaton. The key operations are: concatenation (r₁r₂, strings of r₁ followed by strings of r₂), alternation (r₁|r₂, strings of r₁ or r₂), Kleene star (r*, zero or more repetitions of r), and grouping ((r), grouping of subexpressions). Regular expressions are closed under these operations: the union, concatenation, and Kleene star of regular languages is regular. This closure property ensures that lexical specifications composed of regular expressions are themselves regular and can be implemented by a finite automaton.
 
-### Overview
+The **Thompson's construction** (1968) converts a regular expression into an NFA (nondeterministic finite automaton) in O(|r|) time, where |r| is the length of the regular expression. Each regular expression operator maps to a distinct NFA pattern: ε-transitions for alternation, sequential composition for concatenation, and ε-transition loops for Kleene star. The resulting NFA has at most 2|r| states. The **subset construction** (powerset construction) converts the NFA into a DFA (deterministic finite automaton) by tracking sets of NFA states. The DFA has at most 2^n states (where n is the number of NFA states), and in the worst case this exponential blowup can occur — but in practice most lexical specifications produce DFAs of reasonable size. The DFA accepts the same language as the NFA but runs in O(m) time (where m is the input length), compared to O(m·n) for the NFA simulation.
 
-This lecture explores concepts aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how concepts-level understanding shapes both theory and practice.
+**Lex** (Lesk, 1975) and its successors (**Flex**, **Ragel**, **re2c**) automate lexer generation: the programmer specifies the token patterns as regular expressions with associated actions, and the tool generates a C (or C++) function that implements the DFA. Lex's rule priority (longest match, then rule order) resolves ambiguities: if two rules match the same prefix, the longer match wins; if two rules match the same length, the first rule wins. This ensures that `identifier` matches the longest possible identifier, and that keywords have priority over identifiers.
 
-### Key Topics
+The **longest-match** rule is crucial for correct lexing. Consider the input `ifelse`: without longest match, the lexer would match `if` (a keyword) and leave `else` for the next token; with longest match, it matches `ifelse` (an identifier). The longest-match rule is implemented by the DFA continuing to advance through the input until no transition is possible, then backing up to the last accepting state. This requires the lexer to maintain a "last accept" pointer and a "current position" pointer, backing up the current position to the last accept when the DFA reaches a dead state.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How concepts perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Token attributes** carry more than just the type. The YggLang lexer produces tokens with: type (INT, ID, KW_IF, OP_PLUS, etc.), lexeme (the actual string), line and column (for error messages), and value (the parsed integer value for numeric literals, or the interned string for identifiers). The lexer also handles comments (discarded), string literals (with escape sequence processing), and numeric literals (with type suffixes for integer sizes). The **symbol table** (interning table) maps identifier strings to unique integer IDs, ensuring that each identifier is compared and stored as a single integer rather than a variable-length string.
 
-### Lecture Notes
+**Unicode and UTF-8** present challenges that the early lexer generators did not anticipate. A modern lexer must handle UTF-8-encoded input, where a single "character" (Unicode code point) may occupy 1–4 bytes. The lexer must: (1) decode UTF-8 to code points before matching against regular expressions, or (2) write regular expressions that work on the byte-level UTF-8 encoding. Approach (1) is simpler but slower (every byte must be decoded); approach (2) is faster but requires understanding the UTF-8 encoding rules. The YggLang lexer uses approach (1) for keywords and identifiers (which are ASCII-only) and approach (2) for string literals (which may contain arbitrary Unicode).
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Error recovery** in the lexer is typically simple: if no rule matches, emit an error token with the offending character and continue. The parser handles the error token by attempting to recover (skip tokens until a synchronisation point). More sophisticated lexers attempt to re-synchronise by skipping characters until a valid token start is found. The YggLang lexer emits a diagnostic message ("unexpected character 'þ' at line 42, column 7 — did you mean 'th'?") and skips to the next token start, allowing the parser to see as many valid tokens as possible and produce better error messages.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
+**Required Reading:**
+- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), ch. 3 (Lexical Analysis)
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 2 (Scanners)
+- Lesk, "Lex — A Lexical Analyzer Generator," *Bell Labs Computing Science Technical Report* 39 (1975)
 
-### Required Reading
-
-- Course textbook, chapters relevant to core concepts of compiler design & code generation
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do concepts considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. The subset construction can produce an exponential number of DFA states. Give a regular expression for which this blowup occurs. How do lexer generators handle this in practice?
+2. The longest-match rule resolves most ambiguities, but not all. Give an example where the longest-match rule produces an incorrect result. How do you fix this?
+3. Unicode support in lexers is more complex than ASCII. What are the tradeoffs between decoding UTF-8 before scanning versus writing byte-level regular expressions?
 
 ---
 
-ᚦ **Lecture 3: Historical Context and Evolution**
+## Lecture 3: Parsing — From Tokens to Trees
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Parsing** transforms the token stream into an **abstract syntax tree** (AST) — a structured representation of the program that captures its hierarchical organisation. The AST is the compiler's primary data structure: every subsequent phase (semantic analysis, IR generation, optimisation, code generation) operates on the AST or its derivatives.
 
----
+**Context-free grammars** (CFGs) are the formal foundation of parsing. A CFG G = (V, Σ, R, S) consists of: a set of nonterminals V (syntactic categories like expression, statement, function), a set of terminals Σ (the tokens from the lexer), a set of productions R (rewrite rules like E → E + T | T), and a start symbol S (the root nonterminal). A string w is in L(G) iff there exists a derivation S ⇒* w — a sequence of production applications that derives w from S. CFGs are strictly more powerful than regular languages: they can express nested structures (parentheses, begin-end blocks, recursive data types) that regular expressions cannot.
 
-### Overview
+The **parse tree** (concrete syntax tree) records every derivation step, including intermediate nonterminals and productions. The **abstract syntax tree** (AST) is a simplified version that eliminates syntactic sugar and intermediate nodes. For example, the parse tree for `3 + 4 * 5` has intermediate nodes for every production (E → E + T, T → T * F, F → num), while the AST has a single binary expression node with operator +, left child 3, and right child a binary expression with operator *, left child 4, and right child 5. The AST is the compiler's working representation; the parse tree is useful for tooling (syntax highlighting, refactoring) but not for compilation.
 
-This lecture explores history aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how history-level understanding shapes both theory and practice.
+**LL parsing** (top-down, predictive) constructs the parse tree from left to right using a leftmost derivation. **LL(1)** parsers use one token of lookahead to decide which production to apply. The LL(1) parsing table is constructed by computing the FIRST and FOLLOW sets of each nonterminal: FIRST(A) is the set of terminals that can begin a string derived from A; FOLLOW(A) is the set of terminals that can appear immediately after A in any derivation. A grammar is LL(1) iff for each nonterminal A with productions A → α₁ | α₂ | ... | αₙ, the sets FIRST(αᵢ) are pairwise disjoint, and if ε ∈ FIRST(αᵢ), then FIRST(αⱼ) ∩ FOLLOW(A) = ∅ for all j ≠ i. LL(1) grammars can be parsed in O(n) time using a recursive-descent parser or a table-driven parser.
 
-### Key Topics
+**LL(k) parsing** generalises LL(1) to k tokens of lookahead. The complexity of LL(k) parsing grows rapidly with k (the parse table size is O(|G| · |Σ|ᵏ)), and most programming language grammars are not LL(1) — they have ambiguous productions that require arbitrary lookahead (the "dangling else" problem, where `if (c1) if (c2) s1 else s2` can parse as `if (c1) { if (c2) s1 } else s2` or `if (c1) { if (c2) s1 else s2 }`). ANTLR (Parr, 2013) is the most widely used LL(*) parser generator; it uses adaptive LL(*) parsing with DAG-structured lookahead to handle arbitrary lookahead without the exponential cost of fixed k.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How history perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**LR parsing** (bottom-up, shift-reduce) constructs the parse tree from left to right using a rightmost derivation in reverse. LR parsers maintain a stack of grammar symbols and states, and they shift tokens onto the stack until a production's right-hand side appears on top of the stack, at which point they reduce the right-hand side to the left-hand side. **LR(0)** parsers use no lookahead; they are simple but can only handle a small class of grammars. **SLR(1)** (Simple LR) parsers use one token of lookahead and the FOLLOW sets to resolve shift-reduce conflicts. **LALR(1)** (Look-Ahead LR) parsers merge states with the same core (the same LR(0) items) but different lookaheads; this reduces the parse table size at the cost of occasionally introducing conflicts. **Yacc** (Johnson, 1975) and **Bison** (the GNU equivalent) generate LALR(1) parsers; most programming language grammars are LALR(1) or can be made LALR(1) with minor modifications.
 
-### Lecture Notes
+**CLR(1)** (Canonical LR) parsers use the full LR(1) item sets without merging, producing the largest parse tables but handling the widest class of grammars. **GLR parsing** (Tomita, 1984) handles ambiguous grammars by maintaining multiple parse stacks in parallel, merging them when they converge. GLR parsers can parse any context-free grammar (including ambiguous ones) in O(n³) worst-case time, but most programming language grammars parse in O(n) time in practice. The **Elkhound** parser generator (Nederhort, 2004) uses GLR parsing with a shared packed parse forest (SPPF) to represent all possible parses efficiently, returning the number of parses and the forest of all parse trees.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Operator precedence parsing** resolves ambiguities in expression grammars without modifying the grammar. By assigning precedence levels to operators (e.g., * has higher precedence than +) and associativity directions (left, right, or non-associative), the parser can resolve shift-reduce conflicts without lookahead. Yacc/Bison support operator precedence declarations (%left, %right, %nonassoc) that annotate the grammar and resolve conflicts at parse time. The YggLang parser uses operator precedence for expressions and LALR(1) for statements and declarations, resulting in a clean, unambiguous grammar.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
+**Error recovery** in parsing is more complex than in lexing. The basic strategies are: (1) **panic mode** — discard tokens until a synchronisation set (e.g., statement separators like `;`, `}`, `end`) is found, then continue parsing; (2) **phrase-level recovery** — replace the erroneous prefix with a correction (e.g., insert a missing semicolon, delete an extra token); (3) **error productions** — augment the grammar with productions that match common errors (e.g., E → E + + E to handle double operators); (4) **global correction** — find the minimal set of insertions and deletions that produce a valid parse tree. Panic mode is fast but may skip large portions of the input; phrase-level recovery is better but requires more grammar engineering; global correction is optimal but NP-complete. The YggLang parser uses panic mode with carefully chosen synchronisation sets that are derived from the grammar's FOLLOW sets.
 
-### Required Reading
+**Required Reading:**
+- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), chs. 4–5
+- Appel, *Modern Compiler Implementation in ML* (2004/2040), chs. 3–4
+- Tomita, *Efficient Parsing for Natural Language* (1986), chs. 2–3
 
-- Course textbook, chapters relevant to historical context and evolution
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do history considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Most programming language grammars are not LL(1). Give three specific constructs that violate LL(1) and explain why. How does each parser type (LL(1), LALR(1), GLR) handle them?
+2. The shift-reduce conflict is the bane of LALR(1) parsing. What is the dangling-else ambiguity, and how do operator precedence declarations resolve it? What other common shift-reduce conflicts arise in practice?
+3. Error recovery is more art than science. What are the tradeoffs between panic mode and phrase-level recovery? When would you choose global correction despite its NP-complete complexity?
 
 ---
 
-ᚬ **Lecture 4: Theoretical Framework**
+## Lecture 4: Semantic Analysis — Types, Scope, and Well-Formedness
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The parser produces an AST, but the AST does not carry enough information for code generation. Is `x + y` an integer addition or a floating-point addition? Is `f(x)` a valid call? Does `p->field` refer to a field that exists? These questions are answered by **semantic analysis**, the phase that annotates the AST with types, resolves names to declarations, and checks that the program is well-formed according to the language's static semantics.
 
----
+**Name resolution** maps every identifier occurrence (use) to its declaration (definition). This requires a **scope** stack: a set of nested symbol tables, one per enclosing scope (block, function, module). When the compiler encounters a declaration `int x = 5;`, it inserts x into the current scope's symbol table. When it encounters a use of x in an expression, it looks up x by searching the scope stack from innermost to outermost, finding the most recent declaration. The symbol table also stores metadata about each name: its type, storage class (automatic, static, extern), and location (stack offset, register, global address).
 
-### Overview
+**Type checking** verifies that every expression has a well-defined type and that operations are applied to operands of the correct type. The **type system** is the set of rules that defines which types are valid and how they compose. YggLang has a simple type system: integers (`i8`, `i16`, `i32`, `i64`), floats (`f32`, `f64`), booleans, pointers, arrays, structs, and functions. The type checker rules are: arithmetic operators require numeric types, comparison operators require comparable types, assignment requires compatible types, and function calls require matching parameter types. Type compatibility is determined by a **coercion** relation: `i8` → `i16` → `i32` → `i64` → `f32` → `f64` (implicit widening), but no implicit narrowing (explicit casts required).
 
-This lecture explores theory aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how theory-level understanding shapes both theory and practice.
+**Type inference** (for languages with parametric polymorphism, like ML, Haskell, and Rust) deduces the types of expressions from how they are used, without requiring explicit type annotations. The **Hindley-Milner type system** (Hindley, 1969; Milner, 1978) performs type inference using Algorithm W: for each expression, it generates a fresh type variable and a set of constraints (equations between types), then solves the constraints using unification. If unification succeeds, the inferred types are the most general possible; if it fails, the program has a type error. Hindley-Milner type inference is decidable and produces principal types (most general types) in polynomial time. YggLang does not have parametric polymorphism (it is a C-like language), so its type checker is simpler — it only needs to check that each expression has a well-defined type and that operations are applied to compatible types.
 
-### Key Topics
+**Control flow analysis** checks that control flow is well-formed: all loops have reachable bodies, all breaks and continues are inside loops, all returns are inside functions, and all switch cases are exhaustive (or have a default case). The YggLang compiler performs **definite assignment** checking: a local variable must be definitely assigned before it is used on every execution path. This is a dataflow analysis problem that requires computing the set of variables that are definitely assigned at each program point. The analysis is flow-sensitive (it considers the order of statements) and path-sensitive (it considers conditional branches).
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How theory perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**The symbol table** is the central data structure of semantic analysis. It maps names to their declarations and metadata. In a language with nested scopes (like YggLang), the symbol table is implemented as a stack of hash tables: each scope push creates a new hash table pushed onto the stack, and each scope pop removes it. Lookup searches from the top of the stack downwards. For languages with modules or namespaces (like Rust, Python, or Java), the symbol table must also handle qualified names (`module::function`) and import/export declarations. The YggLang symbol table supports nested block scopes, function scopes, and module scopes, with shadowing (an inner declaration shadows an outer declaration with the same name).
 
-### Lecture Notes
+**Abstract syntax** vs. **concrete syntax**: the parser produces a concrete syntax tree that mirrors the grammar productions, but the semantic analyser works on an abstract syntax tree that represents the essential structure of the program. The translation from concrete to abstract syntax eliminates syntactic sugar (e.g., `x += 1` becomes `x = x + 1`), flattens nested expressions into three-address code, and groups related constructs (e.g., all loop types become a single `while` construct). This simplification makes subsequent phases easier to implement and reason about.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Pierce, *Types and Programming Languages* (2002/2040), chs. 1–5, 22
+- Appel, *Modern Compiler Implementation in ML* (2004), ch. 5
+- Nielson, Nielson & Hankin, *Principles of Program Analysis* (2004/2040), ch. 1
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to theoretical framework
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do theory considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Hindley-Milner type inference is decidable and produces principal types. But many useful type system features (type classes, row polymorphism, dependent types) make type inference undecidable. What are the tradeoffs?
+2. Definite assignment checking is flow-sensitive and path-sensitive. Give an example where a variable is definitely assigned on some paths but not others, and explain how the analysis handles it. What are the limitations of this analysis?
+3. The symbol table must handle qualified names and imports. How does this interact with separate compilation (where a module may be compiled before its dependencies)? What is the minimal interface that separate compilation requires?
 
 ---
 
-ᚱ **Lecture 5: Key Methods and Approaches**
+## Lecture 5: Intermediate Representations — SSA, Basic Blocks, and Control Flow Graphs
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The **intermediate representation** (IR) is the compiler's internal language — the representation on which all optimisations are performed. A good IR must be: (1) expressive enough to represent the source language's semantics, (2) simple enough to be analysed and transformed efficiently, and (3) target-independent enough to support multiple backends. LLVM IR achieves this balance with a low-level, typed, infinite-register representation in **static single assignment** (SSA) form.
 
----
+**SSA form** (Cytron et al., 1991) requires that every variable is assigned exactly once. In non-SSA code, a variable may be assigned multiple times (e.g., `x = 1; x = x + 1; x = x * 2`). In SSA form, each assignment creates a new variable: `x₁ = 1; x₂ = x₁ + 1; x₃ = x₂ * 2`. At control flow merge points (where multiple definitions of the same source variable reach the same point), SSA inserts **φ-functions** (phi functions) that select the appropriate definition based on the incoming control flow edge: `x₄ = φ(x₃, x₅)` means "x₄ takes the value of x₃ if control came from the first predecessor, or x₅ if control came from the second predecessor." φ-functions are not executable instructions — they are bookkeeping entries that tell the compiler how definitions flow through the program.
 
-### Overview
+**Basic blocks** are sequences of instructions with a single entry (the first instruction) and a single exit (the last instruction). There are no branches into or out of the middle of a basic block. Basic blocks are the fundamental unit of analysis and optimisation: dataflow analysis operates on basic blocks, instruction scheduling operates within basic blocks, and control flow analysis connects basic blocks into a **control flow graph** (CFG).
 
-This lecture explores methods aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how methods-level understanding shapes both theory and practice.
+The **control flow graph** (CFG) is a directed graph where nodes are basic blocks and edges represent possible control flow transfers. The entry block is the first block executed; exit blocks are blocks that terminate the function (by returning, throwing an exception, or reaching an unreachable state). The CFG is the foundation for almost all optimisations: constant propagation follows edges from predecessors to successors, dead code elimination identifies blocks that are unreachable from the entry, and loop detection identifies back edges (edges from a block to a block that dominates it).
 
-### Key Topics
+**Constructing SSA form** from a CFG requires two phases: (1) inserting φ-functions at join points (basic blocks with multiple predecessors where the same source variable has different definitions in different predecessors), and (2) renaming variables (replacing each source variable with a new SSA name at each definition and use). Phase 1 uses the **dominance frontier** (Cytron et al., 1991): a basic block B is in the dominance frontier of block D if B has a predecessor that D dominates (or is D) but D does not strictly dominate B. Intuitively, the dominance frontier identifies where two paths merge — exactly the points where φ-functions are needed. Phase 2 walks the dominator tree in depth-first order, assigning new SSA names and replacing old names.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How methods perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**LLVM IR** is a typed, three-address, infinite-register IR in SSA form. Every value has a type (e.g., `i32`, `float`, `i8*`, `[10 x i32]`, `%struct.Point`), and every instruction defines a new SSA value (e.g., `%1 = add i32 %x, 5`). LLVM IR supports arithmetic instructions (`add`, `sub`, `mul`, `sdiv`, `udiv`), comparison instructions (`icmp eq`, `icmp slt`), memory instructions (`alloca`, `load`, `store`, `getelementptr`), control flow instructions (`br`, `switch`, `ret`, `invoke`, `unwind`), and function calls (`call`). The `getelementptr` (GEP) instruction computes the address of a sub-element of a structured type (struct, array) without loading it — it is the pointer arithmetic primitive of LLVM IR, and it is the most commonly misunderstood instruction for newcomers.
 
-### Lecture Notes
+The **YggLang compiler** translates the typed AST (produced by semantic analysis) into LLVM IR via a recursive walk of the AST. Expression nodes produce SSA values; statement nodes produce side effects (stores, branches). Function bodies become CFGs of basic blocks, each terminated by a branch or return instruction. The translation preserves the source semantics but eliminates syntactic sugar: `for` loops become `while` loops, `switch` statements become `switch` instructions, and `break`/`continue` become explicit branches. The result is a clean, well-structured LLVM IR module ready for optimisation.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Cytron et al., "Efficiently Computing Static Single Assignment Form and the Control Dependence Graph," *ACM TOPLAS* 13:4 (1991): 451–490
+- Lattner & Adve, "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation," *CGO '04* (2004): 75–88
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 5, 9
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to key methods and approaches
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do methods considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. SSA form requires φ-functions at merge points. Why can't the compiler simply assign each source variable a single SSA name? What would go wrong?
+2. The dominance frontier algorithm inserts φ-functions conservatively (it may insert φ-functions that are not strictly necessary). How can we determine which φ-functions are necessary and which are redundant?
+3. LLVM IR uses infinite virtual registers. How does this simplify compiler passes compared to a representation with a fixed number of physical registers? What pass is responsible for mapping virtual registers to physical registers?
 
 ---
 
-ᚴ **Lecture 6: Practical Applications I**
+## Lecture 6: Dataflow Analysis — The Mathematical Heart of Optimisation
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Dataflow analysis** is the technique by which the compiler derives facts about the program's runtime behaviour without actually running the program. Every optimisation depends on some form of dataflow analysis: constant propagation needs to know which variables hold constant values, dead code elimination needs to know which computations are unused, and register allocation needs to know which variables are live at each program point. Dataflow analysis provides these facts by solving systems of equations over the CFG.
 
----
+A **dataflow analysis** is defined by: (1) a **domain** D of abstract values (e.g., sets of variables for liveness analysis, maps from variables to constants for constant propagation); (2) a **flow function** for each instruction that maps the input abstract state to the output abstract state; (3) a **merge operator** ⊔ that combines abstract states at join points (union for may-analyses, intersection for must-analyses); (4) a **direction** (forward or backward); and (5) an **initial value** (⊤ for may-analyses, ⊥ for must-analyses).
 
-### Overview
+**Reaching definitions** is a forward may-analysis that determines which definitions of variables reach each program point. A definition d of variable x reaches point p if there is a path from d to p along which x is not redefined. The domain is sets of definitions {d₁, d₂, ...}. The flow function for an instruction `x = ...` kills all previous definitions of x and generates the new definition. The merge operator is set union (a definition reaches p if it reaches p on *any* path). Reaching definitions is used for constant propagation, copy propagation, and induction variable analysis.
 
-This lecture explores practice1 aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how practice1-level understanding shapes both theory and practice.
+**Liveness analysis** is a backward must-analysis that determines which variables are live (will be used in the future) at each program point. A variable x is live at point p if there is a path from p to a use of x along which x is not redefined. The domain is sets of variables {x₁, x₂, ...}. The flow function for an instruction that uses x generates x (adds x to the live-out set), and the flow function for an instruction that defines x kills x (removes x from the live-in set). The merge operator is set union (x is live at p if it is live on *any* successor path). Liveness analysis is essential for register allocation: a variable that is not live does not need a register.
 
-### Key Topics
+**Constant propagation** is a forward must-analysis that determines which variables hold constant values at each program point. The domain is maps from variables to either a constant value c ∈ Z ∪ R or ⊤ (unknown) or ⊥ (undefined). The flow function for `x = y + z` evaluates y + z if both y and z are constant, producing a constant result; otherwise, it produces ⊤. The merge operator is: if both inputs are the same constant c, the result is c; if they differ, the result is ⊤. Constant propagation is one of the most powerful optimisations: it enables dead code elimination (if a condition is constantly true or false, the dead branch can be removed), strength reduction (replace multiplication by a constant with shifts and adds), and branch folding.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How practice1 perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Worklist algorithms** solve dataflow equations efficiently. The naive approach iterates over all basic blocks until convergence (the chaotic iteration algorithm). The worklist approach maintains a set of blocks that need to be re-analysed (because their inputs have changed). Initially, all blocks are on the worklist. When a block is processed, its output is computed from its input using the flow function. If the output changes, all blocks that depend on this block's output (its successors for forward analyses, its predecessors for backward analyses) are added to the worklist. The worklist algorithm terminates when the worklist is empty. In practice, most dataflow analyses converge in 2–5 iterations for well-structured programs, because most blocks' outputs do not change after the first iteration.
 
-### Lecture Notes
+**Complexity and convergence**: dataflow analysis on a CFG with n nodes and domain D converges in at most n × h(D) iterations, where h(D) is the height of the lattice (the length of the longest chain from ⊤ to ⊥). For constant propagation, h(D) is infinite (the lattice of integers has infinite height), so constant propagation may not converge; in practice, the compiler uses widening (replacing a sequence of increasing values with ⊤ after a fixed number of iterations) to ensure convergence. For liveness and reaching definitions, h(D) is the number of variables, so convergence is guaranteed in O(n × v) iterations, where v is the number of variables. The YggLang compiler implements all standard dataflow analyses using LLVM's pass infrastructure, which provides efficient worklist-based solvers.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), ch. 9 (Dataflow Analysis)
+- Nielson, Nielson & Hankin, *Principles of Program Analysis* (2004/2040), chs. 2–3
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 8
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications i
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice1 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Constant propagation over the integers is not guaranteed to converge (the lattice has infinite height). How does widening work, and what information does it lose? Can you design a more precise widening operator?
+2. Liveness analysis and reaching definitions are duals (one is backward, the other forward; one uses union, the other intersection). What other pairs of dual analyses can you identify?
+3. Dataflow analysis is flow-sensitive but not path-sensitive (it merges results from all paths). Give examples of optimisations that would benefit from path-sensitive analysis. What are the challenges?
 
 ---
 
-ᚺ **Lecture 7: Practical Applications II**
+## Lecture 7: Optimisation — Making Programs Run Faster
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Optimisation** is the phase of the compiler that transforms the program into an equivalent but more efficient version. The term "optimisation" is a misnomer — the compiler does not find the optimal program (which is undecidable in general), but it finds a better program. The betterment is measured by one or more objective functions: execution time, code size, energy consumption, or a weighted combination. Every optimisation must preserve the program's **semantics** — the observable behaviour — while improving the objective function.
 
----
+**Dead code elimination** (DCE) removes code that cannot be reached or whose results are never used. Unreachable code (blocks with no path from the entry block) is removed entirely. Dead assignments (assignments to variables that are never read) are removed from the IR. In SSA form, DCE is particularly effective: a value that has no uses can be removed, and its definition can be removed in turn, potentially exposing more dead code in a cascade. The YggLang compiler's DCE pass typically removes 10–20% of the IR instructions.
 
-### Overview
+**Constant propagation and folding** replaces variables that hold constant values with their values and evaluates constant expressions at compile time. If `x = 3` and `y = 5`, then `z = x + y` becomes `z = 8`. This enables further optimisations: the branch `if (z < 10)` becomes `if (8 < 10)` which becomes `true`, allowing the else branch to be removed (dead code elimination). Constant propagation and DCE form the most basic optimisation cycle: constant propagation enables DCE, which exposes more constants for propagation.
 
-This lecture explores practice2 aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how practice2-level understanding shapes both theory and practice.
+**Common subexpression elimination** (CSE) identifies expressions that compute the same value and replaces redundant computations with a single computation. Local CSE operates within a basic block; global CSE operates across basic blocks using available expressions analysis (a forward may-analysis). In SSA form, CSE is trivial: if two instructions compute the same operation on the same operands, they produce the same SSA value, so the second instruction can be replaced by a reference to the first. **Global value numbering** (GVN) is a more powerful form of CSE that assigns a canonical number to each unique value and replaces all instructions that compute the same value with the canonical representative.
 
-### Key Topics
+**Loop optimisations** are the most impactful class of optimisations because programs spend most of their time in loops. **Loop-invariant code motion** (LICM) moves computations that do not change across loop iterations out of the loop. If `x = y * z` and neither y nor z changes in the loop, x can be computed before the loop. **Strength reduction** replaces expensive operations with cheaper ones: `x * 2` becomes `x << 1`, `x * 8` becomes `x << 3`, and `a[i]` (array indexing) becomes pointer arithmetic that increments by the stride. Induction variable analysis identifies variables that vary linearly across loop iterations (e.g., `i` in `for (i = 0; i < n; i++)`) and enables strength reduction of the memory access pattern.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How practice2 perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Loop unrolling** replicates the loop body to reduce the overhead of loop control (branch, increment, compare) and enable further optimisations across iterations. Unrolling by a factor of k reduces the loop overhead by k× and exposes instruction-level parallelism (independent operations from different iterations can be executed simultaneously). The cost is increased code size (k copies of the loop body). **Loop vectorisation** (SIMD) transforms scalar operations into vector operations: `for (i = 0; i < n; i++) a[i] = b[i] + c[i]` becomes a single vector add instruction that adds 4 or 8 elements at once. LLVM's vectorisation pass analyses loop carried dependencies and generates vector code when safe.
 
-### Lecture Notes
+**Inlining** replaces a function call with the body of the called function, eliminating call overhead (parameter passing, stack frame allocation, return) and enabling further optimisations across the caller-callee boundary. Inlining is the single most impactful optimisation for programs with many small function calls (which is most modern programs, thanks to abstraction-based programming styles). The cost is increased code size (code bloat), which can hurt instruction cache performance. **Profile-guided inlining** uses runtime profiles to decide which functions to inline: hot functions are always inlined, cold functions are never inlined, and warm functions are inlined if the callee is small. The YggLang compiler's inlining heuristic is: inline functions with fewer than 20 IR instructions, and functions that are called from only one call site (regardless of size).
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 8, 10, 14
+- Muchnick, *Advanced Compiler Design and Implementation* (1997), chs. 12–18
+- Allen & Kennedy, *Optimizing Compilers for Modern Architectures* (2002/2040), chs. 2–4
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications ii
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice2 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Optimisation is correct only if it preserves the program's semantics. Give an example of an optimisation that changes the program's observable behaviour. How do compiler writers ensure correctness?
+2. Loop unrolling increases code size. When is unrolling beneficial, and when does it hurt performance? How does profile-guided unrolling decide the unrolling factor?
+3. Inlining is the most impactful optimisation, but it can cause code bloat. What is the relationship between code size and instruction cache performance? How do modern compilers balance inlining benefits against code bloat?
 
 ---
 
-ᚾ **Lecture 8: Advanced Topics in Compiler Design & Code Generation**
+## Lecture 8: Register Allocation — The Hard Problem
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Register allocation** maps the compiler's infinite virtual registers (SSA values) to the finite physical registers of the target machine. This is the most constrained phase of the compiler: even the simplest optimisations can be undone by poor register allocation, because spills (values that do not fit in registers and must be stored in memory) can dominate the execution time. Register allocation is NP-complete in general (Chaitin, 1982), so all practical algorithms use heuristics.
 
----
+**Live ranges** are the foundation of register allocation. A virtual_register v is live from its definition to its last use (exclusive of the point where it is defined, inclusive of the point where it is used). Two virtual registers **interfere** if their live ranges overlap — they cannot be assigned to the same physical register. The **interference graph** is an undirected graph where nodes are virtual registers and edges connect interfering registers. Register allocation reduces to **graph colouring**: assign K colours (physical registers) to the nodes such that no two adjacent nodes have the same colour. If the graph cannot be coloured with K colours, some registers must be **spilled** (stored in memory and loaded when needed).
 
-### Overview
+**Chaitin's algorithm** (1982) is the classic graph-colouring register allocator. It proceeds in four phases: (1) **Build** — construct the interference graph from liveness information; (2) **Simplify** — repeatedly remove nodes with degree < K (they can be coloured easily after the remaining graph is coloured) and push them onto a stack; (3) **Spill** — if no node has degree < K, select a node to spill (store in memory) based on a heuristic (e.g., least frequently used, or the node whose removal reduces the most edges); (4) **Select** — pop nodes from the stack and assign them colours, checking that no neighbour already has the assigned colour. If a node cannot be coloured, it must be spilled. After spilling, the compiler must insert load/store instructions, rebuild the interference graph, and try again. This **iterate-colour-spill** loop may require several rounds.
 
-This lecture explores advanced aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how advanced-level understanding shapes both theory and practice.
+**Linear scan register allocation** (Traub et al., 1998) is a faster alternative that avoids building the interference graph. It sorts live ranges by their start points and scans them in order, assigning the first available register to each live range. If no register is available, the live range with the furthest end point is spilled. Linear scan is O(n log n) (for sorting) compared to Chaitin's O(n²) (for building the interference graph), making it suitable for JIT compilers where compilation time is critical. The **linear scan with second chance** (Wimmer & Mössenb\uck{ö}ck, 2005) improves on basic linear scan by splitting live ranges at optimal points (where the live range has a gap) rather than spilling the entire range.
 
-### Key Topics
+**Coalescing** eliminates unnecessary register-to-register copies (e.g., `mov %r1, %r2` generated by copy propagation after register allocation). Coalescing merges the source and destination registers of a copy instruction into a single register, removing the copy. The challenge is that coalescing increases the degree of the merged node in the interference graph, potentially making the graph uncolourable. **Aggressive coalescing** (Chaitin) coalesces all copy-related nodes regardless of degree, risking increased spilling. **Conservative coalescing** (George & Appel, 1996) coalesces only when it is guaranteed not to increase spilling. **Iterated coalescing** (Appel & George, 2001) interleaves simplification and coalescing, coalescing when possible and simplifying when necessary, until no more progress can be made.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How advanced perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**SSA-based register allocation** exploits the properties of SSA form to simplify the allocation problem. In SSA form, every definition is unique, and phi-functions join values at merge points. The interference graph in SSA form has a special structure: values defined in disjoint scopes (different branches of an if-then-else) do not interfere, even if they are merged by a phi-function. This reduces the number of interferences and makes the graph easier to colour. The **separate allocator** approach (Budimlić et al., 2002) allocates registers within each basic block separately, using phi-functions to coordinate values across blocks. The **SSA-destruction** phase (which replaces phi-functions with copy instructions) must be coordinated with register allocation to avoid introducing unnecessary spills.
 
-### Lecture Notes
+The YggLang compiler uses LLVM's register allocator, which offers three algorithms: (1) **basic** — a simple greedy allocator that assigns the first available register, spilling when necessary; (2) **greedy** — a priority-based allocator that uses live range splitting to reduce spilling; and (3) **PBQP** (Partitioned Boolean Quadratic Programming) — an exact allocator that solves the allocation problem as a PBQP instance, which is NP-complete in general but tractable for most real-world functions. The default is greedy, which provides good performance with reasonable compilation time.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Chaitin, "Register Allocation & Spilling via Graph Colouring," *SIGPLAN Notices* 17:6 (1982): 98–105
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 13
+- Appel & Palsberg, *Modern Compiler Implementation in Java* (2nd ed., 2002/2040), ch. 11
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to advanced topics in compiler design & code generation
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do advanced considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Register allocation is NP-complete, but most real functions can be coloured with 6–8 registers. Why is this? What structural properties of real interference graphs make them easy to colour?
+2. Linear scan is faster than graph colouring but produces worse code. Under what conditions is the code quality difference significant? When would you choose linear scan over graph colouring?
+3. SSA-based register allocation eliminates phi-functions by inserting copies. But copies can be eliminated by coalescing. How do you balance the desire to eliminate copies (coalescing) with the need to preserve colourability (not coalescing)?
 
 ---
 
-ᛁ **Lecture 9: Interdisciplinary Connections**
+## Lecture 9: Code Generation — From IR to Machine Code
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Code generation** is the final phase of the compiler: it translates the optimised IR into target-machine instructions. Code generation must produce correct code (preserving the program's semantics) and efficient code (minimising execution time, code size, or energy consumption). The code generator must handle: instruction selection (choosing the best instruction sequence for each IR construct), instruction scheduling (reordering instructions to minimise pipeline stalls), and register allocation (assigning physical registers to virtual registers, as discussed in Lecture 8).
 
----
+**Instruction selection** maps each IR instruction to one or more target-machine instructions. The simplest approach is **macro expansion**: each IR instruction is replaced by a fixed sequence of machine instructions (e.g., `add i32 %a, %b` → `add r0, r1, r2`). This is correct but not optimal — it misses opportunities to use complex instructions (e.g., addressing modes that combine addition and memory access) and to combine multiple IR instructions into a single machine instruction. **Tree pattern matching** (Fraser et al., 1992) represents each IR instruction as a tree and the target machine's instruction set as a set of tree patterns. The instruction selector finds the minimum-cost covering of the IR tree by instruction patterns, using dynamic programming. This is the approach used by LLVM's SelectionDAG instruction selector.
 
-### Overview
+**SelectionDAG** and **GlobalISel** are LLVM's two instruction selection frameworks. SelectionDAG lowers LLVM IR to a directed acyclic graph of target-independent nodes (SDNodes), optimises the DAG (combining nodes, eliminating redundant operations), and then legalises the DAG (replacing unsupported operations with supported sequences). The legalised DAG is then matched against the target machine's instruction patterns using dynamic programming. GlobalISel (introduced in LLVM 10) uses a rule-based approach: the target describes instruction selection rules in a table-gen file, and LLVM matches IR instructions to rules using a greedy algorithm. GlobalISel is faster (O(n) vs. O(n²) for SelectionDAG) but produces slightly worse code in some cases.
 
-This lecture explores connections aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how connections-level understanding shapes both theory and practice.
+**Instruction scheduling** reorders instructions to minimise pipeline stalls and maximise instruction-level parallelism. Modern processors have deep pipelines (10–20 stages) and multiple functional units (ALU, FPU, load/store unit, branch unit). An instruction that depends on the result of a previous instruction cannot issue until the result is available — this is a **pipeline stall**. The instruction scheduler reorders independent instructions to fill the stall cycles, using a list scheduling algorithm that assigns priorities to instructions (based on critical path length, latency, or resource constraints) and schedules them in priority order. The YggLang compiler targets both RISC-V and x86-64: RISC-V has a simple pipeline (few stalls, minimal scheduling needed), while x86-64 has a complex pipeline (many stalls, scheduling is critical).
 
-### Key Topics
+**Calling conventions** define how functions pass parameters and return values: which registers are used for arguments, which registers are caller-saved (must be preserved by the caller) and which are callee-saved (must be preserved by the callee), and how the stack frame is laid out. The RISC-V calling convention passes the first 8 integer arguments in registers a0–a7 and the first 8 floating-point arguments in fa0–fa7; remaining arguments are passed on the stack. The x86-64 System V calling convention passes the first 6 integer arguments in rdi, rsi, rdx, rcx, r8, r9 and the first 8 floating-point arguments in xmm0–xmm7. The YggLang compiler follows the platform calling convention for external functions but uses a custom calling convention for internal functions (passing all arguments in registers, with no stack arguments, and using a larger callee-saved set).
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How connections perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Prologue and epilogue**: The function prologue allocates the stack frame (by decrementing the stack pointer), saves callee-saved registers, and sets up the frame pointer. The function epilogue restores callee-saved registers, deallocates the stack frame (by incrementing the stack pointer), and returns. The prologue and epilogue are critical for performance — callee-saved registers must be saved and restored even if they are not used (a conservative approach), or the compiler must track which callee-saved registers are actually modified (a precise approach). The YggLang compiler uses shrink-wrapping (an optimisation that moves callee-save stores from the prologue to the first point where the register is actually needed), reducing prologue/epilogue overhead by 10–30%.
 
-### Lecture Notes
+**Required Reading:**
+- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 11–12
+- Muchnick, *Advanced Compiler Design and Implementation* (1997), chs. 9–10
+- Fraser, Hanson & Proebsting, "Engineering a Simple, Efficient Code Generator Generator," *LOPLAS* 1:3 (1992): 213–226
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to interdisciplinary connections
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do connections considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Macro expansion is simple but produces suboptimal code. Tree pattern matching produces better code but is more complex. What are the tradeoffs? How does LLVM's SelectionDAG balance simplicity and optimality?
+2. Instruction scheduling is critical for x86-64 but less important for RISC-V. Why? What architectural features make scheduling more or less important?
+3. Shrink-wrapping moves callee-save stores from the prologue to the first point of use. How does the compiler determine where the saved registers are actually needed? What are the risks of shrink-wrapping?
 
 ---
 
-ᛃ **Lecture 10: Ethical Considerations and Societal Impact**
+## Lecture 10: Linking, Loading, and Runtime Systems
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The compiler produces **object files** (ELF on Linux, Mach-O on macOS, COFF on Windows) containing machine code, data, symbol tables, and relocation entries. The **linker** combines multiple object files into a single executable or shared library by resolving symbol references (finding the definition of each external symbol across all object files) and applying relocations (patching the machine code with the final addresses of resolved symbols). The **loader** copies the executable into memory, resolves dynamic library dependencies, and transfers control to the entry point.
 
----
+**Symbol resolution** is the linker's primary task. Each object file defines symbols (functions and global variables) and references symbols defined in other files. The linker builds a global symbol table from all object files, matches references to definitions, and reports undefined symbols (references without definitions) and multiply-defined symbols (two definitions of the same symbol). **Strong symbols** (function definitions, initialised global variables) override **weak symbols** (declarations without definitions, or symbols marked with `__attribute__((weak))`). The YggLang linker follows the platform's linking rules (ld.bfd on Linux, ld64 on macOS).
 
-### Overview
+**Relocation** patches the machine code with the final addresses of resolved symbols. When the compiler generates a call to function `f`, it emits a relocation entry saying "the instruction at offset X needs to be patched with the address of f." The linker reads the relocation entry, looks up the address of f in the symbol table, and writes the address into the instruction at offset X. There are many relocation types (absolute, PC-relative, GOT-relative, PLT-relative) corresponding to different addressing modes. RISC-V has **relocation relaxation** (linker relaxation), where the linker can replace a long instruction sequence with a shorter one if the symbol is within range. For example, `auipc + jalr` (two instructions for a 32-bit address) can be replaced with `jal` (one instruction for a ±1MB offset) if the target is within range.
 
-This lecture explores ethics aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how ethics-level understanding shapes both theory and practice.
+**Position-independent code** (PIC) generates code that works regardless of where it is loaded in memory. PIC is required for shared libraries (which may be loaded at different addresses in different processes) and for ASLR (address space layout randomisation, a security feature that loads code at random addresses). PIC uses the **global offset table** (GOT) for global variable access (a table of addresses that is filled in by the loader) and the **procedure linkage table** (PLT) for function calls (a table of stubs that lazy-bind function addresses on first call). On x86-64, PIC adds one instruction per global variable access (a load through the GOT) and one instruction per function call (a jump through the PLT). On RISC-V, PIC adds two instructions per global variable access (`auipc + ld` to load the GOT entry) and two instructions per function call (`auipc + jalr` to jump through the PLT).
 
-### Key Topics
+**Dynamic linking** loads shared libraries at runtime rather than at link time. The dynamic linker (ld.so on Linux) resolves the executable's shared library dependencies, loads them into memory (sharing code pages between processes), and fills in the GOT and PLT entries. Dynamic linking reduces executable size (shared library code is not duplicated in each executable) and enables library updates (a security patch to a shared library takes effect for all programs that use it). The cost is a small performance overhead (one or two extra instructions per global variable access and function call) and a complex dependency management problem (version conflicts, ABI compatibility, library search paths).
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How ethics perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Runtime systems** provide services that the compiled code cannot provide for itself: memory allocation (malloc/free, garbage collection), exception handling (stack unwinding, handler dispatch), and thread management (thread creation, synchronisation, scheduling). The YggLang runtime provides a simple memory allocator (based on dlmalloc), structured exception handling (using DWARF unwind tables for stack unwinding), and a basic threading library (pthreads wrappers). The runtime is linked into every YggLang executable and provides the `main` entry point, command-line argument processing, and exit handling.
 
-### Lecture Notes
+**Garbage collection** (GC) is an alternative to manual memory management. The YggLang compiler supports an optional garbage collector (a mark-and-sweep collector with incremental collection) for programs that prefer automatic memory management. The GC requires the compiler to generate **root sets** (the set of pointers that the GC must trace from — stack variables, global variables, and register values) and **layout maps** (descriptions of where pointers are located within each object). The compiler generates these maps as side tables that the GC reads at collection time. The overhead of GC is typically 5–15% of execution time for a well-tuned collector, but it eliminates memory leaks and dangling pointers entirely.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Levine, *Linkers and Loaders* (2000/2040), chs. 1–7
+- Drepper, "How to Write Shared Libraries" (2001/2040), sections 1–4
+- Boehm, "Dynamic Space-Storage Management" in *GC Handbook* (2011/2040), ch. 2
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to ethical considerations and societal impact
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do ethics considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Relocation relaxation replaces long instruction sequences with shorter ones. How does the linker determine when a relaxation is possible? What are the risks (e.g., relaxation that changes code size, affecting subsequent offsets)?
+2. Position-independent code adds overhead per global variable access and function call. What is the quantitative impact? How does ASLR interact with PIC?
+3. Dynamic linking enables library updates but introduces version conflicts. How do symbol versioning and soname versioning work? What are the tradeoffs between static and dynamic linking?
 
 ---
 
-ᛇ **Lecture 11: Current Research and Future Directions**
+## Lecture 11: JIT Compilation and Adaptive Optimisation
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+**Just-in-time (JIT) compilation** compiles program code at runtime, during execution, rather than before execution (ahead-of-time, AOT). JIT compilation combines the flexibility of interpretation (the ability to start executing immediately, without waiting for compilation) with the performance of compiled code (the ability to optimise hot code based on runtime profiles). JIT compilation is the core technology of modern language runtimes: the JVM (HotSpot C1/C2 compilers), V8 (Ignition interpreter + TurboFan optimiser), and .NET (RyuJIT).
 
----
+**Interpretation vs. compilation** is a spectrum, not a binary choice. A pure interpreter (e.g., CPython) executes each bytecode by looking up its handler in a dispatch table and calling the handler function. This is simple to implement but slow (each operation requires a dispatch table lookup, which is a memory-indirect branch that the hardware branch predictor struggles with). A baseline JIT (e.g., the JVM's C1 compiler) compiles each method to unoptimised machine code the first time it is called, eliminating the dispatch overhead. A profiling JIT (e.g., V8's Ignition) interprets bytecodes and collects type profiles (which types flow through which variables), which guides later optimisation. An optimising JIT (e.g., the JVM's C2 compiler or V8's TurboFan) recompiles hot methods with aggressive optimisations based on the collected profiles.
 
-### Overview
+**Speculative optimisation** is the key technique that makes JIT compilation competitive with AOT compilation. The optimising JIT makes assumptions about the program's runtime behaviour (e.g., "variable x always holds an integer," "function f is always called with 2 arguments of type string") and emits code that is optimised for the common case. If the assumption holds, the optimised code runs much faster than the unoptimised code. If the assumption fails, the JIT must **deoptimise** — transfer control from the optimised code back to the interpreter, reconstruct the interpreter's state from the optimised code's state, and continue execution in the interpreter. Deoptimisation is expensive (it requires reconstructing the interpreter stack frame, which may involve rematerialising values that were optimised away), but it is rarely needed if the profiling data is accurate.
 
-This lecture explores research aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how research-level understanding shapes both theory and practice.
+**On-stack replacement** (OSR) transfers control from the interpreter to optimised code (and vice versa) in the middle of a method execution. OSR is necessary because a method may be identified as hot after it has been executing for some time — waiting until the method returns and re-entering the optimised code at the top would miss the hot loop. OSR constructs a "transition point" in the middle of the optimised code that maps interpreter stack frames to optimised code stack frames, reconstructs any values that were optimised away, and jumps to the optimised code. The transition point also exists in the deoptimisation direction, mapping optimised code stack frames back to interpreter stack frames.
 
-### Key Topics
+**Tiered compilation** combines multiple compilation tiers to balance startup latency, peak performance, and compilation cost. The JVM uses three tiers: (1) the interpreter (fast startup, slow execution), (2) C1 (fast compilation, moderate performance), and (3) C2 (slow compilation, high performance). A method starts in the interpreter, is compiled by C1 after a threshold number of invocations, and is recompiled by C2 if it is still hot. Each tier adds more aggressive optimisations: C1 does local optimisations (constant folding, dead code elimination), C2 does global optimisations (inlining, escape analysis, vectorisation). The YggLang JIT uses a two-tier scheme: tier 0 (interpreter + profiler) and tier 1 (LLVM ORC JIT with profile-guided optimisation).
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How research perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+**Profile-guided optimisation** (PGO) in the JIT context uses runtime profiles to guide optimisation decisions. Type profiles tell the optimiser which types dominate at each call site (enabling speculative inlining and type specjalisation). Branch profiles tell the optimiser which branches are taken (enabling code layout optimisation that places hot paths on consecutive cache lines). Call profiles tell the optimiser which functions are called most frequently (enabling selective inlining and specialisation). The optimiser uses these profiles to make tradeoffs: inlining a function that is called 1000 times per second is worthwhile, but inlining a function that is called once per second is not.
 
-### Lecture Notes
+**The LLVM ORC JIT** is LLVM's JIT compilation framework (ORC stands for On-Request Compilation). ORC provides a layer-based architecture: the compiler layer compiles IR modules to machine code on demand, the object layer manages compiled object files, and the absolute symbols layer resolves external symbols. ORC supports lazy compilation (symbols are compiled when first referenced), concurrent compilation (multiple threads compile different modules simultaneously), and removal of compiled code (modules can be unloaded to reclaim memory). The YggLang JIT uses ORC to compile hot functions individually (without waiting for the entire module to be compiled), cache compiled code for future executions, and unload cold code to reduce memory pressure.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Aycock, "A Brief History of Just-In-Time," *ACM Computing Surveys* 35:2 (2003): 97–113
+- Click et al., "The Server Compiler," *JVM Internals* (Sun Microsystems, 2001/2040)
+- LLVM ORC JIT Documentation, *LLVM Compiler Infrastructure* (2040)
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to current research and future directions
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do research considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. Speculative optimisation assumes that future behaviour matches past behaviour. Under what conditions does this assumption fail, and what are the performance consequences of deoptimisation?
+2. Tiered compilation adds complexity (multiple compilers, transition points, profiling). When is a single-tier compiler preferable? What are the tradeoffs?
+3. JIT compilation has access to runtime information that AOT compilers lack. Give three specific optimisations that a JIT can perform but an AOT compiler cannot. What are the risks?
 
 ---
 
-ᛈ **Lecture 12: Synthesis and Comprehensive Review**
+## Lecture 12: The Future of Compilation — ML-Guided Optimisation, Verified Compilation, and Multi-Level IR
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The landscape of compiler technology in 2040 is shaped by three trends: **machine-learning-guided optimisation**, **verified compilation**, and **multi-level intermediate representations**. These trends are not incremental improvements — they are paradigm shifts that change how compilers are built, how they make decisions, and how we trust their output.
 
----
+**ML-guided optimisation** replaces hand-tuned heuristics with learned models. The most impactful application is **inlining decisions**: instead of a fixed threshold (inline functions with fewer than N instructions), ML models predict whether inlining a particular call site will improve overall performance, based on features like the callee's size, the call site's frequency, the caller's register pressure, and the estimated code size impact. Google's MLGO framework (2021) uses reinforcement learning to train inlining and register allocation policies on production workloads, achieving 3–7% speedup on large C++ programs. The YggLang compiler's inlining heuristic is a gradient-boosted decision tree trained on YggLang benchmarks; it outperforms LLVM's default heuristic by 5% on YggLang-specific workloads.
 
-### Overview
+**Sequence-to-sequence models** for code generation use large language models (LLMs) to generate optimised IR directly from source code. The input is the unoptimised IR, and the output is the optimised IR. AlphaCode (2022) and subsequent models have demonstrated that neural code generation can produce correct, efficient code for competitive programming problems, but the models are not yet reliable enough for production compilers (correctness must be guaranteed, and neural models are not formally verifiable). Hybrid approaches combine neural generation with symbolic verification: the model proposes an optimisation, and a symbolic verifier checks that the optimisation preserves semantics. This hybrid approach is used in the YggLang compiler for loop optimisation (the model proposes unrolling factors and vectorisation strategies, and the verifier checks that the transformed code is equivalent to the original).
 
-This lecture explores synthesis aspects of compiler design & code generation, building on foundational knowledge from previous sessions. By 2040, lexing, parsing, ir, optimization, llvm, jit, aot, and this session examines how synthesis-level understanding shapes both theory and practice.
+**Verified compilation** (CompCert, Leroy, 2006) proves that the compiler preserves the program's semantics from source to machine code. CompCert is a C compiler verified in Coq that produces correct code for x86, PowerPC, ARM, and RISC-V. The verification guarantees that if the source program does not exhibit undefined behaviour, then the compiled program produces the same observable results. CompCert has found bugs in every production C compiler (GCC, Clang, ICC) by comparison testing against its verified output. The cost of verification is high: CompCert is ~50,000 lines of Coq, and each new optimisation pass must be verified separately. **Verified LLVM** (Vellvm, Zhao et al., 2012–2017) is an ongoing effort to verify the LLVM optimisation passes, but only a subset of LLVM's passes have been verified as of 2040.
 
-### Key Topics
+**Multi-level IR** (MLIR, Lattner et al., 2021) addresses a fundamental problem in modern compilers: different domains (machine learning, hardware accelerators, high-level synthesis, dataflow, transaction processing) require different IRs, and translating between them is error-prone and loses information. MLIR provides a framework for defining multiple **dialects** (domain-specific IRs) within a single infrastructure. Each dialect defines its own operations, types, and invariants, and passes can transform between dialects. The key insight: dialects are not isolated — they share a common infrastructure (attributes, locations, regions, block arguments) that enables progressive lowering from high-level dialects (e.g., `affine` for loop nests) to low-level dialects (e.g., `llvm` for LLVM IR) without losing information. The YggLang compiler uses MLIR for domain-specific optimisations: the `ygglang.tensor` dialect optimises tensor operations, the `ygglang.parallel` dialect optimises parallel loops, and the `ygglang.hw` dialect lowers tensor operations to hardware accelerator instructions.
 
-- **Topic 1:** Core definitions and terminology specific to compiler design & code generation
-- **Topic 2:** How synthesis perspectives reshape our understanding of lexing, parsing, ir, optimization, llvm, jit, aot
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Science program
+The deepest lesson of compiler design is that **correctness is non-negotiable**. Every optimisation must preserve the program's semantics — a single miscompiled program is a bug that can cause crashes, data corruption, or security vulnerabilities. The compiler writer's task is to make the program faster without changing what it does, and this requires the same rigour as mathematical proof. CompCert and verified LLVM demonstrate that this rigour is achievable, but at a cost: verified compilers are slower to develop and harder to extend than unverified compilers. The future of compilation lies at the intersection of ML (for optimisation decisions), verification (for correctness guarantees), and multi-level IR (for extensibility). The YggLang compiler embodies this intersection: ML-guided heuristics for optimisation, Lean 4 verification for critical passes, and MLIR for domain-specific extensions.
 
-### Lecture Notes
+As the Norse smiths knew, the craft of forging requires both fire and precision. The compiler's fire is the optimisation that transforms slow code into fast code; the compiler's precision is the verification that ensures the transformation is correct. Without fire, the program runs slowly; without precision, it runs wrongly. Both are necessary. Both are sacred.
 
-The field of compiler design & code generation has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how lexing, parsing, ir, optimization, llvm, jit, aot requires both technical depth and contextual awareness.
+**Required Reading:**
+- Leroy, "Formal Verification of a Realistic Compiler," *CACM* 52:7 (2009): 107–115
+- Lattner et al., "MLIR: Scaling Compiler Infrastructure for Domain-Specific Computation," *CGO '21* (2021): 2–14
+- Cummins et al., "Compiler GYM: A Reinforcement Learning Toolkit for Compiler Optimisation," *CGO '22* (2022): 3–15
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern compiler design & code generation
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to synthesis and comprehensive review
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of compiler design & code generation evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do synthesis considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+**Discussion Questions:**
+1. ML-guided optimisation learns heuristics from program benchmarks. But what happens when the training benchmarks do not represent the target workload? How do you prevent overfitting to the training data?
+2. Verified compilation guarantees semantics preservation for the verified passes. But the unverified passes (e.g., the register allocator, the code generator) can still introduce bugs. How do you extend verification to the entire compilation pipeline?
+3. Multi-level IR allows domain-specific dialects to coexist within a single compiler. What are the challenges of translating between dialects? How does MLIR ensure that information is not lost during lowering?
 
 ---
 
-## Assignments
+## Final Examination Preparation
 
+The final examination for CS302 consists of eight questions of which you must choose four. Each question requires a substantive essay (800–1200 words) demonstrating mastery of compiler design concepts and the ability to apply them to novel situations. The examination is open-book but not open-internet.
 
-### Assignment 1: Foundational Exercise
+**Sample Examination Questions:**
 
-**Course:** CS302 — Compiler Design & Code Generation  
-**Type:** Foundational Exercise  
-**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of compiler design & code generation.
+1. Compare and contrast LL(1), LALR(1), and GLR parsing. For each, describe: (a) the class of grammars it can handle, (b) the time and space complexity, (c) the error recovery capabilities, and (d) a real-world parser generator that uses it. Under what circumstances would you choose each?
 
-**Task:** Complete a set of exercises that demonstrate mastery of core concepts in compiler design & code generation. Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
+2. Explain the construction of SSA form, including φ-function insertion using dominance frontiers and variable renaming using the dominator tree. How does SSA form simplify dataflow analysis? Give examples of optimisations that are trivial in SSA form but difficult in non-SSA form.
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
+3. Describe the Chaitin graph-colouring register allocation algorithm in detail, including the simplify-spill-select cycle. How does SSA-based register allocation reduce the interference graph? What is the relationship between register allocation and instruction scheduling?
 
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
+4. A JIT compiler must decide when to compile a hot method and when to deoptimise a speculative optimisation. Describe the tradeoffs between compilation latency, code quality, and deoptimisation cost. How does tiered compilation address these tradeoffs?
 
-**Due:** End of Week 3 (see course schedule for exact date)
+5. Design an optimisation pipeline for a functional language with immutable data structures. Which optimisations from the imperative world (constant propagation, dead code elimination, loop optimisations) are still applicable? What new optimisations does immutability enable (e.g., common subexpression elimination becomes more powerful)? What optimisations are no longer needed?
+
+6. Position-independent code adds overhead per global variable access and function call. Analyse the quantitative impact on RISC-V and x86-64, considering GOT indirection, PLT stubs, and relocation relaxation. When is PIC worthwhile, and when should you use static linking instead?
+
+7. Verified compilation (CompCert) proves semantics preservation for the entire compilation pipeline, but only for the verified passes. Unverified passes (register allocation, instruction scheduling) can still introduce bugs. Propose a verification strategy that covers the entire pipeline. What are the practical challenges?
+
+8. Multi-level IR (MLIR) allows domain-specific dialects to coexist within a single compiler. Design a dialect for a new domain (e.g., quantum computing, neural network inference, database query processing). What operations does your dialect support? How does it lower to existing dialects? What optimisations does it enable that are not possible at the LLVM level?
 
 ---
 
-
-### Assignment 2: Applied Analysis
-
-**Course:** CS302 — Compiler Design & Code Generation  
-**Type:** Applied Analysis  
-**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of compiler design & code generation.
-
-**Task:** Analyze a real-world scenario related to lexing, parsing, ir, optimization, llvm, jit, aot. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 6 (see course schedule for exact date)
-
----
-
-
-### Assignment 3: Research & Synthesis
-
-**Course:** CS302 — Compiler Design & Code Generation  
-**Type:** Research & Synthesis  
-**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of compiler design & code generation.
-
-**Task:** Conduct research on a contemporary issue in compiler design & code generation. Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 9 (see course schedule for exact date)
-
----
-
-
-### Assignment 4: Design & Implementation
-
-**Course:** CS302 — Compiler Design & Code Generation  
-**Type:** Design & Implementation  
-**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of compiler design & code generation.
-
-**Task:** Design and prototype a solution to a problem in compiler design & code generation. Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 12 (see course schedule for exact date)
-
----
-
-
-### Assignment 5: Comprehensive Project
-
-**Course:** CS302 — Compiler Design & Code Generation  
-**Type:** Comprehensive Project  
-**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of compiler design & code generation.
-
-**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in compiler design & code generation. Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 15 (see course schedule for exact date)
-
----
-
+*ᛟ End of Course Materials — CS302: Compiler Design & Code Generation — University of Yggdrasil, 2040*
