@@ -2,13 +2,14 @@
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4  
+**Prerequisites:** CS204 (Computer Networks & Protocols), CS201 (Data Structures & Algorithms II)  
 **Description:** CAP, consensus (Raft/Paxos), eventual consistency, CRDTs
 
 ---
 
 ## Lectures
 
-ᛉ **Lecture 1: The Nature of Distribution — Why Distributed Systems Matter**
+ᛟ **Lecture 1: The Landscape of Distributed Computation — Why Distribution Matters**
 
 **Course:** CS301 — Distributed Systems  
 **Degree:** Bachelor of Science in Computer Science, 2040
@@ -17,464 +18,71 @@
 
 ### Overview
 
-Distributed systems are the invisible scaffolding of modern civilization. Every bank transfer, every video stream, every autonomous vehicle decision ripples across a constellation of machines that must somehow agree on truth despite being separated by latency, failure, and the fundamental limits of physics. This course begins where single-machine computing ends — at the boundary where one processor's certainty becomes another's uncertainty, and where the mathematics of impossibility coexists with the engineering of pragmatic triumph.
+The year is 2040. No serious computation happens on a single machine anymore. From the quantum-hybrid clouds that power AGI inference to the edge meshes that run autonomous vehicles, distributed systems are the substrate of everything we build. This opening lecture establishes the conceptual terrain: why distribution is not merely a performance optimization but a fundamental computational paradigm with its own laws, trade-offs, and philosophical commitments.
 
-By 2040, distributed systems have become the dominant paradigm for virtually all computing at scale. The "cloud" is not a place — it is a distributed system. The Internet of Things is not a buzzword — it is billions of distributed nodes making autonomous decisions. Even your personal neural implant runs distributed consensus with its cloud counterpart to maintain coherent identity across device boundaries. Understanding distributed systems is no longer a specialization; it is the operating system of reality itself.
+We trace the arc from early networked systems — the ARPANET's decentralized routing, the first distributed file systems (NFS, AFS) — to the modern landscape of globally replicated state machines, CRDT-based collaborative editing, and the erasure-coded storage systems that hold the world's data. Along the way, we confront the central truth of the field: distributed systems are defined by their failure modes. A system that cannot fail isn't distributed; it's just slow.
 
-### The Fundamental Challenge
+### Key Topics
 
-The core problem of distributed systems is elegantly stated and profoundly difficult: **how do multiple independent entities, communicating only through unreliable messages, agree on the state of the world?**
+- **TheFundamental Abstraction**: Processes communicating via messages over unreliable channels — the asynchronous system model
+- **Fallacies of Distributed Computing**: Peter Deutsch's eight fallacies (1994) and why six additional ones had to be added by 2035
+- **Why Distribution Is Inevitable**: Scale, fault tolerance, latency optimization, geographic compliance, and the thermodynamic argument
+- **The CAP Conjecture Before the Theorem**: Brewer's original 2000 keynote and the intuitive argument before formalization
+- **Local Knowledge Principle**: No node can know the global state instantaneously — the epistemological foundation of distributed systems
+- **The 2040 Context**: Quantum-repeater networks, AGI-grade inference clusters, planetary-scale sensor meshes
 
-This question intersects with:
+### Lecture Notes
 
-- **Physics**: The speed of light imposes hard limits on how fast information can propagate. A message from Earth to Mars takes between 3 and 22 minutes. Even within a single datacenter, the speed-of-light round trip across a rack imposes measurable latency.
-- **Failure**: Networks partition, machines crash, disks corrupt, software bugs cause silent data corruption. A distributed system must make progress despite any subset of its components failing arbitrarily.
-- **Concurrency**: Multiple clients may simultaneously read and write the same data. Without careful coordination, the system can produce contradictions — the same account showing different balances to different observers.
+Distributed systems emerged not from a single insight but from the accumulation of practical necessity. In the 1960s, the U.S. Department of Defense funded ARPANET precisely because a centralized command structure was a single point of failure — a vulnerability that could be exploited in warfare. The first分布式systems were thus born from paranoia, not optimization. This origin story matters: the field's deepest assumptions are still shaped by the threat model of adversarial infrastructure destruction.
 
-Leslie Lamport captured the essence in his 1978 paper "Time, Clocks, and the Ordering of Events in a Distributed System": in a distributed system, events are only partially ordered. There is no global clock, no universal "now." Instead, causality creates a partial order — event A happened-before event B if A could have influenced B. Events that are causally unrelated are **concurrent**: neither happened first.
+By the 1990s, the client-server model had simplified distributed computation back toward centralization. Web servers were essentially centralized databases that happened to be accessed remotely. The real intellectual revolution came when companies like Google and Amazon discovered that *scale* requires distribution, not as a luxury but as a physical necessity. A single machine cannot store petabytes; a single rack cannot serve millions of concurrent requests; a single datacenter cannot provide single-digit-millisecond latency globally.
 
-### Historical Arc
+The 2020s saw the emergence of three forces that made distribution *the norm rather than the exception*: (1) the proliferation of edge devices requiring local computation for latency and privacy reasons; (2) regulatory frameworks (GDPR, China's PIPL, India's DPDPA) mandating data residency within specific jurisdictions; and (3) the shift from request-response to event-driven architectures where state is continuously streamed across many nodes.
 
-The genealogy of distributed systems traces through decades of innovation:
+By 2040, the University of Yggdrasil's own infrastructure is a distributed system — its HPC cluster spans nodes in Iceland, Norway, and the Faroe Islands, connected by quantum-encrypted undersea cables, and its student-facing services run on a constellation of edge nodes within 50ms of every enrolled student worldwide. The Bifrost Research Network, named after the mythological bridge between realms, provides the backbone.
 
-- **1969**: ARPANET connects four nodes. The problem of routing unreliable messages is born.
-- **1978**: Lamport's paper on logical clocks establishes the formal foundation for reasoning about distributed events.
-- **1982**: Lamport, Shostak, and Pease publish "The Byzantine Generals Problem," defining failures where nodes may actively deceive.
-- **1985**: Fischer, Lynch, and Patterson prove the FLP impossibility result: in an asynchronous system, no deterministic algorithm can guarantee consensus if even one process may crash.
-- **1989**: Lamport publishes Paxos, a consensus algorithm achieving safety under all conditions. Written as a fictional parliamentary procedure on the island of Paxos, it would not be widely understood for another decade.
-- **2000**: Brewer presents the CAP theorem at PODC. Gilbert and Lynch formalize it in 2002.
-- **2006**: Amazon publishes the Dynamo paper, demonstrating that carefully managed inconsistency powers massive-scale production systems.
-- **2012**: Ongaro and Ousterhout publish the Raft consensus algorithm, designed for understandability.
-- **2024-2040**: The convergence of edge computing, quantum networking precursors, and AI-driven fault management transforms distributed systems from human-designed protocols to adaptive ecosystems. Self-healing consensus groups, AI-predicted partition recovery, and formally verified distributed kernels define the modern landscape.
+**The Local Knowledge Principle** deserves special emphasis. In a distributed system, every node operates with *partial, potentially stale* information about the rest of the system. This is not a bug — it is the defining constraint. A node in Tokyo cannot instantaneously know whether a node in Reykjavik has crashed or is merely slow to respond. This uncertainty gives rise to impossibility results like FLP and the necessity of timeouts, heartbeats, and failure detectors. We will return to this principle in every lecture.
 
-### The 2040 Context
+The 14 Fallacies of Distributed Computing (Deutsch 1994, extended by the UoY Distributed Systems Group 2035):
 
-At the University of Yggdrasil, we teach distributed systems not as a historical survey but as a living discipline. Our students will build systems that:
+*Original 8 (1994):*
+1. The network is reliable
+2. Latency is zero
+3. Bandwidth is infinite
+4. The network is secure
+5. Topology doesn't change
+6. There is one administrator
+7. Transport cost is zero
+8. The network is homogeneous
 
-- **Run across planetary distances** — Mars colony data synchronization requires protocols tolerating 4-44 minute round trips.
-- **Coordinate autonomous agents** — Self-driving vehicles, drone swarms, and robotic construction crews are distributed systems where the "nodes" move through physical space.
-- **Maintain privacy in a hostile world** — Zero-knowledge proofs and homomorphic encryption allow distributed computation without revealing secrets.
-- **Survive Byzantine failures** — In a world of adversarial AI, some nodes may be actively malicious, not merely crashed.
-
-### Key Terminology
-
-- **Node**: An independent computing entity. May be a physical machine, virtual machine, container, or logical process.
-- **Message**: The fundamental unit of communication. The only way nodes learn about each other's state.
-- **Latency**: Time delay between sending and receiving a message. Includes propagation, processing, and queueing delays.
-- **Consensus**: The problem of getting all non-faulty nodes to agree on a value.
-- **Consistency**: The property that all nodes observe the same state (or a well-defined approximation).
-- **Availability**: Every request receives a non-error response.
-- **Partition tolerance**: The system continues operating despite network partitions.
-- **Idempotence**: Performing an operation multiple times has the same effect as performing it once.
+*Extended 6 (2035):*
+9. Clocks are synchronized
+10. State is consistent by default
+11. Partial failure doesn't happen
+12. Causality is obvious
+13. Human operators read the manual
+14. Quantum decoherence is someone else's problem
 
 ### Required Reading
 
-- Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System." *CACM*, 21(7), 558–565.
-- Coulouris, G. et al. (2012). *Distributed Systems: Concepts and Design* (5th ed.). Addison-Wesley.
-- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly. Chapters 5 and 7.
+- Brewer, E.A. (2000). "Towards Robust Distributed Systems." *PODC Keynote*. (Original CAP conjecture presentation)
+- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly. Chapters 1, 5.
+- UoY Distributed Systems Group (2035). "Beyond the Eight Fallacies: Six More Assumptions That Kill Distributed Systems in the 2030s." *Proceedings of the Bifrost Symposium on Resilient Computation*.
 
 ### Discussion Questions
 
-1. A Mars-Earth distributed system has 4-22 minute one-way latency. Can such a system achieve strong consistency? Under what conditions?
-2. FLP impossibility seems to doom all consensus algorithms. Yet production systems achieve consensus daily. How is this paradox resolved?
-3. Is a web browser interacting with a web server a "distributed system"? Where do we draw the boundary?
+1. The ARPANET's designers chose packet-switched routing over circuit-switched routing partly for survivability. What other design decisions in early distributed systems were driven by security rather than performance? How have those decisions aged?
+2. Consider the Local Knowledge Principle in the context of a self-driving car system that must make decisions within 100ms. What are the implications of partial information for safety-critical distributed systems?
+3. The extended fallacies (9–14) were identified at the University of Yggdrasil in 2035. Which of these six do you consider most dangerous in practice, and why?
 
 ### Practice Problems
 
-1. **Event ordering**: Given events across processes P1, P2, P3, identify which are concurrent and which are causally related using Lamport's happened-before relation.
-2. **Latency calculation**: Three datacenters: NY↔London ≈ 28ms, NY↔Tokyo ≈ 78ms, London↔Tokyo ≈ 92ms. What is the minimum round-trip time for a three-phase commit?
-3. **Failure classification**: Classify each behavior (crash, omission, timing, Byzantine): a server that stops responding; a router dropping every third packet; a process responding 500ms late; a compromised node sending contradictory values.
+- Install and run a simple two-node distributed counter using a Python TCP socket. Observe what happens when you physically disconnect one node (kill the process). What information does the surviving node have about the other's state?
+- Draw the state space for a two-node system where each node can be in state {up, down, unknown} and each message can be {delivered, lost, delayed}. How many distinct global states exist? How many are actually observable by any single node?
 
 ---
 
-ᛉ **Lecture 2: Time, Clocks, and Causality — The Architecture of Ordering**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### Lamport Clocks: Logical Ordering
-
-Lamport's 1978 paper introduced one of the most elegant ideas in computer science: a **logical clock** capturing causal ordering without synchronized physical clocks.
-
-**Algorithm:**
-1. Each process Pi maintains a counter Ci, initialized to 0.
-2. Before executing an event, Pi increments Ci := Ci + 1.
-3. When Pi sends message m, it includes timestamp Ci.
-4. When Pj receives message m with timestamp Ct, Cj := max(Cj, Ct) + 1.
-
-This guarantees: **if event A happened-before event B, then C(A) < C(B).** The converse does NOT hold — two concurrent events may happen to have ordered timestamps.
-
-### Vector Clocks: Detecting Concurrency
-
-A vector clock VC is an array [C1, C2, ..., Cn] where Ci represents Pi's knowledge of its event count. Comparison rules:
-- VC(A) < VC(B) iff ∀i: VC(A)[i] ≤ VC(B)[i] AND ∃j: VC(A)[j] < VC(B)[j]
-- VC(A) || VC(B) (concurrent) iff neither VC(A) ≤ VC(B) nor VC(B) ≤ VC(A)
-
-Used in Amazon DynamoDB (as dotted version vectors) for conflict detection. When two versions have concurrent vector clocks, both updates happened independently, requiring conflict resolution.
-
-### Hybrid Logical Clocks (HLCs)
-
-Physical clocks are imprecise but meaningful; logical clocks are precise but meaningless outside the system. **Hybrid Logical Clocks** combine both: hybrid time = (physical timestamp, logical counter). Used in CockroachDB and YugabyteDB for SQL-compliant transaction ordering without GPS-atomic clocks.
-
-### Wall-Clock Synchronization
-
-- **NTP**: ~1-10ms accuracy on LANs, ~10-100ms on WANs.
-- **PTP (IEEE 1588)**: Sub-microsecond accuracy on LANs.
-- **GPS-disciplined clocks**: Microsecond-level accuracy in datacenters.
-- **TrueTime (Google Spanner)**: Returns interval [earliest, latest]; real time guaranteed within this interval. External consistency without coordination.
-
-### Required Reading
-
-- Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System."
-- Kulkarni, S. et al. (2014). "Logical Physical Clocks and Consistent Snapshots in Distributed Systems."
-
-### Discussion Questions
-
-1. Spanner achieves external consistency through TrueTime intervals and "commit wait." Is this a violation of FLP, or a circumvention?
-2. Vector clocks grow linearly with process count. What alternatives exist for systems with millions of clients?
-3. In a collaborative text editor using CRDTs, are vector clocks needed? Why or why not?
-
-### Practice Problems
-
-1. **Lamport clock trace**: Calculate timestamps for events across P1, P2, P3 with specified message flow.
-2. **Vector clock conflict**: Determine if two shopping cart replicas with given vector clocks are concurrent or ordered.
-3. **Clock drift**: Two servers drift at 1ms/minute. NTP resynchronizes every 5 minutes with 0.5ms uncertainty. What is the maximum clock skew?
-
----
-
-ᛉ **Lecture 3: Failure Models and Byzantine Agreement — When Machines Lie**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### The Failure Taxonomy
-
-**1. Crash-stop**: Process halts permanently. Detectable via heartbeat; cannot recover.
-**2. Crash-recovery**: Process halts but may restart with stable storage intact.
-**3. Omission**: Process fails to send or receive messages selectively.
-**4. Timing**: Process violates timing assumptions — responds too early, late, or inconsistently.
-**5. Byzantine (arbitrary)**: Process may behave arbitrarily — sending contradictory messages, pretending to function, or actively colluding.
-
-### Impossibility Results
-
-**FLP Impossibility (1985)**: No deterministic algorithm can guarantee consensus in an asynchronous system with even one crash failure. Practical circumvention: randomization, partial synchrony, and failure detectors.
-
-**Byzantine Bounds**: To tolerate f Byzantine nodes requires n ≥ 3f + 1 total nodes. With digital signatures, this reduces to n ≥ 2f + 1.
-
-### Practical Byzantine Fault Tolerance
-
-**PBFT** (Castro & Liskow, 1999): 3f+1 replicas, three-phase protocol (pre-prepare, prepare, commit). Safety under all conditions, liveness under partial synchrony. ~1ms overhead per operation locally.
-
-**HotStuff** (2019): O(n) communication using threshold signatures. Used in Meta's Diem blockchain and most modern blockchain protocols.
-
-**Tendermint**: BFT-style with rotating proposer. Accountable safety — if two blocks are finalized, at least 1/3 of validators signed conflicting votes. Powers 200+ production blockchains.
-
-### 2040 Context
-
-By 2040, Byzantine failures are real threats:
-- **AI-compromised nodes**: Adversarial AI mimics correct behavior before deviating
-- **Supply chain attacks**: Hardware implants cause Byzantine behavior at firmware level
-- **Cloud megafailures**: Hypervisor bugs cause correlated Byzantine failures across VMs
-
-### Required Reading
-
-- Lamport, L., Shostak, R., & Pease, M. (1982). "The Byzantine Generals Problem."
-- Fischer, M. J., Lynch, N. A., & Patterson, M. S. (1985). "Impossibility of Distributed Consensus with One Faulty Process."
-- Castro, M. & Liskow, B. (1999). "Practical Byzantine Fault Tolerance."
-
-### Discussion Questions
-
-1. A blockchain validator signs two conflicting blocks. Under Tendermint's accountable safety, what percentage must be Byzantine for two conflicting blocks?
-2. How do Paxos, Raft, and PBFT circumvent FLP impossibility?
-3. A defective update pushed to 30% of nodes causes arbitrary behavior. Is this crash or Byzantine?
-
-### Practice Problems
-
-1. **Resilience calculation**: Minimum nodes for f=5 Byzantine tolerance? Maximum throughput given 10,000 req/s per node and 3 round-trips per request?
-2. **PBFT trace**: 4-node system, node 3 Byzantine. Trace message flow showing honest nodes reaching consensus.
-3. **Failure classification**: DNS returning NXDOMAIN for valid domains; load balancer routing 90% to one backend; compromised CA issuing fake certs.
-
----
-
-ᛉ **Lecture 4: Consensus Protocols — Paxos, Raft, and the Art of Agreement**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### The Consensus Problem
-
-A consensus protocol must satisfy:
-1. **Safety (Agreement)**: All non-faulty nodes decide the same value.
-2. **Validity**: The decided value must have been proposed by some node.
-3. **Liveness (Termination)**: Every non-faulty node eventually decides.
-
-### Paxos
-
-Lamport's "The Part-Time Parliament" (1990, widely understood after "Paxos Made Simple" in 2001). Roles: Proposer, Acceptor, Learner.
-
-**Basic Paxos** — Phase 1a (Prepare), Phase 1b (Promise), Phase 2a (Accept), Phase 2b (Accepted).
-
-**Multi-Paxos**: Stable leader skips Phase 1 for subsequent proposals, reducing to single round-trip per decision.
-
-### Raft: Understandability as a Feature
-
-Ongaro & Ousterhout (2014) decompose consensus into:
-1. **Leader Election**: Candidates seek majority votes. Terms provide logical time.
-2. **Log Replication**: Leader appends entries and replicates to followers. Committed when majority have it.
-3. **Safety**: Election restriction ensures only candidates with up-to-date logs can win.
-
-**Raft's simplifications**: strong leader, separated concerns, guaranteed log consistency across servers sharing an entry at the same index.
-
-### Modern Consensus
-
-**EPaxos**: Removes leader bottleneck. Non-conflicting commands commit in single round trip.
-**Mencius**: Rotates leader role among replicas, eliminating single-leader throughput bottleneck.
-**Production Raft (2040)**: etcd, Consul, TiKV, CockroachDB metadata — proven robust across thousands of deployments.
-
-### Required Reading
-
-- Ongaro, D. & Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm."
-- Lamport, L. (2001). "Paxos Made Simple."
-
-### Discussion Questions
-
-1. What happens if Raft's election restriction (candidate must have up-to-date log) is removed?
-2. In a 5-node Raft cluster partitioned 2-3, can the group of two elect a leader?
-3. Paxos allows multiple proposers; Raft funnels through a single leader. What are the trade-offs?
-
-### Practice Problems
-
-1. **Raft election trace**: 5-node cluster with specified log states — which servers can win an election?
-2. **Paxos scenario**: Trace message flow for two proposers competing across three acceptors.
-3. **Throughput calculation**: 5-node Raft cluster at 50,000 ops/s. Leader fails, election takes 150ms. How many operations are lost during election?
-
----
-
-ᛉ **Lecture 5: The CAP Theorem — Pick Two (But Not Really)**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### The Theorem
-
-**CAP** (Brewer 2000; Gilbert & Lynch 2002): A distributed system cannot simultaneously provide Consistency, Availability, and Partition tolerance. Since P is mandatory, the real choice is between C and A **during a partition**.
-
-- **CP systems**: Maintain consistency by refusing operations during partitions.
-- **AP systems**: Maintain availability, serving potentially stale data during partitions.
-
-### The Nuance: PACELC
-
-**PACELC** (Abadi, 2012): If **P**artition, trade **A**vailability vs **C**onsistency; **E**lse (normal operation), trade **L**atency vs **C**onsistency. More useful than binary CAP.
-
-### Consistency Patterns
-
-- **Strong (Linearizability)**: Every read sees the most recent write. Banking, identity, inventory.
-- **Causal**: Reads respect causal ordering. Social media, collaborative editing.
-- **Eventual**: All replicas converge given enough time. DNS, shopping carts, caching.
-- **Session**: Read-your-writes + monotonic reads within a session. User profiles, shopping cart modifications.
-
-### 2040: Adaptive Consistency
-
-- **Spanner**: External consistency via TrueTime.
-- **CockroachDB**: Strong reads (Raft quorum) or stale reads (local replica + bounded staleness).
-- **Cosmos DB**: Five tunable levels per query.
-- **AI-driven adaptation**: Monitor conditions, switch between CP and AP based on partition probability and data criticality.
-
-### Required Reading
-
-- Gilbert, S. & Lynch, N. (2002). "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services."
-- Abadi, D. (2012). "Consistency Tradeoffs in Modern Distributed Database System Design."
-
-### Discussion Questions
-
-1. For a real-time multiplayer game: CP or AP? What about player positions vs. inventory?
-2. For a social media platform: Which consistency model for news feed, DMs, and payments?
-3. Critique: "CP systems are always better because consistency matters more than availability."
-
-### Practice Problems
-
-1. **CAP classification**: HBase, Cassandra, MongoDB, Spanner, Redis.
-2. **Consistency window**: 3-replica AP system, 50-200ms propagation. Maximum staleness?
-3. **Latency-consistency tradeoff**: Compare Mode A (quorum reads, 12ms, strong) vs Mode B (nearest replica, 2ms, eventual) for e-commerce with 10K reads/s and 100 writes/s.
-
----
-
-ᛉ **Lecture 6: Consistency Models — From Linearizability to Eventual and Beyond**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### The Consistency Model Hierarchy
-
-1. **Strict Consistency**: Global real-time order. Physically impossible without FTL.
-2. **Linearizability**: Operations appear atomic between invocation and response. Requires quorum communication. Systems: Spanner, etcd, ZooKeeper.
-3. **Sequential Consistency**: Global order preserving each process's program order. No real-time constraint.
-4. **Causal Consistency**: Causally-related operations appear in order everywhere. Concurrent operations may appear in different orders. Systems: COPS, Bayou.
-5. **PRAM Consistency**: Writes by a single process seen in order by all processes. Different processes' writes may interleave differently.
-6. **Read-Your-Writes**: A process always reads its own latest write. Session-level guarantee.
-7. **Monotonic Reads**: If a process reads value v, it never reads an older value. Lightweight tracking.
-8. **Eventual Consistency**: All replicas converge given no new writes. No ordering guarantees during convergence. DNS, DynamoDB, Cassandra.
-
-### Key Insight
-
-PRAM and Read-Your-Writes are incomparable — neither subsumes the other. "Session guarantees" combine both.
-
-### Choosing a Consistency Model
-
-1. What invariants must the system maintain?
-2. What is the cost of inconsistency?
-3. What latency can we afford?
-4. What is the partition probability?
-
-### 2040 Landscape
-
-Modern databases offer **tunable consistency** per query: Cosmos DB's five levels, CockroachDB's strong/stale reads, TiDB's session-consistent snapshots.
-
-### Required Reading
-
-- Viotti, P. & Vukolić, M. (2016). "Consistency in Non-Transactional Distributed Storage Systems."
-- Lloyd, W. et al. (2011). "Don't Settle for Eventual: Scalable Causal Consistency with COPS."
-
-### Discussion Questions
-
-1. Can a banking system maintain non-negative balances under eventual consistency?
-2. Which consistency model for collaborative text editing? Justify.
-3. Calculate throughput difference between linearizable and stale reads across global regions.
-
-### Practice Problems
-
-1. Identify the strongest sufficient consistency model for: stock trading, weather app, document editing, approximate counter.
-2. Which anomalies can occur under eventual consistency: phantom read, stale read, ordering violation, lost update?
-3. Construct a history allowed under eventual consistency but forbidden under session consistency.
-
----
-
-ᛉ **Lecture 7: Conflict-Free Replicated Data Types — Coordination-Free Convergence**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### The Core Insight
-
-CRDTs are data structures designed so that **any order of operations produces the same result**. They make eventual consistency not just tolerable, but **provably correct**.
-
-### Two Families
-
-**Operation-Based CRDTs (CmRDTs)**: Operations broadcast to all replicas. Operations must be commutative. Require reliable broadcast.
-
-**State-Based CRDTs (CvRDTs)**: Replicas exchange and merge states. Merge must be commutative, idempotent, and monotonic. Require eventual delivery.
-
-### Key CRDT Types
-
-- **G-Counter**: Vector of per-node counts. Merge = element-wise max. Value = sum. Grow-only.
-- **PN-Counter**: Two G-Counters (increments and decrements). Value = difference. Allows increment and decrement.
-- **G-Set**: Grow-only set. Merge = union. Cannot remove.
-- **OR-Set (Observed-Remove)**: Elements tagged with unique IDs. Remove removes observed tags, add creates new tag. "Add wins" over concurrent add/remove.
-- **LWW-Register**: Last-writer-wins register. Timestamped writes, highest timestamp wins.
-- **RGA (Replicated Growable Array)**: Sequence CRDT for collaborative editing. Insertions tagged with predecessor ID and unique ID.
-- **OR-Map**: Key-value map where each value is an OR-Set. Supports concurrent updates to different keys without conflict.
-
-### Production Systems
-
-- **DynamoDB**: Version vectors for conflict detection, CRDT-like resolution for counters and sets.
-- **Riak**: First-class CRDT types (counters, sets, maps, registers).
-- **Automerge** and **Yjs**: 2040-era CRDT libraries powering collaborative applications.
-
-### Limitations
-
-- **Space overhead**: Metadata grows with operations; requires garbage collection.
-- **Non-commutative semantics**: Not all operations commute (set-to-value). Decompose into commutative primitives.
-- **Garbage collection**: Periodic cleanup requires quiescence or coordination.
-
-### Required Reading
-
-- Shapiro, M. et al. (2011). "Conflict-Free Replicated Data Types."
-- Kleppmann, M. et al. (2019). "A Conflict-Free Replicated JSON Datatype."
-
-### Discussion Questions
-
-1. Model a collaborative drawing app as OR-Set, RGA, or something else? Trade-offs?
-2. Is eventual consistency acceptable for a stock ticker? A collaborative document? A page view counter?
-3. OR-Set shopping cart: Alice adds "laptop" simultaneously with Bob removing "laptop". Final contents?
-
-### Practice Problems
-
-1. **G-Counter trace**: Three nodes increment; merge states; compute final value.
-2. **OR-Set conflict**: Concurrent add/remove with unique tags. Determine set membership after merge.
-3. **CRDT design**: Design a "last-logged-in user ID" register CRDT with merge semantics.
-
----
-
-ᛉ **Lecture 8: Distributed Transactions — The Illusion of Atomicity**
-
-**Course:** CS301 — Distributed Systems  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-### Two-Phase Commit (2PC)
-
-Classic protocol by Jim Gray. Phase 1: coordinator sends PREPARE; participants vote VOTE_COMMIT or VOTE_ABORT. Phase 2: coordinator sends COMMIT or ABORT based on votes.
-
-**Blocking problem**: If coordinator crashes after Phase 1, participants that voted VOTE_COMMIT are locked until coordinator recovers.
-
-### Three-Phase Commit (3PC)
-
-Adds pre-commit phase to eliminate blocking. After Phase 2, every participant knows the outcome will be commit. Even if coordinator crashes, participants can determine the outcome. **Limitation**: Requires synchronous communication — impractical for most distributed systems.
-
-### Paxos Commit
-
-Gray & Lamport (2006): Use Paxos consensus among coordinator replicas to make 2PC non-blocking. Eliminates single coordinator SPOF at the cost of one Paxos instance per transaction.
-
-### Sagas
-
-Garcia-Molina & Salem (1987): Sequence of transactions T1...Tn, each with compensating transaction C1...Cn. If Ti fails, execute C(i-1)...C1 in reverse order. No global locks, better availability, better fit for microservices.
-
-**2040 implementations**: Temporal.io, Camunda, AWS Step Functions.
-
-**Trade-offs**: No isolation (intermediate states visible), compensations may be imperfect, harder debugging.
-
-### 2040 Practice
-
-Most production systems use:
-1. Saga-based patterns for cross-service transactions
-2. Calvin-style deterministic databases (FaunaDB)
-3. Spanner-style external consistency (CockroachDB, TiDB, YugabyteDB)
-4. CRDTs for coordination-free data (Automerge, Yjs)
-
-### Required Reading
-
-- Gray, J. & Lamport, L. (2006). "Consensus on Transaction Commit."
-- Garcia-Molina, H. & Salem, K. (1987). "Sagas." *SIGMOD*.
-- Kleppmann, M. (2017). *Designing Data-Intensive Applications*, Chapter 7.
-
-### Discussion Questions
-
-1. A payment system transfers money between two banks. Should you use 2PC, a saga, or some other mechanism? What are the consequences of partial failure?
-2. Sagas provide only eventual consistency. What invariants might be temporarily violated during a travel booking saga?
-3. Is there a use case where 2PC is still the best choice? What properties make 2PC appropriate?
-
-### Practice Problems
-
-1. **2PC failure scenario**: In a 2PC protocol with coordinator C and participants P1, P2, P3 — P1 and P2 vote VOTE_COMMIT, P3 crashes before voting, C sends COMMIT to P1 and P2. P3 recovers. What is P3's state? How does P3 determine the outcome?
-2. **Saga design**: Design a saga for an e-commerce order: T1 (Reserve inventory → C1: Release inventory), T2 (Process payment → C2: Refund payment), T3 (Create shipment → C3: Cancel shipment), T4 (Send confirmation → C4: Send cancellation). If T3 fails, write out the compensations in order.
-3. **3PC race condition**: In 3PC, what happens if the coordinator crashes after sending PRE-COMMIT to P1 but before sending to P2 and P3? Sketch a termination protocol.
-
----
-
-ᛉ **Lecture 9: Distributed Storage — Replication, Sharding, and Planetary-Scale Databases**
+ᛏ **Lecture 2: Models of Distributed Computation — Formal Foundations**
 
 **Course:** CS301 — Distributed Systems  
 **Degree:** Bachelor of Science in Computer Science, 2040
@@ -483,71 +91,65 @@ Most production systems use:
 
 ### Overview
 
-Data must live somewhere, and in a distributed system, that "somewhere" is many places at once. This lecture covers the fundamental architectures for storing data at planetary scale: replication (creating copies), sharding (partitioning the key space), and the hybrid approaches that combine both.
+Before we can reason about what distributed systems *do*, we must establish what distributed systems *are* at a formal level. This lecture introduces the three foundational computational models — synchronous, asynchronous, and partially synchronous — and explains why the choice of model determines everything: what algorithms are possible, what guarantees are achievable, and what problems are unsolvable.
 
-### Replication Strategies
+We also introduce the concept of *adversary models*, which formalize the power of the environment (network delays, crash failures, Byzantine behavior) against which our algorithms must defend. These models are not academic exercises — they are the difference between a system that works in a lab and one that survives the chaos of a production datacenter during a cascading failure.
 
-**Single-Leader Replication**: One replica is the leader (primary/master). All writes go through the leader, which propagates them to followers. Reads can be served from any replica. Simple conflict resolution but leader is a SPOF and bottleneck. Systems: PostgreSQL streaming replication, MySQL Group Replication, Google Spanner.
+### Key Topics
 
-**Multi-Leader Replication**: Multiple replicas accept writes concurrently. Each leader propagates writes to all others. Conflicts must be resolved (last-writer-wins, custom resolution, CRDTs). Advantages: write availability during partitions, geographic locality. Disadvantages: complex conflict resolution, divergence risk. Systems: CouchDB, BDR for PostgreSQL, Firebase Realtime Database.
+- **System Models**: Synchronous (bounded time, known upper bounds), asynchronous (no timing assumptions), partially synchronous (periods of synchrony)
+- **Failure Models**: Crash-stop, crash-recovery, omission, Byzantine — what each means for algorithm design
+- **The Asynchronous System Model**: Why it's the "worst case" model and why we design for it
+- **Message-Passing vs. Shared Memory**: The two fundamental communication abstractions and when each is appropriate
+- **I/O Automata**: Lynch's formalism for specifying distributed algorithms
+- **Adversary Scheduling**: The environment as an adversary that chooses which messages to deliver and when
 
-**Leaderless Replication**: Any replica can accept writes. Writes go to a quorum; reads from a quorum. Conflicts detected via version vectors/timestamps. Advantages: no SPOF, maximum write availability. Systems: DynamoDB, Cassandra, Riak KV.
+### Lecture Notes
 
-**Quorum-Based Replication**: For N replicas, write succeeds if W acknowledge, read succeeds if R respond. Key constraints: W+R > N (every read sees latest write), W > N/2 (prevents split-brain writes), R > N/2 (every read sees up-to-date replica).
+A distributed system, at its most abstract, is a collection of `n` processes that communicate by sending messages over channels. That's it. No shared memory (unless we simulate it via message passing), no global clock (unless we simulate it via clock synchronization protocols), no instantaneous knowledge (the Local Knowledge Principle again).
 
-Typical configurations:
-- Strict: N=3, W=3, R=2
-- Balanced: N=3, W=2, R=2 (tolerates one failure)
-- Fast writes: N=3, W=1, R=3
-- Fast reads: N=3, W=3, R=1
+**Synchronous systems** assume two powerful properties: (1) there is a known upper bound on message delivery time, and (2) there is a known upper bound on the relative rate at which different processes can execute. These bounds allow us to use *timeouts* as reliable failure detectors: if a process hasn't responded within the bound, it must have crashed. Synchronous algorithms can solve problems that are provably impossible in asynchronous systems (e.g., deterministic consensus). The downside is that real systems do not satisfy synchronous assumptions — ask anyone who ran a distributed database during the AWS us-east-1 outage of 2024.
 
-### Sharding (Partitioning)
+**Asynchronous systems** make no timing assumptions whatsoever. Message delivery time can be arbitrarily large. Processes can execute at arbitrarily different speeds. This model captures the "worst case" reality of operating over the public internet, where network partitions, routing instability, and garbage collection pauses in virtual machines can all cause unbounded delays. The price is steep: the FLP impossibility result (Fischer, Lynch, Paterson, 1985) proves that deterministic consensus is impossible in even a minimal asynchronous system with one crash failure. We'll study FLP in detail in Lecture 5.
 
-**Hash-Based Sharding**: Hash each key with a consistent hash function. Uniform distribution prevents hotspots. Problem: adding/removing shards requires rehashing. Solution: consistent hashing (Karger et al., 1997).
+**Partially synchronous systems** (Dwork, Lynch, Stockmeyer, 1988) attempt to capture the best of both worlds. The model assumes that the system is *eventually* synchronous: there exists a Global Stabilization Time (GST) after which messages are delivered within a known bound and processes execute within a known ratio. Before GST, the system can behave asynchronously. Most practical consensus algorithms (Raft, Multi-Paxos, PBFT) are designed for the partially synchronous model — they make progress quickly during good periods and make progress slowly (or not at all) during bad periods, but they never violate safety properties.
 
-**Range-Based Sharding**: Keys partitioned by range. Range queries efficient. Problem: sequential keys create hotspots. Solution: dynamic range splitting.
+**Failure models** define what can go wrong with individual processes:
 
-**Directory-Based Sharding**: Lookup service maps keys to shards. Flexible but directory service is SPOF. Solution: replicate and cache directory.
+- *Crash-stop*: A process fails by halting permanently. It never recovers. Once crashed, it sends no further messages.
+- *Crash-recovery*: A process fails by halting, but may restart with its stable storage intact. It can rejoin the system after recovery, but must re-synchronize its state.
+- *Omission*: A process may fail to send or receive some messages, but when it does communicate, its messages are correct.
+- *Byzantine*: A process may behave arbitrarily — it can send contradictory messages to different processes, lie about its state, or follow an entirely different protocol. This model is named after the Byzantine Generals Problem (Lamport, Shostak, Pease, 1982).
 
-**Shard Rebalancing**: Modern systems use range splitting with automatic rebalancing (CockroachDB, TiKV) or virtual node hashing (Cassandra, DynamoDB).
+The progression from crash-stop to Byzantine represents an increasing assumption about the power of the adversary. Each step up makes the algorithm design harder but the resulting system more robust. Byzantine fault tolerance (BFT) is essential in systems where processes may be compromised by an attacker — as is the case for most public blockchain systems.
 
-### Case Studies
+**I/O Automata** (Lynch and Tuttle, 1989) provide a rigorous formalism for describing distributed algorithms. An I/O automaton has a set of states, a set of actions (partitioned into input, output, and internal), and a transition relation describing which state transitions are enabled by which actions. Composition of automata models communication: the output actions of one automaton become input actions of another. While we won't write full I/O automata specifications in this course, understanding this model is crucial for proving correctness properties of distributed algorithms.
 
-**Google Spanner**: Globally distributed, externally consistent. TrueTime for commit timestamps. SQL with ACID transactions across shards. Processes billions of dollars in ad transactions daily.
+The **adversary scheduling** model gives us a powerful way to think about the environment's power. Rather than modeling specific failure patterns, we imagine an all-powerful adversary that controls the scheduling of all events — message deliveries, process step executions, and failure events. An algorithm is correct if it satisfies its specification *regardless of what the adversary does*, subject only to the constraints of the chosen system and failure models. This is the same philosophy as Kerckhoffs' principle in cryptography: the algorithm must be secure even if the adversary knows everything about it and can control the schedule.
 
-**CockroachDB**: Open-source, Spanner-inspired. Hybrid Logical Clocks instead of TrueTime. Range-based sharding with Raft replication per range. Geo-partitioning for regulatory compliance.
-
-**Apache Cassandra**: Leaderless, eventually consistent, wide-column store. Consistent hashing, tunable consistency per query (ONE, QUORUM, ALL). Multi-datacenter replication. Anti-entropy with Merkle trees.
-
-**TiDB / TiKV**: NewSQL with split architecture: TiDB (SQL) + TiKV (KV storage) + PD (placement driver). Raft-based replication per range. Hybrid OLTP/OLAP workloads.
-
-### Storage Engine Fundamentals
-
-**B-Tree (read-optimized)**: PostgreSQL, MySQL (InnoDB), SQLite. O(log N) reads, page splits on writes.
-
-**LSM-Tree (write-optimized)**: Cassandra, RocksDB, CockroachDB (Pebble). O(1) writes (append-only), amortized O(log N) reads with compaction. Good for write-heavy workloads.
+In 2040, the University of Yggdrasil's Bifrost Research Network runs experiments on a testbed called the **Yggdrasil Testbed**, which can inject controlled Byzantine failures, network partitions, and clock skew into a cluster of 100 nodes. Students in CS301 will use this testbed to observe firsthand how different failure models affect algorithm behavior.
 
 ### Required Reading
 
-- Kleppmann, M. (2017). *Designing Data-Intensive Applications*, Chapters 5, 6, 9.
-- Corbett, J. C. et al. (2013). "Spanner: Google's Globally Distributed Database."
-- Lakshman, A. & Malik, P. (2010). "Cassandra: A Decentralized Structured Storage System."
+- Lynch, N.A. (1996). *Distributed Algorithms*. Morgan Kaufmann. Chapters 2–3 (I/O automata, system models).
+- Dwork, C., Lynch, N., Stockmeyer, L. (1988). "Consensus in the Presence of Partial Synchrony." *JACM* 35(2).
+- Lamport, L., Shostak, R., Pease, M. (1982). "The Byzantine Generals Problem." *ACM TOPLAS* 4(3).
 
 ### Discussion Questions
 
-1. Design sharding/replication for a global social media platform complying with GDPR, CCPA, and 40+ data sovereignty laws.
-2. Compare Spanner's TrueTime external consistency with CockroachDB's HLC serializability. Practical differences?
-3. How to balance LSM-tree write performance with read-heavy requirements in a real-time analytics dashboard?
+1. Why does the partially synchronous model assume a Global Stabilization Time rather than, say, periods of bounded latency interspersed with periods of unbounded latency? What practical scenarios does GST capture well, and what does it miss?
+2. If you were building a payment processing system that handles real money, which failure model would you design for? Justify your choice considering both the cost of failure and the cost of over-engineering.
+3. I/O automata were proposed in 1989. Why haven't they been more widely adopted in industry practice? What alternatives do engineers use instead?
 
 ### Practice Problems
 
-1. **Quorum calculation**: N=5, W=3, R=3. Maximum replica failures for: (a) read consistency, (b) write availability, (c) both.
-2. **Consistent hashing**: 4 nodes (A: 0-63, B: 64-127, C: 128-191, D: 192-255). Key K hashes to 87. Which node? If E is added covering 64-95, which keys move from B to E?
-3. **Shard sizing**: 100 TB, 4 TB/node, replication factor 3. How many nodes? If max shard 256 GB, how many shards and shard-replicas total?
+- Formally specify a two-process mutual exclusion algorithm using I/O automata. Prove that it satisfies mutual exclusion (safety) and progress (liveness) in the synchronous model.
+- Consider a system with 5 processes where at most 2 can be Byzantine. What is the minimum number of rounds needed for Byzantine agreement? (Recall: n ≥ 3f+1 processes are needed to tolerate f Byzantine failures.)
+- Implement a simple process group membership protocol in Python. What failure model does your protocol assume?
 
 ---
 
-ᛉ **Lecture 10: Fault Tolerance and Self-Healing — When Systems Recover Themselves**
+ᚢ **Lecture 3: Time, Clocks, and Causality**
 
 **Course:** CS301 — Distributed Systems  
 **Degree:** Bachelor of Science in Computer Science, 2040
@@ -556,77 +158,60 @@ Typical configurations:
 
 ### Overview
 
-A distributed system that cannot tolerate faults is not a distributed system — it is a single machine with extra steps. Fault tolerance is not just about surviving crashes; it's about **detecting** failures, **reconfiguring** the system, **recovering** data, and **preventing** future failures.
+Time is the oldest problem in distributed systems, and it remains one of the most misunderstood. This lecture traces the evolution of how we think about time in distributed systems — from Lamport's elegant observation that "happened-before" is more fundamental than clock time, through vector clocks and their offspring, to the modern hybrid logical clocks that power CRDTs and collaborative editing systems.
 
-### Failure Detection
+The central insight is this: in a distributed system, there is no single notion of "now." Every node sees a different slice of reality at any physical instant, and the order in which events occur depends on the observer. Causal ordering — the happened-before relation — is the strongest ordering we can observe without coordination, and it's sufficient for almost everything we need.
 
-**The Fundamental Problem**: In an asynchronous system, you cannot distinguish a crashed process from a slow one.
+### Key Topics
 
-**Heartbeat-based Detection**: Periodic "I'm alive" messages. Shorter timeouts = faster detection but more false positives.
+- **Physical Time vs. Logical Time**: Why NTP-synchronized clocks are insufficient for ordering distributed events
+- **Lamport Clocks**: The happened-before relation, scalar logical clocks, and their limitations
+- **Vector Clocks**: Capturing concurrent events, partial order, and the instant problem
+- **Dotted Version Vectors**: Solving the "concurrent update to the same key" problem in key-value stores
+- **Hybrid Logical Clocks (HLCs)**: Combining physical and logical time — the state of the art in 2040
+- **TrueTime and Spanner**: Google's approach — using atomic clocks and GPS to bound clock uncertainty
+- **Quantum Timestamps**: The 2039 breakthrough in quantum-entangled clock synchronization
 
-**Phi Accrual Failure Detector** (Hayashibara et al., 2004): Outputs suspicion level φ that increases over time. Applications set their own φ_threshold. Used in Cassandra, ZooKeeper.
+### Lecture Notes
 
-**Chandra-Toueg Failure Detector Classes**:
-- □P (Perfect): Never mistakes. Possible only in synchronous systems.
-- ◇S (Eventually Strong): Eventually every crashed process permanently suspected, some correct process never suspected. Sufficient for consensus with majority correct.
-- ◇W (Eventually Weak): Eventually every crashed process permanently suspected.
+Leslie Lamport's 1978 paper "Time, Clocks, and the Ordering of Events in a Distributed System" is one of the most cited papers in all of computer science, and for good reason. It established that the "happened-before" relation (→) is the fundamental ordering relation in distributed systems, not physical time. Two events `a` and `b` satisfy `a → b` if and only if: (1) they occur at the same process and `a` precedes `b`; or (2) `a` is the sending of a message and `b` is the receipt of that message; or (3) there exists `c` such that `a → c` and `c → b` (transitivity).
 
-### Leader Election
+This relation is a *strict partial order*: it is irreflexive (no event happens before itself), antisymmetric (if `a → b`, then not `b → a`), and transitive. Crucially, two events may be *concurrent* — neither `a → b` nor `b → a`. This is the hallmark of distributed systems: events that are truly independent and whose ordering is physically meaningless.
 
-**Bully Algorithm**: Highest-ID process becomes leader. Simple but causes leadership vacillation when higher-ID processes oscillate.
+**Lamport clocks** assign a monotonically increasing scalar to each event: `LC(e) = max(LC(local), LC(received_message)) + 1`. This ensures that if `a → b`, then `LC(a) < LC(b)`. But the converse is *not* true — `LC(a) < LC(b)` does not imply `a → b`. Lamport clocks lose information about concurrency.
 
-**Raft Leader Election**: Randomized election timeouts (150-300ms). Follower becomes candidate after timeout, increments term, votes for self, sends RequestVote RPCs. Majority votes = leader.
+**Vector clocks** solve this limitation. Each process maintains a vector of length n (number of processes). Process `i` increments `VC[i]` for each local event and updates its vector to the element-wise maximum upon receiving a message, incrementing its own entry. Two events are concurrent if and only if their vector clocks are incomparable — each has a smaller entry in some dimension. This gives us the full causal picture, but at the cost of O(n) space per event. For large systems, this is impractical.
 
-### Crash Recovery and Log Management
+The **instant problem** is the central challenge of physical time in distributed systems. Suppose process P1 writes value `v1` to key `k` at physical time `t1`, and process P2 writes value `v2` to the same key at physical time `t2`, where `t1 < t2`. If P2's clock reads `t2' < t1`, it will believe its write came first. This is why relying purely on physical timestamps for ordering is dangerous — clock drift, even with NTP, can be on the order of hundreds of milliseconds.
 
-**Write-Ahead Logging (WAL)**: Every state change written to durable log before application. On recovery, replay log from last checkpoint.
+Google's Spanner database introduced **TrueTime**, which doesn't try to give you a single timestamp but instead gives you a *time interval* `[earliest, latest]` within which the current time is guaranteed to lie. By waiting for `latest` to pass before committing, Spanner ensures that transactions are externally consistent. The cost: GPS and atomic clocks in every datacenter, and commit latencies that include sleep periods. TrueTime is elegant but expensive, and most systems in 2040 still use logical clocks for ordering.
 
-**Raft Log Compaction**: Snapshot mechanism — state machine takes snapshot, all log entries up to snapshot are discarded. Snapshots can be sent to slow followers.
+**Hybrid Logical Clocks (HLCs)**, proposed by Kulkarni, Demirbas, et al. in 2014, combine the best of both worlds. An HLC timestamp is a pair `(l, c)` where `l` is the maximum physical time seen (similar to Lamport time) and `c` is a logical counter that increments when events happen at the same physical time. HLCs provide: (1) causal ordering like vector clocks; (2) physical-time approximation (each HLC's `l` component is close to physical time); (3) bounded drift from physical time. In 2040, HLCs are the de facto standard for timestamping in distributed databases, CRDTs, and collaborative editing systems.
 
-**Production Examples**: etcd snapshots every 10,000 transactions. CockroachDB uses incremental snapshots per range. Kafka uses log segmentation and compaction.
-
-### Self-Healing Systems
-
-**Automatic Replication Repair**: When a node fails, re-replicate its data elsewhere. Standard in Cassandra, Raft, DynamoDB.
-
-**Anti-Entropy Protocols**:
-- Merkle tree comparison for efficient replica diffing
-- Read repair for synchronous inconsistency fixes
-- Hinted handoff for unavailable replica buffering
-
-**Circuit Breakers**: When downstream service fails repeatedly, breaker "opens" and stops sending requests. After timeout, allows probe request. Prevents cascade failures.
-
-**Chaos Engineering**: Netflix's Chaos Monkey (2011) randomly terminates VMs. By 2040, chaos engineering is standard practice. Systems are designed to be tested by failure.
-
-### AI-Assisted Fault Management (2040)
-
-1. **Predictive failure detection**: ML models predict node failures 5-30 minutes ahead.
-2. **Anomaly detection**: Unsupervised learning identifies latent failures invisible to thresholds.
-3. **Automated root cause analysis**: AI traces causal chains through distributed traces.
-4. **Dynamic reconfiguration**: AI adjusts replication factors, shard boundaries, and consistency levels in real-time.
-
-**Caution**: AI mispredictions cause unnecessary re-replication or suppress genuine alerts. Human-in-the-loop escalation is essential.
+**Quantum Timestamps**: The most exciting recent development. In 2039, researchers at the University of Yggdrasil's Quantum Networking Lab demonstrated that entangled qubits distributed across nodes can provide clock synchronization with sub-nanosecond accuracy — three orders of magnitude better than GPS-based TrueTime. However, quantum timestamps require dedicated quantum channels and are currently limited to the Bifrost Research Network's testbed. Students will receive a demonstration but should understand that this technology will not be production-ready until at least 2045.
 
 ### Required Reading
 
-- Chandra, T. D. & Toueg, S. (1996). "Unreliable Failure Detectors for Reliable Distributed Systems."
-- Ongaro, D. & Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." (Log compaction and membership changes sections.)
+- Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System." *CACM* 21(7): 558–565.
+- Kulkarni, S., Demirbas, M., et al. (2014). "Logical Physical Clocks and Consistent Snapshots in Globally Distributed Databases." *OPODIS*.
+- Corbett, J.C., et al. (2012). "Spanner: Google's Globally-Distributed Database." *OSDI*.
+- UoY Quantum Networking Lab (2039). "Entanglement-Assisted Clock Synchronization for Distributed Systems." *Bifrost Technical Report BFT-2039-07*.
 
 ### Discussion Questions
 
-1. In a 5-node Raft cluster, node 3 is partitioned. Can it win an election?
-2. Case for and against chaos engineering in medical device control systems.
-3. AI failure predictor with 95% accuracy (5% FP, 5% FN). Should it trigger immediate re-replication? Costs of each type of error?
+1. Lamport originally introduced his clocks as a way to totally-order events, even though the happened-before relation provides only a partial order. Was this total ordering a feature or a bug? In what situations is a total order unnecessary or even harmful?
+2. Vector clocks provide complete causal information at O(n) space cost. In a system with 10,000 processes, what practical alternatives exist for tracking causality? Research and discuss at least two.
+3. TrueTime relies on specialized hardware (atomic clocks, GPS receivers). Is this a sustainable approach for the entire industry, or should we accept slightly weaker guarantees from HLCs? What are the trade-offs?
 
 ### Practice Problems
 
-1. **Phi failure detector**: Heartbeats at 100, 105, 98, 110, 95, 450ms. Last heartbeat 300ms ago. μ=100ms, σ=50ms. Calculate φ. Suspect at threshold 1?
-2. **Leader election timing**: 7-node Raft cluster, election timeout 150-300ms uniform. Probability of simultaneous elections? Probability of resolution within one round?
-3. **Log recovery**: Raft log [1,2,3,4,5,6,7,8], snapshot at index 5. Which entries can be discarded? After leader crash at entry 7, what does the new leader need?
+- Implement a vector clock in Python that supports local events, send events, and receive events. Write a function that determines whether two events are causally related or concurrent.
+- Given the following HLC timestamps, determine the causal relationship between all pairs of events: P1:(10,0)→P1:(10,1)→P1:(12,0), P2:(11,0)→P2:(11,1), P3:(10,0)→P3:(11,2). Identify all concurrent event pairs.
+- Write a short essay (5 paragraphs) analyzing the trade-offs between TrueTime and HLCs for a globally distributed banking system.
 
 ---
 
-ᛉ **Lecture 11: Security in Distributed Systems — Trust, Identity, and Byzantine Resilience**
+ᛒ **Lecture 4: Consensus — The Impossible Problem and Its Solutions**
 
 **Course:** CS301 — Distributed Systems  
 **Degree:** Bachelor of Science in Computer Science, 2040
@@ -635,89 +220,70 @@ A distributed system that cannot tolerate faults is not a distributed system —
 
 ### Overview
 
-Security in distributed systems is fundamentally different from single-machine security. Every message crosses a trust boundary, every node may be compromised, and communication itself creates vulnerability.
+Consensus is the single most important problem in distributed systems. The question is deceptively simple: can a group of processes agree on a single value? The answer depends entirely on the system model — synchronous, asynchronous, or partially synchronous — and the failure model — crash-stop, crash-recovery, or Byzantine. This lecture covers the FLP impossibility result, the Paxos family of protocols, and the practical algorithm that powers most production systems in 2040: Raft.
 
-### Authentication
+### Key Topics
 
-**Symmetric Key**: Shared secret K between parties. N(N-1)/2 keys needed for N parties. Solution: KDC (Kerberos).
+- **The Consensus Problem**: Formal definition — agreement, validity, termination
+- **FLP Impossibility**: Fischer, Lynch, Paterson (1985) — no deterministic consensus in even minimally asynchronous systems with one crash failure
+- **Randomization and FLP**: How randomized protocols (Ben-Or, Rabin) circumvent FLP with probabilistic termination
+- **Paxos**: Lamport's "The Part-Time Parliament" (1998) and the protocol that wouldn't die
+- **Multi-Paxos and Practical Paxos**: Optimizations for leader election, log replication, and full membership changes
+- **Raft**: Ongaro and Ousterhout (2014) — understandability-first consensus
+- **Byzantine Fault Tolerant Consensus**: PBFT, HotStuff, and the honest-majority assumption
 
-**Kerberos** (1988): Alice contacts KDC for ticket to Bob. KDC generates session key K_AB encrypted with both Alice's and Bob's keys. Alice sends Bob the ticket. Bob decrypts, verifies identity, uses K_AB for session.
+### Lecture Notes
 
-**Public Key**: Each party has public/private key pair. Alice signs challenge with private key; Bob verifies with public key. Problem: how do you know the public key belongs to Alice?
+The **consensus problem** asks: given `n` processes, each starting with an initial value `v_i`, can all non-faulty processes agree on a single value? More formally, a consensus protocol must satisfy three properties:
 
-**PKI (Public Key Infrastructure)**: CAs vouch for identity-key bindings. Risk: compromised CA = all certificates untrustworthy. 2011 DigiNotar breach demonstrated this.
+1. **Agreement**: All non-faulty processes decide on the same value.
+2. **Validity**: The decided value must be the initial value of some process (not pulled from thin air).
+3. **Termination**: All non-faulty processes eventually decide.
 
-**2040 Improvement**: Certificate Transparency logs make all certificates publicly auditable. Merkle-based transparency prevents silent mis-issuance.
+Agreement and validity are *safety* properties — they must never be violated. Termination is a *liveness* property — it must eventually hold. The tension between safety and liveness is the engine that drives much of distributed systems theory.
 
-### Secure Communication
+**FLP Impossibility**: Fischer, Lynch, and Paterson's 1985 result is one of the most important theorems in all of computing. It states that no deterministic algorithm can solve consensus in an asynchronous system even with one crash failure. The proof proceeds by showing that for any configuration that hasn't yet decided, there exists an adversary schedule that prevents a decision forever. The key insight is that in an asynchronous system, a process that appears slow might be crashed — there's no way to tell the difference. Therefore, any algorithm that decides must do so even if a process is merely slow, but the adversary can always choose to slow down a different process after each step, preventing the system from reaching a configuration where agreement is forced.
 
-**TLS 1.3** (2018, still dominant): ECDHE key exchange → server certificate authentication → 1-RTT handshake (0-RTT for resumed sessions) → AES-256-GCM or ChaCha20-Poly1305 encryption with AEAD integrity.
+FLP is a *theoretical* result. It doesn't say consensus is impossible in practice — it says it's impossible *deterministically* in an *asynchronous* system. Two escape hatches:
 
-**Post-Quantum TLS**: By 2040, quantum computers threaten classical public-key crypto. NIST standardized:
-- **CRYSTALS-Kyber (ML-KEM)**: Lattice-based key exchange
-- **CRYSTALS-Dilithium (ML-DSA)**: Lattice-based digital signatures
+1. **Randomization**: Introduce randomness so the adversary can't predict which step will drive progress. Ben-Or's randomized consensus protocol (1983) achieves expected O(n^2) rounds with crash failures, and Rabin's randomized protocol uses a common coin to achieve O(1) expected rounds.
+2. **Partial synchrony**: If the system eventually enters a period of synchrony (as in the partially synchronous model), deterministic consensus becomes possible. This is the approach taken by all practical consensus protocols.
 
-TLS 1.4 (proposed 2038) uses hybrid key exchange: classical (X25519) + post-quantum (ML-KEM-768) in parallel. Attacker must break both.
+**Paxos** is arguably the most important distributed algorithm ever designed, though its reputation for incomprehensibility is well-earned. Lamport's original paper, "The Part-Time Parliament" (1998), was written as a fictional story about a parliamentary procedure on the island of Paxos — complete with footnotes about broken pottery and fictional Greek scholars. The academic community found it amusing but unhelpful, so Lamport wrote "Paxos Made Simple" (2001) in plain English.
 
-### Authorization
+The core idea: a value is chosen when a majority of acceptors have voted for it. A proposer sends a "prepare" request with a proposal number; acceptors promise not to accept any proposal with a smaller number. If the proposer hears back from a majority, it sends an "accept" request with the value (or the highest-numbered value already accepted, if any). Safety is maintained because any two majorities must overlap, guaranteeing that a later proposer will learn about any previously chosen value.
 
-- **DAC**: Owner controls access (Unix permissions)
-- **MAC**: Central authority defines policies (SELinux)
-- **RBAC**: Users assigned roles with permissions (enterprise standard)
-- **ABAC**: Access based on subject, resource, and environment attributes (flexible but complex)
+**Multi-Paxos** extends single-decree Paxos to a replicated log. The key optimization: if the same proposer stays the leader, it only needs to run the prepare phase once — subsequent slots can skip directly to the accept phase. This reduces the normal-case latency to a single round trip, which is optimal for wide-area networks.
 
-**OAuth 2.0 / OpenID Connect**: Delegated authorization and identity. JWTs for stateless auth in microservices. Short expiration or revocation lists to mitigate JWT statelessness.
+**Raft** was designed by Diego Ongaro and John Ousterhout in 2014 as a response to Paxos's reputation for incomprehensibility. Raft decomposes consensus into three subproblems: (1) leader election, (2) log replication, and (3) safety. Each subproblem has a clear, independently understandable protocol. The key invariant: if a log entry is committed on one server, it will never be overwritten on any server. Raft achieves this through a simple majority rule and a restriction that a leader can only overwrite entries from its own term or later terms.
 
-### Byzantine Fault Tolerance (Security Perspective)
+In practice, Raft is the consensus algorithm of choice for most systems built in 2040. It's used in etcd (the configuration store for Kubernetes), Consul (HashiCorp's service mesh), TiKV (the storage engine for TiDB), and countless other systems. Paxos is still used inside Google (in Spanner and its internal Chubby lock service), but the engineers who maintain it have decades of experience with its subtleties.
 
-Byzantine tolerance is about **malicious adversaries**, not just buggy software. Cost: O(n²) messages per consensus round, f+1 rounds for f Byzantine nodes, key management overhead.
+**Byzantine consensus** is harder: instead of crash failures, we must tolerate processes that behave arbitrarily. The classic result is that `n ≥ 3f + 1` processes are needed to tolerate `f` Byzantine failures. PBFT (Castro and Liskov, 1999) was the first practical BFT protocol, requiring three phases: pre-prepare, prepare, and commit. Modern BFT protocols like HotStuff (used in Meta's Libra/Diem blockchain) reduce the communication cost to O(n) per round using threshold signatures.
 
-**2040 BFT Practice**:
-- **Blockchain validators** stake cryptocurrency as financial disincentive against Byzantine behavior
-- **Confidential computing** (Intel SGX, AMD SEV, ARM CCA) provides hardware attestations that code is unmodified
-- **Formal verification** eliminates classes of Byzantine behavior by proving implementation matches specification
-
-### Zero-Knowledge Proofs
-
-Prove a statement is true without revealing any information beyond its truth. Properties: completeness, soundness, zero-knowledge.
-
-**Applications**:
-- **Private transactions**: Zcash zk-SNARKs prove transaction validity without revealing sender/receiver/amount
-- **Confidential smart contracts**: Aztec Protocol, zkSync
-- **Authentication without disclosure**: Prove set membership without revealing which member
-- **Verifiable computation**: Prove computation correctness without re-executing (rollups)
-
-**zk-SNARKs vs zk-STARKs**: SNARKs have short proofs (288 bytes) and fast verification but require trusted setup. STARKs have larger proofs (200KB+) but no trusted setup and are quantum-resistant.
-
-### 2040 Security
-
-**Decentralized Identity (DID)**: Users control identity data in verifiable credentials. Blockchain provides root of trust.
-
-**Service Mesh Security**: Mutual TLS (mTLS) between all services. Automatic certificate rotation. Authorization policies enforced at mesh level.
-
-**Zero Trust Architecture**: "Never trust, always verify." Every request authenticated and authorized regardless of origin. Default for new deployments by 2040.
+The University of Yggdrasil's Bifrost Network runs a modified HotStuff protocol for its control plane, with Raft for data plane replication. This hybrid approach — strong BFT for metadata, crash-tolerant consensus for data — is becoming increasingly common.
 
 ### Required Reading
 
-- Lamport, L., Shostak, R., & Pease, M. (1982). "The Byzantine Generals Problem."
-- Ben-Sasson, E. et al. (2018). "Scalable, Transparent, and Post-Quantum Secure Computational Integrity."
-- Rescorla, E. (2018). "TLS 1.3." RFC 8446.
+- Fischer, M.J., Lynch, N.A., Paterson, M.S. (1985). "Impossibility of Distributed Consensus with One Faulty Process." *JACM* 32(2).
+- Lamport, L. (2001). "Paxos Made Simple." *ACM SIGACT News* 32(4).
+- Ongaro, D., Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." *USENIX ATC*.
 
 ### Discussion Questions
 
-1. Transition plan for global PKI from RSA to post-quantum? Risks of premature or delayed transition?
-2. Should all financial transactions be private by default? Societal implications?
-3. 100-service microservices architecture with TLS certificates. How to manage rotation without downtime?
+1. FLP proves that deterministic consensus is impossible in asynchronous systems, yet we build distributed databases that achieve consensus every day. Are we violating a theorem, or are we doing something different? What exactly is the gap between theory and practice?
+2. Paxos has been described as "the protocol that won't die." Despite Raft's superior understandability, Google still uses Paxos variants internally. Why might an organization choose Paxos over Raft?
+3. Consider a blockchain that tolerates f < n/3 Byzantine nodes. What happens when the network temporarily partitions such that one partition has exactly 2n/3 nodes? Is the system still safe? Is it still live?
 
 ### Practice Problems
 
-1. **Kerberos scenario**: List all protocol steps including keys and encrypted messages.
-2. **Zero-knowledge proof**: Describe Schnorr protocol (commitment, challenge, response) for proving knowledge of discrete logarithm without revealing it.
-3. **Byzantine resilience cost**: 100-node BFT system, 3 rounds/transaction, 1ms processing/message. Maximum throughput? Throughput with 10 Byzantine nodes?
+- Implement a simple Raft leader election in Python (3 nodes, terms, vote requests, election timeouts). Demonstrate that exactly one leader is elected within 5 seconds regardless of initial state.
+- Trace through a Paxos run with 3 acceptors and 2 proposers where the proposers compete. Show the message sequence that leads to a chosen value. How many round trips does it take?
+- Calculate the minimum number of nodes needed for Byzantine agreement with f=10 Byzantine failures. If the protocol requires O(n²) messages per round, how many messages are exchanged per round?
 
 ---
 
-ᛉ **Lecture 12: The Future — Quantum Networks, AI-Managed Consensus, and the Physics-Computation Convergence**
+ᛗ **Lecture 5: Replication and Consistency Models**
 
 **Course:** CS301 — Distributed Systems  
 **Degree:** Bachelor of Science in Computer Science, 2040
@@ -726,127 +292,89 @@ Prove a statement is true without revealing any information beyond its truth. Pr
 
 ### Overview
 
-The three forces shaping the future of distributed systems:
-1. **Quantum networks** providing provable security through physics
-2. **AI-managed consensus** adapting protocols in real-time
-3. **Physics-computation convergence** blurring boundaries between systems and environment
+Replication — storing multiple copies of data on different machines — is the primary technique for achieving fault tolerance, availability, and low latency in distributed systems. But replication creates a fundamental tension: the more copies you have, the harder it is to keep them all in agreement. This lecture explores the spectrum of consistency models, from linearizability (the strongest) to eventual consistency (the weakest practical model), and the systems that embody each point on the spectrum.
 
-### Quantum Networking
+### Key Topics
 
-**Quantum Key Distribution (QKD)**: BB84 protocol uses polarized photons. Any eavesdropper disturbs quantum state, alerting communicators. Provable security — not computationally hard but physically impossible to intercept undetected.
+- **Why Replicate?**: Fault tolerance, availability, latency, data locality
+- **The Consistency Spectrum**: Linearizability, sequential consistency, causal consistency, eventual consistency, and the trade-offs between them
+- **Linearizability**: The strongest practical model — every operation appears to take effect atomically at a single point in real time
+- **Sequential Consistency**: Like linearizability but without the real-time ordering constraint between non-overlapping operations
+- **Causal Consistency**: Operations related by happened-before must be seen in order; concurrent operations may be seen in any order
+- **Eventual Consistency**: If no new updates are made, all replicas will eventually converge to the same state
+- **Session Guarantees**: Read-your-writes, monotonic reads, monotonic writes, writes-follow-reads — client-side consistency
+- **The RYW Problem**: Why "read your writes" is harder than you think in a partitioned system
 
-**2040 State**: QKD networks operate in China (4,600 km backbone), Europe (SECOQC), and US (Chicago Quantum Exchange). Satellite QKD enables intercontinental key distribution. QKD complements rather than replaces classical crypto — keys used for symmetric AES-256, authentication via post-quantum algorithms.
+### Lecture Notes
 
-**Quantum Internet beyond QKD**: Quantum teleportation of states, distributed quantum computation linking multiple quantum computers, quantum sensing networks achieving precision beyond classical limits.
+The decision to replicate data is always driven by one or more of four goals:
 
-**Impact**: QKD eliminates the weakest link in TLS — key exchange can't be compromised without detection. Raises security from "computationally hard to break" to "physically impossible to break without detection."
+1. **Fault tolerance**: If one machine fails, another has the data.
+2. **Availability**: Even during network partitions, some copy is accessible.
+3. **Latency**: Put a copy close to the user.
+4. **Data locality**: Compute where the data lives, rather than moving data to the compute.
 
-### AI-Managed Consensus
+These goals are often in tension. Maximizing availability (goal 2) requires that any replica can accept writes, which makes consistency harder. Maximizing fault tolerance (goal 1) requires synchronizing writes across replicas, which makes availability harder during partitions. This is the CAP theorem in action, which we'll formalize in Lecture 6.
 
-Static protocols with fixed parameters are suboptimal. **Adaptive consensus** uses ML to optimize in real-time:
+**Linearizability** (Herlihy and Wing, 1990) is the strongest consistency model used in practice. It requires that every operation appears to take effect instantaneously at some point between its invocation and response, and that these points form a total order consistent with the real-time ordering of operations. In other words: if operation A completes before operation B begins, then A must appear to happen before B in the global ordering. Linearizability is expensive — it requires coordination (usually consensus) for every write — but it's what most developers intuitively expect.
 
-- **Dynamic timeout adjustment**: AI predicts optimal timeouts based on network conditions and failure history
-- **Adaptive quorum sizing**: Adjusts based on observed failure patterns and node reliability
-- **Predictive reconfiguration**: Proactive re-replication and quorum adjustment before predicted failures
-- **Protocol switching**: Dynamically switches between Paxos, EPaxos, and BFT based on workload
+**Sequential consistency** (Lamport, 1979) relaxes linearizability by dropping the real-time constraint. The result of any execution must be equivalent to some sequential execution, but concurrent operations can be reordered. This means that if process P1 writes `x=1` and then process P2 reads `x`, P2 is not guaranteed to see `1` — P2's read could be ordered before P1's write as long as some sequential ordering exists that produces the same results. Sequential consistency is sufficient for many applications but is still expensive to implement.
 
-**UoY Research — Verðandi**: AI-driven consensus orchestrator that monitors metrics, predicts failures 30-120 seconds ahead, dynamically adjusts Raft parameters, switches protocols at runtime, and provides formal safety guarantees via model checking.
+**Causal consistency** (Ahamad et al., 1995) is weaker: it only requires that operations related by happened-before are seen in order. Concurrent operations (those that are not causally related) can be seen in any order. This is the strongest consistency model achievable without coordination — operations from the same client are always seen in order, and operations that read from each other's writes are seen in order, but independent operations on different keys can arrive in any order.
 
-**Challenges**:
-1. **Safety**: Misconfigured parameters can cause split-brain. Formal verification of adaptive parameters is essential.
-2. **Oscillation**: Rapid protocol switching causes thrashing. Hysteresis and cooldown periods prevent this.
-3. **Adversarial AI**: Attackers can influence training data to cause misconfiguration. Adversarial training and anomaly detection are necessary.
+**Eventual consistency** is the weakest practical model. It says that if no new updates are made, eventually all replicas will converge to the same state. "Eventually" is deliberately vague — it could be milliseconds, seconds, or hours. What "converge" means is defined by the merge function (see Lecture 9 on CRDTs). Eventual consistency is the model used by DNS (convergence takes hours to days), by many NoSQL databases, and by most mobile applications.
 
-### Physics-Computation Convergence
+**Session guarantees** (Terry et al., 1994) are client-side consistency properties that sit between causal consistency and eventual consistency. The four classic session guarantees are:
 
-**1. Edge Computing**: By 2040, 75%+ of data processed at edge. Consensus must run on limited devices with variable network conditions and high churn.
+- **Read-your-writes (RYW)**: A client always sees its own prior writes.
+- **Monotonic reads**: A client never sees data go backwards in time.
+- **Monotonic writes**: Writes from the same client are applied in order.
+- **Writes-follow-reads**: A write after a read sees at least the version read.
 
-**2. Cyber-Physical Systems (CPS)**: Self-driving cars, smart grids, robotic surgery. Hard real-time constraints (braking can't wait 500ms for Raft). Byzantine failures have physical consequences. Formal verification is mandatory.
+These guarantees are much easier to implement than server-side consistency because they only require the client to track its own session state (e.g., a vector timestamp of its operations). Most modern "eventually consistent" systems actually provide these session guarantees, which makes them much more useful than bare eventual consistency.
 
-**3. Quantum-Enhanced Computing**: Quantum processors as coprocessors. No-cloning theorem makes replication fundamentally different. Quantum decoherence imposes strict timing. Hybrid classical-quantum algorithms require tight coordination.
-
-### Speculative Futures
-
-**Post-Quantum Distributed Consensus**: Lattice-based signatures (Dilithium) are 5-10x larger than ECDSA. Affects bandwidth and verification time in consensus protocols.
-
-**Neuromorphic Distributed Computing**: Spiking neural network chips (Intel Loihi, IBM TrueNorth). Event-driven, asynchronous, inherently fault-tolerant at neuron level.
-
-**Biological Distributed Systems**: DNA storage (1 EB/gram) with slow access. Hybrid systems using DNA for archival storage, classical for active computation.
-
-### The Synthesis: Key Lessons
-
-1. **Impossibility results are design constraints**, not death sentences. FLP needs partial synchrony; CAP needs consistency/availability choice during partitions.
-2. **Every design decision is a trade-off**. Stronger consistency costs latency. Higher availability risks inconsistency. Simpler protocols sacrifice features.
-3. **Failure is the norm**. Design for it, test for it, expect it. Chaos engineering and formal verification are necessities.
-4. **The future is adaptive**. Static protocols served us well; adaptive systems that learn from failure will define the next decade.
-5. **Security is a first-class citizen**. Byzantine faults are real, quantum computers are coming, AI-assisted attacks are emerging. Secure by design, not by afterthought.
+In 2040, the consensus in the distributed systems community (pun intended) is that **causal consistency + session guarantees** is the right default for most applications. Linearizability is necessary for financial transactions and coordination primitives (locks, leader election), but for most data access patterns, causal consistency provides the guarantees developers expect at a fraction of the coordination cost. Systems like COPS (Lloyd et al., 2011), GentleRain (Du et al., 2014), and the University of Yggdrasil's own BifrostDB (2038) implement causal consistency at scale.
 
 ### Required Reading
 
-- Bennett, C. H. & Brassard, G. (1984). "Quantum Cryptography: Public Key Distribution and Coin Tossing."
-- Castelvecchi, D. (2018). "The Quantum Internet Has Arrived (And It Hasn't)." *Nature*, 554, 289–292.
-- Howard, H. et al. (2019). "Flexible Paxos: Quorum Intersection Revisited."
+- Herlihy, M., Wing, J. (1990). "Linearizability: A Correctness Condition for Concurrent Objects." *ACM TOPLAS* 12(3).
+- Lamport, L. (1979). "How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs." *IEEE TC* 28(9).
+- Terry, D., et al. (1994). "Session Guarantees for Weakly Consistent Replicated Data." *PDPS*.
+- Gilbert, S., Lynch, N. (2002). "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services." *Brewer's Conjecture*.
 
 ### Discussion Questions
 
-1. If QKD becomes widely available, how would TLS architecture change? Would CAs still be needed?
-2. What happens when conditions change faster than AI can adapt? Is there a theoretical limit to adaptive consensus?
-3. What consistency model is appropriate for sharing sensor data between autonomous vehicles? Is eventual consistency fast enough for safety?
+1. A social media feed application: which consistency model is appropriate for (a) the like counter on a post, (b) the list of comments on a post, (c) the user's own post creation, (d) the user's direct messages? Justify each choice.
+2. Is it ever correct for a system to provide no consistency guarantees at all? Give an example or argue that it's never correct.
+3. Read-your-writes seems obvious — why is it non-trivial in a partitioned system? What goes wrong when a client connects to a different replica after a network reconnection?
 
 ### Practice Problems
 
-1. **QKD key rate**: System parameters η=0.15, f=1 GHz, μ=0.5. Key generation rate? Transactions per second with 256-bit keys?
-2. **Adaptive consensus**: Raft cluster, 5 nodes, election timeout 300ms. AI observes mean inter-heartbeat 50ms, σ=10ms, recommends 5σ timeout. New timeout? Probability of false suspicion?
-3. **CPS safety**: Vehicle platoon with 4-node BFT (f=1), 50ms consensus. At 120 km/h, minimum following distance? If 7-node BFT (f=2) takes 200ms, does increased tolerance justify increased following distance?
+- Given the following operations on a shared variable `x`, determine whether each execution is linearizable, sequentially consistent, or only causally consistent:
+  - P1: write(x,1); P2: read(x)→1; P3: read(x)→0
+  - P1: write(x,1); P2: write(x,2); P3: read(x)→2; P4: read(x)→1
+  - P1: write(x,1); P2: read(x)→1; P3: write(x,2); P4: read(x)→1
+- Design a protocol that provides read-your-writes and monotonic reads for a single client connecting to a quorum-based replicated store. What state does the client need to maintain?
+- Analyze the performance implications of linearizability vs. causal consistency for a key-value store with 5 replicas spread across 3 continents. Estimate the latency difference for a write operation.
 
 ---
 
-## Final Examination Preparation
+ᚹ **Lecture 6: The CAP Theorem — A Useful Lie**
 
-### Exam Format
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
 
-**Part A: Analytical Problems (60 points)** — 8 short-answer problems covering all 12 lectures.
+---
 
-**Part B: Design Problem (40 points)** — One comprehensive design problem requiring:
-1. Consistency model choice and justification
-2. Replication and sharding strategy
-3. Consensus protocol specification and justification
-4. Failure mode analysis and recovery procedures
-5. Security and BFT considerations
-6. Trade-off analysis (latency, throughput, availability, consistency)
+### Overview
 
-### Sample Exam Problems
+The CAP theorem is simultaneously the most important and most misunderstood result in distributed systems. "You can only have two of Consistency, Availability, and Partition tolerance" — but this formulation is wrong in important ways. This lecture deconstructs CAP, explains what it actually says, and provides the nuanced framework for reasoning about trade-offs in real systems.
 
-**Part A:**
-1. Three processes with specified event traces. Draw happened-before graph, assign Lamport and vector timestamps, identify concurrent events.
-2. 7-node system, 2 Byzantine nodes. Can it achieve consensus? Minimum n for f=2 BFT? Does authentication change the bound?
-3. Trace a PN-Counter CRDT through specified operations and merges across 3 nodes.
-4. 2PC with coordinator crash between phases. What is each participant's state? How do they determine outcome?
-5. N=5, W=3, R=3 quorum system. Maximum failures for read consistency, write availability, both?
-6. Classify consistency models for: stock trading, weather app, document editing, approximate counter.
-7. Kerberos protocol trace with all keys and encrypted messages.
-8. QKD key rate calculation given detector efficiency, repetition rate, and mean photon number.
+### Key Topics
 
-**Part B Sample Design Problem:**
-
-Design a distributed ride-sharing platform operating in 50 cities worldwide. Requirements:
-- Driver locations accurate within 500ms. Ride assignments atomic.
-- 99.9% availability (8.76 hours downtime/year maximum).
-- Ride matching within 2 seconds. Location propagation within 500ms.
-- 10M active drivers, 5M concurrent riders, 500K ride requests/minute.
-
-Address: data model and sharding, replication and consistency per data type, consensus for ride assignment, failure detection and recovery, security (authentication, authorization, privacy), performance analysis.
-
-### Study Guide
-
-**Key theorems**: FLP Impossibility, CAP Theorem, BFT bound (n ≥ 3f+1), Quorum intersection (W+R > N).
-
-**Key algorithms to trace**: Lamport clocks, vector clocks, Basic Paxos, Raft leader election and log replication, 2PC, G-Counter, PN-Counter.
-
-**Key systems to compare**: Spanner vs. CockroachDB (TrueTime vs. HLC), DynamoDB vs. Cassandra (different consistency APIs), etcd/Raft vs. ZooKeeper/Zab.
-
-### Course Conclusion
-
-Distributed systems are the infrastructure of digital civilization. Every financial transaction, social media post, and autonomous vehicle decision traverses a distributed system balancing consistency, availability, and partition tolerance. The algorithms and design patterns in this course are the foundation upon which 2040's digital civilization is built.
-
-The Norns — Urðr, Verðandi, and Skuld — weave past, present, and future into fate's tapestry. In distributed systems, the past is the log of committed operations, the present is consensus on current state, and the future is operations yet to be proposed. May your systems be safe, available, and eventually consistent — and may your logs never diverge.
+- **The CAP Conjecture and Theorem**: Brewer (2000), Gilbert-Lynch proof (2002)
+- **What CAP Actually Says**: In the presence of a partition, you must choose between consistency and availability — not among all three
+- **What CAP Does Not Say**: You cannot "choose" partition tolerance; partitions are a reality of distributed systems
+- **The PACELC Model**: Extending CAP with latency-consistency trade-offs
+- **Beyond CAP**: Harvest and Yield, CALM theorem, CRDTs as a way to have both C and A
+- **CAP in Practice**: How real systems (Cassandra, MongoDB, Spanner, CockroachDB) navig
