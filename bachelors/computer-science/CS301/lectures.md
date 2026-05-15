@@ -457,4 +457,396 @@ Most production systems use:
 ### Required Reading
 
 - Gray, J. & Lamport, L. (2006). "Consensus on Transaction Commit."
-- Garcia-Molina, H. & Salem, K. (1987
+- Garcia-Molina, H. & Salem, K. (1987). "Sagas." *SIGMOD*.
+- Kleppmann, M. (2017). *Designing Data-Intensive Applications*, Chapter 7.
+
+### Discussion Questions
+
+1. A payment system transfers money between two banks. Should you use 2PC, a saga, or some other mechanism? What are the consequences of partial failure?
+2. Sagas provide only eventual consistency. What invariants might be temporarily violated during a travel booking saga?
+3. Is there a use case where 2PC is still the best choice? What properties make 2PC appropriate?
+
+### Practice Problems
+
+1. **2PC failure scenario**: In a 2PC protocol with coordinator C and participants P1, P2, P3 — P1 and P2 vote VOTE_COMMIT, P3 crashes before voting, C sends COMMIT to P1 and P2. P3 recovers. What is P3's state? How does P3 determine the outcome?
+2. **Saga design**: Design a saga for an e-commerce order: T1 (Reserve inventory → C1: Release inventory), T2 (Process payment → C2: Refund payment), T3 (Create shipment → C3: Cancel shipment), T4 (Send confirmation → C4: Send cancellation). If T3 fails, write out the compensations in order.
+3. **3PC race condition**: In 3PC, what happens if the coordinator crashes after sending PRE-COMMIT to P1 but before sending to P2 and P3? Sketch a termination protocol.
+
+---
+
+ᛉ **Lecture 9: Distributed Storage — Replication, Sharding, and Planetary-Scale Databases**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Data must live somewhere, and in a distributed system, that "somewhere" is many places at once. This lecture covers the fundamental architectures for storing data at planetary scale: replication (creating copies), sharding (partitioning the key space), and the hybrid approaches that combine both.
+
+### Replication Strategies
+
+**Single-Leader Replication**: One replica is the leader (primary/master). All writes go through the leader, which propagates them to followers. Reads can be served from any replica. Simple conflict resolution but leader is a SPOF and bottleneck. Systems: PostgreSQL streaming replication, MySQL Group Replication, Google Spanner.
+
+**Multi-Leader Replication**: Multiple replicas accept writes concurrently. Each leader propagates writes to all others. Conflicts must be resolved (last-writer-wins, custom resolution, CRDTs). Advantages: write availability during partitions, geographic locality. Disadvantages: complex conflict resolution, divergence risk. Systems: CouchDB, BDR for PostgreSQL, Firebase Realtime Database.
+
+**Leaderless Replication**: Any replica can accept writes. Writes go to a quorum; reads from a quorum. Conflicts detected via version vectors/timestamps. Advantages: no SPOF, maximum write availability. Systems: DynamoDB, Cassandra, Riak KV.
+
+**Quorum-Based Replication**: For N replicas, write succeeds if W acknowledge, read succeeds if R respond. Key constraints: W+R > N (every read sees latest write), W > N/2 (prevents split-brain writes), R > N/2 (every read sees up-to-date replica).
+
+Typical configurations:
+- Strict: N=3, W=3, R=2
+- Balanced: N=3, W=2, R=2 (tolerates one failure)
+- Fast writes: N=3, W=1, R=3
+- Fast reads: N=3, W=3, R=1
+
+### Sharding (Partitioning)
+
+**Hash-Based Sharding**: Hash each key with a consistent hash function. Uniform distribution prevents hotspots. Problem: adding/removing shards requires rehashing. Solution: consistent hashing (Karger et al., 1997).
+
+**Range-Based Sharding**: Keys partitioned by range. Range queries efficient. Problem: sequential keys create hotspots. Solution: dynamic range splitting.
+
+**Directory-Based Sharding**: Lookup service maps keys to shards. Flexible but directory service is SPOF. Solution: replicate and cache directory.
+
+**Shard Rebalancing**: Modern systems use range splitting with automatic rebalancing (CockroachDB, TiKV) or virtual node hashing (Cassandra, DynamoDB).
+
+### Case Studies
+
+**Google Spanner**: Globally distributed, externally consistent. TrueTime for commit timestamps. SQL with ACID transactions across shards. Processes billions of dollars in ad transactions daily.
+
+**CockroachDB**: Open-source, Spanner-inspired. Hybrid Logical Clocks instead of TrueTime. Range-based sharding with Raft replication per range. Geo-partitioning for regulatory compliance.
+
+**Apache Cassandra**: Leaderless, eventually consistent, wide-column store. Consistent hashing, tunable consistency per query (ONE, QUORUM, ALL). Multi-datacenter replication. Anti-entropy with Merkle trees.
+
+**TiDB / TiKV**: NewSQL with split architecture: TiDB (SQL) + TiKV (KV storage) + PD (placement driver). Raft-based replication per range. Hybrid OLTP/OLAP workloads.
+
+### Storage Engine Fundamentals
+
+**B-Tree (read-optimized)**: PostgreSQL, MySQL (InnoDB), SQLite. O(log N) reads, page splits on writes.
+
+**LSM-Tree (write-optimized)**: Cassandra, RocksDB, CockroachDB (Pebble). O(1) writes (append-only), amortized O(log N) reads with compaction. Good for write-heavy workloads.
+
+### Required Reading
+
+- Kleppmann, M. (2017). *Designing Data-Intensive Applications*, Chapters 5, 6, 9.
+- Corbett, J. C. et al. (2013). "Spanner: Google's Globally Distributed Database."
+- Lakshman, A. & Malik, P. (2010). "Cassandra: A Decentralized Structured Storage System."
+
+### Discussion Questions
+
+1. Design sharding/replication for a global social media platform complying with GDPR, CCPA, and 40+ data sovereignty laws.
+2. Compare Spanner's TrueTime external consistency with CockroachDB's HLC serializability. Practical differences?
+3. How to balance LSM-tree write performance with read-heavy requirements in a real-time analytics dashboard?
+
+### Practice Problems
+
+1. **Quorum calculation**: N=5, W=3, R=3. Maximum replica failures for: (a) read consistency, (b) write availability, (c) both.
+2. **Consistent hashing**: 4 nodes (A: 0-63, B: 64-127, C: 128-191, D: 192-255). Key K hashes to 87. Which node? If E is added covering 64-95, which keys move from B to E?
+3. **Shard sizing**: 100 TB, 4 TB/node, replication factor 3. How many nodes? If max shard 256 GB, how many shards and shard-replicas total?
+
+---
+
+ᛉ **Lecture 10: Fault Tolerance and Self-Healing — When Systems Recover Themselves**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+A distributed system that cannot tolerate faults is not a distributed system — it is a single machine with extra steps. Fault tolerance is not just about surviving crashes; it's about **detecting** failures, **reconfiguring** the system, **recovering** data, and **preventing** future failures.
+
+### Failure Detection
+
+**The Fundamental Problem**: In an asynchronous system, you cannot distinguish a crashed process from a slow one.
+
+**Heartbeat-based Detection**: Periodic "I'm alive" messages. Shorter timeouts = faster detection but more false positives.
+
+**Phi Accrual Failure Detector** (Hayashibara et al., 2004): Outputs suspicion level φ that increases over time. Applications set their own φ_threshold. Used in Cassandra, ZooKeeper.
+
+**Chandra-Toueg Failure Detector Classes**:
+- □P (Perfect): Never mistakes. Possible only in synchronous systems.
+- ◇S (Eventually Strong): Eventually every crashed process permanently suspected, some correct process never suspected. Sufficient for consensus with majority correct.
+- ◇W (Eventually Weak): Eventually every crashed process permanently suspected.
+
+### Leader Election
+
+**Bully Algorithm**: Highest-ID process becomes leader. Simple but causes leadership vacillation when higher-ID processes oscillate.
+
+**Raft Leader Election**: Randomized election timeouts (150-300ms). Follower becomes candidate after timeout, increments term, votes for self, sends RequestVote RPCs. Majority votes = leader.
+
+### Crash Recovery and Log Management
+
+**Write-Ahead Logging (WAL)**: Every state change written to durable log before application. On recovery, replay log from last checkpoint.
+
+**Raft Log Compaction**: Snapshot mechanism — state machine takes snapshot, all log entries up to snapshot are discarded. Snapshots can be sent to slow followers.
+
+**Production Examples**: etcd snapshots every 10,000 transactions. CockroachDB uses incremental snapshots per range. Kafka uses log segmentation and compaction.
+
+### Self-Healing Systems
+
+**Automatic Replication Repair**: When a node fails, re-replicate its data elsewhere. Standard in Cassandra, Raft, DynamoDB.
+
+**Anti-Entropy Protocols**:
+- Merkle tree comparison for efficient replica diffing
+- Read repair for synchronous inconsistency fixes
+- Hinted handoff for unavailable replica buffering
+
+**Circuit Breakers**: When downstream service fails repeatedly, breaker "opens" and stops sending requests. After timeout, allows probe request. Prevents cascade failures.
+
+**Chaos Engineering**: Netflix's Chaos Monkey (2011) randomly terminates VMs. By 2040, chaos engineering is standard practice. Systems are designed to be tested by failure.
+
+### AI-Assisted Fault Management (2040)
+
+1. **Predictive failure detection**: ML models predict node failures 5-30 minutes ahead.
+2. **Anomaly detection**: Unsupervised learning identifies latent failures invisible to thresholds.
+3. **Automated root cause analysis**: AI traces causal chains through distributed traces.
+4. **Dynamic reconfiguration**: AI adjusts replication factors, shard boundaries, and consistency levels in real-time.
+
+**Caution**: AI mispredictions cause unnecessary re-replication or suppress genuine alerts. Human-in-the-loop escalation is essential.
+
+### Required Reading
+
+- Chandra, T. D. & Toueg, S. (1996). "Unreliable Failure Detectors for Reliable Distributed Systems."
+- Ongaro, D. & Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." (Log compaction and membership changes sections.)
+
+### Discussion Questions
+
+1. In a 5-node Raft cluster, node 3 is partitioned. Can it win an election?
+2. Case for and against chaos engineering in medical device control systems.
+3. AI failure predictor with 95% accuracy (5% FP, 5% FN). Should it trigger immediate re-replication? Costs of each type of error?
+
+### Practice Problems
+
+1. **Phi failure detector**: Heartbeats at 100, 105, 98, 110, 95, 450ms. Last heartbeat 300ms ago. μ=100ms, σ=50ms. Calculate φ. Suspect at threshold 1?
+2. **Leader election timing**: 7-node Raft cluster, election timeout 150-300ms uniform. Probability of simultaneous elections? Probability of resolution within one round?
+3. **Log recovery**: Raft log [1,2,3,4,5,6,7,8], snapshot at index 5. Which entries can be discarded? After leader crash at entry 7, what does the new leader need?
+
+---
+
+ᛉ **Lecture 11: Security in Distributed Systems — Trust, Identity, and Byzantine Resilience**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Security in distributed systems is fundamentally different from single-machine security. Every message crosses a trust boundary, every node may be compromised, and communication itself creates vulnerability.
+
+### Authentication
+
+**Symmetric Key**: Shared secret K between parties. N(N-1)/2 keys needed for N parties. Solution: KDC (Kerberos).
+
+**Kerberos** (1988): Alice contacts KDC for ticket to Bob. KDC generates session key K_AB encrypted with both Alice's and Bob's keys. Alice sends Bob the ticket. Bob decrypts, verifies identity, uses K_AB for session.
+
+**Public Key**: Each party has public/private key pair. Alice signs challenge with private key; Bob verifies with public key. Problem: how do you know the public key belongs to Alice?
+
+**PKI (Public Key Infrastructure)**: CAs vouch for identity-key bindings. Risk: compromised CA = all certificates untrustworthy. 2011 DigiNotar breach demonstrated this.
+
+**2040 Improvement**: Certificate Transparency logs make all certificates publicly auditable. Merkle-based transparency prevents silent mis-issuance.
+
+### Secure Communication
+
+**TLS 1.3** (2018, still dominant): ECDHE key exchange → server certificate authentication → 1-RTT handshake (0-RTT for resumed sessions) → AES-256-GCM or ChaCha20-Poly1305 encryption with AEAD integrity.
+
+**Post-Quantum TLS**: By 2040, quantum computers threaten classical public-key crypto. NIST standardized:
+- **CRYSTALS-Kyber (ML-KEM)**: Lattice-based key exchange
+- **CRYSTALS-Dilithium (ML-DSA)**: Lattice-based digital signatures
+
+TLS 1.4 (proposed 2038) uses hybrid key exchange: classical (X25519) + post-quantum (ML-KEM-768) in parallel. Attacker must break both.
+
+### Authorization
+
+- **DAC**: Owner controls access (Unix permissions)
+- **MAC**: Central authority defines policies (SELinux)
+- **RBAC**: Users assigned roles with permissions (enterprise standard)
+- **ABAC**: Access based on subject, resource, and environment attributes (flexible but complex)
+
+**OAuth 2.0 / OpenID Connect**: Delegated authorization and identity. JWTs for stateless auth in microservices. Short expiration or revocation lists to mitigate JWT statelessness.
+
+### Byzantine Fault Tolerance (Security Perspective)
+
+Byzantine tolerance is about **malicious adversaries**, not just buggy software. Cost: O(n²) messages per consensus round, f+1 rounds for f Byzantine nodes, key management overhead.
+
+**2040 BFT Practice**:
+- **Blockchain validators** stake cryptocurrency as financial disincentive against Byzantine behavior
+- **Confidential computing** (Intel SGX, AMD SEV, ARM CCA) provides hardware attestations that code is unmodified
+- **Formal verification** eliminates classes of Byzantine behavior by proving implementation matches specification
+
+### Zero-Knowledge Proofs
+
+Prove a statement is true without revealing any information beyond its truth. Properties: completeness, soundness, zero-knowledge.
+
+**Applications**:
+- **Private transactions**: Zcash zk-SNARKs prove transaction validity without revealing sender/receiver/amount
+- **Confidential smart contracts**: Aztec Protocol, zkSync
+- **Authentication without disclosure**: Prove set membership without revealing which member
+- **Verifiable computation**: Prove computation correctness without re-executing (rollups)
+
+**zk-SNARKs vs zk-STARKs**: SNARKs have short proofs (288 bytes) and fast verification but require trusted setup. STARKs have larger proofs (200KB+) but no trusted setup and are quantum-resistant.
+
+### 2040 Security
+
+**Decentralized Identity (DID)**: Users control identity data in verifiable credentials. Blockchain provides root of trust.
+
+**Service Mesh Security**: Mutual TLS (mTLS) between all services. Automatic certificate rotation. Authorization policies enforced at mesh level.
+
+**Zero Trust Architecture**: "Never trust, always verify." Every request authenticated and authorized regardless of origin. Default for new deployments by 2040.
+
+### Required Reading
+
+- Lamport, L., Shostak, R., & Pease, M. (1982). "The Byzantine Generals Problem."
+- Ben-Sasson, E. et al. (2018). "Scalable, Transparent, and Post-Quantum Secure Computational Integrity."
+- Rescorla, E. (2018). "TLS 1.3." RFC 8446.
+
+### Discussion Questions
+
+1. Transition plan for global PKI from RSA to post-quantum? Risks of premature or delayed transition?
+2. Should all financial transactions be private by default? Societal implications?
+3. 100-service microservices architecture with TLS certificates. How to manage rotation without downtime?
+
+### Practice Problems
+
+1. **Kerberos scenario**: List all protocol steps including keys and encrypted messages.
+2. **Zero-knowledge proof**: Describe Schnorr protocol (commitment, challenge, response) for proving knowledge of discrete logarithm without revealing it.
+3. **Byzantine resilience cost**: 100-node BFT system, 3 rounds/transaction, 1ms processing/message. Maximum throughput? Throughput with 10 Byzantine nodes?
+
+---
+
+ᛉ **Lecture 12: The Future — Quantum Networks, AI-Managed Consensus, and the Physics-Computation Convergence**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+The three forces shaping the future of distributed systems:
+1. **Quantum networks** providing provable security through physics
+2. **AI-managed consensus** adapting protocols in real-time
+3. **Physics-computation convergence** blurring boundaries between systems and environment
+
+### Quantum Networking
+
+**Quantum Key Distribution (QKD)**: BB84 protocol uses polarized photons. Any eavesdropper disturbs quantum state, alerting communicators. Provable security — not computationally hard but physically impossible to intercept undetected.
+
+**2040 State**: QKD networks operate in China (4,600 km backbone), Europe (SECOQC), and US (Chicago Quantum Exchange). Satellite QKD enables intercontinental key distribution. QKD complements rather than replaces classical crypto — keys used for symmetric AES-256, authentication via post-quantum algorithms.
+
+**Quantum Internet beyond QKD**: Quantum teleportation of states, distributed quantum computation linking multiple quantum computers, quantum sensing networks achieving precision beyond classical limits.
+
+**Impact**: QKD eliminates the weakest link in TLS — key exchange can't be compromised without detection. Raises security from "computationally hard to break" to "physically impossible to break without detection."
+
+### AI-Managed Consensus
+
+Static protocols with fixed parameters are suboptimal. **Adaptive consensus** uses ML to optimize in real-time:
+
+- **Dynamic timeout adjustment**: AI predicts optimal timeouts based on network conditions and failure history
+- **Adaptive quorum sizing**: Adjusts based on observed failure patterns and node reliability
+- **Predictive reconfiguration**: Proactive re-replication and quorum adjustment before predicted failures
+- **Protocol switching**: Dynamically switches between Paxos, EPaxos, and BFT based on workload
+
+**UoY Research — Verðandi**: AI-driven consensus orchestrator that monitors metrics, predicts failures 30-120 seconds ahead, dynamically adjusts Raft parameters, switches protocols at runtime, and provides formal safety guarantees via model checking.
+
+**Challenges**:
+1. **Safety**: Misconfigured parameters can cause split-brain. Formal verification of adaptive parameters is essential.
+2. **Oscillation**: Rapid protocol switching causes thrashing. Hysteresis and cooldown periods prevent this.
+3. **Adversarial AI**: Attackers can influence training data to cause misconfiguration. Adversarial training and anomaly detection are necessary.
+
+### Physics-Computation Convergence
+
+**1. Edge Computing**: By 2040, 75%+ of data processed at edge. Consensus must run on limited devices with variable network conditions and high churn.
+
+**2. Cyber-Physical Systems (CPS)**: Self-driving cars, smart grids, robotic surgery. Hard real-time constraints (braking can't wait 500ms for Raft). Byzantine failures have physical consequences. Formal verification is mandatory.
+
+**3. Quantum-Enhanced Computing**: Quantum processors as coprocessors. No-cloning theorem makes replication fundamentally different. Quantum decoherence imposes strict timing. Hybrid classical-quantum algorithms require tight coordination.
+
+### Speculative Futures
+
+**Post-Quantum Distributed Consensus**: Lattice-based signatures (Dilithium) are 5-10x larger than ECDSA. Affects bandwidth and verification time in consensus protocols.
+
+**Neuromorphic Distributed Computing**: Spiking neural network chips (Intel Loihi, IBM TrueNorth). Event-driven, asynchronous, inherently fault-tolerant at neuron level.
+
+**Biological Distributed Systems**: DNA storage (1 EB/gram) with slow access. Hybrid systems using DNA for archival storage, classical for active computation.
+
+### The Synthesis: Key Lessons
+
+1. **Impossibility results are design constraints**, not death sentences. FLP needs partial synchrony; CAP needs consistency/availability choice during partitions.
+2. **Every design decision is a trade-off**. Stronger consistency costs latency. Higher availability risks inconsistency. Simpler protocols sacrifice features.
+3. **Failure is the norm**. Design for it, test for it, expect it. Chaos engineering and formal verification are necessities.
+4. **The future is adaptive**. Static protocols served us well; adaptive systems that learn from failure will define the next decade.
+5. **Security is a first-class citizen**. Byzantine faults are real, quantum computers are coming, AI-assisted attacks are emerging. Secure by design, not by afterthought.
+
+### Required Reading
+
+- Bennett, C. H. & Brassard, G. (1984). "Quantum Cryptography: Public Key Distribution and Coin Tossing."
+- Castelvecchi, D. (2018). "The Quantum Internet Has Arrived (And It Hasn't)." *Nature*, 554, 289–292.
+- Howard, H. et al. (2019). "Flexible Paxos: Quorum Intersection Revisited."
+
+### Discussion Questions
+
+1. If QKD becomes widely available, how would TLS architecture change? Would CAs still be needed?
+2. What happens when conditions change faster than AI can adapt? Is there a theoretical limit to adaptive consensus?
+3. What consistency model is appropriate for sharing sensor data between autonomous vehicles? Is eventual consistency fast enough for safety?
+
+### Practice Problems
+
+1. **QKD key rate**: System parameters η=0.15, f=1 GHz, μ=0.5. Key generation rate? Transactions per second with 256-bit keys?
+2. **Adaptive consensus**: Raft cluster, 5 nodes, election timeout 300ms. AI observes mean inter-heartbeat 50ms, σ=10ms, recommends 5σ timeout. New timeout? Probability of false suspicion?
+3. **CPS safety**: Vehicle platoon with 4-node BFT (f=1), 50ms consensus. At 120 km/h, minimum following distance? If 7-node BFT (f=2) takes 200ms, does increased tolerance justify increased following distance?
+
+---
+
+## Final Examination Preparation
+
+### Exam Format
+
+**Part A: Analytical Problems (60 points)** — 8 short-answer problems covering all 12 lectures.
+
+**Part B: Design Problem (40 points)** — One comprehensive design problem requiring:
+1. Consistency model choice and justification
+2. Replication and sharding strategy
+3. Consensus protocol specification and justification
+4. Failure mode analysis and recovery procedures
+5. Security and BFT considerations
+6. Trade-off analysis (latency, throughput, availability, consistency)
+
+### Sample Exam Problems
+
+**Part A:**
+1. Three processes with specified event traces. Draw happened-before graph, assign Lamport and vector timestamps, identify concurrent events.
+2. 7-node system, 2 Byzantine nodes. Can it achieve consensus? Minimum n for f=2 BFT? Does authentication change the bound?
+3. Trace a PN-Counter CRDT through specified operations and merges across 3 nodes.
+4. 2PC with coordinator crash between phases. What is each participant's state? How do they determine outcome?
+5. N=5, W=3, R=3 quorum system. Maximum failures for read consistency, write availability, both?
+6. Classify consistency models for: stock trading, weather app, document editing, approximate counter.
+7. Kerberos protocol trace with all keys and encrypted messages.
+8. QKD key rate calculation given detector efficiency, repetition rate, and mean photon number.
+
+**Part B Sample Design Problem:**
+
+Design a distributed ride-sharing platform operating in 50 cities worldwide. Requirements:
+- Driver locations accurate within 500ms. Ride assignments atomic.
+- 99.9% availability (8.76 hours downtime/year maximum).
+- Ride matching within 2 seconds. Location propagation within 500ms.
+- 10M active drivers, 5M concurrent riders, 500K ride requests/minute.
+
+Address: data model and sharding, replication and consistency per data type, consensus for ride assignment, failure detection and recovery, security (authentication, authorization, privacy), performance analysis.
+
+### Study Guide
+
+**Key theorems**: FLP Impossibility, CAP Theorem, BFT bound (n ≥ 3f+1), Quorum intersection (W+R > N).
+
+**Key algorithms to trace**: Lamport clocks, vector clocks, Basic Paxos, Raft leader election and log replication, 2PC, G-Counter, PN-Counter.
+
+**Key systems to compare**: Spanner vs. CockroachDB (TrueTime vs. HLC), DynamoDB vs. Cassandra (different consistency APIs), etcd/Raft vs. ZooKeeper/Zab.
+
+### Course Conclusion
+
+Distributed systems are the infrastructure of digital civilization. Every financial transaction, social media post, and autonomous vehicle decision traverses a distributed system balancing consistency, availability, and partition tolerance. The algorithms and design patterns in this course are the foundation upon which 2040's digital civilization is built.
+
+The Norns — Urðr, Verðandi, and Skuld — weave past, present, and future into fate's tapestry. In distributed systems, the past is the log of committed operations, the present is consensus on current state, and the future is operations yet to be proposed. May your systems be safe, available, and eventually consistent — and may your logs never diverge.
