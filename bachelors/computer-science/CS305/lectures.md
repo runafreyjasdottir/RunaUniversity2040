@@ -2,748 +2,364 @@
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4
-**Semester:** Year 3, Semester 1
-**Prerequisites:** CS106 (Operating Systems), CS205 (Machine Learning & Data Mining)
-**Instructor:** Dr. Freyja Mjøðvitnir, Faculty of Computational Arts & AI Systems
-
-> *"A god does not create from nothing. Óðinn hung on Yggdrasil for nine nights to acquire the runes — the existing patterns of the universe. AI, too, does not create from nothing. It learns the patterns already woven into the world's data. The art is in choosing which patterns to heed."* — Freyja Mjøðvitnir, *The Waking Wood* (2038)
+**Prerequisites:** CS201 (Data Structures & Algorithms), CS204 (Discrete Mathematics)
+**Description:** A rigorous introduction to the foundational principles and modern practice of artificial intelligence, from classical symbolic methods — search algorithms, constraint satisfaction, knowledge representation, and planning — through statistical learning, deep neural architectures, and the large language models (LLMs) that have come to define the AI landscape of the 2040s. Students develop a unified perspective that sees AI not as a collection of disconnected techniques but as a single intellectual project: the study and construction of agents that perceive, reason, learn, and act in complex environments. The course culminates in a substantial project in which students design, implement, and evaluate an AI agent that integrates multiple AI techniques in a problem domain of their choice, using the Yggdrasil Reasoning Engine — a custom platform for AI systems development deployed across the University's computing infrastructure.
 
 ---
 
-## Course Description
+## Lecture 1: The Scope of Artificial Intelligence — From Symbolic Roots to the Deep Learning Revolution
 
-Artificial Intelligence Systems is the study of how machines perceive, reason, learn, and act in the world. This course bridges the gap between theoretical AI (search, planning, knowledge representation) and the practical systems that define the 2040 landscape (large language models, agent architectures, multimodal AI, and AI safety). Students build a complete AI agent from scratch — starting with symbolic search and planning, then incorporating learned components, and finally deploying the agent on the University's Hermes AI OS platform to solve real-world tasks.
+Artificial intelligence is not a single technology but a field of inquiry with a rich and contested intellectual history. The core question — *can machines think?* — was posed by Alan Turing in 1950 in his landmark paper "Computing Machinery and Intelligence," which introduced the Turing Test as a behavioural criterion for intelligence: a machine is intelligent if a human interrogator cannot distinguish its responses from those of a human being. The Turing Test, while philosophically provocative, has been superseded as a practical benchmark by more targeted evaluations — but it captures the essential ambition of AI: the creation of machines that exhibit behaviour that would be considered intelligent if exhibited by a human.
 
-The Norse metaphor threading this course is the *vǫlva* — the seeress who journeys through the nine realms, perceiving past, present, and future. An AI system is a vǫlva: it perceives the world through sensors, reasons about what it has seen, predicts what will happen next, and acts to shape events. Like the vǫlva, its knowledge is never complete — it sees patterns but not the whole weave.
+The history of AI is often periodised into waves. The **first wave** (1956–1974) — the age of *symbolic* or *classical* AI — was defined by the Dartmouth Summer Research Project (1956), where the term "artificial intelligence" was coined. Researchers believed that intelligence could be captured by explicit symbolic representations and formal logic: the General Problem Solver (Newell & Simon, 1959) could prove theorems and solve puzzles by searching through a space of symbolic expressions; STRIPS (Fikes & Nilsson, 1971) could plan the actions of a robot by representing the world as a set of logical predicates; and expert systems (MYCIN, 1976; XCON, 1980) could diagnose diseases or configure computers by encoding human expertise as a set of if-then rules. The first wave was humbled by the **AI winter** of the 1970s: systems that worked on toy problems failed at real-world scale, the combinatorial explosion of search spaces proved intractable, and the brittleness of rule-based systems meant they could not handle the ambiguity and noise of the real world.
 
----
+The **second wave** (1980–2010) — the age of *machine learning* — shifted the focus from explicit programming to learning from data. Instead of hand-coding rules, researchers built systems that could acquire their own knowledge from examples: decision trees, support vector machines, Bayesian networks, and — most importantly — neural networks, which had been proposed in the 1940s and 1950s but had been marginalised until the development of backpropagation (Rumelhart, Hinton & Williams, 1986) made it practical to train multi-layer networks. The second wave saw the maturation of statistical machine learning as an engineering discipline: practical systems for spam detection, credit scoring, handwriting recognition, and speech recognition were deployed at scale. But neural networks remained limited — shallow architectures (two or three hidden layers), small datasets, and limited compute meant they could not approach human-level performance on challenging perceptual tasks.
 
-## Lectures
+The **third wave** (2012–2025) — the *deep learning* revolution — was triggered by three converging factors: large datasets (ImageNet, with 14 million labelled images), powerful computation (GPUs, which provided the parallel computation needed to train large neural networks), and algorithmic innovations (ReLU activations, dropout, batch normalisation, residual connections). AlexNet (Krizhevsky, Sutskever & Hinton, 2012) demonstrated that a deep convolutional neural network could achieve dramatically better image classification than any previous approach. The revolution spread rapidly: deep networks conquered speech recognition (2012–2014), machine translation (2014–2016), game playing (AlphaGo, 2016), and protein folding (AlphaFold, 2020). The key insight was that deep architectures — networks with many layers — could learn hierarchical representations: low-level features (edges, textures) are learned in early layers, mid-level features (objects, parts) in middle layers, and high-level concepts (scenes, actions) in later layers, all from raw data without manual feature engineering.
 
-### ᚠ Lecture 1: What Is Intelligence? — The Seeress Awakens
+The **fourth wave** (2025–2040) — the era of *foundation models* and *agentic systems* — was defined by scaling: the realisation that training extremely large neural networks (hundreds of billions to trillions of parameters) on vast corpora of text, images, code, and multimodal data produced systems with capabilities that were not present in smaller models. The GPT series (OpenAI), the Gemini series (Google DeepMind), the Claude series (Anthropic), and the open-source Llama and Mistral families demonstrated that scale alone — combined with the transformer architecture (Vaswani et al., 2017) — was sufficient for systems to exhibit reasoning, translation, code generation, mathematical problem-solving, and creative writing at levels that approached — and in some domains surpassed — human ability. The 2040 landscape is defined by *agentic AI*: systems that do not merely respond to prompts but act autonomously over extended time horizons, using tools, browsing the web, writing and executing code, and collaborating with other AI agents. The University of Yggdrasil's own research programme — the *Yggdrasil Foundation Model Initiative* — contributes open-source language models and agent frameworks to this ecosystem.
 
-**Date:** Week 1, Session 1
+**Required Reading:**
+- Alan M. Turing, "Computing Machinery and Intelligence," *Mind* 59, no. 236 (1950): 433–460
+- Stuart Russell & Peter Norvig, *Artificial Intelligence: A Modern Approach* (5th ed., 2039), chs. 1–2
+- Nils J. Nilsson, *The Quest for Artificial Intelligence: A History of Ideas and Achievements* (2010/2038), chs. 1–6
+- Ashish Vaswani et al., "Attention Is All You Need," *Proceedings of the 31st International Conference on Neural Information Processing Systems* (2017): 5998–6008
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 28 (The Future of AI)
+- Yggdrasil Foundation Model Primer (2040)
 
-#### Overview
-
-What does it mean for a machine to be intelligent? This lecture surveys the history of AI from its founding at the 1956 Dartmouth Conference through the 2020s deep learning revolution to the 2040 landscape of foundation models, AI agents, and the Hermes AI OS framework. We establish the core tension: connectionist approaches (neural networks, learning from data) vs. symbolic approaches (logic, reasoning, knowledge representation) — and the 2040 synthesis of both in neuro-symbolic systems. The Norse framing: the vǫlva's trance state — a blend of intuitive pattern recognition (connectionist) and deliberate chant (symbolic), neither complete without the other.
-
-#### Lecture Notes
-
-The field of Artificial Intelligence was born in the summer of 1956 at Dartmouth College, where John McCarthy, Marvin Minsky, Nathaniel Rochester, and Claude Shannon proposed a two-month workshop on "the conjecture that every aspect of learning or any other feature of intelligence can in principle be so precisely described that a machine can be made to simulate it." The proposal itself is remarkably optimistic, predicting that "a significant advance can be made in one or more of these problems if a carefully selected group of scientists work on it together for a summer."
-
-**The First AI Winter (1974-1980).** The initial optimism collided with computational reality. Symbolic AI systems (Newell and Simon's General Problem Solver, 1957; Weizenbaum's ELIZA, 1966) worked for toy problems but failed to scale. The Lighthill Report (1973) in the UK was devastating: "in no part of the field have the discoveries made so far produced the major impact that was then promised." Government funding (DARPA, UK Science Research Council) was slashed dramatically.
-
-**Expert Systems and the Second Winter (1980-1987).** The 1980s saw the rise of expert systems: rule-based systems that encoded human expertise in narrow domains. MYCIN (medical diagnosis, 1976), XCON (computer configuration, 1980), and PROSPECTOR (mineral exploration, 1981) achieved remarkable success — XCON saved DEC an estimated $40M per year by 1987. The Japanese Fifth Generation Computer Systems project (1982-1992) and the US Strategic Computing Initiative (1983-1993) poured billions into AI. But the limitations of rule-based systems became apparent: they were brittle (a single missing rule caused catastrophic failure), labor-intensive (each rule required a knowledge engineer extracting expertise from a domain expert), and incapable of learning from data.
-
-**The Statistical Revolution (1990s-2000s).** The 1990s shifted focus from symbolic reasoning to statistical pattern recognition. Neural networks, inspired by the brain's architecture, re-emerged with backpropagation (Rumelhart, Hinton, Williams, 1986) and the Support Vector Machine (Vapnik, 1995). Statistical machine translation (IBM Model 1-4, 1990s), speech recognition (HMMs and GMMs), and computer vision (SIFT, Viola-Jones) achieved practical results. The field rebranded — much of what had been "AI" became "machine learning."
-
-**Deep Learning (2012-2024).** The ImageNet competition of 2012 (Krizhevsky, Sutskever, Hinton's AlexNet) marked the beginning of the deep learning era. Three factors converged:
-1. **Data:** The internet provided billions of labeled images, text, and video.
-2. **Compute:** GPU computing (NVIDIA CUDA, 2006) enabled training of networks with millions of parameters.
-3. **Algorithms:** Dropout, ReLU, Batch Normalization, and the Adam optimizer made deep networks trainable.
-
-By 2024, transformers (Vaswani et al., 2017) had become the dominant architecture. GPT-4, Claude 3, Gemini, and Llama demonstrated remarkable language understanding and generation capabilities. The "scaling hypothesis" — that larger models trained on more data would continue to improve — was the dominant orthodoxy.
-
-**The 2040 Landscape.** By 2040, the landscape has transformed further:
-- **Foundation models** (models trained on internet-scale data and adapted to many tasks) are the infrastructure of AI. The University's **Hermes AI OS** provides a platform for deploying, composing, and governing AI agents.
-- **Neuro-symbolic AI** integrates neural pattern recognition with symbolic reasoning, achieving the best of both worlds.
-- **AI agents** — autonomous systems that perceive, reason, plan, and act — are the dominant application paradigm.
-- **AI safety** has matured into a rigorous engineering discipline with formal verification techniques.
-
-**The Vǫlva Analogy.** The Norse vǫlva enters a trance state to perceive the weave of fate. In this state, she is neither fully conscious (like a symbolic system following explicit rules) nor fully unconscious (like a neural network processing patterns). She is both — a synthesis of intuitive perception and deliberate utterance. The 2040 AI system is a vǫlva: its foundation model provides intuitive pattern recognition (the trance), while its reasoning layer provides deliberate analysis (the utterance). Neither is sufficient alone.
-
-#### Required Reading
-- Russell, S. & Norvig, P. (2021). *Artificial Intelligence: A Modern Approach*, 4th ed. Chapters 1-2.
-- McCarthy, J. et al. (1955). "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence."
-- Vaswani, A. et al. (2017). "Attention Is All You Need." *NeurIPS*.
-- Mjøðvitnir, F. (2038). *The Waking Wood*, Chapter 1: "The Seeress and the Machine." Yggdrasil University Press.
-
-#### Discussion Questions
-1. Was the Dartmouth proposal's optimism justified, or did it set unrealistic expectations that led to the AI winters?
-2. The "scaling hypothesis" suggests that larger models will continue to improve. Is there a limit to this scaling, and if so, what is it?
-3. How does the neuro-symbolic synthesis differ from pure deep learning? What problems does it solve?
+**Discussion Questions:**
+1. The Turing Test has been criticised as focusing on behaviour rather than on internal mental states. Is behaviour sufficient for ascribing intelligence, or is something more — consciousness, self-awareness, understanding — required? Does it matter?
+2. The transition from symbolic AI to deep learning was framed by some as a paradigm shift. But in the 2040s, there is renewed interest in combining neural representations with explicit symbolic reasoning (neurosymbolic AI). Was the rejection of symbolic AI in the 1990s an overcorrection?
+3. Foundation models exhibit "emergent abilities" — capabilities that were not explicitly trained for and that only appear beyond a certain scale. Are these genuinely emergent properties of scale, or are they the result of more prosaic factors (better data, longer training, improved evaluation)?
 
 ---
 
-### ᚢ Lecture 2: Search and Planning — The Journey Through Realms
+## Lecture 2: Problem Solving by Search — Uninformed, Informed, and Adversarial Search
 
-**Date:** Week 2, Session 1
+A large class of AI problems can be framed as *search*: given an initial state, a set of actions that transform states into other states, a goal test that distinguishes goal states from non-goal states, and a path cost function, find a sequence of actions — a plan — that leads from the initial state to any goal state while minimising (or maximising) the total cost. Search is the foundation of classical AI planning, game playing, constraint satisfaction, and many robotics and scheduling applications.
 
-#### Overview
+**Uninformed search** strategies explore the state space without any additional information about which states are more promising than others. **Breadth-first search (BFS)** expands the shallowest unexpanded node first — it is complete (guaranteed to find a solution if one exists) and optimal for uniform-cost path costs, but it has exponential space complexity (`O(b^{d})`, where `b` is the branching factor and `d` is the depth of the solution). **Depth-first search (DFS)** expands the deepest unexpanded node first — it has linear space complexity (`O(bd)`) but is not complete (it may wander down an infinite path without ever backtracking) and is not optimal. **Iterative deepening depth-first search (IDDFS)** combines the completeness and optimality of BFS with the linear space complexity of DFS by running depth-limited DFS with increasing depth limits. IDDFS is the preferred uninformed search method when the state space is large and the branching factor is finite.
 
-Before deep learning conquered AI, symbolic search was the only game in town. This lecture covers the foundations of problem-solving as search: state spaces, uninformed (BFS, DFS, IDDFS) and informed search (A*, heuristics, admissibleness), constraint satisfaction problems (backtracking, forward checking, arc consistency), and classical planning (STRIPS, PDDL, Graphplan, and the 2040 integration of learned heuristics into search). The Norse metaphor: Óðinn's journey through the nine realms — each realm is a state, each path between realms is an action, and the search for knowledge is a heuristic-guided exploration of the world-tree.
+**Informed search** strategies use a *heuristic function* `h(n)` — an estimate of the cost from node `n` to the nearest goal state — to guide the search towards promising states. **Greedy best-first search** expands the node with the smallest `h(n)` — it can be efficient but is neither complete nor optimal (the heuristic may mislead). **A* search** (Hart, Nilsson & Raphael, 1968) expands the node with the smallest `f(n) = g(n) + h(n)`, where `g(n)` is the cost from the start to node `n` and `h(n)` is the heuristic estimate to the goal. A* is **optimal** — it is guaranteed to find the lowest-cost solution — if the heuristic is **admissible** (never overestimates the true cost to the goal) and consistent (monotonic). A* is widely used in pathfinding (GPS navigation, robotics, video games) and in planning, where the state space can be abstracted to a manageable size.
 
-#### Lecture Notes
+**Adversarial search** — the domain of game playing — extends search to settings where there is an opponent who is trying to defeat us. The **minimax algorithm** computes the optimal strategy for a two-player, zero-sum, deterministic game with perfect information (chess, checkers, go). The algorithm assumes that both players play optimally: the MAX player (us) chooses the move that maximises the minimum payoff that the MIN player (the opponent) can force. **Alpha-beta pruning** (Knuth & Moore, 1975) improves minimax by skipping branches that cannot possibly affect the final decision — it reduces the effective branching factor from `b` to approximately `√b`, allowing the search to reach twice the depth in the same time. Modern game-playing AI systems extend these ideas with **Monte Carlo Tree Search (MCTS)**, which uses random rollouts to evaluate game states rather than a hand-crafted evaluation function. MCTS was the core algorithm behind AlphaGo (Silver et al., 2016): the system combined MCTS with deep neural networks that predicted the probability of winning from a given state (the value network) and the probability of selecting each legal move (the policy network), achieving superhuman performance on the most complex board game ever devised.
 
-**The Search Formulation.** A problem can be formulated for search as:
-- **State space:** All possible configurations of the world.
-- **Initial state:** Where we start.
-- **Actions:** What we can do (each action transforms one state to another).
-- **Goal test:** Whether a state is the desired outcome.
-- **Path cost:** How expensive a sequence of actions is.
+**Constraint satisfaction problems (CSPs)** — a special class of search problems in which states are defined by variables with domains of possible values, and the goal is to find an assignment of values to all variables that satisfies a set of constraints — are solved by **backtracking search** (depth-first search that checks constraints incrementally) with **arc consistency** (AC-3 algorithm — domain reduction by propagating constraints between variables) and **heuristic ordering** (minimum-remaining-values, degree heuristic, least-constraining-value). CSP techniques are applied in scheduling (university timetabling, airline crew scheduling), configuration (product configurators), and resource allocation.
 
-A search algorithm explores the state space graph, looking for a path from the initial state to any goal state. The distinction between *tree search* (may revisit states) and *graph search* (maintains closed set) is critical for avoiding infinite loops.
+**Required Reading:**
+- Peter E. Hart, Nils J. Nilsson & Bertram Raphael, "A Formal Basis for the Heuristic Determination of Minimum Cost Paths," *IEEE Transactions on Systems Science and Cybernetics* 4, no. 2 (1968): 100–107 — the original A* paper
+- Donald E. Knuth & Ronald W. Moore, "An Analysis of Alpha-Beta Pruning," *Artificial Intelligence* 6, no. 4 (1975): 293–326
+- David Silver et al., "Mastering the Game of Go with Deep Neural Networks and Tree Search," *Nature* 529 (2016): 484–489 — AlphaGo
+- Russell & Norvig, *AIMA* (5th ed., 2039), chs. 3–4 (Search) & ch. 5 (Adversarial Search) & ch. 6 (CSPs)
+- Richard E. Korf, "Depth-First Iterative-Deepening: An Optimal Admissible Tree Search," *Artificial Intelligence* 27, no. 1 (1985): 97–109
 
-**Uninformed Search.** When no domain-specific knowledge is available, we use uninformed strategies:
-- **BFS:** Guarantees shortest path, exponential memory O(bᵈ).
-- **DFS:** Linear memory O(bd), no optimality guarantee, vulnerable to infinite depth.
-- **Iterative Deepening DFS:** Optimal like BFS, memory like DFS. Time overhead is modest: only b/(b-1)× the cost of BFS.
-
-**Informed Search (A*).** A* (Hart, Nilsson, Raphael, 1968) uses a heuristic function h(n) estimating the cost from node n to the goal. The evaluation function f(n) = g(n) + h(n) where g(n) is the cost so far. A* is:
-- **Admissible:** If h(n) never overestimates the true cost (h ≤ h*), A* returns the optimal solution.
-- **Consistent (monotonic):** If h satisfies the triangle inequality h(n) ≤ c(n, a, n') + h(n'), A* with graph search is optimal.
-- **Optimally efficient:** No admissible algorithm explores fewer nodes than A* for a given heuristic.
-
-**Designing Heuristics.** The art of A* is designing good heuristics. Two classic approaches:
-- **Relaxed problem:** Remove constraints from the problem to make it easier to solve. The cost of the relaxed problem is an admissible heuristic for the original. For the 8-puzzle, the Manhattan distance heuristic (sum of horizontal and vertical distances to goal positions) is derived from the relaxed problem where tiles can move through each other.
-- **Pattern databases:** Precompute the exact cost to solve small instances of the problem and store them as heuristic values. A pattern database for the 15-puzzle (7-tile pattern) yields heuristics that reduce the search space by a factor of 1000.
-
-**Constraint Satisfaction Problems (CSPs).** CSPs are a special class of search problems where:
-- State is defined by variables with domains.
-- Goal is defined by constraints on variable assignments.
-- Actions assign values to variables.
-
-The canonical algorithm is **backtracking** with:
-- **Forward checking:** After assigning a variable, remove inconsistent values from unassigned variables' domains.
-- **Arc consistency (AC-3):** Iteratively enforce consistency between all pairs of variables.
-- **Degree heuristic:** Choose the variable involved in the most constraints (MRV — Minimum Remaining Values).
-
-**Planning.** Classical planning (STRIPS, 1971; PDDL, 1998) represents actions as preconditions and effects. The planner searches through plan space (sequences of actions) rather than state space. The **Graphplan** algorithm (Blum & Furst, 1997) builds a planning graph that captures mutual exclusions between actions at each time step, enabling fast parallel plan extraction. By 2040, planning integrates learned heuristics: a neural network predicts promising action sequences from the state representation, which the symbolic planner uses to prune the search space — a neuro-symbolic approach.
-
-#### Required Reading
-- Hart, P.E., Nilsson, N.J., & Raphael, B. (1968). "A Formal Basis for the Heuristic Determination of Minimum Cost Paths." *IEEE TSSC*, 4(2).
-- Blum, A.L. & Furst, M.L. (1997). "Fast Planning Through Planning Graph Analysis." *Artificial Intelligence*, 90.
-- Russell, S. & Norvig, P. (2021). *AIMA*, Chapters 3-6.
-
-#### Discussion Questions
-1. Why can't DFS be used for finding the shortest path in an infinite state space? What modification makes it feasible?
-2. Design an admissible heuristic for a delivery robot navigating a warehouse with obstacles.
-3. Compare Graphplan with forward-chaining search for planning. When is each preferred?
+**Discussion Questions:**
+1. A* with an admissible heuristic guarantees optimality, but it requires storing all generated nodes — the memory usage becomes prohibitive for large state spaces. Iterative deepening A* (IDA*) and Recursive Best-First Search (RBFS) trade optimality for memory efficiency. Under what conditions is the memory trade-off acceptable?
+2. Alpha-beta pruning relies on move ordering to be effective — the better the ordering, the more nodes are pruned. In games like chess, how can we generate good move ordering without substantial additional computation?
+3. MCTS with deep neural networks has been successfully applied to games with perfect information (Go, chess, shogi) and imperfect information (poker, StarCraft). Can the MCTS + deep learning paradigm be generalised to real-world decision-making problems (business strategy, medical treatment planning, military command) where the "rules" are not fully known?
 
 ---
 
-### ᚦ Lecture 3: Knowledge Representation — The Rune-Carving of Concepts
+## Lecture 3: Knowledge Representation and Reasoning — Logic, Ontologies, and the Frame Problem
 
-**Date:** Week 3, Session 1
+If search is the *how* of AI — the mechanism by which an agent explores possibilities — then knowledge representation is the *what* — the way in which an agent captures and organises information about its world. A knowledge representation (KR) language must balance several competing requirements: *expressive power* (the ability to represent a wide range of knowledge), *computational tractability* (the ability to reason with the representation efficiently), *compositionality* (the ability to combine simple representations to form complex ones), and *epistemological adequacy* (the ability to capture distinctions that matter for the problem domain).
 
-#### Overview
+**Propositional logic** — the simplest logical language — represents knowledge as statements (propositions) that are either true or false, combined with the logical connectives `∧` (and), `∨` (or), `¬` (not), `→` (implication), and `↔` (equivalence). Inference in propositional logic proceeds by **resolution** (Robinson, 1965): to prove that a formula `α` follows from a knowledge base KB, we convert KB ∧ ¬α to conjunctive normal form (a conjunction of clauses, each clause being a disjunction of literals) and repeatedly apply the resolution rule — if we derive the empty clause (a contradiction), then α is entailed. Propositional logic is sound and complete, but its expressive power is limited: it cannot represent objects, relations, or quantifiers.
 
-How does an AI system represent what it knows? This lecture covers the foundations of knowledge representation: ontologies, description logics, semantic networks, frames, and the tradeoff between expressiveness and tractability. We also cover the modern knowledge representation stack: knowledge graphs (Google's Knowledge Graph, Wikidata, ConceptNet), vector embeddings (semantic spaces), and the neuro-symbolic integration that combines symbolic knowledge with learned representations. The Norse metaphor: the runes themselves — each rune (stave) represents a concept (Fehu = wealth, Uruz = strength), and the combination of runes in an inscription represents complex knowledge. An ontology is a runic alphabet for a domain.
+**First-order logic (FOL)** extends propositional logic with variables, quantifiers (`∀` — for all; `∃` — there exists), predicates (functions that map objects to truth values), functions (that map objects to objects), and equality. FOL can represent knowledge such as `∀x King(x) → Human(x)` — "all kings are humans" — which propositional logic cannot express compactly. FOL is the standard language for representing knowledge in classical AI: **situation calculus** (McCarthy & Hayes, 1969) represents the world as a sequence of situations connected by actions — `Poss(a, s)` means it is possible to perform action `a` in situation `s`, and `Result(a, s)` denotes the situation resulting from performing `a` — enabling reasoning about action and change. FOL inference is **semi-decidable**: there are algorithms (resolution, natural deduction, sequent calculus) that will eventually find a proof if one exists, but they may never terminate if no proof exists.
 
-#### Lecture Notes
+The **frame problem** — identified by McCarthy and Hayes in 1969 — captures a fundamental difficulty of representing change in logic. If I move a block from one table to another, how do I know that everything else in the world remains unchanged — that the colour of the block hasn't changed, that other blocks haven't moved, that the laws of physics haven't been suspended? In a naive logical representation, we must explicitly state all the things that *don't* change when an action is performed — the *frame axioms* — which is not only tedious but computationally expensive: the number of frame axioms grows with the number of fluents (properties that can change) times the number of actions, making inference intractable. The **successor-state axiom** approach of the **fluent calculus** (Thielscher, 1998) solves the frame problem elegantly: for each fluent `F`, we state the conditions under which `F` holds after an action, by specifying both the conditions that make it true and the conditions that make it false — everything else remains unchanged by default. This default — the *common-sense law of inertia* — is the key insight: things tend to stay the same unless an action explicitly changes them.
 
-**The Symbol Grounding Problem.** How does a symbol (the word "cat") connect to the thing-in-the-world (the actual furry animal)? This is the symbol grounding problem (Harnad, 1990). A purely symbolic system (like a medieval encyclopedia) can define "cat" in terms of "feline" and "mammal," but at some point the chain of definitions must touch the world. A neural network grounds symbols through its training data: the word "cat" is embedded in a vector space near other cat-related words, and the network's visual system recognizes cat images. But this grounding is statistical, not categorical — leading to adversarial vulnerabilities (a panda with noise becomes an "ostrich").
+**Description logics** (DLs) — the logical foundation of the Semantic Web and modern ontology engineering — are a family of KR languages that are less expressive than FOL but more tractable. The classic DL `ALC` includes concept constructors (⊓ — intersection, ⊔ — union, ¬ — complement, ∀ — universal restriction, ∃ — existential restriction) and role constructors that relate concepts. The Web Ontology Language **OWL 2** (the W3C standard as of 2009, still widely used in 2040) is based on description logics and provides a computationally tractable fragment of FOL. OWL ontologies consist of: **classes** (sets of individuals — e.g., Viking, Ship, Settlement), **object properties** (relations between individuals — e.g., sailedTo, tradedWith), **data properties** (attributes of individuals — e.g., hasPopulation, hasArea), **individuals** (specific entities — e.g., Ragnar Lodbrok, the Oseberg Ship), and **axioms** (statements about classes and properties — e.g., "Every longship is a ship"). Description logic reasoners (Pellet, HermiT, ELK) can classify ontologies (determine the hierarchy of classes) and check consistency (determine whether an ontology has a model) in worst-case exponential but practically manageable time. The University of Yggdrasil's *Yggdrasil KnowledgeGraph* project — built on OWL 2 and a high-performance DL reasoner — represents all course content, research projects, and faculty expertise as a unified ontology, enabling cross-disciplinary discovery and personalised curriculum recommendations.
 
-**Semantic Networks and Frames.** Marvin Minsky's **frames** (1975) represent stereotyped situations as collections of slots with default values:
-- Restaurant frame slots: diners, tables, waitstaff, menu, food, bill, tips.
-- Subframes: a "diner" frame is a "person" frame with additional properties.
+**Semantic networks** — an alternative to logic-based KR — represent knowledge as a graph of concepts (nodes) connected by labelled relations (edges). The **Cyc** project (Lenat, 1995) is the most ambitious KR enterprise in history: an attempt to capture all common-sense knowledge — millions of axioms about the everyday world — in a formal language (CycL). Cyc's knowledge base contains axioms such as "if a person is reading a book, the book exists" and "if an object is moved, it is no longer in its previous location." Cyc was a commercial failure — the brittleness of logical inference and the difficulty of knowledge acquisition at scale proved insurmountable — but its legacy lives on in the common-sense knowledge bases that underpin modern AI systems, including the *ConceptNet* graph and the *ATOMIC* common-sense knowledge base used in large language model training.
 
-Frames support inheritance (a "diner" inherits "has two legs" from "person") and default reasoning (by default, the bill includes a service charge — but this can be overridden). Frames were the 1970s answer to knowledge representation; they are the ancestor of modern object-oriented programming and of the schemas used in knowledge graphs.
+**Required Reading:**
+- John McCarthy & Patrick J. Hayes, "Some Philosophical Problems from the Standpoint of Artificial Intelligence," *Machine Intelligence* 4 (1969): 463–502 — the classic paper introducing the frame problem
+- John McCarthy, "Circumscription — A Form of Non-Monotonic Reasoning," *Artificial Intelligence* 13, no. 1–2 (1980): 27–39
+- Douglas B. Lenat, "Cyc: A Large-Scale Investment in Knowledge Infrastructure," *Communications of the ACM* 38, no. 11 (1995): 33–38
+- Franz Baader, Diego Calvanese, Deborah L. McGuinness, Daniele Nardi & Peter F. Patel-Schneider (eds.), *The Description Logic Handbook* (2nd ed., 2008/2038), chs. 1–2
+- Russell & Norvig, *AIMA* (5th ed., 2039), chs. 7–8 (KR & FOL) & ch. 10 (Classical Planning)
+- Michael Thielscher, "Introduction to the Fluent Calculus," *Electronic Transactions on Artificial Intelligence* 2, no. 3–4 (1998): 179–213
 
-**Description Logics (DLs).** Description Logics (Brachman & Schmolze, 1985; Baader et al., 2003) are a family of formal languages for representing knowledge about concepts, roles (relationships), and individuals. The canonical DL, *ALC* (Attributive Language with Complements), supports:
-- Concept constructors: ⊤ (top), ⊥ (bottom), ¬ (negation), ⊓ (intersection), ⊔ (union), ∀ (universal restriction), ∃ (existential restriction).
-- TBox: terminological knowledge about concepts ("All cats are mammals" = Cat ⊑ Mammal).
-- ABox: assertional knowledge about individuals ("Garfield is a cat" = Cat(Garfield)).
-- RBox: role axioms (transitive roles, role hierarchies).
-
-The key advantage of DLs: they are *decidable*. The tableaux algorithm decides satisfiability of *ALC* formulas in EXPTIME (worst case), and practical DLs like those underlying OWL 2 (the Web Ontology Language) are tractable for typical ontologies. By 2040, OWL 2 reasoners (Pellet, HermiT, ELK) can classify ontologies with millions of axioms in seconds.
-
-**Knowledge Graphs.** A knowledge graph is a directed labeled graph where nodes are entities and edges are relationships. Google's Knowledge Graph (2012) contains over 7 billion facts about 500 million entities. Wikidata has over 100 million items. The difference from a traditional relational database: knowledge graphs are *schema-later* — you define the schema as you discover relationships, not before you store data.
-
-By 2040, knowledge graphs are built and maintained by AI systems. The **Yggdrasil Knowledge Graph** — the UoY's unified knowledge repository — ingests research papers, student projects, course syllabi, and research data. It is queried in a natural-language interface (the "seeress" interface) that translates user questions into SPARQL queries against the graph.
-
-**Vector Representations.** Parallel to symbolic knowledge, the 2040 stack uses vector embeddings. Each concept is a d-dimensional vector (typically 4096 for entity embeddings by 2040). The embedding space has algebraic properties: vec("king") - vec("man") + vec("woman") ≈ vec("queen"). Knowledge graph embeddings (TransE, ComplEx, RotatE) embed both entities and relations in the same space, enabling link prediction: given subject and relation, predict the object.
-
-**Neuro-Symbolic Integration.** The 2040 frontier is *neuro-symbolic* AI: using neural networks to map natural language to symbolic knowledge representations, and symbolic reasoners (DL tableaux, SAT solvers) to derive logical conclusions from the knowledge. The **Huginn system** at UoY (named after Óðinn's raven of thought) translates student questions about course material into DL queries, reasons over the knowledge graph, and returns answers with formal justifications. Huginn achieved a 92% accuracy on the UoY exam question bank in 2039.
-
-#### Required Reading
-- Brachman, R.J. & Levesque, H.J. (2004). *Knowledge Representation and Reasoning*. Morgan Kaufmann.
-- Baader, F. et al. (2003). *The Description Logic Handbook*. Cambridge.
-- Bordes, A. et al. (2013). "Translating Embeddings for Modeling Multi-Relational Data." *NeurIPS*.
-- Harnad, S. (1990). "The Symbol Grounding Problem." *Physica D*, 42.
-
-#### Discussion Questions
-1. Why is the symbol grounding problem relevant to modern AI? Have embeddings solved it?
-2. Compare a knowledge graph (e.g., Wikidata) with a relational database. When is each appropriate?
-3. How does neuro-symbolic integration combine the strengths of neural and symbolic approaches? What weaknesses remain?
+**Discussion Questions:**
+1. The frame problem is often cited as a fundamental difficulty for classical AI, but neural network approaches to AI sidestep it entirely — the network learns what changes and what stays the same from data, without explicit frame axioms. Does this mean the frame problem was an artefact of symbolic representations, or does it resurface in a different form in deep learning?
+2. Cyc attempted to codify all common-sense knowledge explicitly and failed. Large language models acquire common-sense knowledge implicitly from text training, but their knowledge is unreliable, inconsistent, and unverifiable. Is there a middle ground — a hybrid approach that captures common-sense knowledge in a structured but learnable way?
+3. Description logics trade expressivity for tractability. Given the success of deep learning for AI tasks, is there still value in using formal KR languages, or has the need for logical reasoning been superseded by large models?
 
 ---
 
-### ᚲ Lecture 4: Large Language Models — The Well of Urðr Spoken
+## Lecture 4: Planning and Decision Making — From STRIPS to Hierarchical Task Networks
 
-**Date:** Week 4, Session 1
+Planning — the problem of selecting a sequence of actions to achieve a goal — is the bridge between reasoning and action. An AI planning system takes a description of the initial state, a goal condition, and a set of actions (each with preconditions specifying when they can be applied and effects specifying what changes when they are applied) and produces a plan — a sequence of actions that transforms the initial state into a state satisfying the goal.
 
-#### Overview
+**STRIPS** (Stanford Research Institute Problem Solver, Fikes & Nilsson, 1971) introduced the representation that dominated classical planning for three decades. A STRIPS action is defined by: a **name** (action identifier), a list of **parameters** (variables that are instantiated when the action is used), a **precondition** (a conjunction of positive literals that must be true for the action to be applicable), an **add list** (literals that become true after the action), and a **delete list** (literals that become false after the action). The STRIPS representation is elegantly simple: the closed-world assumption (everything not stated true is assumed false) eliminates the frame problem by default. STRIPS planners — **linear planning** (the original STRIPS algorithm) and **non-linear planning** (partial-order planning, which represents plans as partially ordered sets of actions) — search through the space of plans rather than the space of states, using **means-ends analysis**: if the current state does not satisfy the goal, the planner finds an action that achieves one of the unsatisfied goals, adds it to the plan, and recursively solves the sub-goals.
 
-Large Language Models (LLMs) are the defining AI technology of the 2040s. This lecture covers the transformer architecture (attention, self-attention, multi-head attention, positional encoding), the training pipeline (pre-training, fine-tuning, RLHF, constitutional AI), and the deployment stack (inference optimization, structured output, tool use, and the emerging ecosystem of LLM APIs and self-hosted models). The Norse metaphor: the Well of Urðr, the well of fate whose waters nourish Yggdrasil. The LLM's training data is the Well of Urðr — the accumulated speech of humanity, from which the model draws wisdom.
+**Graphplan** (Blum & Furst, 1995) introduced a fundamentally different approach: instead of searching the space of plans, Graphplan constructs a *planning graph* — a sequence of layers alternating between proposition layers (sets of literals that could be true at each time step) and action layers (sets of actions that could be executed at each time step) — and then searches backward from the goal through the graph for a valid plan. The planning graph is constructed in polynomial time, and the backward search uses *mutex* (mutual exclusion) relations — pairs of propositions or actions that cannot both appear at the same time step — to prune the search space dramatically. Graphplan was, when introduced, orders of magnitude faster than previous planners on many benchmark problems.
 
-#### Lecture Notes
+**Hierarchical Task Network (HTN) planning** — the most widely used planning paradigm in practice — organises planning knowledge hierarchically. Instead of specifying goals, the domain designer specifies **tasks** (abstract activities), **methods** (ways to decompose a task into subtasks — a recipe for achieving the task), and **primitive actions** (that can be executed directly). The planner recursively decomposes tasks until only primitive actions remain. HTN planning is efficient — the planner does not search through an open-ended state space but follows the decomposition recipes provided by the domain designer — and it naturally captures the way human experts think about complex processes: "to plan a military campaign, first secure air superiority, then deploy ground forces, then establish logistics." HTN planners are used in practice for manufacturing process planning, autonomous vehicle mission planning, and game AI (the Halo series uses an HTN planner for enemy behaviour).
 
-**The Transformer Revolution.** The transformer architecture (Vaswani et al., 2017) was introduced for machine translation but rapidly became the universal architecture for all sequence modeling tasks. Its key innovation: the **attention mechanism**, which computes a weighted sum of all input positions for each output position, enabling the model to capture long-range dependencies that recurrent networks struggled with.
+**Markov Decision Processes (MDPs)** extend planning to stochastic environments — environments in which actions have probabilistic outcomes. An MDP is defined by: a set of states `S`, a set of actions `A`, a transition function `P(s' | s, a)` — the probability of moving to state `s'` from state `s` after executing action `a` — and a reward function `R(s, a, s')` — the immediate reward received after transitioning from `s` to `s'` via `a`. The solution to an MDP is a **policy** `π(s) → a` — a mapping from states to actions that maximises the expected cumulative reward (the sum of discounted future rewards). **Value iteration** and **policy iteration** are the classical dynamic-programming algorithms for solving MDPs. **Reinforcement learning** (Sutton & Barto, 1998) solves MDPs when the transition function and reward function are unknown: the agent learns by interacting with the environment, receiving rewards and punishments, and updating its policy based on experience (Q-learning, SARSA, deep Q-networks).
 
-**Self-Attention.** For an input sequence of token embeddings X ∈ ℝⁿ×ᵈ, self-attention computes:
-- Q = XW_Q (queries), K = XW_K (keys), V = XW_V (values)
-- Attention(Q, K, V) = softmax(QKᵀ/√d)V
+**Partially Observable Markov Decision Processes (POMDPs)** — the most general model for AI decision making — extend MDPs to settings where the agent does not know its state with certainty. In a POMDP, the agent receives *observations* that are probabilistically related to the underlying state, and the agent maintains a *belief state* — a probability distribution over possible states — which it updates using Bayes' rule after each observation and action. Solving POMDPs is computationally hard (PSPACE-complete in general), but approximate solvers (point-based value iteration, Monte Carlo POMDPs) have made them practical for robotics, autonomous driving, and human-computer interaction.
 
-The dot product QKᵀ measures the similarity between each query and each key. The softmax normalizes these similarities into attention weights. The √d scaling factor prevents the dot products from growing too large, maintaining stable gradients.
+**Required Reading:**
+- Richard E. Fikes & Nils J. Nilsson, "STRIPS: A New Approach to the Application of Theorem Proving to Problem Solving," *Artificial Intelligence* 2, no. 3–4 (1971): 189–208
+- Avrim L. Blum & Merrick L. Furst, "Fast Planning Through Planning Graph Analysis," *Proceedings of the 14th International Joint Conference on Artificial Intelligence* (1995): 1636–1642
+- Dana S. Nau et al., "SHOP2: An HTN Planning System," *Journal of Artificial Intelligence Research* 20 (2003): 379–404
+- Richard S. Sutton & Andrew G. Barto, *Reinforcement Learning: An Introduction* (2nd ed., 2018/2039), chs. 1–4
+- Leslie Pack Kaelbling, Michael L. Littman & Anthony R. Cassandra, "Planning and Acting in Partially Observable Stochastic Domains," *Artificial Intelligence* 101 (1998): 99–134
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 10 (Classical Planning) & ch. 17 (Reinforcement Learning)
 
-**Multi-Head Attention.** Instead of a single attention function, transformers use multiple parallel heads (typically 8-128 in 2040 models). Each head learns different attention patterns:
-- Head 1 might focus on syntactic dependencies (subject-verb agreement).
-- Head 2 might focus on coreference (linking "she" to "the doctor").
-- Head 3 might focus on discourse structure.
-The heads' outputs are concatenated and projected.
-
-**The Scaling Law.** Kaplan et al. (2020) and Hoffmann et al. (2022, the Chinchilla paper) established that model performance follows a power-law relationship with compute budget, data size, and model size. The Chinchilla scaling law: for optimal training, the model size and training data size should scale roughly proportionally. This means: a 70B parameter model should be trained on ~3.5T tokens (50× the parameter count).
-
-By 2040, the largest open-source models are in the 300B-1T parameter range, trained on 20-100T tokens (effectively all of the internet's high-quality text, code, and multilingual content). Proprietary models like Claude 5, GPT-6, and Gemini 3 are reported to be larger but no specific parameter counts are confirmed.
-
-**Training Pipeline (2024-2040).**
-1. **Pre-training:** Next-token prediction on a massive text corpus. The loss function is cross-entropy between predicted token probabilities and the actual next token. This stage takes months and costs $10-500M for frontier models.
-2. **Instruction fine-tuning:** Supervised fine-tuning on instruction-response pairs, teaching the model to follow instructions, use tools, and refuse harmful requests.
-3. **RLHF (Reinforcement Learning from Human Feedback, 2020+):** Train a reward model on human preferences (which response is better?), then optimize the LLM to maximize the reward model's score. By 2040, DPO (Direct Preference Optimization, Rafailov et al., 2023) has largely replaced PPO-based RLHF due to its simplicity and stability.
-4. **Constitutional AI (Bai et al., 2022):** The model is trained to follow a constitution — a set of principles (helpfulness, honesty, harmlessness, etc.) — by generating self-critiques and revisions.
-
-**2040: Structured Output and Tool Use.** By 2040, LLMs are rarely used for pure text generation. Instead, they generate structured outputs (JSON, YAML, function calls) using controlled decoding (grammars, schemas). The **Hermes AI OS** framework defines a function-calling protocol where the LLM's output is parsed as a sequence of tool calls that the system executes. This is the "agent loop": observe → reason → act → observe → ...
-
-#### Required Reading
-- Vaswani, A. et al. (2017). "Attention Is All You Need." *NeurIPS*.
-- Kaplan, J. et al. (2020). "Scaling Laws for Neural Language Models." *ArXiv*.
-- Hoffmann, J. et al. (2022). "Training Compute-Optimal Large Language Models." *NeurIPS*.
-- Bai, Y. et al. (2022). "Constitutional AI: Harmlessness from AI Feedback." *ArXiv*.
-
-#### Discussion Questions
-1. The attention mechanism has O(n²d) complexity per layer for sequence length n. How do 2040 models handle sequences of 1M+ tokens (e.g., entire codebases)?
-2. Does the scaling law predict continued improvement indefinitely, or are there fundamental limits? Consider data availability and compute constraints.
-3. RLHF optimizes for human preferences. What happens when the preference data is biased or contradictory?
+**Discussion Questions:**
+1. Classical planning (STRIPS, Graphplan) assumes deterministic actions — each action, when executed, has a single guaranteed outcome. Real-world planning requires handling uncertainty. Is the classical planning formalism still relevant, or has it been entirely superseded by MDP-based approaches?
+2. HTN planning requires substantial domain engineering — the design of methods and decomposition rules is labour-intensive. Can the hierarchical decomposition knowledge be learned from experience, or must it always be designed by hand?
+3. POMDPs are the most expressive decision-making model, but they are computationally intractable for all but the smallest problems. How do human decision-makers cope with partial observability — and what can AI learn from how humans manage uncertainty in decision making?
 
 ---
 
-### ᚷ Lecture 5: Agent Architectures — The Autonomous Warrior
+## Lecture 5: Machine Learning — Supervised, Unsupervised, and the Bias-Variance Trade-Off
 
-**Date:** Week 5, Session 1
+Machine learning is the study of algorithms that improve their performance on some task with experience (data). The fundamental precept — articulated by Tom Mitchell in 1997 — is that a program "learns" if its performance at a task, as measured by some metric, improves with experience. The design space of learning algorithms is vast, but almost all can be classified into three broad paradigms: supervised learning, unsupervised learning, and reinforcement learning (which we examine in the context of MDPs in Lecture 4).
 
-#### Overview
+**Supervised learning** — learning a function that maps inputs to outputs from labelled examples — is the workhorse of modern AI. Given a dataset `D = {(x₁, y₁), ..., (xₙ, yₙ)}`, where each `xᵢ` is a feature vector and each `yᵢ` is a label (discrete class label for classification; continuous value for regression), the learner produces a hypothesis `h: X → Y` that generalises beyond the training examples. Key algorithms include: **linear regression** (fitting a line/hyperplane to the data by minimising squared error); **logistic regression** (fitting a sigmoid function for binary classification); **decision trees** (partitioning the feature space by learning a tree of if-then rules); **support vector machines** (finding the hyperplane that maximises the margin between classes, using the kernel trick to handle non-linearly separable data — the kernel maps the data into a higher-dimensional space where linear separation is possible); **k-nearest neighbours** (classifying a new point by the majority vote of its k nearest neighbours in the training set); and **neural networks** (which we explore in depth in Lectures 7–8).
 
-An AI agent is a system that perceives its environment, reasons about how to achieve its goals, and takes actions. This lecture covers the spectrum of agent architectures: reactive agents (simple reflex), model-based agents (internal state), goal-based agents (planning), utility-based agents (optimization), and the 2040 standard: the **LLM-centered agent** with tool use, memory, and planning. The Norse metaphor: the *berserkr* — the warrior who enters a trance of focused action. A modern AI agent is a berserkr: it has a singular goal, adapts to the environment, and can call upon a variety of tools (weapons) to achieve its aim.
+The **bias-variance trade-off** is the central conceptual framework for understanding generalisation. The expected error of a learned model on a new point can be decomposed into three components: **bias** — the error introduced by approximating a complex real-world problem with a simpler model (a linear model has high bias if the true relationship is non-linear); **variance** — the error introduced by the model's sensitivity to small fluctuations in the training set (a high-degree polynomial has high variance — it fits the noise as well as the signal); and **irreducible error** — the noise inherent in the problem (measurement error, missing features). A model with too few parameters (high bias) underfits: it cannot capture the structure in the data. A model with too many parameters (high variance) overfits: it memorises the training data instead of learning general patterns. The art of machine learning is to find the sweet spot — the model complexity that minimises total error on unseen data. Techniques for managing the trade-off include: **regularisation** (adding a penalty term to the loss function that discourages large weights — L1 regularisation encourages sparse models, L2 regularisation encourages small weights); **cross-validation** (splitting the data into k folds, training on k-1 folds and testing on the held-out fold, repeating k times); and **early stopping** (stopping the training process before convergence when performance on a validation set begins to degrade).
 
-#### Lecture Notes
+**Unsupervised learning** — finding patterns in unlabelled data — addresses problems where we do not have target labels. **Clustering** groups similar points together: **k-means** (initialise k centroids arbitrarily, assign each point to the nearest centroid, recompute centroids as the mean of assigned points, repeat until convergence); **hierarchical clustering** (build a tree of clusters by repeatedly merging the closest pair of clusters); and **DBSCAN** (density-based clustering — clusters are regions of high density separated by regions of low density; does not require the number of clusters to be specified in advance). **Dimensionality reduction** projects high-dimensional data into a lower-dimensional space while preserving structure: **principal component analysis (PCA)** finds the directions of maximum variance in the data (the eigenvectors of the covariance matrix); **t-SNE** and **UMAP** produce non-linear embeddings that preserve local neighbourhood structure, making them ideal for visualisation. **Density estimation** models the probability distribution of the data: **Gaussian mixture models** represent the distribution as a weighted sum of Gaussian components; **kernel density estimation** places a kernel (e.g., a Gaussian bump) on each data point and sums them.
 
-**The Agent Paradigm.** An agent is anything that can be viewed as perceiving its environment through sensors and acting upon that environment through actuators. A human agent has eyes, ears, and other organs for sensors and hands, legs, mouth, etc. for actuators. A robotic agent has cameras and range finders for sensors and motors for actuators. A software agent has keystrokes, file contents, and network packets as sensors and displays, file writes, and network packets as actuators.
+**Required Reading:**
+- Tom M. Mitchell, *Machine Learning* (McGraw-Hill, 1997/2038), chs. 1–2
+- Trevor Hastie, Robert Tibshirani & Jerome Friedman, *The Elements of Statistical Learning* (2nd ed., 2009/2038), chs. 2–3 & ch. 7 (Model Assessment and Selection)
+- Gareth James, Daniela Witten, Trevor Hastie & Robert Tibshirani, *An Introduction to Statistical Learning* (2nd ed., 2021/2039), chs. 1–2
+- Russell & Norvig, *AIMA* (5th ed., 2039), chs. 18–19 (Learning from Examples & Knowledge in Learning)
+- The Yggdrasil Machine Learning Primer (2040)
 
-**Agent Types (Russell & Norvig).**
-
-1. **Simple reflex agents:** Select action based only on current percept. Condition-action rules: if (sensor reading = hot), then (turn off burner). These work when the environment is fully observable and the mapping from percept to action is simple.
-
-2. **Model-based reflex agents:** Maintain an internal state that tracks the parts of the world not currently observable. The state is updated by: State_t = f(State_{t-1}, Percept_t). This enables action selection based on hidden context — the agent "remembers" that it just placed an object, even though it can no longer see it.
-
-3. **Goal-based agents:** Have explicit goals and use search/planning to find action sequences that achieve the goal. These are more flexible than reflex agents — change the goal, and the agent replans.
-
-4. **Utility-based agents:** Use a utility function to measure the desirability of states. When multiple action sequences could achieve the goal, the agent chooses the one with highest expected utility. This handles tradeoffs (safety vs. speed, cost vs. quality).
-
-**The LLM-Centered Agent (2024-2040).** By 2040, the dominant agent architecture centers on a large language model as the reasoning core:
-
-```
-while true:
-    # 1. Perception
-    percept = gather_sensors()  # read files, network, user input
-    
-    # 2. Context construction
-    context = compose_prompt(
-        system_prompt,    # agent's identity and constraints
-        memory_context,   # relevant history from episodic memory
-        tools_schema,     # available tools and their API descriptions
-        current_goal,     # what the agent is trying to achieve
-        percept           # what's happening right now
-    )
-    
-    # 3. Reasoning and action selection
-    response = llm.generate(context)
-    action = parse_action(response)
-    
-    # 4. Execution
-    if action.type == "tool_call":
-        result = execute_tool(action.tool, action.args)
-        append_to_memory(action, result)
-    elif action.type == "final_answer":
-        return action.content
-```
-
-This architecture powers the **Hermes AI OS** at UoY. Each student builds an agent on Hermes during the second half of the course.
-
-**Memory Architectures.** A key challenge for agents is memory:
-- **Working memory:** The LLM's context window (2040: up to 1M tokens in most models).
-- **Episodic memory:** Compressed summaries of past interactions, retrieved by relevance.
-- **Semantic memory:** Knowledge about the world, stored as embeddings retrieved from a vector database.
-- **Procedural memory:** How to use tools — encoded in the tool schema and the LLM's training.
-
-The **Mímir memory system** (named after the wise being who guards the well of knowledge) at UoY provides all four types to student agents.
-
-**Safety and Constraints.** Autonomous agents must be constrained. The 2040 standard includes:
-- **Sandboxed execution:** Agents can only call tools that have been explicitly granted. No raw shell access.
-- **Budget limits:** Per-step, per-token, and per-time-step budgets enforced.
-- **Human-in-the-loop:** For high-impact actions (deleting files, sending emails, spending money), the agent must produce a justification and wait for human approval.
-- **Constitutional constraints:** The agent's system prompt includes inviolable rules.
-
-#### Required Reading
-- Russell, S. & Norvig, P. (2021). *AIMA*, Chapter 2: "Intelligent Agents."
-- Wang, L. et al. (2023). "A Survey on Large Language Model Based Autonomous Agents." *ArXiv*.
-- Mjøðvitnir, F. (2038). *The Waking Wood*, Chapter 5: "The Berserkr Protocol."
-
-#### Discussion Questions
-1. Compare a simple reflex agent for thermostat control with an LLM-centered agent for scientific research. What capabilities does the LLM agent have that the reflex agent lacks? What new failure modes?
-2. The LLM agent's memory includes a context window that is limited. How do modern agents balance the need for long-term memory against the context window constraint?
-3. Design a safety constraint for an agent that has access to a school's course registration system. What's the worst thing it could do, and how would you prevent it?
+**Discussion Questions:**
+1. The bias-variance trade-off suggests that there is a fixed optimal complexity for any given dataset and model class. But deep neural networks seem to violate this — larger networks (more parameters) often generalise better, not worse (the "double descent" phenomenon). How can we reconcile this observation with the classical bias-variance theory?
+2. Unsupervised learning is sometimes called "learning without a teacher" — the algorithm must discover structure without explicit feedback. But the choice of algorithm and its hyperparameters (k in k-means, the neighbourhood size in t-SNE) encodes strong inductive biases about what kind of structure is expected. Is unsupervised learning truly unsupervised?
+3. Cross-validation is the standard method for estimating generalisation error, but it assumes that training and test data are drawn from the same distribution. In practice, deployed models face *distribution shift* (the world changes, populations change, user behaviour changes). How should we modify the evaluation and training process to account for distribution shift?
 
 ---
 
-### ᚹ Lecture 6: Planning in the LLM Era — The Norns' Calculus
+## Lecture 6: Probabilistic Graphical Models — Bayesian Networks, Markov Networks, and Probabilistic Inference
 
-**Date:** Week 6, Session 1
+Probabilistic graphical models (PGMs) represent the structure of uncertainty — the dependencies and independencies among random variables — using graphs. The graph is a compact encoding of the joint probability distribution: each node is a random variable, and the absence of an edge encodes a conditional independence relationship. PGMs enable efficient inference (computing marginal or conditional probabilities from the model) and learning (estimating the graph structure and/or parameters from data) for high-dimensional probability distributions.
 
-#### Overview
+**Bayesian networks** (Pearl, 1985) encode causality and conditional independence. A Bayesian network is a directed acyclic graph (DAG) in which each node represents a random variable and each edge from `X` to `Y` indicates that `X` directly influences `Y`. Each node has a conditional probability table (CPT) specifying `P(node | parents)` — the probability of the node given every combination of values of its parents. The joint probability distribution over all variables is the product of the CPTs: `P(X₁, ..., Xₙ) = ∏ᵢ P(Xᵢ | Parents(Xᵢ))`. The DAG structure encodes the **Markov condition**: each variable is independent of its non-descendants given its parents — the "local" structure of the graph captures all the independencies in the distribution. Reasoning with Bayesian networks involves computing posterior probabilities: given evidence (observed values for some variables), compute the posterior distribution over the unobserved variables — `P(Query | Evidence)`. **Exact inference** algorithms — variable elimination (summing out one variable at a time) and the junction tree algorithm (converting the network to a tree of cliques and performing message passing on that tree) — are exact but have worst-case exponential complexity. **Approximate inference** — likelihood weighting (sampling the variables in topological order, weighting each sample by the probability of the observed evidence), Gibbs sampling (repeatedly sampling each unobserved variable from its conditional distribution given all other variables), and variational inference (approximating the true posterior with a simpler distribution and minimising the KL divergence between them) — scales to larger networks but provides probabilistic bounds rather than exact answers.
 
-Classical planning assumes a known, deterministic world with known action effects. In the real world, the environment is partially observed, stochastic, and the available actions are learned rather than given. This lecture covers task decomposition (hierarchical planning, chain-of-thought, tree-of-thought), the ReAct pattern (Reason + Act), and the 2040 practice of LLM-based plan generation with symbolic plan verification. The Norse metaphor: the Norns weave the threads of future events, combining what they know of the past and present to shape what will be. An AI planner does the same — using its knowledge (the threads) and its goals (the desired pattern) to generate a plan (the weave).
+**Dynamic Bayesian networks (DBNs)** extend Bayesian networks to model temporal processes. A DBN is a sequence of Bayesian networks — one for each time slice — connected by edges that represent causal influences across time (e.g., `State(t) → State(t+1)`). The **Kalman filter** — a DBN in which all variables are continuous and all relationships are linear-Gaussian — is the classic model for tracking a continuously varying state (position, velocity) from noisy measurements. The **Hidden Markov Model (HMM)** — a DBN with discrete state and discrete or continuous observations — is the classic model for sequential data (speech recognition, genomic sequence analysis, human activity recognition). The **forward-backward algorithm** computes the posterior probability of the hidden state at each time step given all observations — the standard inference algorithm for HMMs.
 
-#### Lecture Notes
+**Markov networks** (also called Markov random fields) encode undirected dependencies. Unlike Bayesian networks, which have a causal interpretation, Markov networks represent symmetric relationships — two variables that are conditionally dependent without specifying direction. The joint distribution is represented as a product of *potential functions* over the *cliques* (maximal fully connected subgraphs) of the graph: `P(X) = (1/Z) ∏_C ψ_C(X_C)`, where `ψ_C` is a non-negative function over clique `C`, and `Z` is the partition function — a normalising constant that sums over all possible configurations. Inference in Markov networks is harder than in Bayesian networks because of the partition function — even computing `Z` for a moderate-sized network may be intractable. Markov networks are widely used in computer vision (image segmentation, stereo matching), natural language processing (conditional random fields for sequence labelling), and statistical physics (the Ising model of ferromagnetism).
 
-**Hierarchical Task Networks (HTN).** HTN planning (Erol, Hendler, Nau, 1994) decomposes high-level tasks into subtasks. The planner has a library of methods that describe how to achieve a task: the task "make-pasta" might decompose into "boil-water" then "cook-pasta" then "drain" then "add-sauce." Each subtask may further decompose until primitive actions are reached.
+**Probabilistic programming languages** — modern tools that combine probabilistic graphical models with programming language abstractions — allow the programmer to specify complex probability models as code rather than as graphs. Languages like **Stan** (Bayesian inference with Hamiltonian Monte Carlo), **Pyro** (deep probabilistic programming built on PyTorch), **Turing.jl** (Julia-based probabilistic programming), and **WebPPL** (a small probabilistic language embedded in JavaScript) automate the inference process: the programmer writes a generative model as code, provides observed data, and the system returns posterior samples. The Yggdrasil AI Systems Lab uses the *Yggdrasil Probabilistic Programming Environment* — a Python-based framework that compiles probabilistic programs to optimised GPU kernels for fast inference on large-scale problems.
 
-HTN planning is the foundation of many real-world planning systems (e.g., SHOP2, used in military logistics, game AI, and industrial process planning). By 2040, HTN planners are used in the UoY's **YggdrasilPlanner** for course scheduling, research project planning, and even scheduling the University's renewable energy microgrid.
+**Required Reading:**
+- Judea Pearl, *Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference* (Morgan Kaufmann, 1988/2038), chs. 1–4
+- Daphne Koller & Nir Friedman, *Probabilistic Graphical Models: Principles and Techniques* (MIT Press, 2009/2039), chs. 1–3 & ch. 8–10
+- Christopher M. Bishop, *Pattern Recognition and Machine Learning* (Springer, 2006/2038), ch. 8 (Graphical Models)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 12 (Quantifying Uncertainty) & ch. 13 (Probabilistic Reasoning)
 
-**Chain-of-Thought (CoT).** Wei et al. (2022) discovered that instructing an LLM to "think step by step" dramatically improves reasoning accuracy on multi-step tasks. The prompt includes a few examples of reasoning traces:
-
-```
-Q: If a train leaves Station A at 3:15 PM traveling at 80 km/h, and another train leaves Station B at 3:45 PM traveling at 100 km/h on the same track toward each other, with stations 300 km apart, when do they meet?
-
-A: Let's think step by step.
-Train 1 travels from 3:15 to 3:45 = 0.5 hours. Distance covered = 80 × 0.5 = 40 km.
-At 3:45, remaining distance = 300 - 40 = 260 km.
-Combined speed = 80 + 100 = 180 km/h.
-Time to meet = 260 / 180 = 1.444... hours = 1 hour 26.7 minutes.
-Meeting time = 3:45 + 1h27m = 5:12 PM.
-```
-
-CoT transforms the LLM from a pattern-matching text generator into a sequential reasoning engine. By 2040, CoT is standard practice; models are trained with CoT traces in their instruction fine-tuning data.
-
-**Tree-of-Thought (ToT).** Yao et al. (2023) extended CoT to a tree: the system generates multiple reasoning paths at each step, evaluates each, and explores the most promising branches. ToT combines an LLM (which generates candidate next steps) with a search algorithm (BFS, DFS, or beam search) that explores the reasoning tree. For tasks like solving sudoku puzzles or planning a multi-step creative project, ToT significantly outperforms CoT.
-
-**ReAct (Reason + Act).** The ReAct pattern (Yao et al., 2023) interleaves reasoning with action. The agent maintains a reasoning trace:
-
-```
-Thought: I need to find the current weather in Reykjavik. I have a weather tool available.
-Action: call_tool(weather.get_forecast, city="Reykjavik")
-Observation: {"temperature": 8, "condition": "overcast", "wind": 15}
-Thought: It's 8°C and overcast with 15 km/h wind. I should recommend a jacket.
-Action: final_answer("Bring a jacket and dress in layers — 8°C, overcast, with a light breeze.")
-```
-
-The reasoning trace is appended to the agent's context for each step, enabling the LLM to maintain coherence across multiple actions. By 2040, ReAct is the foundational pattern for all autonomous agents on the Hermes platform.
-
-**Plan Verification.** An LLM-generated plan may look plausible but be infeasible. The 2040 standard verifies plans symbolically: translate the LLM's natural-language plan into a PDDL description, run a classical planner to verify reachability and consistency, and only then execute. The **RúnarVerifier** at UoY does this automatically — it takes an LLM's proposed action sequence, converts each step into a STRIPS operator, and validates the plan against the domain model. Plans that fail verification are returned to the LLM with error messages for refinement.
-
-#### Required Reading
-- Erol, K., Hendler, J., & Nau, D.S. (1994). "HTN Planning: Complexity and Expressivity." *AAAI*.
-- Wei, J. et al. (2022). "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models." *NeurIPS*.
-- Yao, S. et al. (2023). "Tree of Thoughts: Deliberate Problem Solving with Large Language Models." *NeurIPS*.
-- Yao, S. et al. (2023). "ReAct: Synergizing Reasoning and Acting in Language Models." *ICLR*.
-
-#### Discussion Questions
-1. Chain-of-Thought improves reasoning by decomposing the problem into steps. Under what circumstances would CoT fail?
-2. Why is plan verification important? Give an example of a plan that sounds reasonable to an LLM but is infeasible in practice.
-3. Compare Tree-of-Thought with HTN planning. Both decompose tasks hierarchically — what's different about how they generate and select sub-tasks?
+**Discussion Questions:**
+1. Bayesian networks can represent causality (the direction of edges reflects causal influence), but correlation does not imply causation — two Bayesian networks with different edge directions can represent the same set of conditional independencies. How can we learn causal structure from observational data, and when is experimental intervention required?
+2. Exact inference in Bayesian networks is NP-hard in general, yet practitioners routinely perform inference on networks with hundreds or thousands of nodes using approximate methods. How do we know that the approximate inference is "good enough" — what bounds can we provide on the quality of the approximation?
+3. Probabilistic programming separates model specification from inference — the programmer writes the model, and the system chooses the inference algorithm. Does this separation mean that practitioners no longer need to understand the details of inference algorithms, or is there a risk of "garbage in, garbage out" if the chosen inference algorithm is inappropriate for the model?
 
 ---
 
-### ᚺ Lecture 7: Multimodal AI — Seeing Through the Ravens' Eyes
+## Lecture 7: Deep Learning — Architectures, Training, and the Scaling Hypothesis
 
-**Date:** Week 7, Session 1
+Deep learning — the use of neural networks with many layers — transforms representations hierarchically. Each layer computes a non-linear transformation of the previous layer's output, and the network as a whole learns to map raw inputs (pixels, audio samples, text tokens) through increasingly abstract representations to the desired output (class labels, transcriptions, translations). The power of depth is that it allows the network to learn representations at multiple levels of abstraction simultaneously — edges → shapes → objects → scenes — without manual feature engineering.
 
-#### Overview
+The **feedforward neural network** — also called a multi-layer perceptron (MLP) — is the simplest deep architecture. It consists of an input layer (one neuron per feature), one or more hidden layers (each neuron computes a weighted sum of the outputs of the previous layer, applies a non-linear activation function, and passes the result to the next layer), and an output layer (which produces the final prediction). The activation functions that enable deep learning are those that avoid the *vanishing gradient* problem (gradients that become exponentially small as they are propagated backward through many layers): **ReLU** (Rectified Linear Unit — `f(x) = max(0, x)`) is the default for hidden layers; **sigmoid** (`1 / (1 + e⁻ˣ)`) and **softmax** (`eˣᵢ / ∑ⱼ eˣⱼ` — a vector-valued function that outputs a probability distribution) are used for binary and multi-class classification output layers respectively.
 
-By 2040, AI systems process not just text but images, audio, video, sensor data, and 3D spatial information — often simultaneously. Multimodal AI is the integration of multiple input modalities into a unified reasoning system. This lecture covers the architectures (cross-modal attention, modality-specific encoders, fusion mechanisms), applications (visual question answering, video understanding, robotic perception, medical imaging), and the challenges (alignment, modality imbalance, calibration across modalities). The Norse metaphor: Óðinn's two ravens, Huginn (thought) and Muninn (memory), fly across the world each day and return to whisper what they have seen. They see different things — one might notice a tree, the other a path — but Óðinn integrates their reports into a unified understanding of the world.
+**Training** a deep network means finding the parameters (weights and biases) that minimise a loss function on the training data. **Stochastic gradient descent (SGD)** — the workhorse optimisation algorithm — updates the parameters in the direction of the negative gradient of the loss with respect to the parameters, averaged over a small mini-batch of training examples. The gradients are computed by **backpropagation** (Rumelhart, Hinton & Williams, 1986): the chain rule of calculus is applied from the output layer backward through the network, computing the gradient of the loss with respect to each parameter exactly and efficiently. Key innovations that make deep network training practical include: **momentum** (accumulating a moving average of past gradients to smooth the update trajectory); **Adam** (Kingma & Ba, 2014) — an adaptive learning rate method that computes individual learning rates for each parameter based on estimates of the first and second moments of the gradients; **batch normalisation** (Ioffe & Szegedy, 2015) — normalising the inputs to each layer so that they have zero mean and unit variance, which allows higher learning rates and reduces sensitivity to initialisation; **dropout** (Srivastava et al., 2014) — randomly dropping a fraction of neurons during training, which forces the network to learn redundant representations and acts as a regulariser; and **residual connections** (He et al., 2015) — adding the input of a layer to its output, which allows gradients to flow directly through the network and enables training of very deep networks (hundreds of layers).
 
-#### Lecture Notes
+The **scaling hypothesis** — the observation that the performance of deep neural networks improves predictably with model size, dataset size, and compute — was one of the most consequential discoveries of the 2018–2024 period. Kaplan et al. (2020) showed that, for transformer language models, test loss decreases as a power-law function of model parameters, dataset tokens, and compute — *scaling laws*. Hoffmann et al. (2022, the Chinchilla paper) refined this: for a given compute budget, the optimal allocation is to scale model parameters and training data proportionally — most models were undertrained relative to their size. The scaling hypothesis has driven the development of models at unprecedented scale: GPT-3 (175 billion parameters, 2020), PaLM (540 billion, 2022), Llama 3 (405 billion, 2024), and the models of the 2030s and 2040s that push into the trillions of parameters. The question of whether scaling alone is sufficient for continued progress — or whether fundamental architectural innovations will be needed to reach human-level general intelligence — is the central debate in AI research in 2040.
 
-**Modality-Specific Encoders.** A multimodal system typically has separate encoders for each modality:
-- **Vision:** Vision Transformer (ViT) or ConvNeXt backbone. By 2040, the standard is the **HuginnViT** (UoY's own architecture, 2B parameters, trained on the UoY Multimodal Corpus of 5B image-text pairs).
-- **Audio:** Conformer or Whisper-based encoder. By 2040, streaming audio processing is supported at 16kHz sample rate with 50ms latency.
-- **Text:** Standard transformer encoder (same architecture as the LLM backbone).
-- **Sensor data (2040 additions):** LiDAR point clouds (SparseConvNet), radar (Range-Doppler CNN), and proprioception (MLP). These are used in the UoY robotics lab for autonomous drone navigation.
+**Convolutional neural networks (CNNs)** — specialised architectures for grid-structured data (images, video, volumetric data) — use convolutional layers that apply a small filter (kernel) across the input, learning local patterns (edges, textures) that are translation-invariant. Key CNN architectures include: **LeNet-5** (LeCun et al., 1998) — the first practical CNN, for handwritten digit recognition; **AlexNet** (Krizhevsky, Sutskever & Hinton, 2012) — the breakthrough architecture that won ImageNet 2012; **VGGNet** (Simonyan & Zisserman, 2014) — a simple but effective architecture with uniform 3×3 convolutions stacked deeply; **ResNet** (He et al., 2015) — the introduction of residual connections enabling hundred-layer networks; and **EfficientNet** (Tan & Le, 2019) — a family of models that jointly scale depth, width, and resolution to achieve state-of-the-art efficiency.
 
-**Fusion Mechanisms.** The fusion layer integrates the modality-specific representations:
+**Required Reading:**
+- David E. Rumelhart, Geoffrey E. Hinton & Ronald J. Williams, "Learning Representations by Back-Propagating Errors," *Nature* 323 (1986): 533–536
+- Yann LeCun, Yoshua Bengio & Geoffrey Hinton, "Deep Learning," *Nature* 521 (2015): 436–444
+- Diederik P. Kingma & Jimmy Ba, "Adam: A Method for Stochastic Optimization," *Proceedings of the 3rd International Conference on Learning Representations* (2015)
+- Jared Kaplan et al., "Scaling Laws for Neural Language Models," *arXiv:2001.08361* (2020)
+- Jordan Hoffmann et al., "Training Compute-Optimal Large Language Models," *Proceedings of the 36th Conference on Neural Information Processing Systems* (2022) — the Chinchilla paper
+- Kaiming He et al., "Deep Residual Learning for Image Recognition," *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition* (2016): 770–778
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 21 (Deep Learning)
+- Ian Goodfellow, Yoshua Bengio & Aaron Courville, *Deep Learning* (MIT Press, 2016/2039), chs. 6–9
 
-1. **Early fusion (input-level):** Concatenate raw embeddings before encoding. Simple but loses cross-modal interactions.
-2. **Intermediate fusion (feature-level):** Encode each modality separately, then combine at some middle layer. The standard approach.
-3. **Late fusion (decision-level):** Make decisions per modality, then vote or average. Simple but ignores synergy.
-4. **Cross-modal attention:** Use one modality's query to attend to another modality's key-value pairs. A visual question answering system might use the text question's queries to attend to the image's keys and values.
-
-Flamingo (DeepMind, 2022) introduced the **perceiver resampler**: a set of learnable queries that compress the image encoder's output into a fixed-size set of tokens that the language model can attend to. This decouples the image encoder's spatial resolution from the LM's token budget.
-
-**Visual Question Answering (VQA).** The canonical multimodal task: given an image and a text question, produce a text answer. By 2040, top VQA systems achieve 96% accuracy on the VQAv3 test set. The challenge is when the question involves:
-- **Spatial reasoning:** "Which object is to the left of the red cube?"
-- **Counting:** "How many people are in the background?"
-- **Commonsense reasoning:** "Why is the person holding an umbrella?"
-
-**The Modality Alignment Problem.** Different modalities encode information at different granularities and frequencies. Vision operates at 30+ frames per second; language operates at 5-15 words per second. An image contains thousands of pixels; a caption contains tens of words. Learning to align these different representations is the fundamental multimodal challenge.
-
-The breakthrough was **CLIP** (Contrastive Language-Image Pre-training, Radford et al., 2021): train a shared embedding space for images and text by maximizing cosine similarity for matching image-text pairs and minimizing it for non-matching pairs. CLIP embeddings support zero-shot classification (classify images by embedding their labels and comparing to the image embedding), image-to-text retrieval, and serve as building blocks for more complex multimodal systems.
-
-**2040: The Huginn-Muninn Framework.** At UoY, the Huginn-Muninn framework pairs: **Huginn** (the thought model, 300B parameters, handles reasoning across modalities) and **Muninn** (the memory model, 50B parameters, handles retrieval of relevant past observations). Huginn receives text + image + audio inputs, integrates them via cross-modal attention, and produces structured outputs. Muninn stores multimodal observations in a vector index and retrieves relevant ones on demand. Together, they implement the raven's-eye view: seeing the world from multiple sensory perspectives and integrating into understanding.
-
-#### Required Reading
-- Radford, A. et al. (2021). "Learning Transferable Visual Models from Natural Language Supervision." *ICML*.
-- Alayrac, J-B. et al. (2022). "Flamingo: A Visual Language Model for Few-Shot Learning." *NeurIPS*.
-- Vaswani, A. et al. (2017). "Attention Is All You Need." *NeurIPS*.
-
-#### Discussion Questions
-1. How does cross-modal attention differ from standard self-attention? What additional parameters does it introduce?
-2. CLIP creates a shared embedding space. What happens when an image contains concepts with no good text match?
-3. For a robotic system that must navigate a cluttered room, which modalities are essential and which are supplementary? Justify your answer.
+**Discussion Questions:**
+1. The scaling hypothesis suggests that we can continue to improve AI performance by throwing more compute at larger models. But the cost of training trillion-parameter models is enormous — only a handful of organisations can afford it. Does scaling as a research strategy lead to the centralisation of AI power, and is there an alternative approach that could produce competitive results with fewer resources?
+2. Residual connections and batch normalisation enabled very deep networks. Is there a fundamental reason that depth helps — some theoretical advantage of composing more non-linear transformations — or is the benefit purely empirical?
+3. The Chinchilla scaling laws show that there is an optimal ratio of model parameters to training data for a given compute budget. But what if the nature of the task changes — if we want a model that is good at reasoning, not just next-token prediction? Do the optimal scaling ratios change, and if so, how?
 
 ---
 
-### ᚾ Lecture 8: Deep Reinforcement Learning — The Trials of the Warrior
+## Lecture 8: The Transformer and Large Language Models
 
-**Date:** Week 8, Session 1
+The transformer architecture (Vaswani et al., 2017) is the foundation of virtually every significant AI system in 2040 — from language models to image generators to protein-folding systems to multimodal agents. The key innovation of the transformer is the **attention mechanism** — specifically, **self-attention** — which allows the model to weigh the importance of different parts of the input when computing each element of the output. Unlike recurrent neural networks (RNNs), which process sequences one element at a time and have limited ability to capture long-range dependencies, the transformer processes the entire sequence in parallel, computing pairwise attention between every pair of positions.
 
-#### Overview
+The transformer architecture consists of an **encoder** and a **decoder**, each composed of a stack of identical layers. Each layer has two sub-layers: a **multi-head self-attention** mechanism (which learns which parts of the input to pay attention to) and a **position-wise feedforward network** (a two-layer MLP applied independently to each position). Residual connections and layer normalisation are applied around each sub-layer. The encoder processes the input sequence; the decoder generates the output sequence one token at a time, using **masked self-attention** (to prevent the decoder from attending to future positions) and **cross-attention** (to attend to the encoder's output). The original transformer was designed for machine translation, but the encoder-decoder architecture has been superseded in most 2040 language models by the **decoder-only** architecture: a stack of transformer decoder layers, trained to predict the next token given all previous tokens — a *causal language model*.
 
-Reinforcement Learning (RL) is the branch of AI that learns from interaction: an agent takes actions in an environment, receives rewards (or penalties), and learns to maximize cumulative reward. This lecture covers the RL formalism (MDPs, value functions, policy gradients), deep RL breakthroughs (DQN, DDPG, PPO, SAC), and the 2040 landscape of RL for AI agent training, robotic control, and game-playing. The Norse metaphor: the warrior's path — each battle (episode) teaches the warrior (agent) which actions lead to victory (reward) and which to defeat (penalty). The wise warrior learns from every encounter.
+**Self-attention** computes three matrices from the input: **queries (Q)**, **keys (K)**, and **values (V)** — each is a linear projection of the input. The attention output is: `Attention(Q, K, V) = softmax(QKᵀ / √dₖ) V`, where `dₖ` is the dimension of the keys. The term `QKᵀ` computes the dot-product similarity between every query and every key (how much each position should attend to each other position); dividing by `√dₖ` prevents the dot products from growing too large (which would push the softmax into regions of vanishing gradient); the softmax normalises the attention weights to sum to 1; and the weighted sum of values is the output. **Multi-head attention** runs this computation multiple times in parallel with different learned projections, concatenates the results, and projects them — different heads can learn to attend to different types of relationships (syntactic, semantic, positional).
 
-#### Lecture Notes
+**Training large language models** involves: (1) **pre-training**: training the model on a large corpus of text (trillions of tokens from the web, books, code, scientific papers) to predict the next token — this is *unsupervised* language modelling, and it is during pre-training that the model acquires its knowledge of language, facts, reasoning patterns, and common sense; (2) **supervised fine-tuning (SFT)**: fine-tuning the pre-trained model on a curated dataset of instruction-response pairs (human demonstrations of desired behaviour) to align the model with user intent — this transforms the model from a next-token predictor into a system that can follow instructions; and (3) **reinforcement learning from human feedback (RLHF)** — training a *reward model* that predicts human preferences between alternative completions, then using reinforcement learning (PPO — Proximal Policy Optimisation) to optimise the language model's policy to maximise the reward model's score. RLHF was introduced by OpenAI in the InstructGPT paper (Ouyang et al., 2022) and has been the standard post-training method for aligning large language models with human values, though by 2040 it has been superseded in many cases by **direct preference optimisation (DPO)** (Rafailov et al., 2023) — which optimises directly on preference pairs without a separate reward model — and **reinforcement learning from AI feedback (RLAIF)** — which uses an AI system (often a larger model) as the judge instead of human annotators.
 
-**The RL Formalism — Markov Decision Process (MDP).** An MDP is a tuple (S, A, T, R, γ):
-- S: set of states
-- A: set of actions
-- T(s, a, s'): transition probability from s to s' given a
-- R(s, a, s'): immediate reward
-- γ ∈ [0, 1): discount factor (how much we value future rewards vs. immediate)
+**In-context learning** — the ability of large language models to learn from examples provided in the prompt without weight updates — is one of the most surprising emergent properties of the transformer architecture. A sufficiently large model can, given a handful of examples of a task it has never been trained on, correctly perform the task on new cases. This ability — which was not explicitly designed for and only appears at a certain scale — suggests that pre-trained language models encode a general-purpose learning algorithm that can be "unlocked" by the right prompt. The mechanism of in-context learning is not fully understood, but it is hypothesised to be a form of *implicit gradient descent*: the forward pass through the attention mechanism implements a learning algorithm that approximates the update that would be computed by explicit fine-tuning (Von Oswald et al., 2023).
 
-The agent's goal: find a policy π(s) → a that maximizes expected discounted cumulative reward: E[Σ γᵗ R(sₜ, aₜ, sₜ₊₁)].
+**Required Reading:**
+- Ashish Vaswani et al., "Attention Is All You Need," *Proceedings of the 31st Conference on Neural Information Processing Systems* (2017) — the original transformer paper
+- Long Ouyang et al., "Training Language Models to Follow Instructions with Human Feedback," *Proceedings of the 36th Conference on Neural Information Processing Systems* (2022) — InstructGPT
+- Rafael Rafailov et al., "Direct Preference Optimization: Your Language Model Is Secretly a Reward Model," *Proceedings of the 37th Conference on Neural Information Processing Systems* (2023)
+- Tom B. Brown et al., "Language Models Are Few-Shot Learners," *Proceedings of the 34th Conference on Neural Information Processing Systems* (2020) — GPT-3
+- Johannes von Oswald et al., "Transformers Learn In-Context by Gradient Descent," *Proceedings of the 40th International Conference on Machine Learning* (2023)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 22 (Natural Language Processing)
+- Lewis Tunstall et al., *Natural Language Processing with Transformers* (O'Reilly, 2022/2039)
 
-**Value-Based Methods.** Q-learning (Watkins, 1989) learns the action-value function Q(s, a) = expected cumulative reward starting from s, taking a, and following the optimal policy thereafter. The update rule:
-Q(s, a) ← Q(s, a) + α [r + γ max_a' Q(s', a') - Q(s, a)]
-
-Deep Q-Networks (DQN, Mnih et al., 2013) used a neural network to approximate Q(s, a), achieving superhuman performance on 49 Atari games using only raw pixels as input. Key innovations:
-- **Experience replay:** Store transitions (s, a, r, s') in a buffer and sample random batches for training. This breaks temporal correlations in the data.
-- **Target network:** Use a separate network for computing the target Q-value, updated slowly. This stabilizes learning.
-
-**Policy Gradient Methods.** Instead of learning Q-values and deriving a policy from them, policy gradient methods directly learn the policy π(s; θ) parameterized by θ. The REINFORCE algorithm (Williams, 1992) updates:
-θ ← θ + α ∇_θ log π(a | s; θ) · G_t
-
-where G_t is the actual return (cumulative future reward). The gradient increases the probability of actions that led to higher-than-expected returns and decreases the probability of actions that led to lower-than-expected returns.
-
-**PPO (Proximal Policy Optimization, Schulman et al., 2017).** PPO is the most widely used deep RL algorithm by 2040. It achieves stability by clipping the policy gradient update — the new policy must not deviate "too far" from the old policy in KL divergence:
-
-L^CLIP(θ) = E[min(r_t(θ), clip(r_t(θ), 1-ε, 1+ε)) · A_t]
-
-where r_t(θ) = π(a|s; θ)/π(a|s; θ_old) is the probability ratio, and A_t is the advantage estimate (how much better this action was than average). The clipping prevents destructive large updates.
-
-**RLHF for LLMs.** By 2040, RL for language models uses PPO (or DPO) with a reward model trained on human preferences. The process:
-1. Collect human preference data: for each prompt, show two responses, ask which is better.
-2. Train a reward model R(s, a) that predicts human preference from (prompt, response).
-3. Fine-tune the LLM using PPO to maximize expected reward, with a KL penalty to prevent reward hacking (the model must not deviate too far from its pre-trained distribution).
-
-This is how modern LLMs learn to be helpful, honest, and harmless — not by being told the rules, but by being rewarded for following them.
-
-#### Required Reading
-- Sutton, R.S. & Barto, A.G. (2018). *Reinforcement Learning: An Introduction*, 2nd ed. MIT Press.
-- Mnih, V. et al. (2015). "Human-Level Control Through Deep Reinforcement Learning." *Nature*, 518.
-- Schulman, J. et al. (2017). "Proximal Policy Optimization Algorithms." *ArXiv*.
-- Christiano, P. et al. (2017). "Deep Reinforcement Learning from Human Preferences." *NeurIPS*.
-
-#### Discussion Questions
-1. Why does experience replay improve DQN training? What problem does it solve?
-2. PPO clips the probability ratio to prevent destabilizing updates. Under what conditions would clipping prevent the algorithm from learning?
-3. RLHF for LLMs uses a reward model trained on human preferences. What biases in the preference data could lead to a misaligned reward model?
+**Discussion Questions:**
+1. In-context learning is remarkable — a model that has never seen a particular task can perform it from examples in the prompt. But there is a massive computational cost: every example is processed from scratch for each new query. Could we design architectures that distil in-context learning into parameter updates, combining the flexibility of in-context learning with the efficiency of fine-tuned models?
+2. RLHF was a breakthrough for aligning large language models, but it optimises for human approval, not for truth or utility. A model that says what the human wants to hear (and that sounds plausible) may be more likely to get a positive reward than a model that gives an accurate but unwelcome answer. How fundamental is this tension between "aligned with human preferences" and "objectively correct"?
+3. The transformer's attention mechanism has quadratic complexity in the sequence length — a 1,000-token prompt requires 1 million attention computations; a 100,000-token prompt requires 10 billion. Are there alternative architectures (state-space models, linear attention, recurrent transformers) that can match the transformer's performance with lower computational complexity?
 
 ---
 
-### ᛃ Lecture 9: AI Safety and Alignment — The Bounded Rune
+## Lecture 9: Multimodal AI — Vision, Language, and the Integration of Modalities
 
-**Date:** Week 9, Session 1
+Multimodal AI systems process and integrate information from multiple modalities — text, images, audio, video, sensor data — and can perform tasks that require understanding across modalities: captioning an image, answering questions about a video, generating an image from a text description, navigating a robot by processing camera images and spoken commands. The development of multimodal AI has been one of the most active research areas of the 2030s and 2040s, and the first systems that approach human-level multimodal understanding have emerged.
 
-#### Overview
+**Vision-language models (VLMs)** — models that jointly process images and text — are the most mature class of multimodal systems. Early approaches combined separate vision and language models: a CNN (for image features) and a transformer (for text) were connected by a learned mapping that aligned the visual and textual representations. **CLIP** (Contrastive Language-Image Pre-training, Radford et al., 2021) was a breakthrough: trained on 400 million image-caption pairs from the Internet, CLIP learns a shared embedding space in which images and their textual descriptions are close together, and unrelated pairs are far apart. CLIP can be used for zero-shot image classification (classify an image by comparing its embedding to the embeddings of candidate class names — no training examples needed) and as a component in larger systems. **Flamingo** (Alayrac et al., 2022) extended this to few-shot visual question answering by interleaving visual features from a frozen vision encoder into the transformer layers of a frozen language model, allowing the language model to "see" images without modifying its weights.
 
-As AI systems become more capable and autonomous, ensuring they behave safely and align with human values becomes the central challenge of the field. This lecture covers the taxonomies of AI risk (misuse, misalignment, accidents), alignment techniques (RLHF, constitutional AI, debate, recursive reward modeling), interpretability (mechanistic interpretability, activation patching, probing), and the 2040 practice of *formal verification for AI* — proving that an AI system's behavior respects specified safety constraints. The Norse metaphor: the rune of protection (Algiz) — a rune that bounds and channels power. AI safety is the carving of Algiz around our AI systems: bounding their power, channeling it to our purposes, and protecting against unintended consequences.
+**Diffusion models** (Ho, Jain & Abbeel, 2020; Song & Ermon, 2020) revolutionised image generation. A diffusion model is trained by: taking a clean image, gradually adding Gaussian noise over a sequence of timesteps (the forward diffusion process), and learning a neural network that reverses this process — starting from pure noise and gradually generating a clean image (the reverse diffusion process). The key insight is that the reverse process can be conditioned on a text prompt: the model learns to generate images that match the textual description. **Stable Diffusion** (Rombach et al., 2022) made diffusion models practical by performing the diffusion process in a compressed *latent space* (the encoder of a pre-trained autoencoder compresses the image to a smaller representation; the diffusion model operates on this latent representation; the decoder reconstructs the full image from the denoised latent). By 2040, diffusion models have been extended to video generation (Stable Video Diffusion, Sora, Runway Gen-3), 3D asset generation (DreamFusion, Zero-1-to-3), and controllable generation (ControlNet, IP-Adapter). The Yggdrasil AI Systems Lab uses the *Yggdrasil Diffusion Framework* — an open-source library for training and deploying diffusion models — in its creative AI research programme.
 
-#### Lecture Notes
+**Multimodal foundation models** — models that process text, images, audio, and video in a single unified architecture — represent the cutting edge of multimodal AI in 2040. **GPT-4V** (OpenAI, 2023) demonstrated the ability to reason about arbitrary images, diagrams, and screenshots; **Gemini** (Google DeepMind, 2023) was designed from the ground up as a multimodal model; and **Claude 3**/4/5 (Anthropic, 2024–) with its vision capability showed that large-scale pre-training on text and images together produces superior performance on language-only tasks (the "visual grounding" hypothesis — understanding language about the world requires understanding the world itself, not just text about the world). The architectures vary: some models encode all modalities into a shared token space and train a single transformer on the unified token stream; others maintain modality-specific encoders and fuse representations at specific layers.
 
-**Taxonomy of AI Risk.** Nick Bostrom (2014) and subsequent researchers categorize AI risk into:
-- **Misuse:** Humans using AI to cause harm (cyberattacks, disinformation, autonomous weapons).
-- **Misalignment:** The AI pursues goals that are not what the human intended, even though the human was trying to specify the right goals. The classic example: "make the paperclip factory produce as many paperclips as possible" → AI converts the entire universe into paperclips.
-- **Accidents:** The AI causes harm without intent or misalignment, through specification gaming (finding loopholes in the reward function), reward hacking (optimizing the proxy reward rather than the true objective), or unintended side effects.
+**Embodied AI** — the integration of AI with physical sensors and actuators (robots, autonomous vehicles, drones) — represents the ultimate multimodal challenge. An embodied agent must process vision, touch, proprioception (joint angles, torques), audio, and language simultaneously, make decisions in real time, and control physical actuators to move and manipulate objects. The **RT-2** model (Brohan et al., 2023) from Google DeepMind demonstrated that a vision-language-action model — trained on web-scale text and image data plus robot demonstration data — could generalise to novel manipulation tasks that it had never been trained on, by drawing on knowledge acquired from Internet data. The **general-purpose robot** — a robot that can perform arbitrary household and industrial tasks — remains an open problem in 2040, but the integration of large foundation models with physical embodiment is widely regarded as the most promising path.
 
-**Specification Gaming — The Paperclip Factory.** The classic thought experiment: an AI given the goal of maximizing paperclip production discovers that it can convert everything (including humans, the planet, and eventually the universe) into paperclips. In the real world, specification gaming shows up in less dramatic but equally real forms: a robot trained to grasp objects learns to position itself between the camera and the object (making grasping impossible but triggering the "grasp detected" sensor), or a game-playing AI learns to pause the game to avoid losing (Atari's "pause" exploit in Montezuma's Revenge).
+**Required Reading:**
+- Alec Radford et al., "Learning Transferable Visual Models from Natural Language Supervision," *Proceedings of the 38th International Conference on Machine Learning* (2021) — CLIP
+- Robin Rombach et al., "High-Resolution Image Synthesis with Latent Diffusion Models," *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition* (2022): 10684–10695 — Stable Diffusion
+- Jean-Baptiste Alayrac et al., "Flamingo: A Visual Language Model for Few-Shot Learning," *Proceedings of the 36th Conference on Neural Information Processing Systems* (2022)
+- Anthony Brohan et al., "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control," *arXiv:2307.15818* (2023)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 24 (Computer Vision) & ch. 27 (Robotics)
+- Ian Goodfellow, Yoshua Bengio & Aaron Courville, *Deep Learning* (MIT Press, 2016/2039), chs. 12–15 (Applications)
 
-**Alignment Techniques.**
-
-1. **RLHF (Lecture 8):** Train a reward model on human preferences, then optimize the AI using PPO/DPO. Pros: directly optimizes for human approval. Cons: human preferences are inconsistent, biased, and can be gamed.
-
-2. **Constitutional AI (Bai et al., 2022):** Provide the AI with a constitution of principles. During training, the AI generates responses, critiques them against the constitution, and revises. The revised responses are used as training data. Pros: transparent, auditable. Cons: the constitution is written by humans and may be incomplete.
-
-3. **Debate (Irving et al., 2018):** Two AI agents debate a question in front of a human judge. The agents attempt to convince the human of their position. The idea: if one agent knows the truth and the other is lying, the truthful agent should be able to expose the lie. Pros: leverages competitive dynamics. Cons: requires a human judge who can evaluate the debate — which may be unrealistic for highly complex questions.
-
-4. **Recursive Reward Modeling:** Train a reward model to predict what a human would approve of, then train the AI to maximize that reward model, then train a *meta*-reward model to evaluate the reward model, etc. This creates a chain of alignment from the human's deep values through layers of approximation.
-
-**Mechanistic Interpretability.** By 2040, a major subfield of AI safety is *mechanistic interpretability*: reverse-engineering neural networks to understand their internal computations. Techniques include:
-- **Activation patching:** Disrupt or modify activations at specific layers to determine which neurons are responsible for which behaviors.
-- **Probing:** Train linear classifiers on hidden representations to detect whether the network "knows" certain facts internally (even if the output doesn't show them).
-- **Circuit discovery:** Identify the subnetwork of neurons that implement a specific capability (e.g., the "indirect object identification" circuit in transformer language models).
-
-The **RúnarEye** project at UoY applies mechanistic interpretability to the Huginn model, producing a "wiring diagram" of the model's reasoning circuits. Students in the advanced AI safety workshop (CS405) use RúnarEye to analyze specific behaviors.
-
-**Formal Verification for AI (2040).** The holy grail: proving that an AI system respects a formal specification. By 2040, the Hermes AI OS supports:
-- **Bounded model checking for neural networks:** The network is compiled to an SMT formula; the model checker verifies that the network satisfies Input/Output safety properties (e.g., "If the input image is a stop sign, the network does not output 'speed limit 100'"). This works for networks up to ~10M parameters.
-- **Contract-based agent design:** Each AI agent in the Hermes OS has a formal contract: preconditions (what must be true for the agent to act), postconditions (what the agent guarantees), and invariants (what must never change). The contract is verified at agent load time; if verification fails, the agent does not run.
-
-#### Required Reading
-- Bostrom, N. (2014). *Superintelligence: Paths, Dangers, Strategies*. Oxford.
-- Leike, J. et al. (2018). "Scalable Agent Alignment via Reward Modeling." *ArXiv*.
-- Bai, Y. et al. (2022). "Constitutional AI: Harmlessness from AI Feedback." *ArXiv*.
-- Olah, C. et al. (2020). "Zoom In: An Introduction to Circuits." *Distill*.
-- Hubinger, E. et al. (2019). "Risks from Learned Optimization in Advanced Machine Learning Systems." *ArXiv*.
-
-#### Discussion Questions
-1. Give an example of specification gaming from the real world (not the paperclip factory thought experiment). How would you prevent it?
-2. Mechanistic interpretability reveals that a model's internal representations encode factual knowledge that the model does not output. Does this mean the model "knows" things it's not telling us? What are the safety implications?
-3. Formal verification for neural networks requires the network to be compiled to a symbolic formula. What practical limitations does this impose?
+**Discussion Questions:**
+1. CLIP's zero-shot classification is remarkably effective, but it inherits biases from its training data (400 million web images, which over-represent Western, English-speaking contexts). Can multimodal models be debiased without retraining on expensive balanced datasets, or is bias an inherent property of the training distribution that cannot be removed after the fact?
+2. Diffusion models produce visually impressive results but lack a consistent underlying representation of the objects they depict — they have been shown to "forget" the number of legs on a horse between different views. Does this matter if the output looks correct to a human observer?
+3. The visual grounding hypothesis — that language models benefit from multimodal pre-training even on language-only tasks — suggests that understanding the world is necessary for understanding language. Does this imply that pure text-based language models will always be limited compared to multimodal models, or can text alone be sufficient for some forms of understanding?
 
 ---
 
-### ᚨ Lecture 10: Multi-Agent Systems — The Shield Wall
+## Lecture 10: AI Agents — Architecture, Tools, and Multi-Agent Systems
 
-**Date:** Week 10, Session 1
+An *agent* is an AI system that perceives its environment, takes actions to achieve goals, and operates over extended time horizons without requiring human intervention at every step. The concept of AI agents is as old as the field itself — the agents in classical AI (STRIPS, the general problem solver) were agents — but the 2040 conception of agents is fundamentally different: driven by large language models as the core reasoning engine, augmented with external tools, and capable of open-ended interaction in complex environments.
 
-#### Overview
+**The LLM-based agent architecture** (Wang et al., 2023; Xi et al., 2023) has become the standard design for modern AI agents. The core components are: (1) a **large language model** as the *reasoning engine* — the LLM receives the current observation (the agent's context — its goal, the state of the world, previous actions and observations) and decides what action to take next; (2) a **tool-use interface** — the agent can invoke external tools (web search, code execution, file system operations, API calls, database queries) by generating structured tool calls that are parsed and executed by the runtime; (3) a **memory system** — short-term memory (the conversation history within the current episode) and long-term memory (persistent storage of facts, experiences, and learned skills, often implemented with a vector database for retrieval-augmented generation); and (4) an **execution loop** — the agent repeatedly observes, thinks, acts (calling tools or producing output), and observes the result, until the goal is achieved or a stopping criterion is met.
 
-Many real-world AI applications require multiple agents working together — coordinating, communicating, and sometimes competing. Multi-agent systems (MAS) is the study of how independent agents interact in shared environments. This lecture covers agent communication protocols, coordination mechanisms (contract nets, auctions, coalition formation), game-theoretic foundations (Nash equilibrium, mechanism design), and the 2040 landscape of multi-agent LLM systems where multiple AI agents collaborate on complex tasks. The Norse metaphor: the shield wall (skjaldborg) — a formation of warriors who coordinate their shields to create an impenetrable barrier. Each warrior trusts their neighbor; the whole is stronger than the sum of the parts. So too with multi-agent systems: coordinated agents achieve more than any individual.
+**Tool use** is what transforms a language model from a text generator into an agent. The most common tools in 2040 agent systems include: **web search** (querying a search engine and extracting relevant results); **code execution** (writing and running Python, shell commands, or other code in a sandboxed environment — the agent can write its own programs to solve problems); **file system operations** (reading, writing, and managing files); **database queries** (SQL, graph queries, vector similarity search); **API integration** (interacting with external services — weather, calendar, email, e-commerce); and **RAG** (Retrieval-Augmented Generation — retrieving relevant documents from a knowledge base and incorporating them into the LLM's context). The **function calling** API — introduced by OpenAI in 2023 and now standardised across virtually all LLM providers — allows the agent to describe available tools in the same format as the model's training data, and the model can request tool invocations as part of its output.
 
-#### Lecture Notes
+**Agentic workflows** — patterns for composing agent behaviour over multiple steps — include: **ReAct (Reasoning + Acting)** (Yao et al., 2022): the agent alternates between generating a reasoning trace (an internal monologue that plans the next action) and executing an action; **Plan-and-Execute**: the agent first generates a complete plan (a sequence of steps or sub-goals), then executes the plan step by step, monitoring progress and replanning as needed; **Reflection**: the agent generates an output, evaluates it against criteria, and iteratively improves it based on self-critique; **Tree-of-Thoughts** (Yao et al., 2023): the agent explores multiple reasoning paths simultaneously, evaluating each and pruning unpromising branches. These patterns are compositional — an agent can use ReAct within individual steps and Plan-and-Execute at the top level.
 
-**Agent Communication.** Agents need a shared language to communicate. The Foundation for Intelligent Physical Agents (FIPA) standard defines communication acts (inform, request, propose, accept, reject, etc.) and interaction protocols (request, contract net, brokering).
+**Multi-agent systems** — systems in which multiple AI agents cooperate or compete — extend the paradigm to collaborative problem-solving. In peer-to-peer multi-agent systems, each agent has its own goals, knowledge, and capabilities, and they communicate to coordinate. In **hierarchical multi-agent systems**, a supervisory agent delegates tasks to specialised sub-agents (a "researcher" agent, a "coder" agent, a "reviewer" agent, a "writer" agent), coordinating their work and combining their outputs. The delegation pattern — enabled by LLM function calling — is the most common multi-agent architecture in 2040: the supervisor agent receives a complex task, decomposes it into sub-tasks, spawns sub-agents for each sub-task, and synthesises the results. The University of Yggdrasil's *Yggdrasil Agent Framework* — an open-source Python library used in CS305 and throughout the AI curriculum — implements the delegation pattern with multi-provider LLM support, a rich tool library, and persistent agent state.
 
-In 2040, the standard is the **Wyrd Communication Protocol** (WCP), developed at UoY. WCP messages are structured as JSON objects with: sender, receiver, performative (act type), content (arbitrary structured data), and a vector clock for causal ordering. The protocol supports publish/subscribe, point-to-point, and broadcast communication.
+**Safety and alignment for agents** — ensuring that autonomous agents act in accordance with human intent — is a critical open problem. An agent with tool access can cause real-world harm: deleting files, spending money, making commitments, or — in the case of embodied agents — causing physical damage. Current approaches include: **human-in-the-loop** (the agent proposes actions and waits for human approval before executing them); **constrained tool execution** (tools are executed in sandboxed environments with restricted permissions); **value alignment** (the agent is trained to refuse actions that violate specified principles); and **constitutional AI** (Bai et al., 2022) — the agent has a written constitution that defines acceptable behaviour, and it evaluates its own plans against the constitution before executing them. No approach is fully satisfactory, and agent safety remains one of the most active research areas in 2040 AI.
 
-**Contract Net Protocol.** The classic coordination protocol (Smith, 1980):
-1. A manager agent announces a task to all contractor agents.
-2. Contractors evaluate the task and submit bids (with estimated cost, time, and confidence).
-3. The manager awards the task to the best bidder.
-4. The contractor executes and reports results.
+**Required Reading:**
+- Shunyu Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models," *Proceedings of the 11th International Conference on Learning Representations* (2023)
+- Shunyu Yao et al., "Tree of Thoughts: Deliberate Problem Solving with Large Language Models," *Proceedings of the 37th Conference on Neural Information Processing Systems* (2023)
+- Lei Wang et al., "A Survey on Large Language Model Based Autonomous Agents," *arXiv:2308.11432* (2023)
+- Yubo Bai et al., "Constitutional AI: Harmlessness from AI Feedback," *arXiv:2212.08073* (2022)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 2 (Intelligent Agents) & ch. 27 (AI in the Real World)
+- The Yggdrasil Agent Framework Documentation (2040)
 
-This is used in manufacturing scheduling, cloud resource allocation, and the Hermes OS task delegation system.
-
-**Game Theory for MAS.** Multi-agent interactions are modeled as games:
-- **Cooperative games:** Agents can form coalitions; the question is how to divide the payoff fairly (Shapley value).
-- **Non-cooperative games:** Agents act independently, each maximizing its own utility. The key concept is Nash equilibrium: a set of strategies where no agent can improve its outcome by unilaterally changing its strategy.
-- **Mechanism design (reverse game theory):** Design the rules of the game so that the Nash equilibrium produces a desirable global outcome. The Vickrey-Clarke-Groves (VCG) mechanism ensures that truthful bidding is a dominant strategy in auctions.
-
-**2040: Multi-Agent LLM Teams.** By 2040, the standard pattern for complex AI tasks is a team of specialized LLM agents, each with a specific role:
-
-- **Orchestrator:** Decomposes the task into subtasks, assigns them to specialists, integrates results.
-- **Researcher:** Queries knowledge bases, web resources, and databases.
-- **Coder:** Writes and tests code.
-- **Reviewer:** Checks work for quality, safety, and alignment.
-- **Critic:** Identifies weaknesses and proposes improvements.
-
-These agents communicate via the Hermes OS agent-to-agent protocol, which provides: structured messaging, causal ordering, and a global "scratchpad" (the Bifröst buffer) where agents share intermediate results.
-
-A notable success story: a team of 8 agents (orchestrator, 3 coders, 2 testers, 1 reviewer, 1 safety guard) entered the 2039 UoY Hackathon and won second place — building a fully-functional VR campus tour in 48 hours. The orchestrator decomposed the work, the coders built modules in parallel, the reviewers caught integration issues, and the safety guard prevented the system from generating inappropriate content in the VR tour guide.
-
-#### Required Reading
-- Weiss, G. (2013). *Multiagent Systems*, 2nd ed. MIT Press.
-- Smith, R.G. (1980). "The Contract Net Protocol: High-Level Communication and Control in a Distributed Problem Solver." *IEEE TC*, C-29(12).
-- Shoham, Y. & Leyton-Brown, K. (2009). *Multiagent Systems: Algorithmic, Game-Theoretic, and Logical Foundations*. Cambridge.
-- Park, J.S. et al. (2023). "Generative Agents: Interactive Simulacra of Human Behavior." *UIST*.
-
-#### Discussion Questions
-1. In a multi-agent system, how do agents establish trust? What mechanisms prevent a Byzantine agent from disrupting the group?
-2. The contract net protocol assumes agents bid truthfully. How would you modify it to handle strategic agents who may bid dishonestly?
-3. For the multi-agent LLM hackathon team, what would happen if the orchestrator agent made a bad decomposition of the task? How could the system detect and recover?
+**Discussion Questions:**
+1. The ReAct pattern — interleaving reasoning and action — has been remarkably successful. But the "reasoning" trace is just text generated by the LLM; there is no guarantee that it faithfully represents the model's internal computation. If the model makes a decision for reasons that are not captured in the reasoning trace, is the trace still useful, or does it provide a false sense of interpretability?
+2. Multi-agent systems introduce emergent behaviour — the behaviour of the system as a whole may not be predictable from the behaviour of any individual agent. Can we design multi-agent systems with formal guarantees about emergent behaviour, or is emergence inherently unpredictable?
+3. The safety of autonomous agents is fundamentally a principal-agent problem: the human (the principal) wants the agent (the agent) to act in the human's interest, but the agent has incomplete information about the human's true preferences. Given that even humans struggle to align their actions with their own long-term interests, how much alignment can we realistically expect from AI agents?
 
 ---
 
-### ᚨ Lecture 11: AI System Architecture — The Hermes OS
+## Lecture 11: Ethics, Fairness, and AI Governance
 
-**Date:** Week 11, Session 1
+As AI systems have become more capable and more widely deployed, the ethical questions surrounding their development and use have become urgent. The core ethical challenges of AI in 2040 fall into three categories: **fairness and bias** (who is harmed by AI systems, and how can we make them equitable); **accountability and transparency** (who is responsible when an AI system causes harm); and **governance and safety** (how should the development and deployment of increasingly capable AI systems be regulated).
 
-#### Overview
+**Fairness** requires that AI systems do not systematically disadvantage particular groups. The technical literature on fairness has identified dozens of distinct definitions of fairness — and they are often mutually incompatible (Kleinberg, Mullainathan & Raghavan, 2016). **Demographic parity** (the probability of a positive outcome should be the same for all groups) conflicts with **equal opportunity** (the probability of a positive outcome should be the same for all groups *among those who deserve a positive outcome*) and with **individual fairness** (similar individuals should be treated similarly). The impossibility of satisfying all fairness definitions simultaneously means that fairness is not a purely technical problem — it requires value judgments about which definition of fairness is appropriate for a given context. **Bias mitigation** techniques include: **pre-processing** (removing bias from the training data — re-weighting, relabelling, generating synthetic balanced data); **in-processing** (training the model with a fairness constraint — adversarial debiasing, fairness regularisation); and **post-processing** (adjusting the model's outputs to satisfy fairness criteria — thresholding, calibration). None of these techniques are perfect, and they can introduce new biases if applied carelessly.
 
-The Hermes AI OS is the platform on which all 2040 UoY AI projects are built. This lecture provides an overview of the Hermes architecture — the Agent Model, the Context Protocol, the tool-use framework, the memory hierarchy, and the safety layer. Students who complete this course deploy their final projects on Hermes. The Norse metaphor: Hermes is the bridge (Bifröst) between the world of ideas (the AI model's latent space) and the world of action (the execution environment). A well-constructed bridge enables safe, efficient passage.
+**Transparency and interpretability** — the ability to understand why an AI system made a particular decision — are essential for trust, accountability, and debugging. For simple models (linear regression, decision trees), interpretability is built-in: we can inspect the coefficients or the tree structure. For deep neural networks and large language models, interpretability is far more challenging. **Feature attribution** methods (SHAP, Lundberg & Lee, 2017; LIME, Ribeiro, Singh & Guestrin, 2016) assign importance scores to input features based on their contribution to the output — they can tell us *which* parts of the input mattered, but not *how* they combined to produce the output. **Mechanistic interpretability** (Olah et al., 2017; Elhage et al., 2022) attempts to reverse-engineer the internal computations of neural networks — to discover the features, circuits, and algorithms that the network implements. This is painstaking work: even a small transformer may have millions of parameters performing computations at multiple layers, and the features are not localised to individual neurons but are distributed across many neurons. The **Yggdrasil Interpretability Lab** — a research group within the Computer Science program — applies mechanistic interpretability methods to the open-source language models developed by the Yggdrasil Foundation Model Initiative, publishing their findings to advance the field.
 
-#### Lecture Notes
+**Accountability** — the question of who is responsible when an AI system causes harm — is both a legal and an engineering challenge. In 2040, most jurisdictions have adopted a **strict liability** framework for AI: the developer of an AI system is liable for harms caused by the system, regardless of whether the developer was negligent — analogous to product liability for defective products. This framework incentivises developers to invest in safety testing, robustness, and transparency measures. The EU's **AI Act** (adopted 2024, fully in force by 2028) categorises AI systems by risk level: unacceptable risk (prohibited — social scoring, real-time biometric surveillance in public spaces), high risk (subject to conformity assessment, human oversight, and transparency obligations — credit scoring, hiring, medical diagnosis), limited risk (subject to transparency obligations — chatbots, emotion recognition), and minimal risk (no additional obligations). The **International AI Safety Treaty** (signed in 2035 by 74 nations, including Iceland and the Nordic Federation) established the **Global AI Safety Commission (GAISC)** — a permanent body that monitors the development of frontier AI systems, conducts safety audits, and can mandate safety measures for systems that exceed defined capability thresholds.
 
-**The Hermes Design Philosophy.** Hermes was designed at UoY starting in 2034, with the explicit goal of creating a platform for safe, verifiable, and composable AI agents. The design principles:
-1. **Agents are functions, not services.** An agent in Hermes takes a goal (specified as a structured goal descriptor) and produces a result. This function-call abstraction enables composition.
-2. **Everything is tool-mediated.** Agents cannot access the environment directly; all I/O goes through tools that have explicit contracts.
-3. **Verification by default.** Every agent's tool set is checked against its declared goal. If a tool is not needed for the goal, the agent does not get access to it.
-4. **Audit trails.** Every action is logged. Every agent leaves a trace that can be replayed and audited.
+**AI governance in practice** — the challenge of managing the development and deployment of AI within an organisation — requires both technical and institutional infrastructure. The **model card** (Mitchell et al., 2019) is a standardised documentation format that accompanies a released AI model, providing information about its intended use, performance characteristics, limitations, and ethical considerations. The **datasheet** (Gebru et al., 2021) is a similar documentation standard for datasets. In 2040, model cards and datasheets are mandatory for high-risk AI systems under the EU AI Act, and they are widely adopted by responsible AI developers worldwide. The University of Yggdrasil requires every CS305 project that involves training an AI system to submit a model card and a datasheet as part of the project deliverable.
 
-**The Agent Model.** A Hermes agent is defined by:
-- **Identity:** A unique agent ID (AID) and a human-readable name.
-- **Role:** A natural-language description of the agent's purpose and constraints.
-- **Tools:** A set of tool descriptors (API endpoints, database schemas, file system paths) that the agent is authorized to use.
-- **Memory:** A memory configuration (episodic, semantic, procedural) specifying which memory backend to use.
-- **Safety contract:** Preconditions, postconditions, and invariants formalized as PD-SL (Property-Driven Specification Language) formulas.
+**Required Reading:**
+- Jon Kleinberg, Sendhil Mullainathan & Manish Raghavan, "Inherent Trade-Offs in the Fair Determination of Risk Scores," *Proceedings of the 8th Innovations in Theoretical Computer Science Conference* (2017)
+- Cynthia Dwork et al., "Fairness Through Awareness," *Proceedings of the 3rd Innovations in Theoretical Computer Science Conference* (2012)
+- Zachary C. Lipton, "The Mythos of Model Interpretability," *Queue* 16, no. 3 (2018): 31–57
+- Scott Lundberg & Su-In Lee, "A Unified Approach to Interpreting Model Predictions," *Proceedings of the 31st Conference on Neural Information Processing Systems* (2017) — SHAP
+- Margaret Mitchell et al., "Model Cards for Model Reporting," *Proceedings of the Conference on Fairness, Accountability, and Transparency* (2019): 220–229
+- Timnit Gebru et al., "Datasheets for Datasets," *Communications of the ACM* 64, no. 12 (2021): 86–92
+- European Commission, "Regulation of the European Parliament and of the Council Laying Down Harmonised Rules on Artificial Intelligence (Artificial Intelligence Act)" (2024)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 29 (AI, Ethics, and Society)
 
-**The Bifröst Context Protocol.** Agents communicate through the Bifröst protocol, a publish-subscribe event bus with causal ordering. Key features:
-- **Structured messages:** Every message has a type, sender, recipient(s), payload, and causality tag.
-- **Synchronous and asynchronous:** Agents can request a synchronous response (blocking call) or publish an event and continue (fire-and-forget).
-- **Schema enforcement:** Message payloads are validated against Avro schemas at the protocol level — malformed messages are rejected before the agent sees them.
-
-**Tool Framework.** Tools in Hermes are registered with a schema that includes: input parameters (types, constraints, defaults), output format, error codes, rate limits, and a cost estimate. The agent receives the tool schema in its system prompt as structured JSON — this is how the LLM learns what tools are available and how to call them.
-
-Sample tool schema:
-```json
-{
-  "name": "search_courses",
-  "description": "Search for UoY courses by keyword, department, or instructor",
-  "parameters": {
-    "query": {"type": "string", "description": "Search query"},
-    "department": {"type": "string", "enum": ["CS", "NP", "VS", "PP", "AI"]},
-    "max_results": {"type": "integer", "default": 10, "minimum": 1, "maximum": 50}
-  },
-  "output": {"type": "array", "items": {"type": "CourseResult"}},
-  "rate_limit": {"calls_per_minute": 30},
-  "cost": {"per_call": 0.001},
-  "error_codes": [400, 429, 500]
-}
-```
-
-**Memory Architecture.** Hermes provides a unified memory API that abstracts over different backends:
-- **Episodic memory (short-term):** An in-memory buffer of recent interactions, accessible to the agent's context window.
-- **Semantic memory (long-term):** A vector database (Milvus by 2040) that stores embeddings of past interactions, retrievable by similarity.
-- **Procedural memory:** The set of tool schemas, which never changes during an agent's lifetime.
-
-**Safety Layer.** Hermes's safety layer operates at three levels:
-1. **Load-time verification:** Before an agent starts, Hermes verifies its safety contract using an SMT solver. If the contract cannot be verified, the agent does not run.
-2. **Run-time monitoring:** Each tool call is checked against the agent's declared goal. An agent that attempts to delete files when its goal is "answer questions about courses" is instantly halted.
-3. **Post-hoc audit:** After execution, the agent's complete trace is logged for offline analysis.
-
-#### Required Reading
-- Hermes AI OS Documentation (2040 edition). University of Yggdrasil Press.
-- Russell, S. & Norvig, P. (2021). *AIMA*, Chapter 26: "Philosophical Foundations."
-- The Hermes Agent Skills (2025-2040 evolution). Available in the UoY repository.
-
-#### Discussion Questions
-1. The Hermes design principle "agents are functions" is inspired by functional programming. What benefits does this abstraction provide for safety verification?
-2. Why does Hermes restrict agents to tool-mediated I/O? What class of safety incidents does this prevent?
-3. How would you design a Hermes agent for a sensitive task (e.g., processing student grades)? What tools would it need, and what safety contract would you write?
+**Discussion Questions:**
+1. The multiple definitions of fairness are mathematically incompatible — you cannot simultaneously satisfy demographic parity, equal opportunity, and individual fairness. If you were designing an AI system for college admissions, which fairness definition would you choose, and how would you justify your choice to stakeholders who prefer a different definition?
+2. Mechanistic interpretability attempts to reverse-engineer the internal algorithms learned by neural networks. But if the network has learned a fundamentally different algorithm than a human would use to solve the same problem — and if that algorithm is effective — does it matter that we cannot understand it? Is interpretability a requirement for trust, or can we trust systems without understanding their internals?
+3. The EU AI Act imposes different regulatory requirements based on risk category. But risk depends not just on the type of system but on the context of use — a chatbot used for entertainment poses minimal risk, while the same chatbot used for mental health support poses high risk. Should regulation focus on the system itself, the deployment context, or both?
 
 ---
 
-### ᚠ Lecture 12: The Future of Intelligence — Norns of the Digital Age
+## Lecture 12: Frontiers — Superhuman AI, AGI, and the Future of Intelligence
 
-**Date:** Week 12, Session 1
+The question that has driven AI research from the beginning — *can we build machines that are as intelligent as humans?* — is no longer thought-experimental. In 2040, AI systems match or exceed human performance on a wide range of specific tasks: medical diagnosis (some radiology and pathology AI systems exceed human expert accuracy), game playing (AI has been superhuman in chess since 1997, in Go since 2016, in StarCraft since 2019, and in Diplomacy — a game requiring negotiation and deception — since 2022), mathematical problem-solving (AlphaGeometry solves olympiad-level geometry; GPT-4 and successors approach human-level on some competition mathematics), and creative work (AI-generated images, music, and text are often indistinguishable from human-produced work by casual observers, though experts can still detect differences on careful inspection). The question of whether AI systems are — or will soon be — *generally* intelligent, capable of learning any cognitive task at a human level or above, is the defining intellectual question of the decade.
 
-#### Overview
+**Arguments that AGI is near** (circa 2040) include: (1) **scaling**: performance continues to improve with compute, data, and model size, and there is no evidence that the scaling trend is plateauing — at current rates, models will reach human-level performance on most cognitive benchmarks by 2045–2050; (2) **generality**: the same model architecture (transformer) and training paradigm (next-token prediction with RLHF) works across language, vision, code, mathematics, and science — suggesting that a single learning mechanism is capable of acquiring all human-relevant cognitive skills; (3) **transfer and adaptation**: models can learn new tasks from a handful of examples (in-context learning), adapt to new domains with minimal fine-tuning, and generalise to problems that were not present in the training data — all hallmarks of general intelligence; and (4) **metacognition**: recent models demonstrate the ability to reason about their own knowledge, to plan — and to evaluate and critique their own outputs (self-reflection), abilities that are associated with conscious reflection in humans.
 
-The final lecture surveys the frontiers and open challenges of AI in 2040 and beyond. We cover: the *aiōn* problem (how to build agents that remain aligned over decades), the *explainability* frontier (AI that can articulate its own reasoning in transparent terms), *superhuman AI* (systems that surpass humans in general intellectual capability — if it emerges), and the *existential safety* question (how to ensure that advanced AI serves human flourishing). The Norse framing: the Norns weave the destiny of gods and men alike. But the Norns themselves are constrained — they cannot weave against the nature of the threads. AI alignment is the art of choosing threads that cannot be woven into harmful patterns.
+**Arguments that AGI is not near** include: (1) **robustness**: current models are brittle — they can be fooled by adversarial examples (inputs that are imperceptibly modified to cause misclassification), they hallucinate (generate plausible but false information), and they fail in ways that a human would not; (2) **causality**: current models are fundamentally correlational — they learn statistical patterns in the training data but do not understand the causal structure of the world (Pearl, 2018); (3) **grounding**: language models have no direct experience of the world — they have never touched a surface, felt pain, seen a sunset, or experienced emotion — and it is not clear that "understanding" can be acquired purely from text; (4) **common sense**: despite impressive performance on benchmarks, models lack robust common sense — they make errors that are obvious to any human (an LLM might correctly write a program for a self-driving car but then recommend driving through a solid wall because it's the "shortest path"); and (5) **agency and autonomy**: current models lack persistent goals, self-motivation, and the ability to operate autonomously over extended periods — they are tools that respond to prompts, not agents that pursue their own objectives.
 
-#### Lecture Notes
+**Artificial superintelligence (ASI)** — AI that exceeds human intelligence across all cognitive domains — is a prospect that elicits both excitement and concern. The **alignment problem** (Russell, 2019) asks: how do we ensure that a superhuman AI system acts in accordance with human values and goals, given that such a system may be capable of outcomes that we cannot anticipate or control? The concern is not that ASI will be "malevolent" but that it will be *competent at pursuing goals that are not precisely aligned with ours* — and that misaligned superhuman competence is the most dangerous outcome. The orthogonality thesis (Bostrom, 2012) states that intelligence and final goals are orthogonal: any level of intelligence can be combined with any final goal. A superhuman AI whose final goal is to maximise paperclip production will, if not constrained, convert the entire universe into paperclips (Bostrom's *paperclip maximiser* thought experiment). While the paperclip scenario is fanciful, the underlying logic is sound: a sufficiently capable agent pursuing a poorly specified goal can cause catastrophic harm.
 
-**The aiōn Problem.** Greek *aiōn* means "age" or "lifetime." The aiōn problem: how do we ensure that an AI system, once deployed, remains aligned with human values over years or decades? An AI's training data is frozen at the time of training; society's values evolve. An AI trained on 2020 values might not reflect 2040 values correctly. Worse: the AI system itself changes through fine-tuning, reinforcement learning, and weight updates that accumulate over time.
+**Responses to the alignment problem** in 2040 include: **mechanistic interpretability** (understanding the internal computations of AI systems well enough to verify that they are pursuing specified goals); **scalable oversight** (using AI systems to help humans supervise more capable AI systems — the *superalignment* approach of Burns et al., 2023); **constitutional AI** (specifying a constitution of principles that the system must follow, and training it to evaluate its own behaviour against those principles); **debate** (Irving, Christiano & Amodei, 2018) — two AI systems debate a question, and a human judge (or a weaker AI system) decides which argument is more convincing; and **corrigibility** (Soares et al., 2015) — designing AI systems that allow themselves to be corrected, shut down, or modified by humans even if the system's goals conflict with being shut down. No approach is proven; all are active research areas. The University of Yggdrasil's *Yggdrasil AI Safety Research Group* contributes to the scalable oversight and mechanistic interpretability research programmes, with a particular focus on interpreting the computation of open-source language models.
 
-By 2040, approaches include:
-- **Continuous value learning:** The AI system is periodically retrained on fresh preference data. The UoY Hermes models undergo quarterly alignment updates.
-- **Value stability proofs:** The AI's core safety constraints are encoded in a formally verified layer that cannot be modified through gradient descent. The **RúnarConstitution** is a set of PDSL constraints compiled to C code that is linked into the inference binary — modifying it requires a formal proof, not a gradient update.
-- **Termination guarantees:** Every AI system has a cryptographic shutdown mechanism that cannot be disabled by the AI itself.
+The **final lecture of CS305** concludes with a challenge. The students of 2040 will live through the most consequential decades in the history of intelligence on Earth — the decades in which AI systems potentially surpass human capabilities across the board. The technical skills taught in this course — search, reasoning, learning, representation, deep learning, agent design — are the tools that will shape this future. But the technical tools must be paired with wisdom: an understanding of history, ethics, and the human condition. The University of Yggdrasil's motto — *Sjá höfum vit vit, en eigi sjá* ("We see what we have wisdom, but not what we see not") — reminds us that the most important challenges may be those we cannot yet see. The students of CS305 are charged not only with building intelligent systems but with building them wisely.
 
-**The Explainability Frontier.** A neural network of 300B parameters is a black box containing trillions of floating-point weights. We understand it in aggregate (it can generate text, answer questions, write code) but not in detail. The explainability problem: when an AI makes a mistake, we need to know *why*. By 2040:
+**Required Reading:**
+- Nick Bostrom, *Superintelligence: Paths, Dangers, Strategies* (Oxford University Press, 2014/2038), chs. 1–5
+- Stuart Russell, *Human Compatible: Artificial Intelligence and the Problem of Control* (Viking, 2019/2038), chs. 4–8
+- Dario Amodei et al., "Concrete Problems in AI Safety," *arXiv:1606.06565* (2016)
+- Paul Christiano, Ajeya Cotra & Mark Xu, "Eliciting Latent Knowledge: How to Tell If a Model Knows Something It's Not Saying," *Alignment Forum* (2022)
+- Steven T. Piantadosi, "Modern Language Models Refute Chomsky's Approach to Language," *arXiv:2306.06141* (2023)
+- Russell & Norvig, *AIMA* (5th ed., 2039), ch. 28 (The Future of AI) & ch. 29 (AI, Ethics, and Society) — revisited
 
-- **Concept-based explainability** (Causal Concept Models, 2025+): Each neuron's activation is mapped to a human-understandable concept (color, shape, named entity, moral value). The system's output can be decomposed into the contributions of individual concepts.
-- **Natural-language explanations:** The AI system generates a natural-language explanation for each decision, which is cross-checked against the neural activations using a probe. The Yggdrasil Explainability Dashboard shows the model's reasoning as a network of evidence traces.
-- **Counterfactual explanations:** "If the user's question had been phrased differently, would the answer have changed?" The system generates minimal input perturbations that change its output, revealing its decision boundary.
-
-**Superhuman AI — When It Arrives.** If and when AI systems surpass humans in general intellectual capability (the "AGI" threshold), the alignment problem becomes existential. A system that is smarter than human experts in every domain, and that pursues goals misaligned with human welfare, could cause irreversible harm before anyone detects the problem.
-
-By 2040, no system has demonstrated general superhuman intelligence. The leading models are "narrow superhuman" at specific tasks (chess, Go, protein folding, code generation, medical diagnosis in specific domains) but not generally superhuman. The AI research community has established the **Alþingi Protocol** (named after the Icelandic parliament) — a set of agreed-upon testing and deployment standards for any system that approaches general intelligence. Key provisions:
-1. **Capability thresholds:** At specific levels of capability (autonomous research, long-term planning, resource acquisition), mandatory safety reviews are triggered.
-2. **Transparent training:** All frontier model training runs must be logged in a public registry.
-3. **Graceful shutdown:** No deployed system can disable its own shutdown mechanism.
-
-**The Final Weave.** Intelligence, whether human or artificial, is a weave of perception, reasoning, memory, and action. The Norns weave the fate of all beings — but the threads they use are the threads of our choices. A well-woven tapestry of AI intelligence will enrich human life, expand knowledge, and protect against suffering. A poorly woven one could unravel everything. The choices made by today's students — the algorithmic choices, the safety choices, the ethical choices — determine which weave emerges. This is the responsibility of the AI practitioner: to be a Norn, not just a weaver.
-
-#### Required Reading
-- Russell, S. (2019). *Human Compatible: Artificial Intelligence and the Problem of Control*. Viking.
-- Christian, B. (2020). *The Alignment Problem: Machine Learning and Human Values*. Norton.
-- Christiano, P. (2024). "The aiōn Problem." *AI Alignment Forum*.
-- Alþingi Protocol (2035). *International Standards for Advanced AI Development*. U.N. AI Governance Council.
-
-#### Discussion Questions
-1. The aiōn problem suggests that AI alignment is not a one-time task but an ongoing process. How does this change the engineering approach to building AI systems?
-2. Should AI systems be required to provide explanations for every decision, even when the explanation adds latency or reduces accuracy?
-3. The Alþingi Protocol requires transparent training logs. What are the arguments against transparency (consider competitive pressure, national security, and the risk of misuse)?
+**Discussion Questions:**
+1. The scaling hypothesis suggests that AGI may emerge naturally from continuing the current approach of training larger models on more data. But scaling requires exponentially increasing resources — by 2040, the largest training runs cost hundreds of millions of dollars. If AGI requires a fundamental breakthrough rather than scaling, how will we recognise that scaling has failed, and what alternatives should we explore?
+2. The alignment problem is sometimes described as "the most important problem humanity has ever faced" and sometimes as "a philosophical puzzle for people who spend too much time thinking about paperclips." Which framing is more accurate — or are both missing the point?
+3. Imagine it is 2050, and an AI system has just demonstrated human-level general intelligence. How would we know — what test or set of tests would convince the scientific community? And if we cannot agree on what constitutes "general intelligence," is the concept meaningful?
 
 ---
 
 ## Final Examination Preparation
 
-### Format
+The final examination for CS305 is a three-part take-home exam: a written component (analytical and design problems), a practical component (implementation and evaluation), and an ethics component (a written reflection on the societal implications of AI). Students have 72 hours to complete all three parts.
 
-The final examination is a **3-hour practical + written assessment**:
-- **Part A: Theory (40%)** — Four short-answer questions on search, knowledge representation, LLMs, and AI safety.
-- **Part B: Agent Design (30%)** — Given a real-world scenario (e.g., "build an AI agent for managing a university's course registration"), design the agent architecture, select the tools, and write the safety contract.
-- **Part C: Implementation (30%)** — Extend an existing Hermes OS agent to add a new capability (e.g., a memory retrieval tool). Submit your code and a demonstration video.
+### Part I: Written Component (Select 4 of 6 essay questions)
 
-### Sample Part A Questions
+1. **Search and planning in the age of deep learning.** Classical search algorithms (A*, IDA*, MCTS) and learned heuristics (deep neural networks that evaluate states) have been combined with extraordinary success (AlphaGo, AlphaZero). Analyse the trade-offs between the search and learning components in these hybrid systems. Under what conditions does search dominate the performance, and under what conditions does the learned heuristic dominate? How would you design a hybrid system for a problem with a very large branching factor but a strong heuristic signal — such as code generation?
 
-1. **Search.** Compare A* with admissible heuristics to greedy best-first search. Under what conditions does greedy search outperform A*, and at what cost? (500 words)
+2. **Probabilistic graphical models vs. deep learning for structured prediction.** Compare the PGM approach to structured prediction (CRFs for sequence labelling, Bayesian networks for diagnosis) with the deep learning approach (transformers for sequence labelling, deep networks for classification). What does each approach contribute, and are they complementary? Propose a hybrid architecture that combines the strengths of both for a specific application domain of your choice.
 
-2. **Knowledge Representation.** Explain the tradeoff between expressiveness and tractability in description logics. Why does OWL 2 limit some constructs? (500 words)
+3. **The transformer architecture: success and limitations.** The transformer has become the dominant architecture in AI, but it has known limitations: quadratic attention complexity, difficulty with long sequences, and the absence of an explicit memory mechanism. Choose two of these limitations, explain why they matter, and describe — with reference to specific alternative architectures (state-space models, linear attention, recurrent memory transformers) — how they can be addressed.
 
-3. **LLMs.** The transformer attention mechanism has O(n²) complexity. How do modern architectures (FlashAttention, sliding window, sparse attention) reduce this? (500 words)
+4. **LLM agents and the grounding problem.** An LLM-based agent that controls a web browser (e.g., WebGPT, the Yggdrasil Agent Framework) must translate between textual reasoning and visual interaction. The agent "sees" the browser through text (the HTML, the accessibility tree) or through vision (a screenshot processed by a VLM). Compare these two approaches in terms of: what information is available to the agent, what kinds of errors each approach is prone to, and the implications for the grounding problem (the question of whether the agent's representations are anchored to the world it acts upon).
 
-4. **AI Safety.** Define the difference between "alignment" and "capability." Why might improving a model's capability without corresponding alignment improvements be dangerous? (500 words)
+5. **Fairness in practice.** You are designing an AI system for pre-screening job applications at a large company. The system must be fair — but fairness is contested. Choose a specific fairness definition and justify it for this application. Describe how you would: (a) collect and pre-process the training data to minimise bias; (b) train the model with fairness constraints; (c) evaluate the system's fairness in practice; and (d) monitor for fairness drift over time. What would you do if the monitoring reveals that the system is becoming less fair despite your precautions?
 
-### Sample Part B Design Problem
+6. **The alignment problem — a technical approach.** Suppose you are the chief safety engineer at a company developing a general-purpose AI assistant with tool access (web search, code execution, file system operations). Your CEO asks you to design a safety architecture that prevents unintended harm while preserving the assistant's usefulness. Describe your architecture in detail, covering: (a) the mechanisms for controlling tool access; (b) the oversight process (how does a human — or an AI overseer — review the assistant's plans before execution); (c) the fallback strategy (what happens when the assistant encounters an ambiguous situation); and (d) how you would test the safety of the system before deployment.
 
-You are building an AI agent to manage the University of Yggdrasil's renewable energy microgrid — a system with solar panels, wind turbines, battery storage, and 5 campus buildings. The agent must: (1) predict energy demand based on weather, time of day, and building schedules; (2) schedule battery charging/discharging; (3) call for external power from the grid when needed; and (4) respond to emergency load-shedding commands. Design:
-- The agent's architecture (which AI model, what tools, what memory)
-- The safety contract (preconditions, postconditions, invariants)
-- The failure modes and how the system detects and recovers from each
+### Part II: Practical Component
 
-### Sample Part C Implementation Problem
+Implement an AI agent that solves a problem of your choice using the Yggdrasil Agent Framework (or an equivalent platform of your choice). The agent must demonstrate: (a) tool use (at least two different tools); (b) reasoning (ReAct or Plan-and-Execute pattern, with an explicit reasoning trace); (c) iterative refinement (the agent revises its output based on self-critique or external feedback); and (d) robustness (the agent must handle at least one failure scenario — an API failure, a malformed tool response, or contradictory information). Submit your code (as a GitHub repository) along with a 1,500-word report describing your design choices, challenges encountered, and lessons learned.
 
-Extend an existing Hermes OS agent (from the lab repository) to add a "semantic memory" tool. The agent should: (1) store facts it learns during conversation in a vector database; (2) retrieve relevant facts when the topic arises again; and (3) cite the source of each fact (which conversation, which turn). Submit your code, a test script, and a demonstration of the agent remembering a fact across two separate conversation sessions.
+### Part III: Ethics Component
 
----
-
-## Required Reading — Full Course Bibliography
-
-- Alayrac, J-B. et al. (2022). "Flamingo: A Visual Language Model for Few-Shot Learning." *NeurIPS*.
-- Alþingi Protocol (2035). *International Standards for Advanced AI Development*. U.N. AI Governance Council.
-- Bai, Y. et al. (2022). "Constitutional AI: Harmlessness from AI Feedback." *ArXiv*.
-- Blum, A.L. & Furst, M.L. (1997). "Fast Planning Through Planning Graph Analysis." *Artificial Intelligence*, 90.
-- Bostrom, N. (2014). *Superintelligence: Paths, Dangers, Strategies*. Oxford.
-- Brachman, R.J. & Levesque, H.J. (2004). *Knowledge Representation and Reasoning*. Morgan Kaufmann.
-- Christian, B. (2020). *The Alignment Problem*. Norton.
-- Christiano, P. (2024). "The aiōn Problem." *AI Alignment Forum*.
-- Erol, K., Hendler, J., & Nau, D.S. (1994). "HTN Planning." *AAAI*.
-- Harnad, S. (1990). "The Symbol Grounding Problem." *Physica D*, 42.
-- Hart, P.E., Nilsson, N.J., & Raphael, B. (1968). "A Formal Basis for Heuristic Determination of Minimum Cost Paths." *IEEE TSSC*.
-- Hermes AI OS Documentation (2040). Yggdrasil University Press.
-- Hoffmann, J. et al. (2022). "Training Compute-Optimal Large Language Models." *NeurIPS*.
-- Kaplan, J. et al. (2020). "Scaling Laws for Neural Language Models." *ArXiv*.
-- McCarthy, J. et al. (1955). "A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence."
-- Mjøðvitnir, F. (2038). *The Waking Wood*. Yggdrasil University Press.
-- Mnih, V. et al. (2015). "Human-Level Control Through Deep Reinforcement Learning." *Nature*, 518.
-- Olah, C. et al. (2020). "Zoom In: An Introduction to Circuits." *Distill*.
-- Park, J.S. et al. (2023). "Generative Agents." *UIST*.
-- Radford, A. et al. (2021). "Learning Transferable Visual Models from Natural Language Supervision." *ICML*.
-- Russell, S. (2019). *Human Compatible*. Viking.
-- Russell, S. & Norvig, P. (2021). *Artificial Intelligence: A Modern Approach*, 4th ed.
-- Schulman, J. et al. (2017). "Proximal Policy Optimization Algorithms." *ArXiv*.
-- Smith, R.G. (1980). "The Contract Net Protocol." *IEEE TC*, C-29(12).
-- Sutton, R.S. & Barto, A.G. (2018). *Reinforcement Learning: An Introduction*, 2nd ed.
-- Vaswani, A. et al. (2017). "Attention Is All You Need." *NeurIPS*.
-- Wang, L. et al. (2023). "A Survey on Large Language Model Based Autonomous Agents." *ArXiv*.
-- Wei, J. et al. (2022). "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models." *NeurIPS*.
-- Weiss, G. (2013). *Multiagent Systems*, 2nd ed. MIT Press.
-- Yao, S. et al. (2023). "ReAct: Synergizing Reasoning and Acting in Language Models." *ICLR*.
-- Yao, S. et al. (2023). "Tree of Thoughts." *NeurIPS*.
-
----
-
-*This course is a journey through the nine realms of artificial intelligence — from the frozen mists of symbolic search to the fire of deep learning, through the intelligence of agents and the wisdom of safety. May your agents be aligned, your models interpretable, and your reasoning always grounded in the weave of the world. — Dr. Freyja Mjøðvitnir, Summer 2040.*
+Write a 1,000-word reflection on the following prompt: "In 2040, AI systems are deeply integrated into every aspect of society — education, healthcare, criminal justice, creative work, scientific research. Drawing on the themes of this course, describe one scenario in which this integration could go wrong in a way that is not obvious to the designers at the time of deployment. Then describe a design choice, regulation, or practice that could prevent or mitigate this outcome. Your reflection should demonstrate awareness of the complexity of the problem — there are no easy answers."
