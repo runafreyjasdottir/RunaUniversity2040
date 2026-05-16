@@ -1,456 +1,731 @@
-# CS306: Software Testing & Quality Assurance
+# CS306: Human-Computer Interaction
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4
-**Prerequisites:** CS201 — Data Structures & Algorithms II; CS203 — Database Systems; CS206 — Software Engineering Principles
-**Description:** Software testing is the act of trading time for confidence. Every test you write today is a bet: a bet that the time spent writing and maintaining the test will be less than the time you would lose finding and fixing the bug it catches. This course transforms students from programmers who "test sometimes" into disciplined practitioners who test strategically, systematically, and continuously. It covers the full spectrum of testing — from unit tests (the foundation) through integration tests (the glue) to end-to-end tests (the contract), from property-based testing (the algorithm's best friend) to fuzz testing (the security scryer), from mutation testing (the test of the tests) to performance testing (the scaler's crucible). Students learn to wield the testing tools of 2040: pytest with advanced plugins, property-based testing with Hypothesis, fuzzing with LibFuzzer and AFL++, contract testing with Pact, mutation testing with MutPy, and the continuous integration pipelines (GitHub Actions, GitLab CI) that enforce quality gates. The course also covers the organisational dimensions of quality — code review, static analysis, technical debt management, and the psychology of bug prevention. The Norse framing is the *Gjallarhorn* — a horn whose sound reveals what is hidden. Testing is a continuous blowing of the horn on our own code, revealing the hidden bugs before they reach the user.
+**Semester:** Year 3, Semester 2
+**Prerequisites:** CS102 (Web Development & User Interfaces), CS205 (Machine Learning & Data Mining)
+**Instructor:** Dr. Álfhildr Lúsbrá, Faculty of Computational Arts & Design
+
+> *"A rune that no one can read is not a rune — it is a scratch on stone. A user interface that no one can use is not an interface — it is a wall. The craft of HCI is the craft of carving runes that speak."* — Álfhildr Lúsbrá, *The Carved Interface* (2037)
 
 ---
 
-## Lecture 1: The Economics of Testing — Why We Test, When We Test, and When We Don't
+## Course Description
 
-Testing is not a technical activity; it is an economic one. Every test is an investment: you spend time writing it today in order to save time (or money, or reputation, or lives) later. The economics of testing determine the optimal amount of testing for a given system — and the answer varies wildly depending on what the system does.
+Human-Computer Interaction (HCI) is the study of how people interact with technology and how to design systems that are usable, accessible, and delightful. In 2040, HCI extends far beyond screen-based interfaces: neural interfaces read brain signals directly, spatial computing overlays digital information on the physical world, and AI agents act as conversational intermediaries. This course covers UX research methods, interaction design principles, accessibility standards, spatial and neural interface design, and the ethical implications of increasingly intimate human-computer relationships.
 
-The **cost of defect curve** has been known since the 1970s (Boehm, 1976): the cost of fixing a bug increases exponentially as it moves through the development lifecycle. A bug caught during requirements analysis costs $100 to fix. A bug caught during design costs $500. A bug caught during coding costs $1,000. A bug caught during testing costs $5,000. A bug caught in production costs $10,000–$100,000. For safety-critical systems (avionics, medical devices, autonomous vehicles), a production bug can cost lives and billions of dollars — the Boeing 737 MAX disasters (2018–2019) cost over $20 billion and 346 lives, traced to a software flaw that better testing might have caught.
-
-The **testing pyramid** (Cohn, 2009) provides a framework for allocating testing effort:
-- **Base — Unit tests (70%):** Test individual functions, methods, or classes in isolation. Fast (milliseconds), reliable, and cheap to write. Provide the foundation of test coverage.
-- **Middle — Integration tests (20%):** Test interactions between components — APIs, database queries, service boundaries. Slower (seconds) but test the "glue."
-- **Top — End-to-end (E2E) tests (10%):** Test the full system, from UI to backend to database. Slow (minutes), fragile, and expensive. Test the most valuable user journeys.
-
-The pyramid is a heuristic, not a law. For a microservices architecture, integration tests may dominate (because the service boundaries are where most bugs live). For a data-processing pipeline, unit tests on the transformation functions may dominate. The art is knowing when to deviate from the pyramid.
-
-**Code coverage** is the most commonly abused metric in software engineering. Line coverage, branch coverage, path coverage, and condition coverage each measure a different aspect of "how much code is exercised by the tests." A team that targets 100% line coverage will inevitably write surface-level tests that tick boxes without finding bugs. A team that targets meaningful behavioural coverage — covering the edge cases, the error paths, the boundary conditions — will find bugs even at 60% line coverage. The lesson: coverage is a diagnostic, not a target.
-
-**Shift-left testing** is the practice of moving testing earlier in the development lifecycle: test requirements (with specification-based testing), test design (with architectural testability reviews), test code during development (with TDD, incremental testing), and test deployments (with canary releases and blue-green deployments). Shift-left reduces the cost of defects by catching them when they are cheapest to fix.
-
-**Required Reading:**
-- Barry W. Boehm, *Software Engineering Economics* (Prentice-Hall, 1981), chs. 3–4 — the cost of defect curve
-- Mike Cohn, *Succeeding with Agile: Software Development Using Scrum* (Addison-Wesley, 2009), ch. 10 — the testing pyramid
-- Cem Kaner, James Bach & Bret Pettichord, *Lessons Learned in Software Testing* (Wiley, 2001), lessons 1–15
-- Lisa Crispin & Janet Gregory, *Agile Testing: A Practical Guide for Testers and Agile Teams* (Addison-Wesley, 2009), chs. 1–5
-- UoY Testing Economics Simulator: Calculate the optimal test investment for different project types (2040)
-
-**Discussion Questions:**
-1. The testing pyramid recommends 70/20/10 split for unit/integration/E2E tests. Under what circumstances would you deviate from this ratio — and what evidence would convince you to change?
-2. Code coverage is widely used as a quality gate in CI pipelines. What are the strongest arguments for and against mandating a minimum coverage percentage?
-3. Shift-left testing moves testing earlier, but it also moves testing to earlier *phases of understanding* — requirements may be incomplete, design may be unsettled. How do we test what we don't yet understand?
+The Norse metaphor: the rune-carver who shapes the stone so that the message is clear to all who see it. A well-carved runestone communicates across centuries and cultures — the message persists because the carving is precise, the layout is readable, and the meaning is encoded in a form the reader can decode. So too with HCI: the designer carves the interface so that the user's intention flows smoothly into computational action.
 
 ---
 
-## Lecture 2: Unit Testing — The Foundation
+## Lectures
 
-Unit testing is the practice of testing individual units of code — functions, methods, classes — in isolation from their dependencies. A unit test exercises one behaviour of one unit, running in milliseconds, with no network calls, no database queries, no file I/O. The **FIRST principles** (Object Mentor, 2006) define the properties of a good unit test:
+### ᚠ Lecture 1: The Carved Interface — Foundations of HCI
 
-- **Fast:** Tests run in milliseconds. If they take seconds, developers won't run them.
-- **Isolated:** A test never depends on other tests. No shared state, no test ordering dependencies.
-- **Repeatable:** A test produces the same result every time, on every machine. No flakiness from timing, network, or environment.
-- **Self-verifying:** The test passes or fails based on its own assertions. No manual inspection of output.
-- **Timely:** Tests are written before (TDD) or alongside (defensive testing) the production code.
+**Date:** Week 1, Session 1
 
-**Test doubles** replace real dependencies in unit tests:
-- **Stubs:** Provide canned answers to calls made during the test. "When you ask for the user's name, return 'Alice'."
-- **Mocks:** Verify interactions — "Was this method called with these arguments?" Mocks assert on behaviour, not state.
-- **Fakes:** Lightweight implementations of real dependencies (an in-memory database instead of PostgreSQL).
-- **Spies:** Record calls for later verification without replacing the dependency's behaviour.
-- **Dummies:** Passed but never actually used.
+#### Overview
 
-The **arrange-act-assert** pattern structures every test:
-```python
-def test_discount_for_loyal_customers():
-    # Arrange
-    customer = Customer("Alice", loyalty_years=10)
-    calculator = DiscountCalculator()
-    
-    # Act
-    discount = calculator.calculate(customer)
-    
-    # Assert
-    assert discount == 0.15  # 15% for 10-year loyalty
+This lecture establishes the foundations of HCI as a discipline — its history, its core concepts (affordances, signifiers, feedback, conceptual models, the gulf of execution and evaluation), and the three pillars of usability: effectiveness, efficiency, and satisfaction. We trace HCI from the early days of command-line interfaces through the GUI revolution (Xerox Star, Macintosh, Windows), the web era, mobile touch interfaces, and into the 2040 landscape of gesture, voice, neural, and spatial interaction. The Norse framing: the evolution of writing technology from runestones (public, formal, slow) to parchment (portable, refined) to the printing press (mass-produced) to digital text (instant, searchable, augmentable). Each transition changed what was possible. So too with interfaces.
+
+#### Lecture Notes
+
+HCI emerged as a distinct field in the early 1980s, coinciding with the transition from professional computer operators (who tolerated cryptic interfaces as part of their job) to general users (who would not). The founding text, *The Psychology of Human-Computer Interaction* (Card, Moran, Newell, 1983), applied cognitive psychology to predict and explain user behavior at the interface.
+
+**Don Norman's Design Principles.** Norman's *The Design of Everyday Things* (1988, revised 2013) established the vocabulary that still frames HCI education:
+
+- **Affordances:** The relationship between a physical object and a person — what actions are possible. A button affords pushing; a handle affords pulling; a touch interface affords tapping, swiping, pinching. In 2040, virtual affordances in VR/AR are designed using haptic feedback and visual cues (glow, shadow, animation) to convey what is possible.
+
+- **Signifiers:** The perceivable indicator of an affordance. A door handle signifies "pull." A flat plate on a door signifies "push." In software, a blue underlined text signifies "clickable link." Signifiers must be visible, unambiguous, and consistent. A signifier that misleads causes the gulf of execution (user can't figure out what to do).
+
+- **Feedback:** The system must communicate the result of an action. A button click produces a visual press animation, a sound, and changes the interface state. In 2040, feedback is multimodal (visual + audio + haptic) and immediate (<50ms for touch interactions, <200ms for voice).
+
+- **Conceptual Models:** The user's mental model of how the system works. A good design makes the system's conceptual model match the user's mental model. A trash can on the desktop maps to "throwing things away" — the user knows that dragged files end up there and can be restored if needed. A poorly designed system gives the user an incorrect or incomplete conceptual model, leading to errors and frustration.
+
+- **The Gulfs of Execution and Evaluation:** The gulf of execution is the gap between the user's goals and the available actions. The gulf of evaluation is the gap between the system's state and the user's understanding of that state. Good design minimizes both gulfs.
+
+**The Three Usability Metrics (ISO 9241-11).**
+1. **Effectiveness:** Can users complete their tasks accurately? Measured by error rate and task completion rate.
+2. **Efficiency:** How quickly can users complete tasks? Measured by time-on-task and number of steps.
+3. **Satisfaction:** How pleasant is the experience? Measured by self-report (SUS, NPS, UEQ) and biometric signals (facial expression, heart rate variability, skin conductance).
+
+**2040: The Post-Screen Era.** By 2040, touchscreens dominate but are being supplemented by:
+- **Voice interfaces (40% of interactions):** Smart speakers, AI assistants, voice-controlled environments. The challenge: voice is serial (you can only say one thing at a time) and leaves no persistent record.
+- **Gesture interfaces (15%):** Hand tracking (Leap Motion, Apple Vision Pro, Meta Quest Pro) enables manipulative interaction. The challenge: gorilla arm fatigue (holding arms up for extended periods).
+- **Neural interfaces (10%):** Non-invasive EEG headsets for cursor control, typing, and simple commands. Invasive BCIs (Neuralink, Synchron) for people with paralysis. The challenge: noise, calibration, and the ethical boundary of mind-reading.
+- **Spatial computing (25%):** AR glasses that overlay digital information on the physical world. The challenge: information density (don't clutter the user's field of view) and social acceptability (glasses must look normal).
+
+#### Required Reading
+- Norman, D. (2013). *The Design of Everyday Things*, revised and expanded ed. Basic Books. Chapters 1-2.
+- Card, S.K., Moran, T.P., & Newell, A. (1983). *The Psychology of Human-Computer Interaction*. L. Erlbaum. Chapter 1.
+- ISO 9241-11 (2018). *Ergonomics of Human-System Interaction — Part 11: Usability*.
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 1: "Rune-Carving as Interaction Design." Yggdrasil University Press.
+
+#### Discussion Questions
+1. Apply Norman's seven stages of action (goal → plan → specify → perform → perceive → interpret → compare) to the task of ordering a coffee through a mobile app. Where are the gulfs?
+2. Voice interfaces have no visual persistence. Design a voice interface for checking train departure times. How do you compensate for the lack of a visual display?
+3. A neural interface that reads brain signals could help people with paralysis communicate. At what point does such an interface cross the line from "assistive technology" to "privacy violation"?
+
+---
+
+### ᚢ Lecture 2: UX Research — Listening to the Weave
+
+**Date:** Week 2, Session 1
+
+#### Overview
+
+The foundation of good design is understanding the user. UX research encompasses the methods for discovering what users need, how they behave, and what they value. This lecture covers qualitative methods (interviews, contextual inquiry, diary studies, focus groups), quantitative methods (surveys, analytics, A/B testing, log analysis), and the 2040 integration of AI-assisted UX research (sentiment analysis of user feedback, automated usability testing with AI agents). The Norse metaphor: the *vǫlva's spá* (prophecy) — the seeress who listens to the whispers of the threads to understand the pattern of fate. UX research is the practice of listening to users to understand the pattern of their needs.
+
+#### Lecture Notes
+
+**Qualitative Methods — Understanding the Why.**
+
+*Interviews.* The most direct method: sit down with users and ask them about their experiences, needs, and frustrations. Three types:
+- **Structured:** Fixed questions, asked in order. Produces comparable, shallow data.
+- **Semi-structured:** A question guide with flexibility to follow interesting threads. The 2040 standard — rich data with some comparability.
+- **Unstructured:** Open conversation around a topic. Deepest data, hardest to analyze.
+
+The critical interviewing skill: *active listening* paired with *the five whys* — asking "why" five times to drill past surface answers to root causes. A user says "I can't find the search button." Why? "It's hidden behind a menu." Why is it hidden? "The designer prioritized visual minimalism." Why? The root cause is not the button placement but the design philosophy.
+
+*Contextual Inquiry.* Observe users in their natural environment. This method reveals what users *actually do*, as opposed to what they *say* they do. A classic HCI study: users report "I check my email three times a day" but logs show they check it 30+ times. The gap between reported and actual behavior is wide. Contextual inquiry bridges it.
+
+*Diary Studies.* Users log their interactions with a system over days or weeks. Captures longitudinal patterns — how usage evolves, what triggers frustration, what delights. In 2040, AI agents on the user's device can automatically log interaction patterns (with consent), reducing the burden on the participant while providing richer data.
+
+**Quantitative Methods — Measuring the What.**
+
+*Surveys.* The workhorse of quantitative UX research. Key instruments:
+- **SUS (System Usability Scale):** 10-item questionnaire producing a score out of 100. Quick, reliable, and technology-agnostic.
+- **UEQ (User Experience Questionnaire):** 26 items measuring six dimensions (attractiveness, perspicuity, efficiency, dependability, stimulation, novelty).
+- **NPS (Net Promoter Score):** "How likely are you to recommend this product to a friend?" Controversial in academic UX but widely used in industry.
+
+*Analytics and Log Analysis.* Every interaction with a digital system can be logged. In 2040, the UoY's **Verðandi Analytics** platform captures: click events, navigation paths, time-on-task, error rates, session duration, and feature adoption rates. Analysis identifies: drop-off points (where users abandon tasks), rage clicks (repeated clicking on non-interactive elements), and the "bottleneck pages" where users spend disproportionately long.
+
+*A/B Testing.* Randomly assign users to variant A or variant B, measure the outcome (conversion rate, task completion time, satisfaction). In 2040, AI-driven multivariate testing tests dozens to hundreds of variants simultaneously. The **Huginn Experiment Engine** at UoY manages continuous experiments across all student-facing systems, optimizing for usability and learning outcomes.
+
+**2040: AI-Assisted UX Research.** AI tools augment but do not replace human researchers:
+- **Automated sentiment analysis:** User feedback (open-ended survey responses, support tickets, social media mentions) is automatically classified as positive, negative, or neutral, and the topics are extracted via topic modeling.
+- **Automated usability testing:** AI agents simulate user behavior, exploring the interface and identifying violations of known usability heuristics. The **RúnarTester** system at UoY achieves 80% agreement with human usability experts on web interfaces.
+- **Behavioral analytics:** Machine learning models detect patterns in user behavior that correlate with churn, frustration, or abandonment — hours before any survey would reveal them.
+
+#### Required Reading
+- Courage, C. & Baxter, K. (2005). *Understanding Your Users: A Practical Guide to User Research Methods*. Morgan Kaufmann.
+- Sauro, J. & Lewis, J.R. (2016). *Quantifying the User Experience*, 2nd ed. Morgan Kaufmann.
+- ISO 25010 (2011). *Systems and Software Quality Requirements and Evaluation (SQuaRE)*.
+- Norman, D. (2013). *The Design of Everyday Things*, Chapter 6: "Design Thinking."
+
+#### Discussion Questions
+1. A user reports "I love this app" but analytics show they only use it once a week for 30 seconds. Which data source do you trust, and why?
+2. AI-assisted UX research promises to automate much of the analysis. What aspects of UX research should never be automated? Why?
+3. Design a diary study for a new campus navigation app. What would you ask participants to log, and for how long?
+
+---
+
+### ᚦ Lecture 3: Interaction Design — Shaping the Conversation
+
+**Date:** Week 3, Session 1
+
+#### Overview
+
+Interaction design is the craft of designing the dialogue between user and system. This lecture covers the fundamental interaction paradigms (command, menu, direct manipulation, form fill, conversational), interaction styles across modalities (click, touch, gesture, voice, gaze, thought), and the design patterns that make interactions feel natural, predictable, and efficient. The Norse metaphor: the flyting — the formal exchange of insults between Norse warriors that established hierarchy and resolved tension without violence. A good interaction design is like a well-performed flyting: it follows conventions, establishes a rhythm, and reaches a satisfying resolution.
+
+#### Lecture Notes
+
+**Interaction Paradigms.**
+
+1. **Command line (oldest, still alive):** The user types commands. Maximum power, steepest learning curve. By 2040, command-line interfaces persist in developer tools and system administration — but they are increasingly augmented by LLMs that translate natural language into commands.
+
+2. **Menu-driven:** The system presents available options; the user selects. Found in ATMs, set-top boxes, and the early web. Limitations: menus impose the designer's hierarchy on the user's tasks. Nielsen's law: the number of menu levels should be ≤ 3.
+
+3. **Direct manipulation (Shneiderman, 1983):** The user directly manipulates on-screen objects. Key characteristics: continuous representation of the object, physical actions (drag, drop, resize) instead of complex syntax, and immediate feedback. Examples: drawing programs, CAD systems, file managers, the touchscreen interface. By 2040, spatial computing extends direct manipulation to 3D — grab a virtual object with your hand, rotate it, place it in the world.
+
+4. **Conversational (voice/LM-based, 2020+):** The user converses with an AI in natural language. By 2040, this is the dominant paradigm for complex tasks ("Plan a trip to Iceland for my family in June"). The challenge: the computer is an unreliable conversational partner — it may misunderstand, hallucinate, or fail to ask clarifying questions.
+
+5. **Gesture-based (2040 growth):** The user gestures (sweep, pinch, point) to interact. Mature in VR/AR, emerging in smart home and automotive.
+
+**Interaction Design Patterns (Tidwell, 2010, 2040 edition).**
+
+- **Overview + Detail:** Show the big picture and let the user zoom into details. Maps, code editors, image viewers.
+- **Progressive Disclosure:** Show only what the user needs now. Reveal more on demand. Settings panels, wizards.
+- **Wizard:** Step-by-step guided task completion. Complex configuration (router setup, tax filing).
+- **Undo/Redo:** The user's safety net. Every action should be reversible. In 2040, the **Urðr Time Machine** in Hermes applications provides visual timeline-based undo — users scroll back through their interaction history and "undo" any step.
+- **Autocomplete/Suggestion:** The system predicts what the user wants and offers suggestions. Search engines, command palettes (Cmd+K in modern IDEs), LLM chat completion.
+- **Confirmation Dialogs:** "Are you sure?" — overused in 2020, rare in 2040. The 2040 principle: assume the user's intent unless the action is irreversible (delete account, pay money, erase data).
+
+**Fitts' Law.** The time to acquire a target (click, tap, grab) is a function of the distance to the target and its size: T = a + b · log₂(1 + D/W). Implications: corner and edge positions are "infinite size" (the cursor stops at the edge), so put critical controls (Start menu, Dock) at screen edges. In 2040, Fitts' Law applies to VR/AR interaction: the law extends to 3D with the addition of depth (the target's distance in z increases the effective size).
+
+**Hick's Law.** Decision time increases logarithmically with the number of choices: T = a + b · log₂(n). Keep choices per screen to 3-7 (the "magic number seven, plus or minus two"). This underlies the 2040 design principle of progressive disclosure: show 3 primary choices, offer "more options" for the rest.
+
+#### Required Reading
+- Shneiderman, B. et al. (2016). *Designing the User Interface*, 6th ed. Pearson. Chapters 1-3.
+- Tidwell, J. (2010). *Designing Interfaces*, 2nd ed. O'Reilly.
+- Fitts, P.M. (1954). "The Information Capacity of the Human Motor System in Controlling the Amplitude of Movement." *Journal of Experimental Psychology*, 47(6).
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 4: "The Flyting as Interaction Pattern."
+
+#### Discussion Questions
+1. Progressive disclosure is a tradeoff between simplicity (fewer visible options) and discoverability (hidden options may never be found). How do 2040 interfaces resolve this tradeoff?
+2. Fitts' Law predicts that corner targets are fastest. How does this apply to VR/AR interfaces, which have no fixed "corners"?
+3. Conversational AI interfaces violate Hick's Law: there are no explicit choices, just an open text field. Are these interfaces harder or easier to use than menu-driven interfaces? Why?
+
+---
+
+### ᚲ Lecture 4: Accessibility — The Interface for All Beings
+
+**Date:** Week 4, Session 1
+
+#### Overview
+
+Accessible design is not charity — it is good design that benefits everyone. Approximately 15% of the global population (over 1.2 billion people) has some form of disability. This lecture covers the categories of disability (visual, hearing, motor, cognitive, speech), the assistive technologies that bridge the gap (screen readers, switch control, voice control, eye tracking, augmentative and alternative communication — AAC), and the design principles that make interfaces accessible to all (WCAG 3.0 guidelines, universal design, inclusive design, the curb-cut effect). The Norse metaphor: the god Hǫðr — blind, yet one of the Aesir, who participates fully in the life of the gods until the tragedy engineered by Loki. A system designed without Hǫðr in mind fails its duty to the full community of users.
+
+#### Lecture Notes
+
+**The Web Content Accessibility Guidelines (WCAG).** By 2040, WCAG 3.0 (published 2024) is the global standard for digital accessibility. It organizes success criteria under four principles — POUR:
+- **Perceivable:** Information and UI components must be presentable to users in ways they can perceive.
+- **Operable:** UI components and navigation must be operable by all users.
+- **Understandable:** Information and UI operation must be understandable.
+- **Robust:** Content must be robust enough to be interpreted reliably by a wide variety of user agents, including assistive technologies.
+
+Key WCAG 3.0 requirements:
+- **Contrast ratio:** Minimum 4.5:1 for normal text, 3:1 for large text.
+- **Keyboard accessibility:** Everything must be operable via keyboard alone, with visible focus indicators.
+- **Screen reader support:** Semantic HTML (headings, landmarks, alt text, ARIA labels).
+- **Captions and transcripts:** All audio and video content must have text alternatives.
+- **Text spacing:** Line height 1.5×, paragraph spacing 2×, letter spacing 0.12×.
+
+**The Curb-Cut Effect.** The "curb cut" — the ramp from the sidewalk to the street — was designed for wheelchair users but benefits everyone: parents with strollers, delivery workers with dollies, cyclists, travelers with rolling luggage. In HCI, designing for accessibility often benefits all users: captions help users in noisy environments and non-native speakers; high contrast helps users in bright sunlight; keyboard shortcuts help power users. This is the curb-cut effect.
+
+**Assistive Technologies in 2040.**
+
+- **Screen readers (JAWS, NVDA, VoiceOver, TalkBack):** By 2040, AI-enhanced screen readers can describe images, interpret complex data visualizations, and summarize long pages. The **Huginn Screen Reader** developed at UoY provides natural-language descriptions of visual layouts: "A form with fields for name, email, and a submit button. Three navigation links at the top: Courses, Schedule, Profile."
+
+- **Switch control:** For users with limited motor control. A single switch (breath puff, eyebrow raise, finger twitch) cycles through interface elements. This is the most demanding accessibility test: if an interface works with a single switch, it works for everyone.
+
+- **Eye tracking:** By 2040, consumer VR/AR headsets include eye tracking. Users with motor disabilities can control the interface with gaze + dwell (fixate on a target for 500ms to click) or gaze + blink.
+
+- **Brain-computer interfaces (BCI):** For users with severe motor disabilities (ALS, locked-in syndrome). EEG-based BCIs (non-invasive) enable cursor control and typing at 20-40 characters per minute in 2040. The **RúnarBCI** project at UoY aims to reach 60 CPM by 2042.
+
+- **AAC (Augmentative and Alternative Communication):** For non-speaking users. Speech-generating devices and apps. By 2040, AI-powered AAC systems predict the user's intended message from partial input (one tap predicts "I want to go to the cafeteria").
+
+**Universal Design Principles (North Carolina State, 1997, extended for 2040).**
+1. **Equitable use:** The design is useful and marketable to people with diverse abilities.
+2. **Flexibility in use:** Accommodates a wide range of preferences and abilities.
+3. **Simple and intuitive:** Easy to understand regardless of experience, language, or cognitive ability.
+4. **Perceptible information:** Communicates necessary information regardless of ambient conditions or sensory abilities.
+5. **Tolerance for error:** Minimizes hazards and adverse consequences of accidental actions.
+6. **Low physical effort:** Can be used efficiently and comfortably with minimum fatigue.
+7. **Size and space for approach and use:** Appropriate size for reach, manipulation, and use regardless of body size, posture, or mobility.
+8. **AI explicability (2040 addition):** The interface must communicate what the AI system knows, is doing, and why.
+
+#### Required Reading
+- WCAG 3.0 (2024). *Web Content Accessibility Guidelines*. W3C.
+- Henry, S.L. (2014). *Just Ask: Integrating Accessibility Throughout Design*. 2nd ed. Lulu.com.
+- Norman, D. (2013). *The Design of Everyday Things*, Chapter 7: "Design in the World of Business."
+- Connolly, M. et al. (2036). "Accessibility in Spatial Computing." *ACM ASSETS*.
+
+#### Discussion Questions
+1. A voice-controlled smart home interface is inherently inaccessible to a deaf user. How would you redesign such an interface to be universally accessible?
+2. The curb-cut effect suggests that designing for accessibility benefits all users. Give five examples of accessibility features that are now used by the general population.
+3. AI-powered accessibility tools (screen readers that describe images, AAC that predicts text) make tradeoffs between speed and accuracy. At what point does prediction become "putting words in the user's mouth"?
+
+---
+
+### ᚷ Lecture 5: Spatial Computing — The Augmented Realms
+
+**Date:** Week 5, Session 1
+
+#### Overview
+
+Spatial computing — the overlaying of digital information on the physical world — is by 2040 a mature, mass-market technology. This lecture covers the interaction design principles for augmented and virtual reality: spatial affordances, depth cues, manipulation in 3D, navigation in virtual spaces, and the ergonomic challenges (motion sickness, fatigue, social acceptability). The Norse metaphor: the *Urðarbrunnr* (Well of Urðr) — a location that exists simultaneously in the physical world (at the root of Yggdrasil) and in the spiritual world (where the Norns weave). Spatial computing creates such dual-presence: digital objects that exist in our physical space, extending our reality.
+
+#### Lecture Notes
+
+**The Spectrum of Reality-Virtuality (Milgram & Kishino, 1994).**
+- **Real environment:** What you see without augmentation.
+- **Augmented Reality (AR):** Digital overlay on the real world (smart glasses, phone camera).
+- **Augmented Virtuality (AV):** Real objects inserted into a virtual world.
+- **Virtual Reality (VR):** Complete immersion in a virtual environment.
+
+By 2040, AR is the dominant paradigm — Apple Vision Pro 4, Meta Quest Pro 3, and the UoY's own **RúnarLens** (developed in partnership with Nordic optics company Horus) are worn by 30% of UoY students during a typical day. VR is used for specialized applications: immersive learning, architectural walkthroughs, and therapeutic scenarios.
+
+**Interaction in 3D.**
+
+*Selection.* How does the user select a virtual object?
+- **Ray casting:** Point from the controller or hand toward the object. Most common, but suffers from jitter at long distances.
+- **Gaze + confirm:** Look at the object, then perform a confirm action (tap, voice, blink). Low effort but imprecise.
+- **Hand proximity:** Reach out and touch the virtual object. Most natural but limited to arm's reach (~1m).
+
+*Manipulation.* Once selected, how does the user manipulate the object?
+- **Direct manipulation (proximal):** Grab with hand, move, rotate, scale with the other hand. The most intuitive.
+- **Gizmo-based (distal):** Select object, see a 3D manipulation widget (translate/rotate/scale rings). High precision, requires training.
+- **Voice + gesture:** "Move the chair... here" (point to location). Combines natural language with spatial pointing.
+
+*Navigation.* How does the user move through the virtual space?
+- **Physical walking:** The gold standard — the user's real body movement maps 1:1 to virtual movement. Challenges: limited tracking space, physical obstacles.
+- **Teleportation:** Point to a location and instantly appear there. Low motion sickness risk. Most common in VR experiences.
+- **Joystick/thumbstick locomotion:** Smooth movement, highest motion sickness risk. Used by experienced VR users.
+
+**The Motion Sickness Problem.** Vection (the perception of self-motion) that conflicts with the vestibular system (which senses no acceleration) causes motion sickness. By 2040, solutions include:
+- **Comfort vignettes:** The field of view narrows during artificial movement, reducing vection.
+- **Translational gain mismatch:** Reduce the visual speed relative to real leg movement (for walking-in-place interfaces).
+- **Galvanic vestibular stimulation (GVS):** Low-current electrical stimulation of the vestibular nerve to create the sensation of acceleration. Experimental in 2040, available in high-end VR systems.
+
+**Spatial Affordances.** In the physical world, affordances are obvious: a chair affords sitting because you've seen chairs before. In spatial computing, affordances must be designed:
+- **Glow effect:** An interactable object glows when the user's gaze or hand approaches it.
+- **Outline:** Selected objects get a colored outline (cyan in the UoY framework).
+- **Physics simulation:** Objects react to gravity, collisions, and forces — the user understands their material properties through behavior.
+- **Sound:** A soft chime when an object becomes interactable; a click when selected; a satisfying thud when placed.
+
+**2040: The UoY Spatial Campus.** By 2040, the UoY campus has a full spatial computing layer accessible through RúnarLens: digital wayfinding arrows on the floor ("Turn left for the Computational Arts building"), virtual whiteboards in study rooms (visible to all students wearing lenses), interactive 3D models in the anatomy lab (floating organs students can examine from all angles), and a shared virtual space ("The Longhouse") where students gather for social events, study groups, and the annual course registration festival.
+
+#### Required Reading
+- Milgram, P. & Kishino, F. (1994). "A Taxonomy of Mixed Reality Visual Displays." *IEICE Transactions on Information Systems*, E77-D(12).
+- Norman, D. (2013). *The Design of Everyday Things*, Chapter 7: "Spatial Design."
+- LaViola, J. et al. (2017). *3D User Interfaces: Theory and Practice*, 2nd ed. Addison-Wesley.
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 8: "The Dual Presence."
+
+#### Discussion Questions
+1. AR interfaces overlay information on the physical world. How do you prevent information overload — the user seeing too many virtual objects and losing track of the physical environment?
+2. Why does teleportation cause less motion sickness than smooth locomotion in VR? What does this tell us about the perceptual mechanisms underlying motion sickness?
+3. Design a spatial computing interface for the UoY cafeteria — what information would you overlay, and how would the user interact with it while holding a tray of food?
+
+---
+
+### ᚹ Lecture 6: Voice and Conversational Interfaces — The Spoken Word
+
+**Date:** Week 6, Session 1
+
+#### Overview
+
+By 2040, voice is the fastest-growing interaction modality, driven by the maturity of large language models and speech recognition. This lecture covers the design of conversational interfaces: turn-taking, grounding, error recovery, persona design, and the unique challenges of voice-only interaction (no visual persistence, ambient noise, privacy concerns). The Norse metaphor: the *þáttr* — a short narrative told aloud in the longhouse, with the storyteller adjusting the tale based on the audience's reactions. A well-designed voice interface is a digital storyteller: it responds to the user's cues, adapts its pacing, and keeps the conversation flowing.
+
+#### Lecture Notes
+
+**Conversational Design Principles.**
+
+*Turn-Taking.* Humans take turns in conversation with remarkable precision — the average gap between turns is 200ms. Voice interfaces must match this rhythm. A delay longer than 1 second breaks the conversational flow. The 2040 standard: the system responds to simple commands in <300ms, and to complex queries in <2s with an acknowledgement (a subtle chime or "Let me think about that...") during the delay.
+
+*Grounding (Clark & Brennan, 1991).* In conversation, speakers establish common ground — shared understanding that accumulates over the dialogue. A voice interface must ground each contribution. The system should:
+- **Acknowledge receipt:** "I heard you say 'set thermostat to 22 degrees'."
+- **Confirm understanding:** "So you want the living room temperature at 22°C. Is that correct?"
+- **Signal understanding:** "Got it" or "OK" after each user contribution, even during extended narration.
+
+*Error Recovery.* In voice interfaces, errors are inevitable (misrecognition, misunderstanding, ambient noise). The system must recover gracefully:
+- **Rejection of low-confidence inputs:** If speech recognition confidence < 80%, ask "Sorry, could you repeat that?" rather than guessing.
+- **Clarification:** If the intent is unclear, ask specific questions rather than generic "I don't understand." Example: "Did you want to *search* for courses or *register* for courses?"
+- **Undo:** Every voice action must be reversible with "Undo that" or "Go back."
+
+**Persona Design.** A voice interface is perceived as having a personality, whether you design one or not. Key dimensions:
+- **Formality:** Formal ("Good afternoon. How may I assist you?") vs. casual ("Hey! What's up?") The 2040 trend: adaptive formality — the interface matches the user's style.
+- **Politeness:** Direct ("Set temperature to 22") vs. polite ("Could you please set the temperature to 22 degrees?"). In usability testing at UoY, users rated polite interfaces as more competent and trustworthy.
+- **Accent and dialect:** By 2040, the best voice interfaces support multiple accents and dialects natively. The UoY campus voice assistant, **UrðrSpeak**, supports 8 regional British accents plus Icelandic and Norwegian.
+
+**Voice UX Anti-Patterns.**
+- **Echo chamber:** The system confirms everything the user says, making the conversation tedious. "I want to set an alarm." → "You want to set an alarm?" → "Yes." → "OK, setting an alarm..." Better: confirm only critical actions.
+- **Too many options:** "Would you like to set a one-time alarm, a recurring alarm, an alarm with a specific ringtone, an alarm that...?" → Information overload. Better: progressive disclosure. "What time?" → After time: "Would you like this alarm to repeat?"
+- **No visual equivalent:** Voice-only interfaces are hard for users with hearing disabilities and impossible in noisy environments. Always provide a visual fallback.
+
+#### Required Reading
+- Clark, H.H. & Brennan, S.E. (1991). "Grounding in Communication." *Perspectives on Socially Shared Cognition*.
+- Pearl, C. (2016). *Designing Voice User Interfaces: Principles of Conversational Experiences*. O'Reilly.
+- Cohen, M.H. et al. (2004). *Voice User Interface Design*. Addison-Wesley.
+
+#### Discussion Questions
+1. Design a voice interface for a banking application. How would you handle the security requirement (authentication) while maintaining conversational flow?
+2. The "echo chamber" anti-pattern is common in early voice interfaces. When is confirmation actually necessary? When does it become annoying?
+3. In a multi-user environment (family living room), how does a voice interface distinguish commands addressed to it from conversation between people? What if the system makes a mistake?
+
+---
+
+### ᚺ Lecture 7: Neural Interfaces — The Threshold of Thought
+
+**Date:** Week 7, Session 1
+
+#### Overview
+
+Neural interfaces — devices that read (and in some cases write) brain signals — represent the most intimate frontier of HCI. This lecture covers the neuroscience foundations (EEG, fNIRS, ECoG, intracortical arrays), the interaction design principles for BCI (control vs. communication, the Midas touch problem, fatigue and training), the state of the art in 2040 (non-invasive EEG for cursor control, invasive BCI for communication in locked-in patients), and the profound ethical questions: cognitive liberty, mental privacy, and the boundary between human and machine. The Norse metaphor: the *hamingja* — a concept in Norse belief meaning a person's luck, fortune, or guardian spirit, often visualized as a being that shapes the person's fate. A neural interface is a technological hamingja: it reads the user's mind and helps shape their digital fate.
+
+#### Lecture Notes
+
+**The Neuroscience.**
+
+*EEG (Electroencephalography).* Non-invasive electrodes on the scalp measure electrical activity of cortical neurons. Temporal resolution: ~1ms (excellent). Spatial resolution: ~1cm (poor). The signal is noisy (SNR ~ 1-5) and contaminated by muscle artifacts (eye blinks, jaw clench, forehead tension). In 2040, dry electrodes (no gel) and active noise cancellation have made EEG practical for consumer use — the **RúnarBand** headband provides 8-channel EEG at 500Hz for under €500.
+
+Common EEG paradigms for HCI:
+- **Motor imagery:** The user imagines moving their left hand or right hand. The sensorimotor rhythms (mu rhythm, 8-12Hz, beta, 18-25Hz) desynchronize on the contralateral hemisphere. This can be classified at ~85% accuracy in 2040.
+- **P300 speller:** A 6×6 grid of characters flashes rows and columns randomly. When the target character flashes, the user's brain produces a P300 event-related potential (positive deflection at 300ms). The system identifies the target by detecting which row and column produce the P300. Typing speed: 20-40 characters per minute in 2040.
+- **Steady-state visually evoked potentials (SSVEP):** The user looks at a target that flickers at a specific frequency (e.g., 15Hz). The occipital cortex produces a response at that frequency. SSVEP enables rapid selection from a grid of targets, with speeds up to 60 choices per minute.
+
+*Invasive BCIs.* For users with severe motor disabilities, implanted electrodes provide higher signal quality:
+- **ECoG (Electrocorticography):** Electrodes placed on the surface of the brain (under the skull but above the dura). SNR ~ 10-20. Requires surgery.
+- **Intracortical arrays (Utah array, Neuralink):** Tiny electrodes inserted into the cortex. SNR ~ 100. Highest resolution. Used in clinical trials for cursor control (BrainGate) and speech decoding (Neuralink's PRIME study).
+
+In 2040, the **RúnarBCI** implant (developed in a UoY-Neuralink partnership) provides 2048 channels at 30kHz from a flexible, thread-like electrode array. It enables: cursor control at 60 bits/min, speech decoding at 60 words/min (for attempted speech), and the first experimental "direct thought-to-text" interfaces.
+
+**The Midas Touch Problem.** In Greek myth, everything King Midas touched turned to gold, including food, drink, and his daughter. In BCIs, the Midas Touch problem is: how do we distinguish between the user's intentional commands and their incidental brain activity (thinking about lunch while the cursor is on the "delete" button)? Solutions in 2040:
+- **Dual-threshold:** A command requires both a specific brain pattern (e.g., motor imagery) AND a confirmation signal (e.g., a blink or jaw clench).
+- **Context-aware buffers:** In the P300 speller, the system does not immediately output characters — it holds a buffer of 3-spell cycles, shows them to the user, and asks for confirmation before sending.
+- **Adaptive calibration:** The system learns the user's baseline neural activity and adapts the classification thresholds continuously.
+
+**The Training Wall.** Non-invasive BCIs require user training. Most users need 10-30 sessions (each 30-60 minutes) to achieve reliable control. About 15% of users are "BCI illiterate" — they never achieve above-chance control. The 2040 standard uses adaptive machine learning: the classifier adapts to the user's neural patterns in real-time, reducing training time to 3-5 sessions for most users.
+
+#### Required Reading
+- Wolpaw, J.R. & Wolpaw, E.W. (2012). *Brain-Computer Interfaces: Principles and Practice*. Oxford.
+- Nijboer, F. et al. (2008). "A P300-Based Brain-Computer Interface for People with Amyotrophic Lateral Sclerosis." *Clinical Neurophysiology*, 119(8).
+- Musk, E. (2019). "An Integrated Brain-Machine Interface Platform with Thousands of Channels." *Journal of Medical Internet Research*, 21(10).
+- The Nordic Bioethics Council (2036). "Ethical Guidelines for Neural Interfaces."
+
+#### Discussion Questions
+1. The Midas Touch problem is about distinguishing intent from incidental thought. Propose a solution that does not require a confirmation signal and works in real-time.
+2. Should non-invasive BCIs be regulated as medical devices, or can they be sold as consumer electronics? At what point does "reading your brain for cursor control" become "reading your thoughts"?
+3. Consider the ethics of "direct thought-to-text" interfaces. Can a person be forced to incriminate themselves through their BCI output? How does the 5th Amendment (US) or Article 6 of the ECHR apply?
+
+---
+
+### ᚾ Lecture 8: Information Architecture — Organizing the Nine Realms
+
+**Date:** Week 8, Session 1
+
+#### Overview
+
+Information Architecture (IA) is the practice of structuring, organizing, and labeling content to support usability and findability. This lecture covers IA fundamentals: hierarchies, taxonomies, folksonomies, navigation design, search systems, and the 2040 challenge of organizing AI-generated content. The Norse metaphor: Yggdrasil, the world-tree that organizes the cosmos into nine realms. A well-designed information architecture is Yggdrasil — it organizes vast complexity into a navigable structure where every user can find their way.
+
+#### Lecture Notes
+
+**The Eight Principles of Information Architecture (Dan Brown, 2010, updated for 2040).**
+
+1. **Principle of Objects:** Treat content as a living thing with its own lifecycle, behaviors, and attributes. Every piece of content has: an owner, a creation date, an expiry date, a format, an audience, and a privacy level.
+2. **Principle of Choices:** Offer meaningful choices. Too few choices frustrate (information starvation). Too many choices overwhelm (paradox of choice). The 2040 guideline: present no more than 7±2 navigation options at any level.
+3. **Principle of Disclosure:** Show only enough information to help people understand what more information they'll find if they dig deeper. This is the progressive disclosure principle applied to information organization.
+4. **Principle of Exemplars:** Show examples of content categories to help users understand what the category contains. A "Courses" category should show a few sample courses.
+5. **Principle of Front Doors:** Assume that at least half of users will enter the site through a page other than the homepage. Every page must confirm the user's location and provide context.
+6. **Principle of Multiple Classification:** Offer users several different classification schemes to browse content — by topic, by format, by audience, by date, by popularity.
+7. **Principle of Focused Navigation:** Don't mix different types of navigation in the same menu. Course navigation (by department, by level, by semester) should be separate from account navigation (profile, settings, logout).
+8. **Principle of Growth:** Assume the content will grow. The navigation must accommodate 10× the current content volume without redesign. This is especially critical in 2040, when AI-generated content expands existing repositories daily.
+
+**Navigation Design Patterns.**
+
+- **Global navigation:** The persistent top-level navigation that appears on every page. The UoY course site has: Courses, Schedule, Degree Planner, Library, Profile.
+- **Local navigation:** Sub-navigation within a section. Courses → Computer Science → Year 3 → CS301.
+- **Breadcrumbs:** Show the user's location in the hierarchy: Home > Courses > CS > Year 3 > CS301. Each level is clickable.
+- **Search as navigation:** For large information spaces (1000+ pages), search is the primary navigation. In 2040, AI-powered semantic search allows users to find content by describing it: "the course about distributed algorithms for key-value stores" returns CS301 immediately.
+
+**The 2040 Challenge: AI-Generated Content.** By 2040, AI systems generate content at scale — auto-generated documentation, AI-written course materials, personalized learning paths. The IA challenge: how do you organize content that didn't exist last week? The UoY solution:
+- **Auto-tagging:** AI systems automatically tag generated content with metadata (topic, level, format, related courses).
+- **Dynamic navigation:** Navigation menus update automatically as new content is added. A new course on quantum distributed computing appears under CS and under Physics, cross-indexed.
+- **Content freshness indicators:** Users see when content was generated, by whom (or by which AI), and when it was last reviewed by a human.
+
+#### Required Reading
+- Rosenfeld, L., Morville, P., & Arango, J. (2015). *Information Architecture: For the Web and Beyond*, 4th ed. O'Reilly.
+- Brown, D. (2010). "Eight Principles of Information Architecture." *Bulletin of the American Society for Information Science and Technology*, 36(6).
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 6: "The World-Tree Organization."
+
+#### Discussion Questions
+1. A news website with AI-generated articles produces 1000 new articles per day. Design an information architecture that lets users find relevant content. How is this different from a human-curated news site?
+2. The principle of multiple classification suggests offering users multiple ways to browse content. How do you help users choose among them?
+3. Breadcrumbs assume a fixed hierarchy. But 2040 navigation is often non-hierarchical and associative (links between related topics, AI-recommended paths). How does breadcrumb navigation work in a non-hierarchical space?
+
+---
+
+### ᛃ Lecture 9: Data Visualization — Reading the Threads
+
+**Date:** Week 9, Session 1
+
+#### Overview
+
+Data visualization is the graphical representation of information and data — the transformation of numbers into shapes that the human visual system can process pre-attentively. This lecture covers the perceptual principles of visualization (preattentive processing, Gestalt laws, the visual hierarchy), the standard chart types (bar, line, scatter, heatmap, treemap, parallel coordinates, network graph), interactive visualization techniques (filtering, zooming, linking-and-brushing), and the 2040 frontier of immersive data visualization in VR/AR. The Norse metaphor: the Norns read the threads of fate — they see patterns that no individual can see from their limited perspective. Data visualization is the modern Norn's practice: transforming raw threads of data into patterns the eye can read.
+
+#### Lecture Notes
+
+**Preattentive Processing.** The human visual system processes certain visual attributes in parallel, within 200ms, before focused attention. These preattentive attributes are the designer's most powerful tools:
+
+- **Color hue:** Red items pop out among gray items — the "red fish" effect.
+- **Color intensity (saturation):** More saturated items attract attention.
+- **Orientation:** A tilted line among vertical lines pops out.
+- **Size:** Larger items appear more important.
+- **Shape:** A circle among squares pops out.
+- **Motion:** An animated element among static elements is immediately noticeable.
+- **Spatial position:** Where an item appears relative to others.
+
+Use preattentive attributes sparingly: each attribute defines a "visual channel." Using red for all important data, large for urgent data, and motion for critical data creates channel overload — nothing pops out because everything is highlighted.
+
+**Gestalt Laws of Perception (for Visualization).**
+
+- **Proximity:** Elements close to each other are perceived as related. Points clustered near each other in a scatterplot are perceived as a cluster.
+- **Similarity:** Elements with similar visual attributes (color, shape, size) are perceived as related.
+- **Continuity:** The eye follows smooth lines rather than abrupt angles. A line chart is easier to follow than a bar chart of the same data.
+- **Closure:** The eye completes incomplete shapes. This can be used for minimalist designs.
+- **Figure-ground:** The eye separates objects (figure) from background (ground). A dark-colored area on a chart becomes the "figure."
+
+**Chart Selection (The Four-Quadrant Model, based on Andy Kirk's work).**
+
+| Data Relationship | Best Chart | Example |
+|---|---|---|
+| Change over time | Line chart | CPU utilization over 24 hours |
+| Comparison of values | Bar chart | Course enrollment by department |
+| Correlation between variables | Scatterplot | GPU power vs. training throughput |
+| Distribution of values | Histogram + box plot | Distribution of assignment scores |
+| Part-to-whole relationship | Stacked bar or treemap | Memory usage by process |
+| Geographical patterns | Choropleth map | Internet speed by country |
+| Network connections | Force-directed graph | Paper citation network |
+| Hierarchical data | Treemap or sunburst | File system directory size |
+
+**Interactive Visualization (Shneiderman's Mantra, 1996, updated 2040).**
+> Overview first, zoom and filter, then details-on-demand.
+
+1. **Overview:** Show the entire dataset at once (even if at low resolution). The user gets the big picture.
+2. **Zoom:** Allow the user to zoom into a region of interest. The zooming is animated to preserve context.
+3. **Filter:** Allow the user to filter out irrelevant data (sliders, checkboxes, range selectors).
+4. **Details-on-demand:** Click on an element to see its full details (a tooltip, a side panel, or a voice readout in immersive environments).
+5. **Relate:** Show relationships between different views. A scatterplot and a map of the same data are linked — selecting points in one highlights them in the other. This is **linking-and-brushing**.
+
+**2040: Immersive Data Visualization.** In VR/AR, data visualization is 3D and spatial. The UoY's **VerðandiViz** platform supports:
+- **3D scatterplots:** Each point is a small sphere floating in space. The user walks through the cloud.
+- **Immersive networks:** Force-directed graphs rendered as glowing nodes and edges, floating around the user. The user reaches out to grab a node, which expands to show detail.
+- **Time-series as landscapes:** CPU utilization over 24 hours rendered as a terrain — low utilization is valleys, high utilization is mountains. The user flies over the terrain, spotting peaks of high activity.
+- **Collaborative analytics:** Multiple users (wearing RúnarLens) stand in the same virtual data space, pointing and discussing. In 2040, teams of data analysts at UoY use VerðandiViz for collaborative exploratory analysis of research data.
+
+#### Required Reading
+- Tufte, E. (2001). *The Visual Display of Quantitative Information*, 2nd ed. Graphics Press.
+- Kirk, A. (2016). *Data Visualization: A Handbook for Data-Driven Design*. Sage.
+- Ware, C. (2013). *Information Visualization: Perception for Design*, 3rd ed. Morgan Kaufmann.
+- Shneiderman, B. (1996). "The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations." *VL*.
+
+#### Discussion Questions
+1. How does Tufte's "data-ink ratio" (the proportion of ink devoted to data vs. decoration) apply to interactive visualizations? Is it still relevant when users can interact with the data?
+2. In immersive 3D scatterplots, the user's perspective changes as they walk through the data. How does this affect the perception of clusters and outliers? What are the pitfalls?
+3. A visualization that uses 7 different colors, 4 different shapes, 3 different sizes, and animated motion is likely to confuse rather than inform. How do you choose which visual channel to use for which aspect of the data?
+
+---
+
+### ᚨ Lecture 10: Design Systems and Component Libraries — The Pattern of the Builder
+
+**Date:** Week 10, Session 1
+
+#### Overview
+
+A design system is a comprehensive set of design standards, components, and guidelines that ensures consistency and efficiency across a product or organization. By 2040, every major digital product has a design system, and the best design systems are themselves powered by AI. This lecture covers the anatomy of a design system (design tokens, components, patterns, guidelines), the tooling ecosystem (Figma, Storybook, and their 2040 descendants), and the integration of design systems with AI agents that can generate UI from specifications. The Norse metaphor: the pattern of the shipbuilder — a standardized design for the Viking longship that ensured every ship was built to the same proven proportions, yet each was unique in its carving and decoration. A design system is the pattern of the shipbuilder for digital products.
+
+#### Lecture Notes
+
+**Anatomy of a Design System.**
+
+*Design Tokens.* The atomic units of visual design — values for color, typography, spacing, shadows, and animation. Examples:
+```
+--color-primary: #1a5cff (UoY Blue)
+--color-surface: #f8f9fa
+--font-heading: 'Runar Sans', sans-serif
+--spacing-unit: 8px
+--border-radius-md: 8px
+--shadow-card: 0 2px 8px rgba(0,0,0,0.1)
+--transition-fast: 150ms ease
 ```
 
-**Property-based testing** (Claessen & Hughes, 2000) inverts the testing paradigm. Instead of writing specific examples, you write *properties* that must hold for all inputs, and the framework (Hypothesis in Python, QuickCheck in Haskell) generates test cases automatically. For example, the roundtrip property: for any list `xs`, `sorted(sorted(xs)) == sorted(xs)` (sorting is idempotent). Property-based testing excels at finding edge cases you never thought to test — a phenomenon called the **small-scope hypothesis**: most bugs have small counterexamples.
+Tokens are defined once and referenced everywhere. Changing `--color-primary` from #1a5cff to #0d47a1 changes the color across the entire product, instantly.
 
-**Required Reading:**
-- Roy Osherove, *The Art of Unit Testing* (3rd ed., Manning, 2020/2040), chs. 1–6
-- Martin Fowler, "Mocks Aren't Stubs" (martinfowler.com, 2007)
-- Gerard Meszaros, *xUnit Test Patterns: Refactoring Test Code* (Addison-Wesley, 2007)
-- Koen Claessen & John Hughes, "QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs" (*ICFP*, 2000): 268–279
-- Zac Hatfield-Dodds & David R. MacIver, "Hypothesis: A New Approach to Property-Based Testing" (*Journal of Open Source Software* 4:43, 2019): 1891
-- UoY Unit Testing Lab: Write parameterised tests with pytest and property-based tests with Hypothesis (2040)
+*Components.* Reusable UI elements with defined behavior, styling, and API. A well-designed component library includes:
+- **Button:** Variants (primary, secondary, ghost, danger), sizes (sm, md, lg), states (default, hover, active, disabled, loading).
+- **Input:** Text, number, email, password, search, textarea, with error states, helper text, labels, and prefix/suffix icons.
+- **Card:** Header, body, footer slots. Optional shadow, border, interactive (clickable with hover state).
+- **Modal:** Title, body, actions. Accessible (focus trap, escape key, ARIA attributes). By 2040, voice-controllable ("Close modal").
+- **Table:** Sortable columns, filterable rows, pagination, selection, expandable rows.
+- **Form:** Field validation, submission handling, error display, progress save.
 
-**Discussion Questions:**
-1. Mocks assert on behaviour (was the method called?), while stubs supply data (what should the method return?). When is behavioural assertion appropriate — and when does it make tests brittle (the "change detector" problem)?
-2. Property-based testing generates random inputs. How do you ensure that the generated inputs are realistic — and how do you shrink a failing test case to its minimal form?
-3. The FIRST principle says tests must be fast. How fast is "fast" — and at what point does a 100ms test suite with 10,000 tests become too slow for the TDD cycle?
+*Patterns.* Higher-level solutions to common design problems:
+- **Authentication pattern:** Login page → 2FA → redirect to original page.
+- **Search pattern:** Search bar with autocomplete → results list with hover preview → detail view.
+- **Data input pattern:** Form with validation → confirmation → success message. If invalid, show error inline + scroll to first error.
 
----
+**The 2040 UoY Design System: RúnarUI.** The University's design system, **RúnarUI**, is the standard for all UoY digital products. It includes:
+- 280+ components, 1200+ design tokens
+- Web (React), mobile (SwiftUI, Jetpack Compose), spatial (RúnarLens SDK) implementations
+- Accessibility compliance with WCAG 3.0 AAA
+- Automatic theme generation — the AI assistant generates a complete color palette, typography scale, and spacing system from a one-sentence brand description ("Icelandic north, modern, warm")
+- Usage analytics — the design system tracks which components are most used, where they cause confusion (based on error rates), and recommends retirement of underperforming components
 
-## Lecture 3: Test-Driven Development — Red, Green, Refactor
+**AI and Design Systems.** By 2040, design systems are AI-powered:
+- **Natural-language component generation:** "Create a card component that shows a student's photo, name, major, and current course count" → the AI generates the component code, documentation, and Storybook story.
+- **Automated accessibility checking:** The AI scans every component commit for WCAG violations and blocks the commit until they are fixed.
+- **Design drift detection:** The AI monitors the production app and identifies components that have drifted from their design system specification — mismatched colors, wrong spacing, incorrect behavior.
 
-Test-Driven Development (TDD) is not a testing technique; it is a *design* technique that uses tests as a specification language. The mantra is **red, green, refactor**:
+#### Required Reading
+- Frost, B. (2016). *Atomic Design*. Brad Frost Web (online).
+- UXPin Design Systems Handbook (2020). Available at uxpin.com.
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 7: "The Shipbuilder's Pattern."
 
-1. **Red:** Write a failing test. No production code exists yet for this feature. The test should fail for exactly one reason: the feature hasn't been implemented.
-2. **Green:** Write the *simplest possible code* to make the test pass. Not the cleanest, not the most general — just the code that satisfies the test.
-3. **Refactor:** Improve the code while keeping the tests green. Remove duplication, improve naming, extract methods, generalise.
-
-The cycle length is 30–120 seconds. Each cycle adds one small behaviour. The cumulative effect after hundreds of cycles is a codebase that is:
-- **Thoroughly tested:** Every behaviour has a test.
-- **Cleanly designed:** The tests drive the design toward loosely coupled, high-cohesion modules — because tightly coupled modules are hard to test.
-- **Safe to change:** The test suite is a safety net; change the code with confidence.
-
-**Kent Beck** (who re-discovered TDD in the 1990s, building on earlier work by the Cleanroom Software Engineering community) describes TDD as "programming with the fear turned off." The test suite is not a burden — it is the foundation of courage.
-
-**Red-green-refactor** applies at multiple levels:
-- **Micro-level (TDD):** One test, one function. The classic cycle.
-- **Meso-level (ATDD / Acceptance TDD):** One acceptance test, one user story. The acceptance test defines "done" for the story.
-- **Macro-level (BDD — Behaviour-Driven Development):** Scenarios written in Gherkin syntax (`Given-When-Then`) define the system's behaviour. BDD tools (Cucumber, SpecFlow) parse the scenarios into executable tests.
-
-The **TDD debate** has raged for two decades: proponents claim TDD reduces defect density by 40–90% (based on studies at IBM, Microsoft, and others); opponents argue that the evidence is confounded (TDD teams also tend to write more tests overall, measure coverage, and have better design). The most honest summary: TDD is a practice, not a silver bullet. It works when it becomes a habit — and it becomes a habit only if you practise it for several weeks until the cycle is automatic.
-
-**Required Reading:**
-- Kent Beck, *Test-Driven Development: By Example* (Addison-Wesley, 2002) — the definitive book
-- Robert C. Martin, *Clean Code: A Handbook of Agile Software Craftsmanship* (Prentice-Hall, 2008), chs. 9–10
-- David Astels, *Test-Driven Development: A Practical Guide* (Prentice-Hall, 2003)
-- Laurie Williams & Robert L. Kessler, *Pair Programming Illuminated* (Addison-Wesley, 2002) — TDD and pair programming often go together
-- UoY TDD Dojo: Practise the red-green-refactor cycle with coding katas (2040)
-
-**Discussion Questions:**
-1. TDD is often described as a "design technique, not a testing technique." What does the design come from — and how does the need for testability drive better design?
-2. The "simplest possible code" in the green phase is rarely the final code. How do you balance the need for speed (get green quickly) with the need for quality (don't paint yourself into a corner)?
-3. TDD works well for greenfield development. How do you apply TDD to legacy code — where you can't write a test without breaking existing behaviour?
+#### Discussion Questions
+1. Design tokens enforce consistency, but they can also stifle creativity. How do you balance standardization with the need for differentiation across different parts of a product?
+2. AI-generated components from natural-language descriptions are convenient, but they risk producing components that don't match the design system's existing patterns. How do you prevent this?
+3. A design system with 280+ components is comprehensive but overwhelming for new designers. How would you design an onboarding experience for a designer new to RúnarUI?
 
 ---
 
-## Lecture 4: Integration Testing — The Glue That Holds Systems Together
+### ᚨ Lecture 11: Ethics in HCI — The Carver's Oath
 
-Unit tests verify individual components in isolation. Integration tests verify that components work together — that the API returns the right status code, that the database query returns the right rows, that the message queue delivers the right payload. Integration testing is where most real-world bugs live: the component interactions.
+**Date:** Week 11, Session 1
 
-**Test doubles for integration** are different from unit test doubles. At the integration level, you typically use:
-- **Containerised dependencies:** Docker-compose or Testcontainers spin up real PostgreSQL, Redis, Kafka containers for the duration of the test suite.
-- **API mocking tools:** WireMock, MockServer, or Mountebank simulate HTTP APIs with configurable responses, delays, and failures.
-- **Service virtualization:** Simulate entire third-party services (payment gateways, email providers, authentication providers) with realistic behaviour.
+#### Overview
 
-**The contract test** (a.k.a. consumer-driven contract test, CDC) tests the agreement between a service consumer and a service provider. Pact is the leading contract-testing framework: the consumer defines a contract (an interaction), Pact records it, and the provider replays the contract to verify it still fulfils the agreement. Contract tests are faster and more reliable than full end-to-end tests — they test the boundary without deploying the whole system.
+As interfaces become more intimate — reading our faces, our voices, our brain signals, our locations — the ethical stakes of HCI design become existential. This lecture covers the ethical frameworks relevant to HCI (utilitarianism, deontology, virtue ethics, the Belmont principles, and the 2040 emerging framework of digital sovereignty), the dimensions of ethical concern (privacy, consent, persuasion, exploitation, accessibility, algorithmic fairness), and the practicing designer's toolkit for ethical decision-making. The Norse metaphor: the rune-carver's oath — a sacred promise to carve true, to serve the community, and to respect the power of the symbols. An interface designer takes a similar oath: to serve the user, not exploit them.
 
-**Database integration testing** requires special care. Tests must:
-- Be **isolated:** Each test starts with a known database state (usually via transactions that are rolled back after the test).
-- Be **fast:** In-memory databases (H2, SQLite) provide speed at the cost of fidelity (SQLite is not PostgreSQL).
-- Be **repeatable:** No test must depend on the side effects of another test.
-- Cover **schema migrations:** Tests verify that the application works with both the old and new schema during a rolling deployment.
+#### Lecture Notes
 
-The **Testcontainers** library (Python, Java, Go, .NET) provides lightweight, throwaway instances of common databases, message queues, and web servers. A Testcontainers test starts a container before the test suite and destroys it afterward — ensuring a clean environment for every run.
+**The Dimensions of Ethical Concern in HCI.**
 
-**Required Reading:**
-- Martin Fowler, "Integration Test" (martinfowler.com, 2003)
-- Richard Rodger, *The Tao of Microservices* (Manning, 2017), chs. 4–5
-- Beth Skurrie & Ronald Holshausen, *Pact: Consumer-Driven Contract Testing* (docs.pact.io, continuously updated)
-- Richard Älvebrand & Oleg Šelajev, *Testcontainers* (testcontainers.com, continuously updated)
-- UoY Integration Testing Lab: Write contract tests with Pact and database tests with Testcontainers (2040)
+*Privacy and Consent.* Every interaction with a digital interface generates data. By 2040, the average person interacts with 50+ digital systems per day, generating thousands of data points. Ethical design requires:
+- **Explicit consent:** Data collection must be opt-in, not opt-out. The UoY standard: explain *what* data is collected, *why* it's needed, *how long* it's kept, and *who* has access — in plain language, at the moment of data collection.
+- **Data minimization:** Collect only the data necessary for the specific task. A study app does not need the user's location or contact list.
+- **Data sovereignty:** The user owns their data. They can access it, export it, delete it, and revoke consent at any time. The **RúnarPrivacy** dashboard at UoY gives students a single-pane view of all data collected about them across all University systems.
 
-**Discussion Questions:**
-1. Contract tests are positioned as the "sweet spot" between unit and E2E tests. Under what circumstances do contract tests give a false sense of security (because they miss behavioural differences that only manifest in full deployment)?
-2. Testcontainers spins up real dependencies, which introduces latency and resource consumption. At what point does the integration test suite become too slow — and what strategies mitigate this?
-3. Database integration tests with in-memory databases (SQLite) vs containerized databases (PostgreSQL in Testcontainers) — what is the cost of using the wrong one?
+*Persuasion and Dark Patterns.* Dark patterns are interface designs that trick users into doing things they didn't intend. By 2040, dark patterns are regulated by the Digital Fairness Act (EU, 2032). Examples:
+- **Roach motel:** Easy to sign up, impossible to cancel. The "confirm subscription" page has a prominent button and a tiny, gray "unsubscribe" link.
+- **Confirmshaming:** "I don't want to save money" as the option to decline a discount offer.
+- **Forced continuity:** The user's free trial is about to expire; the system charges them without a clear warning.
+- **Hidden costs:** Extra fees revealed only at the final checkout step in a multi-step flow.
 
----
+Ethical persuasion (nudge theory, Thaler & Sunstein, 2008) is acceptable when it helps users make decisions that align with their own stated values. A nudge: "You've been working for 3 hours — would you like a break?" (user's stated value: health). A dark pattern: "Your account will be deleted if you don't accept our new terms" (user's stated value: convenience, exploited for consent).
 
-## Lecture 5: End-to-End Testing — The Full Stack, the Full User Journey
+*Accessibility as an Ethical Issue.* Accessibility is not optional (WCAG 3.0 compliance is legally required in 140+ countries by 2040). But beyond legal compliance, the ethical argument is: excluding users with disabilities from digital participation is a form of discrimination that compounds existing social inequalities.
 
-End-to-end (E2E) testing exercises the entire system — UI, API, database, external services — as a user would. E2E tests are the most realistic and the most expensive: they take minutes, they are fragile (a network timeout, a CSS class change, or a database hiccup can cause a spurious failure), and they hard to debug. But they are the only tests that verify the system works as a whole.
+*Algorithmic Fairness.* AI-powered interfaces (recommendation systems, content moderation, automated grading) must be audited for bias. The UoY AI Ethics Board requires every AI-powered interface to:
+1. Test for demographic parity (outcomes should not differ by protected characteristics).
+2. Test for equalized odds (error rates should not differ by demographic groups).
+3. Publish an algorithmic impact assessment for any interface used by more than 100 users.
 
-**UI test automation** frameworks simulate user interactions in a real browser:
-- **Playwright** (Microsoft, 2020) is the leading framework as of 2040. It supports Chromium, Firefox, and WebKit with auto-waiting (the framework waits for elements to be ready before interacting), network interception, and mobile emulation.
-- **Cypress** (2017) provides a developer-friendly API with time-travel debugging (you can see every command's screenshot and DOM snapshot).
-- **Selenium** (2004) is the grandparent — still widely used but losing ground to Playwright's speed and reliability.
+**Ethical Decision-Making for Designers.**
 
-E2E test design follows the **page object model (POM)** — each page of the application is represented as a class that encapsulates the page's elements and interactions:
-```python
-class LoginPage:
-    def __init__(self, page):
-        self.page = page
-        self.username = page.locator("#username")
-        self.password = page.locator("#password")
-        self.submit = page.locator("button[type='submit']")
-    
-    def login(self, username: str, password: str):
-        self.username.fill(username)
-        self.password.fill(password)
-        self.submit.click()
-        return DashboardPage(self.page)
-```
+The **UoY Design Ethics Framework** (inspired by the Belmont Report, extended for 2040):
 
-**Data-driven E2E tests** run the same scenario with different input data and expected outcomes. The test itself stays the same; only the data changes. This separates test logic from test data, making tests more maintainable.
+1. **Identify stakeholders:** Who is affected by this design decision? Users, the company, society, the environment? Consider both direct and indirect stakeholders.
 
-**Visual regression testing** compares screenshots of the application with baselines. Percy and Applitools are the leading tools. Visual regression catches layout bugs, colour changes, and font issues that would slip through functional tests. The challenge is managing baselines — when a change is intentional, the baseline must be updated, and false positives from browser rendering differences must be minimised.
+2. **Identify values:** What values are at stake? Privacy, autonomy, dignity, fairness, security, sustainability, community? Some values conflict — a highly secure system may compromise autonomy. These conflicts must be transparent.
 
-**Required Reading:**
-- Playwright Documentation (playwright.dev, continuously updated) — the canonical reference
-- Martin Fowler, "Page Object" (martinfowler.com/bliki/PageObject.html)
-- Angie Jones, *Test Automation Fundamentals* (Online course/self-published, 2023/2040)
-- UoY E2E Testing Lab: Write a Playwright test suite for a sample web application (2040)
+3. **Identify tradeoffs:** For each stakeholder and each value, what is the benefit and what is the harm? Can the harm be mitigated without sacrificing the benefit?
 
-**Discussion Questions:**
-1. E2E tests are slow and fragile. How do you decide which user journeys to cover with E2E tests vs integration tests vs unit tests — and what is the cost-benefit threshold for adding one more E2E test?
-2. Visual regression testing compares screenshots pixel-by-pixel. How do you handle intentional UI changes, cross-browser rendering differences, and dynamic content (animations, loading spinners)?
-3. Page objects encapsulate page structure but add maintenance overhead. What are the alternatives — and when would you prefer a more lightweight approach?
+4. **The light test:** Would you be comfortable having this design decision published on the front page of the student newspaper? If not, redesign.
+
+5. **The reversibility test:** Can the user reverse the effect of this design? Is there an undo? If the user made a choice, can they change their mind?
+
+#### Required Reading
+- The Belmont Report (1978). *Ethical Principles and Guidelines for the Protection of Human Subjects of Research.*
+- Thaler, R. & Sunstein, C. (2008). *Nudge: Improving Decisions About Health, Wealth, and Happiness.* Yale.
+- Eyal, N. (2014). *Hooked: How to Build Habit-Forming Products.* (Also: the critical responses to Hooked by ethically-minded designers.)
+- Harrington, K. et al. (2035). "Digital Sovereignty and User Data." *ACM Symposium on Computing Ethics*.
+
+#### Discussion Questions
+1. Dark patterns are illegal in the EU under the 2032 Digital Fairness Act. Should the same regulations apply to UoY's student-facing interfaces? What would it take to audit our systems for dark patterns?
+2. AI-powered recommendation systems (for courses, for news, for friends) optimize for engagement, which often means optimizing for time-on-site. Is this ethical? At what point does a recommendation system become coercive?
+3. Invasive BCIs for people with paralysis can dramatically improve quality of life. But they also raise the possibility of "brainjacking" — unauthorized control of the BCI. What security and ethical standards should apply?
 
 ---
 
-## Lecture 6: Fuzz Testing — Finding the Unfindable
+### ᚠ Lecture 12: The Future of HCI — Into the Weave
 
-Fuzz testing (or "fuzzing") is the art of feeding a program with invalid, unexpected, or random data and observing whether it crashes. Fuzzing is the most effective technique for finding security vulnerabilities and memory safety bugs — Google's OSS-Fuzz project has found over 50,000 bugs in open-source software since 2016, including critical vulnerabilities in OpenSSL, libpng, and the Linux kernel.
+**Date:** Week 12, Session 1
 
-**Black-box fuzzing** generates random inputs with no knowledge of the program's internal structure. Tools like the classic BSD `fuzz` tool (Barton Miller, 1990) and `zzuf` generate random byte streams. Black-box fuzzing is simple but inefficient — most random inputs are rejected early by input parsers.
+#### Overview
 
-**Coverage-guided fuzzing** (the dominant paradigm since AFL, 2013) uses code coverage feedback to guide input generation:
-1. Start with a **seed corpus** of valid inputs.
-2. Mutate a seed input (bit flips, byte insertions/deletions, arithmetic mutations).
-3. Run the mutated input through the program, instrumented to measure code coverage.
-4. If the mutated input covers new code (new basic blocks, new edges in the control-flow graph), add it to the seed corpus.
-5. Repeat until no new coverage is found.
+The final lecture surveys the frontiers of HCI in 2040 and beyond. We cover: symbiotic interfaces (human-AI systems that learn and adapt together), the post-screen era (what comes after the touchscreen), the disappearing interface (computing embedded in the environment), and the meta-design challenge (designing tools for non-designer creators). The Norse framing: Ragnarǫk destroys the old interfaces (screens, keyboards, mice) and a new world rises — interfaces that are woven into the fabric of experience itself, as natural as breathing and as responsive as thought.
 
-**AFL++** and **LibFuzzer** are the leading coverage-guided fuzzers. LibFuzzer links the test harness directly into the target function, enabling extremely fast fuzzing (thousands of inputs per second). For Python, the **Atheris** fuzzer (Google) instruments Python bytecode for coverage-guided fuzzing.
+#### Lecture Notes
 
-**Structure-aware fuzzing** generates inputs that respect the grammar of the input format. Instead of randomly mutating bytes, the fuzzer mutates the abstract syntax tree of the input. This is essential for formats with complex structures (PDF, ELF, network protocols). **Grammartech** and **NAUTILUS** (for network protocols) generate valid mutants of complex inputs.
+**Symbiotic Interfaces.** J.C.R. Licklider's 1960 vision of "man-computer symbiosis" — a partnership between human and machine that amplifies both — is finally practical in 2040. Examples:
+- **AI co-writer:** The writer types, and the AI suggests completions, expansions, alternatives, and corrections. But unlike simple autocomplete, the AI *learns* the writer's style, tone, and preferences over time. The more they write together, the better the suggestions.
+- **AI co-designer:** The designer sketches a rough interface, and the AI fills in the details — matching the style of the existing design system, generating the code, adapting to accessibility requirements.
+- **AI co-programmer:** The programmer types an intent in natural language, and the AI generates the code. The programmer reviews and refines. The AI learns which patterns the programmer prefers.
 
-**Required Reading:**
-- Michael Zalewski, *American Fuzzy Lop* (lcamtuf.coredump.cx/afl/, 2013) — the canonical coverage-guided fuzzer
-- Patrice Godefroid, "Fuzzing: Hack, Art, and Science" (*Communications of the ACM* 63:2, 2020): 70–76
-- Barton P. Miller, "Fuzz Testing of Application Reliability" (University of Wisconsin, 1990–present) — the origin of fuzzing
-- Jonathan Metzman et al., "OSS-Fuzz: Google's Continuous Fuzzing Service for Open Source Software" (*Proceedings of the 2021 Annual Computer Security Applications Conference*)
-- UoY Fuzzing Lab: Set up LibFuzzer for a C library and Atheris for a Python parser (2040)
+The key insight: symbiosis is *bidirectional*. The human adapts to the AI (learning to phrase intents clearly) and the AI adapts to the human (learning their preferences, anticipating their needs). This adaptation creates a feedback loop that makes the partnership increasingly effective over time.
 
-**Discussion Questions:**
-1. Coverage-guided fuzzing relies on code coverage feedback. What kinds of bugs are invisible to coverage-guided fuzzing — what would never be found even with infinite fuzzing time?
-2. Fuzzing finds buffer overflows, use-after-free, null-pointer dereferences. How do you prioritise which fuzzer-discovered bugs to fix — especially when the fix may itself introduce new bugs?
-3. Structure-aware fuzzing requires knowing the input grammar. For a protocol with an undocumented binary format, how would you build a fuzzer?
+**The Post-Screen Era.** By 2050, the touchscreen — the dominant interface of 2007-2030 — may be as obsolete as the command line. Successor paradigms:
+- **Ambient interfaces:** The interface is embedded in the environment — smart surfaces, smart walls, the furniture itself. You don't "open an app"; you walk into a room and the room knows what you need.
+- **Contextual interfaces:** The system knows who you are, what you're doing, and what you're likely to need next. The interface adapts moment-by-moment, showing the most relevant options and hiding everything else.
+- **Proactive interfaces:** The system anticipates your needs and acts without being asked. "I notice you have a meeting in 5 minutes. I've prepared the notes and reserved the conference room."
 
----
+**The Disappearing Interface (Mark Weiser's vision, fulfilled by 2040).** Weiser's 1991 vision of "ubiquitous computing" — the most profound technologies are those that disappear — is reality by 2040. Computing is embedded in: clothing (biometric monitoring), jewelry (notifications, authentication), furniture (interactive desks, chairs), architectural surfaces (walls that display information, windows that adjust opacity based on sunlight), and medical implants (glucose monitoring, insulin delivery). The interface disappears; the functionality is woven into the fabric of life.
 
-## Lecture 7: Mutation Testing — Testing the Tests
+**The Meta-Design Challenge.** By 2040, many interfaces are created not by professional designers but by AI systems, end-users, or automated processes. The meta-design challenge: how do you design *the tool* that creates interfaces, rather than the interface itself? Key questions:
+- How do you ensure that AI-generated interfaces are accessible?
+- How do you test an interface that changes every day based on user behavior?
+- How do you maintain a consistent user experience across thousands of dynamically generated pages?
+- How do you teach students to design *design systems* rather than single interfaces?
 
-Mutation testing is the ultimate meta-test: it evaluates the quality of your test suite by introducing bugs (mutations) into your code and checking whether the tests catch them. A mutation is a small syntactic change, such as:
-- Replacing `>` with `>=`
-- Swapping `true` for `false`
-- Deleting a method call
-- Replacing `a + b` with `a - b`
-- Changing a constant value
+**The Final Weave.** The Norse vǫlva sees the fate of all beings, but she does not control it — she describes it. The HCI practitioner in 2040 is a vǫlva: they describe (through prototypes, specifications, design systems) an interface that does not yet exist. The interface is the weave of human intention and computational capability. A well-designed interface disappears — it becomes an extension of the user's will, as natural as reaching for a cup. A poorly-designed interface becomes a wall. The craft of HCI is the craft of weaving interfaces that dissolve: the threshold between human and machine becomes so thin that crossing it feels like moving through air.
 
-A test suite's **mutation score** is the percentage of detected mutations. A score of 100% means your tests catch every possible simple mistake — the tests are thorough. A score of 80% means 20% of simple bugs would slip through — there are gaps in the test coverage that need attention.
+#### Required Reading
+- Licklider, J.C.R. (1960). "Man-Computer Symbiosis." *IRE Transactions on Human Factors in Electronics*, HFE-1.
+- Weiser, M. (1991). "The Computer for the 21st Century." *Scientific American*, 265(3).
+- Norman, D. (2007). *The Design of Future Things*. Basic Books.
+- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 12: "The Disappearing Rune."
 
-**MutPy** and **Cosmic Ray** are the leading mutation testing tools for Python. MutPy generates mutants, runs the test suite against each mutant (in parallel), and reports the mutation score. For a codebase with 10,000 lines of code and a test suite that takes 30 seconds, mutation testing with MutPy takes approximately (number of mutants) × 30 seconds — which can be hours for large codebases. **Incremental mutation testing** (run mutants only on changed code) and **parallel execution** (run mutants in parallel across multiple cores or machines) are essential for making mutation testing practical.
-
-**Equivalent mutants** are a long-standing problem: some mutants are semantically equivalent to the original code — they always produce the same output — but are syntactically different. For example, replacing `if (x < 10)` with `if (x <= 9)` produces the same behaviour for integers, but the mutation tool cannot determine this automatically (the problem is undecidable in general). Equivalent mutants inflate the mutation score denominator, making it harder to reach 100%. Detecting equivalent mutants requires human review — and is one of the main reasons mutation testing is difficult to adopt at scale.
-
-**Pit mutation testing** (Jansen & Hovemeyer, 2020) addresses the performance problem by running mutants in a subset of the test suite (only tests that cover the mutated code). If a code line is covered by 5 tests, why run all 10,000 tests on that mutant? This optimisation reduces mutation testing time from hours to minutes.
-
-**Required Reading:**
-- Yue Jia & Mark Harman, "An Analysis and Survey of the Development of Mutation Testing" (*IEEE Transactions on Software Engineering* 37:5, 2011): 649–678
-- Alex Groce et al., "You Are the Only Possible Oracle: Effective Test Selection for End Users of Interactive Machine Learning Systems" (*IEEE Transactions on Software Engineering*, 2020) — mutation testing for ML
-- Goran Petrović & Marko Ivanković, "Mutation Testing at Google" (*ICSE*, 2018) — industrial experience report
-- UoY Mutation Testing Lab: Measure the mutation score of your own test suite with MutPy (2040)
-
-**Discussion Questions:**
-1. Mutation testing is the most rigorous way to evaluate test quality, but it is computationally expensive. For a CI pipeline that deploys 50 times a day, is mutation testing feasible — and what trade-offs would you accept to make it so?
-2. Equivalent mutants are undetectable in general. In practice, what patterns of equivalent mutants are most common — and how would you design a mutation operator set that minimises equivalents?
-3. A high mutation score (95%+) gives confidence, but does it give *correctness* confidence? What kinds of bugs would a mutation-tested suite still miss?
-
----
-
-## Lecture 8: Performance Testing and Scalability Verification
-
-Performance testing verifies that a system meets its non-functional requirements for responsiveness, throughput, and resource consumption. Performance bugs are harder to detect than functional bugs because they manifest only under load and often require statistical analysis (rather than a pass/fail assertion) to identify.
-
-**Load testing** applies a simulated workload to the system and measures response times, throughput, error rates, and resource utilisation. Tools:
-- **Locust** (Python): Define user behaviour as Python code; Locust spawns fake users and reports response percentiles (p50, p95, p99).
-- **k6** (JavaScript/Go): Script-based load testing with excellent CI integration.
-- **Gatling** (Scala): High-performance, DSL-based load testing with detailed HTML reports.
-
-**Stress testing** finds the system's breaking point — the load at which response times increase non-linearly, error rates spike, or the system crashes. The **knee point** (or tipping point) in the response-time curve is the critical metric: it tells you the system's true capacity.
-
-**Endurance testing** (a.k.a. soak testing) applies a moderate load for an extended period (hours to weeks) to identify memory leaks, connection pool exhaustion, and resource accumulation bugs. A system that passes a 5-minute load test may fail after 6 hours of sustained load because of a subtle memory leak.
-
-**Scalability testing** verifies that adding resources (horizontal scaling: more servers; vertical scaling: more CPU/RAM) proportionally improves performance. The **speedup** is measured as:
-
-Speedup(N) = Latency(1) / Latency(N)
-
-where N is the number of servers (or CPU cores). **Amdahl's law** predicts the theoretical maximum speedup given a fraction P of parallelisable work:
-
-Speedup_max = 1 / ((1−P) + P/N)
-
-In practice, scalability is limited by contention for shared resources (database connections, locks, caches) and by coordination overhead (consensus protocols, cache coherence).
-
-**Profiling** identifies performance bottlenecks at the code level. Tools like py-spy (Python), perf (Linux), and Intel VTune sample the call stack of a running program, building a flame graph that shows which functions consume the most CPU time. Donald Knuth's maxim — "premature optimisation is the root of all evil" — means that profiling, not intuition, should drive optimisation efforts.
-
-**Required Reading:**
-- Brendan Gregg, *Systems Performance: Enterprise and the Cloud* (2nd ed., Addison-Wesley, 2020/2042)
-- Martin L. Abbott & Michael T. Fisher, *The Art of Scalability* (Addison-Wesley, 2009)
-- Gene Amdahl, "Validity of the Single Processor Approach to Achieving Large-Scale Computing Capabilities" (*AFIPS*, 1967) — Amdahl's law
-- UoY Performance Testing Lab: Load-test a REST API with Locust and profile the bottlenecks (2040)
-
-**Discussion Questions:**
-1. Load testing requires generating realistic workloads. How do you model user behaviour — and what are the consequences of an unrealistic workload model?
-2. The p99 response time is a common SLO. Why is p99 more informative than the average — and what makes p99 so hard to stabilise?
-3. Amdahl's law limits parallel speedup. How do you identify the non-parallelisable fraction P in a complex distributed system?
-
----
-
-## Lecture 9: Static Analysis and Code Quality
-
-Static analysis (a.k.a. linting) finds bugs, code smells, and security vulnerabilities *without running the code*. The best time to find a bug is before you run the code — static analysis makes that possible.
-
-**Linters** (flake8, pylint, ESLint, Clippy for Rust) enforce coding style and catch common mistakes:
-- Unused variables
-- Unreachable code
-- Import errors
-- Formatting violations
-
-**S**tatic application security testing (SAST) tools (Bandit for Python, Semgrep for multi-language, SonarQube for enterprise) detect security vulnerabilities:
-- SQL injection: concatenating user input into SQL queries
-- XSS: inserting user input into HTML without escaping
-- Hardcoded credentials: passwords, API keys, tokens
-- Path traversal: constructing file paths from user input
-
-**Abstract interpretation-based analysers** (Astrée, Frama-C Value Analysis, Infer) go beyond pattern matching. They track the possible values of variables across the program and prove the absence of certain classes of bugs — no array-out-of-bounds, no division-by-zero, no null-pointer dereference. The cost is false alarms: the analyser may report a potential bug that cannot occur in practice.
-
-**Code reviews** are the most effective known method for finding bugs. Studies consistently show that code review finds 60–90% of the bugs in a change, more than any automated tool. But code review is expensive — it takes time from senior developers. The most effective code reviews are:
-- **Small:** Changes under 200 lines get 2–3× more thorough review than changes over 500 lines.
-- **Focused:** A review that checks one thing (logic, security, performance) is more effective than a review that checks everything.
-- **Supported by automation:** Linters, formatters, and static analysis should catch the trivial issues before the human sees the code.
-
-**Required Reading:**
-- Michael Fagan, "Design and Code Inspections to Reduce Errors in Program Development" (*IBM Systems Journal* 15:3, 1976): 182–211 — the origin of code inspection
-- Andrew Binstock, "Integration of Static Analysis into the CI Pipeline" (*Communications of the ACM* 63:6, 2020): 42–44
-- Paul Anderson, "Static Code Analysis in Practice" (*IEEE Security & Privacy* 5:5, 2007): 53–57
-- UoY Static Analysis Lab: Configure Semgrep rules for a Python project and run Astrée on a C program (2040)
-
-**Discussion Questions:**
-1. Static analysis tools produce false alarms. What false-positive rate is acceptable — and how do you design a triage workflow for false positives so they don't accumulate?
-2. Code review is more effective than any automated tool, yet many organisations struggle to maintain code review discipline. What organisational practices — and tool support — make code review sustainable?
-3. Abstract interpretation can prove the *absence* of certain bugs, but only for specific properties. For a safety-critical system, how do you decide which properties must be proved (at high cost) vs which can be tested (at lower cost but less certainty)?
-
----
-
-## Lecture 10: Continuous Integration and Quality Gates
-
-Continuous Integration (CI) is the practice of merging code changes into a shared mainline multiple times per day, with each merge triggering an automated build and test suite. The goal is to detect integration problems early — before they compound into the "merge hell" that plagued the era of monthly releases.
-
-The **CI pipeline** typically stages:
-1. **Lint:** Static analysis (fast, <30 seconds)
-2. **Build:** Compile or package the code
-3. **Unit tests:** Fast, reliable (<2 minutes)
-4. **Integration tests:** Slower, test component interactions (<10 minutes)
-5. **Static analysis (SAST):** Security and quality checks (<5 minutes)
-6. **Package and deploy:** Build the deployable artifact
-7. **End-to-end tests (optional):** Full-stack tests on the deployed artifact
-8. **Performance tests (optional):** Load test on the deployed artifact
-
-**Quality gates** are automated checks that must pass before a change can proceed to the next stage — or be deployed. A quality gate is a binary pass/fail check on a measurable property:
-- Test coverage ≥ 80%
-- Mutation score ≥ 90%
-- No critical or high-severity static analysis violations
-- No known vulnerabilities in dependencies (checked by Dependabot, Snyk)
-- E2E tests — all pass
-
-The key to effective quality gates is **tuning**: if a gate is too strict (blocks good changes), developers will work around it. If it is too lenient (passes bad changes), it provides no value. The art of the CI engineer is finding the thresholds that catch real problems without blocking productive work.
-
-**Trunk-based development** is the CI-compatible branching strategy: developers commit directly to `main` (or `trunk`) in small batches, using feature flags to hide incomplete features. Long-lived branches (the GitFlow-style `feature` branch that lives for weeks) are antithetical to CI — they accumulate integration risk that pops when the branch merges.
-
-**Required Reading:**
-- Jez Humble & David Farley, *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation* (Addison-Wesley, 2010), chs. 4–6
-- Paul Duvall, Steve Matyas & Andrew Glover, *Continuous Integration: Improving Software Quality and Reducing Risk* (Addison-Wesley, 2007)
-- Nicole Forsgren, Jez Humble & Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution, 2018) — evidence-based insights on CI/CD
-- UoY CI Lab: Set up a GitHub Actions pipeline with lint, test, build, and deploy stages (2040)
-
-**Discussion Questions:**
-1. A CI pipeline that takes 60 minutes discourages developers from committing. A pipeline that takes 5 minutes may miss bugs that only manifest in longer-running tests. How do you balance speed and thoroughness?
-2. Trunk-based development requires feature flags. What is the operational cost of maintaining feature flags — and how do you clean up flags once a feature is fully rolled out?
-3. Quality gates create a tension between velocity and safety. How do you measure the *effectiveness* of a quality gate — and how do you tune gates when the first measurement shows they are blocking good changes?
-
----
-
-## Lecture 11: Testing in Production — Canaries, Experiments, and Observability
-
-"Testing in production" sounds reckless — and sometimes it is. But for systems that cannot be faithfully replicated in a staging environment (because of the complexity of real-world data, traffic patterns, or service dependencies), testing in production is the only way to gain confidence.
-
-**Canary deployments** gradually route a small percentage of production traffic to a new version:
-1. Deploy the new version to 1% of servers.
-2. Monitor error rates, latency, and business metrics for 10 minutes.
-3. If metrics are healthy, increase to 10% of servers.
-4. Continue up to 100% (or roll back if metrics degrade).
-
-The **analysis of canary results** requires statistical rigour. The metrics from the canary group and the control group are compared using hypothesis testing (Student's t-test, Mann–Whitney U). Because the number of comparisons is large (thousands of metrics), **multiple hypothesis correction** (Bonferroni, Benjamini-Hochberg) is essential to avoid false positives.
-
-**A/B testing** (a.k.a. online experimentation for product features) is different from canary testing: it tests the business effect of a feature, not its technical correctness. An A/B test compares two groups of users — one exposed to the new feature, one not — and measures the difference in a business metric (conversion rate, engagement, revenue). A/B testing requires careful statistical design: sample size calculation, randomisation, minimisation of cross-contamination (two groups interacting).
-
-**Observability** (as distinct from monitoring) is the practice of making a system's internal state *queryable* without deploying new code:
-- **Logs:** Structured, indexed, queryable records of events (ELK stack, Loki).
-- **Metrics:** Numeric measurements aggregated over time (Prometheus, Grafana).
-- **Traces:** End-to-end request flows across service boundaries (Jaeger, OpenTelemetry).
-
-**Brendan Gregg's USE method** (Utilisation, Saturation, Errors) is a systematic approach to performance troubleshooting:
-- For every resource (CPU, memory, disk, network), check its utilisation (busyness), saturation (queued work), and error count.
-
-**Required Reading:**
-- Charity Majors, Liz Fong-Jones & George Miranda, *Observability Engineering* (O'Reilly, 2022/2042)
-- Brendan Gregg, "The USE Method" (brendangregg.com, 2012)
-- Kohavi, Tang & Xu, *Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing* (Cambridge, 2020)
-- UoY Observability Lab: Set up Prometheus + Grafana + Jaeger for a microservices application (2040)
-
-**Discussion Questions:**
-1. Canary deployments depend on the assumption that the canary group is representative of the full user population. When does this assumption break — and how do you detect a biased canary?
-2. A/B testing requires careful statistical design. What are the most common statistical mistakes in A/B testing — and how do the tools of 2040 help avoid them?
-3. Observability is often described as three pillars (logs, metrics, traces). Is this taxonomy still useful in 2040 — or does the rise of streaming analytics, eBPF, and AI-driven anomaly detection demand a new paradigm?
-
----
-
-## Lecture 12: Quality Culture — The Psychology and Sociology of Bug Prevention
-
-The best testing in the world cannot prevent bugs. Bug prevention is a cultural problem — it requires an organisation that values quality, gives engineers the time to write good tests, and learns from failures without assigning blame.
-
-**The psychology of testing** is the most underappreciated dimension of quality assurance. Humans are terrible at testing their own work (the **author bias problem**). We read what we intended to write, not what we actually wrote. We unconsciously avoid the edge cases that would embarrass us. The most effective testing strategies *separate the author from the tester*: pair testing, independent QA, code review by someone else, and adversarial testing (a "tiger team" tasked with breaking the system).
-
-**Blameless postmortems** (SRE culture, Google) are the standard practice for incident analysis. A postmortem is not a witch hunt — it is a fact-finding mission that answers "what happened, why did it happen, and how do we prevent it from happening again?" The five whys technique (Toyota Production System) digs past the proximate cause to the systemic root cause. The output of a postmortem is a set of **action items** — specific, measurable changes to processes or systems — that prevent the same class of incident from recurring.
-
-**Technical debt** is the gap between the ideal state of the code and its current state. "If it's not tested, it's broken" is the most honest measure of technical debt. Untested code is debt that will come due — as a production incident, a security vulnerability, or a missed deadline. The **interest** on technical debt compounds: untested code is hard to refactor, so it accumulates more untested code, and eventually the codebase becomes impossible to change safely.
-
-**The "right to test"** is an organisational practice: every engineer has the right — and the responsibility — to add tests to any code they touch. Even if the code belongs to another team. Even if the change is "trivial." Testing is not an optional polish step; it is a core development practice. The most effective quality organisations are those where testing is not a separate phase but an integral part of every coding session.
-
-**Required Reading:**
-- John Allspaw, "Blameless PostMortems and a Just Culture" (kitchensoap.com, 2012)
-- Martin Fowler, "Technical Debt" (martinfowler.com/bliki/TechnicalDebt.html)
-- James Reason, *Human Error* (Cambridge, 1990) — the foundational text on human factors in safety-critical systems
-- Sidney Dekker, *The Field Guide to Understanding Human Error* (CRC Press, 2006) — the modern view of human error as a symptom of systemic problems
-- UoY Quality Culture Workshop: Practice blameless postmortems on simulated incidents (2040)
-
-**Discussion Questions:**
-1. Blameless postmortems are widely recommended but rarely practised. Why are organisations so reluctant to adopt blameless postmortems — and what is the most effective way to start?
-2. Technical debt is a metaphor borrowed from finance. How useful is the metaphor — and what are its limitations? (When does "refactoring to reduce technical debt" become a distraction from shipping value?)
-3. The "right to test" is an organisational policy. How do you implement it in practice — and how do you prevent it from becoming a source of friction between teams (when Team A adds tests to Team B's code)?
+#### Discussion Questions
+1. A symbiotic interface adapts to the user. What happens when two different users — with different styles, preferences, and priorities — share the same device? How does the interface adapt?
+2. The "disappearing interface" makes computing seamless and intuitive. Does this seamlessness also make computing invisible — and therefore harder to understand, critique, and control?
+3. AI-generated interfaces could lead to a monoculture of design — every app looking the same because they're all generated by the same model. How do we preserve diversity and creativity in interface design?
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for CS306 assesses your ability to design, implement, and evaluate a testing strategy for a realistic software system — from unit tests and property-based tests through integration, E2E, fuzz, and performance testing, and including the organisational practices that sustain quality.
+### Format
 
-**Sample Essay Questions (Choose 4 of 8):**
+The final examination is a **3-hour portfolio assessment**:
+- **Part A: Heuristic Evaluation (30%)** — Evaluate a given interface against Nielsen's 10 usability heuristics. Identify 5 violations, explain each, and propose a fix.
+- **Part B: Redesign Proposal (35%)** — Choose a poorly-designed interface from a provided list. Research the users, analyze the problems, and propose a redesigned interface with sketches (hand-drawn or wireframed) and a written rationale.
+- **Part C: Design System Component (35%)** — Design and document a new RúnarUI component. Submit: the component specification (states, behavior, accessibility requirements, code), a Storybook story, and a usability test plan.
 
-1. **The Testing Strategy.** You are the QA lead for a microservices-based e-commerce platform with 50 services, 200 developers, and a deployment cadence of 100 times per day. Design the testing strategy — what types of tests, in what proportion, with what quality gates, and with what CI pipeline. Justify your decisions with references to testing economics and the testing pyramid.
+### Sample Part A Heuristic Evaluation
 
-2. **TDD: Design Technique or Testing Technique?** Defend the claim that TDD is primarily a design technique, not a testing technique. What design properties does TDD encourage — and how do they improve code quality beyond what is captured by test coverage metrics?
+Evaluate the UoY course registration interface (provided in the exam) against Nielsen's 10 heuristics. Identify and analyze five violations. For each:
+- Name the violated heuristic
+- Describe the violation (be specific: which page, which element, what happens)
+- Rate the severity (0=cosmetic, 1=minor, 2=major, 3=catastrophic)
+- Propose a specific fix
 
-3. **The Limits of Automated Testing.** Describe three classes of bugs that automated testing (unit, integration, E2E, fuzz, mutation) systematically struggles to find. For each class, propose a complementary approach (human review, formal methods, or organisational practice) that could catch them.
+### Sample Part B Redesign Topic
 
-4. **Fuzz for Security.** Explain how coverage-guided fuzzing finds security vulnerabilities. Walk through the process of setting up LibFuzzer for a C library — seed corpus, instrumentation, crash triage. What are the limitations of fuzzing for security (buffer overflows that do not crash — can they still be exploitable?)?
+The UoY campus map app (text-based, no visual map) is difficult to use. Research the user group (new students), analyze the problems (at least 3), and propose a redesigned interface. Your proposal must include: user research summary, wireframes or sketches, interaction flow, and a design rationale. Consider: wayfinding, search, building information, and accessibility.
 
-5. **Mutation Testing in Practice.** Design a mutation testing workflow for a CI pipeline. Address: how to handle the computational cost, how to deal with equivalent mutants, how to present results to developers, and how to set quality gates based on mutation scores.
+### Sample Part C Component Specification
 
-6. **Testing in Production.** You are tasked with introducing canary deployments and observability to a team that has never tested in production. Design the rollout plan — what metrics to monitor, what statistical techniques to use, what failure criteria to define, and how to convince the team that testing in production is safe when done correctly.
+Design a "ProgressPath" component that shows a student's progress through their degree program. The component should: show completed courses, current courses, and planned courses; indicate prerequisite chains; and allow the student to explore "what if" scenarios (what if I drop CS305?). Submit:
+- Component specification document
+- A Storybook story file
+- A usability test plan with 5 tasks
 
-7. **Quality Culture.** Your organisation ships buggy software with exhausting "crunch" periods before every release. Design a cultural intervention — not a tool or a process, but a change in organisational norms — that would sustainably improve quality without burning out the engineers.
+---
 
-8. **The Future of Testing (2040).** Speculate on how AI will change software testing in the next decade. Will AI write tests automatically? Will AI generate test oracles from natural-language specifications? What risks does AI-generated testing introduce — and how do we mitigate them while capturing the benefits?
+## Required Reading — Full Course Bibliography
 
-**Practical Project Option:** Choose an open-source project with at least 1,000 lines of code and design a testing improvement plan. Your plan must include: (1) analysis of the current test suite (coverage, mutation score, gaps), (2) a set of new tests covering the identified gaps (unit, property-based, integration, or fuzz), (3) a CI pipeline configuration implementing quality gates, and (4) a reflection on what was systematic about the bugs you found and what could prevent them.
+- Belmont Report (1978). *Ethical Principles and Guidelines for Human Subjects Research.*
+- Brown, D. (2010). "Eight Principles of Information Architecture." *ASIS&T Bulletin*.
+- Card, S.K., Moran, T.P., & Newell, A. (1983). *The Psychology of Human-Computer Interaction*.
+- Clark, H.H. & Brennan, S.E. (1991). "Grounding in Communication." *Perspectives on Socially Shared Cognition*.
+- Courage, C. & Baxter, K. (2005). *Understanding Your Users*.
+- Eyal, N. (2014). *Hooked: How to Build Habit-Forming Products.*
+- Fitts, P.M. (1954). "The Information Capacity of the Human Motor System." *J. Exp. Psych.*
+- Frost, B. (2016). *Atomic Design*.
+- Harrington, K. et al. (2035). "Digital Sovereignty and User Data." *ACM Symposium*.
+- Henry, S.L. (2014). *Just Ask: Integrating Accessibility Throughout Design*.
+- ISO 9241-11 (2018). *Ergonomics of Human-System Interaction*.
+- Kirk, A. (2016). *Data Visualization: A Handbook*.
+- LaViola, J. et al. (2017). *3D User Interfaces*.
+- Licklider, J.C.R. (1960). "Man-Computer Symbiosis." *IRE Trans. HFE*.
+- Lúsbrá, Á. (2037). *The Carved Interface*. Yggdrasil University Press.
+- Milgram, P. & Kishino, F. (1994). "A Taxonomy of Mixed Reality Visual Displays." *IEICE*.
+- Norman, D. (2013). *The Design of Everyday Things*.
+- Norman, D. (2007). *The Design of Future Things*.
+- Pearl, C. (2016). *Designing Voice User Interfaces*.
+- Rosenfeld, L., Morville, P., & Arango, J. (2015). *Information Architecture*.
+- Sauro, J. & Lewis, J.R. (2016). *Quantifying the User Experience*.
+- Shneiderman, B. (1983). "Direct Manipulation: A Step Beyond Programming Languages." *IEEE Computer*.
+- Shneiderman, B. (1996). "The Eyes Have It." *VL Symposium*.
+- Shneiderman, B. et al. (2016). *Designing the User Interface*.
+- Thaler, R. & Sunstein, C. (2008). *Nudge*.
+- Tidwell, J. (2010). *Designing Interfaces*.
+- Tufte, E. (2001). *The Visual Display of Quantitative Information*.
+- Ware, C. (2013). *Information Visualization*.
+- WCAG 3.0 (2024). *Web Content Accessibility Guidelines*.
+- Weiser, M. (1991). "The Computer for the 21st Century." *Scientific American*.
+- Wolpaw, J.R. & Wolpaw, E.W. (2012). *Brain-Computer Interfaces*.
+
+---
+
+*This course has been one long conversation about carving — carving interfaces that speak to users, carving structures that organize information, carving spaces that feel natural, carving ethics that protect the vulnerable. You leave this course not just as a designer but as a carver: someone who shapes the interactions that shape the world. Carve well. — Dr. Álfhildr Lúsbrá, Alþingi Month, Summer 2040.*
