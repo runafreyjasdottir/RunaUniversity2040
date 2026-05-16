@@ -2,371 +2,616 @@
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Prerequisites:** CS201 — Data Structures & Algorithms II; CS202 — Programming Languages & Paradigms  
-**Description:** Rigorous introduction to compiler construction: lexical analysis, parsing (LL, LR, GLR), semantic analysis, intermediate representations, dataflow analysis, optimisation (constant propagation, dead code elimination, loop transformations, register allocation), code generation, and runtime systems. Covers LLVM IR and pass infrastructure, Just-In-Time compilation, and Ahead-Of-Time compilation. Lab work uses the Yggdrasil Mimir Compilation Cluster building a full compiler for a C-like language targeting RISC-V and x86-64.
+**Description:** Lexing, parsing, IR, optimization, LLVM, JIT, AOT
 
 ---
 
-## Lecture 1: The Architecture of Translation — Why Compilers Matter and How They Think
+## Lectures
 
-A compiler is a translator that maps from a source language (the programmer's mental model) to a target language (the machine's execution model). This translation is not mere substitution — it is a deep structural transformation that preserves semantics while changing representation. The compiler must understand both languages intimately: the source language's type system, control flow, and concurrency model, and the target language's instruction set, memory hierarchy, and pipeline constraints. The gap between these two models is the compiler's problem space, and the quality of the compiled code depends on how thoroughly the compiler bridges this gap.
+ᛉ **Lecture 1: The Craft of Compilation — From Source to Machine and Beyond**
 
-The **compiler pipeline** is traditionally described in phases: lexing → parsing → semantic analysis → IR generation → optimisation → code generation → assembly → linking. Each phase transforms the program representation: the lexer transforms characters into tokens, the parser transforms tokens into an abstract syntax tree (AST), semantic analysis transforms the AST into a typed AST, IR generation transforms the typed AST into a control-flow graph (CFG) in intermediate representation, optimisation transforms the CFG into a more efficient CFG, and code generation transforms the CFG into machine instructions. Each phase is a self-contained transformation with a clear input and output — this modularity is both the compiler's strength (each phase can be developed, tested, and debugged independently) and its limitation (phase boundaries can lose information that would be useful to later phases).
-
-**Just-in-time (JIT) compilation** blurs the traditional boundaries. A JIT compiler starts by interpreting or compiling with minimal optimisation, profiles the running program to identify hot spots, and then recompiles those hot spots with aggressive optimisation. The JVM's HotSpot compiler, V8's TurboFan, and LLVM's ORC JIT all use this approach. JIT compilation has access to runtime information (actual type profiles, branch frequencies, memory access patterns) that an ahead-of-time (AOT) compiler cannot see, enabling speculative optimisations (inlining a virtual call based on observed type profiles, eliminating a branch based on observed branch probabilities). The cost is startup latency (the JIT must compile hot code before it can run fast) and memory overhead (compiled code and profile data must be kept in memory).
-
-**Ahead-of-time (AOT) compilation** compiles the entire program before execution, trading runtime flexibility for predictable performance. AOT compilers have the advantage of whole-program visibility (they can see all call sites, all type definitions, all control flow) and unlimited compilation time (they can spend as long as they need on each function). The cost is that they must make optimisation decisions without runtime information — they must guess which branches are likely, which types dominate, and which functions are hot. Profile-guided optimisation (PGO) bridges this gap: the program is first compiled with instrumentation, run on representative workloads to collect profiles, and then recompiled with the profiles as additional input. PGO typically improves performance by 5–15% on real-world workloads.
-
-The **Yggdrasil Compilation Lab** uses the LLVM infrastructure as the primary compiler framework. Students build a compiler for a C-like language called **YggLang** that supports structs, pointers, arrays, functions, and a module system. The compiler targets RISC-V (the instruction set of the Mimir Cluster's node processors) and x86-64 (for testing on development machines). Each lecture builds one phase of the compiler; by the end of the course, students have a complete compiler that generates optimised code for both architectures. The lab emphasises correctness over performance: a correct but slow compiler is worth more than a fast but wrong compiler, because correctness is the foundation on which all optimisation is built.
-
-The fundamental tension in compiler design is between **simplicity** and **performance**. A simple compiler (like the ones students build in the first few weeks) translates each construct directly and predictably. A sophisticated compiler (like LLVM at -O3) makes thousands of optimisation decisions based on heuristics, profiles, and mathematical properties. The simple compiler is easier to understand, debug, and trust; the sophisticated compiler produces faster code. The art of compiler engineering is knowing when to be simple and when to be sophisticated — and ensuring that the sophisticated compiler is still correct when it is being clever.
-
-**Required Reading:**
-- Aho, Lam, Sethi & Ullman, *Compilers: Principles, Techniques, and Tools* (2nd ed., 2006/2040), chs. 1–2
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed., 2022/2040), chs. 1–3
-- Lattner & Adve, "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation," *CGO '04* (2004): 75–88
-
-**Discussion Questions:**
-1. The compiler pipeline is traditionally described as a sequence of independent phases. What information is lost at each phase boundary? How does LLVM's multi-level IR address this problem?
-2. JIT compilers have access to runtime information that AOT compilers lack. Give three specific optimisations that a JIT can perform but an AOT compiler cannot. What are the risks of these optimisations?
-3. A correct compiler is worth more than a fast compiler. But in practice, how do you verify that a compiler is correct? What are the limits of testing, and what role does formal verification play?
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-## Lecture 2: Lexical Analysis — From Characters to Tokens
+### Overview
 
-**Lexical analysis** (lexing, scanning) is the first phase of the compiler: it transforms a stream of characters into a stream of **tokens**, each annotated with a type (identifier, keyword, integer literal, operator, etc.) and a value (the lexeme — the actual string of characters that the token represents). The lexer is the compiler's first abstraction barrier: it hides the details of whitespace, comments, and character encoding, providing the parser with a clean, structured input stream.
+A compiler is a translator — a smith who takes raw ore (source code) and forges it into a blade (machine code) fit for battle (execution). Like the dwarf-smiths of Svartálfaheimr who crafted Gungnir for Odin, the compiler must understand both the material it works with and the purpose its product will serve.
 
-**Regular expressions** are the formal foundation of lexical analysis. A regular expression r denotes a regular language L(r) — a set of strings that can be recognised by a finite automaton. The key operations are: concatenation (r₁r₂, strings of r₁ followed by strings of r₂), alternation (r₁|r₂, strings of r₁ or r₂), Kleene star (r*, zero or more repetitions of r), and grouping ((r), grouping of subexpressions). Regular expressions are closed under these operations: the union, concatenation, and Kleene star of regular languages is regular. This closure property ensures that lexical specifications composed of regular expressions are themselves regular and can be implemented by a finite automaton.
+This course traces the full journey of a compiler: from the raw characters of source text through the structure of syntax, the meaning of types, the transformation of intermediate representations, and finally the emission of machine code that runs on real hardware. Along the way, we will study the great algorithms that make this translation possible — algorithms that have remained relevant for sixty years and continue to evolve in the age of multi-target compilation, just-in-time execution, and AI-guided optimization.
 
-The **Thompson's construction** (1968) converts a regular expression into an NFA (nondeterministic finite automaton) in O(|r|) time, where |r| is the length of the regular expression. Each regular expression operator maps to a distinct NFA pattern: ε-transitions for alternation, sequential composition for concatenation, and ε-transition loops for Kleene star. The resulting NFA has at most 2|r| states. The **subset construction** (powerset construction) converts the NFA into a DFA (deterministic finite automaton) by tracking sets of NFA states. The DFA has at most 2^n states (where n is the number of NFA states), and in the worst case this exponential blowup can occur — but in practice most lexical specifications produce DFAs of reasonable size. The DFA accepts the same language as the NFA but runs in O(m) time (where m is the input length), compared to O(m·n) for the NFA simulation.
+### The Compilation Pipeline
 
-**Lex** (Lesk, 1975) and its successors (**Flex**, **Ragel**, **re2c**) automate lexer generation: the programmer specifies the token patterns as regular expressions with associated actions, and the tool generates a C (or C++) function that implements the DFA. Lex's rule priority (longest match, then rule order) resolves ambiguities: if two rules match the same prefix, the longer match wins; if two rules match the same length, the first rule wins. This ensures that `identifier` matches the longest possible identifier, and that keywords have priority over identifiers.
+A compiler is organized as a pipeline of phases, each transforming its input into a more refined form:
 
-The **longest-match** rule is crucial for correct lexing. Consider the input `ifelse`: without longest match, the lexer would match `if` (a keyword) and leave `else` for the next token; with longest match, it matches `ifelse` (an identifier). The longest-match rule is implemented by the DFA continuing to advance through the input until no transition is possible, then backing up to the last accepting state. This requires the lexer to maintain a "last accept" pointer and a "current position" pointer, backing up the current position to the last accept when the DFA reaches a dead state.
+```
+Source Code
+    │
+    ▼
+┌──────────┐     ┌──────────┐     ┌──────────────┐
+│  Lexical  │────▶│  Syntax  │────▶│   Semantic    │
+│ Analysis  │     │ Analysis │     │   Analysis    │
+│ (Scanner) │     │ (Parser) │     │ (Type Checker)│
+└──────────┘     └──────────┘     └──────────────┘
+      │                │                  │
+   Tokens          Parse Tree      Annotated Tree
+                                         │
+                                         ▼
+                                 ┌──────────────┐
+                                 │ Intermediate │
+                                 │ Representation│
+                                 │  Generation   │
+                                 └──────────────┘
+                                         │
+                                         ▼
+                                 ┌──────────────┐
+                                 │ Optimization  │
+                                 │   (multiple   │
+                                 │    passes)    │
+                                 └──────────────┘
+                                         │
+                                         ▼
+                                 ┌──────────────┐
+                                 │    Code       │
+                                 │  Generation   │
+                                 └──────────────┘
+                                         │
+                                         ▼
+                                    Machine Code
+```
 
-**Token attributes** carry more than just the type. The YggLang lexer produces tokens with: type (INT, ID, KW_IF, OP_PLUS, etc.), lexeme (the actual string), line and column (for error messages), and value (the parsed integer value for numeric literals, or the interned string for identifiers). The lexer also handles comments (discarded), string literals (with escape sequence processing), and numeric literals (with type suffixes for integer sizes). The **symbol table** (interning table) maps identifier strings to unique integer IDs, ensuring that each identifier is compared and stored as a single integer rather than a variable-length string.
+**Front End**: Language-dependent phases (lexical analysis, syntax analysis, semantic analysis). Converts source text to an intermediate representation.
 
-**Unicode and UTF-8** present challenges that the early lexer generators did not anticipate. A modern lexer must handle UTF-8-encoded input, where a single "character" (Unicode code point) may occupy 1–4 bytes. The lexer must: (1) decode UTF-8 to code points before matching against regular expressions, or (2) write regular expressions that work on the byte-level UTF-8 encoding. Approach (1) is simpler but slower (every byte must be decoded); approach (2) is faster but requires understanding the UTF-8 encoding rules. The YggLang lexer uses approach (1) for keywords and identifiers (which are ASCII-only) and approach (2) for string literals (which may contain arbitrary Unicode).
+**Middle End**: Language- and machine-independent optimization. Transforms IR into more efficient equivalent IR.
 
-**Error recovery** in the lexer is typically simple: if no rule matches, emit an error token with the offending character and continue. The parser handles the error token by attempting to recover (skip tokens until a synchronisation point). More sophisticated lexers attempt to re-synchronise by skipping characters until a valid token start is found. The YggLang lexer emits a diagnostic message ("unexpected character 'þ' at line 42, column 7 — did you mean 'th'?") and skips to the next token start, allowing the parser to see as many valid tokens as possible and produce better error messages.
+**Back End**: Machine-dependent code generation. Selects instructions, allocates registers, and emits assembly or machine code.
 
-**Required Reading:**
-- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), ch. 3 (Lexical Analysis)
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 2 (Scanners)
-- Lesk, "Lex — A Lexical Analyzer Generator," *Bell Labs Computing Science Technical Report* 39 (1975)
+This three-part structure is crucial. It is what allows a single optimizer to serve many languages (C, C++, Rust, Swift all compile to LLVM IR) and many targets (x86, ARM, RISC-V, WASM all share the same optimization pipeline).
 
-**Discussion Questions:**
-1. The subset construction can produce an exponential number of DFA states. Give a regular expression for which this blowup occurs. How do lexer generators handle this in practice?
-2. The longest-match rule resolves most ambiguities, but not all. Give an example where the longest-match rule produces an incorrect result. How do you fix this?
-3. Unicode support in lexers is more complex than ASCII. What are the tradeoffs between decoding UTF-8 before scanning versus writing byte-level regular expressions?
+### Historical Arc
 
----
+- **1954**: FORTRAN compiler for IBM 704. First optimizing compiler. Led by John Backus, it produced code competitive with hand-written assembly.
+- **1960s**: Theory of formal languages develops. Chomsky hierarchy (1956) provides the mathematical foundation for parsing.
+- **1970s**: LR parsing (Knuth, 1965), LALR parsing (DeRemer, 1971), and the yacc/bison toolchain. Unix pipeline philosophy (Thompson, Ritchie) influences compiler architecture.
+- **1980s**: SSA form (Rosen, Wegman, Zadeck, 1988) revolutionizes optimization. GCC emerges as the dominant open-source compiler.
+- **1990s**: Java introduces JIT compilation to the mainstream (HotSpot JVM, 1999). Just-In-Time compilation becomes practical for managed languages.
+- **2000s**: LLVM (Lattner, 2000-2004) demonstrates that a clean, retargetable IR can serve as the backbone for a compiler infrastructure supporting many languages and targets.
+- **2010s-2040s**: Compiler infrastructure evolves into an ecosystem. Profile-guided optimization, auto-vectorization, polyhedral models, and ML-guided optimization become standard. Verified compilers (CompCert) prove correctness end-to-end.
 
-## Lecture 3: Parsing — From Tokens to Trees
+### The 2040 Context
 
-**Parsing** transforms the token stream into an **abstract syntax tree** (AST) — a structured representation of the program that captures its hierarchical organisation. The AST is the compiler's primary data structure: every subsequent phase (semantic analysis, IR generation, optimisation, code generation) operates on the AST or its derivatives.
+At UoY, our compiler lab uses LLVM 28 as the primary infrastructure. Students implement a full front end for a teaching language (NornScript), generate LLVM IR, and leverage LLVM's optimization passes before targeting x86-64, RISC-V, and WASM. The final project requires implementing at least one custom optimization pass and evaluating its impact on real benchmarks.
 
-**Context-free grammars** (CFGs) are the formal foundation of parsing. A CFG G = (V, Σ, R, S) consists of: a set of nonterminals V (syntactic categories like expression, statement, function), a set of terminals Σ (the tokens from the lexer), a set of productions R (rewrite rules like E → E + T | T), and a start symbol S (the root nonterminal). A string w is in L(G) iff there exists a derivation S ⇒* w — a sequence of production applications that derives w from S. CFGs are strictly more powerful than regular languages: they can express nested structures (parentheses, begin-end blocks, recursive data types) that regular expressions cannot.
+By 2040, compilers are no longer passive translators. They are:
+- **Adaptive**: ML-guided optimization profiles the code at runtime and adjusts inlining, vectorization, and register allocation accordingly.
+- **Verified**: Tools like CompCert and CakeML prove that the compiler preserves the semantics of the source program.
+- **Multi-target**: A single IR compiles to CPUs, GPUs, TPUs, and WASM without source changes.
+- **Collaborative**: The IDE and the compiler work together — the compiler provides diagnostics, suggestions, and refactoring assistance in real time.
 
-The **parse tree** (concrete syntax tree) records every derivation step, including intermediate nonterminals and productions. The **abstract syntax tree** (AST) is a simplified version that eliminates syntactic sugar and intermediate nodes. For example, the parse tree for `3 + 4 * 5` has intermediate nodes for every production (E → E + T, T → T * F, F → num), while the AST has a single binary expression node with operator +, left child 3, and right child a binary expression with operator *, left child 4, and right child 5. The AST is the compiler's working representation; the parse tree is useful for tooling (syntax highlighting, refactoring) but not for compilation.
+### Key Terminology
 
-**LL parsing** (top-down, predictive) constructs the parse tree from left to right using a leftmost derivation. **LL(1)** parsers use one token of lookahead to decide which production to apply. The LL(1) parsing table is constructed by computing the FIRST and FOLLOW sets of each nonterminal: FIRST(A) is the set of terminals that can begin a string derived from A; FOLLOW(A) is the set of terminals that can appear immediately after A in any derivation. A grammar is LL(1) iff for each nonterminal A with productions A → α₁ | α₂ | ... | αₙ, the sets FIRST(αᵢ) are pairwise disjoint, and if ε ∈ FIRST(αᵢ), then FIRST(αⱼ) ∩ FOLLOW(A) = ∅ for all j ≠ i. LL(1) grammars can be parsed in O(n) time using a recursive-descent parser or a table-driven parser.
+- **Token**: The smallest meaningful unit recognized by the lexer (identifier, keyword, literal, operator).
+- **Parse tree**: A tree representation of the syntactic structure of the source program according to the grammar.
+- **AST (Abstract Syntax Tree)**: A simplified parse tree that omits syntactic sugar (parentheses, semicolons) and retains essential structure.
+- **IR (Intermediate Representation)**: A machine-independent representation that serves as the interface between the front end and back end.
+- **Basic block**: A maximal sequence of instructions with one entry point and one exit point.
+- **Control flow graph (CFG)**: A graph of basic blocks with edges representing possible execution paths.
+- **SSA (Static Single Assignment)**: An IR form where each variable is assigned exactly once, making dataflow analysis simpler and more powerful.
 
-**LL(k) parsing** generalises LL(1) to k tokens of lookahead. The complexity of LL(k) parsing grows rapidly with k (the parse table size is O(|G| · |Σ|ᵏ)), and most programming language grammars are not LL(1) — they have ambiguous productions that require arbitrary lookahead (the "dangling else" problem, where `if (c1) if (c2) s1 else s2` can parse as `if (c1) { if (c2) s1 } else s2` or `if (c1) { if (c2) s1 else s2 }`). ANTLR (Parr, 2013) is the most widely used LL(*) parser generator; it uses adaptive LL(*) parsing with DAG-structured lookahead to handle arbitrary lookahead without the exponential cost of fixed k.
+### Required Reading
 
-**LR parsing** (bottom-up, shift-reduce) constructs the parse tree from left to right using a rightmost derivation in reverse. LR parsers maintain a stack of grammar symbols and states, and they shift tokens onto the stack until a production's right-hand side appears on top of the stack, at which point they reduce the right-hand side to the left-hand side. **LR(0)** parsers use no lookahead; they are simple but can only handle a small class of grammars. **SLR(1)** (Simple LR) parsers use one token of lookahead and the FOLLOW sets to resolve shift-reduce conflicts. **LALR(1)** (Look-Ahead LR) parsers merge states with the same core (the same LR(0) items) but different lookaheads; this reduces the parse table size at the cost of occasionally introducing conflicts. **Yacc** (Johnson, 1975) and **Bison** (the GNU equivalent) generate LALR(1) parsers; most programming language grammars are LALR(1) or can be made LALR(1) with minor modifications.
+- Aho, A. V., Lam, M. S., Sethi, R., & Ullman, J. D. (2006). *Compilers: Principles, Techniques, and Tools* (2nd ed.). Pearson. Chapters 1-2.
+- Lattner, C. & Adve, V. (2004). "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation." *CGO*.
+- Cooper, K. D. & Torczon, L. (2022). *Engineering a Compiler* (3rd ed.). Morgan Kaufmann. Chapter 1.
 
-**CLR(1)** (Canonical LR) parsers use the full LR(1) item sets without merging, producing the largest parse tables but handling the widest class of grammars. **GLR parsing** (Tomita, 1984) handles ambiguous grammars by maintaining multiple parse stacks in parallel, merging them when they converge. GLR parsers can parse any context-free grammar (including ambiguous ones) in O(n³) worst-case time, but most programming language grammars parse in O(n) time in practice. The **Elkhound** parser generator (Nederhort, 2004) uses GLR parsing with a shared packed parse forest (SPPF) to represent all possible parses efficiently, returning the number of parses and the forest of all parse trees.
+### Discussion Questions
 
-**Operator precedence parsing** resolves ambiguities in expression grammars without modifying the grammar. By assigning precedence levels to operators (e.g., * has higher precedence than +) and associativity directions (left, right, or non-associative), the parser can resolve shift-reduce conflicts without lookahead. Yacc/Bison support operator precedence declarations (%left, %right, %nonassoc) that annotate the grammar and resolve conflicts at parse time. The YggLang parser uses operator precedence for expressions and LALR(1) for statements and declarations, resulting in a clean, unambiguous grammar.
+1. If a compiler is a translator, what is "lost in translation"? Can a compiled program ever be more correct than its source?
+2. LLVM's three-phase architecture (front-middle-back) enables language and target independence. What are the costs of this generality? Are there cases where a single-pass compiler outperforms a multi-stage compiler?
+3. The FORTRAN I compiler (1954) produced code competitive with hand-written assembly. If you were designing a compiler in 2040, what would "competitive with hand-written code" mean for modern architectures?
 
-**Error recovery** in parsing is more complex than in lexing. The basic strategies are: (1) **panic mode** — discard tokens until a synchronisation set (e.g., statement separators like `;`, `}`, `end`) is found, then continue parsing; (2) **phrase-level recovery** — replace the erroneous prefix with a correction (e.g., insert a missing semicolon, delete an extra token); (3) **error productions** — augment the grammar with productions that match common errors (e.g., E → E + + E to handle double operators); (4) **global correction** — find the minimal set of insertions and deletions that produce a valid parse tree. Panic mode is fast but may skip large portions of the input; phrase-level recovery is better but requires more grammar engineering; global correction is optimal but NP-complete. The YggLang parser uses panic mode with carefully chosen synchronisation sets that are derived from the grammar's FOLLOW sets.
+### Practice Problems
 
-**Required Reading:**
-- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), chs. 4–5
-- Appel, *Modern Compiler Implementation in ML* (2004/2040), chs. 3–4
-- Tomita, *Efficient Parsing for Natural Language* (1986), chs. 2–3
-
-**Discussion Questions:**
-1. Most programming language grammars are not LL(1). Give three specific constructs that violate LL(1) and explain why. How does each parser type (LL(1), LALR(1), GLR) handle them?
-2. The shift-reduce conflict is the bane of LALR(1) parsing. What is the dangling-else ambiguity, and how do operator precedence declarations resolve it? What other common shift-reduce conflicts arise in practice?
-3. Error recovery is more art than science. What are the tradeoffs between panic mode and phrase-level recovery? When would you choose global correction despite its NP-complete complexity?
-
----
-
-## Lecture 4: Semantic Analysis — Types, Scope, and Well-Formedness
-
-The parser produces an AST, but the AST does not carry enough information for code generation. Is `x + y` an integer addition or a floating-point addition? Is `f(x)` a valid call? Does `p->field` refer to a field that exists? These questions are answered by **semantic analysis**, the phase that annotates the AST with types, resolves names to declarations, and checks that the program is well-formed according to the language's static semantics.
-
-**Name resolution** maps every identifier occurrence (use) to its declaration (definition). This requires a **scope** stack: a set of nested symbol tables, one per enclosing scope (block, function, module). When the compiler encounters a declaration `int x = 5;`, it inserts x into the current scope's symbol table. When it encounters a use of x in an expression, it looks up x by searching the scope stack from innermost to outermost, finding the most recent declaration. The symbol table also stores metadata about each name: its type, storage class (automatic, static, extern), and location (stack offset, register, global address).
-
-**Type checking** verifies that every expression has a well-defined type and that operations are applied to operands of the correct type. The **type system** is the set of rules that defines which types are valid and how they compose. YggLang has a simple type system: integers (`i8`, `i16`, `i32`, `i64`), floats (`f32`, `f64`), booleans, pointers, arrays, structs, and functions. The type checker rules are: arithmetic operators require numeric types, comparison operators require comparable types, assignment requires compatible types, and function calls require matching parameter types. Type compatibility is determined by a **coercion** relation: `i8` → `i16` → `i32` → `i64` → `f32` → `f64` (implicit widening), but no implicit narrowing (explicit casts required).
-
-**Type inference** (for languages with parametric polymorphism, like ML, Haskell, and Rust) deduces the types of expressions from how they are used, without requiring explicit type annotations. The **Hindley-Milner type system** (Hindley, 1969; Milner, 1978) performs type inference using Algorithm W: for each expression, it generates a fresh type variable and a set of constraints (equations between types), then solves the constraints using unification. If unification succeeds, the inferred types are the most general possible; if it fails, the program has a type error. Hindley-Milner type inference is decidable and produces principal types (most general types) in polynomial time. YggLang does not have parametric polymorphism (it is a C-like language), so its type checker is simpler — it only needs to check that each expression has a well-defined type and that operations are applied to compatible types.
-
-**Control flow analysis** checks that control flow is well-formed: all loops have reachable bodies, all breaks and continues are inside loops, all returns are inside functions, and all switch cases are exhaustive (or have a default case). The YggLang compiler performs **definite assignment** checking: a local variable must be definitely assigned before it is used on every execution path. This is a dataflow analysis problem that requires computing the set of variables that are definitely assigned at each program point. The analysis is flow-sensitive (it considers the order of statements) and path-sensitive (it considers conditional branches).
-
-**The symbol table** is the central data structure of semantic analysis. It maps names to their declarations and metadata. In a language with nested scopes (like YggLang), the symbol table is implemented as a stack of hash tables: each scope push creates a new hash table pushed onto the stack, and each scope pop removes it. Lookup searches from the top of the stack downwards. For languages with modules or namespaces (like Rust, Python, or Java), the symbol table must also handle qualified names (`module::function`) and import/export declarations. The YggLang symbol table supports nested block scopes, function scopes, and module scopes, with shadowing (an inner declaration shadows an outer declaration with the same name).
-
-**Abstract syntax** vs. **concrete syntax**: the parser produces a concrete syntax tree that mirrors the grammar productions, but the semantic analyser works on an abstract syntax tree that represents the essential structure of the program. The translation from concrete to abstract syntax eliminates syntactic sugar (e.g., `x += 1` becomes `x = x + 1`), flattens nested expressions into three-address code, and groups related constructs (e.g., all loop types become a single `while` construct). This simplification makes subsequent phases easier to implement and reason about.
-
-**Required Reading:**
-- Pierce, *Types and Programming Languages* (2002/2040), chs. 1–5, 22
-- Appel, *Modern Compiler Implementation in ML* (2004), ch. 5
-- Nielson, Nielson & Hankin, *Principles of Program Analysis* (2004/2040), ch. 1
-
-**Discussion Questions:**
-1. Hindley-Milner type inference is decidable and produces principal types. But many useful type system features (type classes, row polymorphism, dependent types) make type inference undecidable. What are the tradeoffs?
-2. Definite assignment checking is flow-sensitive and path-sensitive. Give an example where a variable is definitely assigned on some paths but not others, and explain how the analysis handles it. What are the limitations of this analysis?
-3. The symbol table must handle qualified names and imports. How does this interact with separate compilation (where a module may be compiled before its dependencies)? What is the minimal interface that separate compilation requires?
-
----
-
-## Lecture 5: Intermediate Representations — SSA, Basic Blocks, and Control Flow Graphs
-
-The **intermediate representation** (IR) is the compiler's internal language — the representation on which all optimisations are performed. A good IR must be: (1) expressive enough to represent the source language's semantics, (2) simple enough to be analysed and transformed efficiently, and (3) target-independent enough to support multiple backends. LLVM IR achieves this balance with a low-level, typed, infinite-register representation in **static single assignment** (SSA) form.
-
-**SSA form** (Cytron et al., 1991) requires that every variable is assigned exactly once. In non-SSA code, a variable may be assigned multiple times (e.g., `x = 1; x = x + 1; x = x * 2`). In SSA form, each assignment creates a new variable: `x₁ = 1; x₂ = x₁ + 1; x₃ = x₂ * 2`. At control flow merge points (where multiple definitions of the same source variable reach the same point), SSA inserts **φ-functions** (phi functions) that select the appropriate definition based on the incoming control flow edge: `x₄ = φ(x₃, x₅)` means "x₄ takes the value of x₃ if control came from the first predecessor, or x₅ if control came from the second predecessor." φ-functions are not executable instructions — they are bookkeeping entries that tell the compiler how definitions flow through the program.
-
-**Basic blocks** are sequences of instructions with a single entry (the first instruction) and a single exit (the last instruction). There are no branches into or out of the middle of a basic block. Basic blocks are the fundamental unit of analysis and optimisation: dataflow analysis operates on basic blocks, instruction scheduling operates within basic blocks, and control flow analysis connects basic blocks into a **control flow graph** (CFG).
-
-The **control flow graph** (CFG) is a directed graph where nodes are basic blocks and edges represent possible control flow transfers. The entry block is the first block executed; exit blocks are blocks that terminate the function (by returning, throwing an exception, or reaching an unreachable state). The CFG is the foundation for almost all optimisations: constant propagation follows edges from predecessors to successors, dead code elimination identifies blocks that are unreachable from the entry, and loop detection identifies back edges (edges from a block to a block that dominates it).
-
-**Constructing SSA form** from a CFG requires two phases: (1) inserting φ-functions at join points (basic blocks with multiple predecessors where the same source variable has different definitions in different predecessors), and (2) renaming variables (replacing each source variable with a new SSA name at each definition and use). Phase 1 uses the **dominance frontier** (Cytron et al., 1991): a basic block B is in the dominance frontier of block D if B has a predecessor that D dominates (or is D) but D does not strictly dominate B. Intuitively, the dominance frontier identifies where two paths merge — exactly the points where φ-functions are needed. Phase 2 walks the dominator tree in depth-first order, assigning new SSA names and replacing old names.
-
-**LLVM IR** is a typed, three-address, infinite-register IR in SSA form. Every value has a type (e.g., `i32`, `float`, `i8*`, `[10 x i32]`, `%struct.Point`), and every instruction defines a new SSA value (e.g., `%1 = add i32 %x, 5`). LLVM IR supports arithmetic instructions (`add`, `sub`, `mul`, `sdiv`, `udiv`), comparison instructions (`icmp eq`, `icmp slt`), memory instructions (`alloca`, `load`, `store`, `getelementptr`), control flow instructions (`br`, `switch`, `ret`, `invoke`, `unwind`), and function calls (`call`). The `getelementptr` (GEP) instruction computes the address of a sub-element of a structured type (struct, array) without loading it — it is the pointer arithmetic primitive of LLVM IR, and it is the most commonly misunderstood instruction for newcomers.
-
-The **YggLang compiler** translates the typed AST (produced by semantic analysis) into LLVM IR via a recursive walk of the AST. Expression nodes produce SSA values; statement nodes produce side effects (stores, branches). Function bodies become CFGs of basic blocks, each terminated by a branch or return instruction. The translation preserves the source semantics but eliminates syntactic sugar: `for` loops become `while` loops, `switch` statements become `switch` instructions, and `break`/`continue` become explicit branches. The result is a clean, well-structured LLVM IR module ready for optimisation.
-
-**Required Reading:**
-- Cytron et al., "Efficiently Computing Static Single Assignment Form and the Control Dependence Graph," *ACM TOPLAS* 13:4 (1991): 451–490
-- Lattner & Adve, "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation," *CGO '04* (2004): 75–88
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 5, 9
-
-**Discussion Questions:**
-1. SSA form requires φ-functions at merge points. Why can't the compiler simply assign each source variable a single SSA name? What would go wrong?
-2. The dominance frontier algorithm inserts φ-functions conservatively (it may insert φ-functions that are not strictly necessary). How can we determine which φ-functions are necessary and which are redundant?
-3. LLVM IR uses infinite virtual registers. How does this simplify compiler passes compared to a representation with a fixed number of physical registers? What pass is responsible for mapping virtual registers to physical registers?
+1. **Pipeline trace**: Given the C expression `x = a + b * c`, trace each compiler phase from source text through tokens, parse tree, AST, IR, and assembly (x86-64).
+2. **Phase identification**: For each task, identify the compiler phase: (a) detecting that a variable is used before being defined, (b) converting `if` statements to conditional branches, (c) replacing `2 * x` with `x << 1`, (d) detecting that `/` is a division operator.
+3. **Design decision**: You are building a compiler for a new language that runs on both embedded ARM microcontrollers and cloud x86 servers. How does the three-phase architecture help? What optimizations differ between the two targets?
 
 ---
 
-## Lecture 6: Dataflow Analysis — The Mathematical Heart of Optimisation
+ᛉ **Lecture 2: Lexical Analysis — Where Characters Become Tokens**
 
-**Dataflow analysis** is the technique by which the compiler derives facts about the program's runtime behaviour without actually running the program. Every optimisation depends on some form of dataflow analysis: constant propagation needs to know which variables hold constant values, dead code elimination needs to know which computations are unused, and register allocation needs to know which variables are live at each program point. Dataflow analysis provides these facts by solving systems of equations over the CFG.
-
-A **dataflow analysis** is defined by: (1) a **domain** D of abstract values (e.g., sets of variables for liveness analysis, maps from variables to constants for constant propagation); (2) a **flow function** for each instruction that maps the input abstract state to the output abstract state; (3) a **merge operator** ⊔ that combines abstract states at join points (union for may-analyses, intersection for must-analyses); (4) a **direction** (forward or backward); and (5) an **initial value** (⊤ for may-analyses, ⊥ for must-analyses).
-
-**Reaching definitions** is a forward may-analysis that determines which definitions of variables reach each program point. A definition d of variable x reaches point p if there is a path from d to p along which x is not redefined. The domain is sets of definitions {d₁, d₂, ...}. The flow function for an instruction `x = ...` kills all previous definitions of x and generates the new definition. The merge operator is set union (a definition reaches p if it reaches p on *any* path). Reaching definitions is used for constant propagation, copy propagation, and induction variable analysis.
-
-**Liveness analysis** is a backward must-analysis that determines which variables are live (will be used in the future) at each program point. A variable x is live at point p if there is a path from p to a use of x along which x is not redefined. The domain is sets of variables {x₁, x₂, ...}. The flow function for an instruction that uses x generates x (adds x to the live-out set), and the flow function for an instruction that defines x kills x (removes x from the live-in set). The merge operator is set union (x is live at p if it is live on *any* successor path). Liveness analysis is essential for register allocation: a variable that is not live does not need a register.
-
-**Constant propagation** is a forward must-analysis that determines which variables hold constant values at each program point. The domain is maps from variables to either a constant value c ∈ Z ∪ R or ⊤ (unknown) or ⊥ (undefined). The flow function for `x = y + z` evaluates y + z if both y and z are constant, producing a constant result; otherwise, it produces ⊤. The merge operator is: if both inputs are the same constant c, the result is c; if they differ, the result is ⊤. Constant propagation is one of the most powerful optimisations: it enables dead code elimination (if a condition is constantly true or false, the dead branch can be removed), strength reduction (replace multiplication by a constant with shifts and adds), and branch folding.
-
-**Worklist algorithms** solve dataflow equations efficiently. The naive approach iterates over all basic blocks until convergence (the chaotic iteration algorithm). The worklist approach maintains a set of blocks that need to be re-analysed (because their inputs have changed). Initially, all blocks are on the worklist. When a block is processed, its output is computed from its input using the flow function. If the output changes, all blocks that depend on this block's output (its successors for forward analyses, its predecessors for backward analyses) are added to the worklist. The worklist algorithm terminates when the worklist is empty. In practice, most dataflow analyses converge in 2–5 iterations for well-structured programs, because most blocks' outputs do not change after the first iteration.
-
-**Complexity and convergence**: dataflow analysis on a CFG with n nodes and domain D converges in at most n × h(D) iterations, where h(D) is the height of the lattice (the length of the longest chain from ⊤ to ⊥). For constant propagation, h(D) is infinite (the lattice of integers has infinite height), so constant propagation may not converge; in practice, the compiler uses widening (replacing a sequence of increasing values with ⊤ after a fixed number of iterations) to ensure convergence. For liveness and reaching definitions, h(D) is the number of variables, so convergence is guaranteed in O(n × v) iterations, where v is the number of variables. The YggLang compiler implements all standard dataflow analyses using LLVM's pass infrastructure, which provides efficient worklist-based solvers.
-
-**Required Reading:**
-- Aho, Lam, Sethi & Ullman, *Compilers* (2nd ed.), ch. 9 (Dataflow Analysis)
-- Nielson, Nielson & Hankin, *Principles of Program Analysis* (2004/2040), chs. 2–3
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 8
-
-**Discussion Questions:**
-1. Constant propagation over the integers is not guaranteed to converge (the lattice has infinite height). How does widening work, and what information does it lose? Can you design a more precise widening operator?
-2. Liveness analysis and reaching definitions are duals (one is backward, the other forward; one uses union, the other intersection). What other pairs of dual analyses can you identify?
-3. Dataflow analysis is flow-sensitive but not path-sensitive (it merges results from all paths). Give examples of optimisations that would benefit from path-sensitive analysis. What are the challenges?
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-## Lecture 7: Optimisation — Making Programs Run Faster
+### Overview
 
-**Optimisation** is the phase of the compiler that transforms the program into an equivalent but more efficient version. The term "optimisation" is a misnomer — the compiler does not find the optimal program (which is undecidable in general), but it finds a better program. The betterment is measured by one or more objective functions: execution time, code size, energy consumption, or a weighted combination. Every optimisation must preserve the program's **semantics** — the observable behaviour — while improving the objective function.
+Lexical analysis (scanning) is the compiler's first encounter with the source text. It transforms a stream of characters into a stream of tokens — the smallest meaningful units of the language. The scanner strips whitespace and comments, groups characters into identifiers, keywords, literals, and operators, and passes the token stream to the parser.
 
-**Dead code elimination** (DCE) removes code that cannot be reached or whose results are never used. Unreachable code (blocks with no path from the entry block) is removed entirely. Dead assignments (assignments to variables that are never read) are removed from the IR. In SSA form, DCE is particularly effective: a value that has no uses can be removed, and its definition can be removed in turn, potentially exposing more dead code in a cascade. The YggLang compiler's DCE pass typically removes 10–20% of the IR instructions.
+This lecture covers the mathematical foundations of lexical analysis (regular expressions and finite automata), the algorithms for constructing efficient scanners (NFA → DFA → minimized DFA), and the practical concerns of building a lexer by hand or using tools like flex and re2c.
 
-**Constant propagation and folding** replaces variables that hold constant values with their values and evaluates constant expressions at compile time. If `x = 3` and `y = 5`, then `z = x + y` becomes `z = 8`. This enables further optimisations: the branch `if (z < 10)` becomes `if (8 < 10)` which becomes `true`, allowing the else branch to be removed (dead code elimination). Constant propagation and DCE form the most basic optimisation cycle: constant propagation enables DCE, which exposes more constants for propagation.
+### Regular Expressions
 
-**Common subexpression elimination** (CSE) identifies expressions that compute the same value and replaces redundant computations with a single computation. Local CSE operates within a basic block; global CSE operates across basic blocks using available expressions analysis (a forward may-analysis). In SSA form, CSE is trivial: if two instructions compute the same operation on the same operands, they produce the same SSA value, so the second instruction can be replaced by a reference to the first. **Global value numbering** (GVN) is a more powerful form of CSE that assigns a canonical number to each unique value and replaces all instructions that compute the same value with the canonical representative.
+Regular expressions define the patterns that the scanner recognizes. Each token class is specified as a regular expression:
 
-**Loop optimisations** are the most impactful class of optimisations because programs spend most of their time in loops. **Loop-invariant code motion** (LICM) moves computations that do not change across loop iterations out of the loop. If `x = y * z` and neither y nor z changes in the loop, x can be computed before the loop. **Strength reduction** replaces expensive operations with cheaper ones: `x * 2` becomes `x << 1`, `x * 8` becomes `x << 3`, and `a[i]` (array indexing) becomes pointer arithmetic that increments by the stride. Induction variable analysis identifies variables that vary linearly across loop iterations (e.g., `i` in `for (i = 0; i < n; i++)`) and enables strength reduction of the memory access pattern.
+```
+Identifier:  [a-zA-Z_][a-zA-Z0-9_]*
+Integer:     [0-9]+
+Float:       [0-9]+\.[0-9]+([eE][+-]?[0-9]+)?
+Keyword:     if | else | while | for | return | ...
+Operator:    + | - | * | / | = | == | != | < | > | <= | >= | && | || | ...
+String:      "([^"\\]|\\.)*"
+Comment:     //.*$ | /\*([^*]|\*+[^*/])*\*+/
+Whitespace:  [ \t\r\n]+
+```
 
-**Loop unrolling** replicates the loop body to reduce the overhead of loop control (branch, increment, compare) and enable further optimisations across iterations. Unrolling by a factor of k reduces the loop overhead by k× and exposes instruction-level parallelism (independent operations from different iterations can be executed simultaneously). The cost is increased code size (k copies of the loop body). **Loop vectorisation** (SIMD) transforms scalar operations into vector operations: `for (i = 0; i < n; i++) a[i] = b[i] + c[i]` becomes a single vector add instruction that adds 4 or 8 elements at once. LLVM's vectorisation pass analyses loop carried dependencies and generates vector code when safe.
+Regular expressions are built from three operations:
+1. **Union** (R1 | R2): Matches either R1 or R2.
+2. **Concatenation** (R1 R2): Matches R1 followed by R2.
+3. **Kleene star** (R*): Matches zero or more repetitions of R.
 
-**Inlining** replaces a function call with the body of the called function, eliminating call overhead (parameter passing, stack frame allocation, return) and enabling further optimisations across the caller-callee boundary. Inlining is the single most impactful optimisation for programs with many small function calls (which is most modern programs, thanks to abstraction-based programming styles). The cost is increased code size (code bloat), which can hurt instruction cache performance. **Profile-guided inlining** uses runtime profiles to decide which functions to inline: hot functions are always inlined, cold functions are never inlined, and warm functions are inlined if the callee is small. The YggLang compiler's inlining heuristic is: inline functions with fewer than 20 IR instructions, and functions that are called from only one call site (regardless of size).
+These three operations, plus ε (empty string) and ∅ (empty language), form the foundation of pattern matching in the scanner.
 
-**Required Reading:**
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 8, 10, 14
-- Muchnick, *Advanced Compiler Design and Implementation* (1997), chs. 12–18
-- Allen & Kennedy, *Optimizing Compilers for Modern Architectures* (2002/2040), chs. 2–4
+### Finite Automata
 
-**Discussion Questions:**
-1. Optimisation is correct only if it preserves the program's semantics. Give an example of an optimisation that changes the program's observable behaviour. How do compiler writers ensure correctness?
-2. Loop unrolling increases code size. When is unrolling beneficial, and when does it hurt performance? How does profile-guided unrolling decide the unrolling factor?
-3. Inlining is the most impactful optimisation, but it can cause code bloat. What is the relationship between code size and instruction cache performance? How do modern compilers balance inlining benefits against code bloat?
+**Deterministic Finite Automaton (DFA)**: A 5-tuple (Q, Σ, δ, q₀, F) where Q is a finite set of states, Σ is the input alphabet, δ: Q × Σ → Q is the transition function, q₀ is the start state, and F ⊆ Q is the set of accepting states. Each input character causes exactly one transition.
 
----
+**Nondeterministic Finite Automaton (NFA)**: δ maps each (state, symbol) pair to a *set* of states. ε-transitions allow movement between states without consuming input. An NFA accepts a string if *some* path from q₀ to a state in F consumes the entire string.
 
-## Lecture 8: Register Allocation — The Hard Problem
+**Key theorems**:
+- For every NFA, there exists an equivalent DFA (subset construction).
+- For every regular expression, there exists an NFA that recognizes the same language (Thompson's construction).
+- Every regular language can be expressed as a regular expression (Kleene's theorem).
+- A DFA with n states can be minimized to a unique canonical form with at most n states.
 
-**Register allocation** maps the compiler's infinite virtual registers (SSA values) to the finite physical registers of the target machine. This is the most constrained phase of the compiler: even the simplest optimisations can be undone by poor register allocation, because spills (values that do not fit in registers and must be stored in memory) can dominate the execution time. Register allocation is NP-complete in general (Chaitin, 1982), so all practical algorithms use heuristics.
+### Thompson's Construction
 
-**Live ranges** are the foundation of register allocation. A virtual_register v is live from its definition to its last use (exclusive of the point where it is defined, inclusive of the point where it is used). Two virtual registers **interfere** if their live ranges overlap — they cannot be assigned to the same physical register. The **interference graph** is an undirected graph where nodes are virtual registers and edges connect interfering registers. Register allocation reduces to **graph colouring**: assign K colours (physical registers) to the nodes such that no two adjacent nodes have the same colour. If the graph cannot be coloured with K colours, some registers must be **spilled** (stored in memory and loaded when needed).
+Given a regular expression R, Thompson's construction builds an NFA with at most 2|R| states (where |R| is the number of symbols and operators in R). The construction rules are:
 
-**Chaitin's algorithm** (1982) is the classic graph-colouring register allocator. It proceeds in four phases: (1) **Build** — construct the interference graph from liveness information; (2) **Simplify** — repeatedly remove nodes with degree < K (they can be coloured easily after the remaining graph is coloured) and push them onto a stack; (3) **Spill** — if no node has degree < K, select a node to spill (store in memory) based on a heuristic (e.g., least frequently used, or the node whose removal reduces the most edges); (4) **Select** — pop nodes from the stack and assign them colours, checking that no neighbour already has the assigned colour. If a node cannot be coloured, it must be spilled. After spilling, the compiler must insert load/store instructions, rebuild the interference graph, and try again. This **iterate-colour-spill** loop may require several rounds.
+1. **ε**: NFA with two states connected by an ε-transition.
+2. **a**: NFA with two states connected by a transition on symbol a.
+3. **R1 | R2**: Create new start and accepting states. ε-transition from new start to starts of R1 and R2. ε-transitions from accepting states of R1 and R2 to new accepting state.
+4. **R1 R2**: Concatenation: accepting state of R1 becomes start state of R2 (via ε-transition).
+5. **R***: Create new start and accepting states. ε-transition from new start to new accepting and to start of R. ε-transition from accepting state of R to start of R and to new accepting state.
 
-**Linear scan register allocation** (Traub et al., 1998) is a faster alternative that avoids building the interference graph. It sorts live ranges by their start points and scans them in order, assigning the first available register to each live range. If no register is available, the live range with the furthest end point is spilled. Linear scan is O(n log n) (for sorting) compared to Chaitin's O(n²) (for building the interference graph), making it suitable for JIT compilers where compilation time is critical. The **linear scan with second chance** (Wimmer & Mössenb\uck{ö}ck, 2005) improves on basic linear scan by splitting live ranges at optimal points (where the live range has a gap) rather than spilling the entire range.
+### NFA to DFA: Subset Construction
 
-**Coalescing** eliminates unnecessary register-to-register copies (e.g., `mov %r1, %r2` generated by copy propagation after register allocation). Coalescing merges the source and destination registers of a copy instruction into a single register, removing the copy. The challenge is that coalescing increases the degree of the merged node in the interference graph, potentially making the graph uncolourable. **Aggressive coalescing** (Chaitin) coalesces all copy-related nodes regardless of degree, risking increased spilling. **Conservative coalescing** (George & Appel, 1996) coalesces only when it is guaranteed not to increase spilling. **Iterated coalescing** (Appel & George, 2001) interleaves simplification and coalescing, coalescing when possible and simplifying when necessary, until no more progress can be made.
+The subset construction converts an NFA with n states to a DFA with at most 2ⁿ states. For each DFA state, which is a set of NFA states:
 
-**SSA-based register allocation** exploits the properties of SSA form to simplify the allocation problem. In SSA form, every definition is unique, and phi-functions join values at merge points. The interference graph in SSA form has a special structure: values defined in disjoint scopes (different branches of an if-then-else) do not interfere, even if they are merged by a phi-function. This reduces the number of interferences and makes the graph easier to colour. The **separate allocator** approach (Budimlić et al., 2002) allocates registers within each basic block separately, using phi-functions to coordinate values across blocks. The **SSA-destruction** phase (which replaces phi-functions with copy instructions) must be coordinated with register allocation to avoid introducing unnecessary spills.
+1. Compute ε-closure of the current state set.
+2. For each input symbol, compute the set of NFA states reachable from the current set.
+3. The new state set is the ε-closure of the reachable states.
+4. Mark sets containing NFA accepting states as DFA accepting states.
 
-The YggLang compiler uses LLVM's register allocator, which offers three algorithms: (1) **basic** — a simple greedy allocator that assigns the first available register, spilling when necessary; (2) **greedy** — a priority-based allocator that uses live range splitting to reduce spilling; and (3) **PBQP** (Partitioned Boolean Quadratic Programming) — an exact allocator that solves the allocation problem as a PBQP instance, which is NP-complete in general but tractable for most real-world functions. The default is greedy, which provides good performance with reasonable compilation time.
+**Minimization**: After construction, minimize the DFA using Hopcroft's algorithm (O(n log n) for n states). The minimized DFA is unique up to state renaming.
 
-**Required Reading:**
-- Chaitin, "Register Allocation & Spilling via Graph Colouring," *SIGPLAN Notices* 17:6 (1982): 98–105
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), ch. 13
-- Appel & Palsberg, *Modern Compiler Implementation in Java* (2nd ed., 2002/2040), ch. 11
+### Practical Lexer Construction
 
-**Discussion Questions:**
-1. Register allocation is NP-complete, but most real functions can be coloured with 6–8 registers. Why is this? What structural properties of real interference graphs make them easy to colour?
-2. Linear scan is faster than graph colouring but produces worse code. Under what conditions is the code quality difference significant? When would you choose linear scan over graph colouring?
-3. SSA-based register allocation eliminates phi-functions by inserting copies. But copies can be eliminated by coalescing. How do you balance the desire to eliminate copies (coalescing) with the need to preserve colourability (not coalescing)?
+**The Maximal Munch Rule**: When the scanner reads characters, it keeps consuming as long as the current prefix matches some pattern. When no extension matches, it backs up one character and emits the longest match. This ensures `==` is tokenized as one token (equality), not two (`=` assignment, `=` assignment).
 
----
+**Priority Rules**: When two patterns match the same longest string, the scanner uses the *first* pattern in the specification. This means keyword patterns should appear before the identifier pattern.
 
-## Lecture 9: Code Generation — From IR to Machine Code
+**Lexical Ambiguities**:
+- `ifelse` → identifier (no keyword matches), not `if` + `else`
+- `2e3` → float (2.0 × 10³), not `2` + identifier `e3`
+- `a+++b` → `a` `++` `+` `b`, not `a` `+` `++` `b` (maximal munch for `+++` fails; longest valid token is `++`)
 
-**Code generation** is the final phase of the compiler: it translates the optimised IR into target-machine instructions. Code generation must produce correct code (preserving the program's semantics) and efficient code (minimising execution time, code size, or energy consumption). The code generator must handle: instruction selection (choosing the best instruction sequence for each IR construct), instruction scheduling (reordering instructions to minimise pipeline stalls), and register allocation (assigning physical registers to virtual registers, as discussed in Lecture 8).
+### Hand-Written vs. Generated Lexers
 
-**Instruction selection** maps each IR instruction to one or more target-machine instructions. The simplest approach is **macro expansion**: each IR instruction is replaced by a fixed sequence of machine instructions (e.g., `add i32 %a, %b` → `add r0, r1, r2`). This is correct but not optimal — it misses opportunities to use complex instructions (e.g., addressing modes that combine addition and memory access) and to combine multiple IR instructions into a single machine instruction. **Tree pattern matching** (Fraser et al., 1992) represents each IR instruction as a tree and the target machine's instruction set as a set of tree patterns. The instruction selector finds the minimum-cost covering of the IR tree by instruction patterns, using dynamic programming. This is the approach used by LLVM's SelectionDAG instruction selector.
+**Generated (flex, re2c)**:
+- Pros: Fast to develop, mathematically correct, handles complex patterns easily.
+- Cons: Slower than hand-written (table-driven dispatch), harder to debug, generated code is unreadable.
 
-**SelectionDAG** and **GlobalISel** are LLVM's two instruction selection frameworks. SelectionDAG lowers LLVM IR to a directed acyclic graph of target-independent nodes (SDNodes), optimises the DAG (combining nodes, eliminating redundant operations), and then legalises the DAG (replacing unsupported operations with supported sequences). The legalised DAG is then matched against the target machine's instruction patterns using dynamic programming. GlobalISel (introduced in LLVM 10) uses a rule-based approach: the target describes instruction selection rules in a table-gen file, and LLVM matches IR instructions to rules using a greedy algorithm. GlobalISel is faster (O(n) vs. O(n²) for SelectionDAG) but produces slightly worse code in some cases.
+**Hand-written**:
+- Pros: Full control, faster execution, easier to add context-sensitive rules (e.g., string interpolation).
+- Cons: More error-prone, more code to maintain, harder to verify correctness.
 
-**Instruction scheduling** reorders instructions to minimise pipeline stalls and maximise instruction-level parallelism. Modern processors have deep pipelines (10–20 stages) and multiple functional units (ALU, FPU, load/store unit, branch unit). An instruction that depends on the result of a previous instruction cannot issue until the result is available — this is a **pipeline stall**. The instruction scheduler reorders independent instructions to fill the stall cycles, using a list scheduling algorithm that assigns priorities to instructions (based on critical path length, latency, or resource constraints) and schedules them in priority order. The YggLang compiler targets both RISC-V and x86-64: RISC-V has a simple pipeline (few stalls, minimal scheduling needed), while x86-64 has a complex pipeline (many stalls, scheduling is critical).
+**Modern approach (2040)**: Most production compilers use hand-written lexers. GCC, Clang, V8, and Go all use hand-written scanners. The reason is speed — a table-driven DFA has 1-2 orders of magnitude more branch mispredictions than a hand-written lexer that can exploit the structure of the language. The generated lexer approach is used in teaching and prototyping, and in compiler-compilers like ANTLR.
 
-**Calling conventions** define how functions pass parameters and return values: which registers are used for arguments, which registers are caller-saved (must be preserved by the caller) and which are callee-saved (must be preserved by the callee), and how the stack frame is laid out. The RISC-V calling convention passes the first 8 integer arguments in registers a0–a7 and the first 8 floating-point arguments in fa0–fa7; remaining arguments are passed on the stack. The x86-64 System V calling convention passes the first 6 integer arguments in rdi, rsi, rdx, rcx, r8, r9 and the first 8 floating-point arguments in xmm0–xmm7. The YggLang compiler follows the platform calling convention for external functions but uses a custom calling convention for internal functions (passing all arguments in registers, with no stack arguments, and using a larger callee-saved set).
+### Required Reading
 
-**Prologue and epilogue**: The function prologue allocates the stack frame (by decrementing the stack pointer), saves callee-saved registers, and sets up the frame pointer. The function epilogue restores callee-saved registers, deallocates the stack frame (by incrementing the stack pointer), and returns. The prologue and epilogue are critical for performance — callee-saved registers must be saved and restored even if they are not used (a conservative approach), or the compiler must track which callee-saved registers are actually modified (a precise approach). The YggLang compiler uses shrink-wrapping (an optimisation that moves callee-save stores from the prologue to the first point where the register is actually needed), reducing prologue/epilogue overhead by 10–30%.
+- Aho et al. (2006). *Compilers*, Chapter 3 (Lexical Analysis).
+- Appel, A. (2004). *Modern Compiler Implementation in ML*, Chapter 2.
+- Lesk, M. E. (1975). "Lex — A Lexical Analyzer Generator." *Unix Programmer's Manual*.
 
-**Required Reading:**
-- Cooper & Torczon, *Engineering a Compiler* (3rd ed.), chs. 11–12
-- Muchnick, *Advanced Compiler Design and Implementation* (1997), chs. 9–10
-- Fraser, Hanson & Proebsting, "Engineering a Simple, Efficient Code Generator Generator," *LOPLAS* 1:3 (1992): 213–226
+### Discussion Questions
 
-**Discussion Questions:**
-1. Macro expansion is simple but produces suboptimal code. Tree pattern matching produces better code but is more complex. What are the tradeoffs? How does LLVM's SelectionDAG balance simplicity and optimality?
-2. Instruction scheduling is critical for x86-64 but less important for RISC-V. Why? What architectural features make scheduling more or less important?
-3. Shrink-wrapping moves callee-save stores from the prologue to the first point of use. How does the compiler determine where the saved registers are actually needed? What are the risks of shrink-wrapping?
+1. Why do most production compilers use hand-written lexers despite the availability of tools like flex? Under what circumstances would a generated lexer be preferable?
+2. A language allows nested comments (`/* /* inner */ outer */`). Can a DFA-based scanner handle nested comments? How about an NFA? What approach would you use?
+3. Regular expressions cannot match balanced parentheses (this is a context-free language). Yet most scanners use regexes to describe tokens. Why is this not a problem?
 
----
+### Practice Problems
 
-## Lecture 10: Linking, Loading, and Runtime Systems
-
-The compiler produces **object files** (ELF on Linux, Mach-O on macOS, COFF on Windows) containing machine code, data, symbol tables, and relocation entries. The **linker** combines multiple object files into a single executable or shared library by resolving symbol references (finding the definition of each external symbol across all object files) and applying relocations (patching the machine code with the final addresses of resolved symbols). The **loader** copies the executable into memory, resolves dynamic library dependencies, and transfers control to the entry point.
-
-**Symbol resolution** is the linker's primary task. Each object file defines symbols (functions and global variables) and references symbols defined in other files. The linker builds a global symbol table from all object files, matches references to definitions, and reports undefined symbols (references without definitions) and multiply-defined symbols (two definitions of the same symbol). **Strong symbols** (function definitions, initialised global variables) override **weak symbols** (declarations without definitions, or symbols marked with `__attribute__((weak))`). The YggLang linker follows the platform's linking rules (ld.bfd on Linux, ld64 on macOS).
-
-**Relocation** patches the machine code with the final addresses of resolved symbols. When the compiler generates a call to function `f`, it emits a relocation entry saying "the instruction at offset X needs to be patched with the address of f." The linker reads the relocation entry, looks up the address of f in the symbol table, and writes the address into the instruction at offset X. There are many relocation types (absolute, PC-relative, GOT-relative, PLT-relative) corresponding to different addressing modes. RISC-V has **relocation relaxation** (linker relaxation), where the linker can replace a long instruction sequence with a shorter one if the symbol is within range. For example, `auipc + jalr` (two instructions for a 32-bit address) can be replaced with `jal` (one instruction for a ±1MB offset) if the target is within range.
-
-**Position-independent code** (PIC) generates code that works regardless of where it is loaded in memory. PIC is required for shared libraries (which may be loaded at different addresses in different processes) and for ASLR (address space layout randomisation, a security feature that loads code at random addresses). PIC uses the **global offset table** (GOT) for global variable access (a table of addresses that is filled in by the loader) and the **procedure linkage table** (PLT) for function calls (a table of stubs that lazy-bind function addresses on first call). On x86-64, PIC adds one instruction per global variable access (a load through the GOT) and one instruction per function call (a jump through the PLT). On RISC-V, PIC adds two instructions per global variable access (`auipc + ld` to load the GOT entry) and two instructions per function call (`auipc + jalr` to jump through the PLT).
-
-**Dynamic linking** loads shared libraries at runtime rather than at link time. The dynamic linker (ld.so on Linux) resolves the executable's shared library dependencies, loads them into memory (sharing code pages between processes), and fills in the GOT and PLT entries. Dynamic linking reduces executable size (shared library code is not duplicated in each executable) and enables library updates (a security patch to a shared library takes effect for all programs that use it). The cost is a small performance overhead (one or two extra instructions per global variable access and function call) and a complex dependency management problem (version conflicts, ABI compatibility, library search paths).
-
-**Runtime systems** provide services that the compiled code cannot provide for itself: memory allocation (malloc/free, garbage collection), exception handling (stack unwinding, handler dispatch), and thread management (thread creation, synchronisation, scheduling). The YggLang runtime provides a simple memory allocator (based on dlmalloc), structured exception handling (using DWARF unwind tables for stack unwinding), and a basic threading library (pthreads wrappers). The runtime is linked into every YggLang executable and provides the `main` entry point, command-line argument processing, and exit handling.
-
-**Garbage collection** (GC) is an alternative to manual memory management. The YggLang compiler supports an optional garbage collector (a mark-and-sweep collector with incremental collection) for programs that prefer automatic memory management. The GC requires the compiler to generate **root sets** (the set of pointers that the GC must trace from — stack variables, global variables, and register values) and **layout maps** (descriptions of where pointers are located within each object). The compiler generates these maps as side tables that the GC reads at collection time. The overhead of GC is typically 5–15% of execution time for a well-tuned collector, but it eliminates memory leaks and dangling pointers entirely.
-
-**Required Reading:**
-- Levine, *Linkers and Loaders* (2000/2040), chs. 1–7
-- Drepper, "How to Write Shared Libraries" (2001/2040), sections 1–4
-- Boehm, "Dynamic Space-Storage Management" in *GC Handbook* (2011/2040), ch. 2
-
-**Discussion Questions:**
-1. Relocation relaxation replaces long instruction sequences with shorter ones. How does the linker determine when a relaxation is possible? What are the risks (e.g., relaxation that changes code size, affecting subsequent offsets)?
-2. Position-independent code adds overhead per global variable access and function call. What is the quantitative impact? How does ASLR interact with PIC?
-3. Dynamic linking enables library updates but introduces version conflicts. How do symbol versioning and soname versioning work? What are the tradeoffs between static and dynamic linking?
+1. **NFA construction**: Build the NFA for the regular expression `(a|b)*abb` using Thompson's construction. Show all ε-transitions.
+2. **Subset construction**: Convert your NFA to a DFA using subset construction. Show the transition table.
+3. **Tokenization**: Given the input `if(x<=y+3)`, and the token classes [if, identifier, lparen, le, identifier, plus, integer, rparen], trace the scanner's token-by-token output. What happens if the scanner sees `x<y` and the patterns include both `<` and `<=`?
 
 ---
 
-## Lecture 11: JIT Compilation and Adaptive Optimisation
+ᛉ **Lecture 3: Context-Free Grammars & Top-Down Parsing — Building Structure from Tokens**
 
-**Just-in-time (JIT) compilation** compiles program code at runtime, during execution, rather than before execution (ahead-of-time, AOT). JIT compilation combines the flexibility of interpretation (the ability to start executing immediately, without waiting for compilation) with the performance of compiled code (the ability to optimise hot code based on runtime profiles). JIT compilation is the core technology of modern language runtimes: the JVM (HotSpot C1/C2 compilers), V8 (Ignition interpreter + TurboFan optimiser), and .NET (RyuJIT).
-
-**Interpretation vs. compilation** is a spectrum, not a binary choice. A pure interpreter (e.g., CPython) executes each bytecode by looking up its handler in a dispatch table and calling the handler function. This is simple to implement but slow (each operation requires a dispatch table lookup, which is a memory-indirect branch that the hardware branch predictor struggles with). A baseline JIT (e.g., the JVM's C1 compiler) compiles each method to unoptimised machine code the first time it is called, eliminating the dispatch overhead. A profiling JIT (e.g., V8's Ignition) interprets bytecodes and collects type profiles (which types flow through which variables), which guides later optimisation. An optimising JIT (e.g., the JVM's C2 compiler or V8's TurboFan) recompiles hot methods with aggressive optimisations based on the collected profiles.
-
-**Speculative optimisation** is the key technique that makes JIT compilation competitive with AOT compilation. The optimising JIT makes assumptions about the program's runtime behaviour (e.g., "variable x always holds an integer," "function f is always called with 2 arguments of type string") and emits code that is optimised for the common case. If the assumption holds, the optimised code runs much faster than the unoptimised code. If the assumption fails, the JIT must **deoptimise** — transfer control from the optimised code back to the interpreter, reconstruct the interpreter's state from the optimised code's state, and continue execution in the interpreter. Deoptimisation is expensive (it requires reconstructing the interpreter stack frame, which may involve rematerialising values that were optimised away), but it is rarely needed if the profiling data is accurate.
-
-**On-stack replacement** (OSR) transfers control from the interpreter to optimised code (and vice versa) in the middle of a method execution. OSR is necessary because a method may be identified as hot after it has been executing for some time — waiting until the method returns and re-entering the optimised code at the top would miss the hot loop. OSR constructs a "transition point" in the middle of the optimised code that maps interpreter stack frames to optimised code stack frames, reconstructs any values that were optimised away, and jumps to the optimised code. The transition point also exists in the deoptimisation direction, mapping optimised code stack frames back to interpreter stack frames.
-
-**Tiered compilation** combines multiple compilation tiers to balance startup latency, peak performance, and compilation cost. The JVM uses three tiers: (1) the interpreter (fast startup, slow execution), (2) C1 (fast compilation, moderate performance), and (3) C2 (slow compilation, high performance). A method starts in the interpreter, is compiled by C1 after a threshold number of invocations, and is recompiled by C2 if it is still hot. Each tier adds more aggressive optimisations: C1 does local optimisations (constant folding, dead code elimination), C2 does global optimisations (inlining, escape analysis, vectorisation). The YggLang JIT uses a two-tier scheme: tier 0 (interpreter + profiler) and tier 1 (LLVM ORC JIT with profile-guided optimisation).
-
-**Profile-guided optimisation** (PGO) in the JIT context uses runtime profiles to guide optimisation decisions. Type profiles tell the optimiser which types dominate at each call site (enabling speculative inlining and type specjalisation). Branch profiles tell the optimiser which branches are taken (enabling code layout optimisation that places hot paths on consecutive cache lines). Call profiles tell the optimiser which functions are called most frequently (enabling selective inlining and specialisation). The optimiser uses these profiles to make tradeoffs: inlining a function that is called 1000 times per second is worthwhile, but inlining a function that is called once per second is not.
-
-**The LLVM ORC JIT** is LLVM's JIT compilation framework (ORC stands for On-Request Compilation). ORC provides a layer-based architecture: the compiler layer compiles IR modules to machine code on demand, the object layer manages compiled object files, and the absolute symbols layer resolves external symbols. ORC supports lazy compilation (symbols are compiled when first referenced), concurrent compilation (multiple threads compile different modules simultaneously), and removal of compiled code (modules can be unloaded to reclaim memory). The YggLang JIT uses ORC to compile hot functions individually (without waiting for the entire module to be compiled), cache compiled code for future executions, and unload cold code to reduce memory pressure.
-
-**Required Reading:**
-- Aycock, "A Brief History of Just-In-Time," *ACM Computing Surveys* 35:2 (2003): 97–113
-- Click et al., "The Server Compiler," *JVM Internals* (Sun Microsystems, 2001/2040)
-- LLVM ORC JIT Documentation, *LLVM Compiler Infrastructure* (2040)
-
-**Discussion Questions:**
-1. Speculative optimisation assumes that future behaviour matches past behaviour. Under what conditions does this assumption fail, and what are the performance consequences of deoptimisation?
-2. Tiered compilation adds complexity (multiple compilers, transition points, profiling). When is a single-tier compiler preferable? What are the tradeoffs?
-3. JIT compilation has access to runtime information that AOT compilers lack. Give three specific optimisations that a JIT can perform but an AOT compiler cannot. What are the risks?
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-## Lecture 12: The Future of Compilation — ML-Guided Optimisation, Verified Compilation, and Multi-Level IR
+### Overview
 
-The landscape of compiler technology in 2040 is shaped by three trends: **machine-learning-guided optimisation**, **verified compilation**, and **multi-level intermediate representations**. These trends are not incremental improvements — they are paradigm shifts that change how compilers are built, how they make decisions, and how we trust their output.
+The scanner gives us tokens; the parser gives us *structure*. Parsing is the process of determining whether a sequence of tokens conforms to the grammar of the language and, if so, constructing a parse tree (or AST) that represents its hierarchical structure.
 
-**ML-guided optimisation** replaces hand-tuned heuristics with learned models. The most impactful application is **inlining decisions**: instead of a fixed threshold (inline functions with fewer than N instructions), ML models predict whether inlining a particular call site will improve overall performance, based on features like the callee's size, the call site's frequency, the caller's register pressure, and the estimated code size impact. Google's MLGO framework (2021) uses reinforcement learning to train inlining and register allocation policies on production workloads, achieving 3–7% speedup on large C++ programs. The YggLang compiler's inlining heuristic is a gradient-boosted decision tree trained on YggLang benchmarks; it outperforms LLVM's default heuristic by 5% on YggLang-specific workloads.
+This lecture covers context-free grammars (CFGs), top-down parsing strategies (recursive descent, predictive parsing), and the mathematical tools (FIRST and FOLLOW sets) that make deterministic parsing possible.
 
-**Sequence-to-sequence models** for code generation use large language models (LLMs) to generate optimised IR directly from source code. The input is the unoptimised IR, and the output is the optimised IR. AlphaCode (2022) and subsequent models have demonstrated that neural code generation can produce correct, efficient code for competitive programming problems, but the models are not yet reliable enough for production compilers (correctness must be guaranteed, and neural models are not formally verifiable). Hybrid approaches combine neural generation with symbolic verification: the model proposes an optimisation, and a symbolic verifier checks that the optimisation preserves semantics. This hybrid approach is used in the YggLang compiler for loop optimisation (the model proposes unrolling factors and vectorisation strategies, and the verifier checks that the transformed code is equivalent to the original).
+### Context-Free Grammars
 
-**Verified compilation** (CompCert, Leroy, 2006) proves that the compiler preserves the program's semantics from source to machine code. CompCert is a C compiler verified in Coq that produces correct code for x86, PowerPC, ARM, and RISC-V. The verification guarantees that if the source program does not exhibit undefined behaviour, then the compiled program produces the same observable results. CompCert has found bugs in every production C compiler (GCC, Clang, ICC) by comparison testing against its verified output. The cost of verification is high: CompCert is ~50,000 lines of Coq, and each new optimisation pass must be verified separately. **Verified LLVM** (Vellvm, Zhao et al., 2012–2017) is an ongoing effort to verify the LLVM optimisation passes, but only a subset of LLVM's passes have been verified as of 2040.
+A context-free grammar G = (V, Σ, R, S) consists of:
+- **V**: A finite set of nonterminal symbols (e.g., Stmt, Expr, Type)
+- **Σ**: A finite set of terminal symbols (tokens from the scanner)
+- **R**: Production rules of the form A → α, where A ∈ V and α ∈ (V ∪ Σ)*
+- **S**: The start symbol (S ∈ V)
 
-**Multi-level IR** (MLIR, Lattner et al., 2021) addresses a fundamental problem in modern compilers: different domains (machine learning, hardware accelerators, high-level synthesis, dataflow, transaction processing) require different IRs, and translating between them is error-prone and loses information. MLIR provides a framework for defining multiple **dialects** (domain-specific IRs) within a single infrastructure. Each dialect defines its own operations, types, and invariants, and passes can transform between dialects. The key insight: dialects are not isolated — they share a common infrastructure (attributes, locations, regions, block arguments) that enables progressive lowering from high-level dialects (e.g., `affine` for loop nests) to low-level dialects (e.g., `llvm` for LLVM IR) without losing information. The YggLang compiler uses MLIR for domain-specific optimisations: the `ygglang.tensor` dialect optimises tensor operations, the `ygglang.parallel` dialect optimises parallel loops, and the `ygglang.hw` dialect lowers tensor operations to hardware accelerator instructions.
+**Example — simplified expression grammar**:
+```
+E  → E + T | T
+T  → T * F | F
+F  → ( E ) | id | num
+```
 
-The deepest lesson of compiler design is that **correctness is non-negotiable**. Every optimisation must preserve the program's semantics — a single miscompiled program is a bug that can cause crashes, data corruption, or security vulnerabilities. The compiler writer's task is to make the program faster without changing what it does, and this requires the same rigour as mathematical proof. CompCert and verified LLVM demonstrate that this rigour is achievable, but at a cost: verified compilers are slower to develop and harder to extend than unverified compilers. The future of compilation lies at the intersection of ML (for optimisation decisions), verification (for correctness guarantees), and multi-level IR (for extensibility). The YggLang compiler embodies this intersection: ML-guided heuristics for optimisation, Lean 4 verification for critical passes, and MLIR for domain-specific extensions.
+This grammar is **left-recursive**, which causes top-down parsers to loop infinitely. We eliminate left recursion by rewriting:
 
-As the Norse smiths knew, the craft of forging requires both fire and precision. The compiler's fire is the optimisation that transforms slow code into fast code; the compiler's precision is the verification that ensures the transformation is correct. Without fire, the program runs slowly; without precision, it runs wrongly. Both are necessary. Both are sacred.
+```
+E  → T E'
+E' → + T E' | ε
+T  → F T'
+T' → * F T' | ε
+F  → ( E ) | id | num
+```
 
-**Required Reading:**
-- Leroy, "Formal Verification of a Realistic Compiler," *CACM* 52:7 (2009): 107–115
-- Lattner et al., "MLIR: Scaling Compiler Infrastructure for Domain-Specific Computation," *CGO '21* (2021): 2–14
-- Cummins et al., "Compiler GYM: A Reinforcement Learning Toolkit for Compiler Optimisation," *CGO '22* (2022): 3–15
+**Ambiguity**: A grammar is ambiguous if some string has two or more distinct parse trees. The classic example is the dangling else:
 
-**Discussion Questions:**
-1. ML-guided optimisation learns heuristics from program benchmarks. But what happens when the training benchmarks do not represent the target workload? How do you prevent overfitting to the training data?
-2. Verified compilation guarantees semantics preservation for the verified passes. But the unverified passes (e.g., the register allocator, the code generator) can still introduce bugs. How do you extend verification to the entire compilation pipeline?
-3. Multi-level IR allows domain-specific dialects to coexist within a single compiler. What are the challenges of translating between dialects? How does MLIR ensure that information is not lost during lowering?
+```
+Stmt → if Expr then Stmt else Stmt
+     | if Expr then Stmt
+     | other
+```
+
+For `if E1 then if E2 then S1 else S2`, the `else` can bind to either `if`. Most languages resolve this by associating `else` with the nearest `if`, which can be enforced by restructuring the grammar.
+
+### Predictive Parsing: LL(1)
+
+An LL(1) parser uses a single lookahead token to decide which production to apply. It is called LL(1) because it scans the input **L**eft-to-right, constructs a **L**eftmost derivation, with **1** token of lookahead.
+
+**FIRST set**: For a string α of grammar symbols, FIRST(α) is the set of terminals that begin strings derivable from α. If α can derive ε, then ε ∈ FIRST(α).
+
+**FOLLOW set**: For a nonterminal A, FOLLOW(A) is the set of terminals that can appear immediately to the right of A in some sentential form. If A can be the rightmost symbol, then $ ∈ FOLLOW(A).
+
+**Computing FIRST**:
+1. If X is a terminal, FIRST(X) = {X}.
+2. If X → ε, add ε to FIRST(X).
+3. If X → Y₁Y₂...Yₖ, add FIRST(Y₁) - {ε} to FIRST(X). If ε ∈ FIRST(Y₁), add FIRST(Y₂) - {ε} to FIRST(X). Continue. If ε is in all FIRST(Yᵢ), add ε to FIRST(X).
+
+**Computing FOLLOW**:
+1. Add $ to FOLLOW(S) (start symbol).
+2. If A → αBβ, add FIRST(β) - {ε} to FOLLOW(B).
+3. If A → αB or A → αBβ where ε ∈ FIRST(β), add FOLLOW(A) to FOLLOW(B).
+
+**LL(1) parse table**: For each production A → α and terminal a ∈ FIRST(α), add A → α to M[A, a]. If ε ∈ FIRST(α), add A → α to M[A, b] for each b ∈ FOLLOW(A). If there's a conflict (two entries in the same cell), the grammar is not LL(1).
+
+### Recursive Descent Parsing
+
+Recursive descent is the simplest and most common top-down parsing technique. Each nonterminal becomes a function:
+
+```python
+def parse_E():
+    parse_T()
+    parse_E_prime()
+
+def parse_E_prime():
+    if lookahead == '+':
+        match('+')
+        parse_T()
+        parse_E_prime()
+    # else: ε-production (do nothing)
+
+def parse_T():
+    parse_F()
+    parse_T_prime()
+
+def parse_T_prime():
+    if lookahead == '*':
+        match('*')
+        parse_F()
+        parse_T_prime()
+    # else: ε-production
+
+def parse_F():
+    if lookahead == '(':
+        match('(')
+        parse_E()
+        match(')')
+    elif lookahead == 'id':
+        match('id')
+    elif lookahead == 'num':
+        match('num')
+    else:
+        error(f"expected '(', id, or num, got {lookahead}")
+```
+
+**Error recovery**: When the parser encounters an unexpected token, it can:
+1. **Panic mode**: Skip tokens until a FOLLOW set member is found.
+2. **Phrase-level recovery**: Insert or delete tokens to fix common errors.
+3. **Error productions**: Add grammar rules that match common errors and produce helpful diagnostics.
+
+### 2040: Practical Parsers
+
+By 2040, most production compilers use hand-written **recursive descent parsers** with error recovery (Clang, GCC, Go, Rust, Swift). The reasons:
+- Better error messages than generated parsers.
+- More control over context-sensitive parsing (e.g., C's typedef-name ambiguity).
+- Performance comparable to or better than table-driven parsers.
+
+**Parser combinators** (functional programming approach): Libraries like Parsec (Haskell), FastParse (Scala), and Nom (Rust) compose small parsers into larger ones. Popular in domain-specific languages and data format parsers.
+
+**PEG (Parsing Expression Grammars)**: An alternative to CFGs. PEGs use ordered choice (/) instead of unordered alternation (|), making them unambiguous by definition. Packrat parsing provides linear-time PEG parsing. Used in many modern language tools.
+
+### Required Reading
+
+- Aho et al. (2006). *Compilers*, Chapter 4 (Syntax Analysis, sections 4.1-4.4).
+- Appel (2004). *Modern Compiler Implementation*, Chapter 3.
+- Ford, B. (2004). "Parsing Expression Grammars: A Recognition-Based Syntactic Foundation." *POPL*.
+
+### Discussion Questions
+
+1. C's grammar requires the parser to know whether an identifier is a typedef name or an ordinary identifier. How does a recursive descent parser handle this? How would a generated parser handle it?
+2. PEG grammars are never ambiguous. Why isn't PEG the universal solution for all language parsing? What are the disadvantages of ordered choice?
+3. Most JSON parsers are hand-written. Why? What makes JSON amenable to hand-written parsing?
+
+### Practice Problems
+
+1. **FIRST/FOLLOW**: Given the grammar `E → T E', E' → + T E' | ε, T → F T', T' → * F T' | ε, F → ( E ) | id`, compute FIRST and FOLLOW for all nonterminals.
+2. **LL(1) check**: Is the grammar from problem 1 LL(1)? Construct the parse table and check for conflicts.
+3. **Left factoring**: The grammar `S → if E then S else S | if E then S | a` is not LL(1) due to common prefixes. Left-factor it and verify the result is LL(1).
 
 ---
 
-## Final Examination Preparation
+ᛉ **Lecture 4: Bottom-Up Parsing — LR Parsing and Its Variants**
 
-The final examination for CS302 consists of eight questions of which you must choose four. Each question requires a substantive essay (800–1200 words) demonstrating mastery of compiler design concepts and the ability to apply them to novel situations. The examination is open-book but not open-internet.
-
-**Sample Examination Questions:**
-
-1. Compare and contrast LL(1), LALR(1), and GLR parsing. For each, describe: (a) the class of grammars it can handle, (b) the time and space complexity, (c) the error recovery capabilities, and (d) a real-world parser generator that uses it. Under what circumstances would you choose each?
-
-2. Explain the construction of SSA form, including φ-function insertion using dominance frontiers and variable renaming using the dominator tree. How does SSA form simplify dataflow analysis? Give examples of optimisations that are trivial in SSA form but difficult in non-SSA form.
-
-3. Describe the Chaitin graph-colouring register allocation algorithm in detail, including the simplify-spill-select cycle. How does SSA-based register allocation reduce the interference graph? What is the relationship between register allocation and instruction scheduling?
-
-4. A JIT compiler must decide when to compile a hot method and when to deoptimise a speculative optimisation. Describe the tradeoffs between compilation latency, code quality, and deoptimisation cost. How does tiered compilation address these tradeoffs?
-
-5. Design an optimisation pipeline for a functional language with immutable data structures. Which optimisations from the imperative world (constant propagation, dead code elimination, loop optimisations) are still applicable? What new optimisations does immutability enable (e.g., common subexpression elimination becomes more powerful)? What optimisations are no longer needed?
-
-6. Position-independent code adds overhead per global variable access and function call. Analyse the quantitative impact on RISC-V and x86-64, considering GOT indirection, PLT stubs, and relocation relaxation. When is PIC worthwhile, and when should you use static linking instead?
-
-7. Verified compilation (CompCert) proves semantics preservation for the entire compilation pipeline, but only for the verified passes. Unverified passes (register allocation, instruction scheduling) can still introduce bugs. Propose a verification strategy that covers the entire pipeline. What are the practical challenges?
-
-8. Multi-level IR (MLIR) allows domain-specific dialects to coexist within a single compiler. Design a dialect for a new domain (e.g., quantum computing, neural network inference, database query processing). What operations does your dialect support? How does it lower to existing dialects? What optimisations does it enable that are not possible at the LLVM level?
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-*ᛟ End of Course Materials — CS302: Compiler Design & Code Generation — University of Yggdrasil, 2040*
+### Overview
+
+Bottom-up parsers build the parse tree from the leaves (terminals) upward to the root (start symbol). They are more powerful than top-down parsers — every LL(1) grammar is LR(1), but not vice versa. Bottom-up parsers can handle a wider class of grammars, including most programming language grammars without modification.
+
+This lecture covers LR(0), SLR, LALR(1), and CLR(1) parsing, their construction algorithms, and their practical applications in tools like yacc, bison, and their descendants.
+
+### Shift-Reduce Parsing
+
+An LR parser maintains a **stack** of grammar symbols and parser states, and reads input from left to right. At each step, it performs one of two actions:
+
+1. **Shift**: Push the next input symbol onto the stack and transition to the appropriate state.
+2. **Reduce**: Pop the right-hand side of a production from the stack, push the left-hand side, and transition to the state indicated by the goto table.
+
+The parser uses two tables:
+- **ACTION table**: Maps (state, lookahead) to shift, reduce, accept, or error.
+- **GOTO table**: Maps (state, nonterminal) to a new state (used after reductions).
+
+### LR(0) Items and States
+
+An LR(0) item is a production with a dot (•) indicating how much has been seen. For the production `A → XYZ`:
+- `A → •XYZ` (nothing seen yet)
+- `A → X•YZ` (X seen, expecting Y)
+- `A → XY•Z` (XY seen, expecting Z)
+- `A → XYZ•` (complete — ready to reduce)
+
+The **closure** of a set of items adds all items that can be derived from the current position of the dot. The **goto** operation moves the dot past a symbol and takes the closure of the result.
+
+An LR(0) parser is constructed by:
+1. Computing the closure of the initial item set {S' → •S$}.
+2. Computing goto sets for each grammar symbol.
+3. Repeating until no new item sets exist.
+
+### SLR (Simple LR)
+
+SLR parsing uses LR(0) items but restricts reductions: a reduction `A → α` is performed only when the lookahead is in FOLLOW(A). This is more restrictive than LR(0), which reduces whenever the dot is at the end of any production.
+
+**SLR limitations**: FOLLOW sets may be too large, causing spurious reductions. Not all grammars that are LR(1) are SLR.
+
+### LALR(1) (Look-Ahead LR)
+
+LALR(1) is the most commonly used variant. It merges LR(1) item sets that have the same core (same LR(0) items) but different lookaheads. This dramatically reduces the number of states (same as SLR) while maintaining most LR(1) power.
+
+**Construction**: Start with LR(1) items. Merge states with the same core. Propagate lookaheads through the merged states.
+
+**LALR(1) vs LR(1)**: LALR(1) may introduce reduce-reduce conflicts that LR(1) does not have. In practice, these conflicts are rare and can be resolved by restructuring the grammar.
+
+**bison/yacc**: The most widely used LALR(1) parser generators. Bison produces C code from a grammar specification with embedded actions. Modern bison supports GLR (Generalized LR) parsing for ambiguous grammars.
+
+### CLR(1) (Canonical LR)
+
+CLR(1) is the most powerful LR variant. It uses full LR(1) items without merging, resulting in many more states but accepting the largest class of LR grammars. In practice, CLR(1) parsers are rarely used because the state count is too large for most programming languages.
+
+### Practical Considerations
+
+**Shift-reduce conflicts**: Occur when the parser can either shift the next token or reduce by a production. Bison resolves these by shifting (the "shift" resolution), which corresponds to the "dangling else" resolution.
+
+**Reduce-reduce conflicts**: Occur when two productions can be reduced with the same lookahead. Always indicate a grammar problem. Bison resolves by choosing the production listed first.
+
+**Operator precedence**: Bison allows specifying precedence rules that resolve shift-reduce conflicts for expressions. `%left`, `%right`, `%nonassoc` declarations control associativity and precedence.
+
+### 2040: The State of Parsing
+
+**GLR parsing**: Bison's GLR mode handles ambiguous grammars by exploring all possible parses simultaneously. Used for C++ (which has inherently ambiguous grammar), COBOL, and other complex languages.
+
+**Error recovery**: Modern parsers (bison, tree-sitter) use error recovery strategies to continue parsing after syntax errors:
+- **Error token**: Bison's `error` special token skips input until a synchronizing token is found.
+- **Error productions**: Grammar rules that match common error patterns.
+- **Partial parsing**: Tree-sitter can parse files with multiple errors, producing a partial AST for IDE features like syntax highlighting and code completion.
+
+**Incremental parsing**: Tree-sitter and similar tools support incremental parsing — re-parsing only the portion of the file that changed. Enables real-time IDE features with <1ms parse times for files under 10,000 lines.
+
+### Required Reading
+
+- Aho et al. (2006). *Compilers*, Chapter 4 (sections 4.5-4.7).
+- Appel (2004). *Modern Compiler Implementation*, Chapter 5.
+- Grune, D. & Jacobs, C. (2008). *Parsing Techniques: A Practical Guide* (2nd ed.). Springer.
+
+### Discussion Questions
+
+1. Every LL(1) grammar is LR(1), but not vice versa. Give an example of a common programming language construct that is LR(1) but not LL(1). How is this construct handled in practice?
+2. LALR(1) merges LR(1) states with the same core. Under what conditions does this merging introduce reduce-reduce conflicts?
+3. C++ has an inherently ambiguous grammar (the "most vexing parse"). How do real C++ parsers handle this? Why can't a deterministic parser handle it?
+
+### Practice Problems
+
+1. **LR(0) item sets**: Given the grammar `S → S S + | S S * | a`, construct all LR(0) item sets and the goto table.
+2. **SLR parse table**: Using the item sets from problem 1, construct the SLR ACTION and GOTO tables. Show any conflicts.
+3. **Shift-reduce resolution**: The expression grammar `E → E + E | E * E | ( E ) | id` has shift-reduce conflicts for `+` and `*`. Using precedence (multiplication before addition, left-associativity), show which actions the parser takes for the input `id + id * id`.
+
+---
+
+ᛉ **Lecture 5: Semantic Analysis & Type Systems — Meaning from Structure**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+The parser produces a tree, but trees don't execute. Before the compiler can generate code, it must verify that the program is *well-formed*: types are consistent, variables are declared before use, functions are called with the right number of arguments, and operations are applied to compatible operands. This phase is semantic analysis, and its backbone is the type system.
+
+### Type Systems: The Logic of Data
+
+A type system is a tractable syntactic method for proving the absence of certain program behaviors by classifying phrases according to the kinds of values they compute. (Pierce, 2002)
+
+**Static vs. Dynamic Typing**:
+- **Static**: Types checked at compile time. Errors caught before execution. (C, Java, Rust, Haskell)
+- **Dynamic**: Types checked at runtime. More flexible, more runtime overhead. (Python, JavaScript, Ruby)
+- **Gradual**: Mix of static and dynamic. Optional type annotations. (TypeScript, Python with type hints, Reticulated Python)
+
+**Type Soundness** (safety): If a well-typed program compiles, it will not get stuck at runtime (it will either run forever or produce a value of the expected type). This is the combination of **progress** (well-typed programs can always take a step) and **preservation** (well-typed programs remain well-typed after each step).
+
+### Type Checking Rules
+
+Type checking rules are specified as inference rules:
+
+```
+Γ ⊢ e₁ : τ₁    Γ ⊢ e₂ : τ₂    τ₂ ≤ τ₁
+───────────────────────────────────────────────  (T-Assign)
+        Γ ⊢ e₁ = e₂ : τ₁
+```
+
+"Under typing environment Γ, if expression e₁ has type τ₁ and e₂ has type τ₂, and τ₂ is a subtype of τ₁, then the assignment e₁ = e₂ has type τ₁."
+
+**Subtyping**: τ₁ ≤ τ₂ means τ₁ is a subtype of τ₂ (every τ₁ value is also a τ₂ value). For records, subtyping is width- and depth-subtyping.
+
+### Symbol Tables and Scopes
+
+The symbol table maps identifiers to their declarations. It must handle nested scopes:
+
+```python
+class SymbolTable:
+    def __init__(self, parent=None):
+        self.parent = parent  # enclosing scope
+        self.symbols = {}     # name → (type, kind, offset)
+    
+    def lookup(self, name):
+        if name in self.symbols:
+            return self.symbols[name]
+        if self.parent:
+            return self.parent.lookup(name)
+        return None  # undefined
+    
+    def define(self, name, type, kind, offset):
+        self.symbols[name] = (type, kind, offset)
+```
+
+**Scope levels**: Global → module → class → function → block. Each level has its own symbol table with a pointer to the enclosing scope.
+
+**Name resolution**: When the compiler encounters an identifier, it looks up the name in the symbol table chain, starting from the innermost scope and proceeding outward. This process is called **environment lookup**.
+
+### Type Inference
+
+For languages with type inference (Haskell, ML, Rust), the compiler doesn't require explicit type annotations. Instead, it infers types from usage using **Hindley-Milner type inference** (Algorithm W):
+
+1. Assign a fresh type variable to each expression whose type is unknown.
+2. Generate constraints from the program structure (e.g., `+` requires both operands to be `int` or both to be `float`).
+3. Unify the constraints to solve for type variables.
+
+**Unification**: The process of making two types equal by substituting type variables. If we have constraint `α = int → β` and constraint `α = γ → bool`, unification gives `α = int → bool`, `β = bool`, `γ = int`.
+
+### Error Reporting
+
+A good compiler produces helpful error messages. The type checker should report:
+- **Location**: File, line, column of the error.
+- **Expected vs. actual**: "Expected `int`, found `string`" rather than "Type mismatch."
+- **Suggestion**: "Did you mean `x.to_int()`?"
+- **Context**: Show the full expression where the error occurs, with the problematic sub-expression highlighted.
+
+**Error recovery**: After detecting one type error, the compiler should continue checking (not stop at the first error). This requires synthesizing default types for ill-typed expressions.
+
+### 2040: Modern Type Systems
+
+By 2040, type systems have become far more expressive than the simple systems of the 1990s:
+
+- **Dependent types** (Idris, Agda): Types can depend on values. `Vec Int n` is a vector of integers of length n. Allows proving properties in the type system.
+- **Ownership types** (Rust): Track ownership and borrowing at the type level, guaranteeing memory safety without garbage collection.
+- **Effect systems** (Koka, Eff): Track side effects in types. A function's type indicates whether it can throw exceptions, access I/O, or modify mutable state.
+- **Linear types** (Rust, Clean): Values that must be used exactly once. Prevent double-free and use-after-free bugs at compile time.
+- **Refinement types** (F*, Liquid Haskell): Types with logical predicates. `{x : int | x > 0}` is a positive integer. Complemented by SMT solvers for automatic verification.
+
+### Required Reading
+
+- Pierce, B. C. (2002). *Types and Programming Languages*. MIT Press. Chapters 1-9 (core type systems), 15-16 (subtyping).
+- Aho et al. (2006). *Compilers*, Chapter 5 (Syntax-Directed Translation) and Chapter 6 (Type Checking).
+- Nielson, F., Nielson, H. R., & Hankin, C. (2015). *Principles of Program Analysis*. Springer. Chapter 4 (Type-Based Analysis).
+
+### Discussion Questions
+
+1. Rust's ownership system prevents use-after-free bugs at compile time. What is the compile-time cost of this guarantee? How does it affect the expressiveness of the language?
+2. TypeScript uses gradual typing to add optional type annotations to JavaScript. Does gradual typing provide the same safety guarantees as a fully statically-typed language? What are the holes?
+3. Dependent types allow proving program properties in the type system. Why aren't all mainstream languages dependent? What are the practical barriers?
+
+### Practice Problems
+
+1. **Type checking**: Given the environment `{x: int, y: float, f: int → float}`, type-check the expression `f(x) + y`. Show all inference rule applications.
+2. **Type inference**: Infer the type of `λf. λx. f(f(x))` using Algorithm W. Show the type variable assignments and unification steps.
+3. **Subtyping**: Given `Cat ≤ Animal`, `Dog ≤ Animal`, and `Animal ≤ Object`, which of the following are valid subtyping relationships? (a) `List<Cat> ≤ List<Animal>`, (b) `List<Animal> ≤ List<Cat>`, (c) `Function<Animal, Cat> ≤ Function<Cat, Animal>`.
+
+---
+
+ᛉ **Lecture 6: Intermediate Representations — The Compiler's Common Tongue**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+The intermediate representation (IR) is the compiler's lingua franca — the common language shared between the front end and the back end. A well-designed IR enables language-independent optimization and retargetable code generation. This lecture covers the major IR forms, their properties, and the trade-offs between expressiveness and optimizability.
+
+### Three-Address Code
+
+The simplest IR is three-address code (TAC), where each instruction has at most one operator and at most three operands:
+
+```
+t1 = b * c
+t2 = a + t1
+x = t2
+if x < 10 goto L1
+t3 = x - 1
+y = t3
+goto L2
+L1: y = x
+L2: ...
+```
+
+Properties: Simple, easy to generate, easy to optimize. But unstructured (goto-heavy) and does not preserve high-level information.
+
+### Static Single Assignment (SSA)
+
+SSA form requires that each vari

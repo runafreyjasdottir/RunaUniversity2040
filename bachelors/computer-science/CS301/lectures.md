@@ -377,7 +377,478 @@ The CAP theorem is simultaneously the most important and most misunderstood resu
 - **What CAP Does Not Say**: You cannot "choose" partition tolerance; partitions are a reality of distributed systems
 - **The PACELC Model**: Extending CAP with latency-consistency trade-offs
 - **Beyond CAP**: Harvest and Yield, CALM theorem, CRDTs as a way to have both C and A
-- **CAP in Practice**: How real systems (Cassandra, MongoDB, Spanner, CockroachDB) navigate the trade-off space
+- **CAP in Practice**: How real systems (Cassandra, MongoDB, Spanner, CockroachDB) navigate the trade-off
+
+### Lecture Notes
+
+The CAP theorem, as formulated by Eric Brewer in his 2000 PODC keynote and proved by Gilbert and Lynch in 2002, states: **In a distributed system that may experience network partitions, you cannot simultaneously guarantee consistency (C) and availability (A).** You must choose one or the other during a partition.
+
+The critical misunderstanding is treating CAP as a menu where you "pick two." This is wrong for three reasons:
+
+1. **You cannot choose P.** Partitions are not an option — they are a fact of networked computing. Networks will partition. Switches will fail. Undersea cables will be cut by ship anchors. A system that "doesn't tolerate partitions" is a system that fails when the inevitable partition occurs. Therefore, every distributed system must be partition-tolerant. The real choice is CP or AP.
+
+2. **CAP only applies during a partition.** When the network is healthy, you can have both consistency and availability. CAP says nothing about normal-case behavior — it only describes the trade-off during a partition.
+
+3. **"Consistency" in CAP means linearizability.** This is the strongest possible consistency model, and many applications don't need it. If your application can tolerate causal consistency or even eventual consistency, CAP's constraint may not apply to you at all.
+
+**PACELC** (Abadi, 2012) extends CAP to capture the latency-consistency trade-off in normal operation. The full name: **if there is a Partition (P), you choose between Availability (A) and Consistency (C); Else (E), when running normally, you choose between Latency (L) and Consistency (C).** This gives us four design points:
+
+- **PA/EL**: Available during partitions, low latency during normal operation (e.g., Dynamo, Cassandra with weak consistency)
+- **PA/EC**: Available during partitions, but consistent during normal operation (rare — difficult to achieve)
+- **PC/EL**: Consistent during partitions (rejecting some requests), low latency during normal operation (e.g., MongoDB with readConcern=local)
+- **PC/EC**: Consistent during partitions, consistent during normal operation — but latency may be higher (e.g., Spanner, CockroachDB with serializable isolation)
+
+**The CALM Theorem** (Hellerstein, 2010) provides a different perspective: programs that are *monotonic* — whose outputs only grow as inputs grow — can be computed without coordination. This is formalized as the Consistency As Logical Monotonicity theorem. It shows that the CAP trade-off isn't between C and A per se, but between coordination (which is expensive) and monotonicity (which enables coordination-free computation). CRDTs (Lecture 9) are a practical application of CALM: their merge functions are monotonic, so they can be computed without synchronous coordination.
+
+In practice, most production systems in 2040 occupy a **middle ground**:
+
+- **Spanner** (Google): Provides external consistency (stronger than linearizability) via TrueTime. It's PC/EC, with commit latencies that include a sleep period to account for clock uncertainty. For most applications, this latency (typically 5-10ms in a single region) is acceptable.
+- **Cassandra** (Apache): Tunable consistency — each read/write can specify `QUORUM`, `ONE`, `ALL`, etc. It's PA/EL by default (available during partitions, low latency) but can be configured as PC/EL or even PC/EC at the cost of latency and reduced availability.
+- **CockroachDB**: Inspired by Spanner but without TrueTime. Uses HLCs for timestamp ordering. PC/EC by default, with serializable SQL transactions.
+- **BifrostDB** (University of Yggdrasil): Causal consistency by default, with opt-in linearizability per operation. Designed for the PACELC PA/EC point — available during partitions with causal consistency, and consistent with bounded latency during normal operation.
+
+### Required Reading
+
+- Gilbert, S., Lynch, N. (2002). "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services." *ACM SIGACT News* 33(2).
+- Abadi, D. (2012). "Consistency Tradeoffs in Modern Distributed Database System Design." *IEEE Computer* 45(2).
+- Hellerstein, J.M. (2010). "The Declarative Imperative: Experiences and Conjectures in Distributed Logic." *ACM SIGMOD Record* 39(1).
+
+### Discussion Questions
+
+1. A banking system needs to process transfers. Should it choose CP or AP during a partition? What are the implications for customer experience and regulatory compliance?
+2. Gilbert and Lynch's proof assumes that availability means *every* non-faulty node responds. Is this the right definition? What if we define availability as "at least one node responds"? Does CAP still hold?
+3. The CALM theorem suggests that monotonic computations don't need coordination. Which common distributed operations (counting, summing, finding maximum, finding minimum, set union, set intersection) are monotonic? Which require coordination?
+
+### Practice Problems
+
+- Draw the PACELC diagram and place the following systems: Spanner, Dynamo, Cassandra (QUORUM reads/writes), CockroachDB, and a simple in-memory cache with no replication.
+- Consider a system with 5 replicas. A partition separates the system into groups of {1,2,3} and {4,5}. For each PACELC category, describe the system's behavior: (a) Does group {1,2,3} accept writes? (b) Does group {4,5} accept writes? (c) What happens after the partition heals?
+- Prove or disprove: "If a system provides causal consistency during normal operation, it must reject some requests during a partition." Give a formal argument or a counterexample.
+
+---
+
+ᛁ **Lecture 7: Fault Tolerance and Failure Detection**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+A distributed system is only as reliable as its ability to detect and respond to failures. This lecture covers the theory and practice of failure detection — the fundamental building block on which all consensus and replication protocols depend. We study Chandra and Toueg's unreliable failure detectors, the interplay between suspicion and accuracy, and the practical algorithms used in modern systems.
+
+### Key Topics
+
+- **Failure Detection as a Substrate**: Why every consensus protocol needs a failure detector
+- **Perfect vs. Unreliable Failure Detectors**: P, S, ♢S, and ♢P — the hierarchy of failure detector classes
+- **The Heartbeat Protocol**: How most systems detect failures in practice
+- **Suspicion and Accuracy**: The two properties that define a failure detector's quality
+- **Phi Accrual Failure Detector**: Cassandra's probabilistic approach — continuous suspicion levels
+- **Gossip-Based Failure Detection**: SWIM and its descendants
+- **Cascading Failures and Circuit Breakers**: How failure detection prevents failure propagation
+
+### Lecture Notes
+
+The FLP impossibility result (Lecture 4) tells us that deterministic consensus is impossible in purely asynchronous systems. But Chandra and Toueg (1996) showed that consensus *is* possible in asynchronous systems if we augment them with a failure detector of the right strength. This result is profound: it separates the problem of detecting failures from the problem of reaching consensus, allowing us to reason about each independently.
+
+A **failure detector** is a module at each process that provides information about which processes have crashed. Importantly, failure detectors can be *wrong* — they can suspect a process that is actually correct (a false suspicion) or they can fail to suspect a process that has actually crashed (a false trust). The quality of a failure detector is characterized by two properties:
+
+1. **Completeness**: Every crashed process is eventually suspected by some correct process. (Detecting failures — not missing them)
+2. **Accuracy**: Some correct process is never suspected. (Not raising false alarms)
+
+Chandra and Toueg defined four classes of failure detectors based on different combinations of these properties:
+
+- **Perfect (P)**: Strong completeness + strong accuracy. Every crash is detected, and no correct process is ever suspected. This is the ideal — but it's impossible in an asynchronous system.
+- **Strong (S)**: Strong completeness + weak accuracy. Every crash is eventually detected, and at least one correct process is never suspected. Solves consensus with f < n/2 crash failures.
+- **Eventually Strong (♢S)**: Strong completeness + eventual weak accuracy. Every crash is eventually detected, and eventually at least one correct process is never suspected. Also solves consensus with f < n/2.
+- **Eventually Perfect (♢P)**: Strong completeness + eventual strong accuracy. Every crash is eventually detected, and eventually no correct process is suspected. Solves consensus with any number of crash failures.
+
+The key insight: ♢S and ♢P can be implemented in *partially synchronous* systems. During asynchronous periods, they may make mistakes (suspecting correct processes or failing to detect crashes), but once the system becomes synchronous, they eventually stabilize to correct behavior. This is why Paxos and Raft work in practice — during normal operation (synchronous periods), their timeout-based failure detectors work correctly, and during network anomalies (asynchronous periods), they may make false suspicions but safety is never violated.
+
+**Heartbeat protocols** are the most common implementation of failure detectors. Each process periodically sends a heartbeat message to all other processes. If a process doesn't receive a heartbeat from another process within a timeout period, it suspects that process. The challenge is choosing the timeout: too short and you get many false suspicions; too long and you delay detection of real failures.
+
+The **Phi Accrual Failure Detector** (Hayashibara et al., 2004), used in Apache Cassandra, takes a probabilistic approach. Instead of a hard timeout, it computes the **phi value** — the probability that a heartbeat would not have arrived if the process were alive, based on the distribution of historical inter-arrival times. When phi exceeds a configurable threshold (typically 8.0, corresponding to ~99.999% confidence that the process has failed), the process is suspected. The accrual approach provides a continuous suspicion level rather than a binary alive/dead decision, allowing upper-level protocols to make more nuanced decisions.
+
+**SWIM** (Scalable Weakly-consistent Infection-style Membership, Gupta et al., 2001) and its descendants (SWIM-Multicast, Lifeguard, Serf) provide failure detection in large-scale systems where individual heartbeats don't scale. Instead of all-to-all heartbeats, each process periodically selects a random target to ping. If the ping fails, the process asks k other processes to perform indirect pings (probes). This protocol is O(n) per process per round, regardless of cluster size, and provides probabilistic completeness with bounded false suspicion rates.
+
+**Cascading failures** occur when a failure in one component causes failures in other components, which cause further failures, and so on. The 2024 AWS us-east-1 outage was a cascading failure: a control plane overload caused metadata service failures, which caused dependent services to time out, which caused retries that further overloaded the control plane. **Circuit breakers** (Hystrix pattern) prevent cascading failures by detecting when a downstream service is failing and temporarily stopping requests to it, giving it time to recover. In 2040, circuit breakers are mandatory infrastructure at the University of Yggdrasil — every inter-service call on the Bifrost Network goes through a circuit breaker with tuned thresholds.
+
+### Required Reading
+
+- Chandra, T.D., Toueg, S. (1996). "Unreliable Failure Detectors for Reliable Distributed Systems." *JACM* 43(2).
+- Hayashibara, N., et al. (2004). "φ Accrual Failure Detector." *SRDS*.
+- Gupta, I., et al. (2001). "SWIM: Scalable Weakly-consistent Infection-style Membership." *PODC*.
+
+### Discussion Questions
+
+1. The Phi Accrual failure detector computes a suspicion level. Contrast this with a binary alive/dead detector. In what situations is a suspicion level more useful? When might it be harmful?
+2. SWIM provides O(n) gossip per process per round. But in a cluster of 10,000 nodes, detecting a failure still takes O(log n) rounds on average. Is this fast enough for a system that needs to react to failures within 5 seconds?
+3. Circuit breakers prevent cascading failures, but they also reduce availability during a partial outage. How should you configure the circuit breaker thresholds for (a) a payment processing service, (b) a social media feed service, and (c) a health monitoring service?
+
+### Practice Problems
+
+- Implement a simple heartbeat failure detector in Python. Each process sends heartbeats every 1 second; a process is suspected if 3 heartbeats are missed. Inject random network delays and observe the false suspicion rate.
+- Calculate the expected detection time for a Phi Accrual failure detector with normal inter-arrival times (mean=1s, std=0.1s) and threshold=8.0. What is the probability of a false suspicion during a 10-second window if no actual failures occur?
+- Design a circuit breaker with the following parameters: request volume threshold=20, error percentage threshold=50%, sleep window=5s, half-open permits=3. Trace through a scenario where a downstream service starts failing.
+
+---
+
+ᛖ **Lecture 8: Distributed Transactions and Atomic Commit**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+A distributed transaction is an operation that spans multiple nodes and must either commit on all of them or abort on all of them. This lecture covers the classical atomic commit protocols (2PC, 3PC), modern approaches (Paxos commit, Spanner's TrueTime-based transactions), and the emerging consensus-transaction approach used by systems like CockroachDB and FaunaDB.
+
+### Key Topics
+
+- **Two-Phase Commit (2PC)**: The classical protocol — coordinator asks all participants to prepare, then commit or abort
+- **Three-Phase Commit (3PC)**: Adding a pre-commit phase to avoid blocking — why it doesn't work in practice
+- **Paxos Commit**: Using consensus for the commit decision — removing the single coordinator failure point
+- **Spanner-style Transactions**: TrueTime + 2PC + Paxos — how Google achieves external consistency
+- **Optimistic Concurrency Control**: Validation-based transactions without locks
+- **Distributed Deadlock Detection**: The phantom menace of cross-node locks
+
+### Lecture Notes
+
+**Two-Phase Commit (2PC)** is the simplest and most widely used atomic commit protocol. A coordinator sends a PREPARE message to all participants. Each participant votes YES (ready to commit) or NO (must abort). If all vote YES, the coordinator sends COMMIT; if any vote NO, the coordinator sends ABORT. The protocol is simple and correct, but it has a fatal flaw: **blocking**. If the coordinator crashes after all participants have voted YES but before sending the COMMIT/ABORT decision, the participants are blocked indefinitely — they cannot commit (another participant might have voted NO) and they cannot abort (the coordinator might have decided COMMIT). They must wait for the coordinator to recover.
+
+**Three-Phase Commit (3PC)** attempts to solve the blocking problem by adding a PRE-COMMIT phase. After all participants vote YES, the coordinator sends PRE-COMMIT. Only after all participants acknowledge the PRE-COMMIT does the coordinator send COMMIT. The idea is that if the coordinator crashes after the PRE-COMMIT phase, the surviving participants can infer that the decision was to commit (since they all received PRE-COMMIT) and proceed without the coordinator. Unfortunately, 3PC assumes synchronous communication — it requires known timeouts and does not work in asynchronous systems with crash failures. In practice, 3PC is rarely used because real networks don't provide the timing guarantees it needs.
+
+**Paxos Commit** (Gray and Lamport, 2006) solves the coordinator failure problem by using consensus for the commit decision. Instead of a single coordinator deciding COMMIT or ABORT, the decision is made by a Paxos group. If the original coordinator fails, the Paxos group can still reach a decision, so the protocol never blocks. The cost: every transaction requires a consensus decision, adding latency proportional to the Paxos round trip time.
+
+**Spanner's approach** is more integrated. Spanner uses TrueTime timestamps to provide external consistency — every transaction is assigned a timestamp, and transactions are committed in timestamp order. For distributed transactions (spanning multiple Paxos groups), Spanner uses a two-phase commit where the coordinator is chosen via leader election and the commit decision is replicated via Paxos. The key innovation: TrueTime's bounded clock uncertainty means that once a transaction's timestamp has passed (i.e., the current time is definitely past the transaction's commit time), all subsequent transactions are guaranteed to see its effects.
+
+**Optimistic Concurrency Control (OCC)** takes a different approach: instead of locking resources before modifying them, transactions read and modify data without coordination, then validate at commit time. If the validation succeeds (no conflicting modifications), the transaction commits; if not, it aborts and retries. OCC works well when conflicts are rare, but it degrades badly under contention because transactions waste work on aborts. In distributed settings, OCC validation requires checking that the read set hasn't been modified across all replicas — this is essentially a distributed read lock with a optimistic implementation.
+
+**Distributed deadlock detection** is the phantom menace of distributed transactions. When transaction T1 holds a lock on resource A and waits for lock B, and transaction T2 holds lock B and waits for lock A, we have a deadlock. In a distributed system, these locks may span multiple nodes, making detection harder. The classical approach is centralized deadlock detection (one node collects all lock graphs), but this creates a single point of failure. Distributed deadlock detection uses edge-chasing algorithms (e.g., Obermarck's algorithm) where deadlock probes are propagated along wait-for edges. In practice, most systems in 2040 use timeout-based deadlock prevention — if a transaction has been waiting for more than N seconds, abort it and try again. This is simpler than detection and avoids the overhead of building global lock graphs.
+
+### Required Reading
+
+- Gray, J. (1978). "Notes on Data Base Operating Systems." *Operating Systems: An Advanced Course*, Springer.
+- Gray, J., Lamport, L. (2006). "Consensus on Transaction Commit." *ACM TODS* 31(1).
+- Corbett, J.C., et al. (2012). "Spanner: Google's Globally-Distributed Database." *OSDI*.
+
+### Discussion Questions
+
+1. 2PC blocks on coordinator failure. 3PC doesn't block but requires synchronous assumptions. Paxos Commit doesn't block but requires a consensus round. Is there a way to get atomic commit without any of these costs? Prove or disprove.
+2. Spanner's TrueTime approach is often criticized for requiring specialized hardware (GPS, atomic clocks). Can you achieve external consistency without TrueTime? What are the alternatives?
+3. OCC aborts transactions on conflict. In a high-contention system (e.g., a popular item in an e-commerce store), OCC's abort rate can be catastrophically high. What techniques can reduce this problem without resorting to pessimistic locking?
+
+### Practice Problems
+
+- Implement 2PC in Python with 1 coordinator and 3 participants. Test the following scenarios: (a) all participants vote YES, (b) one participant votes NO, (c) coordinator crashes after all votes are collected. In scenario (c), implement recovery so that the participants can eventually commit or abort.
+- Prove that 3PC cannot block in the synchronous model with crash-stop failures and at most f < n crash failures. Then show it *can* block in the asynchronous model.
+- Compare the latency of a distributed transaction using (a) 2PC with one coordinator, (b) Paxos Commit with 5 acceptors. Assume each message round trip takes 10ms and all participants are in the same region.
+
+---
+
+ᚾ **Lecture 9: CRDTs — Conflict-Free Replicated Data Types**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+CRDTs are the most significant development in distributed systems theory in the last two decades. By mathematically guaranteeing that concurrent updates never conflict, CRDTs make it possible to have *both* availability and eventual consistency *with* deterministic convergence — effectively achieving "CA" in CAP, bypassing the theorem by weakening the consistency model. This lecture covers the theory, the major data types, and the practical systems that use CRDTs in 2040.
+
+### Key Topics
+
+- **The CRDT Insight**: If the merge operation is commutative, associative, and idempotent, replicas can never conflict
+- **State-Based CRDTs (CvRDTs)**: Replicas send their full state; merge function is a semilattice join
+- **Operation-Based CRDTs (CmRDTs)**: Replicas send operations; operations are commutative
+- **The Semilattice Property**: Join-semilattices and why they guarantee convergence
+- **CRDTs in Practice**: Counters (G-Counter, PN-Counter), sets (G-Set, OR-Set), registers (LWW-Register, MV-Register), maps, sequences
+- **Collaborative Editing as a CRDT**: The RGA, Yjs, and Automerge approaches
+- **BifrostDB and the CRDT-Native Database**: How the University of Yggdrasil's research database uses CRDTs as the primary data model
+
+### Lecture Notes
+
+The fundamental insight behind CRDTs is deceptively simple: **if the merge operation forms a semilattice, then replicas can update independently and merge later without conflict.** A semilattice is a partially ordered set where any two elements have a least upper bound (join operation). The join operation must be:
+
+1. **Commutative**: `merge(A, B) = merge(B, A)` — order doesn't matter
+2. **Associative**: `merge(merge(A, B), C) = merge(A, merge(B, C))` — grouping doesn't matter
+3. **Idempotent**: `merge(A, A) = A` — applying the same update twice has no effect
+
+If these properties hold, then it doesn't matter what order updates arrive in, how many times they're applied, or whether replicas are temporarily disconnected. Every merge brings the state closer to the eventual converged value, and convergence is guaranteed when all updates have been delivered.
+
+**State-based CRDTs (CvRDTs)** replicate by sending their full state. Each replica maintains its local state and periodically broadcasts it to other replicas. When a replica receives another replica's state, it merges it with its own using the semilattice join operation. The merge is guaranteed to be correct because the join operation is commutative, associative, and idempotent. The cost: sending the entire state for each update can be expensive. Optimizations like state deltas (sending only the changed parts) reduce this overhead.
+
+**Operation-based CRDTs (CmRDTs)** replicate by sending operations (e.g., "increment counter by 1" or "add element X to set"). These operations must be commutative — they must produce the same final state regardless of the order in which they're applied. This is a stronger requirement than for state-based CRDTs, because the operation's effect must commute with all other operations. The advantage is that operations are typically much smaller than full states, making them more efficient to transmit.
+
+**G-Counter** (Grow-only Counter): The simplest state-based CRDT. Each of n replicas maintains a vector of n integers, one per replica. To increment, a replica increments its own entry. To merge, take the element-wise maximum of the two vectors. The counter value is the sum of all entries. This counter can only grow; it cannot be decremented.
+
+**PN-Counter** (Positive-Negative Counter): Two G-Counters — one for increments, one for decrements. The value is the difference. This allows counting up and down. Both counters merge independently. The cost: twice the state of a G-Counter.
+
+**OR-Set** (Observed-Remove Set): The most widely used set CRDT. Elements are added with unique tags (typically a replica ID + sequence number). When adding, a new tag is created for the element. When removing, all tags for the element that are currently visible are recorded. Merge resolves conflicts by: if an add tag is present and its tag was not in the remove set, the element is in the set. This implements "add wins" semantics — if an element is concurrently added and removed, the add wins. This is the semantics most users expect.
+
+**RGA (Replicated Growable Array)**: A sequence CRDT for collaborative editing. Each character in the document is assigned a unique identifier that encodes its position relative to other characters, even under concurrent edits. The merge operation resolves concurrent inserts by comparing identifiers and placing characters in a deterministic order. RGAs form the basis of most collaborative editing systems in 2040.
+
+**Yjs** (Nicolaus, 2020) is a production-quality CRDT implementation for collaborative editing that uses a highly optimized encoding: instead of storing the full RGA, Yjs stores only the differences (item updates) and computes the full state on demand. This reduces memory usage from O(n²) to O(n) for n elements. Yjs is used by Figma, Affine, and many other collaborative editing applications.
+
+**Automerge** (Kleppmann, et al., 2019) is another approach to CRDT-based collaborative editing, originally developed for peer-to-peer applications. Automerge uses a JSON-like document model where every field is a CRDT. It was originally slower than Yjs for large documents, but the 2024 version (Automerge 3.0) uses a columnar storage format inspired by database internals that achieves competitive performance.
+
+**BifrostDB** is the University of Yggdrasil's research database, designed from the ground up around CRDTs. Its key innovation: instead of applying CRDTs as an afterthought (as in most NoSQL databases), BifrostDB uses CRDTs as the *primary data model*. Every column type in BifrostDB is a CRDT — counters, sets, registers, and even complex types like CRDT maps and sequences. This means that every BifrostDB table is automatically mergeable, without any application-specific conflict resolution logic. BifrostDB's query planner can push queries down to replicas and merge the results using the CRDT merge functions, enabling low-latency reads without sacrificing consistency guarantees.
+
+The philosophical lesson of CRDTs is profound: **conflict is not inherent in distributed systems — it's an artifact of data representations that don't have merge functions.** By choosing data representations that are inherently mergeable, we can eliminate conflict entirely. This is the CALM theorem in action: monotonic operations on semilattice-structured data are coordination-free.
+
+### Required Reading
+
+- Shapiro, M., et al. (2011). "Conflict-Free Replicated Data Types." *SSS*.
+- Kleppmann, M., Beresford, A. (2017). "A Conflict-Free Replicated JSON Datatype." *IEEE TPDS* 27(10).
+- Nicolaus, K. (2020). "Yjs: A CRDT Framework for Collaborative Editing." *GitHub repository documentation and benchmarks*.
+
+### Discussion Questions
+
+1. OR-Sets implement "add wins" semantics for concurrent add/remove operations. What other conflict resolution policies could be useful? When would "remove wins" be preferable?
+2. CRDTs guarantee convergence, but the converged state may not be what any user intended. Give an example where CRDT merge produces a semantically wrong result, even though it's technically correct.
+3. BifrostDB uses CRDTs as the primary data model. What are the limitations of this approach? Can you express foreign key constraints, uniqueness constraints, or complex join operations in a CRDT-native database?
+
+### Practice Problems
+
+- Implement a G-Counter and a PN-Counter in Python. Test that both counters converge to the same value regardless of the order of merges.
+- Implement an OR-Set that supports add(element), remove(element), and merge(other_set). Verify that concurrent add and remove of the same element results in the element being present (add wins).
+- Compare the space overhead of a G-Counter with n replicas versus a simple integer counter. At what value of n does the overhead become significant? (Consider memory and network bandwidth separately.)
+
+---
+
+ᛉ **Lecture 10: Fault-Tolerant Storage — Erasure Coding and Replication Strategies**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Data durability is the central promise of any storage system: if you write data, it should be readable later, even if components fail. This lecture covers the two primary techniques for achieving durability at scale — replication and erasure coding — and the systems that use each approach.
+
+### Key Topics
+
+- **Replication Factor**: How many copies is enough? The mathematics of independent failure probabilities
+- **Erasure Coding**: Reed-Solomon codes, the fundamental trade-off between storage overhead and reconstruction cost
+- **Comparison**: When replication beats erasure coding and vice versa
+- **Locality and Repair**: Regenerating codes and the repair bandwidth problem
+- **Consistent Hashing**: Distributing data across nodes with minimal remapping on topology changes
+- **Basetime and Repair Time**: Mean Time To Data Loss (MTTDL) calculations
+
+### Lecture Notes
+
+The simplest approach to data durability is **full replication**: store k complete copies of each data object on k different nodes. If each node has an independent failure probability p per unit time, then the probability that all k copies fail simultaneously is p^k. With 3-way replication (the standard in most production systems) and a per-disk annual failure rate of 2%, the probability of losing all three copies in a year is 0.0008% — roughly one loss in 125,000 years per object. This sounds reassuring, but it doesn't account for correlated failures (power outages, buggy firmware updates, datacenter fires) or the cascading failure scenarios discussed in Lecture 7.
+
+**Erasure coding** reduces storage overhead by breaking each data object into k data fragments and m parity fragments, such that any k of the (k+m) fragments are sufficient to reconstruct the original data. The storage overhead is (k+m)/k, compared to k for k-way replication. For example, with a (10,4) Reed-Solomon code (k=10, m=4), the overhead is 1.4x — compared to 3x for 3-way replication. The catch: reconstructing a lost fragment requires reading k other fragments and performing O(k²) finite field operations. This makes erasure coding significantly more expensive than replication for *repair* operations.
+
+The **repair bandwidth problem** is erasure coding's Achilles' heel. When a single fragment is lost, a k-of-(k+m) code requires reading k fragments (typically from k different nodes) to reconstruct the original data and regenerate the lost fragment. For a (10,4) code, this means transferring 10 units of data to repair 1 unit — a 10x overhead. Compare with 3-way replication, where repair requires transferring only 1 unit from a surviving replica — a 1x overhead. This 10x factor matters enormously in practice: it determines how quickly a storage system can recover from a disk failure and return to full redundancy.
+
+**Regenerating codes** (Dimakis et al., 2010) reduce repair bandwidth by allowing nodes to send linear combinations of their fragments rather than complete fragments. The fundamental trade-off: for a given storage overhead and data reconstruction threshold, there is a minimum repair bandwidth below which it's impossible to go. This is the **storage-repair bandwidth trade-off** — a curve that shows the minimum repair bandwidth achievable for each point on the storage overhead spectrum. MBR (Minimum Bandwidth Regenerating) codes minimize repair bandwidth at the cost of higher storage; MSR (Minimum Storage Regenerating) codes minimize storage at the cost of higher repair bandwidth.
+
+**Consistent hashing** (Karger et al., 1997) is the standard technique for distributing data across a cluster. Each data key is hashed to a point on a circle (ring), and each node is responsible for the keys that hash to the arc counterclockwise from its position. When a node joins or leaves, only the keys in its arc need to be remapped. This makes topology changes cheap — O(1/n) of the keys move, compared to O(1) for a modulo-based distribution. Apache Cassandra, Amazon DynamoDB, and Riak all use consistent hashing with virtual nodes (vnodes) to balance load more evenly.
+
+**MTTDL (Mean Time To Data Loss)** is the key metric for storage reliability. For a replicated system with n replicas and repair time T_repair, the MTTDL is approximately:
+
+```
+MTTDL ≈ (MTTF_disk)^n / (n * T_repair^(n-1))
+```
+
+where MTTF_disk is the Mean Time To Failure of a single disk. This formula assumes independent failures and immediate repair starts when a failure is detected. In practice, correlated failures and repair time variability make MTTDL calculations an upper bound on actual reliability.
+
+In 2040, most large-scale storage systems use a combination of replication and erasure coding: data is replicated within a datacenter (for fast reads and cheap repairs), and erasure-coded across datacenters (for geo-redundancy with minimal storage overhead). The University of Yggdrasil's Bifrost Storage System uses 3-way replication within each datacenter and a (10,4) Reed-Solomon code across 4 datacenters, achieving a storage overhead of 3.6x (3x local + 0.6x remote) and a theoretical MTTDL of over 10^9 years.
+
+### Required Reading
+
+- Dimakis, A.G., et al. (2010). "Network Coding for Distributed Storage Systems." *IEEE Trans. Inf. Theory* 56(3).
+- Karger, D., et al. (1997). "Consistent Hashing and Random Trees." *STOC*.
+- Weil, S.A., et al. (2006). "CRUSH: Controlled, Scalable, Decentralized Placement of Replicated Data." *OSDI*.
+
+### Discussion Questions
+
+1. Calculate MTTDL for the following configurations: (a) 3-way replication, MTTF_disk=1M hours, T_repair=24 hours; (b) (10,4) erasure coding, same parameters; (c) (10,4) erasure coding, T_repair=240 hours (10 days). What do you conclude?
+2. Why doesn't everyone use erasure coding instead of replication? Calculate the repair bandwidth for a (10,4) code when the object is 1GB and compare with 3-way replication.
+3. Consistent hashing minimizes data movement on topology changes. But it doesn't minimize request routing distance. How do modern systems like Ceph's CRUSH algorithm improve on consistent hashing for data placement?
+
+### Practice Problems
+
+- Implement a simple consistent hash ring in Python. Support add_node, remove_node, and get_node(key) operations. Verify that when a node is added, only keys in the new node's arc are remapped.
+- Calculate the storage overhead and minimum repair bandwidth for: (a) 3-way replication; (b) (6,3) Reed-Solomon; (c) (10,4) Reed-Solomon; (d) a hypothetical MSR code with storage overhead 1.5x.
+- Simulate a (10,4) erasure-coded storage system with 14 nodes. Remove 3 random nodes and verify that all objects can still be reconstructed. Remove the 4th node — what happens?
+
+---
+
+ᚺ **Lecture 11: Distributed Locking, Leader Election, and Coordination Services**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Many distributed algorithms require coordination: electing a leader, acquiring a lock, or maintaining group membership. This lecture covers the practical coordination services that provide these primitives — ZooKeeper, etcd, and Consul — and the algorithms they use internally.
+
+### Key Topics
+
+- **Distributed Mutual Exclusion**: The problem of locking across nodes
+- **Leader Election**: Ring-based, bully, and Raft-based election
+- **ZooKeeper**: The hierarchical coordination service that started it all
+- **etcd and Consul**: Modern alternatives built on Raft
+- **Leases vs. Locks**: Why leases are often better than locks in distributed systems
+- **Fencing Tokens**: The critical missing piece in many lock implementations
+- **Group Membership**: The dynamic subset problem — who's in and who's out?
+
+### Lecture Notes
+
+**Distributed mutual exclusion** is the problem of ensuring that at most one process at a time can execute a critical section. In a single-machine system, this is solved by mutex locks and semaphores. In a distributed system, it's solved by algorithms that combine message passing with logical timestamps:
+
+- **Lamport's mutual exclusion algorithm** uses a total order of requests (based on Lamport timestamps) and requires O(n) messages per critical section entry (3n if acknowledgments are counted). Each process maintains a request queue sorted by timestamp, and grants access to the process with the smallest timestamp.
+- **Ricart-Agrawala's algorithm** reduces this to 2(n-1) messages by combining the request and acknowledgments into a single round trip. A process requesting the critical section sends a request to all other processes; a process grants access unless it has an earlier request pending.
+- **Maekawa's algorithm** reduces this further to O(√n) messages by having each process consult only a subset (quorum) of other processes, such that any two quorums overlap. This is the same quorum intersection property used in consensus protocols.
+
+In practice, distributed mutual exclusion is almost never implemented using these algorithms. Instead, it's provided by a **coordination service** — a centralized (but replicated for fault tolerance) service that manages locks, leader election, and group membership.
+
+**ZooKeeper** (Hunt et al., 2010) is the grandfather of coordination services. It provides a hierarchical namespace (like a filesystem) where each node (called a "znode") can store a small amount of data. Clients can create, read, write, and delete znodes, and crucially, they can set **watches** on znodes that trigger when the znode changes. ZooKeeper uses a variant of Multi-Paxos internally for consensus and provides the following guarantees: linearizable writes, FIFO client ordering, and sequential consistency for reads.
+
+ZooKeeper implements distributed locks using **ephemeral nodes** — znodes that are automatically deleted when the client session that created them ends. To acquire a lock, a client creates an ephemeral sequential znode under a lock parent znode (e.g., `/locks/my-lock/lock-0000000001`). If the client's znode has the lowest sequence number, it holds the lock. If not, it watches the znode with the next-lower sequence number and waits for it to be deleted. This is called the **herd effect avoidance** pattern — only one watcher per lock contender, not n watchers all rushing for the lock simultaneously.
+
+**etcd** (2014) is a modern coordination service built on Raft. It provides a flat key-value store (not hierarchical like ZooKeeper) with the same linearizable writes and FIFO client ordering guarantees. etcd is the backing store for Kubernetes, which stores all cluster state (pods, services, config maps, secrets) in etcd. The etcd team at CoreOS (later acquired by Red Hat) chose Raft specifically for its understandability, arguing that the ZooKeeper codebase had become unmaintainable due to Paxos's complexity.
+
+**Consul** (HashiCorp, 2014) is a coordination service that combines key-value storage with service discovery and health checking. It uses Raft for consensus (in the key-value store) and a gossip protocol (SWIM-based) for cluster membership. Consul's killer feature is its **service mesh** — it can automatically configure proxy sidecars for inter-service communication, providing encryption, observability, and traffic management without application changes.
+
+**Leases vs. Locks** is one of the most important practical distinctions in distributed systems. A **distributed lock** grants exclusive access to a resource until the holder explicitly releases it. A **lease** grants exclusive access for a fixed time period. The crucial difference: if the lock holder crashes, the lock is held forever (or until a timeout mechanism kicks in), but a lease expires automatically. Leases are superior in almost all practical scenarios because they're **self-releasing** — even if the holder crashes, the lease eventually expires and the resource becomes available again.
+
+**Fencing tokens** (also called epoch numbers or generation numbers) are a critical safety mechanism that many lock implementations overlook. The problem: a client acquires a lock, enters a critical section, crashes, and then reacquires the lock after restarting. But the client's first critical section may still be executing (or its effects may still be propagating) — the system now has two processes in the same critical section. The solution: every lock acquisition returns a monotonically increasing fencing token, and every resource that the lock protects must check the fencing token before accepting an operation. If the token is stale (lower than the last seen token), the operation is rejected. This is why ZooKeeper's sequential znodes and etcd's revision numbers are so important — they provide the fencing tokens automatically.
+
+### Required Reading
+
+- Hunt, P., et al. (2010). "ZooKeeper: Wait-Free Coordination for Internet-Scale Systems." *USENIX ATC*.
+- Howard, H., et al. (2015). "Dynamo: Amazon's Highly Available Key-Value Store." *SOSP* (reprint with 2015 context).
+- Chandra, T.D., et al. (2007). "Paxos Made Live — An Engineering Perspective." *PODC*.
+
+### Discussion Questions
+
+1. ZooKeeper uses a hierarchical namespace, while etcd uses a flat key-value store. What are the advantages and disadvantages of each approach for coordination primitives?
+2. Fencing tokens prevent stale lock holders from corrupting shared state. But they require every resource server to maintain fencing token state. Is this overhead justified for all applications, or only for specific ones? Give examples.
+3. In a system with 100,000 clients competing for 1,000 locks, what is the maximum throughput of ZooKeeper's lock service? Consider the message pattern: create, watch, notification, delete. What bottlenecks limit scalability?
+
+### Practice Problems
+
+- Implement a distributed lock using ZooKeeper's ephemeral sequential node pattern. Test it with 5 concurrent clients and verify mutual exclusion.
+- Implement leader election using etcd. Three candidates compete for leadership; when the leader fails, a new leader is elected within 10 seconds. Verify that at most one leader exists at any time.
+- Design a coordination service for a distributed task queue. The service must support: (a) enqueueing tasks, (b) dequeuing tasks (with exactly-once semantics), (c) tracking task status (pending, in_progress, completed, failed). What data structures and coordination primitives would you use?
+
+---
+
+ᛜ **Lecture 12: The Future of Distributed Systems — Edge, Quantum, and Beyond**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+This final lecture steps back from the algorithms and protocols to examine the emerging forces reshaping distributed systems in 2040 and beyond. Edge computing pushes computation closer to users; quantum networking promises fundamentally new communication primitives; and AGI-era systems demand new models of verification, trust, and governance. We synthesize the course's themes and project them forward.
+
+### Key Topics
+
+- **Edge-to-Cloud Continuum**: From datacenter to edge to device — the tiered computing model of 2040
+- **Quantum Networking**: Entanglement-based communication, quantum repeaters, and the Bifrost Research Network
+- **Proof-of-Stake and BFT in Production**: How blockchains solved (and didn't solve) the distributed consensus problem
+- **AGI-Era Distributed Systems**: Verification of autonomous agents, proof-carrying data, and the alignment problem in distributed contexts
+- **The Local Knowledge Principle, Revisited**: Why distributed systems theory matters more than ever in the age of AGI
+- **Course Synthesis**: The unifying themes of CS301 and the road ahead
+
+### Lecture Notes
+
+**Edge computing** is not a new idea — content delivery networks (CDNs) have been pushing data to the edge since the 1990s. What's new in 2040 is the *computation* at the edge. Modern edge nodes are not just caches; they run inference models, perform data filtering and aggregation, and make autonomous decisions. The **edge-to-cloud continuum** is a three-tier architecture:
+
+1. **Device tier**: IoT sensors, wearables, autonomous vehicles. Limited compute, intermittent connectivity. Must make real-time decisions locally.
+2. **Edge tier**: Micro-datacenters in metro areas, cell tower sites, and satellite ground stations. Moderate compute, low latency to devices. Runs model inference, data aggregation, and lightweight coordination.
+3. **Cloud tier**: Large datacenters running training, analytics, and global coordination. High compute, high latency from devices.
+
+The key challenge: **data consistency across tiers**. A device may update state that the edge node hasn't seen, or the edge may make a decision based on stale cloud data. CRDTs (Lecture 9) are now the standard approach for cross-tier state synchronization — device state is modeled as CRDTs that merge upward periodically. The University of Yggdrasil's own sensor network uses this architecture: each sensor runs a local CRDT, edge nodes aggregate state from thousands of sensors and merge it with the cloud, and the cloud provides global queries and analytics.
+
+**Quantum networking** represents the most fundamental shift in distributed systems since the internet. Quantum entanglement enables two operations that classical networks cannot provide:
+
+1. **Quantum key distribution (QKD)**: Two parties can establish a shared secret key that is provably secure against any eavesdropping, based on the laws of quantum mechanics (not computational assumptions). Any attempt to intercept the quantum channel disturbs the entangled particles and is detected.
+2. **Quantum teleportation**: A quantum state can be transmitted from one location to another using entanglement and classical communication, without the quantum state itself traversing the intervening space. This does not enable faster-than-light communication (classical communication is still required), but it enables the transfer of quantum information (qubits) across physical distance.
+
+The Bifrost Research Network at the University of Yggdrasil operates one of the world's longest quantum-secured links, connecting nodes in Reykjavik, Oslo, and Tórshavn via undersea fiber with quantum repeaters. This link provides QKD for all administrative communication between nodes, ensuring that keys are refreshed every 100 milliseconds — far beyond what classical key exchange can achieve.
+
+**Blockchain and BFT consensus** have had a complicated relationship with the distributed systems community. On one hand, blockchains like Ethereum demonstrated that BFT consensus could be run in a permissionless setting with billions of dollars at stake — a deployment scale that academic BFT research had never achieved. On the other hand, blockchains introduced new problems (MEV extraction, governance attacks, energy waste in proof-of-work) that were not anticipated by the classical BFT literature. In 2040, proof-of-stake blockchains (Ethereum 2.0+, Solana, and others) use BFT consensus adapted for open participation. The resulting systems are impressive in scale but fragile in new ways — governance decisions can be influenced by economic power, and the "unpredictability" needed for proposer selection creates new attack surfaces.
+
+**AGI-era distributed systems** present challenges that CS301's classical theory wasn't designed to address. When autonomous agents can modify their own code, make decisions that affect millions of users, and coordinate at speeds beyond human oversight, we need new verification and governance mechanisms:
+
+- **Proof-carrying data**: Every piece of data carries a cryptographic proof of its provenance and processing history. Agents can verify the integrity of data without trusting the producer.
+- **Formal verification at scale**: The same techniques used to verify consensus protocols (model checking, theorem proving) are being applied to agent behavior specifications. The challenge: specifications themselves may be ambiguous or incomplete.
+- **Distributed governance**: How do you make decisions about a system that spans thousands of nodes and serves billions of users? On-chain governance (voting) and off-chain governance (councils, constitutions) each have strengths and weaknesses.
+- **The alignment problem in distributed contexts**: Ensuring that an AGI system's behavior is aligned with human values is hard enough in a centralized setting. In a distributed setting, where agents may have incomplete information about global state and may receive conflicting instructions from different principals, alignment becomes even harder.
+
+**The Local Knowledge Principle**, which we introduced in Lecture 1, turns out to be more relevant than ever. In an AGI-era distributed system, the "local knowledge" of each agent includes not just the state of its own processes but also its understanding of the global system's goals, constraints, and values. The gap between local knowledge and global reality is the fundamental challenge of distributed AI — and it's the same challenge that distributed systems theory has been grappling with since Lamport's 1978 paper.
+
+### Course Synthesis
+
+The twelve lectures of CS301 have covered a journey from the abstract foundations (system models, impossibility results) to the practical algorithms (Raft, CRDTs, coordination services) to the emerging future (edge computing, quantum networking, AGI-era systems). The unifying themes are:
+
+1. **Failures are not exceptional — they are the normal case.** Distributed systems must be designed for failure. Every algorithm must work correctly even when messages are lost, processes crash, and clocks drift.
+2. **Consistency and availability are often in tension, but not always.** CRDTs and causal consistency show that we can have both, with caveats. The art is choosing the right point on the spectrum for each application.
+3. **Time is not fundamental — causality is.** The happened-before relation, not physical time, is the foundation of distributed systems reasoning. Logical clocks, vector clocks, and hybrid logical clocks all encode this insight.
+4. **Verification is mandatory.** Distributed systems fail in ways that are hard to reproduce and harder to diagnose. Model checking, theorem proving, and rigorous testing are not luxuries — they are prerequisites for production deployment.
+5. **The theory-practice gap is real but narrowing.** FLP is an impossibility result, but real systems achieve consensus every day. The gap between theory and practice is bridged by partial synchrony, failure detectors, randomness, and pragmatic engineering.
+
+### Required Reading
+
+- Satyanarayanan, M., et al. (2009). "The Case for VM-Based Cloudlets in Mobile Computing." *IEEE Pervasive Computing*.
+- Amazon Web Services (2040). "Graviton Quantum: Secure Key Distribution for Cloud Applications." *AWS Whitepaper*.
+- UoY AGI Safety Group (2039). "Proof-Carrying Data for Autonomous Agent Systems." *Bifrost Technical Report BFT-2039-12*.
+
+### Discussion Questions
+
+1. Edge computing pushes computation closer to users, but it also increases the attack surface — more locations means more physical security risks. How should we secure edge nodes that are physically accessible (unlike datacenter servers)?
+2. Quantum key distribution provides provable security against eavesdroppers, but it requires dedicated fiber optic infrastructure. Is QKD worth the cost? What alternative approaches provide comparable security guarantees?
+3. In 2040, autonomous agents make decisions that affect millions of people. How should we verify that these agents are behaving correctly? Is formal verification sufficient, or do we need new approaches?
+
+### Practice Problems
+
+- Design the state synchronization layer for an edge-to-cloud system using CRDTs. The system manages inventory levels for a retail chain. Each store is an edge node; the cloud aggregates inventory across all stores. What CRDT types would you use? How would you handle the case where a store counts 10 items while the cloud has 8 (because the store hasn't synced yet)?
+- Calculate the key generation rate for a QKD system running over a 100km fiber link with 80% transmission efficiency and a 10MHz photon source. Assume 50% of photons produce usable key bits after error correction and privacy amplification.
+- Write a 2-page essay: "Distributed Systems in the Age of AGI — What Stays the Same and What Changes." Use concepts from at least 5 lectures in this course.
+
+---
+
+## Final Examination Preparation
+
+The final examination for CS301 consists of 8 questions, of which you must choose 4 to answer in depth. Each answer should demonstrate understanding of both theory and practice, with reference to specific algorithms, proofs, and systems discussed in the course.
+
+### Essay Questions (Choose 4 of 8)
+
+**Question 1**: "Consensus is the most important problem in distributed systems." Evaluate this claim with reference to FLP impossibility, Paxos/Raft, and the practical challenges of implementing consensus in production systems. Consider both sides: is there anything more fundamental than consensus?
+
+**Question 2**: Compare and contrast linearizability, causal consistency, and eventual consistency as consistency models. For each, describe: (a) a real system that implements it, (b) the performance implications, (c) the types of applications it's suitable for, and (d) the types of applications it's unsuitable for.
+
+**Question 3**: The CAP theorem states that in the presence of partitions, you must choose between consistency and availability. The PACELC model extends this to include latency-consistency trade-offs in normal operation. Analyze a globally distributed social media platform and specify the consistency model you would recommend for each of the following data types: user profiles, follower lists, direct messages, news feed posts, and trending topics. Justify each recommendation using PACELC.
+
+**Question 4**: "CRDTs eliminate the need for coordination in distributed systems." Evaluate this claim. Describe what CRDTs can and cannot achieve. In what situations are CRDTs superior to consensus-based approaches? When are they insufficient?
+
+**Question 5**: Design a distributed key-value store that provides causal consistency, read-your-writes, and monotonic reads across 5 globally distributed replicas. Specify: (a) the data model and CRDT types used, (b) the read and write protocols, (c) the clock structure (what type of logical clock), and (d) how session guarantees are maintained during client reconnections.
+
+**Question 6**: Analyze the failure detection requirements for the following systems: (a) a Raft cluster with 5 nodes in one datacenter, (b) a globally distributed database with 100 nodes across 10 regions, (c) an edge computing system with 10,000 sensor nodes. For each, specify the failure detector class needed, the implementation approach, and the expected detection latency.
+
+**Question 7**: Compare erasure coding and replication for data durability. Given a cluster of 100 nodes with individual disk annual failure rate of 2%, target data durability of 99.999999% (eight nines), and a requirement that any single object can be read with latency under 50ms, which approach would you choose? Justify your answer with calculations.
+
+**Question 8**: "In the age of AGI, distributed systems theory is obsolete — intelligent agents will figure out coordination dynamically without needing explicit protocols." Present arguments for and against this position. Draw on specific impossibility results (FLP, CAP, Byzantine agreement lower bounds) and consider whether AGI can circumvent fundamental constraints.
+
+---
+
+*"The network is reliable, latency is zero, bandwidth is infinite, the network is secure, topology doesn't change, there is one administrator, transport cost is zero, the network is homogeneous, clocks are synchronized, state is consistent by default, partial failure doesn't happen, causality is obvious, human operators read the manual, and quantum decoherence is someone else's problem. None of this is true. That's why we have a course."*
+
+*— Inscription on the wall of the UoY Distributed Systems Laboratory, 2040*ate the trade-off space
 
 ### Lecture Notes
 
