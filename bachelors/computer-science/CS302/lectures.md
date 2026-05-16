@@ -614,4 +614,705 @@ Properties: Simple, easy to generate, easy to optimize. But unstructured (goto-h
 
 ### Static Single Assignment (SSA)
 
-SSA form requires that each vari
+SSA form requires that each variable is assigned exactly once. Every use of a variable refers to a single definition point, making dataflow analysis dramatically simpler.
+
+```
+Original code:        SSA form:
+x = 1                 x₁ = 1
+x = 2                 x₂ = 2
+y = x + x            y₁ = x₂ + x₂
+x = 3                 x₃ = 3
+z = x + y            z₁ = x₃ + y₁
+```
+
+**φ-functions**: At control flow merge points (where multiple definitions of a variable reach the same point), SSA inserts φ-functions that "select" the appropriate definition based on which predecessor block was executed:
+
+```
+if condition:
+    x₁ = 1
+else:
+    x₂ = 2
+x₃ = φ(x₁, x₂)  // x₃ = x₁ if came from then, x₂ if came from else
+y = x₃ + 1
+```
+
+**SSA construction algorithm**:
+1. Compute dominators and dominance frontiers for all blocks.
+2. Place φ-functions at the dominance frontier of each variable's definition.
+3. Rename variables: walk the dominator tree, replacing each use with the current version of the variable.
+
+**SSA advantages**:
+- **Simpler dataflow analysis**: Reaching definitions, live variables, and constant propagation become trivial — each use has exactly one definition.
+- **Better optimization**: Common subexpression elimination, dead code elimination, and register allocation all benefit from SSA.
+- **Compact representation**: No need for def-use and use-def chains; SSA form encodes them directly.
+
+### Control Flow Graphs (CFGs)
+
+A CFG is a directed graph where nodes are basic blocks and edges represent possible control flow:
+
+```
+    [B1: entry]
+    if (x > 0) goto B2 else goto B3
+        │              │
+        ▼              ▼
+    [B2: then]    [B3: else]
+    y = x              y = -x
+        │              │
+        └──────┬───────┘
+               ▼
+         [B4: join]
+         return y
+```
+
+**Basic blocks** are maximal sequences of instructions with one entry point and one exit point.
+
+### LLVM IR
+
+LLVM IR is a low-level, typed, SSA-based IR:
+
+```llvm
+define i32 @example(i32 %a, i32 %b, i32 %c) {
+entry:
+  %1 = mul i32 %b, %c
+  %2 = add i32 %a, %1
+  ret i32 %2
+}
+```
+
+### Other IR Forms
+
+**Sea of Nodes**: Used in Java HotSpot JIT and V8 TurboFan. Nodes are values; edges represent data dependencies. Control flow is implicit, enabling aggressive reordering.
+
+**ANF (A-Normal Form)**: Every intermediate result is named. Used in Scala, Kotlin, and many functional language compilers.
+
+### Required Reading
+
+- Appel (2004). *Modern Compiler Implementation*, Chapter 6.
+- Lattner & Adve (2004). "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation." *CGO*.
+- Cytron et al. (1991). "Efficiently Computing Static Single Assignment Form." *ACM TOPLAS*.
+
+### Discussion Questions
+
+1. SSA form requires φ-functions at join points. What happens during code generation — how are φ-functions eliminated?
+2. LLVM IR uses infinite virtual registers. At what point does the number of registers become finite? What algorithm bridges this gap?
+3. A "sea of nodes" IR has no fixed instruction ordering. How does the back end decide the order in which to emit instructions?
+
+### Practice Problems
+
+1. **SSA construction**: Convert the following code to SSA form:
+   ```
+   x = 1
+   y = 2
+   if (c) {
+       x = 3
+   } else {
+       x = 4
+   }
+   y = x + y
+   ```
+   Show all φ-functions.
+
+2. **CFG construction**: Given the following code, identify basic block leaders, construct the CFG, and list all edges.
+
+3. **LLVM IR**: Write LLVM IR for a simple C function that computes the factorial of n.
+
+---
+
+ᛉ **Lecture 7: Machine-Independent Optimization — Making Code Faster Without Hardware**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Optimization transforms a program into a semantically equivalent program that executes faster, uses less memory, or both. "Machine-independent" optimizations operate on the IR without considering target-machine details — they exploit algebraic identities, redundancy, and program structure to reduce work.
+
+### The Optimization Hierarchy
+
+Optimizations are ordered by their scope:
+
+1. **Peephole** (local): Examine a small window of instructions. Examples: constant folding, strength reduction.
+2. **Local** (within a basic block): Examples: common subexpression elimination, constant propagation.
+3. **Global** (across basic blocks): Examples: global CSE, global constant propagation, dead code elimination.
+4. **Interprocedural** (across functions): Examples: inlining, interprocedural constant propagation, alias analysis.
+
+### Peephole Optimizations
+
+**Constant folding**: Evaluate constant expressions at compile time.
+```
+x = 3 + 5 * 2  →  x = 13
+```
+
+**Constant propagation**: If a variable is known to have a constant value, replace uses with the constant.
+```
+x = 5
+y = x + 3  →  y = 8
+```
+
+**Strength reduction**: Replace expensive operations with cheaper ones.
+```
+x = y * 2    →  x = y << 1
+x = y * 16   →  x = y << 4
+x = y / 8    →  y >> 3
+x = y % 8    →  y & 7
+```
+
+**Dead code elimination**: Remove code that cannot be reached or whose results are never used.
+
+**Algebraic simplification**:
+```
+x = y + 0    →  x = y
+x = y * 1    →  x = y
+x = y * 0    →  x = 0
+```
+
+### Common Subexpression Elimination (CSE)
+
+If two expressions compute the same value, the second can reuse the first's result:
+
+```
+Before:                    After:
+t1 = b * c                t1 = b * c
+t2 = a + t1               t2 = a + t1
+t3 = b * c                t3 = t1           // CSE
+t4 = d + t3               t4 = d + t3
+```
+
+### Loop Optimizations
+
+**Loop-Invariant Code Motion (LICM)**: Move computation outside the loop if it produces the same result every iteration.
+
+**Induction variable elimination**: Replace derived induction variables with computations based on the primary induction variable, or eliminate the primary variable entirely.
+
+**Loop unrolling**: Replicate the loop body to reduce loop overhead and enable further optimizations.
+
+**Loop interchange**: Reverse loop nesting to improve cache locality (row-major vs. column-major).
+
+**Loop fusion**: Combine two loops with the same bounds into one loop.
+
+**Loop tiling (blocking)**: Process data in cache-sized blocks to improve locality for large matrices.
+
+### Function Inlining
+
+Replace a function call with the body of the called function. Benefits: eliminates call overhead, exposes further optimization. Costs: increases code size, compilation time.
+
+**Inlining heuristics (2040)**:
+- Small functions (≤10 instructions): always inline.
+- Medium functions: inline if called from hot paths (profile-guided).
+- Large functions: inline only if call frequency justifies code size increase.
+- Virtual/dynamic calls: inline after devirtualization (type profiling).
+
+### Required Reading
+
+- Aho et al. (2006). *Compilers*, Chapter 8 (sections 8.1-8.5).
+- Cooper & Torczon (2022). *Engineering a Compiler*, Chapters 8-9.
+- Muchnick (1997). *Advanced Compiler Design*, Chapters 12-13.
+
+### Discussion Questions
+
+1. Constant propagation can enable further optimizations. Give an example where constant propagation alone doesn't help but enables a second optimization that does.
+2. Loop unrolling increases code size. At what point does unrolling become counterproductive?
+3. Inlining a virtual call requires devirtualization. How does profile-guided optimization help?
+
+### Practice Problems
+
+1. **Constant propagation cascade**: Apply constant propagation and folding to a block of code, showing the fully optimized result.
+2. **CSE**: Find and eliminate common subexpressions in a given basic block.
+3. **Loop optimization**: Apply LICM, strength reduction, and induction variable elimination to a given loop.
+
+---
+
+ᛉ **Lecture 8: Dataflow Analysis & Loop Optimizations — Understanding the Flow of Data**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Dataflow analysis is the mathematical foundation for most compiler optimizations. By analyzing how data flows through the program, the compiler can safely transform it.
+
+### The Dataflow Analysis Framework
+
+A dataflow analysis is specified by:
+1. **Domain**: The set of values computed over (sets of definitions, sets of variables).
+2. **Direction**: Forward (entry→exit) or backward (exit→entry).
+3. **Transfer function**: How each statement transforms information.
+4. **Meet operator**: How information from multiple paths is combined (∪ for may analyses, ∩ for must analyses).
+5. **Boundary condition**: Initial value at entry (forward) or exit (backward).
+
+```
+Forward:  IN[B] = meet(OUT[P] for all predecessors P)
+          OUT[B] = f_B(IN[B])
+
+Backward: OUT[B] = meet(IN[S] for all successors S)
+          IN[B] = f_B(OUT[B])
+```
+
+### Reaching Definitions
+
+**Question**: Which definitions of a variable reach each point?
+
+**Transfer**: OUT[B] = gen_B ∪ (IN[B] - kill_B)
+**Meet**: ∪ (union — any definition reaching through any path)
+**Application**: Constant propagation, type-based optimizations, detecting undefined variable uses.
+
+### Live Variable Analysis
+
+**Question**: Which variables are live (will be used later) at each point?
+
+**Transfer**: IN[B] = use_B ∪ (OUT[B] - def_B)
+**Direction**: Backward
+**Application**: Dead code elimination, register allocation.
+
+### Available Expressions
+
+**Question**: Which expressions have already been computed at each point?
+
+**Meet**: ∩ (intersection — available on ALL paths)
+**Application**: Global common subexpression elimination.
+
+### Very Busy Expressions
+
+**Question**: Which expressions are guaranteed to be computed later?
+
+**Meet**: ∩ (intersection — busy on ALL paths)
+**Application**: Code hoisting.
+
+### Lattice Theory Foundation
+
+Each analysis corresponds to a lattice with partial order, top, bottom, and meet operator. The fixed-point algorithm iterates until convergence, guaranteed in O(n × d) iterations.
+
+### Advanced Loop Optimizations
+
+**Loop-carried dependencies**: Dependencies between iterations that prevent parallelization.
+
+**Polyhedral model**: Represents loop iterations as integer points in a polyhedron, enabling transformations like tiling, fusion, and interchange as affine transformations.
+
+**Auto-vectorization**: Detects loop iterations that can execute in parallel using SIMD instructions (SSE, AVX, NEON).
+
+### 2040: ML-Guided Optimization
+
+By 2040, compilers use machine learning to guide optimization decisions:
+
+- **Inlining decisions**: ML models predict profitability based on call frequency, function size, and historical performance.
+- **Loop transformation ordering**: ML models learn which sequences yield the best performance.
+- **Register allocation heuristics**: ML models predict spilling behavior.
+
+LLVM's MLGO project uses reinforcement learning to train inlining and register allocation policies that outperform hand-tuned heuristics.
+
+### Required Reading
+
+- Aho et al. (2006). *Compilers*, Chapter 9.
+- Nielson, Nielson & Hankin (2015). *Principles of Program Analysis*, Chapters 2-3.
+- Muchnick (1997). *Advanced Compiler Design*, Chapters 6-7.
+
+### Discussion Questions
+
+1. What would a "must-be-live" analysis (intersection instead of union) be useful for?
+2. The polyhedral model enables powerful transformations. Why isn't it used for all loops?
+3. ML-guided optimization outperforms hand-tuned heuristics on benchmarks. How would you verify correctness?
+
+### Practice Problems
+
+1. **Reaching definitions**: Compute reaching definitions for a given CFG after fixed-point iteration.
+2. **Live variables**: Compute live variables for each block (backward analysis).
+3. **Available expressions**: Compute available expressions for a given program.
+
+---
+
+ᛉ **Lecture 9: Code Generation & Register Allocation — From IR to Machine**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Code generation transforms the optimized IR into target machine code. The two central problems: instruction selection (choosing machine instructions) and register allocation (assigning values to registers vs. memory).
+
+### Instruction Selection
+
+Maps IR operations to target machine instructions. Multiple implementations may exist for the same IR operation:
+
+```
+IR: x = y * 4
+Option 1: imul r1, y, 4; mov x, r1    // multiply
+Option 2: shl r1, y, 2; mov x, r1       // shift
+Option 3: add r1, y, y; add r1, r1, r1  // double twice
+```
+
+**Tree pattern matching**: IR and instructions are tree patterns. Instruction selection finds the cheapest tiling of the IR tree.
+
+**LR(1)-based selection**: Used in BURG/IBURG. Produces optimal instruction sequences in O(n) time.
+
+### Register Allocation
+
+The difference between all values in registers and all values in memory can be **2-10x** in performance.
+
+**Graph coloring register allocation** (Chaitin, 1982):
+1. Build interference graph (nodes = registers, edges = simultaneous liveness).
+2. Simplify: remove nodes with degree < k.
+3. Spill: if all nodes have degree ≥ k, select a node for spilling.
+4. Select: assign colors (registers) to removed nodes.
+5. Start over if spills occurred.
+
+**Coalescing**: When `mov x, y` exists and x, y don't interfere, assign them the same register, eliminating the copy.
+
+**Linear scan** (Poletto & Sarkar, 1999): O(n) time. Sort intervals by start, assign/free registers greedily. Used in JIT compilers where compilation speed matters.
+
+### SSA-Based Register Allocation
+
+SSA form simplifies register allocation because the interference graph is a **chordal graph**, which can be optimally colored in O(|V|) time. This makes register allocation tractable (polynomial time) in SSA form, unlike general register allocation which is NP-complete.
+
+**Spill code**: Inserting load/store instructions for values that can't fit in registers. Heuristics: spill variables with fewest uses, spill variables not in loops, rematerialization (recompute instead of load).
+
+### Instruction Scheduling
+
+Reorder instructions to minimize pipeline stalls:
+
+- **RAW (Read After Write)**: Instruction B uses A's result. B must wait.
+- **List scheduling**: Build dependence DAG, assign priorities (longest path to exit), schedule highest-priority ready instruction first.
+
+### Required Reading
+
+- Aho et al. (2006). *Compilers*, Chapter 8 (sections 8.6-8.7).
+- Cooper & Torczon (2022). *Engineering a Compiler*, Chapter 13.
+- Chaitin (1982). "Register Allocation & Spilling via Graph Coloring." *SIGPLAN*.
+
+### Discussion Questions
+
+1. Why do most production compilers still use graph coloring instead of SSA-based allocation?
+2. Is linear scan "good enough" for JIT-compiled code? When would you want something better?
+3. Instruction scheduling and register allocation interact. How do production compilers resolve this chicken-and-egg problem?
+
+### Practice Problems
+
+1. **Interference graph**: Build and color an interference graph given live ranges.
+2. **Graph coloring allocation**: Apply Chaitin's algorithm with k=3 registers.
+3. **Instruction scheduling**: Schedule instructions to minimize pipeline stalls on a machine with 2-cycle load latency.
+
+---
+
+ᛉ **Lecture 10: LLVM — Architecture, IR, and Passes**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### LLVM Architecture
+
+LLVM is a compiler infrastructure designed as a set of reusable libraries with well-defined interfaces:
+
+```
+┌─────────────┐  ┌─────────────┐  ┌──────────┐  ┌──────────┐
+│ Clang (C/C++)│  │  Rustc      │  │ Swift    │  │  Others   │
+│  Front End   │  │  Front End  │  │ Front End│  │ Front Ends│
+└──────┬───────┘  └──────┬──────┘  └────┬─────┘  └─────┬────┘
+       │                  │              │              │
+       └──────────────────┴──────────────┴──────────────┘
+                          │
+                     LLVM IR (.ll / .bc)
+                          │
+               ┌──────────┴──────────┐
+               │   Optimization      │
+               │   Passes           │
+               │  (-O0 to -O3, -Os) │
+               └──────────┬──────────┘
+                          │
+       ┌──────────────────┼──────────────────┐
+       │                  │                  │
+  ┌────┴─────┐     ┌─────┴─────┐     ┌─────┴─────┐
+  │ x86-64   │     │  ARM64    │     │   WASM    │
+  │ Back End │     │ Back End  │     │ Back End  │
+  └──────────┘     └───────────┘     └───────────┘
+```
+
+### LLVM IR in Detail
+
+LLVM IR is strongly typed, SSA-based, with infinite virtual registers:
+
+**Types**: i1, i8, i16, i32, i64, float, double, ptr, arrays, structs, vectors, functions.
+
+**Instructions**: add, sub, mul, udiv, sdiv, fadd, fsub, fmul, and, or, xor, shl, lshr, ashr, alloca, load, store, getelementptr, icmp, fcmp, br, ret, call, phi.
+
+Example — `max(a, b)`:
+```llvm
+define i32 @max(i32 %a, i32 %b) {
+entry:
+  %cmp = icmp sgt i32 %a, %b
+  br i1 %cmp, label %then, label %else
+then:
+  br label %merge
+else:
+  br label %merge
+merge:
+  %result = phi i32 [%a, %then], [%b, %else]
+  ret i32 %result
+}
+```
+
+### Optimization Passes
+
+- **Analysis passes**: Compute information without modifying IR (dominators, loops, alias analysis).
+- **Transformation passes**: Modify IR (constant propagation, dead code elimination, loop unrolling, inlining, vectorization).
+
+**Pass pipeline at -O2**: Always Inliner → Instruction Combine → GVN → CFG Simplification → Loop Simplify → SLP Vectorizer → Loop Vectorizer → DCE → Tail Call Opt → Merge Functions.
+
+### Writing a Custom LLVM Pass
+
+```cpp
+#include "llvm/IR/Function.h"
+#include "llvm/Pass.h"
+#include "llvm/Support/raw_ostream.h"
+
+struct HelloPass : public FunctionPass {
+  static char ID;
+  HelloPass() : FunctionPass(ID) {}
+  bool runOnFunction(Function &F) override {
+    errs() << "Hello from: " << F.getName() << "\n";
+    return false;
+  }
+};
+```
+
+### Required Reading
+
+- Lattner & Adve (2004). "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation." *CGO*.
+- LLVM Language Reference Manual
+- LLVM Pass Infrastructure documentation
+
+### Discussion Questions
+
+1. LLVM IR has no fixed instruction ordering within a basic block. How does LLVM decide ordering for emission?
+2. What are the advantages and disadvantages of opaque pointer type (ptr) vs. typed pointers?
+3. Why would you write a custom LLVM pass? Give a concrete example.
+
+### Practice Problems
+
+1. **LLVM IR writing**: Write LLVM IR for a C function that sums an array.
+2. **Pass analysis**: Write an LLVM analysis pass that counts basic blocks per function.
+3. **Optimization trace**: Trace optimizations that -O1 would apply to `x = a + 0`.
+
+---
+
+ᛉ **Lecture 11: Just-In-Time & Ahead-Of-Time Compilation — When to Compile and Why**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### The Compilation Continuum
+
+```
+AOT ──────────────── JIT ──────────────── Interpreter
+(compile before run) (compile during run)   (no compilation)
+Fast execution       Balances startup/      Fastest startup
+Slower startup       throughput             Slowest execution
+No runtime info      Adapts to patterns     No optimization
+```
+
+### Just-In-Time Compilation
+
+**Tiered compilation** (V8 pipeline):
+```
+Source → Parser → Ignition (interpreter, collects profiles)
+                    ↓ (hot function detected)
+                Sparkplug (non-optimizing JIT, fast compilation)
+                    ↓ (very hot function detected)
+                TurboFan (optimizing JIT, slow compilation, fast code)
+```
+
+**Profiling data**: Type feedback, branch frequencies, call frequencies, inline cache hits.
+
+**Deoptimization**: When an optimizing JIT makes an assumption that fails at runtime, it must revert to interpreter state. Requires mapping JIT state to interpreter state and transitioning execution.
+
+### Profile-Guided Optimization (PGO)
+
+1. Instrumented build: compile with profiling counters.
+2. Profile collection: run on representative workloads.
+3. Optimized build: compile using profile data.
+
+PGO enables better inlining, branch layout, code placement, and register allocation.
+
+**AutoFDO**: Uses hardware performance counters (Linux perf) for near-zero overhead profiling.
+
+### Ahead-Of-Time Compilation
+
+**Advantages**: No startup cost, no profiling overhead, predictable performance.
+**Disadvantages**: No runtime information, must optimize for general case, platform-specific binaries.
+
+**2040 AOT landscape**: Native AOT (Go, Rust, C++), Java GraalVM Native Image, .NET AOT, WASM AOT.
+
+### WebAssembly
+
+WASM is a portable, size-efficient binary format designed as a compilation target:
+- **Portable**: Architecture-independent
+- **Safe**: Sandboxed execution
+- **Efficient**: Binary format, streams and compiles fast
+- **Multi-language**: C, C++, Rust, Go, C# compile to WASM
+- **WASI**: System interface for OS features
+
+### 2040: Blurring the Lines
+
+- **Speculative AOT**: Compile with speculative optimizations, guard with runtime checks.
+- **Progressive compilation**: Start unoptimized, progressively optimize as the program runs.
+- **Continuous compilation**: In long-running systems, re-optimize as workloads change.
+- **ML-guided compilation**: ML models predict optimization effectiveness in real-time.
+
+### Required Reading
+
+- Aycock (2003). "A Brief History of Just-In-Time." *ACM Computing Surveys*, 35(2).
+- Haas et al. (2017). "Bringing the Web up to Speed with WebAssembly." *PLDI*.
+
+### Discussion Questions
+
+1. What is the optimal tier transition threshold for JIT compilation? How would you determine it?
+2. What are the trade-offs of WASM compared to native AOT? When would you prefer WASM?
+3. What happens when PGO profiling workloads don't match production workloads?
+
+### Practice Problems
+
+1. **Tiered compilation ROI**: A function runs at 1/100 native speed in the interpreter. The optimizing JIT takes 10ms to compile but produces native speed. After how many calls is JIT compilation worth the cost?
+2. **Deoptimization steps**: Describe the steps to deoptimize when a JIT assumption fails.
+3. **PGO branch layout**: Given 95/5 branch ratio, how should the compiler lay out code?
+
+---
+
+ᛉ **Lecture 12: The 2040 Compiler Landscape — ML, Verification, and Multi-Target Compilation**
+
+**Course:** CS302 — Compiler Design & Code Generation  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### ML-Guided Optimization
+
+**MLGO (Machine Learning Guided Optimization)** — LLVM's ML framework:
+- Uses reinforcement learning for inlining and register allocation policies.
+- Trained on large corpora of real programs and continuously improved.
+
+**AutoTVM / Ansor** — ML-based schedule generation for tensor operators:
+- Searches the space of possible schedules for deep learning operators.
+- Achieves 2-10x speedups over hand-tuned schedules.
+
+**ML-based phase ordering**: The order of optimization passes affects code quality. ML models learn optimal orderings.
+
+**Learning to compile**: End-to-end models that take source code and emit optimized machine code. Still experimental.
+
+### Verified Compilers
+
+**CompCert** (Leroy, 2009): Verified C compiler in Coq. Proves compiled code behaves exactly as the source specifies.
+
+**CakeML**: Verified ML compiler in HOL4. Proves correctness end-to-end including the compiler itself.
+
+**Vellvm**: Verified LLVM IR subset. Proves optimization passes preserve semantics.
+
+**Challenge**: Verified compilers handle language subsets and are slower than production compilers, but are invaluable for safety-critical systems.
+
+### Multi-Target Compilation
+
+By 2040, a single program must compile to: x86-64, ARM64, RISC-V, GPU (CUDA/ROCm/SPIR-V), TPU/NPU, WASM.
+
+**LLVM's approach**: Each target implements `TargetLowering`. Optimization passes are target-independent; only final lowering and emission are target-specific.
+
+**Tensor compilers** (TVM, XLA, MLIR): Compile computational graphs to diverse hardware:
+```
+PyTorch/TF Model → Relay IR → TVM/Ansor → x86-64 | ARM64 | CUDA | WASM
+```
+
+**MLIR (Multi-Level IR)**: Framework for defining domain-specific IRs:
+- `affine`: Loop nest transformations (polyhedral model)
+- `linalg`: Linear algebra operations
+- `gpu`: GPU kernel abstractions
+- `spirv`: SPIR-V compilation target
+- `llvm`: Lowering to LLVM IR
+
+### Compilation for AI
+
+AI compilers (TVM, XLA, TensorRT, TorchInductor) compile ML models:
+- **Graph optimization**: Constant folding, operator fusion, dead code elimination.
+- **Kernel generation**: Auto-generating optimized GPU kernels.
+- **Quantization**: Reducing precision (FP32 → FP16 → INT8 → INT4).
+- **Memory optimization**: Recomputation, operator scheduling, memory planning.
+
+### The Synthesis: Compilers in 2040
+
+The compiler of 2040 is:
+1. **Verified**: Safety-critical code compiled by verified compilers proving correctness.
+2. **Adaptive**: ML-guided optimization learns from runtime profiles.
+3. **Multi-target**: A single source compiles to CPUs, GPUs, TPUs, WASM.
+4. **Collaborative**: IDE and compiler work together for real-time feedback.
+5. **AI-augmented**: Large language models assist code generation, refactoring, debugging.
+
+The fundamental insight remains: translate source programs to machine programs while preserving semantics and improving efficiency. What has changed is the scale, diversity, and intelligence of the translation.
+
+At the University of Yggdrasil, we believe that the compiler is the rune-smith's forge — the place where abstract thought becomes concrete action. The front end is the incantation, the IR is the seidr that transforms form, and the back end is the hammer that shapes the final blade. May your compilations be correct, your optimizations fast, and your registers ever sufficient.
+
+### Required Reading
+
+- Leroy (2009). "Formal Verification of a Realistic Compiler." *CACM*, 52(7).
+- Lattner et al. (2021). "MLIR: Scaling Compiler Infrastructure for Domain Specific Computation." *CGO*.
+- Chen et al. (2018). "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning." *OSDI*.
+
+### Discussion Questions
+
+1. A verified compiler proves compilation correctness. Does this mean the compiled program is correct? What assumptions does the verification make?
+2. ML-guided optimization learns from profiling data. If training data is biased, what optimizations might it miss?
+3. What are the challenges of compiling to a TPU vs. an x86 CPU? How does the strategy differ?
+
+### Practice Problems
+
+1. **ML policy design**: Design a reward function for RL agent controlling inlining decisions. What metrics should it include?
+2. **Verification sketch**: Write an informal proof that constant folding is correct: if source has `x = 3 + 5`, compiled has `x = 8`. What invariants must hold?
+3. **MLIR dialect**: Design a `quantum` dialect for MLIR with gates (H, X, CNOT), measurements, and classical control flow. Give operations and types.
+
+---
+
+## Final Examination Preparation
+
+### Exam Format
+
+**Part A: Analytical Problems (60 points)** — 8 short-answer problems covering:
+- Lexical analysis and regular expressions (Lectures 1-2)
+- Parsing and grammar analysis (Lectures 3-4)
+- Type systems and type checking (Lecture 5)
+- Intermediate representations (Lecture 6)
+- Optimization techniques (Lectures 7-8)
+- Code generation and register allocation (Lecture 9)
+- LLVM architecture (Lecture 10)
+- JIT and AOT compilation (Lecture 11)
+
+**Part B: Design Problem (40 points)** — One comprehensive problem requiring lexer/parser design, type system design, IR generation, optimization selection, register allocation, and target-specific code generation.
+
+### Sample Exam Problems
+
+**Part A:**
+1. Construct NFA for `(a|b)*abb` using Thompson's construction, convert to DFA.
+2. Compute FIRST/FOLLOW sets, construct LL(1) parse table.
+3. Perform type checking on a given expression with subtyping rules.
+4. Convert code to SSA form, showing all φ-functions.
+5. Apply constant propagation, CSE, and dead code elimination.
+6. Perform reaching definitions analysis on a given CFG.
+7. Color an interference graph with minimum colors. Show spills with k=3.
+8. Write LLVM IR for a given C function.
+
+**Part B:** Design a compiler front end for a simple language with integer/boolean types, arithmetic/comparison operators, if-else/while statements, and functions. Address: lexer specification, grammar, type checking rules, IR generation, and three optimizations with justification.
+
+### Study Guide
+
+**Key algorithms to trace**: Subset construction, LL(1) table construction, LR(0) items, SSA construction, graph coloring register allocation, list scheduling.
+
+**Key concepts to explain**: Left recursion, SLR vs LALR(1) vs CLR(1), SSA simplification of dataflow analysis, graph coloring vs linear scan, JIT pipeline, PGO benefits.
+
+**Key systems to compare**: LLVM vs GCC, JIT vs AOT, SSA vs three-address code.
+
+### Farewell
+
+As the Norns weave the threads of fate at the foot of Yggdrasil, so too does the compiler weave the threads of source into the fabric of execution. The front end reads the runes of your intent, the middle end reshapes them into more efficient patterns, and the back end stamps them into the iron of machine code. May your parsing tables be unambiguous, your dataflow analyses converge swiftly, and your registers never spill. Hail the rune-smiths — the compilation never ends.
