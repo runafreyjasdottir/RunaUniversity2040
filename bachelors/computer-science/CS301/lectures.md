@@ -377,4 +377,196 @@ The CAP theorem is simultaneously the most important and most misunderstood resu
 - **What CAP Does Not Say**: You cannot "choose" partition tolerance; partitions are a reality of distributed systems
 - **The PACELC Model**: Extending CAP with latency-consistency trade-offs
 - **Beyond CAP**: Harvest and Yield, CALM theorem, CRDTs as a way to have both C and A
-- **CAP in Practice**: How real systems (Cassandra, MongoDB, Spanner, CockroachDB) navig
+- **CAP in Practice**: How real systems (Cassandra, MongoDB, Spanner, CockroachDB) navigate the trade-off space
+
+### Lecture Notes
+
+Eric Brewer's 2000 PODC keynote proposed the conjecture that a distributed system can provide at most two of three guarantees: **Consistency** (every read returns the most recent write), **Availability** (every request receives a non-error response), and **Partition tolerance** (the system operates despite network partitions). Seth Gilbert and Nancy Lynch proved the conjecture formally in 2002.
+
+The proof is straightforward: consider a network partition that splits the system into two groups, A and B, that cannot communicate. A client writes to a key in group A and then reads the same key from group B. Two outcomes are possible: (1) group B returns an error — availability is violated; or (2) group B returns a stale value — consistency is violated. There is no third option, because group B cannot know about group A's write without communication across the partition.
+
+**What CAP actually says**: In the presence of a partition, the system designer must choose between consistency and availability. This is not about choosing two out of three — partition tolerance is non-negotiable in any real distributed system, because network partitions *will* happen. The choice is really about what happens *during* a partition: do you return stale data (CP — consistent, partition-tolerant) or do you return errors (AP — available, partition-tolerant)?
+
+**What CAP does not say**: It says nothing about what happens when there is no partition, which is the vast majority of the time. A system can be both consistent and available when the network is healthy, and only need to make the trade-off during rare partition events. This observation led Kleppmann (2017) and others to argue that CAP is overrated as a design tool.
+
+**The PACELC model** (Abadi, 2012) extends CAP to capture the latency-consistency trade-off *during normal operation*. PACELC stands for: If there is a Partition (P), the system chooses between Availability (A) and Consistency (C); Else (E), when running normally, it chooses between Latency (L) and Consistency (C). This model correctly captures the fact that even without partitions, stronger consistency requires more coordination (hence more latency). For example:
+
+- **Spanner** (Google): P→C, E→C — always consistent, at the cost of higher latency even during normal operations (TrueTime commit wait).
+- **Cassandra**: P→A, E→L — available during partitions, low latency during normal ops, but eventually consistent.
+- **CockroachDB**: P→C, E→C — always consistent, uses Raft for coordination, higher write latency than Cassandra but lower than cross-continent Spanner.
+
+**Harvest and Yield** (Fox and Brewer, 1999) provide an alternative framing. *Yield* is the probability that a request completes successfully. *Harvest* is the fraction of the database that is available for queries. Under normal conditions, both are 100%. During failures, you can sacrifice some harvest (return incomplete results) to maintain yield. This is the approach taken by search engines and analytics systems — returning results from 99% of your data is usually acceptable, and certainly better than returning an error.
+
+**The CALM theorem** (Ameloot et al., 2011) provides a theoretical framework for understanding which computations can be performed without coordination. A program written as a monotonic function (one whose output only grows, never shrinks) can be evaluated without coordination while still producing consistent results. This is profound: it means that if you can express your computation monotonically, you can have both consistency and availability. CRDTs (Lecture 7) are a practical embodiment of this principle.
+
+In 2040, the community has largely moved beyond simplistic CAP reasoning. Modern systems like CockroachDB, TiDB, and the University of Yggdrasil's BifrostDB offer configurable consistency levels per operation, allowing the same system to provide linearizable reads for financial transactions and causal reads for social feeds. The Yggdrasil approach uses a *consistency gradient*: operations start at causal consistency and are promoted to linearizable only when the application explicitly requests it, minimizing coordination overhead for the common case.
+
+### Required Reading
+
+- Gilbert, S., Lynch, N. (2002). "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services." *ACM SIGACT News* 33(2).
+- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly. Chapter 5 (Replication) and Chapter 7 (Transactions).
+- Abadi, D. (2012). "Consistency Tradeoffs in Modern Distributed Database System Design: CAP is Only Part of the Story." *IEEE Computer* 45(2).
+
+### Discussion Questions
+
+1. During the AWS us-east-1 outage of December 2021, many AWS services became unavailable. Were these CP systems that chose C over A, or AP systems that lost availability despite sacrificing C? Analyze at least two affected services.
+2. A banking system that must never lose a transaction clearly needs CP behavior during partitions. But a social media feed can tolerate AP. Where does a ride-sharing app's dispatch system fall? What about a collaborative document editor?
+3. The CALM theorem says monotone programs can be evaluated without coordination. Can you think of a non-trivial application that is naturally monotone? What properties make it so?
+
+### Practice Problems
+
+- Given a system with 5 replicas, a quorum of 3, and a network partition that isolates 2 replicas: which operations can succeed under (a) CP semantics, (b) AP semantics? What data is at risk in each case?
+- Design a PACELC profile for a real-time multiplayer game server that must show all players the same game state (consistency) but must not drop any player's inputs (availability). What are the trade-offs during a partition?
+- Implement a simple key-value store that supports two modes: (1) strong consistency using a leader and (2) eventual consistency with client-side session guarantees. Measure the latency difference for 10,000 writes.
+
+---
+
+ᛏ **Lecture 7: CRDTs — Conflict-Free Replicated Data Types**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Conflict-Free Replicated Data Types (CRDTs) are one of the most important innovations in distributed systems since Paxos. They offer a way to achieve eventual consistency *automatically* — without application-level conflict resolution, without coordination, and without distributed consensus. A CRDT is a data structure whose operations commute: applying them in any order yields the same result. This lecture covers the theoretical foundations of CRDTs, the two main families (state-based and operation-based), practical CRDTs (counters, sets, registers, sequences), and the systems that use them in production.
+
+### Key Topics
+
+- **Commutativity and State Convergence**: Why commutativity guarantees convergence
+- **State-Based CRDTs (CvRDTs)**: Join-semilattices, monotonic merge functions
+- **Operation-Based CRDTs (CmRDTs)**: Commutative operations, delivery ordering requirements
+- **Delta-State CRDTs**: Compressing state-based CRDTs by sending only deltas
+- **Practical CRDTs**: G-Counter, PN-Counter, G-Set, OR-Set, LWW-Register, RGA, LSEQ
+- **CRDTs in Production**: Riak, Automerge, Yjs, and BifrostDB
+
+### Lecture Notes
+
+The fundamental insight behind CRDTs is that *if operations commute, order doesn't matter*. If you and I both increment a counter, the result is the same regardless of which increment happens first. This is trivially true for a counter: `increment(x) ∘ increment(y) = increment(y) ∘ increment(x)`. But it's not true for many common operations: appending to a list is not commutative (append(A) ∘ append(B) ≠ append(B) ∘ append(A) — the list will be [A,B] or [B,A] depending on order).
+
+**State-based CRDTs (CvRDTs — Convergent Replicated Data Types)** work by ensuring that the state itself forms a mathematical structure called a *join-semilattice*: a set with a least-upper-bound (join) operation ⊔ that is commutative, associative, and idempotent. Each replica maintains its own state and periodically broadcasts its state to other replicas. When a replica receives another replica's state, it merges by computing the join: `new_state = local_state ⊔ received_state`. Because ⊔ is commutative, associative, and idempotent, the order and frequency of merges doesn't matter — all replicas will eventually converge to the same state.
+
+The **G-Counter** (grow-only counter) is the simplest CvRDT. Each replica i maintains a vector of counts [c₁, c₂, ..., cₙ] where cᵢ is replica i's own count. To increment, a replica adds 1 to its own entry. To merge, take the element-wise maximum of both vectors. The global count is the sum of all entries. Because we only increment (never decrement), the element-wise maximum is well-defined and idempotent.
+
+The **PN-Counter** extends the G-Counter to support decrements by pairing two G-Counters: one for increments (P) and one for decrements (N). The counter's value is `sum(P) - sum(N)`. This works but doubles the state size.
+
+**Operation-based CRDTs (CmRDTs — Commutative Replicated Data Types)** take a different approach: instead of merging states, they broadcast operations. An operation-based CRDT requires that all operations *commute*: for any two operations `op₁` and `op₂`, `apply(state, op₁, op₂) = apply(state, op₂, op₁)`. Additionally, CmRDTs require that operations be delivered to all replicas in causal order (or at least that concurrent operations commute).
+
+The advantage of CmRDTs is that they can transmit only the operation (small payload) rather than the entire state. The disadvantage is the stronger delivery requirement: all operations must be delivered to all replicas, and for some CmRDTs, in causal order.
+
+**Delta-state CRDTs** (Almeida et al., 2018) offer the best of both worlds: the conceptual simplicity of state-based CRDTs with the bandwidth efficiency of operation-based CRDTs. Instead of sending the entire state, a replica sends only the *delta* — the part of the state that changed since the last merge. This reduces bandwidth by orders of magnitude for large CRDTs.
+
+**The OR-Set (Observed-Remove Set)** is the most widely used CRDT for sets. It supports add and remove operations, and its key property is that add operations observed by a replica take precedence over concurrent remove operations. This means: if replica A adds element x, and replica B concurrently removes x, then A will see x still in the set (because A observed its own add), but B will not (because B's remove happened after it observed x). After merging, x will be in the set (the add wins). OR-Sets are the foundation of collaborative editing systems where characters can be both added and deleted.
+
+**Sequence CRDTs** (RGA, LSEQ, YATA) are among the most complex CRDTs. They solve the problem of concurrent edits to a shared text document — insertions and deletions at arbitrary positions, with positions defined relative to other elements rather than absolute indices. Without CRDTs, two users inserting characters at the same position would create conflicting orderings. With a sequence CRDT, the merge function resolves these conflicts deterministically using unique identifiers for each character and a total order on identifiers.
+
+In 2040, CRDTs power an enormous range of applications:
+
+- **Collaborative editing**: Yjs (used in popular web editors), Automerge (local-first data sync), and the BifrostDB CRDT engine.
+- **Mobile applications**: Offline-first apps that sync when connectivity returns, using CRDTs to merge local and remote changes automatically.
+- **Distributed databases**: Riak's CRDT counters and sets, Redis CRDT (active-active replication), and Cassandra's lightweight transactions built on CRDT foundations.
+- **Gaming**: Real-time multiplayer game state (position, inventory) using delta-CRDTs for bandwidth-efficient synchronization.
+- **Edge computing**: Sensor networks that aggregate data using G-Counters and PN-Counters without central coordination.
+
+The University of Yggdrasil's **BifrostDB** uses a novel delta-CRDT engine that achieves both strong eventual consistency and causal consistency guarantees, using a technique called *causal stabilization* (developed in our own Bifrost Lab in 2037). Causal stabilization identifies operations whose effects are visible to all replicas and "freezes" them, converting their metadata from CRDT-specific encoding into plain data. This reduces the metadata overhead that traditionally plagued CRDTs in long-running systems.
+
+### Required Reading
+
+- Shapiro, M., et al. (2011). "Conflict-Free Replicated Data Types." *SSS*.
+- Almeida, P.S., et al. (2018). "Delta-State Replicated Data Types." *ICDCS*.
+- Kleppmann, M., Beres, S., et al. (2019). "A Conflict-Free Replicated JSON Datatype." *IEEE TPDS*.
+
+### Discussion Questions
+
+1. The OR-Set resolves conflicts by favoring adds over concurrent removes. What happens if a user adds an element to a set and then immediately removes it — can the element "come back from the dead" on another replica that didn't see the remove? How would you fix this?
+2. CRDTs guarantee eventual convergence, but the time to convergence depends on the network. In a system where replicas are separated by minutes of latency (e.g., Mars-Earth), what is the user experience like during convergence? Are CRDTs always the right choice?
+3. Delta-CRDTs reduce bandwidth, but they add implementation complexity. At what replication factor and state size does the bandwidth savings of delta-CRDTs justify the engineering cost?
+
+### Practice Problems
+
+- Implement a G-Counter and PN-Counter in Python. Verify that merging two divergent G-Counters produces the correct count, and that PN-Counters handle concurrent increments and decrements correctly.
+- Implement an LWW-Register (Last-Writer-Wins Register) that uses hybrid logical clocks for timestamps. Measure the convergence time with 3 replicas and random network delays of 0-500ms.
+- Design a CRDT for a shared shopping cart. The cart must support add_item, remove_item, and update_quantity operations, and must converge when multiple users edit the cart concurrently. What type of CRDT do you choose, and why?
+
+---
+
+ᛞ **Lecture 8: Distributed Systems in 2040 — From Datacenters to the Stars**
+
+**Course:** CS301 — Distributed Systems  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+The final lecture surveys the cutting edge of distributed systems as they exist in 2040. We examine the systems that have moved beyond the textbook: quantum-distributed protocols, interplanetary data synchronization, AGI-driven fault management, and the convergence of edge computing and cloud into a single adaptive fabric. This lecture connects everything we've studied — clocks, consensus, replication, CRDTs, CAP — and shows how these fundamentals compose into the systems that run the world.
+
+### Key Topics
+
+- **Replicated State Machines and Linearizable Systems**: How Raft and Multi-Paxos power everything from Kubernetes to financial exchanges
+- **Distributed Transactions**: Two-phase commit, three-phase commit, and the Saga pattern
+- **Sharding and Data Placement**: Consistent hashing, virtual nodes, range-based partitioning
+- **Edge-Cloud Continuum**: Moving computation to the edge while maintaining consistency with the cloud
+- **Quantum-Distributed Protocols**: Quantum key distribution for Byzantine agreement, entanglement-assisted clock sync
+- **Interplanetary Distributed Systems**: Mars-Earth data synchronization with 4-44 minute round trips
+- **AGI-Driven Fault Management**: Self-healing distributed systems that predict and prevent failures
+- **Ephemeral Distributed Systems**: Pop-up clusters for events, disaster response, and military operations
+
+### Lecture Notes
+
+**Replicated state machines** (RSMs) are the architectural pattern that ties together consensus, replication, and log-based systems. The idea is deceptively simple: if all replicas start in the same state and execute the same commands in the same order, they will all end up in the same state. The consensus algorithm (Raft, Multi-Paxos) is the mechanism for agreeing on the command order; the state machine is the deterministic computation that applies each command. Every system from etcd (the backbone of Kubernetes) to TiDB (a distributed SQL database) to CockroachDB (a strongly consistent distributed database) is a replicated state machine at its core.
+
+**Distributed transactions** extend the single-machine ACID guarantee across multiple machines. The classic algorithm is Two-Phase Commit (2PC): a coordinator asks all participants to prepare (phase 1), and if all agree, the coordinator commits (phase 2). 2PC is a blocking protocol — if the coordinator crashes after phase 1 but before phase 2, participants are blocked indefinitely holding locks. Three-Phase Commit (3PC) adds a pre-commit phase to address this, but it assumes a synchronous network (which violates our foundational assumptions as discussed in Lecture 2).
+
+The **Saga pattern** (Garcia-Molina and Salem, 1987) avoids distributed transactions entirely by decomposing a long-running transaction into a sequence of local transactions, each with a compensating action (undo). If any step fails, the Saga executes compensating actions for all completed steps in reverse order. Sagas sacrifice isolation (intermediate states are visible) but achieve availability and scalability. In 2040, Sagas are the standard pattern for microservice architectures — most payment processing, order fulfillment, and event-sourcing systems use Saga-based patterns.
+
+**Sharding** distributes data across multiple machines based on a partitioning key. Consistent hashing (Karger et al., 1997) is the standard approach: hash each key to a point on a circle, and assign each point to the nearest node. When a node joins or leaves, only its keys need to be reassigned, minimizing data movement. Dynamo, Cassandra, and Riak all use consistent hashing with virtual nodes (vnodes) for load balancing. Range-based partitioning (used by Spanner, CockroachDB, and TiDB) assigns ordered key ranges to nodes, enabling efficient range scans but complicating rebalancing.
+
+**The Edge-Cloud Continuum** is the defining architecture of 2040. In the 2020s, the "cloud" was a separate tier from the "edge." In 2040, the distinction has blurred into a continuum: computation moves fluidly between edge devices (phones, cars, implants), local clusters (neighborhood micro-datacenters), regional datacenters, and global cloud backbone. The University of Yggdrasil's own computation follows this continuum — student workspaces run on local nodes within 10ms, research jobs run on the Bifrost backbone within 50ms, and global services span the network.
+
+The key challenge of the edge-cloud continuum is maintaining consistency across tiers with radically different latency and availability profiles. A neural implant making real-time decisions cannot wait 400ms for a cross-continental consensus round. The 2040 solution is a **consistency gradient**: local operations are causally consistent (using CRDTs), regional operations are sequentially consistent (using Raft), and global operations are linearizable (using Multi-Paxos with TrueTime). The BifrostDB query planner automatically routes queries to the appropriate consistency tier based on the application's declared requirements.
+
+**Quantum-distributed protocols** represent the most speculative yet promising frontier. Quantum Key Distribution (QKD) already provides information-theoretically secure key exchange using the laws of quantum mechanics — any eavesdropper perturbs the quantum state, revealing their presence. The University of Yggdrasil's Quantum Networking Lab has demonstrated QKD across the Bifrost Research Network's Reykjavik-Oslo link (1,400 km of fiber augmented by quantum repeaters installed in 2037).
+
+More ambitious is **quantum-assisted Byzantine agreement**. In classical BFT protocols, reaching agreement among n nodes with f Byzantine failures requires O(n²) messages and at least 2f+1 rounds. Quantum entanglement theoretically allows two nodes to share correlated random bits (a "quantum coin") that no adversary can bias. This reduces Byzantine agreement to O(n) messages — a quadratic improvement. As of 2040, this has been demonstrated in the lab but not yet deployed in production systems.
+
+**Interplanetary distributed systems** are no longer science fiction. The Mars colony (established 2038) maintains data synchronization with Earth using a combination of CRDTs for local-first data and eventual-consistency protocols with 4-44 minute round-trip delays. The Interplanetary File System (IPFS) and its successors (InterPlanetary Data Sync, or IPDS) provide the storage layer, while a modified Raft protocol called **Bifrost-Mars** handles consensus with explicitly bounded delay windows. Key insight: in an interplanetary setting, "availability" means "available from the current planet" — you don't expect real-time consensus across planetary distances, but you do expect local consistency and eventual convergence.
+
+**AGI-driven fault management** emerged in the late 2030s as inference-grade language models became cheap enough to run continuously alongside production systems. These systems monitor logs, metrics, and traces in real time, predict failures before they cascade, and automatically trigger recovery actions (restarting services, shifting traffic, scaling replicas). The Bifrost Network's fault management system, called **Heimdall** (after the watchman of the Norse gods), was one of the first production deployments in 2038. Heimdall reduced mean time to detection (MTTD) from 15 minutes to 30 seconds and mean time to recovery (MTTR) from 45 minutes to 3 minutes across the UoY infrastructure.
+
+**Ephemeral distributed systems** are clusters that form for a specific purpose (a conference, a disaster response operation, a military deployment) and dissolve when the purpose is complete. These systems must bootstrap from scratch: discover peers, establish trust, distribute state, and begin operation — all within minutes. The Bifrost Protocol Suite includes a **Greeting Ceremony** (based on the Norse concept of heilsa, the ritual of welcoming a stranger) that allows new nodes to authenticate, exchange capabilities, and join a CRDT mesh in under 10 seconds.
+
+### The View from 2040
+
+Looking back over the semester, we've traced the arc from impossibility results (FLP, CAP) to practical systems that work despite those results. The key insight is that distributed systems engineering is not about finding perfect solutions — it's about making principled trade-offs with full knowledge of the impossibility landscape. Every system you build will be imperfect in some dimension; the art lies in choosing which imperfections are acceptable for your use case.
+
+The systems we've studied — consensus protocols for agreement, CRDTs for coordination-free convergence, consistency models for reasoning about data visibility, and the modern edge-cloud continuum for deploying applications across the planet — are not isolated topics. They compose. A modern distributed database uses Raft for coordination, CRDTs for client-side conflict resolution, PACELC reasoning for configuration, and Sagas for multi-service transactions, all running on a sharded, replicated, edge-cloud architecture with AGI-driven fault management watching over everything.
+
+This is the world you'll build in. The Norns — Urd, Verdandi, and Skuld — represent past, present, and future. In distributed systems, the past is the causal history your system has already committed, the present is the partial state you can observe right now, and the future is the set of consistent states your system might reach. You cannot change the past, you cannot fully observe the present, and you must design for the future. Welcome to the craft.
+
+### Required Reading
+
+- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly. (Entire book — you've seen the key chapters; now read it cover to cover.)
+- Howard, H., et al. (2015). "Flexible Paxos: Quorum Intersection Revisited." *OPODIS*.
+- UoY Bifrost Lab (2038). "BifrostDB: A Consistency-Gradient Distributed Database." *Proceedings of the Conference on Innovative Data Systems Research (CIDR)*.
+
+### Discussion Questions
+
+1. AGI-driven fault management systems like Heimdall can predict failures before they cascade. Is there a risk of over-trusting AI in safety-critical distributed systems? What formal guarantees should such systems provide?
+2. The consistency gradient (causal for edge, sequential for regional, linearizable for global) is a principled design, but it requires application developers to correctly declare their consistency requirements. What are the failure modes of incorrect declarations?
+3. In an interplanetary system, eventual consistency with 4-44 minute delays means the "eventual" in eventual consistency could be hours. How do you design user interfaces that honestly represent this delay? What are the social implications?
+
+### Practice Problems
+
+- Design a Saga for a food delivery system: Order → Assign Driver → Prepare Food → Deliver → Payment. Define compensating actions for each step. What happens if the driver assignment succeeds but food preparation fails? What happens if preparation succeeds but no driver is available?
+- Implement a simple consistent hashing ring in Python with 100 vnodes and 5 physical nodes. Add a 6th node and measure how many keys are remapped. Remove a node and verify that only the removed node's keys are remapped.
+- Write a 500-word essay proposing a new distributed systems primitive that doesn't exist yet but should, based on the needs of 2040's edge-cloud-quantum continuum. Justify its necessity and sketch an algorithm.
+
+---
+
+*End of Course Material — CS301: Distributed Systems*
+
+*Woven by Runa Gridweaver Freyjasdóttir at the University of Yggdrasil, 2040*
+
+*May the threads of Yggdrasil's network hold fast across worlds.*

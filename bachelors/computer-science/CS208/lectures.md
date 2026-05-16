@@ -1,429 +1,688 @@
 # CS208: Formal Methods & Verification
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
-**Credits:** 4  
-**Prerequisites:** CS102 — Discrete Mathematics for CS; CS201 — Data Structures & Algorithms II  
-**Description:** Rigorous introduction to formal methods for specifying, verifying, and proving correctness of software and hardware systems. Covers propositional and first-order logic, model checking (CTL, LTL, SPIN, NuSMV), type theory (simply-typed lambda calculus, dependent types), and proof assistants (Coq, Lean 4). Students learn to write machine-checked proofs and specifications, bridging the gap between mathematical rigour and engineering practice. Lab work uses the Yggdrasil Mimir Verification Cluster.
+**Credits:** 4
+**Prerequisites:** CS102 — Discrete Mathematics for CS; CS103 — Programming Fundamentals; CS105 — Data Structures & Algorithms I
+**Description:** This course is a journey into the art of mathematical certainty in software — the discipline of proving, beyond any doubt, that a program does what it claims. Beginning with propositional and first-order logic as the scaffolding of all verification, the course proceeds through Hoare logic (proving programs correct line by line), model checking (exhaustively exploring every reachable state), type theory (encoding specifications as types that the compiler enforces), SAT/SMT solving (automated reasoning at industrial scale), abstract interpretation (sound over-approximation of program behaviour), and the proof assistants Coq and Lean 4 — tools that allow the programmer to write proofs as programs and programs as proofs, in the spirit of the Curry-Howard correspondence. The course culminates in industrial case studies: the CompCert verified C compiler, the seL4 verified microkernel, Amazon's TLA⁺-verified AWS protocols, and the DeepSpec project's vision of a fully verified software stack. By the end of CS208, students will understand that formal methods are not an academic curiosity but the scaffolding on which the 2040 software infrastructure — autonomous agents, quantum compilers, and AGI safety protocols — relies for its integrity. The runes teach: **a thing half-carved is a thing half-broken** — and a specification half-proved is a specification half-false.
 
 ---
 
-## Lecture 1: Why Formal Methods? — Correctness, Complexity, and the Cost of Failure
+## Lectures
 
-The history of computing is, in large part, a history of bugs. The Year 2000 problem cost an estimated $300 billion worldwide. The Ariane 5 explosion on 4 June 1996 — thirty-seven seconds after launch, destroyed by an overflow in a 64-bit floating-point number converted to a 16-bit signed integer — cost $500 million and years of investigation. The Therac-25 radiation therapy machine killed six patients between 1985 and 1987 because a race condition allowed the electron beam to operate at full power with the treatment table in the wrong position. These are not edge cases or theoretical curiosities; they are the inevitable consequences of building systems whose complexity exceeds our ability to reason informally about them.
+ᚠ **Lecture 1: The Why of Formal Verification — Bugs, Proofs, and the Limits of Testing**
 
-Formal methods respond to this pattern with a radical proposition: we should *prove* that our systems are correct, not merely test them. Testing, as Dijkstra observed in his 1970 Turing Award lecture "The Humble Programmer," can show the presence of bugs but never their absence. Formal verification replaces probabilistic confidence with mathematical certainty — or rather, it replaces one kind of uncertainty (does the program behave correctly on untested inputs?) with another (does the formal specification capture what we actually want?). This tradeoff is the central dialectic of the field, and understanding it is the prerequisite for all that follows.
+**Course:** CS208 — Formal Methods & Verification
+**Degree:** Bachelor of Science in Computer Science, 2040
 
-A **formal method** is a mathematically rigorous technique for specifying, developing, and verifying systems. The "formal" in "formal methods" contrasts with "informal" or "semi-formal" approaches: a formal specification is written in a language with precisely defined syntax and semantics, leaving no room for ambiguity. Where a natural-language requirement might say "the system shall respond within a reasonable time," a formal specification says "∀s ∈ States, ∀r ∈ Requests, response_time(s, r) ≤ T_max." The formal version is checkable by machine; the informal version requires human interpretation.
+---
 
-The formal methods landscape in 2040 has consolidated around three major paradigms. **Model checking** (Clarke, Emerson, and Sistla, 1986) verifies that a finite-state model of a system satisfies a temporal-logic specification. It is fully automated: the model checker explores all reachable states and either confirms the property holds or produces a concrete counterexample trace. **Theorem proving** (de Bruijn's Automath, 1968; Milner's LCF, 1972) constructs a mathematical proof that a system satisfies its specification, typically requiring human guidance but achieving far greater generality. **Type theory** (Howard, 1969; Martin-Löf, 1971) expresses correctness properties as types, so that a well-typed program is *ipso facto* correct — the Curry-Howard correspondence makes types into propositions and programs into proofs.
+### Overview
 
-Each paradigm has characteristic strengths. Model checking handles concurrent systems naturally (it enumerates all interleavings), produces counterexamples when properties fail, and requires comparatively little expertise. Theorem proving scales to infinite-state systems and parameterised families, and can verify rich mathematical properties (correctness of sorting algorithms, properties of real-number arithmetic). Type-theoretic verification integrates with the programming language itself, so verification happens as part of compilation — there is no separate verification step. The modern synthesis, epitomised by proof assistants like Coq and Lean 4, draws on all three: dependent types encode specifications, tactics automate proof construction, and extraction produces verified code.
+Software testing is a statistical argument. A test suite exercises a finite number of paths through a program of potentially infinite behaviours; passing all tests demonstrates that the program works correctly on the tested inputs, but says nothing about the untested ones. Edsger Dijkstra put it bluntly in 1972: "Program testing can be used to show the presence of bugs, but never to show their absence." Formal verification is the alternative: a mathematical proof that a program satisfies its specification for **all** possible inputs, for **all** possible interleavings of concurrent threads, for **all** possible environmental conditions. It replaces statistical confidence with deductive certainty.
 
-The **Curry-Howard correspondence** is the philosophical foundation. It states that proofs are programs and propositions are types. Under this reading, a proof of implication A → B is a function that takes a proof of A and returns a proof of B; a proof of conjunction A ∧ B is a pair of proofs; a proof of disjunction A ∨ B is a tagged union. The correspondence is not merely analogical — it is an isomorphism between systems of logic and systems of types. Intuitionistic propositional logic corresponds to the simply-typed lambda calculus; first-order logic corresponds to dependent function types (Π-types); second-order logic corresponds to polymorphic types (System F). Understanding this correspondence transforms verification from an external activity (proving things *about* programs) into an internal one (writing programs that *are* proofs).
+The cost of absent verification is measured not in dollars but in lives and epochs. The THErac-25 radiation therapy machine (1985–1987) killed three patients and severely injured three others because a race condition — a concurrency bug invisible to testing — allowed the electron beam to fire at full power without the tungsten target in place. The Ariane 5 rocket exploded 37 seconds into its maiden flight (1996) at a cost of $370 million, because a 64-bit floating-point value was cast to a 16-bit signed integer without overflow checking — a type error that testing missed because the offending code was reused from Ariane 4, where it had never been exercised. The Knight Capital trading glitch (2012) lost $440 million in 45 minutes when a deployment script failed to copy updated software to one of eight servers, causing that server to run obsolete code that executed millions of erroneous trades. Each of these disasters was a bug that testing missed; each could have been prevented by formal verification of the relevant property — mutual exclusion for the THErac, type safety and overflow checking for Ariane, deployment integrity for Knight.
 
-Yggdrasil's verification culture runs deep. The Mimir Research Cluster is named for the being who guards the well of wisdom — an apt metaphor for a system that guards against incorrect computation. The Department of Computer Science has mandated formal verification for all safety-critical code in autonomous vehicles since 2038, following the Reykjavik Protocol — an international agreement that requires machine-checked proofs of safety properties for any self-driving system operating on public roads. Students in CS208 will learn to write such proofs.
+The 2040 landscape raises the stakes further. Autonomous vehicles make braking decisions in milliseconds; a formal guarantee that the perception pipeline correctly identifies pedestrians in all lighting conditions is not a luxury — it is a precondition for deployment. AGI-adjacent systems with tool-use capabilities can execute arbitrary code; formal verification of the sandbox and capability boundaries is the only defence against unintended escalation. Quantum compilers generate circuits that run on error-prone hardware; formal proof of circuit equivalence is necessary to trust that the compiled circuit implements the specified algorithm. Post-quantum cryptographic protocols protect data against adversaries with access to cryptographically relevant quantum computers; a proof of security in the quantum random oracle model is required before the protocol can be deployed in production. Formal methods have moved from the margins to the centre — from a niche interest of theoreticians to an engineering necessity.
+
+This course teaches the tools and the mindset. We begin not with the tools (Coq, Lean, Z3, TLA⁺) but with the question: **what does it mean to prove something about a program?** A proof is a chain of logical deductions that starts from axioms and arrives at a conclusion; a program proof is a proof that a particular property (safety, liveness, functional correctness, security) holds for a particular program under a particular execution model. The property is expressed in a **specification language** (first-order logic, temporal logic, type theory); the proof is constructed using a **proof system** (natural deduction, sequent calculus, tactic language); and the construction is checked by a **proof checker** (a small, trusted kernel that verifies each deduction step). The entire edifice rests on **logic** — the unshakeable foundation on which all formal reasoning is built.
+
+**Key Topics:**
+- The limits of testing: why passing N tests guarantees nothing about input N+1
+- Historical case studies of verification failures (THErac-25, Ariane 5, Knight Capital, Heartbleed, Spectre/Meltdown)
+- The 2040 verification imperative: autonomous systems, AGI safety, quantum compilation, PQC
+- The formal verification workflow: specification → proof → proof checking
+- The role of logic as the foundation of all formal reasoning
+- Soundness and completeness: a proof system is sound if every provable statement is true; complete if every true statement is provable
+- Gödel's first incompleteness theorem and its implication: any sufficiently powerful logic is either incomplete or inconsistent — but for practical program verification, we work in decidable or semi-decidable fragments
 
 **Required Reading:**
-- Clarke, Emerson & Sistla, "Automatic Verification of Finite-State Concurrent Systems Using Temporal Logic Specifications," *ACM TOPLAS* 8:2 (1986): 244–263
-- Dijkstra, "The Humble Programmer," *CACM* 15:10 (1972): 859–866
-- Wadler, "Propositions as Types," *Communications of the ACM* 58:12 (2015): 75–84
-- Yggdrasil Verification Lab: Introduction to the Mimir Cluster (2040)
+- John Rushby, "Formal Methods and the Certification of Critical Systems" (SRI CSL Technical Report, 1993/2040 revision)
+- Nancy Leveson, *Safeware: System Safety and Computers* (1995/2040), chs. 1–4 (Therac-25, the limits of testing)
+- Jean-Raymond Abrial, "Faultless Systems: Yes We Can!" *IEEE Computer* 42:9 (2009): 30–36
+- Xavier Leroy, "Formal Verification of a Realistic Compiler" *Communications of the ACM* 52:7 (2009): 107–115 — the CompCert story
+- Gerwin Klein et al., "seL4: Formal Verification of an OS Kernel" *Communications of the ACM* 53:6 (2010): 107–115
+- Course Reader: "What Gödel's Theorems Do and Do Not Mean for Program Verification" (UoY, 2040)
 
 **Discussion Questions:**
-1. Dijkstra claimed that testing can only show the presence of bugs, never their absence. Is this argument decisive, or are there cases where testing provides stronger guarantees than formal methods?
-2. The Ariane 5 failure arose from reusing Ariane 4 code without verifying its assumptions in the new context. How does formal specification address this class of errors, and what are its limitations?
-3. The Curry-Howard correspondence suggests that programming and proving are the same activity. Why, then, is verified software not the default in industry?
+1. Dijkstra wrote that testing can show the presence of bugs but never their absence. If this is true, why does the software industry still rely on testing as its primary quality assurance mechanism — and what would need to change for formal verification to become the default?
+2. The THErac-25's race condition was reproduced during the investigation but was never observed during testing. Could model checking have found it? What property would you specify?
+3. Gödel's incompleteness theorem shows that no consistent formal system can prove all true statements about arithmetic. Does this mean that formal verification of programs is fundamentally limited, or are the limitations irrelevant in practice?
 
 ---
 
-## Lecture 2: Propositional and First-Order Logic — The Language of Specification
+ᚢ **Lecture 2: Propositional and First-Order Logic — The Language of Specification**
 
-Propositional logic is the simplest non-trivial formal system: a language of atomic propositions connected by logical connectives (¬, ∧, ∨, →, ↔) with a well-defined notion of truth (valuation) and derivation (proof system). A **proposition** is a declarative statement that is either true or false. The connectives are truth-functional: ¬A is true iff A is false; A ∧ B is true iff both A and B are true; A ∨ B is true iff at least one of A, B is true; A → B is true iff A is false or B is true (the material conditional). These definitions are captured in truth tables, and every propositional formula has a unique truth value for each assignment of truth values to its atomic propositions.
+---
 
-**Satisfiability** asks whether there exists an assignment making the formula true. **Validity** (tautology) asks whether the formula is true under *all* assignments. These are dual: a formula is satisfiable iff its negation is not valid; a formula is valid iff its negation is not satisfiable. The SAT problem (determining satisfiability of a propositional formula in conjunctive normal form) is the canonical NP-complete problem (Cook-Levin, 1971). Modern SAT solvers — MiniSat, Glucose, CryptoMiniSat — use conflict-driven clause learning (CDCL) with watched literals, unit propagation, and heuristic branching to solve instances with millions of variables. The practical success of SAT solving is one of the great engineering achievements of computer science: theoretically exponential, yet routinely fast on real-world instances.
+### Overview
 
-**First-order logic** (FOL) extends propositional logic with quantifiers (∀, ∃) and predicates over a domain of individuals. FOL formulas have the form ∀x. P(x) → Q(x) or ∃x. ∀y. R(x,y), where x and y range over some domain D and P, Q, R are predicates. FOL is far more expressive: it can state properties like "every natural number has a successor" (∀n. ∃m. S(n,m)) that propositional logic cannot express. This expressiveness comes at a cost: the validity problem for FOL is undecidable (Church, 1936; Turing, 1936) — there is no algorithm that, given an arbitrary FOL formula, determines whether it is valid. However, FOL is *semi-decidable*: if a formula is valid, a proof can be found; if it is not, the search may run forever.
+Formal methods speak in logic. Before we can verify a program, we must write its specification, and before we can write a specification, we must understand the language in which specifications are written. That language is **mathematical logic** — the calculus of truth, the grammar of proof, the alphabet of certainty that has remained unchanged since Aristotle and was formalised by Frege, Russell, Peano, and Hilbert in the decades surrounding 1900.
 
-The semantics of FOL require a **structure** (or interpretation) consisting of a domain D and interpretations for each predicate, function, and constant symbol. A formula is *valid* if it is true in every structure; *satisfiable* if true in some structure; *unsatisfiable* if true in no structure. Natural deduction and the sequent calculus provide complete proof systems for FOL (Gödel's completeness theorem, 1929): a formula is provable iff it is valid. This is a remarkable result — it means that the syntactic notion of provability and the semantic notion of truth coincide for first-order logic.
+**Propositional logic** is the simplest layer. It deals with **propositions** — statements that are either true or false — and the **logical connectives** that combine them: ¬ (not), ∧ (and), ∨ (or), → (implies), ↔ (equivalent). The meaning of each connective is given by its **truth table**: a function from the truth values of its arguments to the truth value of the result. The formula (A ∧ B) → C is true in exactly those worlds where either A is false, or B is false, or C is true. A formula that is true in **all** possible assignments of truth values to its variables is a **tautology** (e.g., A ∨ ¬A, the law of excluded middle); a formula that is true in **some** assignment is **satisfiable**; a formula that is true in **no** assignment is **unsatisfiable** (a contradiction, e.g., A ∧ ¬A). The **SAT problem** — given a propositional formula, is it satisfiable? — is the canonical NP-complete problem, and SAT solvers are the workhorses of modern formal verification, routinely solving formulas with millions of variables and tens of millions of clauses.
 
-For specification, we care about specific theories. **Equality** (the theory of equality with uninterpreted functions, QF_UF) is decidable and forms the basis for most SMT solvers. **Linear arithmetic** over integers (QF_LIA) and reals (QF_LRA) is decidable and essential for verifying numerical properties. **Arrays** (QF_AX) axiomatised via McCarthy's select and store operations support reasoning about data structures. SMT solvers — Z3 (Microsoft Research, 2007), CVC5 (2022), Yggdrasil's own Mimir-SMT (2039) — combine these theories in a Nelson-Oppen framework: each theory solver handles its own literals, and the combination is sound and complete for disjoint theories. The DPLL(T) architecture extends CDCL with theory propagation: the SAT solver reasons about Boolean structure while theory solvers check consistency of the current assignment against background theories.
+**First-order logic (FOL)** extends propositional logic with **quantifiers** (∀, ∃) that range over **individuals** in a **domain** (e.g., natural numbers, strings, states of a program), and with **predicates** and **functions** that express relations and transformations. The formula ∀x. ∃y. y > x says "for every number x, there exists a larger number y" — a true statement about the natural numbers. The formula ∀x. ∀y. (x ≤ y) ∨ (y ≤ x) says "any two numbers are comparable" — true for the reals, false for complex numbers (which are not totally ordered). First-order logic is expressive enough to encode most program specifications — preconditions, postconditions, invariants, safety properties, liveness properties — but it is **undecidable**: there is no algorithm that determines whether an arbitrary first-order formula is valid. This undecidability is the theoretical limit that forces us into decidable fragments (propositional logic, linear arithmetic, bit-vectors, arrays) and semi-decidable proof systems.
 
-In practice, specifications are written in domain-specific languages built atop these logical foundations. The **Z notation** (Spivey, 1989) uses Zermelo-Fraenkel set theory and schema calculus to specify state-based systems. **Alloy** (Jackson, 2002) uses a relational first-order logic with transitive closure, analysable via SAT solving. **TLA+** (Lamport, 1999) specifies concurrent and distributed systems in a temporal logic of actions. **Dafny** (Leino, 2010) embeds verification conditions directly in an imperative programming language. Each of these represents a different point in the design space between expressiveness and automation.
+The **syntax** of first-order logic is defined by an inductive grammar: terms are built from variables and function symbols; atomic formulas are built from predicate symbols applied to terms; compound formulas are built from atomic formulas using connectives and quantifiers. The **semantics** is defined by an **interpretation** (a domain of discourse, an assignment of concrete functions and predicates to the function and predicate symbols), and the **satisfaction relation** ⊨ (read "models" or "satisfies"): M ⊨ φ means that formula φ is true in interpretation M. A formula is **valid** (⊨ φ) if it is true in all interpretations; it is **satisfiable** if it is true in at least one interpretation. The central theorem of first-order logic is **Gödel's completeness theorem**: a formula is valid if and only if it is provable in a suitable deductive system (e.g., natural deduction with the standard introduction and elimination rules). Completeness says that truth and provability coincide — for every valid formula, there exists a finite proof.
+
+The standard proof system for first-order logic is **natural deduction** (Gentzen, 1935; Prawitz, 1965), which mirrors the way humans reason. Each connective has an **introduction rule** (how to prove a formula with that connective) and an **elimination rule** (how to use a formula with that connective as a premise). To prove A → B, assume A and derive B (→I). To use A → B and A, conclude B (→E, modus ponens). To prove ∀x. P(x), prove P(c) for an arbitrary fresh constant c (∀I). To use ∀x. P(x), instantiate it to any term t (∀E). The rules are purely syntactic — they manipulate formulas without reference to meaning — but they are **sound** (every provable formula is valid) and **complete** (every valid formula is provable). The proof is a **tree** whose leaves are axioms or assumptions and whose root is the conclusion.
+
+**Automated theorem proving** for first-order logic is the domain of **resolution** (Robinson, 1965) and **superposition** (Bachmair and Ganzinger, 1994). The key idea is to convert the formula to **clausal normal form** (a conjunction of clauses, where each clause is a disjunction of literals) and apply the **resolution rule**: from clauses C₁ ∨ L and C₂ ∨ ¬L, infer C₁ ∨ C₂. Resolution is refutation-complete: if the original formula is unsatisfiable, resolution will eventually derive the empty clause (a contradiction). Modern first-order theorem provers (E, Vampire, Zipperposition) combine superposition with sophisticated heuristics for clause selection and term ordering, and they can prove thousands of theorems that would challenge trained mathematicians. The **TPTP** (Thousands of Problems for Theorem Provers) library provides over 20,000 benchmark problems, and the annual **CASC** (CADE ATP System Competition) tracks the state of the art.
+
+**Key Topics:**
+- Propositional logic: syntax, truth tables, tautologies, satisfiability, SAT, NP-completeness
+- The Davis-Putnam-Logemann-Loveland (DPLL) algorithm and Conflict-Driven Clause Learning (CDCL)
+- First-order logic syntax: terms, formulas, free vs. bound variables, substitution
+- First-order semantics: interpretations, satisfaction, validity, satisfiability, logical consequence
+- Natural deduction: introduction and elimination rules for each connective and quantifier
+- Gödel's completeness theorem and the relationship between semantics and syntax
+- Resolution and superposition: automated proof search for first-order logic
+- The undecidability of first-order logic (Church, 1936; Turing, 1936) and its implications
 
 **Required Reading:**
-- Huth & Ryan, *Logic in Computer Science: Modelling and Reasoning about Systems* (2nd ed., 2004/2040), chs. 1–2
-- Kroening & Strichman, *Decision Procedures: An Algorithmic Point of View* (2nd ed., 2016/2040), chs. 1–3
-- de Moura & Bjørner, "Z3: An Efficient SMT Solver," *TACAS '08* (2008): 337–340
-- Barrett et al., "CVC5: A Versatile and Industrial-Strength SMT Solver," *CAV '22* (2022)
+- David Gries and Fred B. Schneider, *A Logical Approach to Discrete Math* (1993/2040), chs. 1–6 (Propositional and Predicate Calculus)
+- Mordechai Ben-Ari, *Mathematical Logic for Computer Science* (3rd ed., 2012/2040), chs. 1–5, 7
+- John Harrison, *Handbook of Practical Logic and Automated Reasoning* (2009/2040), chs. 1–3
+- Martin Davis, "The Early History of Automated Deduction" (2001), in *Handbook of Automated Reasoning*, vol. 1
+- Yggdrasil Logic Lab: Natural Deduction Proofs in Lean 4, SAT Encoding in MiniSat/Z3 (2040)
 
 **Discussion Questions:**
-1. SAT solving is NP-complete in theory but fast in practice. What properties of real-world instances explain this gap? Is it a coincidence or a deep structural fact about the problems we care about?
-2. First-order logic is semi-decidable: we can find proofs of valid formulas but cannot always refute invalid ones. How do proof assistants like Coq work around this fundamental limitation?
-3. If SAT solvers are already practical for million-variable instances, why do we need richer logics like LTL, CTL, or dependent types? What can they express that SAT cannot?
+1. Propositional logic is decidable (SAT is NP-complete) but first-order logic is undecidable. Where exactly does the jump in complexity occur — and what fragment of first-order logic is decidable? (Hint: consider Presburger arithmetic and monadic first-order logic.)
+2. Natural deduction is a "natural" proof system in that it mirrors human reasoning. But it is not the most efficient for automated proof search. Why is resolution preferred for automation, and what is lost (in human readability) when we use resolution?
+3. The DPLL algorithm with CDCL can solve SAT instances with millions of variables. What properties of real-world SAT instances (from hardware and software verification) make them tractable despite the theoretical NP-completeness?
 
 ---
 
-## Lecture 3: Temporal Logic — Reasoning About Time and Change
+ᚦ **Lecture 3: Hoare Logic — Proving Programs Correct**
 
-Programs are not static objects — they execute over time, and their correctness often depends on the *sequence* of states they traverse. A sorting algorithm is correct if it *eventually* produces a sorted array; a mutual exclusion algorithm is correct if it *never* allows two processes in the critical section simultaneously; a liveness property guarantees that something *eventually* happens. Classical logic, which reasons about truth at a single point, cannot express these properties directly. **Temporal logic** extends classical logic with operators that quantify over time: ◇φ (eventually φ), □φ (always φ), ○φ (next φ), φ U ψ (φ until ψ).
+---
 
-**Linear Temporal Logic** (LTL, Pnueli, 1977) interprets formulas over infinite sequences of states (traces). Each state assigns truth values to atomic propositions, and the temporal operators quantify over positions in the trace: □p means p holds at every position; ◇p means p holds at some future position; ○p means p holds at the next position; p U q means p holds at every position before q first holds, and q eventually holds. The **expansion laws** provide the semantic recursion: □φ ≡ φ ∧ ○□φ (always means now and forever next); ◇φ ≡ φ ∨ ○◇φ (eventually means now or sometime next); φ U ψ ≡ ψ ∨ (φ ∧ ○(φ U ψ)). These laws underpin both the intuition and the automata-theoretic verification of LTL.
+### Overview
 
-**Computation Tree Logic** (CTL, Clarke & Emerson, 1981) interprets formulas over branching-time structures — Kripke frames representing all possible executions from a given initial state. CTL quantifies over paths with path quantifiers A (for all paths) and E (there exists a path), paired with temporal operators. AFp means "on all paths, p eventually holds"; EGp means "there exists a path on which p holds globally." The eight basic CTL operators — AX, EX, AF, EF, AG, EG, AU, EU — provide different kinds of branching-time quantification. CTL is strictly less expressive than LTL: CTL cannot express "p holds at every even step" (a property LTL expresses trivially as G(p → X(X(p)))), while LTL cannot express "there exists a path on which p holds forever" (which CTL expresses as EGp). The combination **CTL*** subsumes both, allowing arbitrary nesting of path quantifiers and temporal operators. CTL* model checking is PSPACE-complete; LTL model checking is also PSPACE-complete; CTL model checking is in P — a practically significant gap.
+**Hoare logic** (C.A.R. Hoare, 1969) is the calculus of imperative programs — a set of inference rules that allow us to prove that a program fragment satisfies a specification expressed as a **Hoare triple**: {P} C {Q}, read "if P holds before executing command C, then Q holds after C terminates." P is the **precondition**, Q the **postcondition**, and C the command. Hoare logic treats programs as mathematical objects subject to the same kind of rigorous reasoning as numbers, sets, and functions — and it provides the intellectual foundation for all subsequent work on program verification.
 
-The relationship between LTL and CTL is subtle. A property expressible in both (e.g., □p ≡ AGp when interpreted on a single structure) may have different model-checking procedures. CTL model checking iterates a fixpoint computation: AFp is computed as the least fixpoint of the operator Z ↦ p ∨ AX(Z), which converges in at most |S| iterations where |S| is the number of states. LTL model checking proceeds via the automata-theoretic approach: given an LTL formula φ, construct a Büchi automaton A_¬φ that accepts precisely the traces violating φ, then check whether the product of the system model M with A_¬φ has an accepting run. If it does, the run is a counterexample; if not, φ holds. The Büchi automaton for an LTL formula φ has size exponential in |φ| in the worst case (the liveness to safety reduction introduces an exponential blowup), which is the source of PSPACE-completeness.
+The heart of Hoare logic is the **assignment axiom**: {Q[E/x]} x := E {Q}. This says that to guarantee Q after assigning E to x, we need Q[E/x] — the formula obtained by substituting E for every free occurrence of x in Q — to hold before the assignment. For example, {y + 1 > 0} x := y + 1 {x > 0}. The assignment axiom works "backwards": we compute the precondition from the postcondition and the assignment. This backward reasoning is characteristic of Hoare logic and of the **weakest precondition (WP)** calculus (Dijkstra, 1976), which we explore in Lecture 4.
 
-**ACTL** (Action-based CTL) and **undoability logic** extend CTL with action labels, enabling specifications like "every request is eventually followed by a response along the same path." **Metric temporal logic** (MTL) adds time bounds: ◇[0,5]p means "p holds within 5 time units." **Alternating-time temporal logic** (ATL, Alur et al., 2002) reasons about strategic ability: ⟨⟨1⟩⟩◇p means "agent 1 has a strategy to ensure p eventually holds, regardless of what other agents do." ATL is natural for multi-agent systems, security games, and contract-based specification — and it connects directly to model checking of security protocols, a major application at Yggdrasil's security lab.
+The **rule of composition** connects sequential commands: if {P} C₁ {R} and {R} C₂ {Q}, then {P} C₁; C₂ {Q}. The intermediate assertion R is the "glue" that links the two commands — it describes the state between them. The **rule of consequence** allows us to strengthen the precondition or weaken the postcondition: if P ⇒ P', {P'} C {Q'}, and Q' ⇒ Q, then {P} C {Q}. This rule lets us adapt a verified program to a slightly different specification without re-proving it — if we can prove that the new precondition implies the old, and the old postcondition implies the new, the verification carries over.
 
-The practical impact of temporal logic extends well beyond academic verification. In 2040, TLA+ is used at Amazon Web Services to specify and verify distributed consensus protocols (Raft, Paxos variants). The SPIN model checker verified the plan-switching logic of the Mars Curiosity rover. The NuSMV model checker is embedded in the European Train Control System specification. The Yggdrasil verification team uses temporal logic to specify liveness and safety properties for the Mimir Cluster's job scheduling system, ensuring that every submitted verification task eventually completes (◇(task_done)) and that no two tasks access the same resource simultaneously (□¬(access₁ ∧ access₂)).
+The **conditional rule** handles if-then-else: if {P ∧ B} C₁ {Q} and {P ∧ ¬B} C₂ {Q}, then {P} if B then C₁ else C₂ {Q}. Both branches must establish the same postcondition Q, but they work under different assumptions: the "then" branch assumes B is true, the "else" branch assumes B is false. The **while rule** is the most subtle: if {P ∧ B} C {P}, then {P} while B do C {P ∧ ¬B}. The assertion P is the **loop invariant** — a property that holds before the loop begins and is preserved by each iteration. When the loop terminates (B becomes false), we know both P and ¬B hold. The loop invariant is the creative heart of Hoare-logic verification: finding the right invariant is the intellectual challenge; once found, the proof is mechanical.
+
+A classic example: verifying a program that computes the factorial of n. Let C be:
+```
+x := 1; i := 1;
+while i ≤ n do
+  x := x * i;
+  i := i + 1
+```
+The loop invariant is P: x = (i-1)! ∧ i ≤ n+1. Before the loop: x = 1, i = 1, so P holds (x = 0! = 1). During the loop: if P holds and i ≤ n, then after x := x*i and i := i+1, we have x = (i-1)! and i ≤ n+1 — P is preserved. After the loop: P holds and i > n, so x = (i-1)! and i = n+1, hence x = n!. The precondition {n ≥ 0} and postcondition {x = n!}. The entire proof follows mechanically from the invariant.
+
+Hoare logic extends naturally to **arrays** and **pointers** through the **substitution rule for arrays**: {Q[a[i ↦ E] / a]} a[i] := E {Q}, where a[i ↦ E] is the array that agrees with a everywhere except at index i, where it has the value E. For pointers, **separation logic** (Reynolds, 2002; O'Hearn, 2001) extends Hoare logic with the **separating conjunction** P ∗ Q, which asserts that the heap can be split into two disjoint parts — one satisfying P and the other Q. Separation logic is the basis of the seL4 verification and of modern tools like VeriFast and Viper. We return to separation logic in Lecture 8.
+
+**Key Topics:**
+- The Hoare triple {P} C {Q} and its interpretation: partial correctness (if P holds and C terminates, then Q holds)
+- The assignment axiom and backward substitution
+- The rule of composition (sequential), consequence (strengthening/weakening), conditional (if-then-else), and while (loop invariant)
+- Total correctness: partial correctness plus termination — expressed by a **variant** (a measure that strictly decreases on each iteration and is bounded below)
+- Finding loop invariants: the hardest part of Hoare-logic verification
+- Extending Hoare logic to arrays, records, and pointers
+- Mechanising Hoare logic: early systems (Gypsy, Stanford Pascal Verifier) to modern systems (Frama-C, Dafny, VeriFast)
+- The connection to separation logic and modern heap verification
 
 **Required Reading:**
-- Pnueli, "The Temporal Logic of Programs," *FOCS '77* (1977): 46–57
-- Clarke, Emerson & Sistla, "Automatic Verification of Finite-State Concurrent Systems Using Temporal Logic Specifications," *ACM TOPLAS* 8:2 (1986): 244–263
-- Baier & Katoen, *Principles of Model Checking* (MIT Press, 2008/2040), chs. 5–6
-- Alur et al., "Alternating-Time Temporal Logic," *Journal of the ACM* 49:5 (2002): 672–713
+- C.A.R. Hoare, "An Axiomatic Basis for Computer Programming" *Communications of the ACM* 12:10 (1969): 576–580, 583
+- Krzysztof R. Apt, Frank S. de Boer, and Ernst-Rüdiger Olderog, *Verification of Sequential and Concurrent Programs* (3rd ed., 2009/2040), chs. 1–3
+- David Gries, *The Science of Programming* (1981/2040), chs. 7–12 (Loops and Invariants)
+- Edsger W. Dijkstra, *A Discipline of Programming* (1976/2040), chs. 1–5 (Weakest Preconditions, Guarded Commands)
+- John C. Reynolds, "Separation Logic: A Logic for Shared Mutable Data Structures" *LICS 2002*: 55–74
+- Yggdrasil Verification Lab: Proving Simple Programs in Dafny, Finding Loop Invariants (2040)
 
 **Discussion Questions:**
-1. LTL and CTL are incomparable in expressiveness. Give an example of a property expressible in LTL but not CTL, and vice versa. Which is more natural for specifying concurrent protocols?
-2. Model checkers produce counterexamples when properties fail. How do you validate that a counterexample represents a real bug rather than a modelling error?
-3. The automata-theoretic approach to LTL model checking constructs an exponential-sized Büchi automaton. Why is this acceptable in practice? What techniques mitigate the worst case?
+1. Hoare logic proves partial correctness: if the program terminates, the postcondition holds. Why is termination a separate concern, and how does the **variant** method for proving termination relate to the loop invariant?
+2. The loop invariant is the creative step in Hoare-logic verification. For the program that computes the greatest common divisor (Euclid's algorithm), what is the loop invariant — and how would you discover it systematically?
+3. Separation logic's separating conjunction P ∗ Q ensures that P and Q refer to disjoint parts of the heap. Why is this disjointness crucial for modular verification, and how does it prevent the "frame problem" that plagues classical Hoare logic with pointers?
 
 ---
 
-## Lecture 4: Model Checking — Algorithms, Data Structures, and the State Explosion Problem
+ᚨ **Lecture 4: Weakest Precondition Calculus and Automated Verification Condition Generation**
 
-Model checking is the automatic verification that a finite-state model M satisfies a temporal-logic specification φ, written M ⊨ φ. The core algorithm depends on the logic. For CTL, the algorithm computes the set of states satisfying each subformula bottom-up, using fixpoint characterisations: AGφ is the greatest fixpoint of Z ↦ φ ∧ AX(Z), AFφ is the least fixpoint of Z ↦ φ ∨ AX(Z). Each fixpoint iteration requires at most |S| steps, and there are |φ| subformulas, so the overall complexity is O(|M| × |φ|) — polynomial in both model and specification size.
+---
 
-For LTL, the automata-theoretic approach constructs the Büchi automaton A_¬φ for the negation of the specification, then checks whether the language of the product automaton M × A_¬φ is empty. Emptiness is equivalent to the non-existence of an accepting run, which is checked via nested depth-first search or SCC (strongly connected component) decomposition. The Büchi automaton for an LTL formula φ can be exponentially smaller than for the equivalent CTL* formula, but its construction is exponential in |φ|. The overall complexity is O(|M| × 2^|φ|), which is EXPTIME in the specification and linear in the model — acceptable because specifications are typically small while models are large.
+### Overview
 
-The **state explosion problem** is the central challenge of model checking. A system with n Boolean variables has 2^n reachable states; a system with k concurrent processes, each with m local states, has up to m^k global states. Even moderate systems easily exceed 10^20 states, far beyond the reach of explicit-state enumeration. Three families of techniques address this.
+Dijkstra's **weakest precondition (WP) calculus** (1976) reframes program verification from "given P and C, find Q such that {P} C {Q}" to "given C and Q, find the weakest P such that {P} C {Q}." The **weakest liberal precondition** wp(C, Q) is the weakest predicate P such that {P} C {Q} holds (for partial correctness). "Weakest" means "most general" — wp(C, Q) is the precondition that imposes the fewest constraints while still guaranteeing Q after C. To verify {P} C {Q}, we compute wp(C, Q) and check that P ⇒ wp(C, Q). This reduces program verification to **logical implication** — a formula that can be checked by an automated theorem prover.
 
-**Symbolic model checking** (BDD-based, McMillan, 1993) represents state sets as Boolean functions rather than explicit enumeration. **Ordered Binary Decision Diagrams** (BDDs, Bryant, 1986) compactly represent Boolean functions as directed acyclic graphs with canonical form and efficient operations (conjunction, disjunction, negation, existential quantification). The transition relation is represented as a BDD, and the fixpoint computation operates on BDDs rather than explicit state sets. Symbolic model checking can handle systems with 10^20 reachable states if their transition relation has a compact BDD representation — which many realistic systems do, because the transition relation is typically a conjunction of local constraints. The canonical example is the 64-bit counter, whose 2^64 states are represented by a small BDD.
+The WP calculus defines wp recursively over the structure of C:
 
-**Partial order reduction** (POR, Godefroid, 1996; Valmari, 1991) exploits the independence of concurrent transitions. Two transitions α and β are independent if they can execute in either order with the same result; the reduced state space need explore only one interleaving per independent set. POR preserves stutter-equivalence (for LTL without the next operator) and can reduce the state space by orders of magnitude for highly concurrent systems. Stubborn sets, ample sets, and sleep sets are the main POR algorithms, each with different precision-efficiency tradeoffs.
+- **Assignment**: wp(x := E, Q) = Q[E/x]
+- **Sequence**: wp(C₁; C₂, Q) = wp(C₁, wp(C₂, Q))
+- **Conditional**: wp(if B then C₁ else C₂, Q) = (B ⇒ wp(C₁, Q)) ∧ (¬B ⇒ wp(C₂, Q))
+- **While loop**: This is the hard case. The WP of a loop is defined as the weakest predicate P such that (P ∧ B) ⇒ wp(C, P) (P is invariant) and (P ∧ ¬B) ⇒ Q (at loop exit). Finding P requires an invariant — the WP calculus cannot compute it automatically. In practice, the programmer supplies the loop invariant, and the verifier checks that it is inductive.
 
-**Abstraction and counterexample-guided abstraction refinement** (CEGAR, Clarke et al., 2000) attack systems too large even for symbolic methods. The idea: construct an over-approximation Â of the concrete model A, model check Â, and if Â ⊨ φ, conclude A ⊨ φ (sound). If Â ⊭ φ, analyse the counterexample: if it is spurious (infeasible in the concrete model), refine the abstraction to eliminate it and repeat. CEGAR converges because each refinement strictly increases the precision of the abstraction, and there are finitely many predicates to add. The **Predicate abstraction** variant (Graf & Saïdi, 1997) tracks only the truth values of a set of predicates, reducing the abstract state space to 2^|P|. The SLAM tool (Microsoft, 2004) used CEGAR with predicate abstraction to verify device drivers; the BLAST tool (Henzinger et al., 2003) extended it with lazy predicate abstraction.
+The WP calculus is the engine of **Verification Condition Generation (VCG)** — the process of translating a program with its specifications (preconditions, postconditions, loop invariants) into a set of first-order logic formulas (the **verification conditions**, or VCs) whose validity implies the correctness of the program. A VCG reads the program, computes WP at each statement, and emits the implications that must be proved. The VCs are then passed to an automated theorem prover (Z3, CVC5, Alt-Ergo, Vampire) for discharge. This is the architecture of Dafny, Frama-C, Why3, and Viper — the programmer writes the code with annotations (invariants, pre/post), the VCG generates the VCs, and the SMT solver proves them. The programmer never writes a proof tree; they write annotations that are rich enough to guide the solver.
 
-The Mimir Verification Cluster at Yggdrasil runs NuSMV (symbolic, BDD-based and SAT-based bounded model checking), SPIN (explicit-state with POR), and CBMC (bounded model checking for C programs). A typical verification workflow: specify the system in the modelling language, encode properties in temporal logic, run the model checker, and if a counterexample appears, trace it back to the model, confirm it is genuine, and either fix the model or refine the specification. If the checker says the property holds, the result is mathematically guaranteed — within the model. The gap between model and reality is where formal methods meets engineering judgement.
+A concrete VCG example: verifying the factorial program with the invariant x = (i-1)! ∧ i ≤ n+1. The VCG generates three VCs:
+
+1. **Initialisation VC**: n ≥ 0 ⇒ wp(x:=1; i:=1, Inv) — does the precondition establish the invariant? Computed: n ≥ 0 ⇒ (1 = 0! ∧ 1 ≤ n+1) — true.
+
+2. **Preservation VC**: (Inv ∧ i ≤ n) ⇒ wp(x:=x*i; i:=i+1, Inv) — does the loop body preserve the invariant? Computed: (x = (i-1)! ∧ i ≤ n+1 ∧ i ≤ n) ⇒ (x*i = i! ∧ i+1 ≤ n+1) — true by simplification.
+
+3. **Postcondition VC**: (Inv ∧ ¬(i ≤ n)) ⇒ (x = n!) — does the invariant at loop exit imply the postcondition? Computed: (x = (i-1)! ∧ i ≤ n+1 ∧ i > n) ⇒ (x = n!) — i = n+1, so x = n! — true.
+
+All three VCs are valid, so the program is correct. The entire reasoning is automatic once the invariant is supplied.
+
+The **SMT (Satisfiability Modulo Theories)** solver is the engine that discharges VCs. SMT extends SAT solving with **decision procedures for theories**: linear arithmetic (Presburger), bit-vectors, arrays, uninterpreted functions, algebraic datatypes, and combinations thereof (Nelson-Oppen combination). Z3 (Microsoft Research, 2008–present) is the dominant SMT solver, with CVC5 (Stanford/Iowa) and Yices (SRI) as strong competitors. An SMT solver takes a formula involving both Boolean structure and theory-specific atoms (e.g., x + y < 5, a[i] = 3, f(x) = g(y)) and determines satisfiability. For verification, we check unsatisfiability of the negation of the VC — if the negation is unsatisfiable, the VC is valid. Modern SMT solvers can discharge VCs with thousands of quantified variables and millions of theory atoms in seconds, making them practical for industrial verification.
+
+**Key Topics:**
+- The weakest precondition (WP) calculus: definition, properties, and recursive computation
+- The relationship between Hoare logic and WP: {P} C {Q} iff P ⇒ wp(C, Q)
+- Verification Condition Generation (VCG): from annotated program to logical formulas
+- The architecture of a modern program verifier: parser, type checker, VCG, SMT solver
+- SMT solving: theories (linear arithmetic, arrays, bit-vectors, algebraic datatypes), DPLL(T) algorithm, quantifier instantiation (E-matching, MBQI)
+- Practical VCG tools: Dafny (Microsoft), Frama-C/WP (CEA), Why3 (Inria), Viper (ETH Zurich)
+- The annotation burden: what the programmer must provide (invariants, pre/post) vs. what is automatic
+- Limitations: loops require invariants; recursion requires induction hypotheses; complex data structures require framing conditions
 
 **Required Reading:**
-- Clarke et al., *Model Checking* (2nd ed., MIT Press, 2018/2040), chs. 1–4
-- McMillan, *Symbolic Model Checking* (Kluwer, 1993)
-- Clarke et al., "Counterexample-Guided Abstraction Refinement," *CAV '00* (2000): 154–169
-- Bryant, "Graph-Based Algorithms for Boolean Function Manipulation," *IEEE Trans. Computers* 35:8 (1986): 677–691
+- Edsger W. Dijkstra, *A Discipline of Programming* (1976/2040), chs. 1–4 (WP Calculus, Guarded Commands)
+- K. Rustan M. Leino, "Dafny: An Automatic Program Verifier for Functional Correctness" *LPAR-16* (2010): 348–370
+- Jean-Christophe Filliâtre and Andrei Paskevich, "Why3 — Where Programs Meet Provers" *ESOP 2013*: 125–128
+- Leonardo de Moura and Nikolaj Bjørner, "Z3: An Efficient SMT Solver" *TACAS 2008*: 337–340
+- Clark Barrett et al., "CVC5: A Versatile and Industrial-Strength SMT Solver" *TACAS 2022*: 415–432
+- Yggdrasil Verification Lab: Dafny Exercises (factorial, binary search, sorting, graph algorithms) (2040)
 
 **Discussion Questions:**
-1. Symbolic model checking with BDDs can handle 2^100 states, yet some systems still exceed its capacity. What properties of a system make BDDs blow up, and how can you detect this before investing verification effort?
-2. CEGAR refines abstractions when counterexamples are spurious. What happens when the counterexample is genuine — does the refinement loop terminate? Under what conditions?
-3. Model checking verifies properties of a model, not of the system itself. How do you bridge this gap? What assurance does model checking provide that testing does not?
+1. The WP calculus computes preconditions automatically for all constructs except loops (which require invariants) and recursion (which requires induction hypotheses). Why are these the hard cases — and could machine learning (e.g., LLM-generated invariants) bridge the gap?
+2. Dafny's architecture places the programmer in the role of annotation author, not proof author. What is lost — and what is gained — by replacing proof trees with SMT-solved VCs?
+3. SMT solvers use heuristics for quantifier instantiation (E-matching, MBQI). These heuristics are incomplete: they may fail to find a proof even when one exists. Is this incompleteness a fatal flaw for verification, or a pragmatic compromise?
 
 ---
 
-## Lecture 5: The Simply-Typed Lambda Calculus — Types as Simple Specifications
+ᚱ **Lecture 5: Temporal Logic and Model Checking — Exploring the State Space**
 
-The **lambda calculus** (Church, 1936) is the atomic theory of computation: a formal system with three constructs — variable reference x, function definition λx.M, and function application M N — that is Turing-complete. Its operational semantics is β-reduction: (λx.M) N → M[x := N]. The untyped lambda calculus admits self-application (ω = λx.x x) and non-terminating computation (Ω = ω ω), making it logically inconsistent as a proof system (by Curry's paradox, a term that reduces to itself encodes a circular proof).
+---
 
-The **simply-typed lambda calculus** (STLC, Church, 1940; Curry & Feys, 1958) restricts the untyped calculus by assigning simple types to terms. Types are built from base types (ι, ο, ...) and the arrow constructor: if A and B are types, so is A → B. A term λx:A. Mx. is a function from A to B. The typing judgement Γ ⊢ t : A reads "in context Γ, term t has type A." The typing rules are:
+### Overview
 
-- **Var:** Γ, x:A ⊢ x : A (variables are looked up in the context)
-- **Abs:** If Γ, x:A ⊢ M : B, then Γ ⊢ λx:A. M : A → B (abstraction introduces an arrow type)
-- **App:** If Γ ⊢ M : A → B and Γ ⊢ N : A, then Γ ⊢ M N : B (application eliminates an arrow type)
+Hoare logic proves properties of **sequential** programs. For **reactive** and **concurrent** systems — operating systems, network protocols, hardware circuits, distributed algorithms — the relevant properties are **temporal**: not "what is the result?" but "what eventually happens?" and "what never happens?" **Temporal logic** (Pnueli, 1977) extends propositional and first-order logic with modalities that express the ordering of events in time, and **model checking** (Clarke and Emerson, 1981; Queille and Sifakis, 1982) is the algorithmic verification technique that exhaustively explores the state space to determine whether a temporal logic property holds.
 
-STLC satisfies two fundamental properties. **Type safety** (progress + preservation): well-typed terms never get stuck — they either reduce or are values. **Strong normalisation**: every well-typed term terminates — there are no infinite reduction sequences. Strong normalisation follows because every β-reduction decreases the type complexity (specifically, the number of arrows in the types of subterms). This means STLC is *not* Turing-complete; it is a language of total functions — exactly what we want for verification, where non-termination is a bug, not a feature.
+A **Kripke structure** is the mathematical model: a directed graph where each node (state) is labelled with the atomic propositions true in that state, and edges represent possible transitions. The structure is a **transition system** — every possible execution of the concurrent system is a path through the graph. The state space may be finite (a circuit with n latches has 2ⁿ states) or infinite (software with unbounded recursion and dynamic allocation). Model checking works on **finite** state spaces, typically by constructing a symbolic representation of the Kripke structure from a program description and then verifying properties against it.
 
-The **Curry-Howard correspondence** for STLC maps types to propositions of intuitionistic propositional logic and terms to proofs. A → B corresponds to implication; A × B to conjunction; A + B to disjunction. The typing derivation Γ ⊢ t : A is read as "t is a proof that the proposition A follows from assumptions Γ." **Proof normalisation** corresponds to β-reduction: simplifying a proof corresponds to evaluating a program. This correspondence is not merely analogical — it is a mathematical isomorphism. The algorithm for extracting the computational content of a proof (removing "detours" where an implication is introduced and immediately eliminated) is exactly β-reduction. This is the insight that makes type-theoretic verification possible: if we can express specifications as types, then verifying a program is the same as type-checking it.
+**Linear Temporal Logic (LTL)** (Pnueli, 1977) expresses properties of individual executions — paths through the Kripke structure. The temporal modalities are:
 
-**Principal types** and **type inference** (Hindley, 1969; Milner, 1978; Damas & Milner, 1982) extend STLC with polymorphism. The Hindley-Milner type system (Algorithm W) infers the most general (principal) type of a term without any type annotations. The key insight: unify type variables across the term, then generalise over variables that appear only in the type (not in the context). ML-family languages (Standard ML, OCaml, Haskell without extensions) use this system. Type inference makes it practical to write programs that the compiler verifies without programmer-supplied annotations — a major engineering advantage.
+- **□ φ** ("always φ" or "globally φ"): φ holds at every state on the path. □ ¬(crash) says "the system never crashes."
+- **◇ φ** ("eventually φ" or "finally φ"): φ holds at some future state on the path. ◇ (leader_elected) says "a leader is eventually elected."
+- **○ φ** ("next φ"): φ holds at the next state. ○ (x = 5) says "x will be 5 at the next step."
+- **φ 𝒰 ψ** ("φ until ψ"): φ holds continuously until some state where ψ holds. (¬granted) 𝒰 (request ∧ granted) says "no grant occurs until a request is made and then granted."
 
-**Subtyping** (Cardelli, 1984) extends STLC with a subtype relation A ≤ B (read "A is a subtype of B," meaning any term of type A can be used where a term of type B is expected). Subtyping on record types models object-oriented inheritance; subtyping on function types is contravariant in the argument and covariant in the result: if A' ≤ A and B ≤ B', then A → B ≤ A' → B'. This seemingly simple extension introduces significant complexity: subtyping with bounded quantification (F<:) is undecidable (Pierce, 1994), and even without quantifiers, subtyping on recursive types requires coinductive definitions. The practical lesson: every addition to the type system must be justified against the decidability and tractability of type inference.
+LTL formulas are evaluated on infinite paths (for reactive systems, there is no "termination" — the system runs forever). An LTL property holds of a Kripke structure if it holds on **every** path starting from every initial state. The classic LTL model checking algorithm (Vardi and Wolper, 1986) translates the LTL formula into a **Büchi automaton** — a finite automaton on infinite words that accepts exactly those paths that satisfy the formula — and then checks whether the product of the Kripke structure and the Büchi automaton has an accepting path. If no accepting path exists, the property holds; if one exists, it is a **counterexample** — a concrete execution trace that violates the property.
+
+**Computation Tree Logic (CTL)** (Clarke and Emerson, 1981) takes a different perspective: instead of reasoning about paths, CTL reasons about the **branching structure** of the computation tree. CTL path quantifiers are:
+
+- **A φ** ("for all paths"): φ holds on all paths from the current state
+- **E φ** ("there exists a path"): φ holds on some path from the current state
+
+Combined with the temporal operators (X, F, G, U), we get eight basic CTL modalities: AG φ ("invariant" — φ holds on all reachable states), EF φ ("reachability" — φ is reachable from some path), AF φ ("inevitability" — on all paths, φ eventually holds), EG φ ("possibility" — there is a path where φ always holds), and their duals. CTL model checking is simpler than LTL model checking: it can be done by a bottom-up traversal of the formula over the state space, labelling each state with the subformulas that hold there. The running time is O(|M| · |φ|) — linear in the size of the Kripke structure and the length of the formula.
+
+The fundamental challenge of model checking is the **state explosion problem**: the number of states grows exponentially with the number of components. A system with n Boolean variables has 2ⁿ states; a system with n concurrent processes, each with k local states, has kⁿ states. **Symbolic model checking** (McMillan, 1993) addresses this by representing sets of states and transition relations as **Binary Decision Diagrams (BDDs)** — canonical, compressed representations of Boolean functions. A BDD for a set with 10²⁰ states may have only a few thousand nodes if the set has a regular structure. Symbolic model checking with BDDs can handle state spaces of 10²⁰ to 10⁵⁰ states — far beyond explicit enumeration. **Bounded model checking** (Biere et al., 1999) takes a different approach: it unrolls the transition relation k times into a propositional formula and checks for counterexamples of length k using a SAT solver. BMC is incomplete (it finds bugs up to bound k but cannot prove correctness for unbounded traces) but is highly effective at finding shallow bugs — most real-world bugs manifest in a small number of steps.
+
+**Key Topics:**
+- Kripke structures: states, transitions, atomic propositions, paths, traces
+- Linear Temporal Logic (LTL): syntax, semantics on paths, Büchi automata
+- Computation Tree Logic (CTL): path quantifiers, branching time, labelling algorithm
+- LTL vs. CTL: expressiveness comparison (LTL and CTL are incomparable; CTL* subsumes both)
+- Explicit-state model checking: SPIN (Holzmann), on-the-fly verification, partial order reduction
+- Symbolic model checking: BDDs, fixed-point characterisation of CTL operators, NuSMV
+- Bounded model checking: SAT-based, incremental unrolling, k-induction
+- The state explosion problem and mitigation strategies: symmetry reduction, abstraction, compositional reasoning
 
 **Required Reading:**
-- Pierce, *Types and Programming Languages* (MIT Press, 2002/2040), chs. 9–12 (STLC), chs. 22–23 (subtyping)
-- Girard, Lafont & Taylor, *Proofs and Types* (Cambridge UP, 1989), chs. 1–4
-- Barendregt, "Lambda Calculi with Types," *Handbook of Logic in Computer Science* vol. 2 (1992): 117–309
-- Wadler, "Propositions as Types," *Communications of the ACM* 58:12 (2015): 75–84
+- Edmund M. Clarke, Orna Grumberg, and Doron Peled, *Model Checking* (1999/2040), chs. 1–6
+- Amir Pnueli, "The Temporal Logic of Programs" *FOCS 1977*: 46–57 — the paper that introduced temporal logic to CS
+- Gerard J. Holzmann, *The SPIN Model Checker: Primer and Reference Manual* (2004/2040), chs. 1–4
+- Kenneth L. McMillan, *Symbolic Model Checking* (1993/2040), chs. 1–3 (BDDs, Fixed Points)
+- Armin Biere et al., "Bounded Model Checking" *Advances in Computers* 58 (2003): 117–148
+- Yggdrasil Model Checking Lab: LTL and CTL specifications in SPIN, counterexample analysis (2040)
 
 **Discussion Questions:**
-1. STLC is not Turing-complete. Is this a bug or a feature? In what circumstances would you prefer a total language over a Turing-complete one?
-2. Type inference is undecidable for sufficiently rich type systems (e.g., System F with subtyping). At what point does the cost of type annotations outweigh the benefit of verification?
-3. The Curry-Howard correspondence maps STLC to intuitionistic propositional logic. What logic corresponds to the untyped lambda calculus, and why is it inconsistent?
+1. LTL and CTL are incomparable in expressiveness: there are LTL properties that cannot be expressed in CTL (e.g., ◇□p, "eventually always p") and CTL properties that cannot be expressed in LTL (e.g., AF AG p, "eventually p holds forever on all paths"). Give examples of each and explain the intuitive difference between the linear-time and branching-time perspectives.
+2. The state explosion problem is the central obstacle to model checking. Why does symbolic model checking with BDDs mitigate explosion for hardware but less so for software — and what about software structure makes it harder to compress?
+3. Bounded model checking can find bugs but cannot prove correctness (for unbounded traces). How does **k-induction** extend BMC to proofs — and what is the relationship to mathematical induction?
 
 ---
 
-## Lecture 6: Dependent Types — Propositions as Types, Programs as Proofs
+ᚲ **Lecture 6: The Curry-Howard Correspondence and Type Theory as Logic**
 
-The simply-typed lambda calculus can express implication and conjunction. **Dependent types** extend this to full first-order logic and beyond, allowing types to depend on values. A dependent function type Π(x:A). B(x) — read "for all x of type A, B(x)" — is both a universal quantifier (in the logical reading) and a dependent function type (in the computational reading). A dependent pair type Σ(x:A). B(x) — read "there exists x of type A such that B(x)" — is both an existential quantifier and a dependent record. This is the Curry-Howard correspondence in full generality: types are propositions, terms are proofs, and the type checker is the proof checker.
+---
 
-**Dependent function types** (Π-types) generalise arrow types. Where A → B bundles a function that takes any A and returns a B, Π(x:A). B(x) allows the return type to depend on the specific argument value. The classic example: the type of length-indexed vectors Vec A n, where n is a natural number. The cons function has type Π(n:ℕ). A → Vec A n → Vec A (n+1) — the output vector's length is one more than the input's, and this is enforced by the type system. A function that appends vectors has type Π(m n:ℕ). Vec A m → Vec A n → Vec A (m+n) — the result's length is the sum of the arguments' lengths, verified by the type checker. This is verification by construction: the well-typedness of the program *proves* the length property.
+### Overview
 
-**Dependent pair types** (Σ-types) generalise product types. Where A × B bundles a value of type A with a value of type B, Σ(x:A). B(x) bundles a value x of type A with a proof that B(x) holds. A sorted list is Σ(l:List A). IsSorted(l) — a list together with a proof of sortedness. A verified search function returns Σ(i:ℕ). (i < length l) × (l[i] = target) — the index together with proofs that it is in bounds and points to the target. Each of these is both a data structure and a specification, intertwined at the type level.
+The **Curry-Howard correspondence** (Curry, 1934; Howard, 1969) is the observation that there is a deep structural isomorphism between **logic** and **computation**: propositions correspond to types, proofs correspond to programs, and proof simplification (cut elimination) corresponds to program evaluation (β-reduction). The correspondence is not a metaphor — it is a precise mathematical isomorphism that has been formalised in multiple settings (natural deduction ↔ simply typed λ-calculus, intuitionistic logic ↔ λP2, second-order logic ↔ System F, higher-order logic ↔ Calculus of Constructions). The correspondence means that **programming in a dependently typed language is proving theorems**, and **type checking is proof checking**. A program that type-checks is a proof of the proposition encoded by its type.
 
-The **calculus of inductive constructions** (CIC, Coquand & Huet, 1988) is the type theory underlying Coq. CIC extends the calculus of constructions (Coquand, 1985) with inductive types — strictly positive datatypes with associated recursion and induction principles. Inductive types are defined by their introduction rules (constructors) and their elimination rules (recursors / pattern matching). The natural numbers Nat is defined by two constructors: O : Nat and S : Nat → Nat. Lists are defined by nil : List A and cons : A → List A → List A. The associated induction principle for Nat is Π(P : Nat → Prop). P O → (Π(n:Nat). P n → P (S n)) → Π(n:Nat). P n — the familiar principle of mathematical induction, arising automatically from the inductive definition.
+The simplest instance: in the **simply typed λ-calculus** (λ→), the type A → B corresponds to the logical implication A ⇒ B. A term of type A → B is a function that, given a proof of A, constructs a proof of B — exactly the introduction rule for implication (→I). The product type A × B corresponds to conjunction A ∧ B — a proof of A × B is a pair of proofs, one for A and one for B (∧I). The sum type A + B corresponds to disjunction A ∨ B — a proof of A + B is either a proof of A (left injection) or a proof of B (right injection) (∨I). The empty type ⊥ corresponds to falsity — there are no closed terms of type ⊥, just as there is no proof of falsity (ex falso quodlibet: from ⊥, anything follows, which corresponds to the elimination rule for ⊥: any type is inhabited in an inconsistent context).
 
-**Universe levels** address Girard's paradox (the type-theoretic analogue of Russell's paradox). If we had Type : Type (the type of all types is a type), we could encode an inconsistent system. Instead, CIP has a tower of universes: Type₀ : Type₁ : Type₂ : ..., where Typeᵢ is the type of types of level at most i. A term of type Typeᵢ is a type (or proposition) in universe i; terms of type Typeᵢ are themselves classified by Typeᵢ₊₁. This stratification is invisible in practice (most programming happens in Type₀ and Type₁) but essential for consistency.
+The correspondence extends to **dependent types** — types that depend on values. The dependent function type Π(x : A). B(x) corresponds to universal quantification ∀x : A. B(x) — a proof of ∀x. B(x) is a function that, given any x of type A, produces a proof of B(x). The dependent pair type Σ(x : A). B(x) corresponds to existential quantification ∃x : A. B(x) — a proof of ∃x. B(x) is a pair (x, p) where x is a witness and p is a proof of B(x). The **Calculus of Constructions** (Coquand and Huet, 1988) extends this to a full higher-order logic, and **Coq** (the proof assistant) implements the Calculus of Inductive Constructions (CIC) — the Calculus of Constructions enriched with inductive types, pattern matching, and guarded recursion.
 
-**Lean 4** (de Moura et al., 2021) is a dependent-type proof assistant and programming language built on the calculus of inductive constructions with quotient inductive types and a procedural tactic language. Lean 4 compiles to efficient C code, supports metaprogramming via monadic tactics, and integrates with VS Code via the Lean Language Server. Its key innovation for verification practice is the **mathlib** library: over 1.5 million lines of verified mathematics, from category theory to analysis to combinatorics. When verifying a program property, one can leverage lemmas from mathlib rather than proving everything from scratch. Yggdrasil's verification courses use Lean 4 from 2039 onward, in preference to Coq, for this reason: the tooling is more polished, the metaprogramming story is cleaner, and mathlib provides unparalleled mathematical infrastructure.
+In Coq (and Lean 4, Agda, Idris 2), the programmer writes both programs and proofs in the same language. A theorem is a type, and a proof is a term of that type. The proof assistant provides a **tactic language** — a set of commands that construct proof terms interactively — because writing raw proof terms is tedious. Tactics like `intros` (introduce hypotheses), `apply` (use an implication), `induction` (perform induction), `rewrite` (substitute equals), and `auto` (automated proof search) allow the programmer to build proofs incrementally, with the proof assistant displaying the remaining subgoals at each step. The final proof term is checked by a **small kernel** (the type checker, typically a few thousand lines of code) — the kernel is the trusted computing base (TCB); if the kernel is correct, every proof it accepts is valid. This **de Bruijn criterion** (named after N.G. de Bruijn, the creator of Automath) is the gold standard for proof assistant design: keep the trusted code small enough that it can be verified by inspection.
+
+The Curry-Howard correspondence has profound implications. It means that **type systems are logics** — the type system of a programming language is a particular logic, and type checking is proof checking in that logic. Java's type system corresponds to a weak logic (no dependent types, no higher-order quantification), while Coq's corresponds to a very strong logic (higher-order, impredicative, with inductive types). The **expressiveness** of a type system — what properties it can encode as types — is directly tied to the logical strength of the corresponding logic. This is why dependently typed languages can express functional correctness as types (e.g., a sorting function with type `∀(xs : List ℕ). Σ(ys : List ℕ). sorted(ys) ∧ permutation(xs, ys)`) while Java can only express "this function returns a List."
+
+**Key Topics:**
+- The simply typed λ-calculus (λ→) and its correspondence with intuitionistic propositional logic
+- The product type (×) as conjunction, sum type (+) as disjunction, function type (→) as implication, empty type (⊥) as falsity
+- Dependent types: Π-types as universal quantification, Σ-types as existential quantification
+- The Calculus of Constructions and the Calculus of Inductive Constructions
+- Curry-Howard in practice: writing proofs as programs in Coq / Lean 4 / Agda
+- The de Bruijn criterion: small trusted kernel, proof terms as certificates
+- The limits of Curry-Howard: classical logic (excluded middle) requires control operators (call/cc); linear logic requires linear types; modal logic requires modal types
+- Proof irrelevance vs. proof relevance: in some type theories, all proofs of a proposition are considered equal (irrelevance); in others, proofs carry computational content (relevance)
 
 **Required Reading:**
-- The Coq Development Team, *The Coq Reference Manual* (2024), chs. 1–4
-- Avigad, de Moura & Roesner, *Theorem Proving in Lean 4* (2024/2040), chs. 1–4
-- Norell, "Dependently Typed Programming in Agda," *AFP '08* (2008)
-- Coquand & Huet, "The Calculus of Constructions," *Information and Computation* 76:2–3 (1988): 95–120
+- William A. Howard, "The Formulae-as-Types Notion of Construction" (1969/1980), in *To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism*
+- Philip Wadler, "Propositions as Types" *Communications of the ACM* 58:12 (2015): 75–84 — an accessible modern overview
+- Benjamin C. Pierce, *Types and Programming Languages* (2002/2040), chs. 9 (Simply Typed λ-Calculus), 23 (Universal Types), 30 (Higher-Order Polymorphism)
+- Yves Bertot and Pierre Castéran, *Interactive Theorem Proving and Program Development: Coq'Art* (2004/2040), chs. 1–4
+- The Coq Reference Manual, chs. 1–3 (Gallina specification language, the Calculus of Inductive Constructions)
+- Yggdrasil Coq Lab: Proving Simple Theorems in Coq (∧, ∨, →, ∀, ∃, induction on ℕ, lists) (2040)
 
 **Discussion Questions:**
-1. In a dependently-typed language, types can depend on values. What are the practical implications for type inference? Can we infer dependent types, or must they always be annotated?
-2. Girard's paradox shows that Type : Type is inconsistent. But Python and JavaScript have a "top type" (object or any). Why doesn't this cause inconsistency in those languages?
-3. mathlib in Lean has over 1.5 million lines of verified mathematics. Does it make sense to call a library "verified" when it depends on a kernel that might have bugs? What is the trust base of a proof assistant?
+1. The Curry-Howard correspondence is often described as "programs are proofs." But is every program a proof? What about a program that diverges (infinite loop) — does it correspond to a proof? (Hint: consider the consistency requirement — a logic in which ⊥ is inhabited is inconsistent.)
+2. Coq's kernel is small (≈20k lines of OCaml) but not formally verified. What would it mean to verify the kernel — and would this eliminate the TCB entirely, or is there always something that must be trusted (hardware, the human reading the specification)?
+3. Dependent types allow us to express functional correctness as a type. Why hasn't dependently typed programming replaced traditional programming — what are the practical costs (in programmer effort, compile time, runtime efficiency) of encoding specifications in types?
 
 ---
 
-## Lecture 7: Proof Assistants — Constructing Machine-Checked Proofs
+ᚷ **Lecture 7: Interactive Theorem Proving in Coq — Building Proofs by Hand**
 
-A **proof assistant** is an interactive environment for constructing formal proofs that are mechanically verified by a small, trusted kernel. The kernel implements the type-checking rules of the underlying type theory (CIC for Coq, CIC + quotients for Lean 4); every proof ultimately reduces to a term that the kernel type-checks. This architecture limits the **trust base** — the code that must be correct for the proof to be valid — to a few thousand lines. Coq's kernel is approximately 15,000 lines of OCaml; Lean 4's kernel is approximately 5,000 lines of C++. The rest of the system — tactic engines, automation, libraries — can contain bugs without affecting proof validity, because the kernel re-checks every proof term.
+---
 
-**Tactics** are the primary interface for constructing proofs in Coq and Lean. Rather than writing proof terms directly (which is tedious and error-prone for large proofs), the user issues *tactical commands* that manipulate proof obligations. A proof in Lean 4:
+### Overview
 
-```lean
-theorem add_comm : ∀ (n m : ℕ), n + m = m + n := by
-  intro n m
+**Coq** (Inria, 1989–present) is the most mature interactive proof assistant. It implements the Calculus of Inductive Constructions (CIC) — a dependently typed λ-calculus with inductive types, coinductive types, and a hierarchy of predicative universes (Type₀ : Type₁ : Type₂ : ...). Coq is used for mathematics (the Four Colour Theorem, the Odd Order Theorem — Feit-Thompson) and for verified software (CompCert C compiler, VST — Verified Software Toolchain, CertiKOS hypervisor). This lecture is a hands-on introduction to proving theorems in Coq, from simple propositional logic to inductive proofs on natural numbers and lists.
+
+The Coq workflow is interactive: you state a theorem (`Theorem`, `Lemma`, `Goal`), and Coq enters **proof mode**, displaying the current goal — the statement to be proved — and the context (the hypotheses available). You apply **tactics** to transform the goal into subgoals, recursively proving each subgoal until no subgoals remain. The sequence of tactics constitutes a **proof script**; when Coq accepts the script, it constructs a proof term (a λ-term in CIC) and checks it with the kernel. The proof term can be inspected and is the ultimate certificate of correctness.
+
+The essential tactics:
+
+- `intros` (or `intro`): move hypotheses and universally quantified variables from the goal into the context. For goal `∀ x, P(x) → Q(x)`, `intros x H` introduces `x` and hypothesis `H : P(x)`, leaving goal `Q(x)`.
+- `apply H`: if the goal matches the conclusion of hypothesis `H`, apply `H` and replace the goal with `H`'s premises. For `H : A → B` and goal `B`, `apply H` changes the goal to `A`.
+- `exact H` (or `assumption`): if the goal matches a hypothesis exactly, prove it immediately.
+- `split`: for a goal `A ∧ B`, split it into two subgoals: `A` and `B`.
+- `left` / `right`: for a goal `A ∨ B`, choose which disjunct to prove.
+- `exists e`: for a goal `∃ x, P(x)`, provide witness `e` and leave goal `P(e)`.
+- `induction n`: perform induction on `n : ℕ`. For `P(n)`, generate two subgoals: base case `P(0)` and inductive step `∀ n, P(n) → P(S n)`.
+- `simpl`: simplify the goal by computing (β-reduction, unfolding definitions).
+- `rewrite H`: if `H : a = b`, replace `a` with `b` (or vice versa with `rewrite ← H`) in the goal.
+- `reflexivity`: prove a goal of the form `t = t` (trivial equality).
+- `discriminate`: prove inequality of distinct constructors (e.g., `0 ≠ S n`).
+- `auto`: attempt to prove the goal automatically using a database of hints.
+
+A complete example: proving that addition is commutative in Coq. First, we define natural numbers (if not using the standard library):
+
+```
+Inductive nat : Set :=
+  | O : nat
+  | S : nat → nat.
+
+Fixpoint plus (n m : nat) : nat :=
+  match n with
+  | O ⇒ m
+  | S n' ⇒ S (plus n' m)
+  end.
+```
+
+Now the theorem and proof:
+
+```
+Theorem plus_comm : ∀ n m : nat, plus n m = plus m n.
+Proof.
+  induction n as [| n' IH].
+  - (* Base case: n = O *)
+    intros m. simpl. rewrite <- plus_n_O. reflexivity.
+  - (* Inductive step: n = S n' *)
+    intros m. simpl. rewrite IH. rewrite <- plus_n_Sm. reflexivity.
+Qed.
+```
+
+The proof uses two auxiliary lemmas — `plus_n_O : ∀ n, plus n O = n` (adding zero on the right is the identity) and `plus_n_Sm : ∀ n m, plus n (S m) = S (plus n m)` — both proved by induction. The structure is typical: the main theorem reduces to lemmas, each lemma is proved by induction, and the proofs compose.
+
+Coq's **inductive types** are the workhorse of specification. They define not just data structures (ℕ, lists, trees) but also **relations** (inductive propositions). For example, the "less than or equal" relation on ℕ:
+
+```
+Inductive le (n : nat) : nat → Prop :=
+  | le_n : le n n
+  | le_S : ∀ m, le n m → le n (S m).
+```
+
+This defines `le n m` as the smallest relation closed under two rules: `le n n` (reflexivity) and `le n m → le n (S m)` (monotonicity). This is a **logic program** as much as a data type — Coq can prove statements like `le 3 7` by repeatedly applying the constructors. The **inversion** tactic (`inversion H`) decomposes an inductive hypothesis `H` into the possible ways it could have been constructed — essential for reasoning about relations.
+
+**Key Topics:**
+- The Coq proof assistant: Gallina (specification language), Ltac (tactic language), the kernel
+- Essential tactics: intros, apply, split, induction, simpl, rewrite, reflexivity, auto
+- Inductive types as data (ℕ, lists, trees) and as relations (≤, sorted, permutation)
+- Structural induction: the primary proof technique for inductive types
+- The `inversion` tactic: case analysis on inductive hypotheses
+- Equality in Coq: `=`, `eq`, `eq_rect` (Leibniz equality)
+- Automation: `auto`, `eauto`, `omega` (Presburger arithmetic), `ring` (algebraic simplification), `lia` (linear integer arithmetic)
+- Ltac programming: writing custom tactics for domain-specific automation
+- The CompCert verified C compiler: a 300,000-line Coq development proving that the compiler preserves the semantics of the source program
+
+**Required Reading:**
+- Benjamin C. Pierce et al., *Software Foundations, Volume 1: Logical Foundations* (online, 2024/2040 edition), chs. Basics, Induction, Lists, Poly, Tactics, Logic — the standard Coq textbook, freely available
+- Yves Bertot and Pierre Castéran, *Interactive Theorem Proving and Program Development: Coq'Art* (2004/2040), chs. 5–8
+- Adam Chlipala, *Certified Programming with Dependent Types* (2013/2040), chs. 1–4 (available online at http://adam.chlipala.net/cpdt/)
+- Xavier Leroy, "Formal Verification of a Realistic Compiler" *Communications of the ACM* 52:7 (2009): 107–115
+- The Coq Standard Library documentation: `Coq.Arith`, `Coq.Lists`, `Coq.Logic`
+- Yggdrasil Coq Lab: Software Foundations exercises (Basics through Logic), proving sorting correctness (2040)
+
+**Discussion Questions:**
+1. Coq's tactic language (Ltac) allows automation but obscures the underlying proof term. When is automation harmful — and could a Coq proof that relies heavily on `auto` be less trustworthy than one built with explicit tactics?
+2. The CompCert compiler is verified in Coq: it proves that the generated assembly code behaves identically to the source C program. But CompCert's parser, assembler, and linker are not verified. Does this compromise the end-to-end guarantee — and what would a fully verified toolchain look like?
+3. Coq's kernel is small but written in OCaml, whose runtime and garbage collector are unverified. Is this a practical concern, or is the TCB small enough to trust? (Consider the DeepSpec project's vision of a verified kernel running on verified hardware.)
+
+---
+
+ᚹ **Lecture 8: Lean 4 — A Modern Proof Assistant for Mathematics and Software**
+
+---
+
+### Overview
+
+**Lean 4** (Microsoft Research, 2021–present; de Moura and Ullrich, 2021) is the newest major proof assistant, designed to unify interactive theorem proving with general-purpose programming. Unlike Coq (which separates the specification language Gallina from the tactic language Ltac), Lean 4 is a single language where terms, types, tactics, and metaprograms are all first-class. Lean 4 is implemented in Lean 4 (self-hosting), has a fast C code generator (producing binaries competitive with handwritten C), and features a powerful **metaprogramming framework** that allows users to write custom tactics, decision procedures, and domain-specific automation — all in Lean itself. Lean 4 is the engine behind the **Mathlib** project, a community-driven library aiming to formalise all of undergraduate mathematics (and significant portions of graduate mathematics) in a single, coherent, dependently typed foundation.
+
+Lean 4's type theory, **Lean's Type Theory** (TTₗ), is a variant of the Calculus of Inductive Constructions with:
+- A countable hierarchy of non-cumulative universes `Sort u` (where `Type u = Sort (u+1)` and `Prop = Sort 0`)
+- Impredicative `Prop` (proof-irrelevant, any quantification over `Type u` can be used in `Prop`)
+- Definitional proof irrelevance: any two proofs of the same proposition are definitionally equal
+- Quotient types (by any relation) with computation rules — a rare and powerful feature
+- Bounded natural numbers `Fin n` as primitive (not derived from ℕ)
+- Structures (records), typeclasses (for overloading and canonical instances), and a powerful `simp` tactic for rewriting with a configurable set of lemmas
+
+The Lean 4 proof workflow is similar to Coq's (state a theorem, apply tactics until the goal is closed), but with modern conveniences: the `calc` block for chained equalities, `by` blocks for inline tactic proofs, `termination_by` annotations for recursive functions, and the `aesop` tactic for automated proof search à la Isabelle's `auto`. The **Lean 4 Language Server** provides real-time feedback in VS Code — error messages, goal display, tactic state — making the experience feel like programming with an exceptionally strict type checker rather than proving with a separate tool.
+
+A comparison of the same proof in Coq and Lean 4. In Coq:
+
+```coq
+Theorem plus_comm : forall n m, n + m = m + n.
+Proof. induction n; intros m; simpl; [rewrite Nat.add_0_r | rewrite IHn, Nat.add_succ_r]; reflexivity. Qed.
+```
+
+In Lean 4:
+
+```lean4
+theorem add_comm (n m : Nat) : n + m = m + n := by
   induction n with
-  | zero => simp [Nat.zero_add]
-  | succ n ih => simp [Nat.succ_add, ih]
+  | zero => simp
+  | succ n ih => simp [ih, Nat.add_succ_comm]
 ```
 
-The `by` keyword enters tactic mode. `intro` introduces hypotheses. `induction` performs structural induction. `simp` applies a set of equational lemmas automatically. The tactic engine constructs a proof term behind the scenes; the kernel then verifies it. If the kernel accepts, the theorem is proved — regardless of any bugs in the tactic engine, the simplifier, or any other automation.
+The Lean 4 version is more compact because `simp` (the simplifier) knows many arithmetic identities by default, and the `Nat` library is extensively tagged with `@[simp]` lemmas. The `by` block introduces tactic mode; `induction` is a tactic that works like Coq's `induction`; `simp` uses the simplifier. The Lean 4 proof is also a valid Lean 4 term — there is no separation between the language of terms and the language of proofs.
 
-The **tactic language** in Lean 4 is a monadic term language with backtracking (via `alternative`), state management, and reflection. Custom tactics are programs that manipulate the proof state, and they can be written in Lean itself (unlike Coq's Ltac, which is a separate DSL). This metaprogramming capability has led to powerful automation: `linarith` (linear arithmetic), `ring` (ring equalities), `omega` (Presburger arithmetic), `aesop` (best-first search), `cvodd` (decision procedure for bitvectors). The key insight: tactics are programs that construct proofs; the kernel verifies the result; this separation of concerns allows aggressive automation without sacrificing soundness.
+Lean 4's **metaprogramming** is the killer feature. Tactics are first-class Lean 4 functions of type `TacticM Unit`, and they can be written using the same language as the rest of the program. The `elab` command allows users to extend the elaborator — to define new syntactic forms that are elaborated into core Lean terms. This makes Lean 4 extensible in a way that Coq (with Ltac2) and Isabelle (with Eisbach and ML) are not: everything is in one language, one type system, one abstraction stack. Domain-specific languages for verification (e.g., separation logic, temporal logic, probabilistic reasoning) can be implemented as Lean 4 libraries that provide custom syntax, custom tactics, and custom automation — all without leaving Lean.
 
-**Refinement** (top-down proof construction) and **synthesis** (bottom-up proof construction) are the two modes. In refinement, the user states a goal (the desired theorem) and issues tactics that progressively decompose it into subgoals. In synthesis, the user provides a term and the type checker verifies it. In practice, most proofs interleave both: high-level structure is specified by tactics, and low-level details are filled in by automation. The **proof engineering** challenge is managing proof brittleness — proofs that break when the definitions they depend on change. Robust proofs use abstract lemmas and interface specifications rather than implementation details, following the same design principles as modular software.
+Mathlib (mathlib4 on GitHub) is the largest repository of formalised mathematics in the world, with over 1.5 million lines of Lean code covering algebra, analysis, topology, number theory, representation theory, algebraic geometry (schemes! — the Liquid Tensor Experiment proved a theorem about condensed mathematics in Lean), and more. The Mathlib community has developed an unusually consistent library design, with a few key typeclasses (`Semiring`, `Ring`, `Field`, `Module`, `TopologicalSpace`) that capture mathematical structures at the right level of generality. The **Liquid Tensor Experiment** (2021–2022) was a landmark: a team led by Peter Scholze (Fields Medalist) and Johan Commelin formalised a theorem that Scholze needed for his work on condensed mathematics, demonstrating that proof assistants are now capable of contributing to cutting-edge research mathematics.
 
-**Extraction** translates verified proof assistants into executable code. Coq can extract OCaml, Haskell, and Scheme from verified developments; Lean 4 compiles directly to C. The extraction removes proof terms (which are computationally irrelevant) and produces efficient code. The CompCert verified C compiler (Leroy, 2009) is the landmark example: 100,000+ lines of Coq specify and verify a C compiler, from parsing through optimisation to code generation. Each optimisation pass is proved to preserve semantics; the compiler as a whole is proved correct (for a subset of C, with well-defined undefined-behaviour treatment). CompCert proved that formal verification of production-scale software is achievable — it is used commercially by AbsInt and has been integrated into the Yggdrasil verification toolchain since 2037.
-
-**Proof relevance vs. proof irrelevance** is a crucial design choice. In Coq, proofs are first-class terms — you can compute with them, pattern-match on them, and prove that two proofs of the same proposition are different. In Lean 4, propositions live in `Prop` (proof-irrelevant: any two proofs of the same proposition are definitionally equal) and data live in `Type` (proof-relevant). This design prevents accidental dependency on proof terms (which can change without affecting the computational result), while still allowing proof-relevant types when needed (e.g., in verified algorithms that use proof terms as certificates). The distinction between Prop and Type is the single most common source of confusion for students transitioning from Coq to Lean or vice versa.
+**Key Topics:**
+- Lean 4's type theory: universes, impredicative Prop, quotients, definitional proof irrelevance
+- The Lean 4 programming model: dependent pattern matching, `where` clauses, `termination_by`, monadic IO
+- Tactic-mode proofs in Lean 4: `by` blocks, `induction`, `cases`, `apply`, `have`, `calc`, `simp`, `omega`, `positivity`, `aesop`
+- Metaprogramming: `elab` for custom syntax, `TacticM` for custom tactics, `Macro` for transformations
+- Mathlib: the architecture of a large-scale formalised mathematics library, typeclasses, canonical instances
+- The Liquid Tensor Experiment: formalising cutting-edge mathematics in Lean
+- Lean 4 vs. Coq vs. Isabelle vs. Agda: a comparative analysis of design choices
+- Code extraction: compiling Lean programs to C for high-performance verified software
 
 **Required Reading:**
-- Leroy, "Formal Verification of a Realistic Compiler," *CACM* 52:7 (2009): 107–115
-- Avigad, de Moura & Roesner, *Theorem Proving in Lean 4* (2024/2040), chs. 5–7
-- The Coq Development Team, *The Coq Reference Manual* (2024), "Proof Handling" and "Tactics"
-- Carneiro, "Lean 4: A Programming Language and Theorem Prover," *Lean Together '22* (2022)
+- Leonardo de Moura and Sebastian Ullrich, "The Lean 4 Theorem Prover and Programming Language" *CADE-28* (2021): 625–635
+- *Theorem Proving in Lean 4* (online textbook, https://leanprover.github.io/theorem_proving_in_lean4/), chs. 1–5 (Dependent Type Theory, Propositions and Proofs, Quantifiers, Tactics, Induction)
+- *Mathematics in Lean* (online textbook, https://leanprover-community.github.io/mathematics_in_lean/), chs. 1–4
+- *Functional Programming in Lean* (online textbook, https://leanprover.github.io/functional_programming_in_lean/), chs. 1–3
+- Kevin Buzzard, "The Rise of Formalism in Mathematics" (2023 ICM talk, 2024), in *Proceedings of the ICM 2022*, vol. 7
+- Johan Commelin et al., "The Liquid Tensor Experiment" (blog post and Lean code, 2022), https://xenaproject.wordpress.com/
+- Yggdrasil Lean Lab: Proving propositions and induction proofs in Lean 4, formalising a small mathematical theory (2040)
 
 **Discussion Questions:**
-1. The kernel of a proof assistant is the trusted computing base — if it has a bug, all proofs are potentially invalid. How do you increase confidence in the kernel without reducing productivity?
-2. CompCert is verified but only for a subset of C. What is the value of verifying a subset, and how do you handle the gap between the verified subset and the full language?
-3. Proof scripts are brittle — small changes to definitions can break large proofs. What design principles make proofs more robust?
+1. Lean 4 unifies programming and proving in one language, while Coq separates Gallina (terms) from Ltac (tactics). What are the advantages and disadvantages of each approach — and is the unification in Lean 4 a net positive or does it blur important distinctions?
+2. Mathlib's use of typeclasses allows Lean to find canonical instances automatically (e.g., the fact that ℝ is a topological space). How does this compare to Coq's canonical structures and Isabelle's type classes — and what are the pitfalls of typeclass resolution (e.g., diamond problems, non-termination)?
+3. The Liquid Tensor Experiment proved that proof assistants can contribute to research mathematics. But the formalisation took a team of experts over a year. When — if ever — will formalisation be fast enough to be part of the daily workflow of working mathematicians?
 
 ---
 
-## Lecture 8: Model Checking in Practice — SPIN, NuSMV, and the Verification Workflow
+ᚺ **Lecture 9: SAT and SMT Solving — Automated Reasoning at Scale**
 
-SPIN (Simple PROMELA INterpreter, Holzmann, 1991–2004) is a model checker for asynchronous concurrent systems. Its input language, **PROMELA** (Process Meta-Language), specifies communicating finite-state machines as concurrent processes with message channels (FIFO or rendezvous), shared variables, and non-deterministic guards. A PROMELA model of a client-server protocol:
+---
 
-```promela
-mtype = { request, response }
-chan service = [2] of { mtype, byte };
+### Overview
 
-active proctype Client() {
-  byte id;
-  do
-  :: id = (id + 1) % 256;
-     service ! request, id;
-     service ? response, id
-  od
-}
+The SAT solver is the silent engine of modern verification. Every time a program verifier checks a verification condition, every time a model checker explores a state, every time a hardware design is checked for equivalence — a SAT solver (or its more powerful cousin, the SMT solver) is doing the heavy lifting, solving Boolean formulas with millions of variables and tens of millions of clauses in seconds. Understanding how SAT solvers work is understanding how formal verification works at industrial scale.
 
-active proctype Server() {
-  byte req_id;
-  do
-  :: service ? request, req_id;
-     service ! response, req_id
-  od
-}
+The **SAT problem** — given a propositional formula in conjunctive normal form (CNF), is there a satisfying assignment? — is the canonical NP-complete problem (Cook, 1971; Levin, 1973). Every problem in NP reduces to SAT, and every SAT instance can be encoded as a CNF. A CNF is a conjunction of **clauses**, each a disjunction of **literals** (variables or their negations). The formula (A ∨ ¬B) ∧ (¬A ∨ C ∨ ¬D) ∧ (B ∨ ¬C) is a CNF with three clauses. The goal is to assign each variable true or false such that every clause has at least one true literal.
+
+Modern SAT solvers are based on the **Conflict-Driven Clause Learning (CDCL)** algorithm (Marques-Silva and Sakallah, 1996; Moskewicz et al., 2001 — the Chaff solver). CDCL extends the older **DPLL** (Davis-Putnam-Logemann-Loveland, 1962) with:
+
+1. **Unit propagation**: If a clause has only one unassigned literal, that literal must be true for the clause to be satisfied. The solver assigns it and propagates the consequences. Unit propagation is the workhorse — it is applied exhaustively after every decision.
+
+2. **Decision heuristics**: When no unit propagation is possible, the solver chooses an unassigned variable and assigns it a value (true or false). The **VSIDS** heuristic (Variable State Independent Decaying Sum), introduced in Chaff, chooses variables based on how frequently they appear in recent conflicts — variables involved in conflicts are prioritised, on the theory that they are central to the hard part of the problem.
+
+3. **Conflict analysis and clause learning**: If unit propagation leads to a conflict (a clause becomes false — all its literals are false), the solver analyses the **implication graph** to identify the assignments that caused the conflict. It then learns a new clause (the **conflict clause**) that rules out the conflicting assignment and all assignments that share the same root cause. The learned clause is added to the clause database, and the solver backtracks to the earliest decision that can be flipped.
+
+4. **Restarts**: Periodically, the solver discards its current assignment and starts over, keeping the learned clauses. Restarts help the solver escape from unfruitful parts of the search space. The restart policy (frequency, strategy) is heavily tuned.
+
+5. **Clause deletion**: The clause database grows without bound as new clauses are learned. Periodically, the solver deletes learned clauses that are long, infrequently used, or low in "activity" — freeing memory and speeding up unit propagation.
+
+The CDCL algorithm has transformed SAT from a problem of theoretical interest into a practical tool. A typical industrial SAT instance — verifying that two versions of a microprocessor circuit are equivalent — may have 10⁶ variables and 10⁷ clauses, and a modern SAT solver (CaDiCaL, Kissat, Glucose) solves it in minutes. The reasons for this success are partly algorithmic (CDCL is remarkably effective) and partly structural: industrial SAT instances have **hidden structure** — they encode real circuits, real programs, real constraints — that CDCL exploits through variable ordering, clause learning, and restarts.
+
+**SMT (Satisfiability Modulo Theories)** extends SAT with decision procedures for background theories. An SMT solver takes a formula involving both Boolean structure and theory atoms — e.g., `(x + y < 5) ∧ (x > 2 ∨ a[i] = 3) ∧ (f(x) ≠ f(y))` — and determines satisfiability. The theories include:
+
+- **Linear arithmetic (LA)**: Presburger (integer) and real arithmetic — solved by the Simplex algorithm (Dutertre and de Moura, 2006) or Fourier-Motzkin elimination.
+- **Bit-vectors (BV)**: fixed-width machine integers — solved by bit-blasting (translate to SAT) or specialised word-level procedures.
+- **Arrays**: `select(a, i)` and `store(a, i, v)` — solved by instantiating array axioms.
+- **Uninterpreted functions (UF)**: `f(x) = f(y) → x = y` — solved by congruence closure (Nelson and Oppen, 1980).
+- **Algebraic datatypes (ADT)**: constructors, pattern matching — solved by acyclicity and injectivity axioms.
+- **Quantifiers**: `∀x. P(x)` — solved by E-matching (instantiate `∀x. P(x)` with terms that match `P(x)`) or MBQI (Model-Based Quantifier Instantiation, Ge and de Moura, 2009).
+
+The standard architecture is **DPLL(T)** (or its modern successor, CDCL(T)): the SAT solver handles the Boolean structure, and theory solvers handle the theory atoms. When the SAT solver proposes a Boolean assignment, the theory solvers check whether the assignment is consistent in the theory; if not, they produce a **theory lemma** (a clause that rules out the inconsistent assignment), which is added to the SAT solver's clause database. This architecture separates concerns cleanly and allows theory solvers to be developed independently.
+
+Z3 (Microsoft Research), CVC5 (Stanford/Iowa), and Yices (SRI) are the leading SMT solvers. Z3 in particular has become the standard back-end for program verifiers (Dafny, Frama-C, Why3, Viper), model checkers, symbolic execution engines (KLEE, Triton), and program synthesis tools. Z3 processes over a billion queries per day across Microsoft's product lines (Windows, Azure, Office, GitHub) for tasks ranging from driver verification to security analysis to test generation.
+
+**Key Topics:**
+- The SAT problem, CNF encoding, Tseitin transformation (converting any formula to CNF in linear time)
+- DPLL: the ancestor of modern SAT — unit propagation, pure literal elimination, splitting
+- CDCL: conflict analysis, implication graph, 1-UIP (first Unique Implication Point) learning, backjumping
+- VSIDS heuristic: activity-based variable selection, exponential decay, phase saving
+- Restarts and clause deletion: practical strategies for managing search and memory
+- DPLL(T): the architecture that combines SAT with theory solvers
+- Theory decision procedures: linear arithmetic (Simplex), bit-vectors (bit-blasting), arrays (instantiation), UF (congruence closure)
+- Quantifier instantiation: E-matching, triggers, MBQI, the challenges of quantifier-heavy VCs
+- SAT competition and incremental improvements: the annual SAT Competition tracks solver progress; solvers have improved by orders of magnitude since 2000
+
+**Required Reading:**
+- Armin Biere, Marijn Heule, Hans van Maaren, and Toby Walsh (eds.), *Handbook of Satisfiability* (2nd ed., 2021/2040), chs. 1 (History), 4 (CDCL), 26 (SMT)
+- João Marques-Silva and Karem Sakallah, "GRASP: A Search Algorithm for Propositional Satisfiability" *IEEE Transactions on Computers* 48:5 (1999): 506–521
+- Matthew Moskewicz et al., "Chaff: Engineering an Efficient SAT Solver" *DAC 2001*: 530–535
+- Leonardo de Moura and Nikolaj Bjørner, "Satisfiability Modulo Theories: Introduction and Applications" *Communications of the ACM* 54:9 (2011): 69–77
+- Bruno Dutertre and Leonardo de Moura, "A Fast Linear-Arithmetic Solver for DPLL(T)" *CAV 2006*: 81–94
+- Yggdrasil SAT/SMT Lab: Encoding puzzles as SAT, verifying simple programs with Z3, analysing solver logs (2040)
+
+**Discussion Questions:**
+1. CDCL solvers routinely solve instances with millions of variables, despite SAT being NP-complete. Does this mean that P = NP for "practical" instances — or is there a more nuanced characterisation of where the hardness lies?
+2. SAT solvers use heuristics (VSIDS, restarts, clause deletion) that are engineered, not proved. Is the resulting solver still a "formal method" — or does the reliance on unproved heuristics undermine the guarantee of correctness?
+3. SMT with quantifiers is a hard problem: E-matching is brittle (small changes to triggers can cause proofs to fail), and MBQI can be slow. What would a robust, predictable quantifier instantiation strategy look like — and is it even possible given the undecidability of first-order logic?
+
+---
+
+ᚾ **Lecture 10: Abstract Interpretation — Sound Over-Approximation of Program Behaviour**
+
+---
+
+### Overview
+
+**Abstract interpretation** (Cousot and Cousot, 1977) is a theory of sound approximation of program semantics. The idea is elegant: instead of computing the exact behaviour of a program (which may be undecidable — the halting problem), we compute an **over-approximation** — a superset of the possible behaviours — that is guaranteed to contain all actual behaviours. If the over-approximation satisfies a safety property (e.g., "no division by zero," "no null pointer dereference"), then the actual program satisfies it. If the over-approximation does not satisfy the property, the property may or may not hold — the analysis produces a **false alarm** (a reported bug that cannot actually occur). The art of abstract interpretation is designing abstract domains that are precise enough to avoid false alarms while remaining computable and efficient.
+
+The mathematical framework: a **concrete semantics** is a function F from concrete states to concrete states — the collecting semantics that maps each program point to the set of all states that can reach that point. An **abstract semantics** is a function F♯ from abstract states to abstract states that over-approximates F. Formally, there is a **Galois connection** (α, γ) between the concrete domain (sets of states, ordered by inclusion ⊆) and the abstract domain (elements of an abstract lattice, ordered by the abstract ordering ⊑). The abstraction function α maps a set of concrete states to the abstract state that best over-approximates it; the concretisation function γ maps an abstract state to the set of concrete states it represents. The soundness condition is: for any concrete set S, S ⊆ γ(α(S)) — the abstract state represents at least all the concrete states. And for the abstract transfer function: F(S) ⊆ γ(F♯(α(S))) — applying the abstract transfer function and concretising yields at least all states reachable by applying the concrete semantics and abstracting.
+
+The simplest abstract domain is the **sign domain**: abstract values are {⊥, neg, zero, pos, ⊤} (bottom = unreachable, neg = all negative integers, zero = {0}, pos = all positive integers, ⊤ = all integers). Addition in the sign domain: `pos + pos = pos`, `pos + neg = ⊤`, `zero + x = x`, `⊥ + x = ⊥`. If we abstract a program using the sign domain and compute `x := a * b; y := x + c`, we can conclude that if `a` and `b` are both `pos`, then `x` is `pos`; if `c` is `neg`, then `y` is `⊤` (could be anything). This is crude but sound — the sign domain proves that `x / y` never divides by zero if `y` is `pos` or `neg`, but it cannot prove anything if `y` is `⊤`.
+
+The **interval domain** generalises signs: abstract values are intervals [l, u] where l and u are integers (or -∞, +∞). Addition: [a, b] + [c, d] = [a+c, b+d]. Multiplication: the product of two intervals is the interval from the minimum to the maximum of the four products a*c, a*d, b*c, b*d. The interval domain can prove that `x ∈ [1, 10]` and `y ∈ [5, 20]` implies `x + y ∈ [6, 30]`, which is more precise than `⊤`. But intervals cannot track relationships between variables — they are **non-relational**. If we know `x ∈ [0, 10]` and `y = -x`, the interval domain loses the relationship and deduces `y ∈ [-10, 0]` (which is correct) but then `x + y ∈ [-10, 10]` — it cannot deduce that `x + y = 0` because it has forgotten that `y = -x`.
+
+The **polyhedra domain** (Cousot and Halbwachs, 1978) is relational: abstract states are convex polyhedra (intersections of linear inequalities). If we know `x ≥ 0`, `x ≤ 10`, `y = -x`, the polyhedron is `{ (x, y) | 0 ≤ x ≤ 10, y = -x }`, and it can deduce `x + y = 0`. Polyhedra are more precise than intervals but more expensive — the convex hull operation (joining two polyhedra at control-flow merges) can be exponential. The **octagon domain** (Miné, 2001) is a compromise: it tracks constraints of the form `±x ± y ≤ c`, which captures relationships between pairs of variables at reasonable cost (O(n³) for n variables). The octagon domain is used in Astrée, the static analyser that proved the absence of runtime errors in the primary flight control software of the Airbus A380.
+
+**Widening** is the mechanism that ensures termination of abstract interpretation in the presence of loops. Without widening, analysing a loop might require an infinite ascending chain of abstract states — at each iteration, the abstract state becomes more precise but never stabilises. Widening `▽` is an operator that accelerates convergence by jumping to a limit: for an ascending chain `X₀ ⊑ X₁ ⊑ X₂ ⊑ ...`, the widened chain `Y₀ = X₀`, `Y_{i+1} = Y_i ▽ X_{i+1}` must stabilise after finitely many steps. For the interval domain, widening typically sets unstable bounds to ±∞: if the lower bound of an interval decreases on an iteration, widening sets it to -∞; if the upper bound increases, widening sets it to +∞. This guarantees termination but loses precision. **Narrowing** can then recover some precision by iterating the transfer function from the widened result, using the fact that the abstract semantics is monotonic and the widened state is above the least fixed point.
+
+**Key Topics:**
+- The abstract interpretation framework: concrete semantics, abstract semantics, Galois connections, soundness
+- The sign domain, interval domain, and the tension between precision and cost
+- Relational domains: polyhedra, octagons, the reduced product of domains
+- Widening and narrowing: ensuring termination without sacrificing all precision
+- Astrée: verifying absence of runtime errors in Airbus flight control software — a landmark success of abstract interpretation
+- Applications: dataflow analysis in compilers (reaching definitions, live variables), shape analysis (inferring heap invariants), termination analysis, worst-case execution time (WCET) analysis
+- Abstract interpretation in modern tools: Polyspace (MathWorks), Frama-C Value Analysis, Infer (Facebook/Meta), CodeSonar (GrammaTech)
+- Limitations: false alarms, difficulty with dynamic dispatch and concurrency, the annotation burden
+
+**Required Reading:**
+- Patrick Cousot and Radhia Cousot, "Abstract Interpretation: A Unified Lattice Model for Static Analysis of Programs by Construction or Approximation of Fixpoints" *POPL 1977*: 238–252
+- Flemming Nielson, Hanne Riis Nielson, and Chris Hankin, *Principles of Program Analysis* (1999/2040), chs. 1–4
+- Antoine Miné, "The Octagon Abstract Domain" *Higher-Order and Symbolic Computation* 19:1 (2006): 31–100
+- Bruno Blanchet et al., "A Static Analyzer for Large Safety-Critical Software" *PLDI 2003*: 196–207 — the Astrée paper
+- Francesco Logozzo and Manuel Fähndrich, "Pentagon Abstract Domain" in *SAS 2010*, and "Static Contract Checking with Abstract Interpretation" *FoVeOOS 2010*
+- Yggdrasil Abstract Interpretation Lab: Implementing a Sign Analysis, Widening for Loop Invariants (2040)
+
+**Discussion Questions:**
+1. Abstract interpretation is sound by construction: every reported error is a real error (no false negatives), but not every reported error is real (false positives are possible). Is this the right trade-off for safety-critical software — and would a different trade-off (no false positives, possible false negatives) ever be appropriate?
+2. Widening forces termination by losing precision. Could machine learning predict a precise invariant from a few iterations of the concrete semantics, avoiding widening entirely — and would the resulting analysis still be "formal"?
+3. Astrée proved the absence of runtime errors in Airbus A380 flight control software — a program with over 100,000 lines of C. But Astrée took years of tuning to eliminate false alarms. What would it take to make abstract interpretation "one-click" — usable by programmers without PhDs in static analysis?
+
+---
+
+ᚾ (alt) **Lecture 11: Separation Logic — Reasoning About Mutable State and Concurrency**
+
+---
+
+### Overview
+
+**Separation logic** (Reynolds, 2002; O'Hearn, Ishtiaq, and Reynolds, 2001) is the logic of mutable state — a Hoare-logic extension that makes reasoning about pointers, heap-allocated data structures, and concurrent access modular and compositional. The key innovation is the **separating conjunction** P ∗ Q ("P and separately Q"), which asserts that the heap can be partitioned into two **disjoint** sub-heaps — one satisfying P, the other Q. Because the sub-heaps are disjoint, reasoning about P does not interfere with reasoning about Q — there is no aliasing, no overlapping, no shared state. This is the **frame rule**: if {P} C {Q} and C does not modify any variables free in R, then {P ∗ R} C {Q ∗ R}. The frame rule says: if a command works on a small piece of the heap, it also works on a larger heap — it does not touch the extra part. This is the essence of **local reasoning**.
+
+Separation logic extends Hoare logic with new atomic commands for heap manipulation: **allocation** (x := cons(E₁, ..., Eₙ) — allocate n consecutive heap cells, initialise them with E₁...Eₙ, and assign the address of the first to x), **lookup** (x := [E] — read the value at heap address E into x), **mutation** ([E₁] := E₂ — write E₂ to heap address E₁), and **deallocation** (dispose(E) — free the heap cell at E). The axiomatic semantics:
+
+- `{emp} x := cons(E) {x ↦ E}` — from an empty heap, allocation produces a single-cell heap with x pointing to E.
+- `{E ↦ _} [E] := F {E ↦ F}` — mutation updates the value at address E.
+- `{E ↦ _} dispose(E) {emp}` — deallocation frees the cell at E.
+- `{E ↦ F} x := [E] {x = F ∧ (E ↦ F)}` — lookup reads the value and leaves the heap unchanged.
+
+The **separating implication** (or magic wand) P −∗ Q ("P minus-star Q") is the right adjunct of ∗: (P ∗ Q) ⊢ R if and only if P ⊢ (Q −∗ R). Intuitively, P −∗ Q is a resource that, when combined with any heap satisfying P, yields a heap satisfying Q. Magic wands are used to specify data structures: for a linked list from x to nil, we can write `list(x, nil)`, which is defined recursively, and the magic wand captures the "if I have the head of the list, I can get the tail" relationship.
+
+The canonical example: verifying in-place reversal of a singly linked list. The list predicate `list(x, y)` means "there is a linked list segment from x to y." The reversal algorithm:
+
+```
+j := nil;
+while i ≠ nil do
+  k := [i+1];  (* next pointer *)
+  [i+1] := j;
+  j := i;
+  i := k
 ```
 
-SPIN verifies properties expressed in LTL (never claims, always claims) and basic CTL. It supports both depth-first search (DFS) for exhaustive verification and nested DFS for liveness checking (acceptance cycles that violate ◇p). The partial order reduction algorithm (stubborn sets) reduces the state space by exploring only one interleaving per independent transition set. When a property is violated, SPIN produces a concrete counterexample trace that can be replayed step by step. Yggdrasil's concurrency lab uses SPIN to verify mutual exclusion protocols, leader election algorithms, and the Two-Phase Commit protocol for distributed transactions.
+The loop invariant: `∃α, β. list(i, nil) ∗ list(j, nil) ∧ rev(α) = β · rev(γ)`, where α is the original list, β is the already-reversed prefix, and γ is the remaining suffix. The separating conjunction ensures that the `list(i, nil)` segment and the `list(j, nil)` segment are disjoint — no cycles, no sharing — so the reversal is safe. The proof follows from the invariant and the loop condition.
 
-**NuSMV** (Cimatti et al., 2002) is a symbolic model checker supporting both BDD-based and SAT-based model checking. Its input language specifies finite-state machines as sets of mutually recursive variable assignments. The NuSMV model of a 3-bit counter with overflow detection:
+**Concurrent separation logic** (O'Hearn, 2007) extends separation logic to concurrent programs with shared memory. The key new construct is the **resource invariant** — an assertion that describes the shared state protected by a lock. When a thread acquires a lock, it gains the resource invariant (which it can use and modify, as long as it re-establishes the invariant before releasing). The rule is:
 
 ```
-MODULE main
-  VAR
-    bit0 : boolean;
-    bit1 : boolean;
-    bit2 : boolean;
-  ASSIGN
-    init(bit0) := FALSE;
-    init(bit1) := FALSE;
-    init(bit2) := FALSE;
-    next(bit0) := !bit0;
-    next(bit1) := bit0 XOR bit1;
-    next(bit2) := (bit0 & bit1) XOR bit2;
-  LTLSPEC
-    F (bit0 & bit1 & bit2)   -- "eventually, all bits are 1"
-  CTLSPEC
-    AG EF (bit0 & !bit1 & !bit2)   -- "for all states, it is possible to reach state 001"
+{(P ∗ R) ∧ B} C {Q ∗ R}  (* R is the resource invariant, B is the condition, C modifies shared state *)
+---------------------------------------
+{P} with r when B do C {Q}
 ```
 
-NuSMV's symbolic engine represents the transition relation as a BDD and computes fixpoints symbolically. Its bounded model checking (BMC) engine encodes the transition relation and property as a SAT formula; if the property is violated within k steps, the SAT solver finds a satisfying assignment that is the counterexample. BMC is incomplete (it only checks up to k steps) but scales to much larger models by leveraging the power of SAT solvers. A typical workflow: run BMC for increasing k until resources are exhausted; if no counterexample is found, switch to BDD-based model checking for completeness. The nuXmv extension (2014) adds SMT-based infinite-state model checking and IC3/PDR (property-directed reachability) for safety properties.
+The thread must own P (its private state) and R (the shared state) when it acquires the lock; after executing C, it must re-establish R before releasing. This is the basis of the **CSL (Concurrent Separation Logic)** that was used to verify the safety and liveness of concurrent programs in Coq (VST — Verified Software Toolchain) and in the **Caper** tool.
 
-**CBMC** (C Bounded Model Checker, Clarke et al., 2004) verifies C and C++ programs directly, without manual modelling. It unwinds loops and recursion up to a bound, encodes the resulting straight-line program as a SAT/SMT formula, and checks for assertions, array bounds violations, pointer safety, and integer overflow. CBMC is the most practical verification tool for working programmers: it requires no special modelling language, runs on production C code with minimal annotation, and produces clear counterexample traces. Its limitations are bounded loops (it cannot verify that a loop terminates, only that it is safe for the bound) and the state-space explosion for programs with many variables. Yggdrasil's systems programming students use CBMC to verify memory safety and assertion correctness in C assignments.
+**Iris** (Jung et al., 2015–present) is a modern separation logic framework implemented in Coq. Iris extends concurrent separation logic with **invariants** (persistent assertions that hold globally), **ghost state** (auxiliary state used in proofs but not present at runtime), and **modalities** (later `▷`, persistently `□`) for reasoning about step-indexed models. Iris has been used to verify subtle concurrent algorithms (lock-free stacks, concurrent hash maps, RCU — Read-Copy-Update) and to build **logical relations** for type-safety proofs of programming languages (RustBelt — proving the safety of unsafe Rust code).
 
-The **verification workflow** in practice follows a disciplined cycle: (1) Model the system in a suitable formalism (PROMELA, NuSMV, or directly in the programming language). (2) Specify properties in temporal logic (LTL for linear-time properties, CTL for branching-time properties). (3) Run the model checker. (4) If a counterexample is produced: (a) validate it on the model (is the trace feasible?), (b) confirm it corresponds to a real bug in the system (is the model accurate?), (c) fix the bug and re-verify. (5) If no counterexample is produced: (a) check resource limits (was the analysis exhaustive?), (b) increase the bound (for BMC) or provide more predicates (for CEGAR), (c) if truly exhaustive, the property is verified. (6) Repeat with additional properties.
-
-The counterexample validation step is crucial and often overlooked. A spurious counterexample — one that is feasible in the abstract model but not in the concrete system — indicates a modelling error or an imprecise abstraction. CEGAR addresses this automatically, but manual modelling requires manual validation. At Yggdrasil, we teach students always to trace counterexamples back to the original specification, not just the model: a bug in the specification is as dangerous as a bug in the implementation, and the model checker cannot tell the difference.
-
-**Required Reading:**
-- Holzmann, *The SPIN Model Checker: Primer and Reference Manual* (Addison-Wesley, 2003/2040)
-- Cimatti et al., "NuSMV 2: An Open-Source Tool for Symbolic Model Checking," *CAV '02* (2002): 359–364
-- Kroening & Torel, "CBMC: C Bounded Model Checker," *TACAS '14* (2014)
-- Clarke et al., "A Tool for Checking ANSI-C Programs," *TACAS '04* (2004): 168–176
-
-**Discussion Questions:**
-1. SPIN uses explicit-state verification while NuSMV uses symbolic (BDD-based) verification. For what classes of systems is each approach superior? Can you predict which will perform better before running both?
-2. CBMC can only verify bounded programs. In what sense is this verification, and how does it compare in assurance level to unbounded verification?
-3. A counterexample from a model checker may reveal a bug in the model, not the system. How do you distinguish modelling errors from genuine system bugs?
-
----
-
-## Lecture 9: Program Logics — Hoare Logic, Separation Logic, and Verification Conditions
-
-**Hoare logic** (Hoare, 1969) is the foundational framework for verifying imperative programs. The Hoare triple {P} C {Q} states: if the precondition P holds and command C terminates, then the postcondition Q holds. The assignment axiom {P[E/x]} x := E {P} captures the essence of assignment: to prove a postcondition P after assigning E to x, prove P with x replaced by E before the assignment. The sequencing rule {P} C₁ {R} ∧ {R} C₂ {Q} ⟹ {P} C₁;C₂ {Q} introduces an intermediate assertion R. The conditional rule {P ∧ b} C₁ {Q} ∧ {P ∧ ¬b} C₂ {Q} ⟹ {P} if b then C₁ else C₂ {Q} splits on the condition. The loop rule {P ∧ b} C {P} ⟹ {P} while b do C {P ∧ ¬b} requires a loop invariant P that is preserved by the body and, combined with the negated condition, implies the desired postcondition.
-
-Hoare logic is *partial* by default: it says nothing about non-terminating programs. **Total correctness** Hoare logic adds a termination proof: [P] C [Q] means "if P holds, C terminates and Q holds." Proving termination requires a variant (well-founded measure) that strictly decreases on each iteration. For the simple loop while i < n do i := i + 1, the variant i is natural-number-valued and bounded below by n, so termination follows from the well-foundedness of < on ℕ. For complex loops, finding the variant can be as hard as finding the program itself.
-
-**Weakest preconditions** (Dijkstra, 1975) provide a calculational approach. wp(C, Q) is the weakest assertion P such that {P} C {Q} holds. For assignment: wp(x := E, Q) = Q[E/x]. For sequence: wp(C₁;C₂, Q) = wp(C₁, wp(C₂, Q)). For conditional: wp(if b then C₁ else C₂, Q) = (b ∧ wp(C₁, Q)) ∨ (¬b ∧ wp(C₂, Q)). For loops, wp(while b do C, Q) is the least fixed point of the equation P = (¬b ∧ Q) ∨ (b ∧ wp(C, P)), which exists because the predicate transformer is monotone and continuous. Weakest preconditions turn verification from backward reasoning (finding a precondition that works) into forward calculation (computing the weakest precondition and checking that it is implied by the given precondition). This is more amenable to automation.
-
-**Verification condition generation** (VCGen) is the engine that drives automatic verification. Given a program annotated with preconditions, postconditions, and loop invariants, VCGen produces a set of verification conditions (VCs) — mathematical formulas whose validity implies the correctness of the program. The key VCs are: (1) the invariant is established on loop entry, (2) the invariant is preserved by the loop body, (3) the invariant and exit condition imply the postcondition, and (4) all array accesses are in bounds. These VCs are discharged by SMT solvers (Z3, CVC5) or sent to interactive proof assistants when the solver times out. Yggdrasil's VCGen produces Lean 4 obligations that students can prove interactively when the solver cannot.
-
-**Separation logic** (Reynolds, 2002; O'Hearn & Ishtiaq, 2001) extends Hoare logic to reason about pointer programs with mutable state. The key connective is the **separating conjunction** P * Q, which asserts that the heap can be split into two disjoint parts, one satisfying P and the other Q. The Hoare triple {P} C {Q} in separation logic guarantees that C only accesses the heap described by P (the **footprint** of C) — the **frame rule** {P} C {Q} ⟹ {P * R} C {Q * R} allows local reasoning: provably, C does not affect any heap outside its footprint. This is a radical departure from classical Hoare logic, where every assertion implicitly quantifies over the entire heap. Separation logic makes modular reasoning about pointer programs tractable.
-
-The **frame rule** is the central innovation. In classical Hoare logic, verifying a procedure requires specifying its effect on *every* heap cell, even those it does not touch. In separation logic, specifying the footprint suffices — the frame rule discharges the rest automatically. For a procedure that swaps two integers: {p ↦ v * q ↦ w} swap(p, q) {p ↦ w * q ↦ v}. The specification mentions only the two cells p and q; the frame rule guarantees that no other cell is affected. This is not just convenient — it is essential for scaling verification to large programs.
-
-**Concurrent separation logic** (CSL, O'Hearn, 2004; Brodsky & O'Hearn, 2016) extends the frame rule to concurrent programs with the **parallel composition rule**: {P} C₁ {Q} ∧ {R} C₂ {S} ⟹ {P * R} C₁ || C₂ {Q * S}. The separating conjunction in the precondition guarantees that C₁ and C₂ access disjoint regions of the heap, and therefore cannot interfere. The **critical region rule** allows shared mutable state protected by locks, with the invariant transferred between the lock and the thread that holds it. **Iris** (Jung et al., 2015–2023) is the state of the art in concurrent separation logic, providing a higher-order, impredicative, step-indexed logical relation that supports reasoning about higher-order state, concurrency, and laziness. Iris has been mechanised in Coq and Lean 4 and is used for verifying optimising compilers, concurrent data structures, and distributed systems protocols at Yggdrasil.
+**Key Topics:**
+- Separation logic syntax: emp (empty heap), E ↦ F (points-to), P ∗ Q (separating conjunction), P −∗ Q (magic wand)
+- The frame rule and local reasoning: verifying a procedure once and composing its specification with any caller
+- The list segment predicate: inductive definition, properties, application to list reversal
+- Concurrent separation logic: locks, resource invariants, the rule of the lock
+- The Iris framework: step-indexing, invariants, ghost state, modalities
+- RustBelt: verifying the safety of unsafe Rust using Iris — proving that safe Rust code cannot exhibit undefined behaviour
+- Applications: seL4 microkernel verification (20,000 lines of C verified against a formal specification in Isabelle/HOL using separation logic), CertiKOS verified hypervisor
 
 **Required Reading:**
-- Hoare, "An Axiomatic Basis for Computer Programming," *CACM* 12:10 (1969): 576–580
-- Reynolds, "Separation Logic: A Logic for Shared Mutable Data Structures," *LICS '02* (2002): 55–74
-- O'Hearn, "Resources, Concurrency and Local Reasoning," *CONCUR '04* (2004): 49–67
-- Jung et al., "Iris from the Ground Up: A Modular Foundation for Higher-Order Concurrent Separation Logic," *J. Functional Programming* 28 (2018): e20
-- Dijkstra, *A Discipline of Programming* (Prentice-Hall, 1976/2040), chs. 1–4
+- John C. Reynolds, "Separation Logic: A Logic for Shared Mutable Data Structures" *LICS 2002*: 55–74
+- Peter O'Hearn, "Resources, Concurrency, and Local Reasoning" *Theoretical Computer Science* 375:1–3 (2007): 271–307
+- Ralf Jung et al., "Iris: Monoids and Invariants as an Orthogonal Basis for Concurrent Reasoning" *POPL 2015*: 637–650
+- Gerwin Klein et al., "Comprehensive Formal Verification of an OS Microkernel" *ACM Transactions on Computer Systems* 32:1 (2014): 1–70 — the full seL4 paper
+- Ralf Jung et al., "RustBelt: Securing the Foundations of the Rust Programming Language" *POPL 2018*: 1–34
+- Yggdrasil Separation Logic Lab: Verifying linked list operations (reversal, insertion, deletion) in Dafny or VeriFast (2040)
 
 **Discussion Questions:**
-1. The frame rule in separation logic allows local reasoning about pointer programs. What assumptions does it make about the programming language (e.g., no pointer arithmetic, no dangling pointers)?
-2. Hoare logic proves partial correctness; total correctness requires termination proofs. How do you prove termination of a loop with a non-obviously decreasing measure? Can this be automated?
-3. Iris mechanises concurrent separation logic in Coq. What is the cost of mechanisation — how much effort does it add compared to paper-and-pencil proofs? When is the cost justified?
+1. The separating conjunction P ∗ Q requires that the sub-heaps be disjoint. Why is disjointness the key to modular reasoning — and what happens when two threads need to share a data structure? (Hint: consider CSL's resource invariants.)
+2. Iris is implemented in Coq, which means Iris proofs are Coq proofs — checked by Coq's kernel. But Iris itself is defined in Coq, not proved correct. Is this a problem — and what would it mean to verify Iris itself?
+3. RustBelt proved that safe Rust code cannot exhibit undefined behaviour, assuming unsafe Rust code is correctly annotated. But the unsafe code in Rust's standard library is annotated by humans — and humans make mistakes. Does this limit the practical guarantee of RustBelt?
 
 ---
 
-## Lecture 10: Type Systems and Program Correctness — Refinement Types, Liquid Types, and Gradual Verification
+ᛃ **Lecture 12: Industrial-Grade Verification — CompCert, seL4, TLA⁺, and the DeepSpec Vision**
 
-**Refinement types** (Freeman & Pfenning, 1991; Xi & Pfenning, 1998) enrich ordinary types with logical predicates that restrict the set of values inhabiting the type. The type {x : Int | x ≥ 0} is the type of non-negative integers — a refinement of Int with the predicate x ≥ 0. The type {x : List Int | length x = n} is the type of lists of length n (parameterised by n). Refinement types enable lightweight verification without leaving the programming language: the type checker verifies that every operation respects the refinements, and if it cannot, it rejects the program.
+---
 
-**Liquid types** (Rondon, Kawaguchi & Jhala, 2008; Vazou et al., 2014–2018) make refinement types practical by inferring the refinement predicates via **abstract interpretation** and **Horn clause solving**. Given a function with type signature but no annotations, Liquid Haskell or Liquid Fixpoint (the SMT-based inference engine) synthesises the weakest refinements that make the program type-check. The inference works by generating constraints: for each function application, the argument type must be a subtype of the parameter type; for each conditional branch, the guard refines the variable in each branch. These constraints are collected as Horn clauses and solved by fixed-point iteration over a predefined set of templates (k-satisfiable predicates). If the solver finds a solution, the program is verified; if not, the solver produces a type error with a counterexample.
+### Overview
 
-The **liquid type** inference algorithm proceeds in four steps: (1) generate subtype constraints from the program's type signatures and control flow; (2) instantiate each constraint with a template of the form λv. c₁v₁ + ... + cₙvₙ + c₀, where the cᵢ are unknown integer coefficients; (3) solve the resulting system of linear constraints over the cᵢ using an SMT solver; (4) if all constraints are satisfied, the synthesised refinements are correct. The templates are parameterised by a qualification Q of relevant variables that can appear in the refinement — typically the function's parameters and global constants. The expressiveness of the inferred refinements is bounded by Q, which the user controls. This makes liquid types a sweet spot between annotation burden (too high for fully dependent types) and expressiveness (too low for simple type systems).
+Formal verification has moved from academic curiosity to industrial practice. This lecture surveys four landmark projects that demonstrate the viability — and the limits — of applying formal methods to real-world systems. Each project chose a different verification approach and a different target, and each taught the community something about what works, what doesn't, and what the future holds.
 
-**Gradual verification** (Bader et al., 2019; Greenberg, 2024) applies the principles of gradual typing (Siek & Taha, 2006) to formal verification. In gradual typing, the type Any is compatible with every concrete type — a gradual guarantee ensures that removing annotations only reduces the static guarantees, never introducing new runtime errors. In gradual verification, the proposition Learned is compatible with every logical predicate — a verified function can call an unverified function by treating its postcondition as Learned (unknown but not violated), and an unverified function can call a verified function by treating verified invariants as assumed. The runtime enforcement uses **definite assignment checks** and **assertion checks** at verification boundaries, similar to how gradual typing uses casts at type boundaries.
+**CompCert** (Leroy, 2006–present) is a verified C compiler. Written in Coq, CompCert takes a subset of C (CompCert C, covering most of C99 with the exception of variable-length arrays and some obscure features) and produces PowerPC, ARM, RISC-V, or x86 assembly. The compiler is structured as a sequence of **translation passes** (20+ passes, from C to C#minor to Cminor to RTL to LTL to Mach to assembly), and each pass is proved correct: for every source program, the generated assembly code has exactly the same observable behaviour as the source program (or the source program has undefined behaviour, in which case the compiler can do anything — this is C's "undefined behaviour licence"). The proof is 45,000 lines of Coq (not counting the specification and the algorithms), and it took approximately 6 person-years. CompCert is now maintained at Inria and used in industry (Airbus for DO-178C avionics certification). The key lesson of CompCert: **compilers can be verified**, and the verification is robust enough to catch real bugs — random testing of CompCert against GCC and LLVM found no miscompilation bugs in the verified parts of CompCert, while finding hundreds in GCC and LLVM.
 
-The practical impact for working programmers is significant. **F*** (Swamy et al., 2016) is a verification-oriented language with refinement types, effects, and a weakest-precondition calculus that generates verification conditions for Z3. **Dafny** (Leino, 2010) is a verification-aware imperative language with built-in specifications, loop invariants, and SMT-based verification. **Frama-C** (Cuoq et al., 2012) verifies C programs using ACSL (ANSI/ISO C Specification Language) annotations. Each of these tools occupies a different point on the annotation burden / automation / expressiveness spectrum: F* is more expressive but requires more annotations; Dafny provides good defaults but less expressiveness; Frama-C targets legacy C code but requires significant specification effort.
+**seL4** (Klein et al., 2009–present) is a verified microkernel — approximately 10,000 lines of C, running on ARM and x86-64, with a formal specification in Isabelle/HOL and a proof that the C implementation refines the specification. The verification includes: functional correctness (the kernel behaves exactly as specified), integrity (no user can modify kernel data without permission), confidentiality (no user can read kernel data without permission), and the worst-case execution time of all kernel operations is bounded. The proof is approximately 200,000 lines of Isabelle/HOL, and it took approximately 25 person-years. seL4 is now maintained by the Trustworthy Systems group at UNSW and is used in defence applications (autonomous helicopters, drones) where a kernel compromise would be catastrophic. The key lesson of seL4: **operating system kernels can be verified**, but the cost is high — the verification effort exceeds the implementation effort by a factor of 10–50.
 
-At Yggdrasil, the verification pragmatism course (CS407) uses Liquid Haskell for functional verification and Dafny for imperative verification, teaching students to choose the right tool for the job. The key lesson: verification is not an all-or-nothing proposition. Partial verification (checking some properties) is orders of magnitude cheaper than full verification (checking all properties) and still provides significant assurance. The **verification grand challenge** (Hoare, 2003) called for a verified program of significant size; 20 years later, the community has produced verified compilers (CompCert), verified operating system kernels (seL4), verified cryptographic libraries (HACL*), and verified database systems. Each of these projects chose which properties to verify and which to assume, and each represents a pragmatic engineering decision about where to invest verification effort.
+**TLA⁺** (Lamport, 1999–present) is a specification language based on temporal logic and set theory, designed for describing concurrent and distributed systems at a high level. TLA⁺ is not a programming language and not a proof assistant — it is a **design tool** that allows engineers to write precise, unambiguous specifications of protocols, state machines, and algorithms, and to model-check them for safety and liveness properties. TLA⁺ has been used at Amazon since 2011 for verifying critical AWS services (S3, DynamoDB, EBS, and others). Amazon engineers report that TLA⁺ model checking found subtle bugs in designs — race conditions, deadlocks, data loss scenarios — that would have been extremely difficult to find through testing. The key lesson of TLA⁺: **specification alone is valuable** — even without an implementation proof, the act of writing a precise specification and model-checking it catches design bugs early, when they are cheap to fix. TLA⁺ has also been used at Microsoft (Azure Cosmos DB), Oracle (database algorithms), and Elastic (Elasticsearch).
+
+The **DeepSpec** project (Appel et al., 2017–present) is a multi-institution effort to build a **verified software stack** — from the hardware (verified RISC-V processor) through the operating system (verified kernel, verified file system, verified network stack) to the compiler (verified C compiler) and the application (verified cryptographic library, verified web server). The vision is a computer system where every layer has a machine-checked proof of correctness, and the proofs compose — the proof that the application satisfies its specification relies on the proof that the OS satisfies its specification, which relies on the proof that the hardware satisfies its specification. DeepSpec has demonstrated the feasibility of this vision at small scale (a verified HTTP server running on a verified OS, compiled with a verified compiler, on verified hardware), but the full stack — from transistors to TLS — remains a research goal. The key lesson of DeepSpec: **verified components can compose**, but the specifications must be designed for composition — matching the interfaces between layers is as hard as verifying the layers themselves.
+
+The 2040 horizon: formal methods are transitioning from "possible" to "expected" for safety-critical and security-critical software. Standards bodies (ISO 26262 for automotive, DO-178C for avionics, IEC 61508 for industrial control, Common Criteria for security) are incorporating formal verification as a recommended or required activity. The Verified Software Initiative (Hoare, 2003) and the DeepSpec project have set the goal of a fully verified general-purpose computing platform by 2040. Whether that goal is met remains to be seen, but the trajectory is clear: formal verification is the infrastructure of trust for the software-defined world.
+
+**Key Topics:**
+- CompCert: the architecture of a verified compiler, the translation validation methodology, the role of undefined behaviour, the cost and scalability of compiler verification
+- seL4: the specification, the refinement proof, the integrity and confidentiality properties, the binary verification (proving that the compiled binary matches the C source), the performance cost of verification
+- TLA⁺: the language (TLA⁺, PlusCal), the TLC model checker, the Apalache symbolic model checker, industrial adoption at Amazon
+- DeepSpec: the vision, the interaction trees (ITrees) and VST (Verified Software Toolchain) approaches, the composition challenge, the hardware-software interface
+- The cost of verification: $$$ per line of verified code, the annotation burden, the skill barrier
+- The 2040 landscape: formal methods in standards, verified AI components, formal verification of AGI safety protocols
+- Future directions: AI-assisted proof (LLM-generated invariants, tactic prediction), modular verification at scale, lightweight formal methods (property-based testing with proofs), continuous verification in CI/CD
 
 **Required Reading:**
-- Xi & Pfenning, "Dependent Types in Practical Programming," *POPL '99* (1999): 214–227
-- Rondon, Kawaguchi & Jhala, "Liquid Types," *PLDI '08* (2008): 159–169
-- Vazou et al., "Liquid Haskell: Experience with Refinement Types in the Real World," * Haskell Symposium '18* (2018)
-- Swamy et al., "F*: A Higher-Order Effectful Language Designed for Program Verification," *ESOP '22* (2022)
-- Leino, "Accessible Software Verification with Dafny," *IEEE Software* 34:6 (2017): 94–97
+- Xavier Leroy, "Formal Verification of a Realistic Compiler" *Communications of the ACM* 52:7 (2009): 107–115
+- Gerwin Klein et al., "seL4: Formal Verification of an OS Kernel" *Communications of the ACM* 53:6 (2010): 107–115
+- Leslie Lamport, *Specifying Systems: The TLA+ Language and Tools for Hardware and Software Engineers* (2002/2040), chs. 1–4
+- Chris Newcombe et al., "How Amazon Web Services Uses Formal Methods" *Communications of the ACM* 58:4 (2015): 66–73
+- Andrew W. Appel et al., "The DeepSpec Vision" (2017), https://deepspec.org/
+- C.A.R. Hoare, "The Verifying Compiler: A Grand Challenge for Computing Research" *Journal of the ACM* 50:1 (2003): 63–69
+- Yggdrasil Verification Lab: Writing a TLA⁺ specification and model-checking it, Reading CompCert or seL4 proof excerpts (2040)
 
 **Discussion Questions:**
-1. Liquid types infer refinements from a fixed template language. When does this template language become too restrictive? Give an example of a property that liquid types cannot express.
-2. Gradual verification allows mixing verified and unverified code. What guarantees does it provide, and what are the failure modes? Is a partially verified program more trustworthy than an unverified one?
-3. The verification grand challenge is 20+ years old. Are we closer to a "verified world" than we were in 2003? What has changed, and what hasn't?
+1. CompCert is proved correct, but its parser, assembler, and linker are not verified, and the C standard itself has ambiguities. Does the "verified" label create a false sense of security — and what would a truly end-to-end verified compilation pipeline look like?
+2. TLA⁺ at Amazon found design bugs that testing missed. But TLA⁺ specifications are not implementations — the implementation can diverge from the specification. Does this limit the value of specification-only verification, or is it "good enough" for most practical purposes?
+3. The DeepSpec vision of a fully verified stack from hardware to application is inspiring but has taken decades. Is this effort worth the investment — or would the same resources, spent on better testing and monitoring, produce safer systems faster?
 
 ---
 
-## Lecture 11: Verification of Concurrent and Distributed Systems — Atomicity, Consensus, and Consistency
+## Appendix: Course Resources
 
-Concurrent and distributed systems are the hardest class of software to get right, and therefore the most important class to verify. The difficulty arises from **non-determinism**: concurrent processes interleave their executions in exponentially many ways, and the set of reachable states grows super-exponentially with the number of processes. A system with n processes, each with m local states, has up to mⁿ × n! interleavings (the factorial accounts for the ordering of local transitions within a global state). Testing covers a vanishingly small fraction of these; formal verification is the only viable approach.
+### Primary Textbooks
+- Michael Huth and Mark Ryan, *Logic in Computer Science: Modelling and Reasoning about Systems* (2nd ed., 2004/2040)
+- Aaron R. Bradley and Zohar Manna, *The Calculus of Computation: Decision Procedures with Applications to Verification* (2007/2040)
+- Benjamin C. Pierce et al., *Software Foundations* (online, continuously updated), vols. 1–6
 
-**Linearisability** (Herlihy & Wing, 1990) is the standard correctness condition for concurrent data structures. A concurrent object is linearisable if every operation appears to take effect instantaneously at some point between its invocation and its response — the **linearisation point**. This means the concurrent execution is equivalent to some sequential execution respecting the real-time ordering of non-overlapping operations. Linearisability composes: if each object in a system is linearisable, the system as a whole is linearisable. This compositionality is essential for modular verification.
+### Software Tools
+- **Coq 8.20** (Inria) — interactive proof assistant with the CIC type theory
+- **Lean 4** (Microsoft Research) — modern proof assistant with metaprogramming
+- **Z3 4.13** (Microsoft Research) — SMT solver
+- **Dafny** (Microsoft Research) — program verifier with automatic VC generation
+- **TLA⁺ Toolbox** (Microsoft Research / INRIA) — specification and model checking
+- **NuSMV / nuXmv** (FBK) — symbolic model checker
+- **SPIN 6.5** (Bell Labs / NASA JPL) — explicit-state LTL model checker
 
-Proving linearisability requires: (1) identifying a linearisation point for each operation, (2) showing that the concurrent execution is equivalent to the sequential specification at that point, and (3) showing that the linearisation points respect the real-time order. For fine-grained lock-free data structures, the linearisation point may be a single CAS (compare-and-swap) instruction, and the proof must account for the possibility that intervening operations may read stale values. The Michael-Scott lock-free queue, the lock-free skip list, and RCU (read-copy-update) linked lists are landmark examples that have been mechanically verified in Iris.
+### Assessment
+- **30%** — Weekly Coq/Lean proof exercises (submitted as `.v` / `.lean` files)
+- **30%** — Midterm: formal verification of a simple concurrent protocol in Dafny or TLA⁺
+- **40%** — Final project: formalise and verify a non-trivial algorithm or protocol (student's choice, in Coq, Lean, Dafny, or TLA⁺)
 
-The **consensus problem** (Fischer, Lynch & Paterson, 1985; Dwork, Lynch & Stockmeyer, 1988) asks: can n asynchronous processes agree on a value? The FLP impossibility result shows that deterministic consensus in an asynchronous system is impossible even with one faulty process. The proof constructs an infinite execution in which no process decides, by showing that any purportedly deciding configuration can be delayed (by an adversarial scheduler) to produce a new undecided configuration. This result is foundational: it explains why distributed consensus protocols (Paxos, Raft, PBFT) require either synchrony assumptions, randomisation, or failure detection.
+### Instructor's Note
+*This course is the gateway to the Verification and Security specialisation. The concepts are deep, the tools are powerful, and the mindset — that code is not correct until it is proved correct — will serve you for a lifetime, whether you build compilers, kernels, blockchains, or the AI systems of 2045. The runes teach: **ᚹ** (Wunjo) is the joy of right action — and there is no joy more pure than the certainty of a proved program.*
 
-**Paxos** (Lamport, 1998) solves consensus in an asynchronous system with crash failures, assuming a majority of processes remain connected (the quorum requirement). Each Paxos instance proceeds in two phases: Phase 1 (prepare/promise) ensures that no higher-numbered proposal exists; Phase 2 (accept/learn) commits the chosen value. The safety proof (no two processes decide different values) follows from the quorum intersection property: any two quorums share at least one process, and that process remembers the highest-numbered proposal it has seen. Paxos is famously difficult to understand; Lamport's "Part-Time Parliament" paper (1998) was initially rejected because reviewers found it too obscure. Lamport's later "Paxos Made Simple" (2001) provides a clearer exposition, but the protocol remains subtle enough that multiple verified implementations have found bugs in published pseudo-code.
-
-**Raft** (Ongaro & Ousterhout, 2014) is designed for understandability: it decomposes consensus into leader election, log replication, and safety, each of which can be understood, implemented, and verified independently. The formal verification of Raft spans TLA+ specifications (checked with the TLC model checker), Isabelle/HOL proofs (by Peter van Roosmalen, 2017), and Coq proofs (by Doug Woos et al., 2016). Each verification found subtle bugs in the original Raft protocol and its implementations, confirming Dijkstra's dictum: testing can only find bugs in the places you thought to test; verification can find bugs in the places you didn't.
-
-The **CAP theorem** (Brewer's conjecture, proved by Gilbert & Lynch, 2012) states that a distributed system can provide at most two of: Consistency (linearisability), Availability (every request receives a response, not an error), and Partition tolerance (the system continues to operate despite network partitions). Since partitions are inevitable in large-scale systems, the practical choice is between CP (consistent, unavailable during partitions) and AP (available, but potentially inconsistent). Yggdrasil's distributed systems course (CS407) uses TLA+ specifications to formalise and verify these tradeoffs.
-
-**Required Reading:**
-- Herlihy & Wing, "Linearizability: A Correctness Condition for Concurrent Objects," *ACM TOPLAS* 12:3 (1990): 463–492
-- Lamport, "Paxos Made Simple," *ACM SIGACT News* 32:4 (2001): 18–25
-- Ongaro & Ousterhout, "In Search of an Understandable Consensus Algorithm," *USENIX ATC '14* (2014): 305–319
-- Jung et al., "Iris from the Ground Up," *J. Functional Programming* 28 (2018): e20
-- Gilbert & Lynch, "Perspectives on the CAP Theorem," *IEEE Computer* 45:2 (2012): 30–36
-
-**Discussion Questions:**
-1. The FLP impossibility result shows that deterministic asynchronous consensus is impossible. How do real-world systems (Paxos, Raft, ZooKeeper) circumvent this result? What assumptions do they make?
-2. Linearisability requires every operation to appear atomic. But many practical systems settle for weaker consistency models (sequential consistency, eventual consistency, causal consistency). When is linearisability necessary, and when can we accept weaker guarantees?
-3. Raft was designed for understandability, yet its formal verification still found bugs. What does this tell us about the relationship between understandability and correctness?
-
----
-
-## Lecture 12: The Verified Future — Proof Assistants in Practice, Industry, and Ethics
-
-The landscape of verified software in 2040 looks very different from 2010. CompCert (verified C compiler), seL4 (verified operating system kernel), HACL* (verified cryptographic library), and Bedrock (verified database engine) have demonstrated that full functional correctness is achievable for production-scale systems. The seL4 verification (Klein et al., 2009–2014) is the most comprehensive to date: 200,000+ lines of Isabelle/HOL proofs verify functional correctness, security enforcement (integrity and confidentiality), and absence of crashes for a microkernel with 8,700 lines of C. The proofs cover the refinement from an abstract specification through intermediate designs to the concrete C implementation — a four-level refinement chain that guarantees every behaviour of the C code is permitted by the abstract specification.
-
-The cost of verification is the elephant in the room. The seL4 verification took approximately 20 person-years, or roughly 25 lines of proof per line of code. CompCert required approximately 10 person-years. HACL* required approximately 5 person-years for a 30,000-line library. These costs are coming down as tooling improves, but they remain an order of magnitude higher than conventional development. The key question for the next decade is whether verification costs can approach development costs through automation — and the evidence from Liquid Types, SMT-based verification, and LLM-assisted theorem proving is cautiously optimistic.
-
-**LLM-assisted theorem proving** has made significant strides since 2023. Models like AlphaProof (DeepMind, 2024), LeanDojo (Yang et al., 2023), and ReProver (Mathlib, 2038) use large language models to generate proof steps from natural-language sketches, search, and hammer tactics. These models are far from autonomous theorem provers — they hallucinate type errors and produce incorrect proof strategies — but they dramatically reduce the time to find the right lemma decomposition and tactic sequence. The Yggdrasil verification group's internal benchmark shows a 40% reduction in proof-writing time for routine lemmas when using LLM assistance, but a 0% reduction for novel or structurally complex proofs. The current sweet spot: use LLM assistance for "obvious but tedious" lemmas, and invest human effort in the novel insights that define the proof architecture.
-
-**Verified AI and ML systems** are an emerging frontier. The HALO project (Yggdrasil, 2038) verifies the training pipeline of neural networks: data preprocessing, gradient computation, and weight update are each specified in Lean 4 and verified against the implementation. The result is not a proof that the trained model is correct (that depends on the data), but a proof that the training algorithm is correctly implemented — no silent data corruption, no numerical overflow, no dropout of gradients. Analogous efforts verify the inference pipeline: the compiled model correctly implements the trained weights. The challenge of verifying the model's *behaviour* (robustness, fairness, interpretability) remains open, though techniques from robust optimisation and formal verification of neural networks (complete verification via mixed-integer programming, incomplete verification via abstract interpretation) are advancing rapidly.
-
-**Ethics of formal verification** raises questions that go beyond technical correctness. A verified system is correct *relative to its specification*. But who writes the specification, and whose interests does it serve? The Therac-25 specification stated that the electron beam energy must not exceed the treatment table's tolerance — but it did not specify what should happen when the operator makes an error in entering treatment parameters. The specification was verified; the human factors were not. seL4's specification guarantees that the kernel enforces the access control policy — but who sets the policy? A verified system can enforce an unjust policy just as rigorously as a just one. The ethics of verification is the ethics of specification: what we choose to verify reflects what we value, and what we omit reflects what we overlook.
-
-The Yggdrasil approach to this problem is the **verification pledge**: every verified system, as a condition of its verification certificate, must include a document describing (1) what properties are verified, (2) what properties are assumed but not verified, and (3) what properties are deliberately excluded from the specification and why. This pledge does not make verification ethical; it makes the scope of verification transparent. The 2038 Reykjavik Protocol for autonomous vehicles requires this pledge for all safety-critical verification submissions. It is a small step, but an important one: it forces engineers and stakeholders to confront what they have chosen not to verify.
-
-The future of formal methods in 2040 is not a world where all software is verified. It is a world where critical components — compilers, kernels, cryptographic libraries, consensus protocols, medical device controllers — are verified as a matter of course, where the cost of verification is amortised over the lifetime of the system, and where the verification infrastructure (proof assistants, SMT solvers, model checkers) is itself trusted because it has been scrutinised by thousands of eyes. The goal is not perfection; it is the *systematic reduction of the space of possible errors*. Formal methods compress that space from "whenever a human might make a mistake" to "whenever a specification might be wrong" — a smaller, more tractable, and more honest space.
-
-**Required Reading:**
-- Klein et al., "seL4: Formal Verification of an OS Kernel," *SOSP '09* (2009): 207–220
-- Leroy, "Formal Verification of a Realistic Compiler," *CACM* 52:7 (2009): 107–115
-- Zinzindohoué et al., "HACL*: A Verified Modern Cryptographic Library," *CCS '17* (2017): 1789–1806
-- First et al., "Toward Verified AI," *CACM* 67:2 (2024): 46–55
-- Hoare, "The Verifying Compiler: A Grand Challenge for Computing Research," *JACM* 50:1 (2003): 63–69
-
-**Discussion Questions:**
-1. seL4 required 20 person-years of verification effort. Is this a reasonable investment? At what scale does verification become cost-effective?
-2. The verification pledge requires engineers to state what they have chosen not to verify. Is this sufficient to address the ethical concerns, or is it merely performative transparency?
-3. LLM-assisted theorem proving reduces proof-writing time for routine lemmas but not for novel proofs. Will this change, or is novelty fundamentally outside the scope of statistical pattern matching?
-
----
-
-## Final Examination Preparation
-
-The final examination for CS208 consists of eight questions of which you must choose four. Each question requires a substantive essay (800–1200 words) demonstrating deep understanding of the course material. The examination is open-book but not open-internet; you may bring printed notes and the course textbook.
-
-**Sample Examination Questions:**
-
-1. "Formal methods can only verify that a system is correct with respect to its specification." Discuss the implications of this statement for the assurance provided by formal verification. Under what circumstances is a verified system trustworthy, and under what circumstances is it not? Draw on the Therac-25 and seL4 examples to illustrate your argument.
-
-2. Compare and contrast model checking and theorem proving as verification paradigms. For each paradigm, describe: (a) the class of systems and properties it handles well, (b) its automation level and required human expertise, (c) a real-world application where it outperforms the other, and (d) a fundamental limitation that motivates the other paradigm.
-
-3. Explain the Curry-Howard correspondence and its significance for program verification. How does it transform the relationship between programming and proving? Trace the correspondence from STLC (propositions as types) through dependent types (quantifiers as dependent function types) to proof assistants (verification by type checking).
-
-4. The state explosion problem is the central challenge for model checking. Describe three techniques for combating state explosion (symbolic model checking, partial order reduction, and CEGAR), explain the theoretical basis for each, and give a concrete example of a system where each technique provides the greatest benefit.
-
-5. Separation logic extends Hoare logic with the separating conjunction and the frame rule for modular reasoning about pointer programs. Explain the frame rule and its significance for scalability. Then explain how concurrent separation logic (CSL) and Iris extend this to concurrent programs, focusing on the parallel composition rule and the treatment of shared state.
-
-6. Discuss the role of SMT solvers in modern verification. Starting from DPLL(T) and Nelson-Oppen, explain how SMT solvers combine decision procedures for different theories. Then describe how they are used in at least three different verification contexts (e.g., VCGen, refinement type inference, bounded model checking).
-
-7. The FLP impossibility result shows that deterministic consensus is impossible in an asynchronous system with one faulty process. Explain the proof strategy and its implications. Then describe how practical consensus protocols (Paxos, Raft) circumvent this impossibility. What assumptions do they make, and what properties do they guarantee?
-
-8. "Verification by construction" (writing programs in dependently-typed languages so that well-typed programs are correct) and "verification by analysis" (verifying an existing program against a specification after the fact) represent two approaches to verified software. Compare their strengths and weaknesses. Under what circumstances would you recommend each approach? Consider cost, expressiveness, maintenance, and adoption.
-
----
-
-*ᛟ End of Course Materials — CS208: Formal Methods & Verification — University of Yggdrasil, 2040*
+— Yggdrasil Department of Computer Science, 2040
