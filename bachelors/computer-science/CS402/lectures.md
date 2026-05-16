@@ -769,4 +769,376 @@ The monadic approach works well for single effects but becomes unwieldy for *com
 
 Algebraic effects and handlers (Plotkin and Pretnar, 2009) offer a more modular approach:
 
-1. **Eff
+1. **Effect types** define the *interface* — the operations available (e.g., `read : () → String`, `write : String → ()`, `throw : Error → α`). These are abstract; they have no implementation.
+2. **Effect handlers** provide the *implementation* — for each operation, the handler specifies what to do and how to resume. Handlers are *modular* — they can be changed, composed, and layered independently.
+3. **The type system tracks which effects a computation may perform** — `eff {read, write} String` means "a computation that may read and write, producing a String."
+
+The advantage over monads is modularity: a function `eff {read, write} String` can be interpreted by *any* handler that implements both `read` and `write`. The same function can be run against a real filesystem handler, a mock handler for testing, or a logging handler for auditing — without changing the function or its type.
+
+### Effect Type Theory
+
+The type-theoretic formulation (Bauer and Pretnar, 2015) extends the simply typed λ-calculus with:
+
+```
+τ ::= α | τ1 → τ2 | τ1 ⇒ ε τ2
+
+ε ::= {op1, op2, ...}   — sets of effect operations
+```
+
+The type `τ1 ⇒ ε τ2` reads "a function from τ1 to τ2 that may perform effects in ε." This is the *effect-annotated arrow*.
+
+Key results:
+- **Effect polymorphism**: `∀ε. (A ⇒ {read}∪ε B) → (A ⇒ ε B)` — if a function only needs read, it can be used in any effect context.
+- **Handler composition**: Effects can be layered — a handler for `{read}` can be stacked under a handler for `{write}`, giving `{read,write}` handling.
+- **Effect subtyping**: `{read} ⊆ {read,write}` — a computation that only reads can be used where one that reads and writes is expected.
+
+### Algebraic Effects in Practice: 2040
+
+The major languages using algebraic effects in 2040:
+
+- **Koka** (Microsoft Research, Daan Leijen): Effect handlers as the primary abstraction. Koka 3.2 ships with a production-quality compiler and VSCode integration. Used for server-side web applications at scale.
+- **Eff** (Andrej Bauer, Matija Pretnar): The original research language, now at version 5.0, used primarily for teaching and research.
+- **Unison**: A content-addressable language that uses abilities (their term for effects) to model I/O, distributed computing, and time-varying values.
+- **OCaml 6** (2028): Native algebraic effects in the runtime, used for concurrent programming and async I/O.
+
+The Óðinn Language Workbench at UoY uses algebraic effects as its primary abstraction for AI agent orchestration — each AI operation (generate, classify, embed) is an effect that can be handled by different backends (cloud API, local model, mock for testing).
+
+### Required Reading
+
+- Plotkin, G.D. & Pretnar, M. "Handlers of Algebraic Effects" (2009) — the founding paper
+- Kammar, O., Lindley, S., & Odersky, M. "Idris Effects: Tiered Effect Management" (2013) — practical ML-style effects
+- Leijen, D. "Koka: Programming with Row-Polymorphic Effect Handlers" (2017) — Koka overview
+- Bauer, A. & Pretnar, M. "Programming with Algebraic Effects and Handlers" (2015) — Eff language tutorial
+
+### Discussion Questions
+
+1. Monad transformers compose effects by stacking monads. Algebraic effects compose by handler composition. Compare the modularity properties — which is easier to extend with new effects? With new handlers?
+2. OCaml 6 added algebraic effects to a language that already had exceptions. What is the relationship between exceptions and algebraic effects? Are exceptions a special case?
+3. The Óðinn Workbench uses algebraic effects for AI agent orchestration. Could the same architecture work for a database transaction system? What about for a distributed consensus protocol?
+
+---
+
+ᛊ **Lecture 11: Homoiconic Types — Metaprogramming, Macros, and Reflection**
+
+**Course:** CS402 — Programming Language Theory  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Metaprogramming — programs that write programs — is the *galdr* (incantation) of programming: the ability to treat code as data, manipulate it, and generate new code. The Norse *galdrar* were magical incantations carved in runes, spoken to reshape reality. In PLT, metaprogramming reshapes the language itself.
+
+This lecture covers the three major approaches to metaprogramming: syntactic macros (hygienic and unhygienic), staged computation (metaprogramming with type safety), and reflection (metaprogramming via runtime type information). We examine the theory behind each, the trade-offs they impose, and their role in 2040's programming landscape.
+
+### Syntactic Macros: Code as Data
+
+The simplest form of metaprogramming treats programs as text (or syntax trees) and transforms them before compilation. This is the approach of C preprocessor macros, Lisp macros, and Rust's `macro_rules!`.
+
+**Unhygienic macros** (C preprocessor, m4) perform textual substitution without regard for scope. The classic bug:
+
+```c
+#define SQUARE(x) ((x) * (x))
+SQUARE(a++)  // expands to ((a++) * (a++)) — increments a twice!
+```
+
+**Hygienic macros** (Scheme `syntax-rules`, Rust `macro_rules!`, Racket) preserve lexical scope by renaming bound variables to avoid capture. The macro system tracks which identifiers are introduced by the macro vs. which come from the surrounding context.
+
+Kohlbecker et al. (1986) formalized hygiene through the concept of *syntactic closures*: each piece of quoted code carries its lexical environment, and the macro expander ensures that introduced identifiers are distinct from any existing ones. Dybvig et al. (1993) refined this into the *set of scopes* model, which underpins Racket's macro system.
+
+**Rust's declarative macros** (`macro_rules!`) are pattern-matching rules that transform syntax. They are hygienic by default but offer `tt` (token tree) escape hatches for advanced cases. Rust's **procedural macros** (derive, attribute, function-like) are Rust functions that consume and produce token streams, giving full power at the cost of hygiene responsibility being on the programmer.
+
+### Staged Computation: Types All the Way Down
+
+Staged computation (multi-stage programming, MetaOCaml, Rompf et al. 2019) brings type safety to metaprogramming by distinguishing *stages* — levels of computation:
+
+```
+⟨e⟩    — bracket: defer evaluation to the next stage
+~e     — escape: splice code from a previous stage into the current bracket
+run e   — evaluate a closed code value
+```
+
+The type system tracks stages:
+
+```
+τ code  — the type of code that produces a τ when executed
+τ^n     — a τ at stage n (for explicit multi-stage systems)
+```
+
+**Theorem (Multi-stage type safety, Taha and Sheard 1997)**: Well-typed multi-stage programs never generate ill-typed code at the next stage.
+
+This is the key theorem: staged computation prevents *code injection* — the generated code is guaranteed to be well-typed by construction. This is why staged computation is the preferred approach for generating verified code in the Yggdrasil verified AI stack.
+
+### Reflection: Programs Knowing Themselves
+
+Reflection is the ability of a running program to inspect and modify its own structure. In PLT terms, reflection adds a *reification* operator that turns metainformation (types, methods, fields) into first-class values:
+
+- **Introspection**: Reading type information at runtime (`obj.GetType()`, `typeof(T)`, `PyObject.__class__`)
+- **Structural reflection**: Modifying structure at runtime (adding methods, changing class hierarchy — found in Smalltalk, CLOS, JavaScript)
+- **Behavioral reflection**: Intercepting and modifying method dispatch (method_missing, __getattr__, dynamic proxies)
+
+The PLT concerns with reflection:
+
+1. **Type safety**: Reflection bypasses static typing. Java's `ClassNotFoundException`, `.NET's `MissingMethodException`, and Python's `AttributeError` are runtime errors that static types should prevent.
+2. **Security**: Reflection can access private members. This is why `java.lang.reflect` requires security manager permissions and why Rust's `any::Any` is deliberately limited.
+3. **Performance**: Reflection is slow (3-100x slower than direct calls). JIT compilers partially mitigate this via speculative devirtualization.
+
+### The Óðinn Macro System: A Case Study
+
+The Óðinn Language Workbench at UoY implements a three-level macro system:
+
+1. **Surface macros** (syntax → syntax): Pattern-based, hygienic, like Rust's `macro_rules!`. Used for DSL construction.
+2. **Semantic macros** (typed AST → typed AST): Access to type information during expansion, like Racket's `syntax-parse` with compile-time side effects. Used for deriving implementations from types.
+3. **Verification macros** (proof state → proof state): Tactics in the style of Lean's `tactic` block, used for proof automation within dependent types.
+
+This layered architecture ensures that each level has access to exactly the information it needs — no more, no less — and each level's output is type-checked by the level above. The result is metaprogramming that is safe, composable, and predictable — the hallmarks of well-designed PLT.
+
+### Required Reading
+
+- Kohlbecker, E. et al. "Hygienic Macro Expansion" (1986) — the hygiene paper
+- Taha, W. & Sheard, T. "Multi-Stage Programming with Explicit Levels" (1997) — staged computation type safety
+- Rompf, T. et al. "From FPGAs to Clouds: Multi-Stage Programming in the Wild" (2019) — practical multi-stage systems
+- Racket documentation: "Macros that Work Together" — the Racket school of macro composition
+
+### Discussion Questions
+
+1. Hygienic macros prevent variable capture, but they also prevent intentional capture. When is intentional capture useful, and how can a language support both safely?
+2. Staged computation generates well-typed code by construction. Is this enough for *secure* code generation, or are there attacks that type safety doesn't prevent?
+3. The Óðinn Workbench's three-level macro system separates surface, semantic, and verification macros. Compare this to Lisp's "code is data is code" philosophy. What does Óðinn gain and lose by stratifying metaprogramming?
+
+---
+
+ᛞ **Lecture 12: The Yggdrasil Summit — Frontiers and Synthesis**
+
+**Course:** CS402 — Programming Language Theory  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+We have reached the summit of Yggdrasil — the crown of the world-ash, where Óðinn hung for nine nights to learn the runes of power. Over the past eleven lectures, we have climbed from the roots (λ-calculus, syntax, operational semantics) through the trunk (type systems, denotational semantics, Curry-Howard) to the branches (subtyping, inference, dependent types, effects, metaprogramming). Now we survey the landscape from the top: the frontiers of PLT in 2040 and the open problems that will define the next decade.
+
+### Frontier 1: Homotopy Type Theory (HoTT)
+
+Homotopy Type Theory (Voevodsky et al., 2013–present) extends dependent type theory with the *univalence axiom*: `(A ≃ B) ≃ (A = B)` — isomorphic types are identical. This identification of equivalence and equality has profound consequences:
+
+- **Higher inductive types**: Types defined not only by point constructors but also by path constructors (equalities between points). Example: the circle S¹ has one point (base) and one non-trivial path (loop).
+- **Proof relevance**: In HoTT, proofs are first-class objects. Equality is not merely a proposition (true/false) but a type with structure (paths, homotopies between paths).
+- **Computational content**: The univalence axiom is not merely an axiom — it has computational content (cubical type theory, Anglica et al., 2019; Cohen et al., 2018).
+
+Cubical Agda is the leading implementation of HoTT in 2040, and HoTT underpins the University of Yggdrasil's verified AI alignment research, where "AI system A ≃ AI system B" means not just behavioral equivalence but *structural* equivalence.
+
+### Frontier 2: Quantum Type Theory
+
+As quantum computing matures (IBM's 10,000-qubit Helios processor debuted in 2038), a new frontier of type theory emerges: types for quantum programs.
+
+Linear types (Girard 1987) — where each resource must be used exactly once — were originally motivated by logic, but they are *exactly right* for quantum computation: the no-cloning theorem means quantum data cannot be duplicated, and the no-deleting theorem means it cannot be silently discarded. The quantum λ-calculus (Selinger and Valiron, 2008) refines linear types with specific quantum constructs:
+
+```
+ψ : Qubit           — a quantum state
+measure : Qubit → Bit   — measurement (irreversible, consumes the qubit)
+H : Qubit → Qubit        — Hadamard gate (unitary, preserves the qubit)
+CNOT : Qubit × Qubit → Qubit × Qubit  — controlled-NOT
+```
+
+The Q# language (Microsoft, 2019–present) and Quipper (Green et al., 2013) are the current state of the art. In 2040, the Yggdrasil Quantum Computing Group is developing *Quiddity* — a dependently typed quantum language that enforces unitarity, no-cloning, and circuit reversibility at the type level.
+
+### Frontier 3: AI-Assisted Type Theory
+
+The most transformative frontier in 2040 is the integration of AI and type theory. Three developments have converged:
+
+1. **Neural type inference** (Li et al., 2038): Deep learning models that predict type annotations for untyped code with 97% accuracy on standard benchmarks. Used in VSCode and JetBrains as of 2039.
+2. **LLM-assisted proof search** (Lean Copilot, 2035–present): Language models that suggest proof steps in Lean and Coq, dramatically reducing the time required for verification. Mathlib's growth rate tripled after Copilot integration.
+3. **Type-theoretic AI alignment** (Creamer et al., 2039): Using dependent types to specify and verify safety properties of AI systems — what the Yggdrasil Computing Consortium calls "type-aware oversight."
+
+These developments raise deep questions about the nature of proof and understanding. If a neural network suggests a proof step that the human cannot understand, is it a proof? If a type system can verify properties that no human could articulate, is verification meaningful? These questions echo the Norse concept of *völva* — a seeress who sees truths hidden from ordinary vision. The völva's prophecies were trusted because they came true, not because anyone understood *how*. Similarly, AI-assisted proof suggestions may be accepted because they typecheck, even when the reasoning is opaque.
+
+### Frontier 4: Gradual Verification and Hybrid Type Systems
+
+Gradual typing (Siek and Taha, 2006) allows mixing statically typed and dynamically typed code. Gradual verification (Eisenberg et al., 2037) extends this idea: parts of a program may have full dependent types and proof obligations, while other parts are merely typechecked. The type system enforces *contracts at boundaries* between verified and unverified code.
+
+This is the practical direction: verified cores with unverified wrappers, and proof obligations that can be progressively strengthened over time. The Yggdrasil verified AI stack uses this architecture:
+
+- **Inner core** (Lean 6): Full dependent types, proof obligations discharged
+- **Middle layer** (Rust): Affine types, memory safety, no proof obligations
+- **Outer shell** (Python 4): Gradual types, dynamic behavior, enforced via contracts at boundaries
+
+The gradual verification framework, implemented in the *Mjölnir* verification tool, uses *blame assignment* to track which component caused a contract violation — a direct analogy to higher-order contract systems (Findler and Felleisen, 2002).
+
+### Synthesis: The Unifying Thread
+
+Looking back over the course, we can identify a single unifying thread: **the quest to make meaning precise**. From the λ-calculus (what does this expression *mean*?) through type systems (what does this type *guarantee*?), denotational semantics (what mathematical object does this program *denote*?), and dependent types (what properties does this program *prove*?), the entire field of PLT is about making the relationship between programmer intention and machine execution as clear, well-defined, and verifiable as possible.
+
+The Greeks called this *logos* — reasoned discourse. The Norse called it *rún* — a secret, a whisper from the deep structure of reality. In PLT, the runes are types: formal specifications that constrain computation and make meaning manifest.
+
+As you leave this course, carry with you the understanding that type theory is not merely a technical discipline but a philosophical stance: that programs can and should say what they mean, and that meaning can be checked, verified, and trusted. In an age of autonomous AI systems, weaponized software, and mission-critical infrastructure, this stance is not merely academic — it is essential.
+
+### Required Reading
+
+- The Univalent Foundations Program. *Homotopy Type Theory: Univalent Foundations of Mathematics* (2013) — the HoTT book
+- Selinger, P. & Valiron, B. "A Lambda Calculus for Quantum Computation" (2008) — quantum λ-calculus
+- Siek, J. & Taha, W. "Gradual Typing for Functional Languages" (2006) — gradual typing foundations
+- Creamer, M. et al. "Type-Theoretic Safety Specifications for AI Systems" (2039) — Yggdrasil AI alignment paper
+
+### Discussion Questions
+
+1. Is univalence — the identification of isomorphism and equality — a philosophical claim or a mathematical one? What does it mean for two things to be "the same"?
+2. Quantum type theory enforces no-cloning at the type level. Are there other physical laws that could or should be enforced by type systems? (Think: conservation of energy, causality, thermodynamic entropy.)
+3. If AI can suggest proof steps that humans cannot understand, should we trust them? Relate to the völva metaphor: trusted prophecies from opaque sources.
+
+---
+
+## Final Examination Preparation
+
+**Course:** CS402 — Programming Language Theory  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Format
+
+The final examination consists of two parts:
+
+**Part A — Theoretical Foundations (60%)**: Eight problems covering λ-calculus, type systems, operational and denotational semantics, Curry-Howard correspondence, and dependent types. Problems will require constructing proofs, writing typing derivations, and performing reductions.
+
+**Part B — Synthesis and Application (40%)**: Two essay problems requiring you to relate theory to practice, evaluate design trade-offs, and propose novel type system designs for given scenarios.
+
+### Sample Problems
+
+**Problem 1 (λ-calculus)**: Reduce `(λx. λy. x) ((λz. z z) (λz. z z))` to normal form using (a) normal-order reduction, (b) applicative-order reduction. Explain which terminates and why.
+
+**Problem 2 (Type safety)**: Prove the Progress theorem for STLC with products and sums. State the canonical forms lemmas you need.
+
+**Problem 3 (Curry-Howard)**: Construct a term of type `A → (B → C) → (A × B → C)` in STLC. What logical principle does this term prove? Is the converse provable?
+
+**Problem 4 (Subtyping)**: Explain why function subtyping is contravariant in the argument. Give a concrete counterexample showing that covariance in the argument would violate type safety.
+
+**Problem 5 (Domain theory)**: Compute the first three approximations of the factorial function using Kleene's fixpoint theorem: `fact₀(⊥)`, `fact₁(⊥)`, `fact₂(⊥)`. What is the least fixpoint?
+
+**Problem 6 (Dependent types)**: Write an Idris type for a binary search tree that stores, in its type, the range of values it contains. Your type should guarantee that `insert` preserves the BST property at the type level.
+
+**Problem 7 (Effects)**: Design an algebraic effect system for a concurrent programming language with operations `{fork, await, yield}`. Write the type for a computation that may fork threads and await results. Design a handler that implements cooperative scheduling.
+
+**Problem 8 (Metaprogramming)**: Compare hygienic macros (Racket), staged computation (MetaOCaml), and reflection (Java). For each, give: (a) one advantage over the others, (b) one disadvantage, (c) one application where it is the best choice.
+
+### Essay Topics
+
+1. **The Verification Tax**: Dependent types guarantee properties at compile time but impose a proof burden on the programmer. Analyze the trade-off between verification effort and correctness guarantees. When is the tax worth paying? When is it not? Consider the layered verification architecture (Lean 6 / Rust / Python 4) used at the Yggdrasil Computing Consortium.
+
+2. **AI and Type Theory in 2040**: Neural type inference and AI-assisted proof search are changing how we interact with type systems. Evaluate the claim that "in 2050, type systems will be invisible — programmers will write untyped code, and the AI will infer, verify, and enforce types automatically." What are the technical and social barriers to this vision? What would be lost?
+
+---
+
+## Assignments
+
+### Assignment 1: Lambda Calculus Reductions (Week 3)
+
+**Objective:** Demonstrate mastery of α-conversion, β-reduction, and evaluation strategies in the untyped λ-calculus.
+
+**Tasks:**
+1. Reduce five terms to normal form using normal-order reduction. Show each step.
+2. Reduce the same five terms using applicative-order reduction. Identify which diverge and why.
+3. Prove that the Y combinator `Y = λf. (λx. f (x x)) (λx. f (x x))` satisfies `Y f = f (Y f)` for any f (the fixpoint property).
+4. Implement Church numerals in the untyped λ-calculus: zero, successor, addition, multiplication, and predicate (is-zero). Demonstrate `2 + 3 = 5` using your encodings.
+
+**Deliverables:** Written solutions with step-by-step reductions and proofs. Code implementations in your choice of functional language (Haskell, OCaml, Racket, or Idris).
+
+**Grading Rubric:**
+- Technical correctness (30%): Accurate reductions and correct proofs
+- Depth of analysis (25%): Understanding of evaluation strategy consequences
+- Communication quality (25%): Clear presentation of reduction sequences
+- Reflection (20%): Self-assessment of understanding
+
+**Due:** End of Week 3
+
+---
+
+### Assignment 2: Type Safety Proof (Week 6)
+
+**Objective:** Construct a complete proof of type safety (progress + preservation) for STLC with products, sums, and let-polymorphism.
+
+**Tasks:**
+1. Define the syntax, typing rules, and evaluation rules for STLC+.
+2. State and prove canonical forms lemmas for each value form.
+3. State and prove the substitution lemma.
+4. Prove the Progress theorem.
+5. Prove the Preservation theorem.
+
+**Deliverables:** Written proof document in LaTeX or Markdown. Each theorem should be stated precisely, with all necessary lemmas clearly identified and proved before use.
+
+**Grading Rubric:**
+- Technical correctness (30%): Accurate proofs with no gaps
+- Depth of analysis (25%): Appropriate lemma decomposition
+- Communication quality (25%): Clear, well-organized proof structure
+- Reflection (20%): Self-assessment of proof technique understanding
+
+**Due:** End of Week 6
+
+---
+
+### Assignment 3: Denotational Semantics Interpreter (Week 9)
+
+**Objective:** Implement a denotational semantics for a small functional language using Scott domains, and verify that it agrees with the operational semantics.
+
+**Tasks:**
+1. Define the abstract syntax and denotational semantics for a language with arithmetic, booleans, functions, recursion, and let-polymorphism.
+2. Implement the denotational semantics as a Python (or Haskell) function that maps terms to domain elements.
+3. Implement the operational semantics for the same language.
+4. Write 20 test cases comparing denotational and operational results. For programs that terminate, both should agree. For diverging programs, the denotational semantics should yield ⊥.
+5. Write a proof (or detailed argument) that the denotational semantics is adequate with respect to the operational semantics.
+
+**Deliverables:** Source code (Python or Haskell), test suite, and proof document.
+
+**Grading Rubric:**
+- Technical correctness (30%): Working implementation and passing tests
+- Depth of analysis (25%): Adequacy argument quality
+- Communication quality (25%): Clear code and documentation
+- Reflection (20%): Self-assessment of implementation vs. theory understanding
+
+**Due:** End of Week 9
+
+---
+
+### Assignment 4: Dependently Typed Verification (Week 12)
+
+**Objective:** Use Idris 3 or Lean 6 to verify a non-trivial property of a data structure or algorithm.
+
+**Tasks:**
+1. Choose a data structure (e.g., red-black trees, balanced binary search trees, heaps, or skip lists).
+2. Define the data structure with invariants encoded in the type (e.g., red-black tree invariant, heap property).
+3. Implement insertion and deletion with the invariant enforced at the type level.
+4. Prove at least two properties: (a) that insertion preserves the invariant, (b) that insertion maintains the BST ordering property (or heap property).
+5. Write a brief (500-1000 word) reflection on the verification experience: what was easy, what was hard, and what you learned about the relationship between types and proofs.
+
+**Deliverables:** Idris or Lean source file(s) with type-checked definitions and proofs. Reflection document.
+
+**Grading Rubric:**
+- Technical correctness (30%): Type-checking proofs with no `sorry` or `admit`
+- Depth of analysis (25%): Insightful reflection on verification experience
+- Communication quality (25%): Clear code organization and documentation
+- Reflection (20%): Self-assessment connecting theory to practice
+
+**Due:** End of Week 12
+
+---
+
+### Assignment 5: Research Synthesis Paper (Week 15)
+
+**Objective:** Investigate a topic in programming language theory in depth, synthesize findings from at least 5 primary sources, and present a coherent analysis with original insight.
+
+**Suggested Topics:**
+1. The evolution of effect systems from monads to algebraic effects (1990–2040)
+2. Linear types and the no-cloning theorem: connections between PLT and quantum computing
+3. Gradual typing and the blame calculus: design principles and unsolved problems
+4. AI-assisted type inference and proof search: capabilities, limitations, and philosophical implications
+5. Homotopy Type Theory and the univalence axiom: mathematical implications for programming
+6. The verification tax: economic analysis of proof effort vs. correctness guarantees
+
+**Deliverables:** 3000-5000 word research paper with at least 5 primary sources, formatted in academic style (ICFP or POPL proceedings format).
+
+**Grading Rubric:**
+- Technical correctness (30%): Accurate use of PLT concepts and formal reasoning
+- Depth of analysis (25%): Original insight beyond summarizing sources
+- Communication quality (25%): Clear academic writing with proper citations
+- Reflection (20%): Self-assessment of research process and learning
