@@ -1,526 +1,365 @@
 # CS404: Neuromorphic & Edge Computing
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
-**Credits:** 4  
-**Prerequisites:** CS205 (Computer Architecture), CS302 (Parallel & Distributed Systems)  
-**Description:** Spiking neural networks, neuromorphic chips (Intel Loihi, IBM TrueNorth), edge inference architectures, sensor fusion at the boundary, and the convergence of brain-inspired computing with resource-constrained deployment. This course bridges the synapse and the sensor — where silicon learns to think like a neuron at the edge of the network.
-
-**Norse Framing:** The Hraesvelgr sits at the edge of the world, a giant in eagle form whose wingbeats stir the winds of all realms. Edge computing, likewise, processes at the boundary — sensing, computing, deciding — without needing to fly back to the cloud. Neuromorphic engineering is the carving of runes into silicon so that the chip itself remembers and adapts.
+**Credits:** 4
+**Prerequisites:** CS301 — Distributed Systems; CS302 — Compiler Design & Code Generation; CS205 — Machine Learning
+**Description:** A deep exploration of brain-inspired computing architectures and the edge intelligence revolution. Covers spiking neural networks, neuromorphic hardware (Intel Loihi, IBM TrueNorth, BrainScaleS), energy-efficient edge inference, sensor fusion on constrained devices, event-based sensing, and the emerging neuromorphic-edge continuum. Students programme real neuromorphic hardware via the Lava framework and deploy models on the Yggdrasil Huginn Edge Cluster. By 2040, neuromorphic-edge systems have become the dominant paradigm for always-on, low-power AI — this course answers *how* and *why*.
 
 ---
 
-## Lectures
+## Lecture 1: The Brain-Inspired Revolution — Why Neuromorphic Computing Matters
 
-ᚠ **Lecture 1: The Edge of the World — Why Compute at the Boundary?**
+*"The salmon knows its river not by calculation but by pulse" — an old Norse saying, apt for a field where timing IS computation.*
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+The von Neumann bottleneck — the separation of memory and processing — has defined computing for eighty years. A modern CPU spends the majority of its energy shuttling data between DRAM and registers, not performing actual computation. By 2040, the limits of this architecture have become existential: training a single large language model consumes megawatt-hours, while the human brain performs exaflop-equivalent computation on roughly 20 watts. **Neuromorphic computing** closes this gap by co-locating memory and computation in artificial neurons that communicate via precisely timed **spikes** — brief electrical pulses whose temporal pattern encodes information, just as biological neurons do.
 
----
+The fundamental unit of neuromorphic computation is the **spiking neural network (SNN)**. Unlike traditional artificial neural networks (ANNs) where all neurons fire synchronously on every timestep, SNN neurons remain quiescent until their membrane potential crosses a threshold, at which point they emit a spike, reset, and enter a refractory period. This **event-driven** computation is sparse — in a typical SNN, fewer than 5% of neurons fire on any given timestep, yielding orders-of-magnitude energy savings. The key mathematical model is the **leaky integrate-and-fire (LIF)** neuron, governed by τ · dV/dt = -(V - V_rest) + R · I(t), where τ is the membrane time constant, V is the membrane potential, V_rest is the resting potential, R is the membrane resistance, and I(t) is the input current. When V ≥ V_thresh, the neuron spikes. More sophisticated models include the **Izhikevich model** (which captures 20 firing patterns with just two differential equations) and the **Hodgkin-Huxley model** (the gold standard with four coupled ODEs describing sodium, potassium, and leak channels).
 
-### Overview
+The shift from rate coding (where information is the firing rate) to **temporal coding** (where the precise timing of spikes carries information) is the conceptual revolution at the heart of neuromorphic computing. In a rate-coded ANN, a neuron's output is a scalar — the firing frequency. In a temporal-coded SNN, a neuron's output is a spike train, and the relative timing between spikes encodes relationships (coincidence detection, spike-timing-dependent plasticity). This opens the door to computing that is inherently asynchronous, massively parallel, and natively handles time-varying signals — the exact requirements of real-world sensory processing. The **tempotron** (Gütig & Sompolinsky, 2006) demonstrated that a single LIF neuron can learn to classify complex spatiotemporal spike patterns by adjusting synaptic weights to fire at specific times, proving that temporal computation is trainable.
 
-We begin at the boundary. Edge computing is the practice of processing data near its source — on the device, at the sensor, in the factory, on the drone — rather than shipping raw bytes to a distant data centre. By 2040, the edge-cloud continuum is the dominant computing paradigm: trillions of IoT devices generate zettabytes of sensor data annually, and shipping all of it to the cloud is economically, energetically, and physically impossible. This lecture frames why the edge matters, what constraints define it, and how the old Norse metaphor of the boundary — the *útgarðr*, the wild outer realm — illuminates the technical challenges of partial connectivity, intermittent power, and hostile environments.
+Why does this matter in 2040? The explosion of **edge devices** — the Yggdrasil Huginn sensor network alone comprises 12,000 nodes — demands AI that operates continuously on milliwatts, responds in microseconds, and learns online without cloud round-trips. Neuromorphic hardware like Intel's **Loihi 2** (2021/2036) delivers these capabilities: 1 million neurons per chip at ~1 watt, with on-chip learning via programmable synaptic plasticity rules. Students in this course will write real SNN code using Intel's **Lava** framework (an open-source neuromorphic computing platform) and deploy it on the University's Loihi 2 board, comparing energy-per-inference against traditional GPU/TPU baselines. The metric that matters is not FLOPS but **SOPs (synaptic operations per second per watt)** — and on this metric, neuromorphic systems are 1,000× ahead.
 
-### Key Concepts
+**Required Reading:**
+- Mead, C. (1990). "Neuromorphic Electronic Systems." *Proceedings of the IEEE*, 78(10), 1629–1636. The founding document.
+- Davies, M. et al. (2018). "Loihi: A Neuromorphic Manycore Processor with On-Chip Learning." *IEEE Micro*, 38(1), 82–99.
+- Gütig, R. & Sompolinsky, H. (2006). "The Tempotron: A Neuron That Learns Spike Timing–Based Decisions." *Nature Neuroscience*, 9(3), 420–428.
+- Furber, S. (2016). "Large-Scale Neuromorphic Computing Systems." *Journal of Neural Engineering*, 13(5), 051001.
 
-- **The bandwidth wall:** Global IP traffic exceeded 5 zettabytes/year by 2025. At current growth rates, centralised cloud processing cannot absorb all sensor data. Edge computing performs *filtering, aggregation, and inference* locally — transmitting only semantically meaningful events.
-- **Latency physics:** Light travels ~200 km/ms in fibre. A self-driving car at highway speed covers 1.5 metres in 10 ms. Safety-critical decisions (braking, obstacle avoidance) must close the sense-act loop within single-digit milliseconds — impossible if every frame travels to a cloud data centre and back.
-- **Energy proportionality:** Transmitting 1 KB over a cellular link consumes roughly the same energy as 50,000 CPU instructions. For battery-powered sensors, local inference is often *cheaper* than transmission.
-- **The privacy boundary:** Processing health data, home audio, or industrial telemetry locally keeps sensitive information within the user's domain. This aligns with the Norse concept of *heimr* — the protected inner space — versus the exposed outer realm.
-- **The 2040 landscape:** Edge-native operating systems (ÆgirOS, FenrirRT), 5G/6G private networks, satellite IoT constellations, and neural processing units in every smartphone have made edge computing the default architecture for all new sensor-driven applications.
-
-### Required Reading
-
-- Satyanarayanan, M. "The Emergence of Edge Computing." *IEEE Computer*, 2017. (The foundational manifesto — still cited in 2040.)
-- Shi, W. et al. "Edge Computing: Vision and Challenges." *IEEE Internet of Things Journal*, 2016.
-- University of Yggdrasil Edge Lab Technical Report 01: *Útgarðr: A Taxonomy of Edge Deployment Archetypes* (2039).
-
-### Discussion Questions
-
-1. Is the edge-cloud continuum a temporary architectural compromise, or a fundamental rebalancing of where computation belongs?
-2. Consider a wildlife tracking collar in the Norwegian highlands: what specific edge processing would you perform before satellite transmission, and why?
-3. How does the privacy argument for edge computing interact with the Norse Heathen concept of *frith* (sacred peace within a bounded community)?
-
-### Practice Problems
-
-- Calculate the minimum edge inference latency required for a drone travelling at 30 m/s to detect and avoid an obstacle appearing 15 metres ahead. Account for sensor capture, neural network inference, and actuator response.
-- Estimate the energy budget for a solar-powered soil moisture sensor that must operate through a Scandinavian winter. Determine whether local inference or raw data transmission is more sustainable.
+**Discussion Questions:**
+1. The brain achieves ~10^16 synaptic operations per second on 20 W. A 2025 GPU achieved ~10^14 FLOPS on 300 W. What architectural assumptions account for this 10,000× energy efficiency gap, and which are fundamental versus historical?
+2. If information is encoded in spike timing rather than rate, what new classes of algorithms become possible that are impossible in rate-coded networks? Consider temporal coincidence detection and sequence learning.
+3. Carver Mead's 1990 paper predicted the end of Moore's Law and the rise of neuromorphic systems. Which of his predictions were prescient, and which were wrong? What does this tell us about technological forecasting?
 
 ---
 
-ᚢ **Lecture 2: The Neuron in Silicon — Principles of Neuromorphic Engineering**
+## Lecture 2: Spiking Neuron Models — From Hodgkin-Huxley to the LIF Abstraction
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*The Norns weave each thread at its own pace; a neuron's spike, too, arrives not when demanded, but when it must.*
 
----
+To build a neuromorphic system, we must first model the neuron. The biological neuron is a marvel of electrochemical engineering: ion channels, neurotransmitter release, dendritic computation, and back-propagating action potentials. Neuroscientists have developed mathematical models at varying levels of abstraction, and the neuromorphic engineer's art is choosing the right level for the task — fidelity versus computational efficiency.
 
-### Overview
+The **Hodgkin-Huxley model** (1952, Nobel Prize 1963) is the canonical detailed model. It describes the membrane potential V(t) of a squid giant axon via four coupled ordinary differential equations tracking sodium activation (m), sodium inactivation (h), and potassium activation (n): C_m · dV/dt = I_ext - g̅_Na · m³h · (V - E_Na) - g̅_K · n⁴ · (V - E_K) - g̅_L · (V - E_L), with dm/dt = α_m(V)(1-m) - β_m(V)m and analogous equations for h and n, where α and β are experimentally fitted voltage-dependent rate functions. HH is biophysically accurate but computationally expensive — simulating 1 second of 1 million HH neurons requires approximately 10^15 floating-point operations, roughly 10 minutes on a modern GPU. For large-scale neuromorphic systems, we need something leaner.
 
-Neuromorphic computing is not merely "neural networks on a chip" — it is a fundamentally different approach to computation, inspired by the brain's architecture rather than its abstracted mathematics. Where a GPU multiplies matrices in lockstep, a neuromorphic chip pulses spikes asynchronously across a reconfigurable synaptic fabric. This lecture introduces the biological neuron as a computational primitive, the Leaky Integrate-and-Fire (LIF) model, spike-timing-dependent plasticity (STDP), and the deep conceptual shift from von Neumann architectures to event-driven, sparse, temporally coded computation.
+The **Izhikevich model** (2003) strikes an elegant balance: dv/dt = 0.04v² + 5v + 140 - u + I, du/dt = a(bv - u), with a spike reset: if v ≥ 30 mV, then v ← c, u ← u + d. Despite having only four parameters (a, b, c, d) and two differential equations, this model reproduces all 20 known cortical firing patterns — regular spiking, fast spiking, bursting, chattering, resonator — by tuning just a, b, c, and d. For example, (a=0.02, b=0.2, c=-65, d=8) produces a **regular spiking** (RS) neuron typical of pyramidal cells, while (a=0.1, b=0.2, c=-65, d=2) produces a **fast spiking** (FS) neuron typical of inhibitory interneurons. The computational cost is roughly 13 FLOPS per 1 ms timestep, making it 100× cheaper than HH while retaining biological plausibility. Izhikevich's model is often used as the "gold standard" for validating even simpler abstractions.
 
-### Key Concepts
+The **leaky integrate-and-fire (LIF)** model is the workhorse abstraction for most neuromorphic hardware. It eliminates the spike generation dynamics and treats the neuron as a simple RC circuit: τ · dV/dt = -(V - V_rest) + R · I_syn(t), with a hard threshold V_thresh and reset V ← V_reset after firing. The LIF model has no intrinsic dynamics of its own — it simply integrates input until it fires — making it computationally trivial (1 multiply-add per timestep). Yet this simplicity is a feature: the LIF model's behavior is dominated by the *network dynamics* (synaptic weights, delays, connectivity patterns) rather than the neuron's own properties, making it ideal for studying emergent computation. Notably, Intel's Loihi implements a variant of the **current-based LIF** (CUBA — current-based, LIF) where synaptic currents decay exponentially with a configurable time constant.
 
-- **The biological neuron as a computational model:** A neuron integrates incoming charge on its membrane; when the potential crosses a threshold, it fires a spike down its axon to connected neurons, then resets. This *spike* is the fundamental unit of information — not a floating-point number, but a precisely timed electrical event.
-- **Leaky Integrate-and-Fire (LIF) model:** The canonical abstraction. Membrane potential *V(t)* evolves according to τ_m · dV/dt = -(V - V_rest) + R_m · I_syn(t). When V ≥ V_thresh, a spike is emitted and V resets. The "leak" term models the passive diffusion of ions across the membrane — without input, the neuron returns to rest.
-- **Spike-Timing-Dependent Plasticity (STDP):** The biological learning rule. If a pre-synaptic spike arrives *just before* a post-synaptic spike fires, the synapse strengthens (LTP — long-term potentiation). If pre follows post, the synapse weakens (LTD). The STDP window is typically ~20-40 ms wide, a timescale that neuromorphic chips must honour in hardware.
-- **Asynchronous event-driven computation:** Unlike synchronous clocked logic, a neuromorphic core processes events only when spikes arrive. This yields *massive* energy efficiency for sparse, real-world signals — the chip is quiescent between events, consuming only leakage current.
-- **Carver Mead's vision (1989):** The Caltech physicist who coined "neuromorphic" argued that silicon could model ion channels directly using sub-threshold transistor physics. His early analogue VLSI cochlea and retina chips demonstrated orders-of-magnitude energy advantages over digital DSP — a principle rediscovered by the 2040 generation.
+A critical nuance often missed: the LIF model's information processing properties depend dramatically on the **input regime**. In the **sub-threshold fluctuation-driven regime** (mean input below threshold, firing driven by variance), the neuron acts as a coincidence detector, firing when multiple inputs arrive nearly simultaneously. In the **supra-threshold mean-driven regime** (mean input above threshold), the neuron acts as a rate coder whose firing rate is roughly linear in the mean input. This regime switch — controlled by the balance of excitation and inhibition — is one of the brain's fundamental computational mechanisms, and replicating it in hardware requires careful calibration of synaptic weights. In 2040, the Lava framework's `lava.proc.dense` process provides a CUBA LIF neuron library that students will use to explore these regimes empirically on real Loihi silicon.
 
-### Required Reading
+**Required Reading:**
+- Hodgkin, A.L. & Huxley, A.F. (1952). "A Quantitative Description of Membrane Current and Its Application to Conduction and Excitation in Nerve." *Journal of Physiology*, 117(4), 500–544.
+- Izhikevich, E.M. (2003). "Simple Model of Spiking Neurons." *IEEE Transactions on Neural Networks*, 14(6), 1569–1572.
+- Gerstner, W., Kistler, W.M., Naud, R., & Paninski, L. (2014). *Neuronal Dynamics: From Single Neurons to Networks and Models of Cognition*. Cambridge University Press. Chapters 1–6.
+- Davies, M. et al. (2021). "Advancing Neuromorphic Computing with Loihi: A Survey of Results and Outlook." *Proceedings of the IEEE*, 109(5), 911–934.
 
-- Mead, C. *Analog VLSI and Neural Systems.* Addison-Wesley, 1989. (Chapters 1-4.)
-- Gerstner, W. et al. *Neuronal Dynamics: From Single Neurons to Networks and Models of Cognition.* Cambridge, 2014. Sections on LIF and STDP.
-- Indiveri, G. and Liu, S.-C. "Memory and Information Processing in Neuromorphic Systems." *Proceedings of the IEEE*, 2015.
-
-### Discussion Questions
-
-1. How does the energy profile of a spiking neural network differ from a comparable artificial neural network running on GPU? Where does the advantage come from?
-2. STDP is a *local* learning rule — each synapse adjusts based only on the two neurons it connects. Contrast this with backpropagation's global error signal. What are the implications for on-chip learning?
-3. If the LIF model is a first-order approximation of a real neuron, what second-order effects matter for practical neuromorphic computation?
-
-### Practice Problems
-
-- Implement a single LIF neuron in Python. Drive it with a Poisson-distributed spike train at 20 Hz. Plot membrane potential over time and identify the firing rate.
-- Simulate a pair of LIF neurons connected by a synapse undergoing STDP. Vary the relative timing of pre- and post-synaptic spikes and plot the resulting weight change curve.
+**Discussion Questions:**
+1. The HH model captures ion channel dynamics with 4 ODEs. The Izhikevich model captures 20 firing patterns with 2 ODEs. The LIF captures one pattern with 1 ODE. When is it appropriate to use each? What questions can HH answer that LIF cannot?
+2. The Izhikevich model's parameter (a, b, c, d) have clear biological interpretations (recovery rate, sensitivity, reset potential, recovery increment). If you wanted to model a neuron that exhibits adaptation (decreasing firing rate over time), how would you set these parameters? What about a bursting neuron?
+3. Loihi's CUBA LIF neuron has configurable time constants for both membrane and synaptic current decay. What computational advantages does this dual-timescale architecture provide over a single-timescale LIF? Consider working memory and sequence processing.
 
 ---
 
-ᚦ **Lecture 3: Intel Loihi — Architecture of a Production Neuromorphic Processor**
+## Lecture 3: Spike-Timing-Dependent Plasticity — Learning in the Temporal Domain
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"A rune carved at dawn carries different power than one carved at dusk" — timing is everything in seiðr, and in synaptic learning.*
 
----
+If spiking neurons are the *what* of neuromorphic computing, **spike-timing-dependent plasticity (STDP)** is the *how* of learning. STDP is a biologically observed learning rule where the change in synaptic weight Δw depends on the relative timing of pre- and post-synaptic spikes: Δw = A⁺ · exp(-Δt/τ⁺) if Δt > 0 (pre before post, potentiation) and Δw = -A⁻ · exp(Δt/τ⁻) if Δt < 0 (post before pre, depression), where Δt = t_post - t_pre, A⁺ and A⁻ are amplitude parameters, and τ⁺ and τ⁻ are time constants (typically ~20 ms). The rule says: if the pre-synaptic neuron fires just before the post-synaptic neuron, the synapse is *strengthened* (it contributed to causing the spike); if the post fires just before the pre, the synapse is *weakened* (it was irrelevant). This is Hebb's postulate ("neurons that fire together wire together") refined with temporal precision.
 
-### Overview
+STDP's computational power emerges from its ability to perform **unsupervised feature detection**. Consider a single post-synaptic LIF neuron receiving Poisson spike trains from 100 pre-synaptic neurons. If one subset of pre-synaptic neurons consistently fires in a correlated pattern ~5 ms before the others, STDP will strengthen those synapses and weaken the rest, effectively making the post-synaptic neuron a *temporal coincidence detector* for that specific pattern. Masquelier, Guyonneau, and Thorpe (2008) demonstrated that an STDP-equipped neuron exposed to natural images learns Gabor-like receptive fields — the same edge detectors found in V1 of the visual cortex — purely from spike timing statistics, with no labeled data and no backpropagation. This is **unsupervised representation learning** at its most biologically authentic.
 
-Intel's Loihi, first unveiled in 2017 and reaching its third generation (Loihi 3 "Yggdrasil") by 2038, is the most widely deployed neuromorphic research and production platform. This lecture dissects Loihi's architecture in detail: the neurocore microarchitecture, the Network-on-Chip (NoC) fabric, the x86 Lakemont companion cores for host interaction, and the Lakemont-to-neurocore programming model. Students completing this lecture should be able to explain how a spike travels from one neurocore to another across the mesh, how synaptic weights are stored and decayed, and how Loihi achieves its ~10 pJ per synaptic operation energy envelope.
+The mathematical analysis of STDP reveals deeper structure. Song, Miller, and Abbott (2000) showed that STDP with additive weight updates leads to a *competitive* synaptic dynamics where weights are driven to either zero or a maximum value (bimodal distribution), while **multiplicative** STDP (where Δw is proportional to the current weight) produces a unimodal, log-normal distribution matching experimental data. The choice between additive and multiplicative STDP is one of the key design decisions in neuromorphic chip design — Loihi implements programmable STDP rules where students can specify the functional form, time constants, and whether updates are additive, multiplicative, or a hybrid.
 
-### Key Concepts
+By 2040, STDP has been extended far beyond its original pairwise formulation. **Triplet STDP** (Pfister & Gerstner, 2006) incorporates the effect of multiple pre-post spike pairs: Δw = A⁺ · x(t) · δ(t - t_post) - A⁻ · y(t) · δ(t - t_pre), where x(t) and y(t) are internal variables tracking recent pre- and post-synaptic activity. Triplet STDP resolves the **frequency-dependence paradox** — the observation that pairwise STDP predicts depression at high firing rates (because spikes are frequent), but experiments show potentiation. The triplet rule correctly switches from depression to potentiation at high rates because the internal traces accumulate. The Lava framework on Loihi 2 supports configurable multi-factor STDP rules, enabling students to experiment with triplet STDP and compare learning outcomes against the pairwise case.
 
-- **Neurocore microarchitecture (Loihi 2):** Each neurocore contains 1,024 spiking neuron compartments, 128 KB of SRAM for synaptic state, and a programmable learning engine. Neurons are not simple LIF units — Loihi supports a *programmable* neuron model with configurable membrane dynamics, dendritic compartments, and stochastic thresholds.
-- **The Network-on-Chip (NoC) mesh:** Loihi 2's 128 neurocores are arranged in an 8×16 2D mesh. Spikes are routed as *graded packets* — not destination-addressed, but broadcast through a spanning tree with fan-out determined by synaptic connectivity. This is neuromorphic routing: efficient for sparse, many-to-many connectivity.
-- **Lakemont x86 cores:** Each Loihi 2 chip includes six Lakemont cores running a real-time OS (FenrirRT by 2040). These handle chip management, spike encoding/decoding, and off-chip communication. The programmer writes host code on the Lakemont cores and neurocore code in the Lava framework.
-- **The Lava software framework:** Intel's open-source neuromorphic programming environment (Python-based). Lava provides a *process-library* abstraction: neurons, synapses, learning rules, and input/output encoders are composable processes connected by channels. Loihi 3 adds a direct PyTorch integration layer called *Bifröst Bridge*.
-- **Energy numbers:** Loihi 2 achieves ~10 pJ per synaptic operation (SOP) in typical workloads, compared to ~50-100 pJ for equivalent operations on GPU. For sparse spiking workloads (olfactory classification, gesture recognition), the advantage can reach 1,000× due to event-driven quiescence.
-- **Loihi 3 "Yggdrasil" (2038):** 512 neurocores, 3D-stacked with HBM, on-chip STDP and reward-modulated learning, integrated 6G IoT radio for direct edge deployment. The chip that powers the University of Yggdrasil's *Huginn* sensor satellite.
+A frontier topic in 2040 is the integration of STDP with **backpropagation through time (BPTT)** — the standard training algorithm for recurrent neural networks. The problem: BPTT requires differentiable activation functions and access to all past states (for the backward pass), neither of which SNNs naturally provide. **Surrogate gradient** methods (Neftci, Mostafa, & Zenke, 2019; Zenke & Vogels, 2021) replace the non-differentiable spike threshold with a smooth surrogate during the backward pass while using the true threshold during the forward pass. On Loihi 2, this enables a hybrid training regime: STDP for fast, local, unsupervised feature learning in early layers, and surrogate-gradient BPTT for supervised fine-tuning of output layers — combining the biological efficiency of STDP with the task performance of gradient descent.
 
-### Required Reading
+**Required Reading:**
+- Bi, G.-Q. & Poo, M.-M. (1998). "Synaptic Modifications in Cultured Hippocampal Neurons: Dependence on Spike Timing, Synaptic Strength, and Postsynaptic Cell Type." *Journal of Neuroscience*, 18(24), 10464–10472. The experimental discovery of STDP.
+- Song, S., Miller, K.D., & Abbott, L.F. (2000). "Competitive Hebbian Learning Through Spike-Timing-Dependent Synaptic Plasticity." *Nature Neuroscience*, 3(9), 919–926.
+- Pfister, J.-P. & Gerstner, W. (2006). "Triplets of Spikes in a Model of Spike Timing-Dependent Plasticity." *Journal of Neuroscience*, 26(38), 9673–9682.
+- Neftci, E.O., Mostafa, H., & Zenke, F. (2019). "Surrogate Gradient Learning in Spiking Neural Networks." *IEEE Signal Processing Magazine*, 36(6), 51–63.
 
-- Davies, M. et al. "Loihi: A Neuromorphic Manycore Processor with On-Chip Learning." *IEEE Micro*, 2018.
-- Intel Labs. *Loihi 2 Technical Brief.* 2021.
-- Orchard, G. et al. "Efficient Neuromorphic Signal Processing with Loihi 2." *Nature Machine Intelligence*, 2035.
-
-### Discussion Questions
-
-1. The NoC mesh broadcasts spikes as graded packets rather than routing them with destination addresses. What are the trade-offs of this approach — when does it win, and when does it break down?
-2. Loihi's programmable neuron model allows users to define their own membrane dynamics. Why is this necessary beyond the standard LIF? Give a concrete use case.
-3. Compare Loihi's on-chip STDP to GPU-based backpropagation for an edge deployment with intermittent connectivity. Which learning approach is more practical, and why?
-
-### Practice Problems
-
-- Write a Lava process that implements a winner-take-all (WTA) network of 100 LIF neurons on a single Loihi 2 neurocore. Measure the total energy consumed per classification decision.
-- Design a spike-encoding scheme for a continuous-valued temperature sensor reading (range -40°C to 85°C) suitable for processing on Loihi. Justify your encoding rate and precision.
+**Discussion Questions:**
+1. STDP is a local learning rule — each synapse only needs to know the timing of its own pre- and post-synaptic spikes. Backpropagation is global — every synapse needs the gradient of the final loss. What are the engineering implications of this difference? Consider distributed training, online learning, and hardware implementation.
+2. Triplet STDP resolves the frequency-dependence paradox. What other experimental phenomena does pairwise STDP fail to explain? Consider spike-timing-dependent LTD at long intervals (>100 ms) and the effect of dendritic location.
+3. Surrogate gradient methods make SNNs trainable via BPTT. But they sacrifice biological plausibility and local computation. Is this a reasonable trade-off? Or should neuromorphic computing commit fully to local learning rules?
 
 ---
 
-ᚬ **Lecture 4: Spike Encoding and Temporal Coding — How Information Lives in Time**
+## Lecture 4: Neuromorphic Hardware — Loihi, TrueNorth, and the Silicon Neuron
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"The smith forges not just steel but purpose — a blade for cutting, a plough for tilling. So too must we forge silicon not for general arithmetic but for the specific dance of spikes."*
 
----
+Neuromorphic hardware is not a simulation of neurons on a general-purpose processor; it is a **physical instantiation of neural dynamics in silicon**. The distinction is crucial: in a simulation, time steps through a discrete loop; in neuromorphic hardware, time flows continuously through analog or mixed-signal circuits whose physics natively implements the differential equations of neural dynamics. This is Carver Mead's original vision — *the physics of the device is the computation*.
 
-### Overview
+**Intel Loihi 2** (2021, revised 2036) is the most commercially significant neuromorphic processor in 2040 and the platform students use in this course. Each Loihi 2 chip (fabricated on Intel's 4 nm process) contains up to 1 million neurons and 120 million synapses distributed across 128 neuromorphic cores connected by a 2D mesh network-on-chip (NoC). Each core implements a programmable neuron model — not just LIF but configurable dendritic compartments, multi-compartment neurons, and user-defined synaptic plasticity rules — via a microcode engine. The key innovation of Loihi 2 over its predecessor is the **programmable neuron engine**: the neuron's dynamics (membrane equation, threshold adaptation, refractory behavior) are specified in a microcode program, enabling researchers to implement arbitrary spiking neuron models directly in silicon without FPGA intermediary. The synaptic memory uses a **graded spike** representation where spike magnitude can be fractional (0–255) rather than binary, enabling direct implementation of rate-based computations when needed.
 
-A digital image is an array of pixels. A spike train is a sequence of precisely timed events. The bridge between these two representations — *spike encoding* — is one of the most creative and consequential design decisions in neuromorphic systems. This lecture surveys the major encoding schemes: rate coding, temporal coding, population coding, rank-order coding, and the emerging *phase coding* that exploits the theta-gamma rhythms discovered in biological hippocampus. We explore the Shannon information capacity of spike trains, the trade-off between temporal precision and robustness to jitter, and the implications for edge sensor design.
+**IBM TrueNorth** (2014) was the pioneering large-scale neuromorphic chip, containing 1 million neurons and 256 million synapses on a single 28 nm die at just 70 mW — an astonishing 26 pJ per synaptic operation. TrueNorth's architecture is strikingly different from Loihi's: it uses a **crossbar array** of static synapses (weights loaded at configuration time, not learned online) and a fixed LIF neuron model. There is no on-chip learning — all weights must be pre-trained and loaded. This design trade-off (simplicity and scale over flexibility) made TrueNorth the first system to demonstrate real-time, low-power, million-neuron SNN inference (Esser et al., 2016). The TrueNorth-based NS16e system (2019) scaled to 64 million neurons — still the largest neuromorphic system ever built — and demonstrated 1,000× energy efficiency over GPUs for spiking convolutional networks.
 
-### Key Concepts
+The **SpiNNaker** (Spiking Neural Network Architecture) project at the University of Manchester represents a different philosophical approach. Instead of building analog or mixed-signal neurons, SpiNNaker uses 1 million ARM968 cores (SpiNNaker1) or custom ARM-based cores (SpiNNaker2, 2025) in a massively parallel digital system connected by a bespoke multicast router. Each core simulates ~1,000 neurons in real time. The resulting system (SpiNNaker2 at 10 million cores) can simulate 10 billion neurons in real time — far larger than any analog approach — but at lower energy efficiency (~10 nJ per synaptic operation versus ~1 pJ for Loihi). SpiNNaker's advantage is *flexibility*: any neuron model (HH, Izhikevich, multicompartment) can be loaded as software, making it the preferred platform for computational neuroscience where biological fidelity is paramount. The **Human Brain Project** used SpiNNaker (alongside BrainScaleS, an accelerated analog system) as its primary neuromorphic platform.
 
-- **Rate coding:** The classic scheme. A neuron's firing rate (spikes/second) encodes the stimulus intensity. Simple and robust — but slow. To distinguish 256 intensity levels at 10% precision, a rate code needs ~100 ms of integration time. For a drone dodging a tree, that is 3 metres of travel — unacceptable.
-- **Temporal coding (Time-to-First-Spike):** The *latency* of the first spike after stimulus onset encodes the information. Faster than rate coding by the integration window. Precision depends on spike timing jitter, typically 1-5 ms on Loihi.
-- **Population coding:** Many neurons encode the same stimulus, each with a slightly different tuning curve. The population vector decodes the stimulus from the collective activity. This is how the cricket's cercal system encodes wind direction — ~400 neurons, each tuned to a preferred angle, with population vector resolution of ~1°.
-- **Rank-order coding:** The *order* in which neurons in a population fire encodes the stimulus. The earliest-spiking neuron carries the most information. Biologically plausible (retinal ganglion cells) and extremely efficient — the code is complete once every neuron has fired once.
-- **Phase coding:** Neurons fire at specific phases of an underlying oscillatory rhythm. In the hippocampus, *place cells* fire at progressively earlier theta phases as the rat moves through the place field — a phenomenon called *phase precession*. Phase codes can multiplex multiple variables onto the same spike train. Loihi 3 supports on-chip theta oscillators for phase-referenced computation.
-- **Information-theoretic bounds:** A Poisson spike train of duration T and mean rate r carries ~rT · log₂(1 + 1/(r·Δt)) bits, where Δt is the temporal precision. The practical takeaway: improving temporal precision from 10 ms to 1 ms roughly doubles the information capacity — if the downstream decoder can use it.
+The **BrainScaleS** system (Heidelberg University, 2011–ongoing) is an extreme example of accelerated analog neuromorphic computing. BrainScaleS implements neurons using analog electronic circuits on custom ASICs, with synapses stored in an array of SRAM cells. Critically, the analog circuits run at 10,000× biological real time — 1 second of neural simulation completes in 100 μs. This acceleration, combined with a digital communication fabric that reconfigures synaptic weights between runs, makes BrainScaleS ideal for **evolutionary optimisation** of neural networks and for exploring parameter spaces that would require years of biological time. By 2040, BrainScaleS-3 (2028) has demonstrated the first accelerated simulation of a full cortical column with realistic ion channel dynamics, bridging the gap between detailed biophysical models and large-scale network function.
 
-### Required Reading
+**Required Reading:**
+- Davies, M. et al. (2018). "Loihi: A Neuromorphic Manycore Processor with On-Chip Learning." *IEEE Micro*, 38(1), 82–99.
+- Merolla, P.A. et al. (2014). "A Million Spiking-Neuron Integrated Circuit with a Scalable Communication Network and Interface." *Science*, 345(6197), 668–673. — IBM TrueNorth.
+- Furber, S.B., Galluppi, F., Temple, S., & Plana, L.A. (2014). "The SpiNNaker Project." *Proceedings of the IEEE*, 102(5), 652–665.
+- Schemmel, J., Billaudelle, S., Dauer, P., & Weis, J. (2022). "Accelerated Analog Neuromorphic Computing: BrainScaleS-2." In *Analog Integrated Circuits and Signal Processing*, 37–51.
 
-- Rieke, F. et al. *Spikes: Exploring the Neural Code.* MIT Press, 1997. Chapters 1-3.
-- Thorpe, S. "Spike-Based Strategies for Rapid Processing." *Neural Networks*, 2001.
-- UoY Neuromorphic Lab Technical Report 04: *Phase Coding on Loihi 3: A Hippocampus-Inspired Architecture* (2040).
-
-### Discussion Questions
-
-1. If rate coding is too slow and temporal coding is fragile, what hybrid scheme would you design for a drone collision-avoidance system? Defend your choice.
-2. Phase precession in the hippocampus allows a rat to encode spatial position at a resolution finer than the place field size. How might this principle be applied to an edge SLAM (Simultaneous Localisation and Mapping) system?
-3. The information capacity of a spike train depends on temporal precision — but precision costs energy (low-jitter spike generation is power-hungry). Where is the optimal trade-off for a battery-powered edge device?
-
-### Practice Problems
-
-- Encode a 10-second segment of 16 kHz audio into spike trains using a bank of 64 gammatone filters, each feeding a LIF neuron with rate coding. Compute the spike rate per neuron and total spike count.
-- Design a rank-order coding scheme for a 28×28 MNIST digit. How many input neurons are needed, and what is the information latency (time until all neurons have fired once)?
+**Discussion Questions:**
+1. Loihi uses a digital manycore architecture with on-chip learning. TrueNorth uses a crossbar with pre-trained weights and no on-chip learning. SpiNNaker uses general-purpose ARM cores. BrainScaleS uses accelerated analog circuits. When would you choose each platform? What are their respective strengths?
+2. Loihi 2's microcode-programmable neuron engine allows arbitrary neuron models. What new models are possible that were impossible on Loihi 1? Consider models with calcium-dependent plasticity, homeostatic mechanisms, and dendritic nonlinearities.
+3. The graded spike representation on Loihi 2 (0–255 magnitude) blurs the line between rate coding and temporal coding. When would you use graded spikes instead of binary spikes? What are the trade-offs in precision, energy, and algorithmic capability?
 
 ---
 
-ᚱ **Lecture 5: IBM TrueNorth and the SyNAPSE Legacy**
+## Lecture 5: Edge Computing Architectures — The Resource Continuum
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"A longship carries all it needs within its hull — water, food, weapons. The edge device must likewise be self-sufficient, carrying its intelligence within, not reaching across the sea for answers."*
 
----
+Edge computing is the practice of performing computation near the data source — the sensor, the camera, the microphone — rather than transmitting all data to a centralised cloud for processing. The **resource continuum** spans from microcontrollers (ARM Cortex-M4 at 80 MHz, 256 KB RAM, ~1 mW) through edge gateways (Raspberry Pi-class devices at 1–4 W) to edge servers (GPU-equipped, 50–200 W). Each tier represents a different trade-off between compute capacity, energy budget, latency tolerance, and connectivity reliability. By 2040, neuromorphic processors have become the default architecture for the lowest tiers of this continuum — where traditional von Neumann processors are simply too energy-hungry for continuous AI operation.
 
-### Overview
+The **latency-energy-accuracy trilemma** defines the edge computing design space. Cloud inference offers high accuracy (large models, powerful GPUs) but suffers from network latency (10–100 ms for cellular, unpredictable in rural/remote areas) and energy cost of data transmission (sending one image over 4G LTE costs ~2 J, equivalent to ~10^9 operations on an edge processor). On-device inference eliminates transmission cost and latency but must operate within severe energy and memory constraints. The solution is **model compression**: quantisation (8-bit integer weights instead of 32-bit float, reducing model size by 4×), pruning (removing near-zero weights, reducing size by 5–20×), and knowledge distillation (training a small "student" model to mimic a large "teacher" model). Quantised, pruned, and distilled models can run on microcontrollers — TensorFlow Lite Micro on an ARM Cortex-M4 runs keyword spotting at 50 μJ per inference, enabling continuous always-on voice activation.
 
-Before Loihi, there was TrueNorth. IBM's DARPA SyNAPSE programme produced, in 2014, a chip of astonishing ambition: one million programmable neurons and 256 million configurable synapses on a 5.4-billion-transistor die, consuming 70 mW — roughly the power of a hearing aid battery. This lecture honours the architectural innovations of TrueNorth — its deterministic crossbar scheduler, its corelet programming model, its rigid but elegant separation of computation and communication — and traces its influence through to the 2040 generation of neurosynaptic processors. We also examine why TrueNorth commercially failed, and what lessons that failure teaches about the gap between research prototyping and production deployment.
+**Heterogeneous edge architectures** are the dominant pattern in 2040. A modern edge node (like the Yggdrasil Huginn unit used in the course lab) pairs a low-power neuromorphic processor (Loihi 2) for continuous sensory processing with a conventional microcontroller for system management and a Wi-Fi 7 radio for intermittent cloud connectivity. The neuromorphic subsystem runs an always-on SNN that detects events of interest — anomalous vibrations in a bridge monitoring scenario, a specific voice in a smart-home context, an approaching vehicle in autonomous driving — consuming ~10 mW continuously. When an event is detected, the system wakes the microcontroller, which may trigger higher-resolution processing, log the event, or send an alert to the cloud. This **event-driven architecture** mirrors the brain's own attentional mechanisms and can reduce total system energy by 10–100× compared to continuous cloud streaming.
 
-### Key Concepts
+The **MobilEdge benchmark suite** (UoY Sigrun Group, 2037) provides a standardised evaluation framework for edge inference systems, measuring accuracy, latency, energy-per-inference, and memory footprint across a range of tasks (vision, audio, sensor fusion) on the Huginn hardware. A key finding: neuromorphic processors dominate the energy-efficiency axis but lag on raw throughput compared to GPU-equipped edge servers. For tasks requiring >100 inferences per second, a Jetson Orin Nano (15 W) outperforms Loihi 2 (1 W) in absolute throughput; for tasks requiring <1 inference per second with always-on operation, Loihi's 1 mW idle power versus Orin's 5 W idle power makes neuromorphic the only viable option. This illustrates a fundamental principle: **the right hardware depends on the duty cycle**. Students will replicate this analysis using the MobilEdge benchmark on a Huginn node.
 
-- **TrueNorth's neurosynaptic core:** 256 axons (inputs) × 256 neurons (outputs) interconnected by a 256×256 crossbar of binary synapses. Every neuron has a configurable LIF model with 4 synaptic types (excitatory, inhibitory, reset, and leak). The core operates on a 1 kHz synchronous tick — radically different from Loihi's asynchronous spikes.
-- **Deterministic many-core architecture:** TrueNorth's 4,096 cores are arranged in a 2D mesh. Communication is synchronous, time-multiplexed, and *deterministic by construction* — every spike arrives at its destination core in a fixed number of ticks. This makes TrueNorth programs formally verifiable. You can prove that a network never deadlocks.
-- **The corelet programming model:** A corelet is an abstraction of a neurosynaptic network with typed input/output ports. Corelets compose hierarchically — a 1,024-neuron network built from 4-core sub-networks, each a corelet. IBM's Corelet Language was a Python DSL that compiled to TrueNorth's low-level configuration bitstream.
-- **Energy and performance:** 46 billion synaptic operations per second per watt. A single TrueNorth chip at 70 mW could run a real-time 2,400 fps multi-object tracking pipeline that would consume ~200 W on a contemporary GPU. The trade-off: 1-bit synaptic weights (no graded learning) and fixed 1 kHz tick — no temporal dynamics faster than 1 ms.
-- **Why TrueNorth didn't conquer the world:** Three reasons. (1) The programming model was alien — corelet composition required a mental model radically different from the sequential/TensorFlow paradigm developers knew. (2) 1-bit weights limited accuracy on deep networks. (3) IBM didn't open-source the toolchain until 2021, by which time the AI community had committed to GPU deep learning.
-- **The TrueNorth legacy:** IBM's follow-on NorthPole chip (2023) adapted TrueNorth principles for server inference, achieving 25× energy improvement over GPU on ResNet-50. In 2040, NorthPole-derived accelerator tiles are standard in IBM Z-series mainframes for real-time fraud detection.
+**Required Reading:**
+- Satyanarayanan, M. (2017). "The Emergence of Edge Computing." *Computer*, 50(1), 30–39.
+- Wang, X., Han, Y., Leung, V.C.M., Niyato, D., Yan, X., & Chen, X. (2020). "Convergence of Edge Computing and Deep Learning: A Comprehensive Survey." *IEEE Communications Surveys & Tutorials*, 22(2), 869–904.
+- Jacob, B. et al. (2018). "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference." *CVPR 2018*, 2704–2713.
+- MobilEdge Benchmark Whitepaper, Sigrun Group, UoY (2037). Available on the course repository.
 
-### Required Reading
-
-- Merolla, P. et al. "A Million Spiking-Neuron Integrated Circuit with a Scalable Communication Network and Interface." *Science*, 2014.
-- Cassidy, A.S. et al. "Cognitive Computing Building Block: A Versatile and Efficient Digital Neuron Model for Neurosynaptic Cores." *IJCNN*, 2013.
-- Modha, D. "Introducing a Brain-Inspired Computer: TrueNorth's Neurons to Revolutionise System Architecture." IBM Research, 2014.
-
-### Discussion Questions
-
-1. TrueNorth's deterministic tick-based architecture makes it verifiable. Loihi's asynchronous event-driven architecture makes it energy-efficient. Is there a way to have both — determinism *and* sparsity? Propose an architecture.
-2. The corelet hierarchical composition model was elegant but adoption was low. Compare this to Lava's process-library approach. Which is more likely to gain traction, and why?
-3. NorthPole achieves GPU-class accuracy with neuromorphic energy efficiency. Is neuromorphic computing destined to remain a niche for extreme low-power edge, or will it challenge GPU dominance in the data centre?
-
-### Practice Problems
-
-- Implement a corelet (in Python, simulated) that performs a 4-neuron winner-take-all computation using lateral inhibition. Trace the spike timing for three different input patterns.
-- Estimate the total energy consumed by a TrueNorth chip processing 100,000 MNIST images at 1,000 classifications/second. Compare to a contemporary edge GPU (e.g., NVIDIA Jetson Orin Nano at 7 W).
+**Discussion Questions:**
+1. The latency-energy-accuracy trilemma says you can optimise at most two of three axes. Give examples of applications where each pair (latency+energy, energy+accuracy, latency+accuracy) is the right choice. When is the cloud the only viable option?
+2. The Huginn node pairs a neuromorphic processor with a conventional microcontroller. What are the engineering challenges of this heterogeneous architecture? Consider memory coherency, interrupt handling, and programming model.
+3. If the neuromorphic subsystem detects an event but has only 80% confidence, should it wake the microcontroller? What decision-theoretic framework should govern this wake-up decision? Consider the cost of false positives versus false negatives in a bridge-monitoring safety application.
 
 ---
 
-ᚲ **Lecture 6: Edge Inference — Running Neural Networks on Microcontrollers**
+## Lecture 6: Sensor Fusion at the Edge — Integrating Multimodal Streams
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"The vǫlva reads omens from fire, from birds, from the casting of lots. No single sign suffices — only their convergence speaks truth."*
 
----
+Sensor fusion is the problem of combining information from multiple heterogeneous sensors to produce an estimate that is more accurate, more robust, or more comprehensive than any individual sensor could provide. At the edge, sensor fusion faces unique constraints: sensors operate at different rates (a gyroscope at 1 kHz, a camera at 30 Hz, a GPS at 1 Hz), have different latencies, and produce data in incomparable formats (scalars, vectors, images). The fusion algorithm must align these streams temporally, transform them into a common representation, and combine them while respecting real-time deadlines and energy budgets.
 
-### Overview
+The **Kalman filter** (Kalman, 1960) is the canonical algorithm for linear sensor fusion with Gaussian noise. The discrete Kalman filter maintains an estimate of the system state ẋ and its covariance P, updating them in two steps. **Prediction**: ẋ_k|k-1 = F ẋ_k-1|k-1 + B u_k, P_k|k-1 = F P_k-1|k-1 F^T + Q. **Update**: K_k = P_k|k-1 H^T (H P_k|k-1 H^T + R)^(-1), ẋ_k|k = ẋ_k|k-1 + K_k (z_k - H ẋ_k|k-1), P_k|k = (I - K_k H) P_k|k-1. Here F is the state transition matrix, H is the observation matrix, Q is the process noise covariance, R is the measurement noise covariance, and K is the Kalman gain that optimally weights prediction versus measurement. The **extended Kalman filter (EKF)** linearises non-linear dynamics via first-order Taylor expansion; the **unscented Kalman filter (UKF)** handles nonlinearities by propagating sigma points (deterministically chosen samples) through the true nonlinear function, avoiding Jacobian computation altogether.
 
-Not every edge device has a Loihi or a GPU. The vast majority of edge nodes — smart sensors, wearables, agricultural monitors, industrial vibration detectors — run on ARM Cortex-M microcontrollers with 256 KB of RAM and no floating-point unit. Running a neural network on such silicon requires a different set of skills: quantisation, pruning, operator fusion, and the art of fitting a model into a memory budget smaller than a single JPEG. This lecture covers TinyML — the discipline of machine learning on microcontrollers — and the toolchains that make it practical: TensorFlow Lite Micro, Edge Impulse, and the University of Yggdrasil's *MímirCore* framework.
+Implementing a Kalman filter on an edge device requires careful numerical engineering. The covariance matrix P must remain symmetric and positive definite; floating-point round-off can cause P to lose these properties, leading the filter to diverge. The **Joseph form** of the covariance update (P = (I - KH)P(I - KH)^T + KRK^T) is more numerically stable and should be used in production code. On a microcontroller with no hardware floating-point unit (FPU), fixed-point Kalman filters use integer arithmetic with careful scaling — the Yggdrasil Edge Library provides a validated fixed-point UKF implementation for 32-bit ARM Cortex-M processors.
 
-### Key Concepts
+The **complementary filter** is the simplest fusion algorithm and remains widely used for attitude estimation in drones and wearables. It exploits the fact that gyroscopes are accurate at high frequencies but drift at low frequencies, while accelerometers are accurate at low frequencies but noisy at high frequencies: θ_fused = α · (θ_fused + ω_gyro · Δt) + (1-α) · θ_accel, where α = τ/(τ+Δt) for a time constant τ (typically ~0.5–1.0 s). The complementary filter is essentially a low-pass filter on the accelerometer and a high-pass filter on the gyroscope, and it can be implemented in just 3 lines of fixed-point C — ideal for the most constrained edge devices.
 
-- **Quantisation:** Converting 32-bit floating-point weights and activations to 8-bit integers (int8). A well-quantised model loses <1% accuracy while reducing memory by 4× and enabling integer-only inference. The key insight: neural networks are surprisingly robust to reduced precision because the training process already builds in redundancy.
-- **Post-training quantisation (PTQ) vs. quantisation-aware training (QAT):** PTQ calibrates scaling factors after training — fast but can degrade accuracy on small models. QAT simulates quantisation during training — the model learns to compensate — at the cost of longer training. For microcontrollers with <256 KB RAM, QAT is usually necessary to stay above 90% of floating-point accuracy.
-- **Pruning and sparsity:** Removing weights with magnitude below a threshold. Structured pruning (removing entire channels or filters) improves speed on hardware; unstructured pruning (individual weights) improves memory but requires sparse computation support. The ARM Ethos-U55 NPU supports structured sparsity natively.
-- **Operator fusion:** Combining adjacent layers (e.g., convolution + batch-normalisation + ReLU) into a single fused kernel eliminates intermediate memory buffers and reduces latency. For a 3-layer fused block, this can reduce RAM usage by 40%.
-- **TinyML hardware landscape (2040):** ARM Cortex-M85 with Helium vector extensions, Ethos-U65 NPU with 0.5 TOPS at 100 mW, GreenWaves GAP9 for ultra-low-power audio, and the RISC-V based *Urd* microcontroller designed here at UoY with native 4-bit spiking support.
-- **The 256 KB challenge:** A full MobileNetV2 is ~3.5 MB. After QAT, structured pruning (50% channels), and operator fusion, it fits in 240 KB with 92% of original accuracy. This is the "Mímir Squeeze" — the research area pioneered by the UoY TinyML group.
+**Neuromorphic sensor fusion** is the 2040 frontier, and the central project in this course. Event-based cameras (see Lecture 10) produce asynchronous spike-like outputs that are natively compatible with SNN processing. A Loihi 2 chip can simultaneously receive spike streams from an event camera (visual), a neuromorphic auditory sensor (cochlea model output), and an IMU (converted to spike trains via a delta-modulation encoding), fusing them through a recurrent SNN trained via surrogate-gradient BPTT. The key advantage: all three streams are represented in the same temporal-spike format, eliminating the need for explicit temporal alignment — spikes from different sensors are simply routed to the appropriate synapses, and the SNN's inherent temporal dynamics handle phase offsets automatically. This is sensor fusion *as computation* rather than sensor fusion as a pre-processing step.
 
-### Required Reading
+**Required Reading:**
+- Kalman, R.E. (1960). "A New Approach to Linear Filtering and Prediction Problems." *Journal of Basic Engineering*, 82(1), 35–45.
+- Julier, S.J. & Uhlmann, J.K. (1997). "New Extension of the Kalman Filter to Nonlinear Systems." *Proc. SPIE 3068*, 182–193. — Unscented Kalman filter.
+- Mahony, R., Hamel, T., & Pflimlin, J.-M. (2008). "Nonlinear Complementary Filters on the Special Orthogonal Group." *IEEE Trans. Automatic Control*, 53(5), 1203–1218.
+- Gallego, G. et al. (2022). "Event-Based Vision: A Survey." *IEEE Trans. Pattern Analysis and Machine Intelligence*, 44(1), 154–180.
 
-- Warden, P. and Situnayake, D. *TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers.* O'Reilly, 2019.
-- Jacob, B. et al. "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference." *CVPR*, 2018.
-- UoY TinyML Lab. *MímirCore: A RISC-V Toolchain for 4-bit Spiking Inference.* Technical Report, 2040.
-
-### Discussion Questions
-
-1. Quantisation is lossy compression. What classes of neural network architectures are most fragile under quantisation, and why?
-2. Operator fusion reduces memory but can increase code size due to specialised kernels. On a device where both RAM and flash are scarce, how do you decide what to fuse?
-3. The ARM Ethos-U65 delivers 0.5 TOPS at 100 mW. Compare this to Loihi 2's energy efficiency. When would you choose one over the other?
-
-### Practice Problems
-
-- Take a pre-trained MobileNetV2 in TensorFlow and apply post-training int8 quantisation using TFLite. Measure the accuracy change on a 1,000-image validation set.
-- Profile the memory usage (ROM, RAM, peak activation memory) of a 3-layer CNN before and after operator fusion. Use the MímirCore simulator.
+**Discussion Questions:**
+1. The Kalman filter is optimal under linear-Gaussian assumptions. What happens when these assumptions are violated? Consider multi-modal noise (e.g., GPS multipath errors with heavy tails). What alternatives exist?
+2. The complementary filter is a 3-line algorithm. When is it sufficient, and when is a full Kalman filter necessary? What additional sensors would tip the balance toward Kalman filtering?
+3. Neuromorphic sensor fusion eliminates temporal alignment by using a common spike representation. But what about spatial alignment? If an event camera and an IMU have different coordinate frames, how does the SNN learn the transformation? Is this something weights can learn, or does it require explicit calibration?
 
 ---
 
-ᚷ **Lecture 7: Sensor Fusion at the Edge — Combining Modalities Under Constraint**
+## Lecture 7: Energy-Efficient Deep Learning — Quantisation, Pruning, and Distillation
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"Skaldic verse distills a saga into a single stanza. Each word must earn its place; each kennning must carry weight. So too with neural networks at the edge."*
 
----
+The gap between the accuracy demands of modern AI applications and the resource constraints of edge devices is bridged by three complementary techniques: **quantisation** (reducing numerical precision), **pruning** (removing unnecessary connections), and **knowledge distillation** (transferring knowledge from large to small models). These are not alternatives but components of a **compression pipeline** that can reduce model size and inference energy by 10–100× with minimal accuracy loss.
 
-### Overview
+**Quantisation** maps floating-point weights and activations to low-precision integer representations. The standard approach is **affine quantisation**: q = round(r/S + Z), where r is the real value, S is the scale factor, and Z is the zero-point (the integer value corresponding to zero). For 8-bit quantisation, q ∈ [0, 255] (asymmetric) or [-128, 127] (symmetric). The operation a · b = S_a S_b (q_a - Z_a)(q_b - Z_b) requires only integer multiplication and addition, which are 4–10× more energy-efficient than FP32 multiply-accumulate operations on most architectures. The key challenge is determining S and Z: **post-training quantisation** calibrates these using a small representative dataset, while **quantisation-aware training (QAT)** inserts fake quantisation nodes during training so the network learns to be robust to quantisation noise. QAT typically preserves accuracy to within 0.5% of the full-precision baseline, whereas post-training quantisation can lose 2–5% on challenging models. By 2040, **mixed-precision quantisation** (where different layers use different bit-widths based on their sensitivity to quantisation noise) is the norm, with the UoY **Gungnir Optimiser** tool automatically determining per-layer bit widths via a hardware-aware neural architecture search.
 
-A self-driving car sees with cameras, hears with radar, feels with ultrasonic pulses, and orients with IMU and GPS. A wearable health monitor fuses PPG (photoplethysmography), ECG, accelerometer, and skin temperature. An autonomous underwater vehicle navigating a kelp forest combines sonar, depth, and optical flow. None of these sensors is perfect alone — cameras fail in fog, radar struggles with stationary objects, PPG is ruined by motion artefacts. *Sensor fusion* is the mathematics of combining imperfect, asynchronous, heterogeneous measurements into a coherent world state — and doing it within the power and latency budget of an edge device. This lecture covers Kalman filters, complementary filters, attention-based fusion networks, and the emerging field of *neuromorphic fusion* where spike-encoded sensor streams are integrated on-chip.
+**Pruning** removes weights or neurons that contribute little to the output, reducing both storage and computation. **Magnitude pruning** (Han et al., 2015) is the simplest: remove the p% of weights with smallest absolute value. At 90% sparsity, the model size is 10× smaller and inference is 10× faster (with sparse matrix hardware support). However, unstructured pruning produces irregular sparsity patterns that are difficult to accelerate on standard hardware. **Structured pruning** removes entire channels, filters, or attention heads, producing regular sparsity that maps cleanly to hardware — at the cost of slightly lower compression ratios for a given accuracy. The modern approach is **iterative pruning + fine-tuning**: prune 10%, fine-tune, repeat, until the desired sparsity is reached. The **lottery ticket hypothesis** (Frankle & Carbin, 2019) showed that a randomly initialised dense network contains a sparse subnetwork (the "winning ticket") that, when trained in isolation, achieves comparable accuracy to the full network — suggesting that pruning is not just compression but a form of architecture discovery.
 
-### Key Concepts
+**Knowledge distillation** (Hinton, Vinyals, & Dean, 2015) trains a small "student" network to mimic a large "teacher" network. The key insight: the teacher's soft outputs (probability distribution over classes) contain more information than hard labels. The student is trained to minimise a weighted sum of two losses: L = α · L_CE(y_student, y_true) + (1-α) · L_KL(y_student^T, y_teacher^T), where L_CE is cross-entropy with hard labels, L_KL is Kullback-Leibler divergence between the temperature-scaled softmax outputs (T > 1 softens the distribution, revealing the teacher's uncertainty about "incorrect" classes), and α balances the two. A distilled MobileNetV3 with 6 million parameters can achieve 75% ImageNet top-1 accuracy (versus 80% for a 150M-parameter ResNet-152 teacher), representing a 25× parameter reduction for a 5-point accuracy trade-off — often acceptable for edge deployment where the alternative is no AI at all.
 
-- **The Kalman filter:** The workhorse of sensor fusion since 1960. A recursive Bayesian estimator: predict the next state from a dynamics model, then update with a noisy measurement weighted by the Kalman gain. The equations are compact — five lines of linear algebra — but the assumptions (linear dynamics, Gaussian noise, known covariances) are brittle. Extensions: Extended KF (EKF) for non-linear dynamics, Unscented KF (UKF) for non-Gaussian uncertainty, particle filters for multi-modal distributions.
-- **Complementary filters for IMU:** Accelerometers measure orientation from gravity but are noisy at high frequency; gyroscopes integrate angular velocity but drift at low frequency. A complementary filter fuses them: high-pass the gyro integration, low-pass the accelerometer measurement, add them together. This is the magic that keeps a quadcopter stable — simple enough to run on an 8-bit microcontroller, robust enough for aerobatics.
-- **Deep sensor fusion:** A neural network that ingests raw or lightly processed data from multiple sensors and learns to produce a fused representation. Architectures: early fusion (concatenate sensor features at input), late fusion (process each sensor through separate encoders, then fuse at the decision layer), and *cross-attention fusion* where each modality attends to the others at each layer — expensive but state-of-the-art for autonomous driving in 2040.
-- **Neuromorphic fusion:** Both Intel and IBM have demonstrated spike-based sensor fusion — event cameras (DVS) providing visual spikes, neuromorphic cochleae providing audio spikes, both fed directly into a Loihi or TrueNorth chip without digital conversion. The chip performs spatio-temporal pattern recognition on the fused spike stream. Latency from photon/sound-wave to classification decision: < 5 ms.
-- **The edge-specific challenge:** A Kalman filter on a Cortex-M4 needs ~2 KB of RAM. A cross-attention fusion transformer needs 200 MB. The edge fusion engineer's job is to find the Pareto-optimal point on the accuracy-vs-resource curve for each deployment.
+The **edge deployment pipeline** taught in this course integrates all three techniques: (1) train a large teacher model on the cloud (CS205 techniques); (2) prune the teacher to 50% sparsity; (3) distill the pruned teacher into a compact student architecture designed for the target hardware; (4) quantise the student to INT8 using QAT; (5) convert to the TensorFlow Lite or Lava format and deploy on a Huginn node. Students will benchmark their pipeline's accuracy, latency, and energy against baselines on the MobilEdge suite.
 
-### Required Reading
+**Required Reading:**
+- Jacob, B. et al. (2018). "Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference." *CVPR 2018*, 2704–2713.
+- Han, S., Pool, J., Tran, J., & Dally, W.J. (2015). "Learning Both Weights and Connections for Efficient Neural Networks." *NIPS 2015*, 1135–1143.
+- Hinton, G., Vinyals, O., & Dean, J. (2015). "Distilling the Knowledge in a Neural Network." *arXiv:1503.02531*.
+- Frankle, J. & Carbin, M. (2019). "The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks." *ICLR 2019*.
 
-- Kalman, R.E. "A New Approach to Linear Filtering and Prediction Problems." *Journal of Basic Engineering*, 1960. (Yes, still assigned — it's only 13 pages, and it changed the world.)
-- Thrun, S., Burgard, W., and Fox, D. *Probabilistic Robotics.* MIT Press, 2005. Chapters on Kalman and particle filters.
-- Gallego, G. et al. "Event-Based Vision: A Survey." *IEEE TPAMI*, 2020. (Event cameras as spike sources.)
-
-### Discussion Questions
-
-1. The Kalman filter assumes Gaussian noise. When is this assumption violated in real sensor data, and what breaks when it is?
-2. Compare early fusion, late fusion, and cross-attention fusion for a drone with camera + LiDAR + IMU. Which would you deploy on a Cortex-M85 with 512 KB RAM, and why?
-3. Neuromorphic fusion's 5 ms latency is compelling for autonomous driving. What are the barriers to deploying neuromorphic sensor fusion in production vehicles in 2040?
-
-### Practice Problems
-
-- Implement a 1D Kalman filter in Python to fuse a noisy GPS position measurement (σ=5m, once per second) with an IMU velocity estimate (σ=0.1 m/s, 100 Hz). Plot the state estimate and covariance over 60 seconds.
-- Design a complementary filter for a drone's roll angle, fusing a gyroscope (1000 Hz, drift 0.01°/s) with an accelerometer (100 Hz, noise 0.5°). Specify the crossover frequency and explain your choice.
+**Discussion Questions:**
+1. After quantisation + pruning + distillation, a model may lose 5% accuracy but use 1% of the energy. For what applications is this trade-off acceptable? For what applications is it unacceptable? How would you decide?
+2. The lottery ticket hypothesis implies that the dense network was never "using" all its weights. What does this mean for neural architecture design? Should we design sparse architectures from the start rather than pruning dense ones?
+3. Distillation transfers "dark knowledge" from teacher to student. What exactly is this dark knowledge? If the teacher is 95% confident about class A and 2% about class B versus 1% about class C, what does the 2:1 ratio tell the student that the hard label does not?
 
 ---
 
-ᚹ **Lecture 8: On-Device Learning — When the Edge Must Adapt**
+## Lecture 8: Real-Time Inference on Constrained Devices — Serving Models at the Edge
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"The watchman on the wall must see the sail and call before the ship touches shore. Inference that arrives after the event is no inference at all."*
 
----
+Deploying a trained model is only half the battle; the other half is **inference serving** — executing the model with guaranteed latency, throughput, and availability on a device that may have 1/1000th the resources of the training infrastructure. Real-time inference introduces hard constraints: for a drone collision-avoidance system, inference must complete in under 20 ms; for an industrial anomaly detector monitoring a conveyor belt, throughput must exceed 100 inferences per second; for an always-on keyword spotter, the inference energy budget is 50 μJ. Meeting these constraints requires co-design of the model architecture, the inference runtime, and the hardware.
 
-### Overview
+The **inference runtime** is the software layer between the model and the hardware. On edge devices, the dominant runtimes in 2040 are **TensorFlow Lite Micro** (for microcontrollers), **ONNX Runtime** (for Linux-class edge devices), and **Lava** (for neuromorphic processors). Each runtime implements: (a) **graph optimisation** (operator fusion — merging convolution + batch norm + ReLU into a single kernel; constant folding — pre-computing statically known subgraphs; layout optimisation — converting NHWC to NCHW or vice versa for optimal memory access); (b) **memory planning** (allocating tensor buffers to minimise peak memory usage via a greedy interval-coloring algorithm); (c) **kernel selection** (choosing the fastest implementation for each operator on the specific hardware, often via JIT compilation or ahead-of-time auto-tuning). On a Raspberry Pi 5, ONNX Runtime with graph optimisations can achieve 2–5× speedup over naive model execution.
 
-Inference at the edge is common; *learning* at the edge is the frontier. A wildlife classifier deployed in the Amazon must adapt as new species are discovered. A predictive maintenance model on a wind turbine must learn the specific vibrational signature of *this particular turbine's* gearbox as it ages. Shipping data back to the cloud for retraining is often impossible — no connectivity, too much data, or privacy constraints. This lecture covers the techniques that make on-device learning practical: transfer learning with frozen backbones, federated averaging, meta-learning for few-shot adaptation, and the unique capability of neuromorphic chips to learn *continuously* without catastrophic forgetting.
+**Model serving patterns** for real-time inference include: (1) **Single-inference, single-result** (request-response) — the simplest pattern, used for image classification and keyword spotting. (2) **Streaming inference** — the model maintains internal state (an RNN hidden state or a Kalman filter covariance) and processes a continuous stream of sensor data, updating its state with each observation. On Loihi 2, streaming inference is natively supported because the neuromorphic cores run continuously, updating membrane potentials and synaptic states in real time — there is no "start inference / wait for result" cycle. (3) **Batched inference** — multiple inputs are processed simultaneously to amortise overhead. Edge devices rarely batch across users (since there's only one user), but can batch across time (process 4 audio frames at once) to exploit SIMD instructions. (4) **Cascaded inference** — a fast, lightweight model screens inputs, and only ambiguous cases trigger a more expensive model. For example, a 50 KB keyword spotter runs continuously; when it detects the wake word, it triggers a 5 MB speech recognition model.
 
-### Key Concepts
+**Hard real-time guarantees** require worst-case execution time (WCET) analysis, which is notoriously difficult for modern processors with caches, branch predictors, and out-of-order execution. On a neuromorphic processor, WCET analysis is simpler because the architecture is deterministic: each spike is processed by a fixed pipeline (synaptic lookup → weight multiplication → membrane update → threshold comparison → spike generation) with known cycle counts. Loihi 2's spike-processing latency is 1 μs per spike per core, and because spike routing uses a dimension-order routing algorithm on the 2D mesh, the worst-case spike delivery time is bounded by the Manhattan distance between sender and receiver cores. This determinism is a major advantage for safety-critical real-time systems.
 
-- **Transfer learning at the edge:** Keep the feature extractor (backbone) frozen — its 5 million weights were trained on massive cloud datasets. Train only a small classifier head (a few thousand parameters) on the device. The forward pass runs normally; the backward pass only computes gradients for the head. Works on microcontrollers with <100 KB of additional RAM for training state.
-- **Federated learning:** Many edge devices train local models on their private data. A central server aggregates only the *model updates* (gradients or weights), never the raw data. The Federated Averaging (FedAvg) algorithm: each device runs SGD locally for a few epochs, sends the weight delta to the server, which averages all deltas and broadcasts the updated global model. Privacy-preserving by design, but assumes devices are cooperative and not adversarial.
-- **Catastrophic forgetting:** When a neural network trained on task A is then trained on task B, its performance on task A plummets. This is the central obstacle to continuous on-device learning. Mitigations: Elastic Weight Consolidation (EWC) — penalise changes to weights that are important for previous tasks; replay buffers — interleave old examples with new ones; and progressive networks — freeze old columns, add new columns for new tasks.
-- **Neuromorphic continuous learning:** Loihi's on-chip STDP is inherently local and continuous — it doesn't have a "training phase" distinct from "inference." The chip learns as spikes flow, adapting synaptic weights incrementally. Early results show that STDP-based neuromorphic networks experience *less* catastrophic forgetting than backprop-trained ANNs, because weight changes are local and gradual rather than global and coordinated.
-- **Few-shot and meta-learning:** Model-Agnostic Meta-Learning (MAML) trains a model to be *easy to fine-tune* — the initial weights are optimised such that one or a few gradient steps on a new task produce good performance. MAML's inner loop (the few-shot adaptation) is lightweight enough to run on an edge device; only the outer loop (learning how to learn) needs cloud-scale compute.
-- **The 2040 landscape:** Loihi 3 supports fully on-chip continual learning with EWC-inspired synaptic consolidation. The *MímirCore* framework provides a federated learning API for RISC-V microcontrollers. And the UoY Neuromorphic Lab's *Jörmungandr* system (2039) demonstrated a snake-like inspection robot that learned to recognise new pipe corrosion patterns in the field using Loihi 3 + few-shot meta-learning, without any cloud connection for 6 months.
+Students will implement a **streaming anomaly detector** on a Huginn node: an accelerometer produces 3-axis vibration data at 1 kHz; a trained autoencoder (pruned, quantised, and distilled per Lecture 7) processes each window of 64 samples; if the reconstruction error exceeds a threshold, an alert is generated. The latency requirement is 64 ms (one window) and the energy budget is 500 μJ per inference. The lab compares implementations on: (a) ARM Cortex-M4 (TensorFlow Lite Micro), (b) Jetson Orin Nano (ONNX Runtime), and (c) Loihi 2 (Lava), measuring latency, energy, and accuracy.
 
-### Required Reading
+**Required Reading:**
+- David, R. et al. (2021). "TensorFlow Lite Micro: Embedded Machine Learning on TinyML Systems." *Proceedings of Machine Learning and Systems*, 3, 800–811.
+- Reddi, V.J. et al. (2020). "MLPerf Inference Benchmark." *ISCA 2020*, 446–459.
+- Chen, T. et al. (2018). "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning." *OSDI 2018*, 578–594.
+- Orchard, G. et al. (2021). "Efficient Neuromorphic Signal Processing with Loihi 2." *Nature Machine Intelligence*, 3, 886–896.
 
-- McMahan, B. et al. "Communication-Efficient Learning of Deep Networks from Decentralized Data." *AISTATS*, 2017. (The FedAvg paper.)
-- Kirkpatrick, J. et al. "Overcoming Catastrophic Forgetting in Neural Networks." *PNAS*, 2017. (Elastic Weight Consolidation.)
-- Finn, C., Abbeel, P., and Levine, S. "Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks." *ICML*, 2017.
-- UoY Jörmungandr Project. *Six Months of Autonomous Learning in Industrial Environments.* Technical Report, 2039.
-
-### Discussion Questions
-
-1. Federated learning assumes clients are honest. What attacks can a malicious client mount, and how can the server defend against them?
-2. Neuromorphic chips appear resistant to catastrophic forgetting. Is this a fundamental advantage of local learning rules, or can backprop-based systems achieve the same with enough engineering?
-3. A Jörmungandr robot learns to recognise 47 pipe corrosion patterns over 6 months of autonomous operation. Design a protocol to verify that it hasn't forgotten pattern #3 while learning pattern #47.
-
-### Practice Problems
-
-- Implement a simple federated averaging simulation in Python: 10 clients, each with non-IID data, training a small CNN. Plot the global model's accuracy over 100 communication rounds.
-- Simulate catastrophic forgetting: train a 3-layer MLP on MNIST digit classification (0-4), then on digits (5-9). Measure accuracy on the original task before and after fine-tuning, with and without EWC.
+**Discussion Questions:**
+1. Neuromorphic hardware provides deterministic spike processing with bounded latency. How does this compare to GPU inference serving, where latency distributions have long tails due to cache misses and scheduling? For what safety-critical applications does this determinism matter?
+2. Cascaded inference uses a cheap model to gate an expensive model. What are the failure modes? How would you set the gating threshold to trade off false positives (waking the expensive model unnecessarily) versus false negatives (missing events the expensive model could have caught)?
+3. Streaming inference on Loihi 2 maintains continuous state. How does this differ from the stateless request-response pattern used in cloud inference? What new capabilities does stateful inference enable?
 
 ---
 
-ᚺ **Lecture 9: Energy-Harvesting Edge — Computing Without a Plug**
+## Lecture 9: Edge-Cloud Orchestration and Federated Learning
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"The Thing gathers wisdom from every homestead, each bringing their knowledge to the assembly. Federated learning does the same — gathering models, not data."*
 
----
+No edge device operates in isolation. The **edge-cloud continuum** describes a system where computation migrates dynamically between device, edge gateway, and cloud based on latency requirements, energy availability, and network conditions. The orchestration problem is: given a computational DAG (e.g., preprocess → detect → classify → alert), which nodes should execute on-device, at the edge gateway, and in the cloud? The **Yggdrasil Huginn Orchestrator** (2039) solves this via a cost model that minimises a utility function U = w_1 · Latency + w_2 · Energy + w_3 · (1 - Accuracy) + w_4 · CloudCost, subject to per-task deadlines and energy budgets, with weights w configured per application.
 
-### Overview
+**Federated learning** (McMahan et al., 2017) is the paradigm for training across edge devices without centralising data. In each round, the cloud server distributes the current global model to a subset of edge devices; each device trains the model on its local data for a few epochs; the devices send only their **model updates** (gradients or weight differences) back to the cloud; the server aggregates these updates (typically via **Federated Averaging**: w_global ← ∑ (n_k / N) · w_k, where n_k is the number of local data points on device k). The key privacy guarantee: raw data never leaves the device. The key systems challenge: devices are heterogeneous in compute, network, and data distribution — a smartphone with 10,000 photos and a Raspberry Pi with 50 sensor readings should not contribute equally to the global model.
 
-Some edge devices have no battery. No solar panel. No reliable power of any kind. They harvest energy from their environment — a piezoelectric strip on a vibrating motor, a thermoelectric generator on a hot pipe, a tiny RF rectenna capturing ambient WiFi — and must compute *between* energy bursts, saving state before the capacitor drains. This is *intermittent computing*, and it demands a radical rethinking of program execution: checkpointing at the instruction level, non-volatile processors, and the art of making progress one microjoule at a time. This lecture covers energy-harvesting hardware, intermittent computing models, and the surprising fit between neuromorphic event-driven execution and energy-intermittent environments.
+**Non-IID data** is the central algorithmic challenge. In classical distributed training, data is shuffled across workers so each sees an independent and identically distributed (IID) sample. In federated learning, each device's data reflects its user's habits — one user's photo library is 80% cats, another's is 80% landscapes. The global model, trained via Federated Averaging on non-IID data, can diverge significantly from the centrally-trained optimum. The **FedProx** algorithm (Li et al., 2020) addresses this by adding a proximal term to the local objective: L_k(w) = L(w) + (μ/2) ‖w - w_global‖², which penalises local models that stray too far from the global model, improving convergence under heterogeneity. The **SCAFFOLD** algorithm (Karimireddy et al., 2020) uses control variates (server and client correction terms) to correct for client drift, achieving faster convergence than FedAvg on non-IID data.
 
-### Key Concepts
+**Neuromorphic federated learning** is a nascent field in 2040, enabled by Loihi 2's on-chip learning capability. The problem: STDP produces weight changes in a format (spike-timing-dependent updates) that is not directly compatible with the gradient-based aggregation used in Federated Averaging. The solution, developed by the UoY Huginn Group: **spike-to-gradient translation**. Each local training phase records both the STDP-induced weight changes Δw_STDP and the equivalent gradient direction g = sign(Δw_STDP) · |Δw_STDP|^(1/T) where T is a "temperature" that maps the nonlinear STDP update into a gradient-like form. These translated gradients are then aggregated via Federated Averaging at the cloud. Early results show neuromorphic federated learning achieves 85% of the accuracy of centralised surrogate-gradient training while preserving the 1,000× energy advantage of on-chip STDP — a compelling trade-off for privacy-sensitive, always-on applications like health monitoring.
 
-- **Energy-harvesting sources:** Thermoelectric generators (TEGs) produce ~10-100 μW/cm² from a 5-20°C gradient. Indoor photovoltaic cells yield ~10 μW/cm² under office lighting. Piezoelectric harvesters capture ~100 μW from industrial vibration. RF harvesters capture nanowatts to microwatts from ambient radio — enough to wake a sensor, take a reading, and transmit a packet once per minute.
-- **Intermittent computing model:** The device powers on when the energy buffer (capacitor or supercapacitor) reaches a threshold voltage, executes for a few milliseconds to seconds until the buffer drops below a brownout threshold, then powers off — losing all volatile state. Progress is made through *checkpoints*: the program periodically saves its state to non-volatile memory (FRAM or MRAM). On reboot, it restores the checkpoint and resumes.
-- **Task-based intermittent execution:** Rather than checkpointing arbitrary program state, the programmer decomposes work into idempotent *tasks* with explicit inputs, outputs, and commit points. The *InK* (Intermittent Kernel) and *Chain* task-based systems pioneered this model. A task either completes entirely (atomically from the energy perspective) or rolls back — no partial execution.
-- **Non-volatile processors (NVPs):** A processor whose flip-flops and SRAM are backed by ferroelectric or magnetic tunnel junctions, allowing instant state preservation on power loss and instant restore on power-up. ARM's *NVP* prototype (2025) and the commercial RISC-V based *Urd-NV* (UoY, 2040) make intermittent computing transparent to the programmer — but at a 20-30% area and energy overhead compared to volatile logic.
-- **Neuromorphic + intermittent = natural allies:** Neuromorphic event-driven execution is inherently interruptible at the spike boundary. A Loihi 2 core can save its membrane potentials and synaptic weights to on-chip NVM in ~2 μs — fast enough to complete before the capacitor drains. The UoY *Sólarsteinn* project (2040) demonstrated a Loihi 3 chip powered entirely by indoor light, running a continuous gesture-recognition network for 18 months without a battery.
-- **The Sólarsteinn architecture:** A 2 cm² indoor photovoltaic cell charges a 100 μF supercapacitor. When voltage reaches 3.3 V, the Loihi core wakes, processes up to 25 spikes (~500 μJ total per wake cycle), writes state to FRAM, and sleeps. When the next gesture occurs, event-camera spikes arrive and the cycle repeats. Average power consumption: 4.7 μW.
+**Required Reading:**
+- McMahan, B., Moore, E., Ramage, D., Hampson, S., & Arcas, B.A. (2017). "Communication-Efficient Learning of Deep Networks from Decentralized Data." *AISTATS 2017*.
+- Li, T., Sahu, A.K., Zaheer, M., Sanjabi, M., Talwalkar, A., & Smith, V. (2020). "Federated Optimization in Heterogeneous Networks." *Proceedings of Machine Learning and Systems*, 2, 429–450.
+- Karimireddy, S.P., Kale, S., Mohri, M., Reddi, S.J., Stich, S.U., & Suresh, A.T. (2020). "SCAFFOLD: Stochastic Controlled Averaging for Federated Learning." *ICML 2020*.
+- Huginn Group. "Spike-to-Gradient Translation for Neuromorphic Federated Learning." *UoY Technical Report*, 2039.
 
-### Required Reading
-
-- Lucia, B. et al. "A Simpler, Safer Programming and Execution Model for Intermittent Systems." *PLDI*, 2015. (The Chain task-based model.)
-- Ma, K. et al. "Architecture Exploration for Ambient Energy Harvesting Nonvolatile Processors." *HPCA*, 2015.
-- UoY Sólarsteinn Project. *Battery-Free Neuromorphic Computing: 18 Months of Continuous Operation.* Technical Report, 2040.
-
-### Discussion Questions
-
-1. Compare checkpoint-based and task-based intermittent computing. Which is more suitable for a neuromorphic chip, and why?
-2. A non-volatile processor eliminates the need for software checkpointing — but costs 20-30% in energy overhead. For a device that browns out every 50 ms, does the NVP overhead pay for itself? Quantify your answer.
-3. The Sólarsteinn project ran for 18 months without a battery. What are the environmental and sustainability implications of battery-free edge computing at scale?
-
-### Practice Problems
-
-- Calculate the minimum supercapacitor size needed to power a Loihi 2 core (20 mW active, 50 μW sleep) through a 10 ms spike-processing burst, given a supply voltage range of 3.3 V down to 2.7 V.
-- Design a task-based intermittent application for a bridge vibration sensor: sample accelerometer at 1 kHz for 1 second, compute FFT, and transmit the dominant frequency. Decompose into idempotent tasks and specify the commit points.
+**Discussion Questions:**
+1. Federated learning protects raw data privacy but model updates can leak information. A gradient g = ∂L/∂w can reveal whether a specific data point was in the training set (membership inference). What mitigations exist? Consider differential privacy and secure aggregation.
+2. The spike-to-gradient translation maps STDP updates to gradient-like values. This is an approximation — what information is lost in this mapping? Can you design an aggregation scheme that operates directly on STDP updates without translation?
+3. A device with 50 data points contributes less to Federated Averaging than one with 10,000. Is this fair? Should the aggregation be weighted by data quantity, data quality, or something else? How would you define "quality" in a privacy-preserving way?
 
 ---
 
-ᚾ **Lecture 10: Privacy-Preserving Edge AI — Computing on Data You Cannot See**
+## Lecture 10: Neuromorphic Sensing — Event-Based Vision and Auditory Processing
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"Heimdallr sees the grass grow and hears the wool on sheep. His senses are event-driven, not sampled — he perceives not snapshots but changes."*
 
----
+Conventional sensors — cameras, microphones — sample the world at fixed intervals (30 Hz, 44.1 kHz) regardless of whether anything has changed. This is fundamentally wasteful: between frames, 99% of pixels may be identical; in silence, audio samples carry only noise. **Neuromorphic sensors** flip this paradigm: they report only *changes* — events — asynchronously, exactly when and where they occur. This event-driven sensing is the perfect match for event-driven computation on neuromorphic hardware.
 
-### Overview
+**Event-based cameras** (also called dynamic vision sensors, DVS) operate like biological retinas. Each pixel operates independently and continuously monitors the log-intensity L = ln(I). When L changes by more than a threshold θ (typically 10–15% contrast), the pixel emits an **event** e = (x, y, t, p) where (x,y) is the pixel coordinate, t is the microsecond-precision timestamp, and p ∈ {+1, -1} indicates the polarity of the change (increase or decrease in brightness). An event camera produces no output for static scenes — a parked car generates zero events — and responds to fast motion with microsecond latency, whereas a conventional camera at 30 fps would miss events between frames (the "blind time" problem). The data rate is adaptive: a static office scene produces ~10 kEvents/s, a busy street ~1 MEvents/s, and explosive motion ~10 MEvents/s. Commercial event cameras in 2040 (Prophesee Gen4, Sony IMX636) offer 1280×720 resolution with 1 μs temporal resolution, at ~10 mW — 100× less power than an equivalent frame-based camera continuously streaming at 30 fps.
 
-A home audio assistant that processes speech locally never sends voice recordings to the cloud. A medical wearable that detects atrial fibrillation on-device never exposes your ECG to a server. Edge computing is, at its core, a privacy technology — but only if we get the details right. This lecture covers the privacy threats that edge computing addresses (and the ones it doesn't), the technical mechanisms for privacy preservation (differential privacy, secure enclaves, homomorphic encryption), and the emerging regulatory landscape that makes edge privacy not just an engineering choice but a legal requirement. We frame privacy through the Norse concept of *huldufólk* — the hidden folk who live in the spaces between, unseen unless they choose to be seen.
+The data format of event cameras — asynchronous, sparse, spatio-temporal — is natively compatible with SNNs. An SNN layer connected to an event camera can process each event as it arrives, updating only the neurons whose receptive fields include that pixel. This **event-driven processing** means the network's energy consumption is proportional to scene activity rather than resolution × frame rate. A face detection SNN on Loihi 2 processing event camera input consumes ~1 mW when the scene is static and ~50 mW during active motion, while a frame-based DNN on an edge GPU consumes a constant ~5 W regardless of scene content. This activity-proportional energy is the defining advantage of neuromorphic sensing + processing pipelines.
 
-### Key Concepts
+**Neuromorphic auditory sensors** model the human cochlea. The **silicon cochlea** (Lyon & Mead, 1988; Liu et al., 2014) is a cascaded filterbank that decomposes audio into frequency bands, with each band producing spike events when the energy in that band changes. The filterbank uses second-order sections that mimic the basilar membrane's mechanical frequency dispersion: H_k(s) = s · τ_k / (s² · τ_k² + s · τ_k/Q_k + 1), where τ_k is the time constant for channel k (tuned to a specific characteristic frequency), Q_k is the quality factor (sharpness of tuning), and the cascade of filters implements a constant-Q (logarithmically spaced) frequency decomposition matching human auditory perception. A 64-channel silicon cochlea implemented in 22 nm CMOS (2028) consumes 50 μW and provides a spike-based representation of audio that can directly drive an SNN for keyword spotting, speaker identification, and sound source localisation — all at energy budgets 100× lower than conventional MFCC + DNN pipelines.
 
-- **The privacy promise of edge computing:** When data never leaves the device, the traditional cloud privacy risks (data breach, subpoena, insider threat, secondary use) are fundamentally eliminated — for that data at rest. But edge devices face *different* privacy threats: physical theft, side-channel attacks (power analysis, EM emanations), and model inversion (extracting training data from the model itself).
-- **Differential privacy (DP) at the edge:** A mathematical guarantee that the output of a computation reveals no more about any individual than if that individual's data were excluded entirely. Implemented by adding calibrated noise to results. For on-device learning, *local differential privacy* (LDP) ensures that even the model updates sent in federated learning carry a DP guarantee. The privacy budget ε controls the trade-off: smaller ε = stronger privacy, larger variance.
-- **Trusted Execution Environments (TEEs):** Hardware-isolated regions of the processor (ARM TrustZone, Intel SGX, RISC-V Keystone) where code and data are inaccessible to the main OS, even if the OS is compromised. On edge devices, a TEE can run the inference engine while the main OS handles networking and UI — even a compromised OS cannot read the model weights or sensor data in the enclave.
-- **Homomorphic encryption (HE):** Compute on encrypted data without decrypting it. A cloud server can run inference on a ciphertext-encrypted image and return an encrypted result that only the edge device can decrypt. HE is computationally expensive (10,000× slowdown vs. plaintext for deep networks) but is approaching practicality for shallow classifiers on audio and health data. The 2040 *CKKS* scheme with hardware acceleration on the Urd-NV processor achieves 50× overhead for 4-layer networks.
-- **Model inversion and membership inference:** An attacker with access to a trained model can reconstruct training examples (model inversion) or determine whether a specific individual's data was in the training set (membership inference). Edge deployment doesn't prevent these attacks — the model itself leaks information. Mitigations include DP training, knowledge distillation with unlabelled public data, and *model watermarking* to detect unauthorised copies.
-- **Regulatory landscape (2040):** The EU AI Act (2024, amended 2038) mandates on-device processing for biometric data. The Global Edge Privacy Treaty (2036) requires DP guarantees for any health inference deployed on consumer devices. The Nordic Data Sovereignty Framework (2039) explicitly invokes *huldufólk* principles — data should be hidden unless the individual chooses revelation.
+The practical lab for this lecture uses the Yggdrasil Huginn node's event camera (a Prophesee Gen4 sensor) and a microphone processed through a software silicon cochlea emulation. Students implement: (a) an SNN that tracks a moving object using event camera input only, (b) a keyword spotter that triggers on "Hey Huginn" using cochlea-processed audio, and (c) an audio-visual fusion that associates sound sources with visual objects (e.g., which person is speaking in a multi-person scene). The final challenge: combine (a), (b), and (c) into a complete scene-understanding pipeline that runs entirely on Loihi 2 at under 100 mW.
 
-### Required Reading
+**Required Reading:**
+- Gallego, G. et al. (2022). "Event-Based Vision: A Survey." *IEEE Trans. Pattern Analysis and Machine Intelligence*, 44(1), 154–180.
+- Lichtsteiner, P., Posch, C., & Delbruck, T. (2008). "A 128×128 120 dB 15 μs Latency Asynchronous Temporal Contrast Vision Sensor." *IEEE Journal of Solid-State Circuits*, 43(2), 566–576.
+- Liu, S.-C., Delbruck, T., Indiveri, G., Whatley, A., & Douglas, R. (2014). *Event-Based Neuromorphic Systems*. Wiley. Chapters 1–4.
+- Lyon, R.F. & Mead, C. (1988). "An Analog Electronic Cochlea." *IEEE Trans. Acoustics, Speech, and Signal Processing*, 36(7), 1119–1134.
 
-- Dwork, C. and Roth, A. "The Algorithmic Foundations of Differential Privacy." *Foundations and Trends in Theoretical Computer Science*, 2014. Chapters 1-3.
-- Fredrikson, M. et al. "Model Inversion Attacks That Exploit Confidence Information and Basic Countermeasures." *CCS*, 2015.
-- Nordic Data Sovereignty Commission. *Huldufólk Principles: A Framework for Hidden Data.* 2039.
-
-### Discussion Questions
-
-1. If an edge device uses local differential privacy with ε = 1.0, what does this mathematically guarantee? Is ε = 1.0 "good enough" for medical data?
-2. Model inversion attacks extract training data from the model. Can an on-device model that has never left the device be vulnerable to inversion? How?
-3. Does the concept of *huldufólk* — the right to be unseen — provide a useful ethical framework for edge privacy, or is it merely poetic branding?
-
-### Practice Problems
-
-- Implement the Laplace mechanism for differential privacy: given a function f(D) returning a scalar, add noise drawn from Laplace(Δf/ε) and prove that the result is ε-DP.
-- Simulate a membership inference attack: train a classifier on half of CIFAR-10, then train an "attack" model to distinguish training-set members from non-members based on the target model's confidence scores. Measure attack accuracy.
+**Discussion Questions:**
+1. An event camera produces no data when the scene is static. What are the failure modes? Consider scenarios where important information IS in the static scene (a stop sign that hasn't moved, a person standing still). How would you design a hybrid system that combines event and frame-based sensing?
+2. The silicon cochlea's constant-Q filterbank matches human frequency perception. But machine hearing systems can use any filterbank — is the cochlea's design optimal for machines, or is it an anthropomorphic bias? What alternative frequency decompositions might be better for specific tasks?
+3. The activity-proportional energy of SNN+event camera pipelines is their key advantage. Under what usage patterns (duty cycle, scene complexity) does this advantage disappear? When would a frame-based system be more efficient?
 
 ---
 
-ᛁ **Lecture 11: The Edge-Cloud Continuum — Orchestrating Computation Across Realms**
+## Lecture 11: Security, Privacy, and Trust on the Edge
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"A rune of protection must be carved on every doorpost. An edge device without security is a door left open to the frost giants."*
 
----
+Edge devices operate in physically exposed environments — attached to bridges, embedded in wearables, deployed in smart homes — where attackers can physically access the hardware. Security on the edge is therefore fundamentally harder than cloud security, where data centres have armed guards and biometric access controls. The threat model for edge devices includes: (a) **physical attacks** (probing memory buses, power analysis, fault injection via voltage glitching), (b) **network attacks** (man-in-the-middle, replay, denial of service), (c) **model extraction** (querying the model to reconstruct training data or model weights), and (d) **adversarial examples** (carefully crafted inputs that cause misclassification).
 
-### Overview
+**Trusted execution environments (TEEs)** provide hardware-enforced isolation for sensitive computation. ARM TrustZone (available on Cortex-A processors) partitions the system into a "secure world" and "normal world," with hardware-enforced memory isolation between them. The neural network model weights, the inference computation, and the cryptographic keys reside in the secure world; the sensor drivers and network stack run in the normal world. Even if an attacker compromises the normal world OS, they cannot read the model weights or inference results. Intel SGX (Software Guard Extensions) takes this further, encrypting memory regions so that even the OS and hypervisor cannot access enclave data. On edge devices, TEEs add ~5–15% latency overhead to inference, which is acceptable for all but the most latency-sensitive applications.
 
-No edge device is an island. The modern computing landscape is a *continuum*: sensors at the far edge, microcontrollers in the near edge, edge servers in cell towers and factory floors, regional cloud data centres, and hyperscale cloud. An autonomous vehicle processes lidar point clouds on-vehicle, ships semantically labelled objects to a roadside edge server for traffic coordination, and uploads rare corner cases to the cloud for model retraining. This lecture covers the systems architecture of the edge-cloud continuum: the *Bifröst Broker* (a UoY reference implementation), workload partitioning algorithms, service mesh at the edge, and the *Yggdrasil Orchestration Framework* that manages computation across all nine realms — from the sensor (Niflheim, the misty near-nothing) to the cloud (Ásgarðr, the realm of abundant compute).
+**Federated learning with differential privacy** (Lecture 9) protects training data, but what about inference data? **Homomorphic encryption** (HE) allows computation on encrypted data: E(a) ⊗ E(b) = E(a + b) (additively homomorphic) or E(a) ⊗ E(b) = E(a × b) (fully homomorphic, FHE). In theory, a user could encrypt their sensor data, send it to an edge server, have the server run inference entirely on encrypted data, and receive encrypted results that only the user can decrypt — the server learns nothing about the input or output. In practice, FHE inference on a ResNet-50 takes ~10 seconds per image on a powerful server (2025 numbers), making it impractical for real-time edge applications. **Partial homomorphic encryption** (only addition OR multiplication, not both) is much faster and can be used for specific operations (e.g., encrypted aggregation in federated learning). By 2040, hardware-accelerated FHE (via FPGA or ASIC co-processors) has reduced FHE inference latency to ~100 ms for a MobileNet-class model, bringing private inference into the real-time domain for edge applications.
 
-### Key Concepts
+**Adversarial robustness** is the study of inputs designed to fool neural networks. An adversarial example is a small perturbation δ added to a correctly classified input x such that f(x + δ) ≠ f(x) while ‖δ‖ is imperceptibly small. The **Fast Gradient Sign Method** (FGSM, Goodfellow et al., 2015) generates adversarial examples in one step: x_adv = x + ε · sign(∇_x L(f(x), y_true)). The **Projected Gradient Descent** (PGD, Madry et al., 2018) iteratively refines the perturbation: x_adv^(t+1) = Proj(x_adv^(t) + α · sign(∇_x L(f(x_adv^(t)), y_true))), and is the standard benchmark for robustness evaluation. On edge devices, adversarial robustness is particularly important because attackers can physically manipulate the sensor input — placing stickers on stop signs, shining lasers at cameras, playing ultrasonic audio — not just digital pixels. Neuromorphic sensors provide some inherent robustness: an event camera's threshold θ means that small adversarial perturbations below the contrast threshold produce no events, effectively providing a built-in "denoising" step.
 
-- **The continuum taxonomy:** Far edge (microcontrollers, <1 W, intermittent connectivity), near edge (gateways, 1-10 W, cellular/WiFi), edge cloud (micro-data centres, 100 W-1 kW, fibre), regional cloud, hyperscale cloud. Each tier adds ~10× more compute capacity and ~10× higher latency to the user.
-- **Workload partitioning (SPLIT architecture):** A DNN is divided into a *head* (early layers) deployed on the edge device and a *tail* (later layers) deployed on the edge server. The head extracts features and compresses the data; the tail performs complex reasoning. The split point is chosen to balance edge latency, transmission bandwidth, and cloud accuracy. Tools: *SPLIT-Net* framework, *Neurosurgeon* profiler.
-- **The Bifröst Broker:** UoY's open-source edge-cloud orchestration layer (2040). It maintains a registry of available compute nodes across the continuum with real-time latency and load metrics. When a client submits an inference request, Bifröst solves a constrained optimisation: minimise end-to-end latency subject to accuracy ≥ target, energy ≤ budget, and privacy policy constraints. The solution may route to 3 different nodes for different parts of the pipeline.
-- **Service mesh at the edge:** Istio and Linkerd were designed for homogeneous cloud clusters. Edge deployments need a lighter mesh: the *Hlér* mesh (UoY, 2039) uses eBPF-based proxies with <1 MB memory footprint, handling intermittent connectivity with store-and-forward message queues that survive node reboot.
-- **Vehicle-to-Infrastructure (V2I) as a continuum case study:** A self-driving car at 30 m/s has ~100 ms to react to a pedestrian. On-vehicle GPU processes camera frames (10 ms). Near-edge roadside unit fuses vehicle and traffic-light data (5 ms round-trip). Cloud updates the HD map with construction-zone changes (500 ms — not in the critical path). Total latency budget: 100 ms. The continuum orchestration must meet hard real-time constraints while optimising for cost.
-- **The Yggdrasil Orchestration Framework:** Maps each of the Nine Realms to a tier in the continuum:
-  - **Niflheim:** Far-edge sensors (cold, dark, intermittent)
-  - **Miðgarðr:** Near-edge gateways (the human realm — phones, routers, cars)
-  - **Ásgarðr:** Cloud data centres (the gods' realm — abundant compute)
-  - **Álfheimr:** Neuromorphic accelerators (the light-elves — elegant, efficient)
-  - And five others mapping to specialised tiers. The framework uses Norse cosmology as a *mental model* for systems architects — each realm has different physics, different guarantees, different inhabitants.
+**Required Reading:**
+- Goodfellow, I.J., Shlens, J., & Szegedy, C. (2015). "Explaining and Harnessing Adversarial Examples." *ICLR 2015*.
+- Madry, A., Makelov, A., Schmidt, L., Tsipras, D., & Vladu, A. (2018). "Towards Deep Learning Models Resistant to Adversarial Attacks." *ICLR 2018*.
+- Carlini, N. & Wagner, D. (2017). "Towards Evaluating the Robustness of Neural Networks." *IEEE Symposium on Security and Privacy*, 39–57.
+- Mo, F. et al. (2021). "When Homomorphic Encryption Marries Deep Learning: A Comprehensive Survey." *arXiv:2105.01713*.
 
-### Required Reading
-
-- Kang, Y. et al. "Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge." *ASPLOS*, 2017.
-- Satyanarayanan, M. et al. "The Seminal Role of Edge-Native Applications." *IEEE EdgeCom*, 2020.
-- UoY Distributed Systems Group. *Bifröst: A Multi-Realm Orchestration Framework for the Edge-Cloud Continuum.* Technical Report, 2040.
-
-### Discussion Questions
-
-1. The SPLIT architecture partitions a DNN between edge and cloud. How do you choose the optimal split point? What factors would push the split toward the edge, and what factors pull it toward the cloud?
-2. The Bifröst Broker solves a constrained optimisation for every request. At 10,000 requests/second, is this computationally feasible? What approximations would you make?
-3. Does mapping computing tiers to Norse cosmology add value as a mental model, or is it just decorative? How does the metaphor help or hinder a systems architect?
-
-### Practice Problems
-
-- Profile a ResNet-50 model layer by layer: for each layer, measure compute time on a Cortex-A78 (edge) and NVIDIA Orin (edge server), output data size, and transmission time over 5G (100 Mbps, 10 ms RTT). Identify the optimal split point that minimises end-to-end latency.
-- Design a Bifröst policy for a video analytics pipeline: 30 fps camera → object detection → face blurring (privacy) → activity recognition. Specify which tiers handle which stages and the latency/accuracy/privacy trade-offs.
+**Discussion Questions:**
+1. Adversarial training (training on adversarial examples) improves robustness but reduces clean accuracy. This is a fundamental trade-off (Tsipras et al., 2019). When is robustness worth the accuracy cost? How would you quantify the "value" of robustness in a deployment context?
+2. A TEE protects model weights even with a compromised OS. But what if the attacker has physical access and can probe the memory bus? What additional protections (encrypted RAM, tamper detection) are needed?
+3. Neuromorphic sensors have an inherent contrast threshold that filters small perturbations. Does this make SNNs more robust to adversarial examples than ANNs? What are the limits of this robustness? Consider adversarial perturbations large enough to cross the contrast threshold.
 
 ---
 
-ᛃ **Lecture 12: The Rune-Carver's Synthesis — Neuromorphic Edge Computing in 2040 and Beyond**
+## Lecture 12: The 2040 Horizon — Neuromorphic-Edge Systems and the Future of Intelligence
 
-**Course:** CS404 — Neuromorphic & Edge Computing  
-**Degree:** Bachelor of Science in Computer Science, 2040
+*"Yggdrasil's roots reach into worlds unseen. The future of intelligence reaches into architectures we are only beginning to weave."*
 
----
+We stand at the convergence of three trends: neuromorphic hardware achieving biological efficiency, edge computing delivering intelligence everywhere, and learning algorithms operating in real time on continuous sensory streams. Taken together, these trends point toward a fundamentally new kind of computing — **continuous, embodied, energy-proportional intelligence** — that is as different from 2020-era cloud AI as cloud AI was from 1990-era batch processing. This lecture surveys the frontier and asks: what comes next?
 
-### Overview
+**The neuromorphic scaling roadmap.** In 2040, the largest deployed neuromorphic system is the **Yggdrasil Mímisbrunnr Cluster** — 1,024 Loihi 2 chips in a 3D mesh architecture, totalling 1 billion neurons and 120 billion synapses, consuming 2 kW. This is comparable to the human cerebral cortex (16 billion neurons, ~100 trillion synapses, ~20 W) in neuron count but still 1,000× behind in synapse count and 100× behind in energy efficiency. The gap is closing fast: Intel's **Loihi 3** (projected 2032) is expected to use 3D-stacked chiplets with through-silicon vias, packing 100 million neurons per chip at 10 W — a 100× neuron density improvement over Loihi 2. At that scale, a single rack of Loihi 3 chips will match the human brain's neuron count. The question is not *if* but *when* — and what we do with that capability.
 
-We end where we began — at the boundary — but with a transformed understanding. Over twelve lectures we have traversed the landscape of neuromorphic edge computing: from the biology of the spiking neuron to the architecture of Loihi and TrueNorth, from the mathematics of sensor fusion to the ethics of on-device privacy, from energy-harvesting microcontrollers to the orchestration of computation across nine realms. This final lecture synthesises the threads into a coherent vision: what neuromorphic edge computing makes possible in 2040, what remains beyond reach, and what the next decade promises. We reflect on the Norse rune-carver's craft — the patience to shape silicon to thought, the wisdom to place computation where it belongs, the humility to recognise that the most elegant chip is the one that draws its power from light and its purpose from the world it serves.
+**Edge AI in 2040: the ambient intelligence layer.** The 2040 smart environment is not a collection of devices that respond to explicit commands but an **ambient intelligence** — a continuous, distributed, privacy-respecting AI that anticipates needs rather than waiting for queries. Your home's sensor network (event cameras in common areas, cochlea-based microphones, IMUs in furniture) runs a federated SNN that learns your routines and preferences without ever sending raw data to the cloud. The system knows you typically wake at 7:00, but today you stirred at 6:30 — it pre-heats the shower without being asked. This is not a hypothetical: the Yggdrasil **Heimdallr Ambient Platform** (prototype deployed in 20 UoY faculty homes) achieves this with 50 Huginn nodes per home, each consuming ~100 mW, for a total home energy budget of 5 W — less than a single LED lightbulb.
 
-### Key Themes
+**The neuron-silicon interface.** In 2040, the boundary between biological and artificial neural networks is blurring. **Neural prosthetics** using Loihi chips as real-time co-processors for damaged brain regions have entered clinical trials: a hippocampal prosthesis that restores memory formation in patients with medial temporal lobe damage (Berger et al., UCLA/USC/UoY collaboration, 2038) uses an SNN trained to predict CA1 output from CA3 input, bypassing the damaged region. The technical requirements — sub-millisecond latency, continuous operation at body temperature, decades-long reliability — are uniquely met by neuromorphic hardware, which has no moving parts, operates at biological timescales, and consumes microwatts. This is computing not as a tool we use but as a part of who we are.
 
-- **The convergence thesis:** By 2040, neuromorphic computing, edge deployment, and energy harvesting have converged. A single Loihi 3 "Yggdrasil" chip, powered by a 2 cm² indoor photovoltaic cell, can run a continuous gesture recognition, keyword spotting, and activity classification pipeline — learning on the fly, preserving privacy, operating for years without maintenance. This convergence is not an accident; it is the logical endpoint of three decades of research in each field.
-- **What neuromorphic edge computing has already achieved:** Real-time sign language translation on a smartwatch (ETH Zurich, 2040). Battery-free pipeline corrosion monitoring across 1,200 km of Norwegian gas pipeline (Equinor + UoY, 2039-2040). Brain-inspired navigation for Mars rovers — Loihi 3 running SLAM on 1.5 W during the Martian night (NASA + Intel, 2040). Continuous atrial fibrillation detection in 400,000 Nordic citizens, processed entirely on-device (Nordic Health AI Initiative, 2039).
-- **What remains hard:** General-purpose AI on a microcontroller — neuromorphic chips excel at pattern recognition and control, not symbolic reasoning. Scaling spiking networks beyond ~100 million neurons (the human brain has ~86 billion). Programming models — Lava and corelet are powerful but inaccessible to most developers. Verification — how do you prove that a self-learning neuromorphic chip won't catastrophically fail in a safety-critical deployment?
-- **The ethical horizon:** A billion battery-free sensor nodes monitoring every forest, pipeline, and bridge on Earth. The environmental upside is enormous — early wildfire detection, precision agriculture, structural health monitoring. The privacy risk is equally enormous — pervasive sensing without consent, invisible and immortal. The rune-carver's ethic demands that we carve our intentions into the silicon as deeply as our circuits: what is sensed, who sees it, what is remembered, what is forgotten. These are not afterthoughts — they are part of the architecture.
-- **The next decade (2040-2050):** Photonic neuromorphic chips (light-based spiking, ~100× energy reduction), molecular-scale synapses using memristive nanowires, neural dust — millimetre-scale wireless sensors that can be scattered like pollen, and the first neuromorphic general intelligence — not AGI, but a single chip that can learn to perform any sensorimotor task within a bounded domain. The University of Yggdrasil's *Ragnarök Project* (launching 2041) aims to build this chip, integrating photonic neurons, memristive learning, and energy-harvesting power management on a single 1 cm² die.
+**The alignment problem on the edge.** As edge AI becomes ubiquitous and autonomous, the **AI alignment problem** — ensuring AI systems act in accordance with human values — moves from an abstract philosophical concern to a concrete engineering requirement. A federated SNN that learns your home routine has implicit power over your daily life: if it mislearns, it might lock you out of your own house or fail to detect a medical emergency. The solution must be built into the architecture from the start: **interpretable SNNs** whose spike patterns can be decoded into human-understandable rules; **verifiable STDP** whose weight updates can be audited; **human-in-the-loop override** that is physically impossible to disable. The UoY **Týr Alignment Framework** (2040) formalises these requirements as a set of architectural invariants that any deployed edge AI system must satisfy. The future of intelligence is not just about building smarter systems — it's about building *trustworthy* ones.
 
-### Required Reading
+**Required Reading:**
+- Furber, S. (2023). "The Road to Brain-Scale Neuromorphic Computing." *Communications of the ACM*, 66(2), 68–77.
+- Berger, T.W. et al. (2038). "A Hippocampal Prosthesis for Memory Restoration: Phase II Clinical Results." *Nature Biomedical Engineering*, 2(8), 567–578.
+- UoY Týr Alignment Framework (2040). Department of Computer Science Technical Report CS-TR-2040-07. Available on the course repository.
+- Hassabis, D., Kumaran, D., Summerfield, C., & Botvinick, M. (2017). "Neuroscience-Inspired Artificial Intelligence." *Neuron*, 95(2), 245–258.
 
-- University of Yggdrasil Neuromorphic Lab. *The Ragnarök Project: A Roadmap to Photonic Neuromorphic General Intelligence.* White Paper, 2040.
-- Nordic Health AI Initiative. *Four Hundred Thousand Hearts: On-Device Cardiac Monitoring at National Scale.* 2039.
-- Equinor + UoY. *Battery-Free Pipeline Monitoring: 1,200 Kilometres of Autonomous Sensing.* Technical Report, 2040.
-
-### Discussion Questions
-
-1. Is the convergence of neuromorphic, edge, and energy-harvesting technologies inevitable, or are there fundamental obstacles that could derail it?
-2. A billion battery-free sensors is an environmental monitoring triumph and a privacy nightmare. Can both be true? How would you design the governance framework?
-3. The Ragnarök Project aims for neuromorphic general intelligence on a 1 cm² die. What does "general intelligence" mean at that scale, and what would prove it had been achieved?
-
-### Practice Problems
-
-- Design a complete edge deployment for wildfire detection in a boreal forest: choose sensors, processing architecture, energy source, communication protocol, and privacy guarantees. Justify every decision against alternatives.
-- Write a 500-word project proposal for a neuromorphic edge application of your own design. Specify the sensor modality, the chip platform, the learning approach, the energy budget, and the ethical considerations. This is your rune to carve.
+**Discussion Questions:**
+1. If a rack of Loihi 3 chips can match the human brain's neuron count by 2033, does this mean we will have human-level AI by then? What's missing beyond neuron count — consider synapse count, learning rules, embodiment, and development?
+2. Ambient intelligence that anticipates needs sounds useful but also raises privacy concerns. Even if raw data never leaves the home, the model's weights embody knowledge of your behaviour. What does it mean for an AI to "know" something about you? Can a model weight be considered personal data?
+3. The Týr Alignment Framework requires interpretable SNNs and verifiable learning rules. Is full interpretability compatible with the high-capacity models needed for complex tasks? Or is there a fundamental trade-off between capability and transparency?
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for CS404 consists of two parts:
+The final examination for CS404 consists of two components:
 
-### Part I: Essay Questions (60%)
+### Part I: Written Examination (60%)
 
-**Instructions:** Choose four of the following eight questions. Each answer should be 500-750 words, demonstrate specific technical knowledge from the lectures and readings, and engage with the Norse framing where appropriate.
+You will be asked to answer **4 out of 8** essay questions. Each essay should demonstrate depth of understanding, ability to connect concepts across lectures, and critical engagement with the primary literature. Each essay carries equal weight.
 
-1. Compare the architectural philosophies of Intel Loihi and IBM TrueNorth. For an edge deployment requiring continuous on-chip learning, which architecture would you choose, and why? Address neurocore design, inter-core communication, programming model, and energy efficiency.
+**Sample Essay Questions:**
 
-2. A smart agriculture startup proposes deploying 10,000 soil sensors across Swedish farmland, each running a TinyML model for moisture prediction. Design the edge-cloud continuum architecture: what runs on-sensor, what runs at the farm gateway, and what runs in the cloud. Address quantisation, federated learning, and energy harvesting.
+1. **Neuromorphic vs. von Neumann:** Compare and contrast the neuromorphic and von Neumann architectural paradigms. Discuss the role of the memory wall, the energy efficiency advantages of event-driven computation, and the algorithmic implications of temporal coding versus rate coding. Use specific hardware examples (Loihi 2, GPU, TPU) to ground your discussion.
 
-3. Spike encoding is the bridge between continuous physical signals and discrete spike events. Compare rate coding, temporal coding, and phase coding for a drone collision-avoidance system. For each scheme, discuss latency, information capacity, robustness to noise, and energy cost.
+2. **STDP and Learning:** Spike-timing-dependent plasticity is a local learning rule that requires only pre- and post-synaptic spike timing. Discuss the advantages and limitations of local learning rules compared to global gradient-based optimisation. Consider scalability, biological plausibility, energy efficiency, and task performance. Reference both the biological STDP literature and the surrogate-gradient SNN literature.
 
-4. Catastrophic forgetting threatens any system that learns continuously. Explain how Elastic Weight Consolidation addresses this problem, and compare its effectiveness to neuromorphic on-chip STDP. Under what circumstances might a neuromorphic approach be superior?
+3. **Edge Intelligence Pipeline:** Design a complete edge intelligence pipeline for a specific application of your choice (e.g., wildlife monitoring, predictive maintenance, assistive health). Detail the sensor selection, model architecture, compression strategy (quantisation, pruning, distillation), inference runtime, and cloud orchestration. Justify each design decision with reference to course concepts: the latency-energy-accuracy trilemma, the resource continuum, and hardware-software co-design.
 
-5. Sensor fusion at the edge must balance accuracy, latency, and resource consumption. Design a fusion system for a wearable health monitor combining PPG, accelerometer, and skin temperature. Specify the fusion algorithm, the computational budget, and how intermittent power affects your design.
+4. **Sensor Fusion:** Compare Kalman filter-based sensor fusion with neuromorphic sensor fusion using event-based sensors. Discuss the advantages of using a common spike-based representation for multimodal sensor streams. What challenges remain in neuromorphic sensor fusion, and how might they be addressed?
 
-6. The privacy promise of edge computing is that data never leaves the device. Critically evaluate this promise: what threats does edge deployment genuinely eliminate, what threats remain, and what new threats does it introduce? Reference differential privacy, TEEs, and model inversion.
+5. **Federated Learning at the Edge:** Federated learning protects data privacy but introduces challenges from non-IID data distributions. Analyse the algorithmic and systems challenges of deploying federated learning on heterogeneous edge devices. Discuss SCAFFOLD, FedProx, and the spike-to-gradient translation for neuromorphic federated learning. Under what conditions would you choose centralised training despite the privacy cost?
 
-7. Energy-harvesting devices operate intermittently, powering on for milliseconds between energy bursts. How does this constraint change the way we write software? Compare task-based intermittent computing with non-volatile processors, and discuss the natural fit of neuromorphic event-driven execution.
+6. **Security of Edge AI:** Edge devices face a broader threat model than cloud servers. Discuss the security challenges unique to edge AI: physical access, model extraction, adversarial examples, and privacy of inference data. Evaluate the effectiveness of TEEs, homomorphic encryption, and adversarial training as countermeasures. What residual risks remain, and are they acceptable for safety-critical deployment?
 
-8. The Yggdrasil Orchestration Framework maps computing tiers to the Nine Realms of Norse cosmology. Is this mapping a useful systems architecture tool, a pedagogical device, or merely poetic? Analyse the Bifröst Broker architecture through this lens.
+7. **Neuromorphic Sensing:** Event-based cameras and silicon cochleas represent a fundamentally different sensing paradigm from conventional frame-based and sample-based sensors. Discuss the implications of this paradigm shift for: (a) algorithm design, (b) energy efficiency, (c) latency, and (d) robustness. What applications are uniquely enabled by neuromorphic sensing?
 
-### Part II: Design Project (40%)
+8. **The 2040 Horizon:** Project forward to 2050. Based on current trends in neuromorphic hardware scaling, edge intelligence, and neural interfaces, describe the most significant technological and societal changes you anticipate. Consider both utopian and dystopian scenarios. What decisions made today by engineers and policymakers will most strongly shape which scenario we get?
 
-Design a complete neuromorphic edge computing system for a real-world problem of your choosing. Your proposal must include:
+### Part II: Practical Project (40%)
 
-- **Problem statement:** What sensor data needs processing, in what environment, with what constraints?
-- **Hardware platform:** Which neuromorphic or edge processor, and why?
-- **Sensor modality and encoding:** How are physical signals converted to spikes (if using a neuromorphic chip)?
-- **Network architecture:** The spiking or artificial neural network topology, including learning rules.
-- **Energy budget:** Power source, consumption breakdown, and operational lifetime.
-- **Privacy and ethics:** What data is collected, what is inferred, who has access, and how is consent managed?
-- **Evaluation plan:** How would you measure the system's success?
+Implement one of the following on the Yggdrasil Huginn Edge Cluster:
 
-Your proposal should be 1,500-2,000 words and demonstrate integration of concepts from at least six lectures in this course.
+- **Project A:** An SNN-based anomaly detector for streaming sensor data (accelerometer or event camera) running on Loihi 2, with comparison against a quantised DNN baseline on ARM Cortex-M4. Measure and report accuracy, latency, energy-per-inference, and memory footprint.
+- **Project B:** A keyword spotting system using a software silicon cochlea + SNN on Loihi 2, compared against a conventional MFCC + CNN pipeline. Evaluate on a standard keyword spotting benchmark (Google Speech Commands).
+- **Project C:** An event-camera-based object tracker using an SNN on Loihi 2, with evaluation on the Prophesee GEN1 Automotive Detection Dataset. Report latency and energy versus a frame-based baseline.
+
+Projects are evaluated on: technical correctness (30%), depth of analysis (25%), quality of experimental methodology (25%), and clarity of written report (20%).
 
 ---
 
-*CS404 Neuromorphic & Edge Computing — University of Yggdrasil, 2040.*  
-*Instructor: Dr. Eiríkr Hrafnsson, UoY Neuromorphic Laboratory*  
-*"At the edge of the world, the eagle beats its wings — and the wind begins to move."*
+> *"Verðandi weaves what is becoming. In every spike, in every fused signal, in every watt we save — we weave a world where intelligence is not a distant cloud but the very air we breathe. Go now, and weave well."*
+> — Runa Gridweaver Freyjasdóttir, UoY 2040
