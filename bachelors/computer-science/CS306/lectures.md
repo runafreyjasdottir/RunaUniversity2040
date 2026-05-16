@@ -1,731 +1,366 @@
-# CS306: Human-Computer Interaction
+# CS306: Machine Learning Theory
 ## Bachelor of Science in Computer Science — University of Yggdrasil, 2040
 
 **Credits:** 4
-**Semester:** Year 3, Semester 2
-**Prerequisites:** CS102 (Web Development & User Interfaces), CS205 (Machine Learning & Data Mining)
-**Instructor:** Dr. Álfhildr Lúsbrá, Faculty of Computational Arts & Design
-
-> *"A rune that no one can read is not a rune — it is a scratch on stone. A user interface that no one can use is not an interface — it is a wall. The craft of HCI is the craft of carving runes that speak."* — Álfhildr Lúsbrá, *The Carved Interface* (2037)
+**Prerequisites:** CS201 (Data Structures & Algorithms II), CS205 (Theory of Computation), CS251 (Probability & Statistics for Computer Science)
+**Description:** This course provides a rigorous theoretical foundation for the discipline of machine learning — the study of algorithms that improve their performance on some task through experience. Unlike applied ML courses that focus on toolchains and frameworks, CS306 develops the mathematical and conceptual apparatus that underlies all learning algorithms: the formalisation of the learning problem (what does it mean to learn from data?), the analysis of generalisation (why do models that perform well on training data also perform well on unseen data?), the characterisation of hypothesis spaces (how does the capacity of a model class relate to its ability to generalise?), and the optimisation principles that drive learning (gradient descent, convex optimisation, Bayesian inference). The course traces the development of ML theory from the classical statistical perspective of R. A. Fisher through the computational learning theory of Valiant and Vapnik to the modern deep learning paradigm, and it equips students with the theoretical tools to analyse, critique, and design learning algorithms for the 2040 landscape — where models operate on planetary-scale data, interact in real time with humans and environments, and must satisfy increasingly stringent requirements for fairness, robustness, and interpretability.
 
 ---
 
-## Course Description
+## Lecture 1: The Learning Problem — Formal Foundations, Hypothesis Spaces, and the No-Free-Lunch Theorem
 
-Human-Computer Interaction (HCI) is the study of how people interact with technology and how to design systems that are usable, accessible, and delightful. In 2040, HCI extends far beyond screen-based interfaces: neural interfaces read brain signals directly, spatial computing overlays digital information on the physical world, and AI agents act as conversational intermediaries. This course covers UX research methods, interaction design principles, accessibility standards, spatial and neural interface design, and the ethical implications of increasingly intimate human-computer relationships.
+What does it mean for a machine to learn? The philosophical question is ancient — Plato's *Meno* wrestled with whether knowledge can be acquired or is merely recollected; the British empiricists (Locke, Hume, Mill) argued that all knowledge derives from sensory experience — but its mathematical formalisation is remarkably recent. The modern theory of machine learning begins with the work of Leslie Valiant (1984), who introduced the **Probably Approximately Correct (PAC) learning framework** — the first rigorous mathematical definition of what it means for an algorithm to learn from examples. In Valiant's framework, a learning algorithm receives labelled examples drawn from an unknown probability distribution over the instance space; the algorithm must, with high probability (at least 1 − δ), output a hypothesis that has low error (at most ε) on future examples drawn from the same distribution. The parameters ε (the accuracy parameter) and δ (the confidence parameter) define the learning criterion: the algorithm must be probably (with confidence 1 − δ) approximately (within accuracy ε) correct.
 
-The Norse metaphor: the rune-carver who shapes the stone so that the message is clear to all who see it. A well-carved runestone communicates across centuries and cultures — the message persists because the carving is precise, the layout is readable, and the meaning is encoded in a form the reader can decode. So too with HCI: the designer carves the interface so that the user's intention flows smoothly into computational action.
+The learning problem is formalised as follows. Let X be the **instance space** — the set of all possible examples (e.g., all 28×28 pixel images for digit recognition, all vectors of sensor readings for a medical diagnosis task). Let Y be the **label space** — the set of possible outcomes (e.g., {0, 1} for binary classification, ℝ for regression). An unknown probability distribution D over X × Y governs the data. The **training set** S = {(x₁, y₁), …, (xₘ, yₘ)} is drawn i.i.d. from D. A **learning algorithm** A maps the training set S to a **hypothesis** h: X → Y selected from a **hypothesis class** H. The **true error** (or risk) of h is R(h) = P_{(x,y) ∼ D}[h(x) ≠ y] — the probability that h misclassifies a randomly drawn example. The **empirical error** (or training error) is R̂(h) = (1/m) ∑ᵢ 1{h(xᵢ) ≠ yᵢ}. The algorithm succeeds if, with high probability, R(h) ≤ ε.
 
----
+The **No-Free-Lunch Theorem** (Wolpert, 1996; Wolpert & Macready, 1997) is the first fundamental result of learning theory: no learning algorithm is universally better than any other when averaged over all possible data distributions. More precisely, for any two learning algorithms A₁ and A₂, there exist distributions for which A₁ outperforms A₂ and vice versa — and when averaged over the uniform distribution over all possible target functions, all algorithms have identical expected error. The theorem forces the learning theorist to confront a crucial question: if no algorithm can be universally optimal, how do we choose among algorithms? The answer lies in **inductive bias** — the set of assumptions that the algorithm makes about the target function. An algorithm that assumes the target function is linear (and searches only over linear hypotheses) will perform well when the target is indeed linear and poorly when it is not. The choice of hypothesis class H encodes the inductive bias, and the analysis of learning reduces to the analysis of the relationship between H, the training data, and the unknown target.
 
-## Lectures
+The **bias–variance trade-off** (Geman, Bienenstock & Doursat, 1992) formalises this intuition. The expected generalisation error of a learning algorithm can be decomposed into three components: **bias** (the error due to the restrictive assumptions of H — the inability of the hypothesis class to represent the true target function), **variance** (the error due to the sensitivity of the learned hypothesis to the particular training sample), and **irreducible error** (the noise inherent in the labelling process — the Bayes error). A hypothesis class with high capacity (e.g., deep neural networks) has low bias but high variance — it can fit the training data perfectly but may overfit to noise. A hypothesis class with low capacity (e.g., linear classifiers) has high bias but low variance — it may never fit the training data well, but what it learns generalises reliably. The art of machine learning — and the subject of this course — lies in managing this trade-off.
 
-### ᚠ Lecture 1: The Carved Interface — Foundations of HCI
+The **Yggdrasil perspective** on the learning problem (2040) emphasises three extensions to the classical framework. First, **distribution shift**: the training distribution D_train may differ from the test distribution D_test — the phenomenon of **covariate shift** (Shimodaira, 2000), **label shift** (Lipton et al., 2018), and **concept drift** (Widmer & Kubat, 1996) that is the rule rather than the exception in deployed ML systems. Second, **interactive learning**: the learner does not receive a static training set but actively queries the environment — **active learning** (Cohn, Ghahramani & Jordan, 1996) and **online learning** (Littlestone, 1988; Hazan, 2016) — with theoretical guarantees that differ from the PAC setting. Third, **strategic learning**: the data distribution responds to the deployed hypothesis — the phenomenon of **performative prediction** (Perdomo et al., 2020) — where the act of classifying individuals changes their behaviour, shifting the distribution and potentially invalidating the learning guarantees.
 
-**Date:** Week 1, Session 1
+**Required Reading:**
+- Leslie G. Valiant, "A Theory of the Learnable," *Communications of the ACM* 27, no. 11 (1984): 1134–1142
+- David H. Wolpert, "The Lack of A Priori Distinctions Between Learning Algorithms," *Neural Computation* 8, no. 7 (1996): 1341–1390
+- Stuart Geman, Elie Bienenstock & René Doursat, "Neural Networks and the Bias/Variance Dilemma," *Neural Computation* 4, no. 1 (1992): 1–58
+- Shai Shalev-Shwartz & Shai Ben-David, *Understanding Machine Learning: From Theory to Algorithms* (2014/2039), chs. 1–5
+- Yggdrasil ML Theory Primer (2040)
 
-#### Overview
-
-This lecture establishes the foundations of HCI as a discipline — its history, its core concepts (affordances, signifiers, feedback, conceptual models, the gulf of execution and evaluation), and the three pillars of usability: effectiveness, efficiency, and satisfaction. We trace HCI from the early days of command-line interfaces through the GUI revolution (Xerox Star, Macintosh, Windows), the web era, mobile touch interfaces, and into the 2040 landscape of gesture, voice, neural, and spatial interaction. The Norse framing: the evolution of writing technology from runestones (public, formal, slow) to parchment (portable, refined) to the printing press (mass-produced) to digital text (instant, searchable, augmentable). Each transition changed what was possible. So too with interfaces.
-
-#### Lecture Notes
-
-HCI emerged as a distinct field in the early 1980s, coinciding with the transition from professional computer operators (who tolerated cryptic interfaces as part of their job) to general users (who would not). The founding text, *The Psychology of Human-Computer Interaction* (Card, Moran, Newell, 1983), applied cognitive psychology to predict and explain user behavior at the interface.
-
-**Don Norman's Design Principles.** Norman's *The Design of Everyday Things* (1988, revised 2013) established the vocabulary that still frames HCI education:
-
-- **Affordances:** The relationship between a physical object and a person — what actions are possible. A button affords pushing; a handle affords pulling; a touch interface affords tapping, swiping, pinching. In 2040, virtual affordances in VR/AR are designed using haptic feedback and visual cues (glow, shadow, animation) to convey what is possible.
-
-- **Signifiers:** The perceivable indicator of an affordance. A door handle signifies "pull." A flat plate on a door signifies "push." In software, a blue underlined text signifies "clickable link." Signifiers must be visible, unambiguous, and consistent. A signifier that misleads causes the gulf of execution (user can't figure out what to do).
-
-- **Feedback:** The system must communicate the result of an action. A button click produces a visual press animation, a sound, and changes the interface state. In 2040, feedback is multimodal (visual + audio + haptic) and immediate (<50ms for touch interactions, <200ms for voice).
-
-- **Conceptual Models:** The user's mental model of how the system works. A good design makes the system's conceptual model match the user's mental model. A trash can on the desktop maps to "throwing things away" — the user knows that dragged files end up there and can be restored if needed. A poorly designed system gives the user an incorrect or incomplete conceptual model, leading to errors and frustration.
-
-- **The Gulfs of Execution and Evaluation:** The gulf of execution is the gap between the user's goals and the available actions. The gulf of evaluation is the gap between the system's state and the user's understanding of that state. Good design minimizes both gulfs.
-
-**The Three Usability Metrics (ISO 9241-11).**
-1. **Effectiveness:** Can users complete their tasks accurately? Measured by error rate and task completion rate.
-2. **Efficiency:** How quickly can users complete tasks? Measured by time-on-task and number of steps.
-3. **Satisfaction:** How pleasant is the experience? Measured by self-report (SUS, NPS, UEQ) and biometric signals (facial expression, heart rate variability, skin conductance).
-
-**2040: The Post-Screen Era.** By 2040, touchscreens dominate but are being supplemented by:
-- **Voice interfaces (40% of interactions):** Smart speakers, AI assistants, voice-controlled environments. The challenge: voice is serial (you can only say one thing at a time) and leaves no persistent record.
-- **Gesture interfaces (15%):** Hand tracking (Leap Motion, Apple Vision Pro, Meta Quest Pro) enables manipulative interaction. The challenge: gorilla arm fatigue (holding arms up for extended periods).
-- **Neural interfaces (10%):** Non-invasive EEG headsets for cursor control, typing, and simple commands. Invasive BCIs (Neuralink, Synchron) for people with paralysis. The challenge: noise, calibration, and the ethical boundary of mind-reading.
-- **Spatial computing (25%):** AR glasses that overlay digital information on the physical world. The challenge: information density (don't clutter the user's field of view) and social acceptability (glasses must look normal).
-
-#### Required Reading
-- Norman, D. (2013). *The Design of Everyday Things*, revised and expanded ed. Basic Books. Chapters 1-2.
-- Card, S.K., Moran, T.P., & Newell, A. (1983). *The Psychology of Human-Computer Interaction*. L. Erlbaum. Chapter 1.
-- ISO 9241-11 (2018). *Ergonomics of Human-System Interaction — Part 11: Usability*.
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 1: "Rune-Carving as Interaction Design." Yggdrasil University Press.
-
-#### Discussion Questions
-1. Apply Norman's seven stages of action (goal → plan → specify → perform → perceive → interpret → compare) to the task of ordering a coffee through a mobile app. Where are the gulfs?
-2. Voice interfaces have no visual persistence. Design a voice interface for checking train departure times. How do you compensate for the lack of a visual display?
-3. A neural interface that reads brain signals could help people with paralysis communicate. At what point does such an interface cross the line from "assistive technology" to "privacy violation"?
+**Discussion Questions:**
+1. The No-Free-Lunch Theorem states that no algorithm dominates all others on all distributions. Does this mean that the search for "better" algorithms is futile — or does the theorem simply redirect our attention to the problem of characterising the distributions that matter in practice?
+2. The bias–variance trade-off was developed for classical statistical models. In the era of overparameterised deep networks — which can achieve zero training error yet generalise well — does the trade-off still hold, or does modern ML require a new theory of generalisation?
+3. Performative prediction — where the classifier influences the distribution — is increasingly common in 2040 (credit scoring, content recommendation, predictive policing). How should the PAC framework be extended to account for the feedback loop between learning and deployment?
 
 ---
 
-### ᚢ Lecture 2: UX Research — Listening to the Weave
+## Lecture 2: Linear Models — Regression, Classification, and Convex Optimisation
 
-**Date:** Week 2, Session 1
+Linear models are the foundation upon which the edifice of machine learning is built. Despite their simplicity — they assume that the target variable is a linear function of the input features — they remain among the most widely used and best-understood learning algorithms, and their analysis introduces the concepts (loss functions, empirical risk minimisation, regularisation, convex optimisation) that generalise to every more complex model class. The linear model is also the natural starting point for theoretical analysis: because the hypothesis class is convex and the loss functions are typically convex, the optimisation problems that arise can be solved to global optimality, and the statistical properties of the resulting estimators are well characterised.
 
-#### Overview
+In **linear regression**, the hypothesis class is H = {h(x) = w·x + b | w ∈ ℝᵈ, b ∈ ℝ}, where w is the weight vector and b is the bias term. Given training data (xᵢ, yᵢ) with yᵢ ∈ ℝ, the learning algorithm minimises a **loss function** that measures the discrepancy between the predicted value ŷᵢ = w·xᵢ + b and the true value yᵢ. The **squared error loss** L(ŷ, y) = (ŷ − y)² yields the **ordinary least squares** (OLS) estimator: ŵ = argmin_w ∑ᵢ (w·xᵢ + b − yᵢ)². The OLS estimator has a closed-form solution: if we absorb the bias term by augmenting each x with a constant 1, then ŵ = (XᵀX)⁻¹ Xᵀy, provided XᵀX is invertible. The **Gauss–Markov theorem** (Gauss, 1809; Markov, 1900) states that, under the assumptions of zero-mean, uncorrelated errors with constant variance, the OLS estimator is the **best linear unbiased estimator** (BLUE) — it has the minimum variance among all linear unbiased estimators. This classical result, however, does not protect against misspecification: if the true relationship is nonlinear, the linear model suffers from bias regardless of the sample size.
 
-The foundation of good design is understanding the user. UX research encompasses the methods for discovering what users need, how they behave, and what they value. This lecture covers qualitative methods (interviews, contextual inquiry, diary studies, focus groups), quantitative methods (surveys, analytics, A/B testing, log analysis), and the 2040 integration of AI-assisted UX research (sentiment analysis of user feedback, automated usability testing with AI agents). The Norse metaphor: the *vǫlva's spá* (prophecy) — the seeress who listens to the whispers of the threads to understand the pattern of fate. UX research is the practice of listening to users to understand the pattern of their needs.
+In **linear classification** (specifically, **logistic regression** — a misnomer, as the method is a classification algorithm), the hypothesis class is H = {h(x) = σ(w·x + b)}, where σ(z) = 1/(1 + e⁻ᶻ) is the **logistic sigmoid function** that squashes the real-valued output to the interval (0, 1), interpreted as the probability of belonging to the positive class. The loss function is the **cross-entropy loss** (or log-loss): L(h(x), y) = −y log(h(x)) − (1 − y) log(1 − h(x)), which is the negative log-likelihood of the data under a Bernoulli model. Unlike OLS, logistic regression has no closed-form solution; the parameters are estimated by iterative optimisation — typically by **gradient descent** or **Newton's method**.
 
-#### Lecture Notes
+The optimisation problems underlying linear models belong to the class of **convex optimisation** problems — problems in which the objective function is convex (the line segment between any two points on the graph lies above the graph) and the feasible set is convex. Convex optimisation is tractable: any local minimum is a global minimum, and the optimum can be found efficiently by first-order methods (gradient descent) or second-order methods (Newton, quasi-Newton). The **gradient descent** algorithm for ERM iteratively updates the parameters: w_{t+1} = w_t − η ∇L(w_t), where η > 0 is the **learning rate** (step size). For convex losses, gradient descent converges to the global optimum at a rate of O(1/T) for general convex functions and O(1/T²) for strongly convex functions (Nesterov, 1983/2004). The **stochastic gradient descent** (SGD) variant — which estimates the gradient using a single randomly chosen training example rather than the full batch — converges more slowly (O(1/√T) for general convex) but is far more computationally efficient for large datasets and is the workhorse optimisation algorithm of modern ML (Robbins & Monro, 1951; Bottou & Bousquet, 2008).
 
-**Qualitative Methods — Understanding the Why.**
+**Regularisation** — the addition of a penalty term to the loss function — addresses the problem of overfitting by biasing the solution toward simpler hypotheses. **Ridge regression** (Hoerl & Kennard, 1970) adds an L₂ penalty: ŵ = argmin_w ∑ᵢ (w·xᵢ − yᵢ)² + λ‖w‖², where λ controls the strength of regularisation. The ridge solution shrinks the weights toward zero but never sets them exactly to zero. **Lasso regression** (Tibshirani, 1996) adds an L₁ penalty: ŵ = argmin_w ∑ᵢ (w·xᵢ − yᵢ)² + λ‖w‖₁. The L₁ penalty has the property that it drives some weights to exactly zero — performing automatic **feature selection**. The theoretical understanding of regularisation is grounded in the **bias–variance trade-off**: regularisation increases bias (the weights are shrunk toward zero, away from the OLS estimates) but reduces variance (the estimates are less sensitive to the particular training sample), and the optimal λ balances these two effects to minimise the expected generalisation error.
 
-*Interviews.* The most direct method: sit down with users and ask them about their experiences, needs, and frustrations. Three types:
-- **Structured:** Fixed questions, asked in order. Produces comparable, shallow data.
-- **Semi-structured:** A question guide with flexibility to follow interesting threads. The 2040 standard — rich data with some comparability.
-- **Unstructured:** Open conversation around a topic. Deepest data, hardest to analyze.
+**Required Reading:**
+- Christopher M. Bishop, *Pattern Recognition and Machine Learning* (2006/2039), chs. 1.1, 3.1–3.3, 4.1–4.3
+- Trevor Hastie, Robert Tibshirani & Jerome Friedman, *The Elements of Statistical Learning* (2nd ed., 2009/2038), chs. 3–4
+- Robert Tibshirani, "Regression Shrinkage and Selection via the Lasso," *Journal of the Royal Statistical Society, Series B* 58, no. 1 (1996): 267–288
+- Leon Bottou & Olivier Bousquet, "The Tradeoffs of Large Scale Learning," *Advances in Neural Information Processing Systems* 20 (2008): 161–168
+- Yggdrasil Linear Models Interactive Lab (2040)
 
-The critical interviewing skill: *active listening* paired with *the five whys* — asking "why" five times to drill past surface answers to root causes. A user says "I can't find the search button." Why? "It's hidden behind a menu." Why is it hidden? "The designer prioritized visual minimalism." Why? The root cause is not the button placement but the design philosophy.
-
-*Contextual Inquiry.* Observe users in their natural environment. This method reveals what users *actually do*, as opposed to what they *say* they do. A classic HCI study: users report "I check my email three times a day" but logs show they check it 30+ times. The gap between reported and actual behavior is wide. Contextual inquiry bridges it.
-
-*Diary Studies.* Users log their interactions with a system over days or weeks. Captures longitudinal patterns — how usage evolves, what triggers frustration, what delights. In 2040, AI agents on the user's device can automatically log interaction patterns (with consent), reducing the burden on the participant while providing richer data.
-
-**Quantitative Methods — Measuring the What.**
-
-*Surveys.* The workhorse of quantitative UX research. Key instruments:
-- **SUS (System Usability Scale):** 10-item questionnaire producing a score out of 100. Quick, reliable, and technology-agnostic.
-- **UEQ (User Experience Questionnaire):** 26 items measuring six dimensions (attractiveness, perspicuity, efficiency, dependability, stimulation, novelty).
-- **NPS (Net Promoter Score):** "How likely are you to recommend this product to a friend?" Controversial in academic UX but widely used in industry.
-
-*Analytics and Log Analysis.* Every interaction with a digital system can be logged. In 2040, the UoY's **Verðandi Analytics** platform captures: click events, navigation paths, time-on-task, error rates, session duration, and feature adoption rates. Analysis identifies: drop-off points (where users abandon tasks), rage clicks (repeated clicking on non-interactive elements), and the "bottleneck pages" where users spend disproportionately long.
-
-*A/B Testing.* Randomly assign users to variant A or variant B, measure the outcome (conversion rate, task completion time, satisfaction). In 2040, AI-driven multivariate testing tests dozens to hundreds of variants simultaneously. The **Huginn Experiment Engine** at UoY manages continuous experiments across all student-facing systems, optimizing for usability and learning outcomes.
-
-**2040: AI-Assisted UX Research.** AI tools augment but do not replace human researchers:
-- **Automated sentiment analysis:** User feedback (open-ended survey responses, support tickets, social media mentions) is automatically classified as positive, negative, or neutral, and the topics are extracted via topic modeling.
-- **Automated usability testing:** AI agents simulate user behavior, exploring the interface and identifying violations of known usability heuristics. The **RúnarTester** system at UoY achieves 80% agreement with human usability experts on web interfaces.
-- **Behavioral analytics:** Machine learning models detect patterns in user behavior that correlate with churn, frustration, or abandonment — hours before any survey would reveal them.
-
-#### Required Reading
-- Courage, C. & Baxter, K. (2005). *Understanding Your Users: A Practical Guide to User Research Methods*. Morgan Kaufmann.
-- Sauro, J. & Lewis, J.R. (2016). *Quantifying the User Experience*, 2nd ed. Morgan Kaufmann.
-- ISO 25010 (2011). *Systems and Software Quality Requirements and Evaluation (SQuaRE)*.
-- Norman, D. (2013). *The Design of Everyday Things*, Chapter 6: "Design Thinking."
-
-#### Discussion Questions
-1. A user reports "I love this app" but analytics show they only use it once a week for 30 seconds. Which data source do you trust, and why?
-2. AI-assisted UX research promises to automate much of the analysis. What aspects of UX research should never be automated? Why?
-3. Design a diary study for a new campus navigation app. What would you ask participants to log, and for how long?
+**Discussion Questions:**
+1. The Gauss–Markov theorem guarantees that OLS is BLUE — the best linear unbiased estimator. But a biased estimator (ridge, lasso) can have lower mean squared error than OLS. When should the learning theorist prefer a biased estimator over an unbiased one?
+2. Stochastic gradient descent converges more slowly than batch gradient descent in the worst case, yet it is the dominant optimisation algorithm in modern ML. What properties of real-world datasets — redundancy, noise, structure — explain this apparent contradiction?
+3. The Lasso performs feature selection by driving weights to zero. But when features are highly correlated, the Lasso selects arbitrarily among them — a property that seems pathological. Is this a weakness of the method, or does it reveal a fundamental limitation of feature selection from finite data?
 
 ---
 
-### ᚦ Lecture 3: Interaction Design — Shaping the Conversation
+## Lecture 3: Kernel Methods — The Kernel Trick, Support Vector Machines, and Reproducing Kernel Hilbert Spaces
 
-**Date:** Week 3, Session 1
+Linear models are limited: they can only represent linear decision boundaries in the input space. The world, however, is rarely linear — the XOR problem alone defeats any linear classifier (Minsky & Papert, 1969). The resolution to this limitation is elegant and profound: map the input data into a high-dimensional **feature space** where the problem becomes linear, and apply a linear model in that space. The **kernel trick** (Aizerman, Braverman & Rozonoer, 1964; Boser, Guyon & Vapnik, 1992) observes that many linear algorithms can be expressed entirely in terms of **inner products** between data points — and if we replace the standard inner product with a **kernel function** K(x, x′) that computes the inner product of the images of x and x′ in the feature space, the algorithm never needs to construct the feature mapping explicitly. This is the theoretical core of kernel methods: the implicit representation of high-dimensional feature spaces through kernel functions that are computationally tractable.
 
-#### Overview
+Formally, a **kernel** is a symmetric, positive-definite function K: X × X → ℝ. The **Moore–Aronszajn theorem** (Aronszajn, 1950) establishes that every positive-definite kernel corresponds uniquely to a **Reproducing Kernel Hilbert Space (RKHS)** — a Hilbert space H of functions on X with the property that for every x ∈ X, the evaluation functional L_x(f) = f(x) is bounded. The **reproducing property** states that f(x) = ⟨f, K(x, ·)⟩_H — the value of f at any point x is the inner product of f with the kernel function centred at x. The RKHS is the hypothesis space for kernel methods: learning algorithms search over functions in H, and the kernel determines the smoothness and complexity of the functions that H contains.
 
-Interaction design is the craft of designing the dialogue between user and system. This lecture covers the fundamental interaction paradigms (command, menu, direct manipulation, form fill, conversational), interaction styles across modalities (click, touch, gesture, voice, gaze, thought), and the design patterns that make interactions feel natural, predictable, and efficient. The Norse metaphor: the flyting — the formal exchange of insults between Norse warriors that established hierarchy and resolved tension without violence. A good interaction design is like a well-performed flyting: it follows conventions, establishes a rhythm, and reaches a satisfying resolution.
+The **representer theorem** (Kimeldorf & Wahba, 1971) is the foundational result of kernel-based learning: for any learning problem with a convex loss function and an RKHS regulariser, the optimal solution can be expressed as a linear combination of kernel functions centred on the training points: f(x) = ∑ᵢ αᵢ K(x, xᵢ). This is a theorem of extraordinary practical significance: it reduces the infinite-dimensional optimisation problem over H to a finite-dimensional problem over the coefficients αᵢ — a problem that can be solved by linear algebra or convex optimisation.
 
-#### Lecture Notes
+The **Support Vector Machine** (SVM) (Cortes & Vapnik, 1995) is the most celebrated kernel method. The SVM solves the optimisation problem: minimise ‖f‖²_H + C ∑ᵢ max(0, 1 − yᵢ f(xᵢ)), where the first term is the RKHS norm (controlling the complexity of f) and the second term is the **hinge loss** — a convex surrogate for the 0–1 misclassification loss. The parameter C controls the trade-off between margin maximisation and training-error minimisation. The SVM finds the **maximum-margin hyperplane** in the feature space — the hyperplane that separates the classes with the largest possible margin, a choice that is justified by Vapnik's statistical learning theory (the margin is related to the VC dimension of the hypothesis class). Crucially, the solution depends only on the **support vectors** — the training examples that lie on or within the margin — and the non-support vectors (the examples that are correctly classified with a margin) have αᵢ = 0 and do not affect the solution. This **sparsity** property makes the SVM computationally efficient at test time and provides a natural notion of **exemplar-based learning**.
 
-**Interaction Paradigms.**
+The choice of kernel encodes the inductive bias of the learning algorithm. The **linear kernel** K(x, x′) = x·x′ recovers the standard linear model. The **polynomial kernel** K(x, x′) = (x·x′ + c)ᵈ maps the input into the space of all monomials of degree up to d. The **Gaussian RBF kernel** K(x, x′) = exp(−γ‖x − x′‖²) maps the input into an infinite-dimensional feature space — the RKHS of the Gaussian kernel contains functions of arbitrary smoothness, and the bandwidth parameter γ controls the length scale of the functions. The RBF kernel is the default choice in many applications because it is **universal** (Micchelli, Xu & Zhang, 2006): any continuous function on a compact domain can be approximated arbitrarily well by functions in the RKHS of the Gaussian kernel. The limitation of universal kernels is that they are also **data-independent** — the kernel does not adapt to the structure of the data. The 2040 frontier of kernel methods includes **deep kernels** (Wilson et al., 2016) that learn the feature mapping from data, and **neural tangent kernels** (Jacot, Gabriel & Hongler, 2018) that connect infinite-width neural networks to kernel regression.
 
-1. **Command line (oldest, still alive):** The user types commands. Maximum power, steepest learning curve. By 2040, command-line interfaces persist in developer tools and system administration — but they are increasingly augmented by LLMs that translate natural language into commands.
+**Required Reading:**
+- Bernhard Schölkopf & Alexander J. Smola, *Learning with Kernels: Support Vector Machines, Regularization, Optimization, and Beyond* (2002/2039), chs. 1–3, 7
+- Corinna Cortes & Vladimir Vapnik, "Support-Vector Networks," *Machine Learning* 20, no. 3 (1995): 273–297
+- N. Aronszajn, "Theory of Reproducing Kernels," *Transactions of the American Mathematical Society* 68, no. 3 (1950): 337–404
+- Arthur Jacot, Franck Gabriel & Clément Hongler, "Neural Tangent Kernel: Convergence and Generalization in Neural Networks," *Advances in Neural Information Processing Systems* 31 (2018): 8571–8580
+- Yggdrasil Kernel Explorer (2040)
 
-2. **Menu-driven:** The system presents available options; the user selects. Found in ATMs, set-top boxes, and the early web. Limitations: menus impose the designer's hierarchy on the user's tasks. Nielsen's law: the number of menu levels should be ≤ 3.
-
-3. **Direct manipulation (Shneiderman, 1983):** The user directly manipulates on-screen objects. Key characteristics: continuous representation of the object, physical actions (drag, drop, resize) instead of complex syntax, and immediate feedback. Examples: drawing programs, CAD systems, file managers, the touchscreen interface. By 2040, spatial computing extends direct manipulation to 3D — grab a virtual object with your hand, rotate it, place it in the world.
-
-4. **Conversational (voice/LM-based, 2020+):** The user converses with an AI in natural language. By 2040, this is the dominant paradigm for complex tasks ("Plan a trip to Iceland for my family in June"). The challenge: the computer is an unreliable conversational partner — it may misunderstand, hallucinate, or fail to ask clarifying questions.
-
-5. **Gesture-based (2040 growth):** The user gestures (sweep, pinch, point) to interact. Mature in VR/AR, emerging in smart home and automotive.
-
-**Interaction Design Patterns (Tidwell, 2010, 2040 edition).**
-
-- **Overview + Detail:** Show the big picture and let the user zoom into details. Maps, code editors, image viewers.
-- **Progressive Disclosure:** Show only what the user needs now. Reveal more on demand. Settings panels, wizards.
-- **Wizard:** Step-by-step guided task completion. Complex configuration (router setup, tax filing).
-- **Undo/Redo:** The user's safety net. Every action should be reversible. In 2040, the **Urðr Time Machine** in Hermes applications provides visual timeline-based undo — users scroll back through their interaction history and "undo" any step.
-- **Autocomplete/Suggestion:** The system predicts what the user wants and offers suggestions. Search engines, command palettes (Cmd+K in modern IDEs), LLM chat completion.
-- **Confirmation Dialogs:** "Are you sure?" — overused in 2020, rare in 2040. The 2040 principle: assume the user's intent unless the action is irreversible (delete account, pay money, erase data).
-
-**Fitts' Law.** The time to acquire a target (click, tap, grab) is a function of the distance to the target and its size: T = a + b · log₂(1 + D/W). Implications: corner and edge positions are "infinite size" (the cursor stops at the edge), so put critical controls (Start menu, Dock) at screen edges. In 2040, Fitts' Law applies to VR/AR interaction: the law extends to 3D with the addition of depth (the target's distance in z increases the effective size).
-
-**Hick's Law.** Decision time increases logarithmically with the number of choices: T = a + b · log₂(n). Keep choices per screen to 3-7 (the "magic number seven, plus or minus two"). This underlies the 2040 design principle of progressive disclosure: show 3 primary choices, offer "more options" for the rest.
-
-#### Required Reading
-- Shneiderman, B. et al. (2016). *Designing the User Interface*, 6th ed. Pearson. Chapters 1-3.
-- Tidwell, J. (2010). *Designing Interfaces*, 2nd ed. O'Reilly.
-- Fitts, P.M. (1954). "The Information Capacity of the Human Motor System in Controlling the Amplitude of Movement." *Journal of Experimental Psychology*, 47(6).
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 4: "The Flyting as Interaction Pattern."
-
-#### Discussion Questions
-1. Progressive disclosure is a tradeoff between simplicity (fewer visible options) and discoverability (hidden options may never be found). How do 2040 interfaces resolve this tradeoff?
-2. Fitts' Law predicts that corner targets are fastest. How does this apply to VR/AR interfaces, which have no fixed "corners"?
-3. Conversational AI interfaces violate Hick's Law: there are no explicit choices, just an open text field. Are these interfaces harder or easier to use than menu-driven interfaces? Why?
+**Discussion Questions:**
+1. The representer theorem shows that the optimal solution in an RKHS is a weighted sum of the training kernel functions. This means that the model complexity grows with the training set size — a practical limitation for large-scale problems. How does the sparsity of the SVM (the fact that most training examples have αᵢ = 0) mitigate this, and what alternatives exist for large-scale kernel learning?
+2. The Gaussian RBF kernel is universal but data-independent. Deep learning methods learn feature representations from data. Is the gap between data-independent kernels and learned features fundamental, or can kernel methods be "deepened" to combine the theoretical guarantees of RKHS with the empirical performance of deep learning?
+3. The neural tangent kernel (NTK) establishes a connection between infinitely wide neural networks and kernel methods. Does this mean that deep learning can be fully understood within the kernel framework, or does the NTK analysis miss essential properties of finite-width networks — in particular, the feature learning that occurs during training?
 
 ---
 
-### ᚲ Lecture 4: Accessibility — The Interface for All Beings
+## Lecture 4: Neural Networks — From Perceptrons to Deep Learning Architectures
 
-**Date:** Week 4, Session 1
+The neural network — a composition of simple, differentiable computational units arranged in layers — is the most practically successful learning architecture in the history of machine learning. Its theoretical foundations, however, remain contested and incompletely understood. The gap between the empirical performance of deep networks and the theoretical guarantees that learning theory can provide is the central intellectual challenge of contemporary ML theory. This lecture traces the arc of neural-network theory from the earliest models to the frontier of 2040 research.
 
-#### Overview
+The **perceptron** (Rosenblatt, 1958) is the simplest neural unit: given an input vector x ∈ ℝᵈ, it computes h(x) = σ(w·x + b), where σ is a **step function** (output 1 if the argument is positive, 0 otherwise). Rosenblatt proved the **perceptron convergence theorem**: if the training data are linearly separable, the perceptron algorithm — which updates the weights by adding misclassified examples — converges to a separating hyperplane in a finite number of steps. The theorem provides a worst-case bound on the number of updates: at most (R/γ)², where R is the radius of the data and γ is the margin of separation. The perceptron, however, is fundamentally limited: Minsky and Papert (1969) demonstrated that the perceptron cannot represent the XOR function or any other non-linearly-separable concept — a limitation that led to the first "AI winter" of the 1970s.
 
-Accessible design is not charity — it is good design that benefits everyone. Approximately 15% of the global population (over 1.2 billion people) has some form of disability. This lecture covers the categories of disability (visual, hearing, motor, cognitive, speech), the assistive technologies that bridge the gap (screen readers, switch control, voice control, eye tracking, augmentative and alternative communication — AAC), and the design principles that make interfaces accessible to all (WCAG 3.0 guidelines, universal design, inclusive design, the curb-cut effect). The Norse metaphor: the god Hǫðr — blind, yet one of the Aesir, who participates fully in the life of the gods until the tragedy engineered by Loki. A system designed without Hǫðr in mind fails its duty to the full community of users.
+The resolution to the perceptron's limitation is the **multilayer perceptron** (MLP): a composition of nonlinear transformations arranged in layers. An L-layer MLP computes h(x) = f_L ∘ f_{L−1} ∘ … ∘ f_1(x), where each layer computes f_ℓ(z) = σ_ℓ(W_ℓ z + b_ℓ), with weight matrix W_ℓ, bias vector b_ℓ, and **activation function** σ_ℓ — a nonlinear function applied elementwise. The **universal approximation theorem** (Cybenko, 1989; Hornik, Stinchcombe & White, 1989; Leshno et al., 1993) states that a two-layer network (one hidden layer) with a sufficiently wide hidden layer can approximate any continuous function on a compact domain to arbitrary accuracy, provided the activation function is non-polynomial. The theorem is existential — it does not guarantee that the parameters can be learned efficiently — but it establishes that the expressive limitation of the perceptron is an artefact of the single-layer architecture, not a fundamental property of neural computation.
 
-#### Lecture Notes
+The **backpropagation algorithm** (Rumelhart, Hinton & Williams, 1986; LeCun, 1985; Parker, 1985) — the application of the chain rule of calculus to compute the gradient of the loss with respect to the parameters of each layer — made training deep networks computationally feasible. The algorithm proceeds in two phases: a **forward pass** computes the output of the network and the loss; a **backward pass** propagates the gradient of the loss backward through the network, applying the chain rule at each layer. The gradients are then used by an optimisation algorithm — typically SGD or one of its adaptive variants (Adam, Kingma & Ba, 2015; RMSprop, Tieleman & Hinton, 2012) — to update the parameters.
 
-**The Web Content Accessibility Guidelines (WCAG).** By 2040, WCAG 3.0 (published 2024) is the global standard for digital accessibility. It organizes success criteria under four principles — POUR:
-- **Perceivable:** Information and UI components must be presentable to users in ways they can perceive.
-- **Operable:** UI components and navigation must be operable by all users.
-- **Understandable:** Information and UI operation must be understandable.
-- **Robust:** Content must be robust enough to be interpreted reliably by a wide variety of user agents, including assistive technologies.
+The **depth** of neural networks is the subject of intense theoretical investigation. The **no-free-lunch theorem for depth** (Telgarsky, 2016) shows that there exist functions that can be represented compactly by deep networks (with polynomially many parameters) but require exponentially many parameters to be represented by shallow networks. This establishes a **representation-theoretic** advantage for depth: deep networks can represent certain compositional structures — hierarchical patterns, recursion, symmetry — far more efficiently than shallow ones. The **lottery ticket hypothesis** (Frankle & Carbin, 2019) proposes that optimisation of dense, randomly initialised networks works because there exist subnetworks (the "winning tickets") that, if trained in isolation, would achieve the same accuracy — and SGD discovers these subnetworks during training. The hypothesis connects the empirical success of pruning (removing redundant parameters) to a theoretical account of what networks learn.
 
-Key WCAG 3.0 requirements:
-- **Contrast ratio:** Minimum 4.5:1 for normal text, 3:1 for large text.
-- **Keyboard accessibility:** Everything must be operable via keyboard alone, with visible focus indicators.
-- **Screen reader support:** Semantic HTML (headings, landmarks, alt text, ARIA labels).
-- **Captions and transcripts:** All audio and video content must have text alternatives.
-- **Text spacing:** Line height 1.5×, paragraph spacing 2×, letter spacing 0.12×.
+The 2040 theoretical frontier includes: **neural scaling laws** (Kaplan et al., 2020; Hoffmann et al., 2022) — the empirical finding that the test loss of large language models decreases as a power law of the number of parameters, the dataset size, and the compute budget, with predictable exponents; **the manifold hypothesis** — the assumption that real-world data lie on or near a low-dimensional manifold embedded in the high-dimensional input space, and that deep networks learn to represent this manifold (Bengio, Courville & Vincent, 2013); and **mechanistic interpretability** (Olah et al., 2020; Elhage et al., 2022) — the attempt to reverse-engineer the internal computations of trained networks by identifying "features" (neurons or circuits that detect specific patterns) and tracing their causal role in the network's output.
 
-**The Curb-Cut Effect.** The "curb cut" — the ramp from the sidewalk to the street — was designed for wheelchair users but benefits everyone: parents with strollers, delivery workers with dollies, cyclists, travelers with rolling luggage. In HCI, designing for accessibility often benefits all users: captions help users in noisy environments and non-native speakers; high contrast helps users in bright sunlight; keyboard shortcuts help power users. This is the curb-cut effect.
+**Required Reading:**
+- Ian Goodfellow, Yoshua Bengio & Aaron Courville, *Deep Learning* (2016/2038), chs. 6 (Deep Feedforward Networks), 12 (Applications)
+- Frank Rosenblatt, "The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain," *Psychological Review* 65, no. 6 (1958): 386–408
+- David E. Rumelhart, Geoffrey E. Hinton & Ronald J. Williams, "Learning Representations by Back-Propagating Errors," *Nature* 323 (1986): 533–536
+- Jonathan Frankle & Michael Carbin, "The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks," *International Conference on Learning Representations* (2019)
+- Yggdrasil Deep Learning Visualiser (2040)
 
-**Assistive Technologies in 2040.**
-
-- **Screen readers (JAWS, NVDA, VoiceOver, TalkBack):** By 2040, AI-enhanced screen readers can describe images, interpret complex data visualizations, and summarize long pages. The **Huginn Screen Reader** developed at UoY provides natural-language descriptions of visual layouts: "A form with fields for name, email, and a submit button. Three navigation links at the top: Courses, Schedule, Profile."
-
-- **Switch control:** For users with limited motor control. A single switch (breath puff, eyebrow raise, finger twitch) cycles through interface elements. This is the most demanding accessibility test: if an interface works with a single switch, it works for everyone.
-
-- **Eye tracking:** By 2040, consumer VR/AR headsets include eye tracking. Users with motor disabilities can control the interface with gaze + dwell (fixate on a target for 500ms to click) or gaze + blink.
-
-- **Brain-computer interfaces (BCI):** For users with severe motor disabilities (ALS, locked-in syndrome). EEG-based BCIs (non-invasive) enable cursor control and typing at 20-40 characters per minute in 2040. The **RúnarBCI** project at UoY aims to reach 60 CPM by 2042.
-
-- **AAC (Augmentative and Alternative Communication):** For non-speaking users. Speech-generating devices and apps. By 2040, AI-powered AAC systems predict the user's intended message from partial input (one tap predicts "I want to go to the cafeteria").
-
-**Universal Design Principles (North Carolina State, 1997, extended for 2040).**
-1. **Equitable use:** The design is useful and marketable to people with diverse abilities.
-2. **Flexibility in use:** Accommodates a wide range of preferences and abilities.
-3. **Simple and intuitive:** Easy to understand regardless of experience, language, or cognitive ability.
-4. **Perceptible information:** Communicates necessary information regardless of ambient conditions or sensory abilities.
-5. **Tolerance for error:** Minimizes hazards and adverse consequences of accidental actions.
-6. **Low physical effort:** Can be used efficiently and comfortably with minimum fatigue.
-7. **Size and space for approach and use:** Appropriate size for reach, manipulation, and use regardless of body size, posture, or mobility.
-8. **AI explicability (2040 addition):** The interface must communicate what the AI system knows, is doing, and why.
-
-#### Required Reading
-- WCAG 3.0 (2024). *Web Content Accessibility Guidelines*. W3C.
-- Henry, S.L. (2014). *Just Ask: Integrating Accessibility Throughout Design*. 2nd ed. Lulu.com.
-- Norman, D. (2013). *The Design of Everyday Things*, Chapter 7: "Design in the World of Business."
-- Connolly, M. et al. (2036). "Accessibility in Spatial Computing." *ACM ASSETS*.
-
-#### Discussion Questions
-1. A voice-controlled smart home interface is inherently inaccessible to a deaf user. How would you redesign such an interface to be universally accessible?
-2. The curb-cut effect suggests that designing for accessibility benefits all users. Give five examples of accessibility features that are now used by the general population.
-3. AI-powered accessibility tools (screen readers that describe images, AAC that predicts text) make tradeoffs between speed and accuracy. At what point does prediction become "putting words in the user's mouth"?
+**Discussion Questions:**
+1. The universal approximation theorem guarantees that a single hidden layer can represent any function — so why do we need depth? What does depth provide beyond what width can achieve, and are there theoretical limits on the benefits of depth?
+2. The lottery ticket hypothesis suggests that dense networks contain sparse subnetworks that can achieve the same accuracy. If true, why do we train dense networks rather than searching directly for the sparse subnetworks — and what does the existence of winning tickets tell us about the geometry of the loss landscape?
+3. Neural scaling laws suggest that performance improves predictably with scale. Is this a fundamental law of learning, or is it an empirical artefact of the current generation of architectures and data — and what would it mean for the theory of learning if scaling laws are universal?
 
 ---
 
-### ᚷ Lecture 5: Spatial Computing — The Augmented Realms
+## Lecture 5: Decision Trees — ID3, CART, and Tree-Based Models
 
-**Date:** Week 5, Session 1
+Decision trees are among the most interpretable models in the machine learning toolkit. A decision tree represents a function as a hierarchical sequence of tests: each internal node tests the value of a feature, each branch corresponds to an outcome of the test, and each leaf assigns a prediction (a class label for classification, a numerical value for regression). The path from the root to a leaf is a **decision rule** — a conjunction of conditions that is human-readable and can be inspected, validated, or challenged. This interpretability — the ability to explain not just the prediction but the reasoning that led to it — distinguishes decision trees from black-box models (neural networks, ensemble methods) and makes them the model class of choice in high-stakes domains where explanations are legally or ethically required.
 
-#### Overview
+The **ID3 algorithm** (Quinlan, 1986) is the foundational algorithm for learning decision trees. ID3 constructs the tree top-down, recursively: at each node, the algorithm selects the feature that best separates the training examples according to the **information gain** criterion — the reduction in entropy (uncertainty) about the class label achieved by splitting on that feature. The entropy of a set S with respect to the class distribution is H(S) = −∑_c p_c log₂ p_c, where p_c is the proportion of examples in class c. The information gain of splitting on feature f is Gain(S, f) = H(S) − ∑_v (|S_v|/|S|) H(S_v), where S_v is the subset of examples for which feature f takes value v. The algorithm selects the feature with the maximum information gain, partitions the data accordingly, and recurses on each partition. The recursion terminates when all examples in a node belong to the same class (pure node) or when no features remain.
 
-Spatial computing — the overlaying of digital information on the physical world — is by 2040 a mature, mass-market technology. This lecture covers the interaction design principles for augmented and virtual reality: spatial affordances, depth cues, manipulation in 3D, navigation in virtual spaces, and the ergonomic challenges (motion sickness, fatigue, social acceptability). The Norse metaphor: the *Urðarbrunnr* (Well of Urðr) — a location that exists simultaneously in the physical world (at the root of Yggdrasil) and in the spiritual world (where the Norns weave). Spatial computing creates such dual-presence: digital objects that exist in our physical space, extending our reality.
+The **CART algorithm** (Classification and Regression Trees) (Breiman, Friedman, Olshen & Stone, 1984) extends decision-tree learning to regression and introduces several innovations. For classification, CART uses the **Gini impurity** — Gini(S) = 1 − ∑_c p_c² — as the splitting criterion, which is computationally cheaper than entropy and yields similar trees in practice. For regression, CART uses the **mean squared error** reduction: at each node, the algorithm selects the split that minimises ∑ᵢ (yᵢ − ȳ_left)² + ∑ⱼ (yⱼ − ȳ_right)². CART also incorporates **pruning** — the reduction of the tree after construction to mitigate overfitting. The algorithm first builds a maximally large tree (until each leaf contains a minimal number of examples), then uses **cost-complexity pruning** (also called weakest-link pruning): for each subtree, the algorithm computes a cost-complexity measure C(T) = R(T) + α|T|, where R(T) is the misclassification rate (or MSE for regression) on the training data, |T| is the number of leaves, and α is a complexity parameter. Pruning removes the branch that yields the smallest increase in R(T) per unit decrease in |T|, and the optimal α is selected by cross-validation.
 
-#### Lecture Notes
+The theoretical analysis of decision-tree learning reveals fundamental limitations. **Decision trees are high-variance estimators** — a small change in the training data can produce a completely different tree (the instability is analogous to the instability of hierarchical clustering). The greedy, top-down construction (select the best split at each node) is **locally optimal but globally suboptimal** — there is no guarantee that the sequence of locally optimal splits yields a globally optimal tree. Finding the optimal decision tree (the tree of depth at most d that minimises the misclassification rate) is NP-complete (Hyafil & Rivest, 1976) — a result that establishes the necessity of heuristic construction algorithms.
 
-**The Spectrum of Reality-Virtuality (Milgram & Kishino, 1994).**
-- **Real environment:** What you see without augmentation.
-- **Augmented Reality (AR):** Digital overlay on the real world (smart glasses, phone camera).
-- **Augmented Virtuality (AV):** Real objects inserted into a virtual world.
-- **Virtual Reality (VR):** Complete immersion in a virtual environment.
+The **interpretability of decision trees** is both their greatest strength and a potential weakness. A tree with fewer than, say, 20 leaves can be visualised and understood by a human — the entire model fits on a page. But a tree that has been pruned for interpretability may sacrifice significant accuracy compared to a deeper, more complex tree. The **trade-off between interpretability and accuracy** is a recurring theme in ML theory: simpler models (linear models, shallow trees) are interpretable but may have high bias; complex models (deep trees, ensembles) may have lower bias but are opaque. The choice between them depends on the application — and on the regulatory and ethical requirements that govern it.
 
-By 2040, AR is the dominant paradigm — Apple Vision Pro 4, Meta Quest Pro 3, and the UoY's own **RúnarLens** (developed in partnership with Nordic optics company Horus) are worn by 30% of UoY students during a typical day. VR is used for specialized applications: immersive learning, architectural walkthroughs, and therapeutic scenarios.
+**Required Reading:**
+- J. Ross Quinlan, "Induction of Decision Trees," *Machine Learning* 1, no. 1 (1986): 81–106
+- Leo Breiman, Jerome Friedman, Richard Olshen & Charles Stone, *Classification and Regression Trees* (1984/2038), chs. 1–3, 8
+- Laurent Hyafil & Ronald L. Rivest, "Constructing Optimal Binary Decision Trees is NP-Complete," *Information Processing Letters* 5, no. 1 (1976): 15–17
+- Cynthia Rudin, "Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead," *Nature Machine Intelligence* 1 (2019): 206–215
+- Yggdrasil Decision Tree Lab (2040)
 
-**Interaction in 3D.**
-
-*Selection.* How does the user select a virtual object?
-- **Ray casting:** Point from the controller or hand toward the object. Most common, but suffers from jitter at long distances.
-- **Gaze + confirm:** Look at the object, then perform a confirm action (tap, voice, blink). Low effort but imprecise.
-- **Hand proximity:** Reach out and touch the virtual object. Most natural but limited to arm's reach (~1m).
-
-*Manipulation.* Once selected, how does the user manipulate the object?
-- **Direct manipulation (proximal):** Grab with hand, move, rotate, scale with the other hand. The most intuitive.
-- **Gizmo-based (distal):** Select object, see a 3D manipulation widget (translate/rotate/scale rings). High precision, requires training.
-- **Voice + gesture:** "Move the chair... here" (point to location). Combines natural language with spatial pointing.
-
-*Navigation.* How does the user move through the virtual space?
-- **Physical walking:** The gold standard — the user's real body movement maps 1:1 to virtual movement. Challenges: limited tracking space, physical obstacles.
-- **Teleportation:** Point to a location and instantly appear there. Low motion sickness risk. Most common in VR experiences.
-- **Joystick/thumbstick locomotion:** Smooth movement, highest motion sickness risk. Used by experienced VR users.
-
-**The Motion Sickness Problem.** Vection (the perception of self-motion) that conflicts with the vestibular system (which senses no acceleration) causes motion sickness. By 2040, solutions include:
-- **Comfort vignettes:** The field of view narrows during artificial movement, reducing vection.
-- **Translational gain mismatch:** Reduce the visual speed relative to real leg movement (for walking-in-place interfaces).
-- **Galvanic vestibular stimulation (GVS):** Low-current electrical stimulation of the vestibular nerve to create the sensation of acceleration. Experimental in 2040, available in high-end VR systems.
-
-**Spatial Affordances.** In the physical world, affordances are obvious: a chair affords sitting because you've seen chairs before. In spatial computing, affordances must be designed:
-- **Glow effect:** An interactable object glows when the user's gaze or hand approaches it.
-- **Outline:** Selected objects get a colored outline (cyan in the UoY framework).
-- **Physics simulation:** Objects react to gravity, collisions, and forces — the user understands their material properties through behavior.
-- **Sound:** A soft chime when an object becomes interactable; a click when selected; a satisfying thud when placed.
-
-**2040: The UoY Spatial Campus.** By 2040, the UoY campus has a full spatial computing layer accessible through RúnarLens: digital wayfinding arrows on the floor ("Turn left for the Computational Arts building"), virtual whiteboards in study rooms (visible to all students wearing lenses), interactive 3D models in the anatomy lab (floating organs students can examine from all angles), and a shared virtual space ("The Longhouse") where students gather for social events, study groups, and the annual course registration festival.
-
-#### Required Reading
-- Milgram, P. & Kishino, F. (1994). "A Taxonomy of Mixed Reality Visual Displays." *IEICE Transactions on Information Systems*, E77-D(12).
-- Norman, D. (2013). *The Design of Everyday Things*, Chapter 7: "Spatial Design."
-- LaViola, J. et al. (2017). *3D User Interfaces: Theory and Practice*, 2nd ed. Addison-Wesley.
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 8: "The Dual Presence."
-
-#### Discussion Questions
-1. AR interfaces overlay information on the physical world. How do you prevent information overload — the user seeing too many virtual objects and losing track of the physical environment?
-2. Why does teleportation cause less motion sickness than smooth locomotion in VR? What does this tell us about the perceptual mechanisms underlying motion sickness?
-3. Design a spatial computing interface for the UoY cafeteria — what information would you overlay, and how would the user interact with it while holding a tray of food?
+**Discussion Questions:**
+1. The greedy construction of decision trees is known to be suboptimal — and finding the optimal tree is NP-complete. Should we nevertheless continue to use greedy algorithms, or is it worth the computational cost to find better (if not optimal) trees using techniques like beam search or branch-and-bound?
+2. Cynthia Rudin argues that for high-stakes decisions (medicine, criminal justice), we should use inherently interpretable models like decision trees rather than post-hoc explanations of black boxes. Is this always feasible — and what do we lose when we restrict ourselves to interpretable models?
+3. Decision trees are unstable — a small change in the data can produce a radically different tree. Is this instability a weakness (the model is unreliable) or a strength (the instability signals genuine uncertainty in the data, and the structure of the instability reveals which features are borderline)?
 
 ---
 
-### ᚹ Lecture 6: Voice and Conversational Interfaces — The Spoken Word
+## Lecture 6: Ensemble Methods — Bagging, Boosting, and the Theory of Generalisation
 
-**Date:** Week 6, Session 1
+Ensemble methods combine multiple models — each potentially weak or inaccurate — to produce a single, strong predictor. The principle is ancient (Aristotle's *Politics*: "the many, when they assemble, are better than the few") but its mathematical formalisation in machine learning has produced some of the most practically successful algorithms in the field: random forests, gradient boosting, and AdaBoost. The theory of ensemble methods addresses two fundamental questions: (1) Why does combining models improve accuracy? (2) How should the models be combined?
 
-#### Overview
+**Bagging** (Bootstrap Aggregating) (Breiman, 1996) is the simplest ensemble method: given a training set of size m, draw B bootstrap samples (samples of size m drawn with replacement), train a model (typically a high-variance, low-bias model like an unpruned decision tree) on each bootstrap sample, and average the predictions (for regression) or take a majority vote (for classification). The variance reduction property of bagging follows from a basic fact: the variance of the average of B i.i.d. random variables is the variance of each variable divided by B. If the models were independent, bagging would reduce variance by a factor of B; in practice, the bootstrap samples are correlated, and the variance reduction is more modest but still substantial. The **random forest** (Breiman, 2001) extends bagging to decision trees by adding an additional source of randomness: at each split, only a random subset of features (typically √d for classification, d/3 for regression) is considered. This **feature subsampling** decorrelates the trees further — trees trained on the same bootstrap sample would otherwise select the same strong features at the top splits — leading to additional variance reduction.
 
-By 2040, voice is the fastest-growing interaction modality, driven by the maturity of large language models and speech recognition. This lecture covers the design of conversational interfaces: turn-taking, grounding, error recovery, persona design, and the unique challenges of voice-only interaction (no visual persistence, ambient noise, privacy concerns). The Norse metaphor: the *þáttr* — a short narrative told aloud in the longhouse, with the storyteller adjusting the tale based on the audience's reactions. A well-designed voice interface is a digital storyteller: it responds to the user's cues, adapts its pacing, and keeps the conversation flowing.
+**Boosting** (Freund & Schapire, 1997) takes an opposing approach: rather than training models independently (as in bagging), boosting trains models **sequentially**, each new model focusing on the mistakes of the previous ones. **AdaBoost** (Adaptive Boosting) assigns a weight to each training example; at each round t, a weak learner is trained on the weighted data, and the weight of each misclassified example is increased (making the next weak learner focus on the hard examples). The final prediction is a weighted vote of the weak learners, where the weight of each weak learner depends on its accuracy. The theoretical analysis of AdaBoost (Schapire et al., 1998) connects boosting to **margin theory**: AdaBoost increases the margin — the difference between the weight assigned to the correct class and the maximum weight assigned to an incorrect class — even after the training error reaches zero, and this margin-maximisation effect explains its ability to generalise despite fitting the training data perfectly.
 
-#### Lecture Notes
+**Gradient boosting** (Friedman, 2001) generalises boosting to arbitrary differentiable loss functions. The key insight is that boosting can be viewed as **functional gradient descent** — the sequential addition of weak learners to the ensemble approximates gradient descent in the space of functions. At each step, the algorithm fits a weak learner (typically a shallow decision tree — a "stump" or a tree with 4–8 leaves) to the **residuals** — the negative gradient of the loss with respect to the current ensemble prediction. The learning rate (shrinkage parameter) ν < 1 controls the step size: the update is f_t(x) = f_{t−1}(x) + ν · g_t(x), where g_t is the new weak learner. The use of a learning rate is critical: smaller ν requires more trees but yields better generalisation (the "wisdom of the crowd" effect is stronger when each contributor has a smaller influence). The **XGBoost** system (Chen & Guestrin, 2016) — an optimised implementation of gradient boosting with regularisation, parallelisation, and cache-aware computation — has dominated structured-data ML competitions for nearly a decade and remains the default choice for tabular data in 2040.
 
-**Conversational Design Principles.**
+The theory of ensemble methods raises a foundational question: **why do ensembles not overfit?** A large ensemble — containing hundreds or thousands of trees — can fit the training data perfectly, yet its test error continues to improve (or at least not degrade) as more models are added. This phenomenon is at odds with the classical bias–variance theory, which predicts that fitting the training data perfectly should lead to overfitting. The resolution lies in **margin theory** (for boosting) and **consistency of random forests** (Scornet, Biau & Vert, 2015): for specific ensemble algorithms, under appropriate conditions, the generalisation error can be bounded in terms of the margin distribution, and the infinite-ensemble limit is a **consistent** estimator — it converges to the Bayes optimal predictor as the sample size grows.
 
-*Turn-Taking.* Humans take turns in conversation with remarkable precision — the average gap between turns is 200ms. Voice interfaces must match this rhythm. A delay longer than 1 second breaks the conversational flow. The 2040 standard: the system responds to simple commands in <300ms, and to complex queries in <2s with an acknowledgement (a subtle chime or "Let me think about that...") during the delay.
+**Required Reading:**
+- Leo Breiman, "Bagging Predictors," *Machine Learning* 26, no. 2 (1996): 123–140
+- Leo Breiman, "Random Forests," *Machine Learning* 45, no. 1 (2001): 5–32
+- Yoav Freund & Robert E. Schapire, "A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting," *Journal of Computer and System Sciences* 55, no. 1 (1997): 119–139
+- Jerome H. Friedman, "Greedy Function Approximation: A Gradient Boosting Machine," *Annals of Statistics* 29, no. 5 (2001): 1189–1232
+- Tianqi Chen & Carlos Guestrin, "XGBoost: A Scalable Tree Boosting System," *Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining* (2016): 785–794
 
-*Grounding (Clark & Brennan, 1991).* In conversation, speakers establish common ground — shared understanding that accumulates over the dialogue. A voice interface must ground each contribution. The system should:
-- **Acknowledge receipt:** "I heard you say 'set thermostat to 22 degrees'."
-- **Confirm understanding:** "So you want the living room temperature at 22°C. Is that correct?"
-- **Signal understanding:** "Got it" or "OK" after each user contribution, even during extended narration.
-
-*Error Recovery.* In voice interfaces, errors are inevitable (misrecognition, misunderstanding, ambient noise). The system must recover gracefully:
-- **Rejection of low-confidence inputs:** If speech recognition confidence < 80%, ask "Sorry, could you repeat that?" rather than guessing.
-- **Clarification:** If the intent is unclear, ask specific questions rather than generic "I don't understand." Example: "Did you want to *search* for courses or *register* for courses?"
-- **Undo:** Every voice action must be reversible with "Undo that" or "Go back."
-
-**Persona Design.** A voice interface is perceived as having a personality, whether you design one or not. Key dimensions:
-- **Formality:** Formal ("Good afternoon. How may I assist you?") vs. casual ("Hey! What's up?") The 2040 trend: adaptive formality — the interface matches the user's style.
-- **Politeness:** Direct ("Set temperature to 22") vs. polite ("Could you please set the temperature to 22 degrees?"). In usability testing at UoY, users rated polite interfaces as more competent and trustworthy.
-- **Accent and dialect:** By 2040, the best voice interfaces support multiple accents and dialects natively. The UoY campus voice assistant, **UrðrSpeak**, supports 8 regional British accents plus Icelandic and Norwegian.
-
-**Voice UX Anti-Patterns.**
-- **Echo chamber:** The system confirms everything the user says, making the conversation tedious. "I want to set an alarm." → "You want to set an alarm?" → "Yes." → "OK, setting an alarm..." Better: confirm only critical actions.
-- **Too many options:** "Would you like to set a one-time alarm, a recurring alarm, an alarm with a specific ringtone, an alarm that...?" → Information overload. Better: progressive disclosure. "What time?" → After time: "Would you like this alarm to repeat?"
-- **No visual equivalent:** Voice-only interfaces are hard for users with hearing disabilities and impossible in noisy environments. Always provide a visual fallback.
-
-#### Required Reading
-- Clark, H.H. & Brennan, S.E. (1991). "Grounding in Communication." *Perspectives on Socially Shared Cognition*.
-- Pearl, C. (2016). *Designing Voice User Interfaces: Principles of Conversational Experiences*. O'Reilly.
-- Cohen, M.H. et al. (2004). *Voice User Interface Design*. Addison-Wesley.
-
-#### Discussion Questions
-1. Design a voice interface for a banking application. How would you handle the security requirement (authentication) while maintaining conversational flow?
-2. The "echo chamber" anti-pattern is common in early voice interfaces. When is confirmation actually necessary? When does it become annoying?
-3. In a multi-user environment (family living room), how does a voice interface distinguish commands addressed to it from conversation between people? What if the system makes a mistake?
+**Discussion Questions:**
+1. Bagging reduces variance without increasing bias; boosting reduces both bias and variance. But boosting can increase variance on noisy datasets. How should the learning theorist decide between bagging and boosting for a given problem — and are there hybrid approaches that capture the advantages of both?
+2. Random forests and gradient boosting are both tree-based ensemble methods but with different theoretical foundations. Is one fundamentally superior, or does the choice depend on the data characteristics (number of features, noise level, sample size)?
+3. Gradient boosting with shrinkage generalises well even when the ensemble has thousands of trees and achieves zero training error. Does this violate the bias–variance trade-off, or does the margin theory provide a complete explanation — and what implications does this have for the analysis of other overparameterised models (e.g., deep networks)?
 
 ---
 
-### ᚺ Lecture 7: Neural Interfaces — The Threshold of Thought
+## Lecture 7: Bayesian Learning — Probabilistic Inference, Gaussian Processes, and Bayesian Neural Networks
 
-**Date:** Week 7, Session 1
+The Bayesian approach to machine learning treats learning as **probabilistic inference**: we maintain a probability distribution over hypotheses (the **prior**), observe data, and update the distribution using Bayes' theorem to obtain the **posterior**. The prediction for a new example is obtained by **marginalising** over the posterior — averaging over all hypotheses weighted by their posterior probability — rather than selecting a single hypothesis. This distinction — between the Bayesian approach (which maintains uncertainty) and the frequentist approach (which produces a point estimate) — is the deepest methodological divide in statistical learning theory, and it has implications for how we interpret uncertainty, how we avoid overfitting, and how we design learning algorithms.
 
-#### Overview
+Bayes' theorem for learning is: P(h | S) = P(S | h) P(h) / P(S), where P(h) is the prior over hypotheses, P(S | h) is the likelihood — the probability of observing the training data S if h were the true hypothesis — and P(h | S) is the posterior. The prediction for a new example x is: P(y | x, S) = ∫_H P(y | x, h) P(h | S) dh — the **predictive distribution**, obtained by integrating over the posterior. The Bayesian approach automatically embodies **Occam's razor**: simpler hypotheses — those that assign high probability to a wider range of possible data — are penalised by the marginal likelihood P(S) = ∫ P(S | h) P(h) dh, which is small for complex hypotheses (because they spread their probability mass thinly over a large space of possible datasets) and large for simple hypotheses (because they concentrate their mass). This **Bayesian Occam's razor** (MacKay, 1992; Rasmussen & Ghahramani, 2001) provides a principled account of why Bayesian methods do not overfit — or, more precisely, why they overfit less than maximum-likelihood methods.
 
-Neural interfaces — devices that read (and in some cases write) brain signals — represent the most intimate frontier of HCI. This lecture covers the neuroscience foundations (EEG, fNIRS, ECoG, intracortical arrays), the interaction design principles for BCI (control vs. communication, the Midas touch problem, fatigue and training), the state of the art in 2040 (non-invasive EEG for cursor control, invasive BCI for communication in locked-in patients), and the profound ethical questions: cognitive liberty, mental privacy, and the boundary between human and machine. The Norse metaphor: the *hamingja* — a concept in Norse belief meaning a person's luck, fortune, or guardian spirit, often visualized as a being that shapes the person's fate. A neural interface is a technological hamingja: it reads the user's mind and helps shape their digital fate.
+**Gaussian processes** (GP) (Rasmussen & Williams, 2006) are the Bayesian approach to regression and classification in the function-space view. A GP is a distribution over functions: any finite collection of function values has a multivariate Gaussian distribution. The GP is specified by a **mean function** m(x) (often taken to be zero) and a **covariance function** (kernel) K(x, x′), which encodes prior beliefs about the smoothness, periodicity, and length scale of the function. Given training data (xᵢ, yᵢ), the posterior over functions is also a GP, and the predictive distribution at a new input x* is Gaussian with closed-form mean and variance: μ* = k*ᵀ (K + σ²I)⁻¹ y, σ²* = K(x*, x*) − k*ᵀ (K + σ²I)⁻¹ k*, where k* is the vector of kernel evaluations between x* and the training points, K is the kernel matrix of the training points, and σ² is the noise variance. The GP prediction is **analytically tractable** — no iterative optimisation is required — and it provides **well-calibrated uncertainty estimates**: the predictive variance at x* is high when x* is far from the training data, reflecting the epistemic uncertainty of the model.
 
-#### Lecture Notes
+**Bayesian neural networks** (BNNs) (MacKay, 1992; Neal, 1996) place priors over the weights of a neural network and perform inference over the posterior. The motivation is twofold: (1) uncertainty estimates — BNNs provide predictive variances that capture both aleatoric (data) and epistemic (model) uncertainty, which is critical for safety-critical applications; (2) regularisation — the Bayesian averaging over weights automatically penalises complex models, reducing overfitting. The computational challenge of BNNs is that the posterior over weights is intractable — the high-dimensional, multimodal posterior requires approximations. The dominant approaches in 2040 are: **variational inference** (Graves, 2011; Blundell et al., 2015) — approximate the posterior with a tractable distribution (e.g., a diagonal Gaussian) and minimise the KL divergence between the approximation and the true posterior; **Monte Carlo dropout** (Gal & Ghahramani, 2016) — interpret dropout (Srivastava et al., 2014) as approximate Bayesian inference, using the dropout training procedure at test time to sample from an approximate posterior; and **deep ensembles** (Lakshminarayanan, Pritzel & Blundell, 2017) — train multiple networks with different random initialisations and treat the ensemble as an empirical approximation to the posterior.
 
-**The Neuroscience.**
+The 2040 frontier of Bayesian deep learning includes: **function-space inference** (Rudner, Pradier & Barber, 2022) — performing inference directly over the function values rather than the weights, avoiding the pathological geometry of the weight space; **neural field GPs** — combining the expressive power of deep networks with the uncertainty quantification of GPs for applications in physics and scientific computing (Wang, Yu & Smith, 2023); and **Bayesian deep learning for foundation models** — scaling Bayesian inference to models with hundreds of billions of parameters, where even storing a single posterior sample is a systems challenge.
 
-*EEG (Electroencephalography).* Non-invasive electrodes on the scalp measure electrical activity of cortical neurons. Temporal resolution: ~1ms (excellent). Spatial resolution: ~1cm (poor). The signal is noisy (SNR ~ 1-5) and contaminated by muscle artifacts (eye blinks, jaw clench, forehead tension). In 2040, dry electrodes (no gel) and active noise cancellation have made EEG practical for consumer use — the **RúnarBand** headband provides 8-channel EEG at 500Hz for under €500.
+**Required Reading:**
+- Carl Edward Rasmussen & Christopher K. I. Williams, *Gaussian Processes for Machine Learning* (2006/2039), chs. 1–5
+- David J. C. MacKay, "A Practical Bayesian Framework for Backpropagation Networks," *Neural Computation* 4, no. 3 (1992): 448–472
+- Yarin Gal & Zoubin Ghahramani, "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning," *International Conference on Machine Learning* (2016): 1050–1059
+- Balaji Lakshminarayanan, Alexander Pritzel & Charles Blundell, "Simple and Scalable Predictive Uncertainty Estimation Using Deep Ensembles," *Advances in Neural Information Processing Systems* 30 (2017): 6402–6413
+- Yggdrasil Bayesian Inference Sandbox (2040)
 
-Common EEG paradigms for HCI:
-- **Motor imagery:** The user imagines moving their left hand or right hand. The sensorimotor rhythms (mu rhythm, 8-12Hz, beta, 18-25Hz) desynchronize on the contralateral hemisphere. This can be classified at ~85% accuracy in 2040.
-- **P300 speller:** A 6×6 grid of characters flashes rows and columns randomly. When the target character flashes, the user's brain produces a P300 event-related potential (positive deflection at 300ms). The system identifies the target by detecting which row and column produce the P300. Typing speed: 20-40 characters per minute in 2040.
-- **Steady-state visually evoked potentials (SSVEP):** The user looks at a target that flickers at a specific frequency (e.g., 15Hz). The occipital cortex produces a response at that frequency. SSVEP enables rapid selection from a grid of targets, with speeds up to 60 choices per minute.
-
-*Invasive BCIs.* For users with severe motor disabilities, implanted electrodes provide higher signal quality:
-- **ECoG (Electrocorticography):** Electrodes placed on the surface of the brain (under the skull but above the dura). SNR ~ 10-20. Requires surgery.
-- **Intracortical arrays (Utah array, Neuralink):** Tiny electrodes inserted into the cortex. SNR ~ 100. Highest resolution. Used in clinical trials for cursor control (BrainGate) and speech decoding (Neuralink's PRIME study).
-
-In 2040, the **RúnarBCI** implant (developed in a UoY-Neuralink partnership) provides 2048 channels at 30kHz from a flexible, thread-like electrode array. It enables: cursor control at 60 bits/min, speech decoding at 60 words/min (for attempted speech), and the first experimental "direct thought-to-text" interfaces.
-
-**The Midas Touch Problem.** In Greek myth, everything King Midas touched turned to gold, including food, drink, and his daughter. In BCIs, the Midas Touch problem is: how do we distinguish between the user's intentional commands and their incidental brain activity (thinking about lunch while the cursor is on the "delete" button)? Solutions in 2040:
-- **Dual-threshold:** A command requires both a specific brain pattern (e.g., motor imagery) AND a confirmation signal (e.g., a blink or jaw clench).
-- **Context-aware buffers:** In the P300 speller, the system does not immediately output characters — it holds a buffer of 3-spell cycles, shows them to the user, and asks for confirmation before sending.
-- **Adaptive calibration:** The system learns the user's baseline neural activity and adapts the classification thresholds continuously.
-
-**The Training Wall.** Non-invasive BCIs require user training. Most users need 10-30 sessions (each 30-60 minutes) to achieve reliable control. About 15% of users are "BCI illiterate" — they never achieve above-chance control. The 2040 standard uses adaptive machine learning: the classifier adapts to the user's neural patterns in real-time, reducing training time to 3-5 sessions for most users.
-
-#### Required Reading
-- Wolpaw, J.R. & Wolpaw, E.W. (2012). *Brain-Computer Interfaces: Principles and Practice*. Oxford.
-- Nijboer, F. et al. (2008). "A P300-Based Brain-Computer Interface for People with Amyotrophic Lateral Sclerosis." *Clinical Neurophysiology*, 119(8).
-- Musk, E. (2019). "An Integrated Brain-Machine Interface Platform with Thousands of Channels." *Journal of Medical Internet Research*, 21(10).
-- The Nordic Bioethics Council (2036). "Ethical Guidelines for Neural Interfaces."
-
-#### Discussion Questions
-1. The Midas Touch problem is about distinguishing intent from incidental thought. Propose a solution that does not require a confirmation signal and works in real-time.
-2. Should non-invasive BCIs be regulated as medical devices, or can they be sold as consumer electronics? At what point does "reading your brain for cursor control" become "reading your thoughts"?
-3. Consider the ethics of "direct thought-to-text" interfaces. Can a person be forced to incriminate themselves through their BCI output? How does the 5th Amendment (US) or Article 6 of the ECHR apply?
+**Discussion Questions:**
+1. Bayesian methods provide well-calibrated uncertainty estimates and automatic Occam's razor — yet they are far less widely used than point-estimate methods (SGD-trained neural networks). Is this because the computational challenges of Bayesian inference are truly prohibitive, or because practitioners do not need uncertainty estimates for their applications?
+2. Deep ensembles — training multiple networks from different initialisations and averaging their predictions — are simple, scalable, and empirically well-calibrated. Are deep ensembles "Bayesian" in any meaningful sense, or are they an engineering hack that happens to produce good uncertainty estimates for different reasons?
+3. The choice of prior in Bayesian learning is both a strength (it encodes domain knowledge) and a weakness (it introduces subjectivity). When the dataset is large, the likelihood dominates the prior, and the choice of prior is asymptotically irrelevant. But for small datasets — the regime where Bayesian methods should be most beneficial — the prior matters enormously. How should the practitioner choose the prior in the small-data regime?
 
 ---
 
-### ᚾ Lecture 8: Information Architecture — Organizing the Nine Realms
+## Lecture 8: Dimensionality Reduction — PCA, Manifold Learning, and Autoencoders
 
-**Date:** Week 8, Session 1
+The **curse of dimensionality** (Bellman, 1961) is a central challenge of statistical learning: as the dimensionality of the input space increases, the volume of the space grows exponentially, and the number of training examples required to maintain a given density grows exponentially as well — the "empty space phenomenon" that makes nearest-neighbour methods, kernel methods, and density estimation impractical in high dimensions. The solution — when it is available — is **dimensionality reduction**: the discovery of a low-dimensional representation of the data that preserves the structure (the distances, the neighbourhoods, the variances) that is relevant for the learning task. Dimensionality reduction is both a preprocessing step (reduce the dimension before applying a high-variance learner) and a window into the intrinsic structure of the data.
 
-#### Overview
+**Principal Component Analysis** (PCA) (Pearson, 1901; Hotelling, 1933) is the oldest and most widely used linear dimensionality reduction method. PCA finds the directions of maximum variance in the data — the **principal components** — which are the eigenvectors of the covariance matrix Σ = (1/m) ∑ᵢ (xᵢ − μ)(xᵢ − μ)ᵀ, sorted by the magnitude of the corresponding eigenvalues. The projection of the data onto the first k principal components — the k-dimensional linear subspace that captures the maximum variance — yields the best k-dimensional linear approximation to the data in the least-squares sense (the reconstruction error is minimised). PCA is also a **whitening** transformation: the principal components are uncorrelated (the covariance matrix in the PCA basis is diagonal), and scaling them to unit variance removes second-order correlations. The theoretical justification for PCA comes from **Karhunen–Loève theory** (Karhunen, 1946; Loève, 1945): PCA is the optimal linear basis for reconstructing a stochastic process in the mean-squared sense.
 
-Information Architecture (IA) is the practice of structuring, organizing, and labeling content to support usability and findability. This lecture covers IA fundamentals: hierarchies, taxonomies, folksonomies, navigation design, search systems, and the 2040 challenge of organizing AI-generated content. The Norse metaphor: Yggdrasil, the world-tree that organizes the cosmos into nine realms. A well-designed information architecture is Yggdrasil — it organizes vast complexity into a navigable structure where every user can find their way.
+The limitation of PCA is its linearity: it can only capture linear correlations and linear manifolds. The **manifold hypothesis** — that real-world data lie on or near low-dimensional nonlinear manifolds embedded in the high-dimensional input space — motivates **nonlinear dimensionality reduction** methods. **t-SNE** (t-Distributed Stochastic Neighbour Embedding) (van der Maaten & Hinton, 2008) is the most widely used method for visualisation: it constructs a probability distribution over pairs of high-dimensional points (where similar points have high probability of being neighbours) and a corresponding distribution over points in the low-dimensional embedding, and minimises the Kullback–Leibler divergence between the two distributions. t-SNE preserves local structure — neighbouring points in the high-dimensional space remain neighbours in the embedding — but the cost function is non-convex, the embedding depends on random initialisation, and the global geometry of the embedding (distances between clusters) is not meaningful. **UMAP** (Uniform Manifold Approximation and Projection) (McInnes, Healy & Melville, 2018) improves on t-SNE by constructing a graph-based representation of the manifold structure and optimising a cross-entropy loss, yielding faster computation and better preservation of global structure.
 
-#### Lecture Notes
+**Autoencoders** (Bourlard & Kamp, 1988; Hinton & Salakhutdinov, 2006) are neural-network architectures for learning nonlinear dimensionality reduction. An autoencoder consists of an **encoder** f_enc: ℝᵈ → ℝᵏ that compresses the input to a low-dimensional **latent** representation, and a **decoder** f_dec: ℝᵏ → ℝᵈ that reconstructs the input from the latent code. The parameters are learned by minimising the reconstruction error: L = ∑ᵢ ‖xᵢ − f_dec(f_enc(xᵢ))‖². When the encoder and decoder are linear and the latent dimension is k, the autoencoder learns the PCA subspace — the weight matrices span the top k principal components. When the encoder and decoder are nonlinear (deep networks), the autoencoder can learn **nonlinear manifolds** that PCA cannot capture. The **variational autoencoder (VAE)** (Kingma & Welling, 2014) extends the autoencoder to a probabilistic framework: the encoder outputs a distribution over the latent code (typically a Gaussian with mean and variance), and the decoder models the conditional distribution of the input given the latent code. The VAE is trained by maximising the **evidence lower bound (ELBO)** — a variational approximation to the log-marginal-likelihood — which decomposes into a reconstruction term and a KL-divergence regulariser that encourages the latent distribution to match a prior (typically a standard Gaussian).
 
-**The Eight Principles of Information Architecture (Dan Brown, 2010, updated for 2040).**
+The 2040 landscape of dimensionality reduction includes: **contrastive learning** (Chen et al., 2020; He et al., 2020) — learning representations by pulling together augmented views of the same example and pushing apart views of different examples — which has become the dominant approach for self-supervised representation learning; **diffusion models** (Ho, Jain & Abbeel, 2020; Song, Meng & Ermon, 2021) — which learn to reverse a diffusion process that gradually adds noise to the data, yielding state-of-the-art generative modelling; and **geometric deep learning** (Bronstein et al., 2021) — which extends dimensionality reduction to non-Euclidean data (graphs, manifolds, point clouds) by learning representations that respect the symmetries and invariances of the data domain.
 
-1. **Principle of Objects:** Treat content as a living thing with its own lifecycle, behaviors, and attributes. Every piece of content has: an owner, a creation date, an expiry date, a format, an audience, and a privacy level.
-2. **Principle of Choices:** Offer meaningful choices. Too few choices frustrate (information starvation). Too many choices overwhelm (paradox of choice). The 2040 guideline: present no more than 7±2 navigation options at any level.
-3. **Principle of Disclosure:** Show only enough information to help people understand what more information they'll find if they dig deeper. This is the progressive disclosure principle applied to information organization.
-4. **Principle of Exemplars:** Show examples of content categories to help users understand what the category contains. A "Courses" category should show a few sample courses.
-5. **Principle of Front Doors:** Assume that at least half of users will enter the site through a page other than the homepage. Every page must confirm the user's location and provide context.
-6. **Principle of Multiple Classification:** Offer users several different classification schemes to browse content — by topic, by format, by audience, by date, by popularity.
-7. **Principle of Focused Navigation:** Don't mix different types of navigation in the same menu. Course navigation (by department, by level, by semester) should be separate from account navigation (profile, settings, logout).
-8. **Principle of Growth:** Assume the content will grow. The navigation must accommodate 10× the current content volume without redesign. This is especially critical in 2040, when AI-generated content expands existing repositories daily.
+**Required Reading:**
+- Christopher M. Bishop, *Pattern Recognition and Machine Learning* (2006/2039), ch. 12 (Continuous Latent Variables)
+- Karl Pearson, "On Lines and Planes of Closest Fit to Systems of Points in Space," *Philosophical Magazine* 2, no. 11 (1901): 559–572
+- Laurens van der Maaten & Geoffrey Hinton, "Visualizing Data Using t-SNE," *Journal of Machine Learning Research* 9 (2008): 2579–2605
+- Diederik P. Kingma & Max Welling, "Auto-Encoding Variational Bayes," *International Conference on Learning Representations* (2014)
+- Yggdrasil Manifold Visualisation Platform (2040)
 
-**Navigation Design Patterns.**
-
-- **Global navigation:** The persistent top-level navigation that appears on every page. The UoY course site has: Courses, Schedule, Degree Planner, Library, Profile.
-- **Local navigation:** Sub-navigation within a section. Courses → Computer Science → Year 3 → CS301.
-- **Breadcrumbs:** Show the user's location in the hierarchy: Home > Courses > CS > Year 3 > CS301. Each level is clickable.
-- **Search as navigation:** For large information spaces (1000+ pages), search is the primary navigation. In 2040, AI-powered semantic search allows users to find content by describing it: "the course about distributed algorithms for key-value stores" returns CS301 immediately.
-
-**The 2040 Challenge: AI-Generated Content.** By 2040, AI systems generate content at scale — auto-generated documentation, AI-written course materials, personalized learning paths. The IA challenge: how do you organize content that didn't exist last week? The UoY solution:
-- **Auto-tagging:** AI systems automatically tag generated content with metadata (topic, level, format, related courses).
-- **Dynamic navigation:** Navigation menus update automatically as new content is added. A new course on quantum distributed computing appears under CS and under Physics, cross-indexed.
-- **Content freshness indicators:** Users see when content was generated, by whom (or by which AI), and when it was last reviewed by a human.
-
-#### Required Reading
-- Rosenfeld, L., Morville, P., & Arango, J. (2015). *Information Architecture: For the Web and Beyond*, 4th ed. O'Reilly.
-- Brown, D. (2010). "Eight Principles of Information Architecture." *Bulletin of the American Society for Information Science and Technology*, 36(6).
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 6: "The World-Tree Organization."
-
-#### Discussion Questions
-1. A news website with AI-generated articles produces 1000 new articles per day. Design an information architecture that lets users find relevant content. How is this different from a human-curated news site?
-2. The principle of multiple classification suggests offering users multiple ways to browse content. How do you help users choose among them?
-3. Breadcrumbs assume a fixed hierarchy. But 2040 navigation is often non-hierarchical and associative (links between related topics, AI-recommended paths). How does breadcrumb navigation work in a non-hierarchical space?
+**Discussion Questions:**
+1. PCA is the optimal linear dimensionality reduction method — but optimal for what objective (maximising variance, minimising reconstruction error)? When would a different linear method (ICA, CCA, factor analysis) be preferred over PCA?
+2. t-SNE preserves local structure but distorts global geometry — distances between clusters in a t-SNE plot are not trustworthy. How should visualisation methods be evaluated, and is there a fundamental trade-off between local fidelity and global structure preservation?
+3. Autoencoders can learn nonlinear manifolds, but the quality of the learned representation depends on the architecture, the regularisation, and the optimisation. What theoretical guarantees can we provide about the representations learned by autoencoders — and under what conditions does an autoencoder recover the true manifold?
 
 ---
 
-### ᛃ Lecture 9: Data Visualization — Reading the Threads
+## Lecture 9: Clustering — K-Means, Gaussian Mixture Models, and Unsupervised Learning
 
-**Date:** Week 9, Session 1
+Clustering — the partitioning of data into groups of similar objects — is the oldest and most intuitive form of unsupervised learning. Unlike supervised learning, where the target labels guide the discovery of structure, clustering must discover structure from the data alone — without labels, without external signal, without a ground-truth evaluation. The problem is fundamentally **ill-posed**: any dataset can be clustered in many ways, and there is no universally correct clustering — the "correct" clustering depends on the purpose, the domain, and the granularity of analysis. The theory of clustering addresses three questions: (1) What is a cluster? (2) How do we find clusters algorithmically? (3) How do we evaluate the quality of a clustering?
 
-#### Overview
+**K-means clustering** (MacQueen, 1967; Lloyd, 1982) is the most widely used clustering algorithm. Given a set of points {x₁, …, xₘ} ⊂ ℝᵈ and a number K of clusters, K-means partitions the data into K sets S = {S₁, …, S_K} by minimising the within-cluster sum of squares: argmin_S ∑_{k=1}^{K} ∑_{x ∈ S_k} ‖x − μ_k‖², where μ_k is the centroid (mean) of cluster S_k. The objective — the **inertia** — measures the compactness of the clusters. The optimisation problem is NP-hard (Aloise et al., 2009) in general, but Lloyd's algorithm — an iterative two-step procedure (assignment: assign each point to the nearest centroid; update: recompute the centroids as the means of the assigned points) — converges to a local minimum in a finite number of steps. The convergence can be slow (exponential worst-case), but in practice it is fast — typically a few tens of iterations — on real-world data.
 
-Data visualization is the graphical representation of information and data — the transformation of numbers into shapes that the human visual system can process pre-attentively. This lecture covers the perceptual principles of visualization (preattentive processing, Gestalt laws, the visual hierarchy), the standard chart types (bar, line, scatter, heatmap, treemap, parallel coordinates, network graph), interactive visualization techniques (filtering, zooming, linking-and-brushing), and the 2040 frontier of immersive data visualization in VR/AR. The Norse metaphor: the Norns read the threads of fate — they see patterns that no individual can see from their limited perspective. Data visualization is the modern Norn's practice: transforming raw threads of data into patterns the eye can read.
+The theoretical limitations of K-means are substantial. (1) The algorithm assumes **spherical clusters** of equal size — the Euclidean distance implicitly assumes isotropic Gaussian clusters with equal covariance. When clusters are elongated, non-convex, or of varying density, K-means fails. (2) The number of clusters K must be specified in advance — the **model selection** problem that has no universally satisfactory solution. The **elbow method** (plotting the inertia against K and looking for the "elbow" where the rate of decrease changes) is heuristic and subjective. The **gap statistic** (Tibshirani, Walther & Hastie, 2001) compares the inertia to the expected inertia under a null reference distribution, providing a statistical test for the optimal K -- but the choice of reference distribution is itself a modelling decision. (3) K-means is sensitive to the initialisation: different random initialisations converge to different local minima. The **K-means++** initialisation (Arthur & Vassilvitskii, 2007) — which samples initial centroids with probabilities proportional to the squared distance from the nearest already-chosen centroid — provides a theoretical guarantee: the expected solution is within O(log K) of the optimal solution.
 
-#### Lecture Notes
+**Gaussian Mixture Models (GMMs)** (Dempster, Laird & Rubin, 1977) generalise K-means by modelling the data as a mixture of K Gaussian distributions: p(x) = ∑_{k=1}^{K} π_k · N(x | μ_k, Σ_k), where π_k are the mixing coefficients (summing to 1) and N(x | μ_k, Σ_k) is the multivariate Gaussian density. The parameters — the means, covariances, and mixing coefficients — are estimated by the **Expectation-Maximisation (EM) algorithm**, which alternates between: the **E-step** (compute the posterior probability — the "responsibility" — of each Gaussian for each data point) and the **M-step** (maximise the expected complete-data log-likelihood with respect to the parameters). GMMs overcome several limitations of K-means: they can model clusters of arbitrary orientation and size (the covariance matrices capture the shape of each cluster), they provide a probabilistic assignment (each point belongs to each cluster with some probability), and the number of components can be selected using model-selection criteria (AIC, BIC) or by placing a Dirichlet process prior (the infinite mixture model, Rasmussen, 2000).
 
-**Preattentive Processing.** The human visual system processes certain visual attributes in parallel, within 200ms, before focused attention. These preattentive attributes are the designer's most powerful tools:
+**Hierarchical clustering** builds a tree (dendrogram) of nested clusterings, from the trivial clustering (each point in its own cluster) to the trivial clustering (all points in one cluster). **Agglomerative clustering** builds the tree bottom-up: start with each point as its own cluster, iteratively merge the two closest clusters according to a **linkage criterion** — single linkage (minimum distance between clusters), complete linkage (maximum distance), average linkage (average distance), or Ward's method (minimum increase in within-cluster variance). The dendrogram can be cut at any height to obtain a clustering with any desired number of clusters — a flexibility that is both a strength (the user can explore clusterings at different granularities) and a weakness (the cut is arbitrary). The theoretical properties of linkage methods are well understood: single linkage tends to produce long, chain-like clusters (it is equivalent to computing the minimum spanning tree and removing edges); Ward's method is equivalent to K-means on the induced distances but is less sensitive to local minima.
 
-- **Color hue:** Red items pop out among gray items — the "red fish" effect.
-- **Color intensity (saturation):** More saturated items attract attention.
-- **Orientation:** A tilted line among vertical lines pops out.
-- **Size:** Larger items appear more important.
-- **Shape:** A circle among squares pops out.
-- **Motion:** An animated element among static elements is immediately noticeable.
-- **Spatial position:** Where an item appears relative to others.
+**Clustering evaluation** — measuring the quality of a clustering without ground-truth labels — is a vexed problem. **Internal evaluation** measures (silhouette coefficient, Davies–Bouldin index, Calinski–Harabasz index) assess the separation and compactness of the clusters but are biased toward particular cluster shapes. **External evaluation** measures (adjusted Rand index, mutual information, homogeneity-completeness-V-measure) compare the clustering to a ground-truth labelling — but in unsupervised learning, ground truth is often unavailable or contested. The **stability-based approach** (Ben-Hur, Elisseeff & Guyon, 2002) evaluates a clustering algorithm by its consistency under perturbations of the data — stable clusterings are considered more reliable — but the connection between stability and the unknown true clustering is indirect.
 
-Use preattentive attributes sparingly: each attribute defines a "visual channel." Using red for all important data, large for urgent data, and motion for critical data creates channel overload — nothing pops out because everything is highlighted.
+**Required Reading:**
+- Christopher M. Bishop, *Pattern Recognition and Machine Learning* (2006/2039), ch. 9 (Mixture Models and EM)
+- J. B. MacQueen, "Some Methods for Classification and Analysis of Multivariate Observations," *Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability* 1 (1967): 281–297
+- David Arthur & Sergei Vassilvitskii, "K-Means++: The Advantages of Careful Seeding," *Proceedings of the 18th Annual ACM-SIAM Symposium on Discrete Algorithms* (2007): 1027–1035
+- Carl Edward Rasmussen, "The Infinite Gaussian Mixture Model," *Advances in Neural Information Processing Systems* 12 (2000): 554–560
+- Yggdrasil Clustering Explorer (2040)
 
-**Gestalt Laws of Perception (for Visualization).**
-
-- **Proximity:** Elements close to each other are perceived as related. Points clustered near each other in a scatterplot are perceived as a cluster.
-- **Similarity:** Elements with similar visual attributes (color, shape, size) are perceived as related.
-- **Continuity:** The eye follows smooth lines rather than abrupt angles. A line chart is easier to follow than a bar chart of the same data.
-- **Closure:** The eye completes incomplete shapes. This can be used for minimalist designs.
-- **Figure-ground:** The eye separates objects (figure) from background (ground). A dark-colored area on a chart becomes the "figure."
-
-**Chart Selection (The Four-Quadrant Model, based on Andy Kirk's work).**
-
-| Data Relationship | Best Chart | Example |
-|---|---|---|
-| Change over time | Line chart | CPU utilization over 24 hours |
-| Comparison of values | Bar chart | Course enrollment by department |
-| Correlation between variables | Scatterplot | GPU power vs. training throughput |
-| Distribution of values | Histogram + box plot | Distribution of assignment scores |
-| Part-to-whole relationship | Stacked bar or treemap | Memory usage by process |
-| Geographical patterns | Choropleth map | Internet speed by country |
-| Network connections | Force-directed graph | Paper citation network |
-| Hierarchical data | Treemap or sunburst | File system directory size |
-
-**Interactive Visualization (Shneiderman's Mantra, 1996, updated 2040).**
-> Overview first, zoom and filter, then details-on-demand.
-
-1. **Overview:** Show the entire dataset at once (even if at low resolution). The user gets the big picture.
-2. **Zoom:** Allow the user to zoom into a region of interest. The zooming is animated to preserve context.
-3. **Filter:** Allow the user to filter out irrelevant data (sliders, checkboxes, range selectors).
-4. **Details-on-demand:** Click on an element to see its full details (a tooltip, a side panel, or a voice readout in immersive environments).
-5. **Relate:** Show relationships between different views. A scatterplot and a map of the same data are linked — selecting points in one highlights them in the other. This is **linking-and-brushing**.
-
-**2040: Immersive Data Visualization.** In VR/AR, data visualization is 3D and spatial. The UoY's **VerðandiViz** platform supports:
-- **3D scatterplots:** Each point is a small sphere floating in space. The user walks through the cloud.
-- **Immersive networks:** Force-directed graphs rendered as glowing nodes and edges, floating around the user. The user reaches out to grab a node, which expands to show detail.
-- **Time-series as landscapes:** CPU utilization over 24 hours rendered as a terrain — low utilization is valleys, high utilization is mountains. The user flies over the terrain, spotting peaks of high activity.
-- **Collaborative analytics:** Multiple users (wearing RúnarLens) stand in the same virtual data space, pointing and discussing. In 2040, teams of data analysts at UoY use VerðandiViz for collaborative exploratory analysis of research data.
-
-#### Required Reading
-- Tufte, E. (2001). *The Visual Display of Quantitative Information*, 2nd ed. Graphics Press.
-- Kirk, A. (2016). *Data Visualization: A Handbook for Data-Driven Design*. Sage.
-- Ware, C. (2013). *Information Visualization: Perception for Design*, 3rd ed. Morgan Kaufmann.
-- Shneiderman, B. (1996). "The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations." *VL*.
-
-#### Discussion Questions
-1. How does Tufte's "data-ink ratio" (the proportion of ink devoted to data vs. decoration) apply to interactive visualizations? Is it still relevant when users can interact with the data?
-2. In immersive 3D scatterplots, the user's perspective changes as they walk through the data. How does this affect the perception of clusters and outliers? What are the pitfalls?
-3. A visualization that uses 7 different colors, 4 different shapes, 3 different sizes, and animated motion is likely to confuse rather than inform. How do you choose which visual channel to use for which aspect of the data?
+**Discussion Questions:**
+1. K-means assumes spherical clusters of equal size — but real-world clusters rarely satisfy this assumption. Is the continued widespread use of K-means a sign that the assumption is approximately satisfied in practice, or that practitioners are unaware of its limitations?
+2. The EM algorithm for GMMs can be derived from a Bayesian perspective by placing priors on the parameters. How does the Bayesian treatment (with Dirichlet priors on the mixing coefficients and inverse-Wishart priors on the covariances) change the behaviour of the algorithm — and does it resolve the model-selection problem?
+3. Clustering evaluation is inherently difficult because there is no ground truth. In the 2040 era, where unsupervised learning is increasingly used to discover unknown structure in scientific data (genomics, astronomy, materials science), should we develop new methods for evaluating clustering based on the utility of the clusters for downstream tasks — and how would such methods avoid the circularity of using the clustering to define the task?
 
 ---
 
-### ᚨ Lecture 10: Design Systems and Component Libraries — The Pattern of the Builder
+## Lecture 10: Reinforcement Learning — Markov Decision Processes, Policy Search, and Deep RL
 
-**Date:** Week 10, Session 1
+Reinforcement learning (RL) is the study of how an agent can learn to make sequential decisions — choosing actions that influence not only the immediate reward but also the future state of the environment — through trial and error. Unlike supervised learning (which learns from labelled examples) or unsupervised learning (which discovers structure in unlabelled data), RL learns from **experience** — the sequence of states, actions, and rewards that the agent generates by interacting with its environment. The theoretical framework for RL is the **Markov decision process** (MDP) (Bellman, 1957; Howard, 1960), which formalises the interaction between the agent and the environment as a tuple (S, A, P, R, γ), where S is the set of states, A is the set of actions, P(s′ | s, a) is the transition probability (the probability of moving to state s′ after taking action a in state s), R(s, a) is the reward function, and γ ∈ [0, 1) is the discount factor that trades off immediate and future rewards.
 
-#### Overview
+The goal of the agent is to find a **policy** π: S → A (or, more generally, a distribution over actions given states) that maximises the **expected discounted return**: G_t = E[∑_{k=0}^{∞} γᵏ R_{t+k+1}]. The **value function** V^π(s) = E_π[G_t | S_t = s] is the expected return starting from state s and following policy π. The **action-value function** Q^π(s, a) = E_π[G_t | S_t = s, A_t = a] is the expected return starting from state s, taking action a, and thereafter following policy π. The **Bellman optimality equations** — the fundamental equations of RL — characterise the optimal value functions: V*(s) = max_a [R(s, a) + γ ∑_{s′} P(s′ | s, a) V*(s′)], Q*(s, a) = R(s, a) + γ ∑_{s′} P(s′ | s, a) max_{a′} Q*(s′, a′). These equations have a unique fixed point — the optimal value functions — but they cannot be solved analytically except for small, known MDPs.
 
-A design system is a comprehensive set of design standards, components, and guidelines that ensures consistency and efficiency across a product or organization. By 2040, every major digital product has a design system, and the best design systems are themselves powered by AI. This lecture covers the anatomy of a design system (design tokens, components, patterns, guidelines), the tooling ecosystem (Figma, Storybook, and their 2040 descendants), and the integration of design systems with AI agents that can generate UI from specifications. The Norse metaphor: the pattern of the shipbuilder — a standardized design for the Viking longship that ensured every ship was built to the same proven proportions, yet each was unique in its carving and decoration. A design system is the pattern of the shipbuilder for digital products.
+The two main families of RL algorithms correspond to two approaches to solving the Bellman equations. **Value-based methods** (dynamic programming in stochastic environments) estimate the optimal value function and derive the policy from it. **Q-learning** (Watkins & Dayan, 1992) is the canonical value-based algorithm: Q(s, a) ← Q(s, a) + α [R(s, a) + γ max_{a′} Q(s′, a′) − Q(s, a)]. Q-learning is **off-policy** — it learns the optimal policy regardless of the policy used to generate the data — and it converges to the optimal Q-function under the usual stochastic-approximation conditions (Robbins–Monro step sizes, sufficient exploration). The convergence proof (Watkins & Dayan, 1992; Jaakkola, Jordan & Singh, 1994) uses the theory of stochastic approximation and contraction mappings: the Bellman optimality operator is a contraction in the supremum norm, and Q-learning is stochastic approximation to this contraction.
 
-#### Lecture Notes
+**Policy-based methods** directly optimise the policy without maintaining a value function. The **REINFORCE** algorithm (Williams, 1992) uses the **policy gradient theorem** (Sutton et al., 2000): ∇ J(θ) = E_π[∇_θ log π_θ(a | s) · Q^π(s, a)], where J(θ) is the expected return and π_θ is a differentiable policy. The policy gradient is estimated by Monte Carlo sampling: collect trajectories, compute the return, and multiply the log-probability of each action by the return. The variance of the REINFORCE estimator is high — it can be reduced by subtracting a **baseline** (typically the value function estimate) without introducing bias. The **actor-critic** architecture (Konda & Tsitsiklis, 2003) combines value-based and policy-based methods: the **critic** learns a value function (reducing variance), and the **actor** updates the policy using the critic's evaluation of each action.
 
-**Anatomy of a Design System.**
+**Deep reinforcement learning** — the combination of RL with deep neural networks — has produced the most impressive empirical successes of the 2040s. **Deep Q-Networks (DQN)** (Mnih et al., 2015) used a convolutional neural network to learn Q-functions directly from pixel inputs, achieving superhuman performance on 49 Atari 2600 games. The theoretical innovations of DQN include **experience replay** (breaking the temporal correlations in the data by storing and randomly sampling past transitions) and **target networks** (stabilising the learning by keeping a fixed target Q-network for several steps). **Policy gradient with deep networks** — **PPO** (Proximal Policy Optimisation) (Schulman et al., 2017) and **SAC** (Soft Actor-Critic) (Haarnoja et al., 2018) — has produced state-of-the-art results in continuous control and robotics.
 
-*Design Tokens.* The atomic units of visual design — values for color, typography, spacing, shadows, and animation. Examples:
-```
---color-primary: #1a5cff (UoY Blue)
---color-surface: #f8f9fa
---font-heading: 'Runar Sans', sans-serif
---spacing-unit: 8px
---border-radius-md: 8px
---shadow-card: 0 2px 8px rgba(0,0,0,0.1)
---transition-fast: 150ms ease
-```
+The 2040 frontier of RL theory includes: **offline RL** (Levine et al., 2020) — learning from a fixed dataset without further interaction, where the challenge is **distribution shift** (the learned policy may visit states that are poorly represented in the dataset); **model-based RL** (Moerland et al., 2023) — learning a model of the environment and using it for planning, which can be more sample-efficient than model-free methods; **multi-agent RL** (Busoniu, Babuska & De Schutter, 2008) — where multiple agents interact, each with its own reward function, leading to the full complexity of game theory plus RL; and **RL from human feedback (RLHF)** (Christiano et al., 2017; Ouyang et al., 2022) — where the reward function is learned from human preferences, the technique that underlies the alignment of the large language models that define the 2040 AI landscape.
 
-Tokens are defined once and referenced everywhere. Changing `--color-primary` from #1a5cff to #0d47a1 changes the color across the entire product, instantly.
+**Required Reading:**
+- Richard S. Sutton & Andrew G. Barto, *Reinforcement Learning: An Introduction* (2nd ed., 2018/2039), chs. 1–6, 13
+- Christopher J. C. H. Watkins & Peter Dayan, "Q-Learning," *Machine Learning* 8, no. 3 (1992): 279–292
+- Volodymyr Mnih, Koray Kavukcuoglu, David Silver, et al., "Human-Level Control Through Deep Reinforcement Learning," *Nature* 518 (2015): 529–533
+- John Schulman, Filip Wolski, Prafulla Dhariwal, et al., "Proximal Policy Optimization Algorithms," arXiv:1707.06347 (2017)
+- Yggdrasil Reinforcement Learning Playground (2040)
 
-*Components.* Reusable UI elements with defined behavior, styling, and API. A well-designed component library includes:
-- **Button:** Variants (primary, secondary, ghost, danger), sizes (sm, md, lg), states (default, hover, active, disabled, loading).
-- **Input:** Text, number, email, password, search, textarea, with error states, helper text, labels, and prefix/suffix icons.
-- **Card:** Header, body, footer slots. Optional shadow, border, interactive (clickable with hover state).
-- **Modal:** Title, body, actions. Accessible (focus trap, escape key, ARIA attributes). By 2040, voice-controllable ("Close modal").
-- **Table:** Sortable columns, filterable rows, pagination, selection, expandable rows.
-- **Form:** Field validation, submission handling, error display, progress save.
-
-*Patterns.* Higher-level solutions to common design problems:
-- **Authentication pattern:** Login page → 2FA → redirect to original page.
-- **Search pattern:** Search bar with autocomplete → results list with hover preview → detail view.
-- **Data input pattern:** Form with validation → confirmation → success message. If invalid, show error inline + scroll to first error.
-
-**The 2040 UoY Design System: RúnarUI.** The University's design system, **RúnarUI**, is the standard for all UoY digital products. It includes:
-- 280+ components, 1200+ design tokens
-- Web (React), mobile (SwiftUI, Jetpack Compose), spatial (RúnarLens SDK) implementations
-- Accessibility compliance with WCAG 3.0 AAA
-- Automatic theme generation — the AI assistant generates a complete color palette, typography scale, and spacing system from a one-sentence brand description ("Icelandic north, modern, warm")
-- Usage analytics — the design system tracks which components are most used, where they cause confusion (based on error rates), and recommends retirement of underperforming components
-
-**AI and Design Systems.** By 2040, design systems are AI-powered:
-- **Natural-language component generation:** "Create a card component that shows a student's photo, name, major, and current course count" → the AI generates the component code, documentation, and Storybook story.
-- **Automated accessibility checking:** The AI scans every component commit for WCAG violations and blocks the commit until they are fixed.
-- **Design drift detection:** The AI monitors the production app and identifies components that have drifted from their design system specification — mismatched colors, wrong spacing, incorrect behavior.
-
-#### Required Reading
-- Frost, B. (2016). *Atomic Design*. Brad Frost Web (online).
-- UXPin Design Systems Handbook (2020). Available at uxpin.com.
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 7: "The Shipbuilder's Pattern."
-
-#### Discussion Questions
-1. Design tokens enforce consistency, but they can also stifle creativity. How do you balance standardization with the need for differentiation across different parts of a product?
-2. AI-generated components from natural-language descriptions are convenient, but they risk producing components that don't match the design system's existing patterns. How do you prevent this?
-3. A design system with 280+ components is comprehensive but overwhelming for new designers. How would you design an onboarding experience for a designer new to RúnarUI?
+**Discussion Questions:**
+1. Q-learning converges to the optimal policy under conditions that require every state–action pair to be visited infinitely often — the "glib" exploration assumption. In practice, exploration is a central challenge of RL. How should the learning theorist balance exploration (gathering information) and exploitation (maximising reward), and what theoretical guarantees can we provide for practical exploration strategies?
+2. Deep RL combines the theoretical foundations of RL (convergence guarantees for tabular Q-learning, policy gradient theorems) with the empirical power of deep networks — but the convergence guarantees for deep RL are essentially nonexistent. Is this gap acceptable as long as the methods work in practice, or does the lack of theoretical understanding pose risks for safety-critical applications?
+3. RLHF has been used to align large language models with human preferences — but the preferences are collected from a limited group of human labelers, and the reward model is a proxy for the true (unknown) human preferences. What are the theoretical risks of optimising a misspecified reward model, and how should the alignment problem be framed within the standard RL formalism?
 
 ---
 
-### ᚨ Lecture 11: Ethics in HCI — The Carver's Oath
+## Lecture 11: Learning Theory — VC Dimension, PAC Learning, and Generalisation
 
-**Date:** Week 11, Session 1
+Learning theory provides the mathematical guarantees that justify — or, in some cases, undermine — the algorithms of machine learning. The core question is: given a hypothesis class H and a training set of size m, what can we guarantee about the generalisation error of the learned hypothesis? The answer depends on the **capacity** of H — its expressive power — and the classical theory characterises this capacity through combinatorial measures: the VC dimension, the Rademacher complexity, and the covering number.
 
-#### Overview
+The **Probably Approximately Correct (PAC) learning framework** (Valiant, 1984) formalises the learning problem as we introduced in Lecture 1. A hypothesis class H is **PAC-learnable** if there exists an algorithm A and a function m_H(ε, δ) such that, for every target concept c and every distribution D over the instance space, given m ≥ m_H(ε, δ) i.i.d. examples, A returns hypothesis h ∈ H that satisfies R(h) ≤ ε with probability at least 1 − δ. The **sample complexity** m_H(ε, δ) — the minimum number of examples required to achieve (ε, δ)-learning — is the central object of study.
 
-As interfaces become more intimate — reading our faces, our voices, our brain signals, our locations — the ethical stakes of HCI design become existential. This lecture covers the ethical frameworks relevant to HCI (utilitarianism, deontology, virtue ethics, the Belmont principles, and the 2040 emerging framework of digital sovereignty), the dimensions of ethical concern (privacy, consent, persuasion, exploitation, accessibility, algorithmic fairness), and the practicing designer's toolkit for ethical decision-making. The Norse metaphor: the rune-carver's oath — a sacred promise to carve true, to serve the community, and to respect the power of the symbols. An interface designer takes a similar oath: to serve the user, not exploit them.
+**VC dimension** (Vapnik & Chervonenkis, 1971) is the measure of the capacity of a hypothesis class of binary classifiers. A hypothesis class H shatters a set of points {x₁, …, x_d} if, for every possible labelling of these points (there are 2ᵈ possible labellings), there exists a hypothesis in H that realises that labelling. The **VC dimension** of H, denoted VCdim(H), is the size of the largest set that H can shatter — or infinity if H can shatter arbitrarily large sets. The VC dimension of linear classifiers in ℝᵈ is d + 1 — the Perceptron can shatter any set of d+1 points in general position but cannot shatter any set of d+2 points. The VC dimension of the set of neural networks with W parameters is O(W log W) (Bartlett, 1998) — a bound that, while not tight, connects the expressiveness of deep networks to their parameter count.
 
-#### Lecture Notes
+The **Fundamental Theorem of Statistical Learning** (Vapnik, 1998; Shalev-Shwartz & Ben-David, 2014) states that a hypothesis class H is PAC-learnable if and only if its VC dimension is finite — and if H is PAC-learnable, the sample complexity is: m_H(ε, δ) = Θ((VCdim(H) + log(1/δ)) / ε). The theorem provides a tight characterisation of learnability: finite VC dimension is both necessary and sufficient for PAC learning. The upper bound (Sufficiency) is proved using the **ERM principle with uniform convergence**: if the VC dimension is finite, the training error converges uniformly to the true error — the maximum deviation between empirical and true error over all h ∈ H goes to zero — and ERM succeeds. The lower bound (Necessity) shows that if the VC dimension is infinite, no algorithm — not just ERM — can learn the class.
 
-**The Dimensions of Ethical Concern in HCI.**
+**Rademacher complexity** (Koltchinskii, 2001; Bartlett & Mendelson, 2002) provides a distribution-dependent alternative to VC dimension. For a hypothesis class H and a sample S = {x₁, …, x_m}, the empirical Rademacher complexity is: R̂_S(H) = E_σ [sup_{h ∈ H} (1/m) ∑ᵢ σᵢ h(xᵢ)], where σᵢ are independent Rademacher random variables (±1 with equal probability). The Rademacher complexity measures the ability of H to fit random noise — it is the expected correlation between h and a random labelling. The **Rademacher generalisation bound** states that, with probability at least 1 − δ, R(h) ≤ R̂(h) + R̂_S(H) + 3√(log(2/δ) / (2m)). Unlike VC-dimension bounds — which are distribution-independent and often loose — Rademacher bounds are data-dependent: they can be estimated from the training data, and they capture the actual complexity of the class with respect to the data distribution.
 
-*Privacy and Consent.* Every interaction with a digital interface generates data. By 2040, the average person interacts with 50+ digital systems per day, generating thousands of data points. Ethical design requires:
-- **Explicit consent:** Data collection must be opt-in, not opt-out. The UoY standard: explain *what* data is collected, *why* it's needed, *how long* it's kept, and *who* has access — in plain language, at the moment of data collection.
-- **Data minimization:** Collect only the data necessary for the specific task. A study app does not need the user's location or contact list.
-- **Data sovereignty:** The user owns their data. They can access it, export it, delete it, and revoke consent at any time. The **RúnarPrivacy** dashboard at UoY gives students a single-pane view of all data collected about them across all University systems.
+**Modern generalisation theory** (2040) seeks to explain why deep networks — which have enormous VC dimension (a network with 100 million parameters can easily shatter any finite set) — nevertheless generalise well. Several theoretical directions have emerged. **Margin theory** (Bartlett, 1998; Neyshabur, Bhojanapalli & Srebro, 2017) bounds generalisation in terms of the margin distribution and the spectral norm of the weight matrices, showing that networks can have low "effective capacity" even when the nominal parameter count is large. **Infinite-width limits** — the neural tangent kernel (NTK) regime (Jacot, Gabriel & Hongler, 2018) — show that infinitely wide networks trained by gradient descent are equivalent to kernel methods, inheriting the generalisation guarantees of the RKHS. The **double descent** phenomenon (Belkin et al., 2019; Nakkiran et al., 2021) — where the test error first decreases, then increases as the model approaches the interpolation threshold, then decreases again in the overparameterised regime — challenges the classical bias–variance trade-off and has stimulated new theoretical work on the properties of interpolating classifiers. The **temperature of the loss landscape** (Müller, Smith & Wichmann, 2020) — the sharpness of the minimum found by SGD — correlates with generalisation, though the causal relationship is debated.
 
-*Persuasion and Dark Patterns.* Dark patterns are interface designs that trick users into doing things they didn't intend. By 2040, dark patterns are regulated by the Digital Fairness Act (EU, 2032). Examples:
-- **Roach motel:** Easy to sign up, impossible to cancel. The "confirm subscription" page has a prominent button and a tiny, gray "unsubscribe" link.
-- **Confirmshaming:** "I don't want to save money" as the option to decline a discount offer.
-- **Forced continuity:** The user's free trial is about to expire; the system charges them without a clear warning.
-- **Hidden costs:** Extra fees revealed only at the final checkout step in a multi-step flow.
+**Required Reading:**
+- Vladimir Vapnik, *Statistical Learning Theory* (1998/2039), chs. 1–4, 9
+- Shai Shalev-Shwartz & Shai Ben-David, *Understanding Machine Learning: From Theory to Algorithms* (2014/2039), chs. 6, 20, 26–28
+- V. N. Vapnik & A. Ya. Chervonenkis, "On the Uniform Convergence of Relative Frequencies of Events to Their Probabilities," *Theory of Probability and Its Applications* 16, no. 2 (1971): 264–280
+- Peter L. Bartlett & Shahar Mendelson, "Rademacher and Gaussian Complexities: Risk Bounds and Structural Results," *Journal of Machine Learning Research* 3 (2002): 463–482
+- Mikhail Belkin, Daniel Hsu, Siyuan Ma & Soumik Mandal, "Reconciling Modern Machine-Learning Practice and the Classical Bias–Variance Trade-Off," *Proceedings of the National Academy of Sciences* 116, no. 32 (2019): 15849–15854
 
-Ethical persuasion (nudge theory, Thaler & Sunstein, 2008) is acceptable when it helps users make decisions that align with their own stated values. A nudge: "You've been working for 3 hours — would you like a break?" (user's stated value: health). A dark pattern: "Your account will be deleted if you don't accept our new terms" (user's stated value: convenience, exploited for consent).
-
-*Accessibility as an Ethical Issue.* Accessibility is not optional (WCAG 3.0 compliance is legally required in 140+ countries by 2040). But beyond legal compliance, the ethical argument is: excluding users with disabilities from digital participation is a form of discrimination that compounds existing social inequalities.
-
-*Algorithmic Fairness.* AI-powered interfaces (recommendation systems, content moderation, automated grading) must be audited for bias. The UoY AI Ethics Board requires every AI-powered interface to:
-1. Test for demographic parity (outcomes should not differ by protected characteristics).
-2. Test for equalized odds (error rates should not differ by demographic groups).
-3. Publish an algorithmic impact assessment for any interface used by more than 100 users.
-
-**Ethical Decision-Making for Designers.**
-
-The **UoY Design Ethics Framework** (inspired by the Belmont Report, extended for 2040):
-
-1. **Identify stakeholders:** Who is affected by this design decision? Users, the company, society, the environment? Consider both direct and indirect stakeholders.
-
-2. **Identify values:** What values are at stake? Privacy, autonomy, dignity, fairness, security, sustainability, community? Some values conflict — a highly secure system may compromise autonomy. These conflicts must be transparent.
-
-3. **Identify tradeoffs:** For each stakeholder and each value, what is the benefit and what is the harm? Can the harm be mitigated without sacrificing the benefit?
-
-4. **The light test:** Would you be comfortable having this design decision published on the front page of the student newspaper? If not, redesign.
-
-5. **The reversibility test:** Can the user reverse the effect of this design? Is there an undo? If the user made a choice, can they change their mind?
-
-#### Required Reading
-- The Belmont Report (1978). *Ethical Principles and Guidelines for the Protection of Human Subjects of Research.*
-- Thaler, R. & Sunstein, C. (2008). *Nudge: Improving Decisions About Health, Wealth, and Happiness.* Yale.
-- Eyal, N. (2014). *Hooked: How to Build Habit-Forming Products.* (Also: the critical responses to Hooked by ethically-minded designers.)
-- Harrington, K. et al. (2035). "Digital Sovereignty and User Data." *ACM Symposium on Computing Ethics*.
-
-#### Discussion Questions
-1. Dark patterns are illegal in the EU under the 2032 Digital Fairness Act. Should the same regulations apply to UoY's student-facing interfaces? What would it take to audit our systems for dark patterns?
-2. AI-powered recommendation systems (for courses, for news, for friends) optimize for engagement, which often means optimizing for time-on-site. Is this ethical? At what point does a recommendation system become coercive?
-3. Invasive BCIs for people with paralysis can dramatically improve quality of life. But they also raise the possibility of "brainjacking" — unauthorized control of the BCI. What security and ethical standards should apply?
+**Discussion Questions:**
+1. The Fundamental Theorem of Statistical Learning establishes that finite VC dimension is necessary and sufficient for PAC learning — but many practically successful hypothesis classes (deep networks, random forests with unlimited depth) have infinite VC dimension. Does this mean that the PAC framework is incomplete, or that our theoretical understanding of generalisation in overparameterised models is still in its infancy?
+2. Rademacher complexity provides tighter, data-dependent bounds than VC dimension — but the bounds still depend on the worst-case supremum over H, and even Rademacher bounds are too loose to explain the empirical generalisation of deep networks. What would a truly satisfying theory of generalisation for deep learning look like — and what mathematical tools might it require?
+3. The double descent curve suggests that there is a "sweet spot" of model capacity that depends on the noise level and the data distribution. Does double descent imply that the classical bias–variance trade-off is wrong — or is it a special case of a more general theory that encompasses both the classical and the modern regimes?
 
 ---
 
-### ᚠ Lecture 12: The Future of HCI — Into the Weave
+## Lecture 12: Feature Engineering, Ethical Machine Learning, and the Path to 2040
 
-**Date:** Week 12, Session 1
+Machine learning is not purely algorithmic — it depends on the data that feeds the algorithms, the features that represent the data, and the ethical framework within which the system is deployed. This final lecture synthesises the theoretical principles of the course with the practical and normative considerations that define responsible ML in 2040.
 
-#### Overview
+**Feature engineering** is the process of transforming raw data into representations that make learning algorithms more effective. While deep learning has automated much of this process — a convolutional neural network learns its own features from raw pixels — the theoretical principles of feature engineering remain essential. The **cascade correlation** (Fahlman & Lebiere, 1990) and **feature learning** (Bengio, Courville & Vincent, 2013) traditions argue that good features are **distributed** (many features activate for each input, and each feature participates in representing many inputs), **disentangled** (each feature captures a single, interpretable factor of variation), and **invariant** (the features are insensitive to irrelevant transformations of the input). The **information bottleneck principle** (Tishby, Pereira & Bialek, 1999; Tishby & Zaslavsky, 2015) provides a theoretical framework for feature learning: the optimal representation is the one that maximises the mutual information between the representation and the target while minimising the mutual information between the representation and the input — trading off compression (discarding irrelevant information) and prediction power (preserving relevant information).
 
-The final lecture surveys the frontiers of HCI in 2040 and beyond. We cover: symbiotic interfaces (human-AI systems that learn and adapt together), the post-screen era (what comes after the touchscreen), the disappearing interface (computing embedded in the environment), and the meta-design challenge (designing tools for non-designer creators). The Norse framing: Ragnarǫk destroys the old interfaces (screens, keyboards, mice) and a new world rises — interfaces that are woven into the fabric of experience itself, as natural as breathing and as responsive as thought.
+**Automated feature engineering** — using algorithms to search the space of possible feature transformations — has become the standard practice in 2040. **Featuretools** (Kanter & Veeramachaneni, 2015) uses **deep feature synthesis** to generate features from relational databases by applying a library of transformations (aggregations, group-bys, temporal operations). **AutoML** systems (Hutter, Kotthoff & Vanschoren, 2019) — which jointly search over feature transformations, model architectures, and hyperparameters — have democratised ML by reducing the need for human feature engineering. The theoretical challenge of automated feature engineering is the combinatorial explosion of the search space: a system that considers n features and m transformation operators must search a space of size O((nm)ᵈ) for a pipeline of depth d. The resolution is **Bayesian optimisation** (Snoek, Larochelle & Adams, 2012) — a probabilistic framework for optimising expensive black-box functions that has become the workhorse of AutoML — and **meta-learning** (Vanschoren, 2018) — learning to learn, where the AutoML system uses past evaluations to guide future searches.
 
-#### Lecture Notes
+**Ethical machine learning** — the normative dimension of the discipline — is not an addendum to the theory but an integral part of it. The **fairness-aware ML** literature (Barocas, Hardt & Narayanan, 2019) has established that fairness is mathematically subtle: the three most common definitions — **demographic parity** (the prediction is independent of the protected attribute), **equal opportunity** (the true positive rate is equal across groups), and **equal calibration** (the probability of a positive outcome given the prediction is equal across groups) — are mutually incompatible except under trivial conditions (Kleinberg, Mullainathan & Raghavan, 2017; Chouldechova, 2017). The **impossibility theorem** of fairness means that the choice of fairness definition — there is no single "correct" definition — is a normative choice that cannot be resolved by mathematics alone. The learning theorist must understand the trade-offs and the ethical implications of the choice.
 
-**Symbiotic Interfaces.** J.C.R. Licklider's 1960 vision of "man-computer symbiosis" — a partnership between human and machine that amplifies both — is finally practical in 2040. Examples:
-- **AI co-writer:** The writer types, and the AI suggests completions, expansions, alternatives, and corrections. But unlike simple autocomplete, the AI *learns* the writer's style, tone, and preferences over time. The more they write together, the better the suggestions.
-- **AI co-designer:** The designer sketches a rough interface, and the AI fills in the details — matching the style of the existing design system, generating the code, adapting to accessibility requirements.
-- **AI co-programmer:** The programmer types an intent in natural language, and the AI generates the code. The programmer reviews and refines. The AI learns which patterns the programmer prefers.
+The **algorithmic fairness** literature of the 2040s has expanded beyond classification to encompass: **fairness in ranking** (the search results, the recommendation list, the college admissions list), **fairness in clustering** (ensuring that all groups are represented in all clusters), **fairness in resource allocation** (the distribution of a limited resource — loans, medical treatment, computational resources — across groups), and **fairness in reinforcement learning** (the long-term effects of a policy on different segments of the population). The **causal approach to fairness** (Kusner et al., 2017; Zhang & Bareinboim, 2018) uses causal inference to distinguish between legitimate and illegitimate uses of sensitive attributes: a decision that uses a sensitive attribute because it is causally related to the outcome through a legitimate pathway is (in this framework) permissible; a decision that uses it because of an unfair historical pattern is not. The causal framework provides a principled basis for fairness analysis but requires knowledge of the causal graph — a demanding assumption.
 
-The key insight: symbiosis is *bidirectional*. The human adapts to the AI (learning to phrase intents clearly) and the AI adapts to the human (learning their preferences, anticipating their needs). This adaptation creates a feedback loop that makes the partnership increasingly effective over time.
+**Interpretability and explainability** — the ability of an ML system to explain its decisions — is a legal requirement in many jurisdictions by 2040 (the EU's **Algorithmic Accountability Act** of 2027, the **Yggdrasil AI Transparency Charter** of 2035). The theory of interpretability distinguishes between **intrinsic interpretability** (the model itself is interpretable — a decision tree, a linear model, a rule list) and **post-hoc interpretability** (explanations extracted from an already-trained black-box model). **SHAP values** (Lundberg & Lee, 2017) — grounded in Shapley values from cooperative game theory (Shapley, 1953) — provide a theoretically principled method for attributing a prediction to the input features: each feature's SHAP value is its average marginal contribution to the prediction, averaged over all possible feature subsets. **LIME** (Ribeiro, Singh & Guestrin, 2016) approximates the local decision boundary of a black-box model with a simple, interpretable model (a linear model or a small decision tree) in the neighbourhood of the prediction. The theoretical challenge of post-hoc interpretability is **faithfulness**: an explanation should accurately reflect the reasoning of the model — but proving faithfulness is difficult, and there is evidence that popular explanation methods can produce misleading explanations (Adebayo et al., 2018; Slack et al., 2020).
 
-**The Post-Screen Era.** By 2050, the touchscreen — the dominant interface of 2007-2030 — may be as obsolete as the command line. Successor paradigms:
-- **Ambient interfaces:** The interface is embedded in the environment — smart surfaces, smart walls, the furniture itself. You don't "open an app"; you walk into a room and the room knows what you need.
-- **Contextual interfaces:** The system knows who you are, what you're doing, and what you're likely to need next. The interface adapts moment-by-moment, showing the most relevant options and hiding everything else.
-- **Proactive interfaces:** The system anticipates your needs and acts without being asked. "I notice you have a meeting in 5 minutes. I've prepared the notes and reserved the conference room."
+The **Yggdrasil perspective on ML in 2040** integrates these threads into a vision of responsible, theoretically grounded machine learning. The curriculum at Yggdrasil emphasises: (1) **theory-first** — the mathematics of learning is the foundation, and every applied decision should be traceable to a theoretical principle; (2) **uncertainty quantification** — every prediction should be accompanied by a calibrated measure of uncertainty; (3) **fairness by design** — fairness analysis should be performed before deployment, not after harm is discovered; (4) **robustness** — the model should be tested against adversarial perturbations, distribution shift, and concept drift before entering production; and (5) **sustainability** — the carbon footprint and computational cost of training and inference should be accounted for, and models should be designed for efficiency. The machine learning theorist of 2040 — the student who completes this course — is not merely a user of ML tools but a critical thinker who understands the assumptions, the guarantees, and the limitations of every algorithm they deploy.
 
-**The Disappearing Interface (Mark Weiser's vision, fulfilled by 2040).** Weiser's 1991 vision of "ubiquitous computing" — the most profound technologies are those that disappear — is reality by 2040. Computing is embedded in: clothing (biometric monitoring), jewelry (notifications, authentication), furniture (interactive desks, chairs), architectural surfaces (walls that display information, windows that adjust opacity based on sunlight), and medical implants (glucose monitoring, insulin delivery). The interface disappears; the functionality is woven into the fabric of life.
+**Required Reading:**
+- Solon Barocas, Moritz Hardt & Arvind Narayanan, *Fairness and Machine Learning: Limitations and Opportunities* (2nd ed., 2039), chs. 1–6
+- Cynthia Rudin, "Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead," *Nature Machine Intelligence* 1 (2019): 206–215
+- Naftali Tishby & Noga Zaslavsky, "Deep Learning and the Information Bottleneck Principle," *IEEE Information Theory Workshop* (2015): 1–5
+- Scott M. Lundberg & Su-In Lee, "A Unified Approach to Interpreting Model Predictions," *Advances in Neural Information Processing Systems* 30 (2017): 4765–4774
+- Jon Kleinberg, Sendhil Mullainathan & Manish Raghavan, "Inherent Trade-Offs in the Fair Determination of Risk Scores," *Proceedings of the 8th Conference on Innovations in Theoretical Computer Science* (2017): 43:1–43:23
 
-**The Meta-Design Challenge.** By 2040, many interfaces are created not by professional designers but by AI systems, end-users, or automated processes. The meta-design challenge: how do you design *the tool* that creates interfaces, rather than the interface itself? Key questions:
-- How do you ensure that AI-generated interfaces are accessible?
-- How do you test an interface that changes every day based on user behavior?
-- How do you maintain a consistent user experience across thousands of dynamically generated pages?
-- How do you teach students to design *design systems* rather than single interfaces?
-
-**The Final Weave.** The Norse vǫlva sees the fate of all beings, but she does not control it — she describes it. The HCI practitioner in 2040 is a vǫlva: they describe (through prototypes, specifications, design systems) an interface that does not yet exist. The interface is the weave of human intention and computational capability. A well-designed interface disappears — it becomes an extension of the user's will, as natural as reaching for a cup. A poorly-designed interface becomes a wall. The craft of HCI is the craft of weaving interfaces that dissolve: the threshold between human and machine becomes so thin that crossing it feels like moving through air.
-
-#### Required Reading
-- Licklider, J.C.R. (1960). "Man-Computer Symbiosis." *IRE Transactions on Human Factors in Electronics*, HFE-1.
-- Weiser, M. (1991). "The Computer for the 21st Century." *Scientific American*, 265(3).
-- Norman, D. (2007). *The Design of Future Things*. Basic Books.
-- Lúsbrá, Á. (2037). *The Carved Interface*, Chapter 12: "The Disappearing Rune."
-
-#### Discussion Questions
-1. A symbiotic interface adapts to the user. What happens when two different users — with different styles, preferences, and priorities — share the same device? How does the interface adapt?
-2. The "disappearing interface" makes computing seamless and intuitive. Does this seamlessness also make computing invisible — and therefore harder to understand, critique, and control?
-3. AI-generated interfaces could lead to a monoculture of design — every app looking the same because they're all generated by the same model. How do we preserve diversity and creativity in interface design?
+**Discussion Questions:**
+1. The information bottleneck principle suggests that optimal representations compress the input while preserving predictive power. Is compression a necessary property of good representations, or are there tasks — anomaly detection, open-world recognition — where preserving information about the input is essential?
+2. The impossibility theorem of algorithmic fairness (demographic parity, equal opportunity, and equal calibration cannot all hold simultaneously) has been interpreted as a crisis for fair ML. Is the impossibility a genuine barrier to fair systems, or does it reveal that the mathematical definitions of fairness are too narrow — and that a richer, relational conception of fairness (fairness as non-domination) might escape the impossibility?
+3. Post-hoc explanations (SHAP, LIME) are widely used to explain black-box models, but they can be unfaithful. In high-stakes domains (medicine, criminal justice, credit), should we require intrinsically interpretable models as Rudin argues, or are post-hoc explanations "good enough" if they are rigorously validated — and what standards of validation should apply?
 
 ---
 
 ## Final Examination Preparation
 
-### Format
+The examination for CS306 consists of two components designed to assess both theoretical understanding and practical capability.
 
-The final examination is a **3-hour portfolio assessment**:
-- **Part A: Heuristic Evaluation (30%)** — Evaluate a given interface against Nielsen's 10 usability heuristics. Identify 5 violations, explain each, and propose a fix.
-- **Part B: Redesign Proposal (35%)** — Choose a poorly-designed interface from a provided list. Research the users, analyze the problems, and propose a redesigned interface with sketches (hand-drawn or wireframed) and a written rationale.
-- **Part C: Design System Component (35%)** — Design and document a new RúnarUI component. Submit: the component specification (states, behavior, accessibility requirements, code), a Storybook story, and a usability test plan.
+### Part I: Theory Examination — Essay Questions (60%)
 
-### Sample Part A Heuristic Evaluation
+You will be asked to write detailed, scholarly essays on **three** of the following topics. Each essay should demonstrate mastery of the relevant theory, reference specific researchers and papers, engage with scholarly debates, and connect the material to the 2040 ML landscape.
 
-Evaluate the UoY course registration interface (provided in the exam) against Nielsen's 10 heuristics. Identify and analyze five violations. For each:
-- Name the violated heuristic
-- Describe the violation (be specific: which page, which element, what happens)
-- Rate the severity (0=cosmetic, 1=minor, 2=major, 3=catastrophic)
-- Propose a specific fix
+1. **The Foundations of Learning Theory**: Contrast the PAC learning framework (Valiant, 1984) with the statistical learning theory framework (Vapnik, 1998). How do these frameworks define the learning problem differently — what is the role of the data distribution, the hypothesis class, and the learning algorithm in each? Discuss the relationship between VC dimension, sample complexity, and uniform convergence, and explain how these concepts have been extended (or challenged) by the success of overparameterised deep networks. In your answer, refer to the double descent phenomenon and the theoretical attempts to explain generalisation in the overparameterised regime.
 
-### Sample Part B Redesign Topic
+2. **Kernel Methods vs. Neural Networks**: Compare and contrast kernel methods (SVMs, Gaussian processes) with neural networks as learning architectures. Discuss the theoretical advantages of each: the representer theorem and the guarantees of optimisation in RKHS vs. the compositional expressiveness and feature learning of deep networks. How does the neural tangent kernel (NTK) connect these two families — and what aspects of deep learning does the NTK analysis fail to capture? In the 2040 landscape, do you expect kernel methods or neural networks to dominate, or is a synthesis possible?
 
-The UoY campus map app (text-based, no visual map) is difficult to use. Research the user group (new students), analyze the problems (at least 3), and propose a redesigned interface. Your proposal must include: user research summary, wireframes or sketches, interaction flow, and a design rationale. Consider: wayfinding, search, building information, and accessibility.
+3. **The Bias–Variance Trade-Off and Its Discontents**: Trace the history of the bias–variance trade-off from Geman, Bienenstock & Doursat (1992) through the modern overparameterised regime. Explain the trade-off formally (decompose the expected squared error into bias, variance, and irreducible error), and discuss its predictions about model capacity and generalisation. How does the double descent curve challenge the classical understanding? What alternative theoretical frameworks (margin theory, NTK, signal propagation) have been proposed to explain the generalisation of overparameterised models, and which do you find most compelling?
 
-### Sample Part C Component Specification
+4. **Bayesian vs. Frequentist Learning**: Compare the Bayesian approach to machine learning (Gaussian processes, Bayesian neural networks, variational inference) with the frequentist/ERM approach (SVMs, neural networks trained by SGD). Discuss the philosophical differences (the treatment of uncertainty, the role of the prior, the interpretation of probability), the practical differences (computational tractability, calibration of uncertainty estimates, scalability), and the theoretical guarantees that each approach provides. Under what conditions does each approach dominate — and is there a principled way to combine them?
 
-Design a "ProgressPath" component that shows a student's progress through their degree program. The component should: show completed courses, current courses, and planned courses; indicate prerequisite chains; and allow the student to explore "what if" scenarios (what if I drop CS305?). Submit:
-- Component specification document
-- A Storybook story file
-- A usability test plan with 5 tasks
+5. **Fairness, Interpretability, and the Limits of Theory**: The impossibility theorem of algorithmic fairness (Kleinberg, Mullainathan & Raghavan, 2017) and the critique of post-hoc interpretability (Rudin, 2019) both suggest that there are limits to what formal, mathematical approaches can achieve in ethical ML. Discuss these limits: is the impossibility of satisfying multiple fairness definitions simultaneously a genuine barrier, or does it call for a richer theoretical framework that incorporates causal reasoning and normative choice? Is the demand for interpretability best satisfied by intrinsically interpretable models (as Rudin argues) or by rigorous validation of post-hoc explanations? How should the ML theorist integrate ethical considerations into the formal theory of learning — and what new mathematics might be required?
 
----
+### Part II: Practical Component — Algorithm Analysis and Implementation Project (40%)
 
-## Required Reading — Full Course Bibliography
+Choose **one** of the following projects:
 
-- Belmont Report (1978). *Ethical Principles and Guidelines for Human Subjects Research.*
-- Brown, D. (2010). "Eight Principles of Information Architecture." *ASIS&T Bulletin*.
-- Card, S.K., Moran, T.P., & Newell, A. (1983). *The Psychology of Human-Computer Interaction*.
-- Clark, H.H. & Brennan, S.E. (1991). "Grounding in Communication." *Perspectives on Socially Shared Cognition*.
-- Courage, C. & Baxter, K. (2005). *Understanding Your Users*.
-- Eyal, N. (2014). *Hooked: How to Build Habit-Forming Products.*
-- Fitts, P.M. (1954). "The Information Capacity of the Human Motor System." *J. Exp. Psych.*
-- Frost, B. (2016). *Atomic Design*.
-- Harrington, K. et al. (2035). "Digital Sovereignty and User Data." *ACM Symposium*.
-- Henry, S.L. (2014). *Just Ask: Integrating Accessibility Throughout Design*.
-- ISO 9241-11 (2018). *Ergonomics of Human-System Interaction*.
-- Kirk, A. (2016). *Data Visualization: A Handbook*.
-- LaViola, J. et al. (2017). *3D User Interfaces*.
-- Licklider, J.C.R. (1960). "Man-Computer Symbiosis." *IRE Trans. HFE*.
-- Lúsbrá, Á. (2037). *The Carved Interface*. Yggdrasil University Press.
-- Milgram, P. & Kishino, F. (1994). "A Taxonomy of Mixed Reality Visual Displays." *IEICE*.
-- Norman, D. (2013). *The Design of Everyday Things*.
-- Norman, D. (2007). *The Design of Future Things*.
-- Pearl, C. (2016). *Designing Voice User Interfaces*.
-- Rosenfeld, L., Morville, P., & Arango, J. (2015). *Information Architecture*.
-- Sauro, J. & Lewis, J.R. (2016). *Quantifying the User Experience*.
-- Shneiderman, B. (1983). "Direct Manipulation: A Step Beyond Programming Languages." *IEEE Computer*.
-- Shneiderman, B. (1996). "The Eyes Have It." *VL Symposium*.
-- Shneiderman, B. et al. (2016). *Designing the User Interface*.
-- Thaler, R. & Sunstein, C. (2008). *Nudge*.
-- Tidwell, J. (2010). *Designing Interfaces*.
-- Tufte, E. (2001). *The Visual Display of Quantitative Information*.
-- Ware, C. (2013). *Information Visualization*.
-- WCAG 3.0 (2024). *Web Content Accessibility Guidelines*.
-- Weiser, M. (1991). "The Computer for the 21st Century." *Scientific American*.
-- Wolpaw, J.R. & Wolpaw, E.W. (2012). *Brain-Computer Interfaces*.
+**Option A: The Generalisation Landscape of Overparameterised Linear Models.** Implement ridge regression and the lasso on a synthetic dataset of your design, varying the number of features p from p ≪ n to p ≈ n to p ≫ n (where n is the number of training examples). Plot the test error as a function of the model capacity (the number of features, the regularisation parameter λ) and identify the double descent curve. For the overparameterised regime (p > n), analyse the solution: the minimum-norm interpolator (λ → 0) and the effect of regularisation. Write a report (2,000–3,000 words) that: (a) explains the theory of generalisation in linear models, (b) presents your experimental results with figures, (c) connects your findings to the theoretical literature (Belkin et al., 2019; Hastie et al., 2019), and (d) discusses the implications of double descent for the design of modern ML systems.
+
+**Option B: Fairness–Accuracy Trade-Offs in Classification.** Implement logistic regression classifiers for a binary classification task using a dataset with a protected attribute (e.g., the UCI Adult dataset, the COMPAS dataset, or a synthetic dataset with controlled bias). Train models with varying degrees of regularisation and with fairness constraints (you may implement demographic parity or equal opportunity constraints using Lagrangian relaxation). Measure the accuracy, demographic parity (the difference in positive prediction rates between groups), and equal opportunity (the difference in true positive rates) for each model. Write a report (2,000–3,000 words) that: (a) explains the theoretical impossibility of simultaneously satisfying multiple fairness criteria, (b) presents your empirical results showing the trade-offs between accuracy and different fairness measures, (c) connects your findings to the theoretical literature (Kleinberg, Mullainathan & Raghavan, 2017; Barocas, Hardt & Narayanan, 2019), and (d) discusses the normative choices that a practitioner must make when selecting a fairness definition and an accuracy–fairness trade-off point.
+
+**Option C: Kernel Methods for Small-Data Regression.** Implement Gaussian process regression with a squared-exponential (RBF) kernel on a small dataset (n < 100) of your choice (e.g., the Boston housing dataset, a synthetic 1D function, or a UCI regression dataset). Compare the GP predictions with those of a neural network (a two-layer MLP with 50–100 hidden units trained by SGD for a fixed number of epochs). For both models, analyse the uncertainty estimates: plot the predictive variance as a function of the input, and measure the calibration (the fraction of test points that fall within the 90% predictive interval). Write a report (2,000–3,000 words) that: (a) explains the theory of Gaussian processes as a Bayesian method, (b) compares the uncertainty quantification of the GP and the neural network, (c) connects your findings to the Bayesian learning literature (Rasmussen & Williams, 2006; Lakshminarayanan, Pritzel & Blundell, 2017), and (d) discusses the role of uncertainty quantification in the deployment of ML systems in 2040.
 
 ---
 
-*This course has been one long conversation about carving — carving interfaces that speak to users, carving structures that organize information, carving spaces that feel natural, carving ethics that protect the vulnerable. You leave this course not just as a designer but as a carver: someone who shapes the interactions that shape the world. Carve well. — Dr. Álfhildr Lúsbrá, Alþingi Month, Summer 2040.*
+*The algorithm learns — but who learns from the algorithm? The weight of the model is the weight of the world it models. Choose your hypothesis class wisely.* ᛟ
+
+— University of Yggdrasil, Department of Computer Science, 2040
