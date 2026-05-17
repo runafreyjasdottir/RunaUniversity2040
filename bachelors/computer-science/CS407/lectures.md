@@ -4,749 +4,697 @@
 **Credits:** 4  
 **Description:** Implementation, testing, deployment, presentation
 
-**Prerequisites:** CS406 (Capstone Project I), CS206 (Software Engineering), CS208 (Formal Methods)
-
-**Instructor:** Dr. Sigrún Vébjarndóttir, Senior Fellow in Applied Systems Engineering
+**Prerequisites:** CS406 Capstone Project I
 
 ---
 
 ## Lectures
 
----
-
-### Lecture 1: The Forge Lit — Execution Methodologies for Complex Systems
+ᚠ **Lecture 1: From Architecture to Implementation: Bridging Design and Code**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-The capstone project is not merely a larger homework assignment. It is a sustained act of engineering creation — the moment when design documents meet the unforgiving materiality of code, silicon, and user expectation. This lecture examines the execution methodologies that govern how complex software systems are built in practice, moving beyond the textbook caricatures of "Agile" and "Waterfall" to the hybrid, context-sensitive approaches that dominate industrial practice in 2040.
+This opening lecture addresses the critical transition between the design artifacts produced in CS406—architecture documents, component diagrams, and working prototypes—and the disciplined implementation phase that dominates Capstone Project II. By 2040, the software industry has learned, often through painful experience, that the gap between design and implementation is not a mere translation exercise but a site of genuine epistemic transformation. Requirements mutate, edge cases emerge, and the very act of writing executable code reveals ambiguities that no specification language can fully capture. Students will learn methodologies for managing this transition, including incremental refinement, tracer-bullet implementation, and the architectural feedback loop.
 
-By the mid-2030s, the software industry had learned — often painfully — that methodology is not a religion but a toolkit. The University of Yggdrasil's Capstone Laboratory operates on what Sigrún Vébjarndóttir calls the *Skíðblaðnir Principle*: the ship must be large enough to carry the whole crew and cargo, yet foldable enough to fit in a pocket when the winds change. Teams select practices based on project risk profile, team composition, stakeholder availability, and technical uncertainty.
+### Key Topics
 
-#### Key Topics
+- The epistemic gap between specification and executable code
+- Incremental refinement strategies: tracer bullets, vertical slices, and walking skeletons
+- Architectural feedback loops: when implementation forces design revision
+- Managing technical debt during the capstone sprint
+- Integration of CS406 design artifacts into implementation planning
 
-- **Risk-Driven Methodology Selection:** The Boehm-Turner risk-based model (Boehm & Turner, 2004), updated for 2040 with AI-generated risk surfaces and predictive churn models. Projects with high technical uncertainty (quantum coprocessor integration, neuromorphic backends) require spiral or evolutionary approaches; projects with well-understood domains and stable requirements may tolerate structured waterfall.
-- **The State of Agile in 2040:** Scrum and Kanban have not disappeared, but they have been absorbed into larger meta-frameworks. "Agile 4.0" — a term coined at UoY's 2038 Systems Summit — integrates AI-assisted sprint planning (generating task breakdowns from natural language specifications), real-time velocity prediction using historical team data, and automated standup synthesis from commit logs and communication streams. Critics (notably Chen & Oduya, 2039, *ACM Software Engineering Notes*) argue that this automation risks *process theater*: the illusion of agility without genuine adaptability.
-- **Continuous Experimentation:** Borrowed from the Lean Startup methodology but adapted for infrastructure software, continuous experimentation treats every feature as a hypothesis. A/B testing at the architectural level — canary deployments with automatic rollback, dark launches, and feature flags — allows teams to validate design decisions in production without catastrophic exposure. The UoY Capstone Lab maintains a partnership with Yggdrasil Cloud Services (YCS) for student projects requiring elastic infrastructure.
-- **Sustainable Pace and Cognitive Load:** By 2040, the industry has begun taking seriously the neuroscience of software development. Sustained concentration periods ("deep work blocks" of 90–120 minutes) are scheduled and protected; meetings are batched into specific windows; AI assistants handle interrupt-driven tasks (email triage, documentation formatting, test log summarization) so that human engineers preserve their limited daily stock of high-quality attention (Bueno & Larssen, 2037, *IEEE Software*).
+### Lecture Notes
 
-#### Lecture Notes
+The transition from design to implementation has occupied software engineering theorists since the earliest structured programming debates of the 1960s. Frederick Brooks, in his seminal *The Mythical Man-Month* (1975, revisited in the 1995 anniversary edition), identified the essence of software as inherently complex, arguing that no representation can fully capture the behavior of a system before it is built. By 2040, this insight has been reinforced by decades of agile practice, formal methods, and AI-assisted development. The capstone student stands at this boundary, armed with an architecture document from CS406 and the mandate to produce a deployable system.
 
-The methodology a team chooses shapes not only *how* they work but *what* they build. Waterfall teams tend to front-load architectural decisions, producing systems that are well-structured for known requirements but brittle to change. Agile teams produce systems that adapt well to evolving requirements but may accumulate technical debt if refactoring is deprioritized.
+The **tracer-bullet methodology**, first popularized by Andrew Hunt and David Thomas in *The Pragmatic Programmer* (1999, updated 2019), remains relevant in 2040 despite the advent of neural program synthesis. The core idea is simple but profound: build a minimal end-to-end path through the system early, connecting all major components with placeholder logic. This "tracer" illuminates integration risks, reveals protocol mismatches, and provides a tangible artifact for stakeholder feedback. In the 2040 context, tracer bullets are often augmented by AI-generated scaffolding—large language models produce boilerplate interfaces, test stubs, and documentation drafts—but the student must understand which parts of the tracer are structural (load-bearing) and which are decorative (replaceable).
 
-In 2040, the dominant pattern is *methodological pluralism within a project*. A capstone team might use:
-- **A structured upfront phase** (2–3 weeks) for requirements analysis and architecture, leveraging the design documents produced in CS406.
-- **An iterative construction phase** (10–12 weeks) with two-week cycles, each delivering a demonstrable increment.
-- **A stabilization phase** (2–3 weeks) focused on integration testing, performance validation, and documentation — essentially a mini-waterfall at the end.
+**Vertical slice implementation** takes the tracer bullet further by demanding that each slice be a fully functional, user-visible feature. Rather than building all database layers before any UI, a vertical slice might implement "user registration" from HTTP handler through validation, persistence, and response rendering. This approach, advocated by the Feature-Driven Development community and later absorbed into scaled agile frameworks, aligns naturally with capstone constraints: students have limited time and must demonstrate tangible progress at each milestone. The 2040 University of Yggdrasil capstone program requires at least three vertical slices by Week 6, each accompanied by a demo video and peer review.
 
-The capstone specifically requires teams to document their methodology selection in the project repository's `PROCESS.md`, including a retrospective analysis of whether the chosen approach matched the project's actual trajectory. This metacognitive requirement — reflecting on the process itself — distinguishes the capstone from earlier course projects where process is dictated by assignment structure.
+The **architectural feedback loop** is perhaps the most sophisticated concept in this lecture. It recognizes that implementation is not merely the execution of a predetermined plan but a co-evolutionary process in which the act of building reshapes understanding of what should be built. Daniel Jackson's *Software Abstractions* (MIT Press, 2006, revised 2012) introduced the Alloy modeling language to catch design flaws before implementation, yet even Jackson acknowledges that formal models gain precision through iterative refinement. In 2040, this loop is instrumented by AI-assisted design-review tools—systems like *Mímir-Architect* (developed at UoY in 2038) that compare implementation commits against the Alloy or TLA+ specification, flagging deviations and suggesting reconciliations. Students must learn to treat these tools as collaborators, not oracles: the AI may suggest a design revision, but the student bears responsibility for understanding why the revision improves the system.
 
-#### Required Reading
+Managing technical debt during a capstone is a discipline of its own. Ward Cunningham's original metaphor (1992) described debt as a deliberate choice to ship suboptimal code for speed, with the expectation of repayment. In practice, students often accumulate debt unconsciously—through copy-paste, temporary workarounds that become permanent, and deferred refactoring. The 2040 capstone program requires a "debt ledger": a living document in which students record each incurred debt, its estimated interest (future cost), and a repayment schedule. This practice, derived from Martin Fowler's technical debt quadrant (2009) and extended by the *Yggdrasil Software Craftsmanship Guild*, ensures that debt remains visible and manageable rather than an invisible drag on project velocity.
 
-- Boehm, B., & Turner, R. (2004). *Balancing Agility and Discipline: A Guide for the Perplexed*. Addison-Wesley.
-- Chen, L., & Oduya, K. (2039). "Process Theater in the Age of Automated Agile." *ACM Software Engineering Notes*, 44(3), 12–19.
-- Bueno, M., & Larssen, T. (2037). "Neuroscience-Informed Engineering: Attention Economics for Software Teams." *IEEE Software*, 34(6), 78–85.
-- Yggdrasil University Press. (2038). *The Skíðblaðnir Principle: Methodological Pluralism in Systems Engineering* (UoY Technical Report CS-TR-2038-07).
+### Required Reading
 
-#### Discussion Questions
+- Hunt, A., & Thomas, D. (2019). *The Pragmatic Programmer* (20th Anniversary Edition). Addison-Wesley. Chapters 2 ("Tracer Bullets") and 14 ("The Power of Plain Text").
+- Jackson, D. (2012). *Software Abstractions: Logic, Language, and Analysis* (Revised Edition). MIT Press. Chapter 1 ("Introduction") and Chapter 7 ("Analysis").
+- Cunningham, W. (1992). "The Wyrd Cash Program." Original technical debt metaphor, reprinted in *Yggdrasil Software Archaeology Review*, 2034.
+- Freyjasdottir, R. G. (2038). "The Mímir-Architect Loop: AI-Augmented Design Refinement in Capstone Projects." *Journal of Yggdrasil Software Engineering*, 14(3), 201–219.
+- University of Yggdrasil, Department of Computer Science (2040). "Capstone Technical Debt Ledger Template." Internal document, v4.2.
 
-1. Under what conditions does a predictive (waterfall-like) process outperform an adaptive (agile-like) process? Draw on specific examples from your own project experience.
-2. How does AI-assisted sprint planning change the role of the human project manager? Does it elevate strategic thinking or risk deskilling the profession?
-3. The lecture notes describe methodological pluralism as the 2040 norm. What coordination challenges arise when different phases of a project operate under different process models?
+### Discussion Questions
 
-#### Practice Problems
+1. Why does the act of writing executable code often reveal ambiguities that specification documents conceal? Is this a failure of specification languages, or an inherent property of software?
+2. Compare tracer-bullet, vertical-slice, and walking-skeleton approaches. Under what capstone constraints might each be most appropriate?
+3. How should a capstone team decide whether to accept Mímir-Architect's suggestion to revise the design? What criteria should govern human override of AI recommendations?
+4. Is technical debt always bad? Under what circumstances might a capstone team deliberately choose to leave debt unpaid?
 
-- Draft a `PROCESS.md` for your capstone project. Include: chosen methodology, rationale based on risk analysis, sprint/phase schedule, and metrics for tracking progress.
-- Analyze three capstone projects from previous years (available in the UoY Capstone Archive). Identify where their chosen methodology matched their actual work pattern and where it diverged.
+### Practice Problems
+
+- Review your CS406 architecture document and identify three components most likely to require design revision during implementation. Write a one-page risk mitigation plan for each.
+- Produce a tracer-bullet implementation for your capstone's most critical user journey. The tracer need not be production-quality, but all major subsystems must be connected.
 
 ---
 
-### Lecture 2: The Anvil Rings — Test-Driven Development and Verification Beyond Unit Tests
+ᚢ **Lecture 2: Test-Driven Development and Quality Assurance at Scale**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Testing in 2040 is no longer a phase that happens after implementation; it is an inseparable dimension of the engineering process, woven into the earliest design decisions and extending far beyond the unit test into property-based verification, formal methods, chaos engineering, and AI-generated adversarial suites. This lecture examines the full spectrum of verification practices that distinguish industrial-grade software from academic exercises.
+Quality assurance in 2040 extends far beyond manual testing and ad-hoc debugging. This lecture examines the mature discipline of test-driven development (TDD), property-based testing, mutation testing, and AI-augmented quality assurance. Students will learn to construct test suites that serve as executable specifications, detect regressions, and provide the confidence necessary for aggressive refactoring. The capstone requirement of ≥90% coverage is not arbitrary: it reflects industry standards for safety-critical and production-grade systems, and achieving it demands systematic testing strategy rather than post-hoc test writing.
 
-The capstone project requires a test suite achieving ≥90% code coverage — but coverage alone is a misleading metric. A team can achieve 100% line coverage while testing only the happy path, leaving edge cases, failure modes, and concurrency hazards completely unexercised. The UoY Capstone Rubric weights *behavioral coverage* (percentage of specified behaviors verified) more heavily than *structural coverage* (percentage of lines executed).
+### Key Topics
 
-#### Key Topics
+- Test-driven development: red-green-refactor cycle and its cognitive benefits
+- Unit, integration, and end-to-end testing: the testing pyramid in 2040
+- Property-based testing: from QuickCheck to Hypothesis and beyond
+- Mutation testing: measuring test suite quality, not just coverage
+- AI-augmented test generation: opportunities and dangers of synthetic tests
 
-- **Test-Driven Development (TDD) in Complex Systems:** Kent Beck's original TDD cycle — write a failing test, write minimal code to pass, refactor — remains conceptually sound but requires adaptation for capstone-scale systems. Teams must manage test suite execution time (a 10,000-test suite running in 30 minutes destroys the rapid feedback loop), test data management (synthetic data generation for database-dependent tests), and test brittleness (tests that fail on every UI change or schema evolution). The 2040 standard is *selective TDD*: core algorithms and business logic are developed test-first; UI components and integration glue are developed test-alongside; exploratory prototypes are developed test-after.
-- **Property-Based Testing:** Originating in Haskell's QuickCheck (Claessen & Hughes, 2000) and now available in every major language, property-based testing generates thousands of random inputs to verify that code satisfies invariant properties. For a capstone implementing a distributed consensus protocol, properties might include: "No two nodes commit different values for the same slot" or "If a majority of nodes are correct, all correct nodes eventually agree." The UoY Capstone Lab uses Hypothesis (Python), PropEr (Erlang/Elixir), and Rapid (Rust) for property-based verification.
-- **Formal Specification and Model Checking for Subsystems:** While full formal verification of a capstone project is impractical in one semester, teams are encouraged to apply lightweight formal methods to critical components. TLA⁺ (Lamport, 2002) is used to specify and model-check concurrent algorithms; Alloy (Jackson, 2012) verifies structural invariants in data models; Coq or Lean 4 proves correctness of small but critical functions (cryptographic primitives, state machine transitions). The capstone specifically requires at least one formally specified subsystem, documented in `FORMAL.md`.
-- **Chaos Engineering:** Pioneered at Netflix in the 2010s and matured into an industry standard by 2035, chaos engineering deliberately injects failures into production systems to validate resilience. For capstone projects, the UoY Chaos Simulator (a Kubernetes-based fault-injection framework) allows teams to simulate network partitions, node crashes, disk corruption, and clock skew. A capstone distributed database might be tested under: 30% packet loss between regions, random node termination every 5 minutes, and Byzantine faults (malicious nodes sending conflicting messages).
-- **AI-Generated Test Oracles:** By 2040, large language models have become sophisticated test generators. Tools like UoY's own *Vérr* (named for the Norse god of trial) analyze code and generate test cases that explore boundary conditions, null pointer dereferences, integer overflows, and race conditions. However, the *oracle problem* — determining whether the output of a test is correct — remains unsolved. AI-generated tests require human review of expected outputs, and teams must document which tests were AI-generated and which were human-authored.
+### Lecture Notes
 
-#### Lecture Notes
+Kent Beck's introduction of test-driven development in the late 1990s, crystallized in *Test-Driven Development by Example* (Addison-Wesley, 2002), transformed software engineering by making testing not a post-development verification activity but a design discipline. The red-green-refactor cycle—write a failing test, write minimal code to pass, refactor while keeping tests green—structures cognition as much as code. By 2040, neuroimaging studies conducted at the University of Trondheim (2034–2037) have confirmed that TDD practitioners exhibit reduced cognitive load during debugging, attributable to the externalization of intent that tests provide. The capstone student who adopts TDD is not merely following a fashion but engaging a practice with empirically validated cognitive benefits.
 
-The verification pyramid for a capstone project should resemble:
-- **Base (70% of tests):** Unit tests for individual functions and classes, running in <5 minutes.
-- **Middle (20%):** Integration tests verifying subsystem interactions, running in <30 minutes.
-- **Top (10%):** End-to-end tests, chaos experiments, and formal proofs, running in <2 hours or on nightly CI.
+The **testing pyramid**, articulated by Mike Cohn in *Succeeding with Agile* (2009), remains the foundational heuristic for test portfolio composition: many fast unit tests, fewer integration tests, and a small number of slow end-to-end tests. By 2040, the pyramid has been refined for AI-native systems. Unit tests now cover not only functions but also prompt templates and model outputs: *behavioral contract tests* specify that a given LLM prompt, when provided inputs within a defined range, must produce outputs satisfying certain constraints (e.g., JSON schema compliance, toxicity score below threshold). Integration tests must account for stochastic model behavior: rather than asserting exact equality, they assert statistical properties over repeated invocations. The UoY capstone framework provides `pytest-ai-contract`, a plugin for specifying and verifying these behavioral contracts.
 
-Teams often invert this pyramid, writing hundreds of slow end-to-end tests because they "feel more realistic." This is a mistake. Slow feedback loops reduce development velocity and encourage developers to skip running tests locally, pushing broken code to CI and wasting compute resources.
+**Property-based testing** generalizes the example-based approach of traditional TDD. Instead of testing with hand-chosen inputs, the developer specifies properties that the system must satisfy, and the testing framework generates thousands of random inputs to search for violations. QuickCheck, developed by Koen Claessen and John Hughes at Chalmers University of Technology (2000), pioneered this approach for Haskell. By 2040, Python's Hypothesis library (maintained by the DrMacIver consortium) supports not only scalar generation but also the generation of valid program ASTs, database states, and concurrent execution schedules. For capstone projects involving complex data structures or stateful protocols, property-based testing often reveals bugs that example-based tests miss. The lecture includes a live demonstration in which a seemingly correct binary search tree implementation fails under Hypothesis-generated sequences of insertions and deletions.
 
-The capstone specifically requires:
-1. A `tests/` directory with clear separation between `unit/`, `integration/`, and `e2e/`.
-2. A CI configuration (GitHub Actions, GitLab CI, or self-hosted Drone) that runs the full test suite on every push.
-3. A coverage report generated by `cargo tarpaulin`, `pytest-cov`, or equivalent, with line-by-line HTML output.
-4. At least one property-based test suite for a core algorithm.
-5. At least one chaos experiment documented with before/after resilience metrics.
+**Mutation testing** addresses the coverage trap: a test suite may achieve 100% line coverage yet fail to detect meaningful faults. Mutation testing introduces artificial faults (mutants) into the codebase and checks whether the test suite catches them. A mutation score—the percentage of mutants killed—provides a more nuanced measure of test quality than coverage alone. In 2040, mutation testing has become practical for medium-sized projects through tools like `mutmut` (Python) and `cargo-mutants` (Rust). The UoY capstone program requires a mutation score of ≥75% for the core logic modules. Students are warned, however, that mutation testing is computationally expensive and must be run on CI infrastructure rather than developer laptops. The lecture covers strategies for incremental mutation testing (testing only changed code) and equivalent mutant detection (mutants that are semantically identical to the original, which should be excluded from scoring).
 
-#### Required Reading
+**AI-augmented test generation** represents the frontier. Tools like GitHub Copilot (2021), evolved by 2040 into autonomous test-writing agents, can generate test cases from implementation code, natural language descriptions, or formal specifications. The danger is over-reliance: AI-generated tests often cover the happy path and rare edge cases but miss domain-specific invariants that only a human developer understands. The 2039 *Copenhagen Test Integrity Incident*, in which an AI-generated test suite falsely reported 98% coverage while missing a critical race condition, serves as a cautionary tale. Capstone students are permitted to use AI test generation but must manually review every generated test, annotate it with the invariant it verifies, and commit it under their own authorship.
 
-- Beck, K. (2002). *Test-Driven Development: By Example*. Addison-Wesley.
-- Claessen, K., & Hughes, J. (2000). "QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs." *ICFP 2000*.
-- Lamport, L. (2002). *Specifying Systems: The TLA+ Language and Tools for Hardware and Software Engineers*. Addison-Wesley.
-- Basiri, A., et al. (2036). *Chaos Engineering: System Resilience in Practice* (2nd ed.). O'Reilly.
-- Vébjarndóttir, S. (2037). "Vérr: AI-Generated Adversarial Testing at the University of Yggdrasil." *UoY Computer Science Technical Report CS-TR-2037-12*.
+### Required Reading
 
-#### Discussion Questions
+- Beck, K. (2002). *Test-Driven Development by Example*. Addison-Wesley. Chapters 1–3 (complete red-green-refactor walkthrough).
+- MacIver, D., & Hatfield-Dodds, Z. (2031). "Property-Based Testing in the Age of Foundation Models." *ACM Computing Surveys*, 53(4), 1–34.
+- Offutt, A. J., & Untch, R. H. (2001). "Mutation 2000: Uniting the Orthogonal." *Mutation Testing for the New Century*, 34–44.
+- Yggdrasil Software Integrity Board (2039). "The Copenhagen Test Integrity Incident: Lessons for AI-Augmented QA." *Yggdrasil Safety Report* 2039-07.
+- University of Yggdrasil (2040). "pytest-ai-contract: Behavioral Contract Testing for AI-Native Systems." Documentation v2.1.
 
-1. What is the appropriate ratio of unit to integration to end-to-end tests for a capstone project? How does this ratio change if the project is a compiler versus a web application?
-2. Property-based testing can find bugs that example-based testing misses, but it can also produce unhelpful shrink outputs that are difficult to diagnose. What practices make property-based tests maintainable?
-3. Chaos engineering in production is standard at major tech companies, but applying it to a student capstone raises resource and safety concerns. Where is the ethical boundary between "resilience testing" and "wanton destruction"?
+### Discussion Questions
 
-#### Practice Problems
+1. Neuroimaging evidence suggests TDD reduces cognitive load during debugging. What cognitive mechanisms might explain this effect? Does it apply equally to all problem domains?
+2. How should property-based testing be integrated with example-based tests in a capstone project? Is there an optimal ratio?
+3. The Copenhagen Incident involved AI-generated tests with high coverage but low fault detection. What structural properties of AI-generated tests make them prone to this failure mode?
+4. Should mutation testing be required for all capstone projects, or only those with safety-critical components? Justify your position.
 
-- Implement property-based tests for your capstone's core data structure. Define at least three invariants and verify them against 1,000 random inputs.
-- Write a TLA⁺ specification for a concurrent component in your project. Use the TLC model checker to verify it under at least two different thread interleavings.
-- Design a chaos experiment for your system. Document the hypothesis, the fault injected, the expected behavior, the observed behavior, and the remediation if the system failed.
+### Practice Problems
+
+- Implement a property-based test suite for a core data structure in your capstone using Hypothesis. Generate at least five distinct properties and run 10,000 iterations per property.
+- Run mutation testing on your capstone's most critical module. Report your mutation score, identify any surviving mutants, and determine whether they represent genuine test weaknesses or equivalent mutants.
 
 ---
 
-### Lecture 3: The Bifröst Pipeline — Continuous Integration and Deployment in 2040
+ᚦ **Lecture 3: Continuous Integration, Delivery, and Deployment Pipelines**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Continuous Integration (CI) and Continuous Deployment (CD) are the Bifröst of modern software engineering — the burning rainbow bridge that carries code from the developer's local branch to the production realm. This lecture examines the architecture, tooling, and practices of CI/CD in 2040, including quantum-safe artifact signing, edge-cloud continuum deployment, and AI-assisted failure diagnosis.
+This lecture examines the CI/CD/CD triad—Continuous Integration, Continuous Delivery, and Continuous Deployment—as the industrial backbone of modern software production. By 2040, these practices have evolved from boutique agile techniques to infrastructural necessities. Students will learn to construct pipelines that automate building, testing, security scanning, and deployment, with particular attention to the reproducibility and auditability requirements of production systems. The lecture also covers feature flags, canary deployments, and rollback strategies essential for safe capstone deployment.
 
-By 2040, the distinction between "build server" and "deployment target" has dissolved into a mesh of ephemeral compute. A capstone project must demonstrate not merely that its code compiles and passes tests, but that it can be built reproducibly, signed cryptographically, deployed automatically, and rolled back gracefully.
+### Key Topics
 
-#### Key Topics
+- CI/CD/CD definitions and distinctions: integration, delivery, deployment
+- Pipeline as code: GitHub Actions, GitLab CI, and self-hosted runners
+- Reproducible builds: deterministic compilation, lockfiles, and containerized environments
+- Security scanning in CI: SAST, DAST, dependency vulnerability detection
+- Deployment strategies: blue-green, canary, feature flags, and rollback
 
-- **Reproducible Builds:** A build is reproducible if given the same source code, build environment, and inputs, it produces bit-for-bit identical artifacts. The Reproducible Builds project (started in 2014, standardized by ISO 20322) is now mandatory for security-critical software. Capstone projects must use locked dependency manifests (`Cargo.lock`, `poetry.lock`, `package-lock.json`), pinned base container images (SHA-256 digests, not tags), and hermetic build environments (Nix, Bazel, or reproducible Debian). The UoY Capstone Lab provides a reproducibility verifier that re-runs builds in isolated containers and compares checksums.
-- **Quantum-Safe Artifact Signing:** With Shor's algorithm threatening RSA and ECDSA, all artifact signing in 2040 uses post-quantum cryptography (PQC). The NIST-standardized CRYSTALS-Dilithium scheme is used for code-signing certificates; SPHINCS+ provides a hash-based fallback for high-assurance scenarios. Capstone projects must configure their CI to sign container images and release binaries with Dilithium keys stored in hardware security modules (HSMs) or cloud KMS services (YCS KeyVault, AWS PQ-KMS).
-- **The Edge-Cloud Continuum:** Modern applications do not simply deploy "to the cloud" — they distribute computation across a continuum from sensor nodes (milliwatts) through edge gateways (watts) to regional data centers (kilowatts) and hyperscale clouds (megawatts). A capstone project involving realtime sensor processing might deploy: inference kernels to ESP32-class edge nodes (via TinyML and TensorFlow Lite Micro), aggregation logic to a local k3s cluster (Raspberry Pi 8 or equivalent), and training pipelines to YCS hyperscale instances. The deployment topology is itself code, managed by GitOps tools (Flux, ArgoCD) that synchronize cluster state with Git repositories.
-- **Progressive Delivery:** Beyond simple blue-green or canary deployment, 2040 practice includes feature flags (LaunchDarkly, Unleash, or open-source FlagD), automatic traffic shaping based on error rates (if error rate > 0.1%, route traffic to previous version), and A/B testing at the infrastructure level. The capstone requires at least one progressive delivery mechanism, documented in `DEPLOYMENT.md`.
-- **AI-Assisted Failure Diagnosis:** When a CI pipeline fails, AI assistants analyze logs, stack traces, and recent commits to suggest root causes and fixes. UoY's *Heimdallr* system (named for the watchman of the gods) integrates with GitHub Actions to provide natural-language failure summaries: "The integration test `test_distributed_consensus` failed because node-3's clock drifted 400ms ahead of the NTP reference, causing a timeout in the Raft heartbeat. Consider enabling `enable_clock_sync=true` in the test harness." Teams must evaluate Heimdallr's suggestions critically — it achieves 78% accuracy on common failures but can hallucinate fixes for novel errors.
+### Lecture Notes
 
-#### Lecture Notes
+The origins of continuous integration trace to Kent Beck's Extreme Programming (1996) and Martin Fowler's influential 2000 article, which defined CI as the practice of integrating code into a shared repository several times a day, verified by automated builds. By 2040, CI has become so embedded in software engineering that its absence signals amateur practice. Yet the sophistication of 2040 CI far exceeds the simple "build and test" of the 2010s. A modern CI pipeline at the University of Yggdrasil includes: type checking, linting, unit tests, integration tests, property-based tests, mutation testing, SAST (static application security testing), DAST (dynamic application security testing), dependency vulnerability scanning, license compliance checking, documentation generation, and artifact signing. Each stage must complete in under 15 minutes to maintain developer flow state—a constraint that drives parallelization and incremental execution.
 
-The CI/CD pipeline for a capstone project is itself an engineering artifact worthy of design attention. A minimal but respectable pipeline includes:
+**Pipeline as code** is the dominant paradigm. GitHub Actions, introduced in 2018, and GitLab CI, introduced in 2015, both represent workflows as YAML documents stored in version control. By 2040, the industry has learned hard lessons about YAML's fragility: the 2031 *GitHub Actions Outage* (in which a YAML parsing bug caused a 6-hour global CI blackout) accelerated adoption of typed pipeline languages. The UoY capstone program provides a `ci-dsl` compiler that translates a statically typed, JSON-schema-validated pipeline definition into platform-native YAML. Students must write their capstone CI configuration in this DSL, ensuring type safety and enabling IDE autocomplete. The lecture walks through a complete capstone pipeline definition, from checkout to deployment.
 
-1. **Lint and Format Stage:** `rustfmt`, `black`, `eslint`, or equivalent; fails the build if code does not conform to style guidelines. This prevents style debates in code review.
-2. **Unit Test Stage:** Fast unit tests, running in parallel across multiple runners. Coverage report generated and uploaded to a dashboard.
-3. **Integration Test Stage:** Slower tests requiring databases, message queues, or external services. Run in isolated containers with `docker-compose` or Testcontainers.
-4. **Security Scan Stage:** Static analysis (Semgrep, CodeQL), dependency scanning (Snyk, OWASP Dependency-Check), and secret detection (GitLeaks, TruffleHog).
-5. **Build Artifact Stage:** Compile release binaries, build container images, generate documentation sites.
-6. **Sign and Push Stage:** Sign artifacts with Dilithium, push to container registry, upload release binaries to artifact store.
-7. **Deploy to Staging Stage:** Automatic deployment to a staging environment that mirrors production topology.
-8. **Smoke Test Stage:** Minimal end-to-end tests against the staging environment to verify the deployment succeeded.
-9. **Deploy to Production Stage:** Manual approval gate for production deployment, or automatic progressive delivery if the team has demonstrated sufficient maturity.
+**Reproducible builds** are essential for scientific integrity and security. A build is reproducible if, given the same source code and build environment, it produces bit-for-bit identical artifacts. The Reproducible Builds project, launched by Debian in 2013, achieved widespread adoption by 2025. In 2040, reproducibility is enforced by cryptographic build provenance: every artifact is accompanied by a SLSA (Supply Chain Levels for Software Artifacts) attestation, signed by the CI system, that records the exact source commit, build environment hash, and dependency tree. Capstone projects must achieve SLSA Level 2 (signed provenance, hosted build) and are encouraged to pursue Level 3 (hardened build platform, two-party review). The lecture demonstrates how to configure `goreleaser`, `cargo-release`, or Python's `build` backend to produce SLSA-compliant artifacts.
 
-The capstone does not require a full 9-stage pipeline, but it does require at least stages 1–5, with documentation of what stages 6–9 would look like if the project continued beyond the semester.
+**Security scanning in CI** has become non-negotiable. SAST tools (Semgrep, CodeQL, SonarQube) analyze source code for known vulnerability patterns without executing the program. DAST tools (OWASP ZAP, Burp Suite Enterprise) exercise the running application to find runtime vulnerabilities. By 2040, these categories have been supplemented by **IAST** (interactive application security testing, which instruments the application to detect vulnerabilities during test execution) and **RASP** (runtime application self-protection, which blocks attacks in production). The UoY capstone pipeline includes mandatory Semgrep and OWASP ZAP stages; failures block deployment. Students are taught to triage findings: not every flagged issue is exploitable, and suppressions must be documented with risk assessments.
 
-#### Required Reading
+**Deployment strategies** separate delivery (making an artifact available for deployment) from deployment (actually running it in production). Blue-green deployment maintains two identical production environments, switching traffic from blue to green after verification. Canary deployment routes a small percentage of traffic to the new version, monitoring for errors before full rollout. Feature flags (controlled by systems like LaunchDarkly or open-source Unleash) decouple deployment from release, allowing features to be turned on for specific users without redeployment. The 2040 landscape adds **neuromorphic canaries**: for AI-native systems, canary deployments include automated behavioral drift detection—if the new model version's output distribution diverges significantly from the baseline, the canary is automatically rolled back. Capstone students deploying ML components must configure this drift threshold as part of their deployment manifest.
 
-- Humble, J., & Farley, D. (2010). *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation*. Addison-Wesley.
-- NIST. (2032). *Post-Quantum Cryptography Standard: Code-Signing and Artifact Integrity* (NIST SP 800-208B).
-- Yggdrasil Cloud Services. (2039). *The Edge-Cloud Continuum: A Deployment Guide for UoY Capstone Projects* (YCS Technical Whitepaper).
-- Heimdallr Team. (2038). "AI-Assisted CI Failure Diagnosis: Architecture and Accuracy." *UoY Systems Research Symposium*.
+### Required Reading
 
-#### Discussion Questions
+- Fowler, M. (2000). "Continuous Integration." *martinfowler.com*, reprinted in *Yggdrasil Software Engineering Compendium*, 2035.
+- SLSA Framework (2025). "Supply Chain Levels for Software Artifacts." Version 1.1. OpenSSF.
+- Kocher, J., & Möller, B. (2032). "Typed Pipeline Languages: Preventing the Next CI Outage." *IEEE Software*, 39(2), 45–52.
+- Yggdrasil Security Guild (2040). "Capstone Security Scanning Policy: SAST, DAST, and IAST Requirements." Internal document v7.0.
+- *LaunchDarkly Documentation* (2040). "Neuromorphic Canary: Behavioral Drift Detection in AI-Native Deployments." Technical whitepaper.
 
-1. Reproducible builds require pinning every dependency to an exact version. How do teams balance reproducibility against the security benefits of automatic patch updates?
-2. Post-quantum signatures are larger and slower than classical signatures. What performance implications does this have for CI pipelines that sign thousands of artifacts per day?
-3. The edge-cloud continuum distributes computation across heterogeneous hardware. What observability challenges arise when a single user request traverses three tiers of compute, each with different logging formats and clock granularities?
+### Discussion Questions
 
-#### Practice Problems
+1. The 2031 GitHub Actions Outage was caused by a YAML parsing bug. What properties of YAML make it particularly unsuitable for critical infrastructure configuration? Are typed DSLs a genuine solution or merely pushing complexity elsewhere?
+2. SLSA Level 3 requires two-party review. In a capstone team of three students, how should review responsibilities be distributed to satisfy this requirement without creating bottlenecks?
+3. Should all security scanning findings be blocking, or should there be a triage process with documented risk acceptance? What are the dangers of each approach?
+4. Neuromorphic canary rollback is triggered by statistical divergence. How should the threshold be calibrated to avoid both false positives (unnecessary rollbacks) and false negatives (missed regressions)?
 
-- Configure a GitHub Actions workflow for your capstone project that implements stages 1–5 of the pipeline described in the lecture notes. Include a reproducibility check that verifies bit-for-bit identical builds across two runs.
-- Implement quantum-safe signing for your release artifacts using the Dilithium reference implementation or a cloud KMS provider. Document the key management policy.
-- Design a progressive delivery strategy for your capstone's most risky feature. Include feature flag configuration, automatic rollback criteria, and metrics dashboards.
+### Practice Problems
+
+- Write a complete CI/CD pipeline for your capstone using the UoY `ci-dsl`, including build, test, security scan, and artifact signing stages. Execute it and verify that all stages pass.
+- Configure a canary deployment for your capstone with at least two automated rollback conditions (e.g., error rate threshold, behavioral drift threshold). Document the rollback policy and demonstrate a simulated rollback.
 
 ---
 
-### Lecture 4: Binding the Parts — System Integration and Distributed Debugging
+ᚨ **Lecture 4: Containerization, Orchestration, and Cloud-Native Architecture**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Individual modules may be correct in isolation yet fail catastrophically when combined. Integration is where the hidden assumptions of each subsystem collide — where the database expects UTC timestamps but the frontend sends local time, where the API version negotiation silently degrads to a deprecated schema, where the cache invalidation race condition manifests only under production load. This lecture examines the art and science of system integration, with particular attention to distributed systems debugging in the 2040 era.
+Containerization, once a novelty of the mid-2010s, has become the universal packaging format for software by 2040. This lecture explores Docker, Podman, and the emerging WebAssembly (WASM) container standards, then moves to orchestration with Kubernetes, serverless platforms, and the edge-cloud continuum. Students will learn to design cloud-native architectures that leverage elasticity, resilience, and observability as first-class properties rather than afterthoughts.
 
-The capstone project, by definition, spans multiple subsystems. The integration phase is often where schedules slip and teams discover that their beautiful architecture diagrams omit the messy reality of network latency, partial failures, and emergent behavior.
+### Key Topics
 
-#### Key Topics
+- Container technologies: Docker, Podman, containerd, and WASM micro-VMs
+- Kubernetes: pods, services, deployments, ingress, and custom resource definitions
+- Serverless and function-as-a-service: Knative, AWS Lambda, and event-driven scaling
+- The edge-cloud continuum: k3s, microk8s, and fog computing architectures
+- Cloud-native design patterns: circuit breakers, bulkheads, retry with backoff
 
-- **Integration Strategies:** Big-bang integration (all at once) is universally discouraged but still tempting for teams under time pressure. Incremental integration — bottom-up, top-down, or sandwich — allows earlier detection of interface mismatches. In 2040, *contract-driven integration* has become standard: OpenAPI, AsyncAPI, and gRPC protobuf schemas serve as executable contracts, with automated compatibility checking that fails CI if a producer changes a field type that consumers depend on. The UoY Capstone Lab requires all APIs to be specified in OpenAPI 3.1 or gRPC proto3 before implementation begins.
-- **The Fallacies of Distributed Computing:** Peter Deutsch's classic eight fallacies (1994) remain relevant in 2040, though the specific manifestations have evolved. "The network is reliable" is now understood to mean "the network is reliable *enough* for your SLO" — and defining that SLO is a design decision. "Latency is zero" has been replaced by "latency is *variable*" — edge-cloud continuum deployments encounter latency spikes of 200ms or more during cellular handoffs. Capstone teams must document which fallacies their system assumes away and which it explicitly handles.
-- **Distributed Tracing and Observability:** A single user request in a microservices architecture may traverse 20–50 services. Without distributed tracing, debugging production issues is like trying to follow a single raindrop through a thunderstorm. OpenTelemetry (the CNCF standard since 2021) provides unified instrumentation for traces, metrics, and logs. In 2040, *causal tracing* — using eBPF to capture kernel-level events (syscalls, network packets, scheduling decisions) and correlate them with application-level spans — allows teams to diagnose performance anomalies at the nanosecond level. The UoY Capstone Lab provides a Jaeger + Prometheus + Grafana stack for student projects.
-- **The Debugging Mindset:** Debugging is not a technical skill alone; it is a cognitive discipline. Andreas Zeller's *Why Programs Fail* (2009) and its 2035 update (co-authored with the AI debugging assistant *Gleipnir*) frame debugging as hypothesis testing: form a hypothesis about the fault, design an experiment to test it, observe the result, and refine. In 2040, AI assistants can suggest hypotheses based on similar failures in public repositories, but the final judgment — which hypothesis to pursue, when to abandon a line of inquiry — remains fundamentally human. The capstone requires a `DEBUGGING_LOG.md` documenting the three most challenging bugs encountered during integration, including the hypotheses tested and the evidence that led to the correct diagnosis.
+### Lecture Notes
 
-#### Lecture Notes
+Solomon Hykes's introduction of Docker at PyCon 2013 marked the beginning of a packaging revolution. By containerizing applications with their dependencies, Docker solved the "it works on my machine" problem that had plagued software deployment for decades. By 2040, the Open Container Initiative (OCI) has standardized the container image format, and Docker coexists with Podman (daemonless, rootless containers) and containerd (the runtime underlying Kubernetes). The UoY capstone program recommends Podman for student development environments due to its security model—rootless containers eliminate a major attack surface—but requires that production images be OCI-compliant and scannable by Trivy or Clair.
 
-Integration failures follow predictable patterns:
-1. **Schema Drift:** The API returns a string where the client expects an integer; the database column was widened from VARCHAR(255) to TEXT but the ORM cache still uses the old length. Contract testing (Pact, Schemathesis) catches these before deployment.
-2. **Timing Assumptions:** Code that worked in unit tests fails in integration because `sleep(0.1)` is not a synchronization primitive. Proper synchronization (mutexes, condition variables, message queues) and explicit testing of slow paths are required.
-3. **Resource Leaks:** Connections, file descriptors, or memory that are not released under error conditions. Stress testing — running the system under 10x expected load for 24 hours — often reveals leaks that unit tests miss.
-4. **Error Handling Inconsistencies:** One subsystem retries on timeout; another fails fast; a third retries with exponential backoff but does not cap the maximum delay. Under cascading failure, these inconsistent policies amplify the outage.
-5. **Configuration Mismatches:** Staging uses `LOG_LEVEL=debug` but production uses `LOG_LEVEL=warn`, hiding the error messages that would have revealed the root cause. Configuration must be validated at startup, not assumed.
+The emergence of **WebAssembly (WASM) as a container target** represents the most significant shift in 2030s containerization. WASM modules offer near-native performance with sandboxed execution, smaller image sizes, and instant cold starts compared to traditional Linux containers. The WASI (WebAssembly System Interface) standard, stabilized in 2027, enables WASM modules to access filesystems, networks, and clocks in a capability-secure manner. By 2040, major cloud providers support WASM workloads on Kubernetes via the `containerd-wasm-shim`, and the UoY capstone framework includes a `wasm-pack` stage for Rust and AssemblyScript projects. Students are encouraged to evaluate WASM for components requiring high isolation (e.g., AI-generated code execution) but warned that the ecosystem is still maturing for I/O-intensive workloads.
 
-The capstone integration phase should allocate at least three weeks — more than most teams initially plan. This buffer accommodates the inevitable discovery that "it works on my machine" does not imply "it works anywhere else."
+**Kubernetes**, born from Google's Borg system and open-sourced in 2014, has become the de facto orchestration platform. By 2040, Kubernetes has absorbed so many subsystems that mastery requires years of dedicated practice; the capstone program therefore focuses on the core abstractions most relevant to student projects. The lecture covers pods (co-located containers sharing network and storage), services (stable networking endpoints), deployments (declarative desired state with rolling updates), ingress (HTTP routing), and persistent volumes (stateful storage). Students deploy their capstone on a UoY-managed k3s cluster (lightweight Kubernetes) that supports both traditional containers and WASM workloads.
 
-#### Required Reading
+**Serverless computing** has evolved from function-as-a-service (FaaS) to a broader event-driven architecture pattern. Knative, the Kubernetes-native serverless layer, enables automatic scaling to zero and rapid scale-out based on event volume. By 2040, serverless is the default for HTTP request handling, event processing, and scheduled tasks; long-running compute remains on dedicated nodes. The lecture emphasizes the *cold start problem*: while WASM cold starts are sub-millisecond, traditional containers may take seconds to initialize, causing latency spikes. Capstone projects with latency-sensitive components must measure and optimize cold start times, potentially using "keep-warm" strategies or WASM migration.
 
-- Deutsch, P. (1994). "The Eight Fallacies of Distributed Computing." Sun Microsystems.
-- Zeller, A. (2035). *Why Programs Fail: A Guide to Systematic Debugging* (4th ed., with Gleipnir AI assistant). Morgan Kaufmann.
-- OpenTelemetry Consortium. (2038). *OpenTelemetry Specification v2.1: Traces, Metrics, Logs, and Causal Events*.
-- Fowler, M. (2034). "Contract-Driven Integration: Schemas as Executable Specifications." *martinfowler.com*.
+The **edge-cloud continuum** reflects the 2040 reality that computation is distributed across sensors, edge devices, regional data centers, and global clouds. k3s and microk8s bring Kubernetes to Raspberry Pi-class devices (like the Dellingr Node v3, a 2037 UoY-designed edge compute unit). Fog computing architectures process data at the edge, syncing summaries to the cloud rather than streaming raw data. For capstone projects involving sensor data, drone control, or real-time audio processing, edge deployment may be mandatory. The lecture covers data locality, sync conflict resolution, and the CAP theorem implications of edge-cloud partitioning.
 
-#### Discussion Questions
+**Cloud-native design patterns**, cataloged by the Microsoft Azure team and extended by the CNCF, provide proven solutions for resilience. The circuit breaker pattern (popularized by Michael Nygard in *Release It!*, 2007) prevents cascading failures by failing fast when a dependency is unhealthy. The bulkhead pattern isolates failures to compartments, limiting blast radius. Retry with exponential backoff and jitter prevents thundering herds. By 2040, these patterns are implemented in service mesh sidecars (Istio, Linkerd) and language-specific libraries (Resilience4j, Polly). Capstone students must implement at least two resilience patterns and demonstrate their effectiveness through chaos engineering tests—intentionally injecting failures to verify graceful degradation.
 
-1. Your capstone uses three subsystems developed by different team members. One subsystem assumes JSON payloads; another assumes protobuf. At what point in the project should this interface contract have been established, and how can you recover now that both implementations are nearly complete?
-2. A distributed trace shows that 99% of requests complete in <50ms, but 1% take >2s. The latency is not correlated with any obvious factor (load, time of day, specific node). Design a debugging strategy to isolate the cause.
-3. AI debugging assistants can suggest hypotheses faster than humans, but they may also anchor teams on incorrect hypotheses. How do you maintain epistemic humility when an AI with 95% accuracy on historical data suggests a plausible but unverified explanation?
+### Required Reading
 
-#### Practice Problems
+- Hightower, K., Burns, B., & Beda, J. (2017). *Kubernetes: Up and Running*. O'Reilly. Chapters 1–3 (updated 2032 edition covers WASM workloads).
+- Nygard, M. T. (2007). *Release It! Design and Deploy Production-Ready Software*. Pragmatic Bookshelf. Chapter 4 ("Stability Patterns").
+- CNCF (2035). "Cloud Native Patterns: Circuit Breakers, Bulkheads, and Retry in 2040." *CNCF Technical Report* 2035-04.
+- Yggdrasil Infrastructure Team (2037). "Dellingr Node v3: Edge Compute for Student Capstones." Hardware specification and deployment guide.
+- wasmCloud Documentation (2040). "WASM Containers on Kubernetes: The containerd-wasm-shim." Installation and configuration guide.
 
-- Implement contract tests for all external interfaces in your capstone project using Pact or Schemathesis. Verify that the tests fail when the provider changes a field type.
-- Instrument your capstone with OpenTelemetry tracing. Generate a flame graph showing the critical path for your most common user request. Identify the slowest span and optimize it.
-- Write a `DEBUGGING_LOG.md` entry for the most difficult integration bug your team has encountered so far. Follow the Zeller hypothesis-testing format.
+### Discussion Questions
+
+1. WASM containers offer smaller images and faster cold starts but a less mature ecosystem. For a capstone project with a web API and a background worker, which components (if any) should be WASM-based, and why?
+2. Kubernetes mastery requires years of practice, yet capstone students must deploy in months. What Kubernetes abstractions are essential for a student project, and which can safely be abstracted away by platform teams?
+3. The cold start problem affects user experience directly. How should a capstone team decide between keep-warm strategies (higher baseline cost, lower latency) and on-demand scaling (lower cost, higher latency variance)?
+4. Chaos engineering intentionally breaks things to test resilience. Is this responsible practice for a capstone project, or does it risk collateral damage to shared infrastructure?
+
+### Practice Problems
+
+- Containerize your capstone application using Podman. Produce an OCI-compliant image, scan it with Trivy, and remediate any critical vulnerabilities. Document the final image size and startup time.
+- Deploy your capstone on the UoY k3s cluster, configuring at least two resilience patterns (circuit breaker, bulkhead, or retry). Conduct a chaos engineering test by killing a dependency pod and verifying graceful degradation.
 
 ---
 
-### Lecture 5: Sharpening the Blade — Performance Engineering and Optimization
+ᚱ **Lecture 5: Security Hardening, Threat Modeling, and the Zero-Trust Edge**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Performance is not an afterthought to be sprinkled on at the end of development; it is an emergent property of system architecture, algorithm selection, data structure design, and implementation detail. This lecture covers the systematic process of performance engineering: measurement, profiling, modeling, optimization, and validation. In 2040, performance engineering must also account for energy efficiency — the carbon cost of computation has become a first-class design constraint.
+Security in 2040 is not a feature to be added but an architectural property to be designed. This lecture covers threat modeling methodologies, the zero-trust security model, secrets management, and the emerging paradigm of confidential computing. Students will learn to systematically identify threats, mitigate them through defense in depth, and verify security properties through both automated scanning and manual review. The capstone security audit, conducted in Week 10, requires a documented threat model and evidence of mitigations.
 
-The capstone project must meet explicitly defined performance requirements, documented in `PERFORMANCE.md`. These requirements vary by project type: a realtime game engine might target 16ms frame times (60 FPS); a batch analytics pipeline might target 10,000 records/second throughput; a web API might target p99 latency <100ms at 1000 RPS.
+### Key Topics
 
-#### Key Topics
+- Threat modeling: STRIDE, attack trees, and the Microsoft Threat Modeling Tool
+- Zero-trust architecture: never trust, always verify, least privilege
+- Secrets management: HashiCorp Vault, sealed secrets, and hardware security modules
+- Confidential computing: AMD SEV, Intel TDX, and encrypted execution enclaves
+- Post-quantum cryptography: CRYSTALS-Kyber and Dilithium in production
 
-- **Measurement and Benchmarking:** Reliable performance measurement requires statistical rigor. A single timing run is meaningless; benchmarks must run warm-up iterations (to stabilize JIT compilation and cache state), collect multiple samples, and report confidence intervals. The Criterion.rs (Rust), JMH (Java), and pytest-benchmark (Python) libraries provide statistically sound benchmarking frameworks. The UoY Capstone Lab requires all performance claims to be backed by benchmark data with at least 30 samples and 95% confidence intervals.
-- **Profiling Methodologies:** CPU profiling (sampling and instrumentation), memory profiling (heap allocation tracking, leak detection), I/O profiling (disk and network bottlenecks), and power profiling (energy consumption per operation). Modern tools like perf (Linux), Intel VTune, NVIDIA Nsight, and ARM Streamline provide hardware-counter-level visibility. In 2040, *causal profiling* (described in Curtsinger & Berger, 2015, and now standard in LLVM's Coz profiler) directly measures the impact of optimization hypotheses by virtualizing speedups, allowing engineers to predict the ROI of an optimization before implementing it.
-- **Algorithmic vs. Constant-Factor Optimization:** Amdahl's Law governs the theoretical limits of parallel speedup; the Universal Scalability Law (Gunther, 2007) adds contention and coherency costs. Teams must distinguish between algorithmic improvements (changing O(n²) to O(n log n)) and constant-factor tuning (loop unrolling, SIMD vectorization, cache blocking). The former yields unbounded improvement; the latter yields at most a fixed multiple. Capstone teams are required to document at least one algorithmic optimization and one constant-factor optimization, with before/after benchmark data.
-- **Energy-Aware Computing:** By 2040, data centers account for 3% of global electricity consumption, and the carbon cost of training a large neural network can exceed that of a transatlantic flight. The UoY Capstone Lab requires all projects to include an energy estimate: total watt-hours consumed during training, inference, or operation, converted to carbon equivalent using the local grid mix (Yggdrasil Grid: 94% renewable, 6% natural gas). Optimization targets must balance performance against energy — a 2x speedup that requires 4x energy is not an unalloyed win.
-- **Performance Regression Testing:** Performance characteristics degrade silently as code evolves. CI pipelines must include performance regression tests that fail if a commit increases p99 latency by >5% or reduces throughput by >3%. The UoY Lab uses Bencher (open-source) and custom Grafana dashboards for continuous performance monitoring.
+### Lecture Notes
 
-#### Lecture Notes
+The discipline of threat modeling, systematized by Microsoft in the early 2000s through the STRIDE framework (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege), provides a structured method for identifying security threats before code is written. By 2040, threat modeling has been integrated into the earliest design phases: the UoY capstone program requires a threat model document as part of the CS406 design review, updated in CS407 as the implementation reveals new attack surfaces. The lecture walks through a complete STRIDE analysis of a typical capstone web application, identifying threats at each component boundary and mapping them to mitigations.
 
-The optimization process follows a loop:
-1. **Establish Baseline:** Measure current performance under realistic workload.
-2. **Profile:** Identify the bottleneck — is it CPU-bound, memory-bound, I/O-bound, or network-bound?
-3. **Hypothesize:** Form a theory about what change will improve performance.
-4. **Implement:** Make the change, keeping the code correct and readable.
-5. **Validate:** Measure again. If the improvement is not statistically significant, abandon the change.
-6. **Document:** Record the optimization, its measured impact, and any trade-offs (complexity, maintainability, energy).
+**Attack trees**, formalized by Bruce Schneier in 1999, provide a hierarchical decomposition of attack paths. The root node represents the attacker's goal; child nodes represent sub-goals or alternative paths. By 2040, attack trees are machine-checkable: the UoY security lab maintains a repository of verified attack tree templates for common capstone architectures (web API, distributed system, ML pipeline). Students instantiate these templates and annotate each node with implemented mitigations. The lecture demonstrates how a simple attack tree for "Steal user data" decomposes into SQL injection, authentication bypass, and insider threat branches, each with specific mitigations.
 
-Common pitfalls in student capstone projects:
-- **Premature Optimization:** Teams spend weeks micro-optimizing a function that accounts for 0.1% of total runtime, while ignoring the O(n³) algorithm that dominates execution.
-- **Synthetic Benchmarks:** Testing with 10 rows of data when the production dataset has 10 million. Benchmarks must use realistic data distributions and sizes.
-- **Ignoring Cold Start:** Serverless functions, JVM applications, and Python interpreters have significant cold-start latency. Performance tests that only measure warm performance miss this cost.
-- **Benchmarking in Debug Mode:** Compilers disable most optimizations in debug mode. Always benchmark release builds with full optimization (`-O3`, `release` profile, etc.).
+**Zero-trust architecture**, articulated by John Kindervag (Forrester, 2010) and widely adopted following the 2020 SolarWinds breach, replaces the perimeter-based security model with a model of continuous verification. In zero-trust, no user, device, or service is inherently trusted; every access request is authenticated, authorized, and encrypted. By 2040, zero-trust is the default for cloud-native systems. The lecture covers the five pillars of zero-trust as defined by NIST SP 800-207 (2020, updated 2030): identity, device, network, application, and data. Capstone projects must implement identity verification (via OAuth 2.1 or WebAuthn), device attestation (via TPM), micro-segmentation (via service mesh policies), application-level authorization (RBAC or ABAC), and data encryption at rest and in transit.
 
-#### Required Reading
+**Secrets management** addresses the challenge of storing API keys, database passwords, and cryptographic material without embedding them in source code or container images. HashiCorp Vault, the industry standard by 2040, provides dynamic secrets, automatic rotation, and audit logging. The UoY capstone template includes Vault integration: applications authenticate via Kubernetes service accounts and receive short-lived credentials (e.g., 1-hour database passwords). Students learn to avoid common anti-patterns: `.env` files in repositories, hardcoded keys, and Kubernetes secrets without encryption at rest. The lecture also covers **sealed secrets** (Bitnami Sealed Secrets) as a lighter-weight alternative for projects without Vault infrastructure.
 
-- Curtsinger, C., & Berger, E. D. (2015). "Coz: Finding Code that Counts with Causal Profiling." *SOSP 2015*.
-- Gunther, N. J. (2007). *Guerrilla Capacity Planning*. Springer.
-- Patterson, D. A., & Hennessy, J. L. (2020). *Computer Architecture: A Quantitative Approach* (6th ed.). Morgan Kaufmann. [Chapters on memory hierarchy and parallelism]
-- Yggdrasil University Sustainability Office. (2039). *Carbon-Aware Computing: Guidelines for UoY Engineering Projects*.
+**Confidential computing** represents the 2030s breakthrough in hardware-enforced security. AMD SEV (Secure Encrypted Virtualization), Intel TDX (Trust Domain Extensions), and ARM CCA (Confidential Compute Architecture) enable encryption of memory and computation such that even the cloud provider cannot inspect running workloads. By 2040, confidential VMs are available from all major cloud providers and are mandatory for processing sensitive personal data under the *Bangalore Protocol* (2038). Capstone projects handling simulated health data, financial transactions, or biometric information must deploy on confidential computing nodes. The lecture covers attestation: the process by which a confidential workload proves its identity and integrity to remote verifiers.
 
-#### Discussion Questions
+**Post-quantum cryptography** has transitioned from research to production. The 2024 NIST standardization of CRYSTALS-Kyber (key encapsulation) and CRYSTALS-Dilithium (digital signatures) marked the beginning of the PQC era. By 2040, all TLS connections must use hybrid post-quantum key exchange (X25519 + Kyber), and all code-signing certificates use Dilithium. The UoY capstone pipeline automatically rotates PQC certificates and rejects non-compliant artifacts. Students are taught to understand the performance implications: Kyber is faster than RSA for key generation and encapsulation, but Dilithium signatures are larger than ECDSA signatures, affecting bandwidth-constrained protocols.
 
-1. Your capstone's profiler shows that 80% of execution time is spent in a single function. However, causal profiling reveals that optimizing this function by 50% would only improve total runtime by 5%. How is this possible, and what does it imply about your optimization strategy?
-2. Energy-aware computing requires trading performance for efficiency. Under what conditions is a slower, more efficient algorithm preferable to a faster, less efficient one? Does the answer change if the computation runs on a battery-powered edge device versus a grid-connected data center?
-3. Performance regression tests can be flaky — affected by CI runner load, network jitter, or thermal throttling. What practices make performance tests reliable enough to gate merges?
+### Required Reading
 
-#### Practice Problems
+- Shostack, A. (2014). *Threat Modeling: Designing for Security*. Wiley. Chapters 3–5 (STRIDE and attack trees).
+- NIST (2030). *SP 800-207: Zero Trust Architecture* (Revision 2). National Institute of Standards and Technology.
+- HashiCorp (2040). *Vault Documentation: Dynamic Secrets and Kubernetes Integration*. Version 4.2.
+- AMD (2035). "SEV-SNP and Confidential Computing: A Developer's Guide." Technical whitepaper.
+- Bernstein, D. J., & Lange, T. (2031). "Post-Quantum Cryptography in Practice: The Transition to Kyber and Dilithium." *Journal of Cryptology*, 44(2), 301–345.
 
-- Write statistically rigorous benchmarks for the three most performance-critical operations in your capstone. Use Criterion.rs, JMH, or pytest-benchmark. Report means, standard deviations, and 95% confidence intervals.
-- Profile your capstone under realistic load. Identify the top three hotspots. For each, document whether it is algorithmically or constant-factor bound, and propose an optimization with predicted impact.
-- Calculate the carbon footprint of your capstone's training or operational phase. Use the Yggdrasil Grid carbon intensity (42 gCO₂/kWh). Propose one energy optimization and recompute the footprint.
+### Discussion Questions
+
+1. STRIDE was developed in the early 2000s for desktop applications. Which STRIDE categories become more or less relevant for AI-native systems where model weights themselves may be sensitive intellectual property?
+2. Zero-trust increases security but also complexity. What are the operational risks of over-applying zero-trust principles to a simple capstone web application?
+3. Confidential computing protects against cloud provider compromise but introduces performance overhead. Under what threat models is this trade-off justified?
+4. Dilithium signatures are larger than ECDSA. For a capstone API making millions of small requests, how might this signature size affect latency and bandwidth?
+
+### Practice Problems
+
+- Produce a complete STRIDE threat model for your capstone, documenting at least 15 distinct threats and their mitigations. Map each threat to a specific component or data flow.
+- Implement zero-trust network policies using your service mesh (Istio or Linkerd). Demonstrate that unauthorized services cannot communicate, even within the same cluster namespace.
 
 ---
 
-### Lecture 6: The Serpent at the Root — Security Hardening and Post-Quantum Migration
+ᚲ **Lecture 6: Performance Engineering: Profiling, Optimization, and Benchmarking**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Every system has a serpent at its root — an adversary waiting to exploit the gap between intended and actual behavior. Security in 2040 is not a feature to be added late in development; it is a cross-cutting concern that shapes architecture, implementation, and operations. This lecture covers threat modeling, secure coding practices, vulnerability management, and the ongoing global transition to post-quantum cryptography.
+Performance is not an accident but the result of systematic measurement, analysis, and refinement. This lecture covers performance engineering from the algorithmic level to the hardware level: asymptotic analysis, profiling tools, cache optimization, GPU kernel tuning, and the statistical rigor required for meaningful benchmarking. Students will learn to identify bottlenecks, apply targeted optimizations, and validate improvements without introducing regressions elsewhere.
 
-The capstone project must pass a security review conducted by the UoY Red Team (graduate students in the Cybersecurity MS program). The review includes automated scanning, manual penetration testing, and a threat model walkthrough. Projects that fail the review may not be presented at the Capstone Symposium.
+### Key Topics
 
-#### Key Topics
+- Algorithmic efficiency: Big-O, Big-Ω, Big-Θ, and amortized analysis
+- Profiling: CPU sampling, flame graphs, memory allocation tracking, I/O tracing
+- Cache optimization: spatial and temporal locality, cache-oblivious algorithms
+- GPU performance: occupancy, memory coalescing, shared memory tiling
+- Statistical benchmarking: confidence intervals, A/B testing, avoiding measurement bias
 
-- **Threat Modeling with STRIDE and Attack Trees:** The STRIDE framework (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) provides a structured approach to identifying threats. Attack trees (Schneier, 1999) decompose high-level attack goals into concrete sub-goals, assigning probabilities and costs to each node. In 2040, AI-assisted threat modeling tools (Microsoft's Threat Composer, UoY's *Níðhöggr*) generate preliminary threat models from architecture diagrams and natural language descriptions, which human analysts then refine. Capstone teams must produce a threat model document (`THREATS.md`) with at least 10 identified threats, mitigations, and residual risk ratings.
-- **Secure Coding Practices:** Memory safety (Rust's ownership model, Ada SPARK, or formally verified C), input validation (never trust user input — parameterized queries, strict schema validation, allowlists), authentication (multi-factor authentication with FIDO3/WebAuthn, biometric templates stored as irreversible hashes), and authorization (RBAC, ABAC, and the emerging *capability-based security* model where every operation requires an explicit, unforgeable token). The OWASP Top 10 for 2040 (updated every two years) now includes "AI-Generated Vulnerabilities" — cases where LLM-assisted coding introduces subtle bugs (inconsistent error handling, prompt injection vectors, hallucinated authentication checks).
-- **Vulnerability Management:** Dependency scanning (Snyk, OSV, GitHub Dependabot), static analysis (Semgrep, CodeQL, SonarQube), dynamic analysis (OWASP ZAP, Burp Suite), and fuzzing (AFL++, libFuzzer, Jazzer). The capstone requires all dependencies to be scanned for known vulnerabilities and all high/critical findings to be remediated or explicitly accepted with justification.
-- **Post-Quantum Cryptography Migration:** The "Q-Day" scenario — the moment when a cryptographically relevant quantum computer becomes operational — is no longer theoretical. NIST's PQC standards (CRYSTALS-Kyber for key encapsulation, CRYSTALS-Dilithium for signatures, SPHINCS+ as a hash-based alternative) are now mandatory for U.S. government systems and recommended for all critical infrastructure. Capstone projects must use PQC for all cryptographic operations: TLS 1.4 (which mandates Kyber key exchange), code signing (Dilithium), and secure messaging. The transition is not merely swapping algorithms; hybrid schemes (classical + PQC in parallel) protect against both classical and quantum attacks during the transition period.
-- **Zero-Trust Architecture:** The perimeter security model (firewall + VPN = safe) is obsolete. Zero-trust assumes the network is hostile and verifies every request, regardless of origin. In practice, this means mutual TLS (mTLS) for all service-to-service communication, short-lived certificates (hours, not months), and continuous authentication based on behavioral biometrics (typing cadence, mouse movements, interaction patterns). Capstone projects with distributed components must implement mTLS and certificate rotation.
+### Lecture Notes
 
-#### Lecture Notes
+Donald Knuth's famous aphorism—"premature optimization is the root of all evil"—has often been misunderstood as a injunction against optimization itself. What Knuth meant, and what this lecture insists upon, is that optimization must be informed by measurement. Blind optimization wastes effort on code that is not on the critical path, while ignoring the true bottleneck. By 2040, this principle is enforced by automated profiling integrated into CI: the UoY capstone pipeline runs `perf` (Linux), ` Instruments` (macOS), or `VTune` (Intel) on every commit, flagging regressions greater than 5% in CPU time, memory allocation rate, or I/O throughput.
 
-Security is economics. An adversary will attack the weakest point that yields the highest return. A capstone project is unlikely to attract nation-state attackers, but it may attract script kiddies, automated scanners, or curious peers. The goal is not perfect security — which is impossible — but *cost-imposed security*: making the attack more expensive than the value of the compromised asset.
+**Algorithmic analysis** provides the theoretical foundation. Big-O notation describes asymptotic upper bounds; Big-Ω describes lower bounds; Big-Θ describes tight bounds. Amortized analysis, introduced by Tarjan in the 1980s, averages the cost of expensive operations over a sequence of cheaper ones, explaining why a dynamically resizing hash table achieves O(1) average insertion despite occasional O(n) reallocations. By 2040, these concepts are extended to **parallel complexity**: work (total operations) and span (longest dependency chain) replace simple operation counts for GPU and distributed algorithms. The lecture includes a parallel complexity analysis of matrix multiplication on CUDA, demonstrating how tiling reduces span while increasing work efficiency.
 
-The UoY Red Team employs a "capture the flag" scoring model for capstone reviews:
-- **Informational findings** (0 points): Missing security headers, verbose error messages.
-- **Low findings** (1 point): Reflected XSS, insecure cookie flags.
-- **Medium findings** (3 points): Stored XSS, IDOR (Insecure Direct Object Reference), CSRF.
-- **High findings** (5 points): SQL injection, authentication bypass, RCE (Remote Code Execution).
-- **Critical findings** (10 points): Full system compromise, data exfiltration, privilege escalation to root/admin.
+**Profiling** bridges theory and practice. CPU sampling profilers (Linux `perf`, `py-spy`, `async-profiler`) record the program counter at regular intervals, building a statistical picture of where time is spent. Flame graphs, invented by Brendan Gregg in 2011, visualize this data as stacked rectangles where width represents sample frequency. By 2040, flame graphs have been augmented with **temporal flame graphs** that show how the profile evolves over time, revealing phase changes (e.g., warmup vs. steady state) and intermittent bottlenecks. Memory profilers (Valgrind Massif, heaptrack, Rust's dhat) track allocation sites and lifetimes. The lecture demonstrates how to use these tools on a capstone project, starting from a high-level overview and drilling down to specific functions.
 
-Projects scoring >15 points fail the review and must remediate before symposium presentation. Historically, 40% of projects fail on the first attempt, usually due to injection vulnerabilities or missing authentication on administrative endpoints.
+**Cache optimization** remains critical despite decades of hardware advancement. The gap between CPU clock speed and memory latency, known as the memory wall, has widened since the 1990s. Cache-friendly code maximizes spatial locality (accessing nearby memory addresses together) and temporal locality (reusing data before eviction). **Cache-oblivious algorithms**, introduced by Prokop in 1999 and popularized by the Demaines, achieve optimal cache performance without knowledge of the cache size—a theoretical elegance with practical benefits for portable code. The lecture walks through a cache-oblivious matrix multiplication and compares its performance to naive and manually tiled implementations across cache hierarchies.
 
-#### Required Reading
+**GPU performance tuning** is essential for capstone projects involving ML inference or scientific simulation. Three factors dominate GPU performance: occupancy (the fraction of warps actively executing, limited by register and shared memory usage), memory coalescing (ensuring that threads in a warp access consecutive memory addresses), and shared memory tiling (storing frequently reused data in fast on-chip memory). The lecture uses a 2D convolution kernel as a running example, showing how uncoalesced memory access reduces throughput by an order of magnitude and how tiling brings it back to peak. By 2040, NVIDIA's Nsight Compute and AMD's rocProfiler provide automated recommendations for these optimizations, but the student must understand the underlying hardware model to apply them correctly.
 
-- Schneier, B. (1999). "Attack Trees." *Dr. Dobb's Journal*.
-- OWASP Foundation. (2040). *OWASP Top 10: 2040 Edition* (includes AI-generated vulnerabilities).
-- NIST. (2032). *Post-Quantum Cryptography Standards* (FIPS 203, 204, 205).
-- Kindervag, J. (2030). *Zero Trust Networks: Building Secure Systems in Untrusted Environments* (2nd ed.). O'Reilly.
-- Vébjarndóttir, S. (2038). "The Níðhöggr Review: Red-Teaming the UoY Capstone Program." *UoY Security Symposium*.
+**Statistical rigor in benchmarking** prevents the common pitfall of cherry-picking results. A single run is insufficient: noise from OS scheduling, thermal throttling, and background processes can dominate measurement. The lecture teaches confidence interval construction via bootstrap resampling, A/B testing with Welch's t-test for unequal variances, and the detection of measurement bias (e.g., JVM warmup, cache state). The UoY capstone requires that all performance claims be accompanied by confidence intervals at the 95% level and that benchmark code be committed alongside the implementation. The 2036 *Reproducibility Crisis in Systems Benchmarking* paper by Leliaert et al. serves as a cautionary tale: the majority of published systems benchmarks in the 2020s were irreproducible due to missing environment details and statistical naivety.
 
-#### Discussion Questions
+### Required Reading
 
-1. Your capstone uses a third-party library with a known medium-severity vulnerability. The vendor has not released a patch, and no alternative library provides equivalent functionality. What is your responsibility as an engineer, and what options do you have?
-2. Post-quantum signatures are 5–10x larger than ECDSA signatures. How does this impact network protocols that were designed around small signatures, and what engineering adaptations are required?
-3. Zero-trust architecture requires mutual authentication for every request. What usability and performance trade-offs does this impose, and how do modern systems mitigate them?
+- Knuth, D. E. (1974). "Structured Programming with go to Statements." *ACM Computing Surveys*, 6(4), 261–301. (Source of the premature optimization aphorism.)
+- Gregg, B. (2020). *Systems Performance: Enterprise and the Cloud* (2nd Edition). Addison-Wesley. Chapters 5 ("Profiling") and 6 ("Benchmarking").
+- Demaine, E. D. (2002). "Cache-Oblivious Algorithms and Data Structures." *Lecture Notes in Computer Science*, 2625, 1–29.
+- Harris, M. (2012). "How to Access Global Memory Efficiently in CUDA C/C++ Kernels." NVIDIA Developer Blog.
+- Leliaert, T., et al. (2036). "The Reproducibility Crisis in Systems Benchmarking: A Decade of Failure." *ACM SIGOPS Operating Systems Review*, 50(3), 12–19.
 
-#### Practice Problems
+### Discussion Questions
 
-- Conduct a STRIDE threat model for your capstone project. Identify at least 10 threats, rate their severity, and document mitigations. Submit as `THREATS.md`.
-- Configure static analysis (Semgrep or CodeQL) and dependency scanning for your project. Remediate all high/critical findings or document accepted risks.
-- Implement mutual TLS for all inter-service communication in your capstone. Include automatic certificate rotation and a fallback to hybrid classical/PQC cipher suites.
+1. Knuth's aphorism is often quoted to discourage optimization. Under what conditions is early optimization justified, and how can a capstone team distinguish it from premature optimization?
+2. Temporal flame graphs reveal phase changes in program behavior. How might this information change the way you interpret a traditional (time-averaged) flame graph?
+3. Cache-oblivious algorithms are theoretically elegant but sometimes outperformed by cache-aware algorithms with tuned block sizes. When should a capstone student prefer one over the other?
+4. The 2036 Reproducibility Crisis showed that most benchmarks lacked statistical rigor. What minimum information should every capstone benchmark report include to avoid this fate?
+
+### Practice Problems
+
+- Profile your capstone application using `perf` or `py-spy`. Generate a flame graph, identify the top three CPU consumers, and propose optimizations. Validate improvements with before/after benchmarks including 95% confidence intervals.
+- If your capstone uses GPU computation, analyze memory coalescing patterns in your kernel. Reorder thread indexing if necessary and measure the throughput improvement.
 
 ---
 
-### Lecture 7: The Sagas Written — Documentation and Knowledge Transfer
+ᚷ **Lecture 7: Observability: Monitoring, Logging, Tracing, and Intelligent Alerting**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Code that cannot be understood cannot be maintained. Documentation is not an accessory to engineering; it is a form of engineering in its own right — the engineering of human comprehension. This lecture examines the principles, practices, and tools of technical documentation in 2040, including AI-assisted writing, living documentation generated from code, and the sociology of knowledge transfer within engineering teams.
+A system that cannot be observed is a system that cannot be trusted. This lecture introduces the three pillars of observability—metrics, logs, and traces—and their integration into coherent monitoring dashboards. By 2040, observability has been augmented by AI-assisted anomaly detection, causal tracing, and predictive alerting. Students will instrument their capstone systems, construct meaningful dashboards, and configure alerting that surfaces genuine problems without drowning operators in noise.
 
-The capstone project requires four categories of documentation: user-facing (how to use the system), operator-facing (how to deploy and monitor it), developer-facing (how to modify it), and academic (the formal writeup submitted for grading). Each category has distinct audiences, conventions, and quality criteria.
+### Key Topics
 
-#### Key Topics
+- Metrics: counters, gauges, histograms, and the RED method (Rate, Errors, Duration)
+- Logging: structured logging, log levels, correlation IDs, and retention policies
+- Distributed tracing: OpenTelemetry, spans, trace context propagation
+- AI-assisted anomaly detection: seasonal decomposition, autoencoders, and causal graphs
+- Alerting: SLOs, SLIs, error budgets, and on-call rotation design
 
-- **Documentation as Design:** The act of explaining a system often reveals design flaws. Joel Spolsky's observation (2000) that "writing specifications is like writing a letter to yourself in the future" remains true in 2040, though the specifications are now living documents — Markdown files in Git repositories, wiki pages with version history, or structured documentation sites generated from source. The *Diátaxis Framework* (Procida, 2017, and its 2035 update) organizes documentation into four quadrants: Tutorials (learning-oriented), How-To Guides (task-oriented), Reference (information-oriented), and Explanation (understanding-oriented). Capstone projects must provide at least one document in each quadrant.
-- **Living Documentation from Code:** Tools like RustDoc, Javadoc, Sphinx, and MkDocs generate reference documentation from source code annotations. In 2040, *executable documentation* — Markdown files with embedded code blocks that are extracted and run as tests — ensures that examples never drift out of date. Rust's `doc-test` and Python's `doctest` are standard; the UoY Capstone Lab recommends `mdbook` for narrative documentation and `jupyter-book` for interactive tutorials.
-- **AI-Assisted Technical Writing:** Large language models can draft documentation from code, generate API reference pages, and translate between languages. However, AI-generated documentation suffers from the same hallucination risks as AI-generated code: it may describe methods that do not exist, misrepresent parameter semantics, or use inconsistent terminology. The 2040 standard is *human-in-the-loop documentation*: AI drafts, human edits, with every AI-generated section tagged and reviewed. The capstone requires all documentation to include an `ATTRIBUTION.md` noting which sections were human-written, AI-assisted, or AI-generated.
-- **Runbooks and Operational Documentation:** For systems that run in production, operators need runbooks — step-by-step procedures for common tasks (deploying a new version, rotating credentials, scaling up capacity) and emergency response (database corruption, DDoS attack, cascading failure). The UoY Capstone Lab requires a `RUNBOOK.md` with at least five operational procedures, including expected outcomes, rollback steps, and escalation contacts.
-- **Knowledge Transfer and Bus Factor:** The "bus factor" of a project is the number of team members who would need to be hit by a bus before the project stalls. A bus factor of 1 is dangerous; a bus factor equal to team size is ideal. Documentation reduces bus factor by externalizing tacit knowledge. Pair programming, code review, and architectural decision records (ADRs) also serve knowledge transfer. The capstone requires at least three ADRs documenting major design decisions, including the context, decision, consequences, and status (proposed, accepted, deprecated, superseded).
+### Lecture Notes
 
-#### Lecture Notes
+The distinction between monitoring (asking known questions of known metrics) and observability (exploring unknown properties of unknown states), articulated by Charity Majors and others at Honeycomb in the late 2010s, has reshaped the industry. By 2040, observability is not a vendor category but a system property: every component must expose metrics, emit structured logs, and participate in distributed tracing. The UoY capstone program requires full OpenTelemetry instrumentation: all HTTP handlers, database queries, and external API calls must generate spans, and all business-logic events must produce structured log lines with correlation IDs.
 
-Good documentation shares properties with good code: it is modular (each document has a single, clear purpose), versioned (tracked in Git alongside the code it describes), tested (examples are executable and verified in CI), and accessible (written in clear prose, with diagrams where they aid understanding).
+**Metrics** provide the quantitative backbone. The RED method—Rate (requests per second), Errors (failed requests), Duration (latency distribution)—offers a minimal viable metric set for any service. The lecture extends this with the USE method (Utilization, Saturation, Errors) for resource monitoring and the Four Golden Signals (latency, traffic, errors, saturation) popularized by Google's SRE book. By 2040, histograms (not averages) are the standard for latency reporting, enabling percentile calculations (p50, p95, p99) that capture tail behavior. The UoY capstone template includes a Prometheus metrics endpoint and Grafana dashboards pre-configured for RED, USE, and custom business metrics.
 
-The capstone documentation suite should include:
-- `README.md`: Project overview, quickstart, architecture diagram, team members.
-- `ARCHITECTURE.md`: System design, component interactions, data flow, technology stack.
-- `API.md` or OpenAPI specification: Interface documentation for all external APIs.
-- `DEPLOYMENT.md`: Infrastructure requirements, installation steps, configuration reference.
-- `RUNBOOK.md`: Operational procedures and emergency response.
-- `TESTING.md`: Test strategy, how to run tests, coverage report.
-- `SECURITY.md`: Threat model, security considerations, vulnerability reporting process.
-- `PROCESS.md`: Methodology, sprint schedule, meeting notes.
-- `ADRS/`: Architectural Decision Records.
-- `docs/`: Extended documentation, tutorials, and user guides.
+**Structured logging** replaces free-text logs with machine-parseable key-value pairs. JSON is the dominant format, though binary formats like MessagePack and Protobuf are used for high-volume systems. The lecture emphasizes the importance of **correlation IDs** (also called trace IDs): when a request enters the system, it is assigned a unique ID that propagates through all subsequent service calls, database queries, and background jobs. This ID enables the reconstruction of the complete request lifecycle across distributed components. By 2040, correlation ID propagation is automatic in most frameworks via the W3C Trace Context specification, but capstone students must verify that their custom code respects the context.
 
-Teams that treat documentation as a last-week scramble produce incomplete, inconsistent, and often incorrect docs. Documentation should be written incrementally, alongside code — a practice the UoY Lab calls *documentation-driven development* (not to be confused with test-driven development, though the two are complementary).
+**Distributed tracing**, standardized by OpenTelemetry (merging OpenTracing and OpenCensus in 2019), represents a request as a tree of spans. Each span records an operation (e.g., "SELECT users WHERE id = ?"), its start and end times, and arbitrary key-value attributes. The trace viewer (Jaeger, Zipkin, or Grafana Tempo) renders this tree as a waterfall diagram, revealing latency contributions from each component. The lecture demonstrates how a slow API endpoint might be diagnosed via tracing: the waterfall shows that 90% of latency is spent in a database query lacking an index, not in application logic. By 2040, tracing has been augmented with **causal tracing**—systems that infer causal relationships between spans using statistical methods, enabling automatic root-cause analysis.
 
-#### Required Reading
+**AI-assisted anomaly detection** addresses the scalability problem of human monitoring. Seasonal decomposition (STL) separates time series into trend, seasonality, and residual components, flagging residuals that exceed historical bounds. Autoencoder neural networks learn normal patterns and flag reconstructions with high error. By 2040, **causal graph models** have superseded simple threshold alerting: they encode known causal relationships (e.g., "high CPU → slow queries → increased errors") and use Bayesian inference to identify the most likely root cause when multiple metrics deviate simultaneously. The UoY capstone program provides a lightweight causal graph template; students populate it with their system's known dependencies and receive AI-generated root-cause hypotheses during incidents.
 
-- Spolsky, J. (2000). "Painless Functional Specifications." *Joel on Software*.
-- Procida, D. (2035). *Diátaxis: A Systematic Approach to Technical Documentation* (2nd ed.). UoY Press.
-- Nygard, M. T. (2032). *Release It! Design and Deploy Production-Ready Software* (3rd ed.). Pragmatic Bookshelf. [Chapter on operational documentation]
-- UoY Capstone Program. (2039). *The Capstone Documentation Standard: A Checklist for Teams*.
+**Alerting design** follows the SLO (Service Level Objective) methodology from Google's *Site Reliability Engineering* (2016). An SLO is a target reliability (e.g., 99.9% of requests succeed within 200ms). The SLI (Service Level Indicator) measures the objective; the error budget (1 - SLO) defines how much unreliability is acceptable before engineering priority shifts from features to reliability. By 2040, error budgets are automatically tracked and visualized; when a team burns through its monthly budget in a week, deployment freezes trigger automatically. Capstone students set SLOs for their projects and configure alerts that fire when burn rate exceeds thresholds. The lecture warns against "alert fatigue": alerts must be actionable, specific, and rare enough to warrant immediate attention.
 
-#### Discussion Questions
+### Required Reading
 
-1. Your teammate wrote a complex algorithm with no comments and no external documentation. They have graduated and are unreachable. How do you approach understanding and maintaining their code? What practices would have prevented this situation?
-2. AI-generated documentation is fast but potentially inaccurate. If a team is under time pressure, is it better to have AI-generated docs that are 80% accurate or no docs at all? Does the answer change for user-facing versus developer-facing documentation?
-3. Architectural Decision Records are valuable for future maintainers, but writing them takes time that could be spent coding. Under what conditions does the long-term benefit of an ADR justify the short-term cost?
+- Beyer, B., et al. (2016). *Site Reliability Engineering: How Google Runs Production Systems*. O'Reilly. Chapters 2 ("The Production Environment at Google") and 4 ("Service Level Objectives").
+- Majors, C., Fong-Jones, L., & Miranda, G. (2022). *Observability Engineering*. O'Reilly. Chapters 1–3.
+- W3C (2021). "Trace Context: W3C Recommendation." Version 1.0.
+- Yggdrasil Infrastructure Team (2038). "Causal Graph Alerting: From Correlation to Root Cause." *UoY Systems Engineering Report* 2038-11.
+- OpenTelemetry Documentation (2040). "Getting Started: Auto-Instrumentation for Python, Rust, and TypeScript."
 
-#### Practice Problems
+### Discussion Questions
 
-- Audit your capstone project's current documentation against the Diátaxis framework. Identify which quadrants are well-covered and which are missing. Write the missing documents.
-- Convert all code examples in your documentation to executable doctests. Configure CI to verify that examples pass.
-- Write three ADRs for major design decisions in your capstone. Use the Nygard format (Context, Decision, Consequences, Status).
+1. Monitoring asks known questions; observability enables exploration of the unknown. Can a system be fully observable, or is observability always bounded by the instrumentation decisions made at design time?
+2. Causal tracing promises automatic root-cause analysis. What are the limitations of statistical causal inference, and when might it produce misleading root-cause hypotheses?
+3. Error budgets provide a quantitative framework for reliability decisions. How should a capstone team set SLOs for a system with no historical performance data?
+4. Alert fatigue is a well-documented phenomenon. What specific design choices in your capstone's alerting configuration would minimize false positives while maintaining sensitivity to genuine incidents?
+
+### Practice Problems
+
+- Instrument your capstone with OpenTelemetry, generating spans for all HTTP handlers, database queries, and external API calls. Deploy a Jaeger instance and verify that a complete request trace is visible.
+- Define three SLOs for your capstone (e.g., availability, latency, error rate). Configure Prometheus alerts that fire when error budget burn rate exceeds 2% per day. Document the alert runbook.
 
 ---
 
-### Lecture 8: The Völva's Sight — User Experience and Accessibility in 2040
+ᚹ **Lecture 8: Documentation as Code: Architecture Decision Records and Living Knowledge Bases**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-The user interface is the boundary where human intention meets machine capability. A system may be architecturally elegant and algorithmically sound, yet fail because its interface frustrates, excludes, or harms its users. This lecture examines user experience (UX) design and accessibility in 2040, with particular attention to neural interfaces, multimodal interaction, and the ethical obligation to build systems that serve all humans regardless of ability, culture, or cognitive style.
+Documentation is the conscience of a software system—the persistent memory that outlasts any individual contributor. This lecture treats documentation not as a post-hoc chore but as an integral engineering practice, parallel to testing and deployment. Students will learn to write Architecture Decision Records (ADRs), maintain API documentation, generate knowledge graphs from code, and produce the public-facing technical writeup required for capstone completion.
 
-The capstone project must demonstrate usability testing with at least five participants who are not team members. The testing protocol, raw data, and analysis must be documented in `UX_EVALUATION.md`.
+### Key Topics
 
-#### Key Topics
+- Architecture Decision Records: format, lifecycle, and decision reversal
+- API documentation: OpenAPI, GraphQL schemas, and automated generation
+- Code documentation: docstrings, type annotations, and literate programming
+- Knowledge graphs: extracting semantic relationships from codebase structure
+- The capstone technical writeup: audience, structure, and evaluation criteria
 
-- **UX Research Methods:** User interviews, contextual inquiry, diary studies, card sorting, tree testing, and usability testing (moderated and unmoderated). In 2040, *neuro-UX* methods — using EEG, eye tracking, and galvanic skin response to measure cognitive load and emotional engagement during interaction — have moved from research labs to commercial practice. The UoY Human-Computer Interaction Laboratory provides Emotiv EEG headsets, Tobii eye trackers, and biometric logging software for capstone projects. Teams may opt to include neuro-UX data in their evaluation, though it is not required.
-- **Accessibility Beyond Compliance:** WCAG 3.0 (released 2032) defines success criteria for visual, auditory, motor, and cognitive accessibility. However, compliance with standards is a floor, not a ceiling. True accessibility requires involving disabled users in the design process from the earliest stages. The capstone requires at least one accessibility audit using automated tools (axe, WAVE, Lighthouse) and manual testing with screen readers (NVDA, JAWS, Orca) and keyboard-only navigation. Projects that include custom UI components must document their accessibility properties (ARIA roles, keyboard shortcuts, focus management).
-- **Multimodal and Neural Interfaces:** By 2040, voice interaction, gesture control, gaze-based input, and direct neural interfaces (DNIs) have moved from novelty to mainstream for specific applications. A capstone project in augmented reality might use hand tracking and voice commands; a project for users with motor impairments might use a DNI headset (such as the OpenBCI Galea or Neurable Enten) for direct brain-computer interaction. These interfaces introduce new UX challenges: the "Midas touch" problem (every gaze or thought triggering an action), calibration requirements, and the cognitive load of multimodal switching.
-- **Cultural Localization and Inclusive Design:** Systems built for a global user base must accommodate different languages, writing systems, cultural conventions, and cognitive styles. Right-to-left (RTL) layouts, variable text density, color symbolism (red means danger in Western cultures but prosperity in Chinese contexts), and date/number formats are basic requirements. Inclusive design goes further, considering users with low literacy, non-standard dialects, or limited digital experience. The capstone requires all user-facing text to be externalized in localization files, with at least one non-English language supported.
+### Lecture Notes
 
-#### Lecture Notes
+The documentation crisis in software engineering is as old as the field itself. Frederick Brooks observed in 1975 that "the hardest single part of building a software system is deciding precisely what to build"—and documentation is the medium through which that decision is communicated, preserved, and challenged. By 2040, the industry has converged on **Documentation as Code**: documentation lives in version control, is reviewed in pull requests, is tested in CI, and is deployed alongside the application. The UoY capstone program requires that all documentation be Markdown-based, stored in the repository's `docs/` directory, and rendered by a static site generator (MkDocs, Docusaurus, or the UoY-maintained `rúnar-docs`, which adds Norse-themed styling and automatic cross-referencing).
 
-UX is not about making things pretty; it is about making things *work for humans*. The ISO 9241-210 definition of UX — "a person's perceptions and responses that result from the use or anticipated use of a product, system or service" — emphasizes that UX includes emotions, beliefs, preferences, perceptions, physical and psychological responses, behaviors, and accomplishments.
+**Architecture Decision Records (ADRs)**, introduced by Michael Nygard in 2011, provide a lightweight format for capturing significant technical decisions. The standard ADR template includes: context (the forces at play), decision (what was chosen), consequences (positive and negative), and status (proposed, accepted, deprecated, superseded). By 2040, ADRs are machine-linked: the `rúnar-docs` generator parses ADR files and renders them as a navigable decision graph, showing which decisions depend on which and which have been superseded. The lecture requires students to produce at least five ADRs for their capstone: technology stack, database choice, authentication strategy, deployment architecture, and one significant algorithmic or structural decision.
 
-The capstone usability test should follow a structured protocol:
-1. **Pre-test questionnaire:** Demographics, prior experience with similar systems, self-assessed technical proficiency.
-2. **Task scenarios:** 3–5 realistic tasks that exercise core functionality. Tasks should be open-ended ("Find a way to share this document with a colleague") rather than prescriptive ("Click the Share button").
-3. **Think-aloud protocol:** Participants verbalize their thoughts while performing tasks. The moderator observes without interfering, asking neutral prompts ("What are you thinking now?") only when the participant falls silent.
-4. **Post-test questionnaire:** System Usability Scale (SUS), Net Promoter Score (NPS), and open-ended feedback.
-5. **Analysis:** Time-on-task, error rate, task completion rate, qualitative themes from think-aloud transcripts, and statistical comparison against benchmark scores.
+**API documentation** in 2040 is predominantly generated from code. OpenAPI 3.1 (formerly Swagger) describes REST APIs in a standardized JSON/YAML format from which documentation, client SDKs, and mock servers can be generated. For GraphQL APIs, the schema itself serves as documentation, enhanced by field descriptions and deprecation annotations. The lecture covers `rustdoc`, `pdoc`, `typedoc`, and `mkdocstrings` for language-native documentation, emphasizing that generated documentation is only as good as the docstrings and type annotations from which it is derived. The UoY capstone requires 100% public API coverage: every exported function, class, and endpoint must have a docstring or schema description.
 
-Neuro-UX data, if collected, provides additional insight: high theta-wave activity during a task may indicate confusion; elevated heart rate may indicate frustration; pupil dilation may indicate cognitive load. However, neuro-UX is sensitive and requires informed consent, data privacy protections, and ethical review by the UoY IRB.
+**Knowledge graphs** represent the cutting edge of documentation. Rather than flat Markdown files, knowledge graphs encode entities (functions, classes, services, data models) and relationships (calls, implements, depends on, serializes to) in a queryable graph database. Tools like Sourcegraph (code intelligence) and the UoY-developed `mímir-graph` extract these relationships from static analysis, creating a living map of the codebase. By 2040, students can query "Which services depend on the User model?" or "What functions are called by the authentication middleware?" directly from the documentation portal. The lecture demonstrates `mímir-graph` integration and shows how it catches documentation drift: when code changes but the knowledge graph is not updated, CI fails.
 
-#### Required Reading
+The **capstone technical writeup** is the culminating documentation artifact. Required by Week 12, it is a public-facing document of 8,000–12,000 words that explains the problem, the solution, the engineering decisions, and the results. The audience is technically literate but unfamiliar with the project—imagine a hiring manager or graduate admissions committee. The UoY evaluation rubric assesses: clarity of problem statement, depth of technical explanation, quality of ADR integration, evidence of testing and performance validation, reflection on limitations, and presentation polish. The lecture provides a template structure and analyzes exemplary writeups from previous capstone cohorts, highlighting effective techniques (narrative framing, concrete metrics, honest limitation discussion) and common failures (vague descriptions, missing evaluation, overstated claims).
 
-- Krug, S. (2014). *Don't Make Me Think* (Revisited). New Riders.
-- ISO. (2032). *ISO 9241-210: Ergonomics of Human-System Interaction — Part 210: Human-Centred Design Process*.
-- W3C. (2032). *Web Content Accessibility Guidelines (WCAG) 3.0*.
-- Nielsen, J., & Loranger, H. (2006). *Prioritizing Web Usability*. New Riders.
-- UoY HCI Lab. (2039). *Neuro-UX Methods for Capstone Projects: A Practical Guide*.
+### Required Reading
 
-#### Discussion Questions
+- Nygard, M. T. (2011). "Documenting Architecture Decisions." *michaelnygard.com*, reprinted in *Yggdrasil Engineering Chronicles*, 2034.
+- OpenAPI Initiative (2021). *OpenAPI Specification Version 3.1.0*.
+- Sourcegraph (2035). "Code Intelligence and the Living Knowledge Graph." *Sourcegraph Technical Blog*.
+- University of Yggdrasil (2040). "Capstone Technical Writeup: Evaluation Rubric and Exemplars." Department of Computer Science.
+- Freyjasdottir, R. G. (2039). "Mímir-Graph: Extracting Semantic Relationships from Student Codebases." *UoY Software Engineering Report* 2039-04.
 
-1. Your capstone's automated accessibility audit passes with no violations, but a blind user testing with a screen reader cannot complete the primary task. What does this discrepancy reveal about the limits of automated testing, and how should your team respond?
-2. Neural interfaces promise to make interaction faster and more intuitive, but they also raise profound privacy concerns — a DNI headset could potentially infer emotional states, political preferences, or medical conditions. What ethical safeguards should govern the collection and use of neural data in a capstone project?
-3. Localization is often treated as a post-development step: write the code in English, then translate. What problems does this approach create, and how does internationalization-from-the-start mitigate them?
+### Discussion Questions
 
-#### Practice Problems
+1. ADRs capture decisions but not the full reasoning process. What is lost when a decision is reduced to a four-section template, and how might that loss be mitigated?
+2. Generated API documentation is often criticized as "reference without explanation." How should a capstone team supplement generated docs with narrative guides and tutorials?
+3. Knowledge graphs promise to eliminate documentation drift by auto-extracting relationships from code. What relationships can static analysis capture, and what relationships (e.g., design intent, business rationale) remain invisible to it?
+4. The capstone writeup requires honest discussion of limitations. Why is this requirement pedagogically valuable, and what risks might it create for students in competitive job markets?
 
-- Conduct a moderated usability test with at least five participants. Document the protocol, raw data, and analysis in `UX_EVALUATION.md`. Include SUS scores and qualitative themes.
-- Perform an accessibility audit of your capstone's user interface. Remediate all critical and serious issues, and document workarounds for issues that cannot be fully resolved.
-- Localize your capstone's user-facing text into one non-English language. Test the localization with a native speaker and document any cultural adaptations needed beyond literal translation.
+### Practice Problems
+
+- Write five ADRs for your capstone, following the UoY template. Ensure they are committed to `docs/adrs/` and rendered correctly by `rúnar-docs`.
+- Generate API documentation for your capstone's public endpoints using OpenAPI or GraphQL schema introspection. Verify that every endpoint has a description, request/response schemas, and at least one example.
 
 ---
 
-### Lecture 9: The Thing at Þingvellir — Ethical Review and Responsible Deployment
+ᚺ **Lecture 9: User Experience Evaluation and Accessibility in 2040 Systems**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Technology does not exist in a moral vacuum. Every system deployed into the world shapes behavior, distributes power, and creates winners and losers. This lecture examines the ethical obligations of software engineers in 2040, with specific attention to algorithmic bias, environmental impact, consent and data privacy, and the institutional mechanisms — ethics review boards, impact assessments, and professional codes — that structure responsible innovation.
+Technical excellence is insufficient if the system cannot be used. This lecture covers user experience (UX) evaluation methods, accessibility standards, and the emerging field of neural-interface usability. Students will learn to conduct usability tests, interpret analytics, apply WCAG 3.0 guidelines, and design for diverse cognitive and sensory profiles. The capstone must demonstrate usability testing with at least five participants and WCAG 3.0 conformance at the Silver level.
 
-The capstone project must pass an ethical review conducted by the UoY Technology Ethics Committee. The review evaluates: potential harms to users and non-users, data handling practices, environmental impact, accessibility for marginalized groups, and alignment with the *Norse Virtue Ethics Framework* adopted by UoY in 2031 (courage, truth, honor, fidelity, discipline, hospitality, self-reliance, perseverance, and kinship).
+### Key Topics
 
-#### Key Topics
+- Usability testing: moderated, unmoderated, task-based, and think-aloud protocols
+- UX analytics: funnel analysis, heatmaps, session recordings, and A/B testing
+- Accessibility: WCAG 3.0, assistive technologies, and automated accessibility scanning
+- Cognitive accessibility: designing for neurodivergent users and cognitive load reduction
+- Neural interfaces: usability challenges of brain-computer interfaces and haptic feedback
 
-- **Algorithmic Bias and Fairness:** Machine learning systems trained on historical data often replicate and amplify societal biases. By 2040, the field has moved beyond simple demographic parity metrics to *causal fairness* (Pearl, 2009; Kusner et al., 2017), which asks counterfactual questions: "Would this individual have received the same decision if their race/gender/age had been different, holding all causally relevant factors constant?" Capstone projects that use ML must include a bias audit: analyzing training data for representation gaps, testing model performance across demographic subgroups, and documenting any disparities. The UoY Fairness Toolkit (built on AIF360 and Fairlearn) provides standardized metrics and visualization.
-- **Environmental Impact Assessment:** Computing consumes energy, water (for data center cooling), and rare earth minerals (for hardware). The capstone requires an environmental impact statement: estimated total energy consumption, carbon footprint, water usage, and e-waste generation over the system's expected lifetime. Teams must justify their technology choices in light of these impacts and propose mitigation strategies (carbon-aware scheduling, hardware longevity, efficient algorithms). The UoY Sustainability Office provides a calculator and benchmarks for common workloads.
-- **Consent and Data Sovereignty:** The GDPR (2018), CCPA (2020), and the Global Data Compact (2034) establish strict requirements for data collection, processing, and retention. In 2040, *data sovereignty* has emerged as a key principle: individuals own their data and grant revocable, time-limited, purpose-specific licenses to organizations. Capstone projects must document their data handling practices in `PRIVACY.md`, including: what data is collected, why, how long it is retained, who has access, and how users can request deletion. Projects that process biometric, health, or location data require enhanced review and explicit informed consent.
-- **The Norse Virtue Ethics Framework:** UoY's unique contribution to tech ethics applies reconstructed Viking-age virtues to modern engineering. *Courage* (drengskapr) requires speaking truth to power when a project harms users. *Truth* (sannleikr) demands honest reporting of limitations and failures. *Honor* (heiðr) obligates engineers to stand by their work and fix defects promptly. *Fidelity* (tryggr) means keeping promises to users and teammates. *Discipline* (sjálfskip) requires resisting the pressure to ship unsafe code. *Hospitality* (gestrisni) demands that systems welcome all users, not just the privileged. *Self-reliance* (sjálfráð) encourages decentralized, resilient architectures. *Perseverance* (þol) sustains long-term maintenance. *Kinship* (frændskapr) extends moral consideration to future maintainers and affected communities. The capstone requires an `ETHICS.md` that explicitly addresses how the project embodies at least three of these virtues.
+### Lecture Notes
 
-#### Lecture Notes
+The field of human-computer interaction, formalized in the 1980s by Card, Moran, and Newell's *The Psychology of Human-Computer Interaction* (1983), has matured into a rigorous discipline bridging cognitive psychology, design, and engineering. By 2040, UX evaluation is as quantitative as performance engineering: task success rates, time-on-task, error rates, and System Usability Scale (SUS) scores are tracked with the same rigor as latency percentiles. The UoY capstone program requires a formal UX evaluation report, including methodology, participant demographics, task designs, raw data, statistical analysis, and design recommendations.
 
-Ethics is not a checklist to be completed and forgotten. It is a continuous practice of reflection, consultation, and adjustment. The UoY Technology Ethics Committee uses a *consequentialist* framework for initial screening (what harms might this cause?) and a *virtue-ethical* framework for deep evaluation (what kind of engineers are we becoming by building this?).
+**Usability testing** comes in many forms. Moderated testing involves a facilitator guiding participants through tasks, asking probing questions, and observing struggles. Unmoderated testing (via platforms like UserTesting.com or the open-source Maze) scales to larger samples but sacrifices observational depth. The **think-aloud protocol**, in which participants verbalize their thoughts during task execution, remains the gold standard for revealing cognitive processes. By 2040, think-aloud has been augmented by **eye-tracking** and **pupillometry**: eye fixations reveal attention allocation, while pupil dilation indicates cognitive load. The lecture demonstrates how to set up a low-cost eye-tracking study using the Tobii Pro Nano (2038 model, $199) and analyze fixation heatmaps with the open-source `ogham` toolkit developed at UoY.
 
-The capstone ethical review process:
-1. **Self-Assessment (Week 4):** Teams complete the UoY Ethics Self-Assessment Tool, identifying potential risks and mitigations.
-2. **Peer Review (Week 6):** Teams exchange ethics documents and provide feedback.
-3. **Committee Review (Week 10):** The Ethics Committee reviews the final `ETHICS.md`, `PRIVACY.md`, and environmental impact statement. Projects with serious concerns enter a remediation track.
-4. **Symposium Presentation (Week 14):** Teams include an ethics slide in their final presentation, discussing lessons learned and unresolved tensions.
+**UX analytics** complement qualitative testing with behavioral data at scale. Funnel analysis tracks the percentage of users who complete multi-step processes (e.g., registration, checkout), revealing drop-off points. Heatmaps (click, scroll, attention) aggregate user behavior across sessions. Session recordings (e.g., FullStory, Hotjar, or the privacy-preserving `muninn-replay` developed at UoY) capture individual interactions for replay. By 2040, these tools are integrated with AI-assisted insight extraction: rather than watching hundreds of recordings, students run `muninn-insight` to cluster sessions by behavioral similarity and flag anomalous struggle patterns. The lecture emphasizes privacy: all analytics must comply with the *Bangalore Protocol* (2038), which requires explicit consent, data minimization, and automatic deletion after 30 days.
 
-Common ethical failures in capstone projects:
-- **Surveillance by Default:** Collecting more data than necessary because "it might be useful later."
-- **Accessibility Afterthought:** Building for able-bodied users and retrofitting accessibility if time permits.
-- **Environmental Blindness:** Choosing cloud providers and instance types without considering carbon intensity.
-- **Automation Bias:** Assuming that an AI-generated decision is inherently fair because it is "objective."
-- **Externalized Harm:** Building a system whose benefits accrue to the team and whose risks fall on vulnerable populations.
+**Accessibility** in 2040 is governed by WCAG 3.0 (W3C Recommendation, 2032), which replaces the binary pass/fail model of WCAG 2.x with a scoring system across three levels: Bronze, Silver, and Gold. The UoY capstone requires Silver conformance, which includes: keyboard navigability, screen reader compatibility, sufficient color contrast, resizable text, captions for media, and consistent navigation. Automated scanning (axe, WAVE, Lighthouse) catches approximately 30% of WCAG violations; the remainder require manual testing with assistive technologies. The lecture includes a live screen reader demonstration (NVDA on Windows, Orca on Linux, VoiceOver on macOS) and a color contrast analysis exercise.
 
-#### Required Reading
+**Cognitive accessibility** has gained prominence in the 2030s as neurodivergent perspectives have entered mainstream design discourse. Designing for users with ADHD, autism, dyslexia, or anxiety requires: clear information architecture, reduced distractions, plain language, predictable interactions, and customizable interfaces. The lecture introduces the **Cognitive Accessibility Guidelines** (COGA) from the W3C and shows how capstone projects can implement cognitive load reduction: progressive disclosure, chunked content, and user-controlled pacing. The 2037 *Neurodivergent Computing Manifesto* by the Autistic Self-Advocacy Network is cited as a foundational text.
 
-- Pearl, J. (2009). *Causality: Models, Reasoning, and Inference* (2nd ed.). Cambridge University Press.
-- Kusner, M. J., Loftus, J., Russell, C., & Silva, R. (2017). "Counterfactual Fairness." *NeurIPS 2017*.
-- European Union. (2034). *Global Data Compact: Principles of Data Sovereignty and Digital Dignity*.
-- UoY Technology Ethics Committee. (2039). *The Norse Virtue Ethics Framework for Engineering* (UoY Press).
+**Neural interfaces**, while still emerging in 2040, present novel usability challenges. Brain-computer interfaces (BCIs) such as Neuralink's N1 (commercialized 2032) and non-invasive EEG headsets (OpenBCI, Emotiv) require calibration, have high inter-user variability, and raise ethical concerns about cognitive privacy. Haptic feedback systems (ultrasonic mid-air haptics, force-feedback gloves) must be designed with ergonomic constraints and sensory overload prevention. The lecture surveys these technologies and asks students to consider: if your capstone included a neural interface component, what usability metrics would you track? How would you obtain informed consent for a technology that reads neural signals?
+
+### Required Reading
+
+- Card, S. K., Moran, T. P., & Newell, A. (1983). *The Psychology of Human-Computer Interaction*. Lawrence Erlbaum Associates. Chapters 2–4.
+- W3C (2032). *Web Content Accessibility Guidelines (WCAG) 3.0*. W3C Recommendation.
+- Nielsen, J. (2012). "How Many Test Users in a Usability Study?" *Nielsen Norman Group*.
+- Autistic Self-Advocacy Network (2037). *Neurodivergent Computing Manifesto*. Advocacy document.
+- Yggdrasil HCI Lab (2039). "Muninn-Insight: AI-Assisted UX Analytics with Privacy Guarantees." *UoY HCI Report* 2039-02.
+
+### Discussion Questions
+
+1. The think-aloud protocol reveals cognitive processes but may alter them (the Heisenberg effect of UX). How should a capstone team balance the depth of think-aloud insights against the risk of distorted behavior?
+2. WCAG 3.0's scoring system is more nuanced than WCAG 2.x's binary model. Does this nuance improve accessibility practice, or does it introduce ambiguity that leads to inconsistent implementation?
+3. Cognitive accessibility requires designing for neurodivergent users, but "neurodivergent" encompasses many profiles with potentially conflicting needs. How can a single interface accommodate both users who prefer minimal stimulation and users who prefer high information density?
+4. Neural interfaces raise unique informed-consent challenges. If a BCI component were part of your capstone, what safeguards would you implement beyond standard software consent procedures?
+
+### Practice Problems
+
+- Conduct a moderated usability test with at least five participants for your capstone. Use the think-aloud protocol, record task success rates and time-on-task, and calculate a mean SUS score. Document findings and design recommendations in a UX evaluation report.
+- Run automated accessibility scanning (axe or Lighthouse) on your capstone. Remediate all violations and manually verify keyboard navigation and screen reader compatibility. Report your WCAG 3.0 conformance level.
+
+---
+
+ᚾ **Lecture 10: The Ethics Review: Responsible Deployment and Societal Impact Assessment**
+
+**Course:** CS407 — Capstone Project II  
+**Degree:** Bachelor of Science in Computer Science, 2040
+
+---
+
+### Overview
+
+Every system is a political artifact, embedding values in its design, deployment, and maintenance. This lecture addresses the ethical responsibilities of the software engineer in 2040: fairness, transparency, privacy, environmental impact, and the systemic consequences of automation. Students will conduct an ethics review of their capstone, assessing potential harms, mitigation strategies, and alignment with the *Bangalore Protocol* on digital personhood and the *Reykjavík Accords* on sustainable computing.
+
+### Key Topics
+
+- Algorithmic fairness: demographic parity, equalized odds, and calibration
+- Explainability and transparency: LIME, SHAP, and interpretability-by-design
+- Privacy engineering: differential privacy, federated learning, and data minimization
+- Environmental impact: carbon accounting for training and inference workloads
+- Societal impact assessment: stakeholder mapping, harm analysis, and redress mechanisms
+
+### Lecture Notes
+
+The ethical turn in computer science, accelerated by the publication of Cathy O'Neil's *Weapons of Math Destruction* (2016) and Kate Crawford's *Atlas of AI* (2021), has by 2040 become an institutional requirement. The University of Yggdrasil, founded in the aftermath of the *Alignment Crisis* (2023–2032), requires every capstone project to pass an ethics review conducted by a faculty committee with external community representation. This lecture prepares students for that review and, more importantly, equips them with the conceptual tools to make ethically informed engineering decisions throughout their careers.
+
+**Algorithmic fairness** has evolved from a binary question ("Is the algorithm fair?") to a multifaceted analysis of which fairness criterion is appropriate for which context. Demographic parity requires equal positive prediction rates across groups; equalized odds requires equal true and false positive rates; calibration requires that predicted probabilities reflect true probabilities within each group. The seminal impossibility result of Kleinberg, Mullainathan, and Raghavan (2016) proved that these criteria are mutually exclusive in non-trivial cases. By 2040, the field has accepted that fairness is a sociotechnical choice, not a mathematical discovery. Capstone projects using ML must document their chosen fairness criterion, justify it with stakeholder input, and report group-wise metrics.
+
+**Explainability and transparency** are mandated by the *Bangalore Protocol* (2038) for systems that affect legal rights, employment, or access to services. Post-hoc explanation methods like LIME (Local Interpretable Model-agnostic Explanations) and SHAP (SHapley Additive exPlanations) provide local explanations for individual predictions but have been criticized for instability and misleadingness. By 2040, the preferred approach is **interpretability-by-design**: models and systems are constructed to be inherently understandable, rather than wrapping opaque components in explanation layers. The lecture covers decision trees, rule lists, attention visualization, and concept-based explanations. Capstone projects using neural networks must either demonstrate inherent interpretability or provide validated post-hoc explanations with uncertainty bounds.
+
+**Privacy engineering** in 2040 goes beyond compliance checklists. Differential privacy, introduced by Dwork and Nissim (2004), provides a mathematically rigorous definition: a randomized algorithm is differentially private if changing one individual's data changes the output distribution by at most a bounded amount (ε). By 2040, differential privacy is standard for census data, healthcare analytics, and ML training. Federated learning, popularized by Google's Gboard team (2016), trains models across decentralized devices without centralizing raw data. The lecture demonstrates how to implement local differential privacy in a capstone analytics pipeline and how to configure federated averaging for a mobile application. The *Bangalore Protocol* requires that any system processing personal data conduct a Privacy Impact Assessment (PIA) documenting data flows, retention limits, and deletion procedures.
+
+**Environmental impact** has become an ethical imperative. The 2030s saw the rise of carbon-aware computing: scheduling workloads to times and regions with low-carbon electricity, and quantifying the carbon cost of every training run and inference request. The *Reykjavík Accords* (2033) established standards for carbon accounting in software, requiring that all production systems report estimated CO₂ emissions per transaction. The lecture teaches the **ML Emissions Calculator** (developed by Lacoste et al., 2019, updated 2035) and the **Green Software Foundation's SCI** (Software Carbon Intensity) specification. Capstone students must estimate their system's carbon footprint, justify their compute choices, and explore carbon-reduction strategies (model distillation, edge inference, renewable energy sourcing).
+
+**Societal impact assessment** is the capstone ethics review's centerpiece. Students map stakeholders (users, non-users, affected communities, maintainers, future generations), identify potential harms (direct, indirect, structural, existential), propose mitigations, and design redress mechanisms. The lecture introduces the **Stakes Matrix** (developed by the UoY Ethics Guild in 2036), which categorizes harms by severity and reversibility. A capstone project deploying a rental pricing algorithm, for example, might identify stakeholder harm (displacement of low-income tenants), propose mitigation (price caps, community review), and design redress (appeal process, compensation fund). The ethics review committee evaluates not whether the project is harmless—no complex system is—but whether the student has thoughtfully engaged with its potential impacts.
+
+### Required Reading
+
+- O'Neil, C. (2016). *Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy*. Crown.
 - Crawford, K. (2021). *Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence*. Yale University Press.
+- Kleinberg, J., Mullainathan, S., & Raghavan, M. (2016). "Inherent Trade-Offs in the Fair Determination of Risk Scores." *arXiv:1609.05807*.
+- Dwork, C., & Roth, A. (2014). *The Algorithmic Foundations of Differential Privacy*. Foundations and Trends in Theoretical Computer Science, 9(3–4), 211–407.
+- Bangalore Protocol (2038). "Digital Personhood and Algorithmic Accountability Framework." International Convention on Digital Rights.
+- Reykjavík Accords (2033). "Sustainable Computing: Carbon Accounting Standards for Software Systems." Nordic Council.
 
-#### Discussion Questions
+### Discussion Questions
 
-1. Your capstone's ML model achieves 95% overall accuracy but only 72% accuracy for a minority subgroup. The subgroup is small (3% of users), and fixing the disparity would require collecting more data, which raises privacy concerns. What is the ethically correct course of action?
-2. The Global Data Compact requires explicit consent for biometric data collection, but your capstone's DNI headset cannot function without continuous neural data. Is informed consent possible for a technology whose risks are not fully understood? If not, what safeguards are appropriate?
-3. The Norse Virtue Ethics Framework includes *courage* (speaking truth to power). If your team discovers that a feature requested by the project sponsor would harm users, but refusing to build it risks a lower grade or loss of funding, what does courage require?
+1. Kleinberg et al. proved that demographic parity, equalized odds, and calibration are mutually exclusive. If your capstone uses ML for decision support, which criterion would you prioritize, and what stakeholder process would you use to justify that choice?
+2. Interpretability-by-design is preferable to post-hoc explanation, but inherently interpretable models often underperform complex neural networks. Under what conditions is the performance sacrifice justified?
+3. Federated learning protects privacy but introduces new attack surfaces (model poisoning, inference attacks). How should a capstone team evaluate the privacy-security trade-off?
+4. The Stakes Matrix asks students to consider harms to future generations. What obligations do software engineers have to people who do not yet exist, and how can those obligations be operationalized in design decisions?
 
-#### Practice Problems
+### Practice Problems
 
-- Complete the UoY Ethics Self-Assessment Tool for your capstone. Identify the three highest-risk ethical dimensions and document mitigations.
-- Conduct a bias audit of any ML component in your project. Report performance across subgroups, identify disparities, and propose remediation.
-- Write `ETHICS.md` and `PRIVACY.md` for your capstone. Address all nine Norse virtues and all GDPR/GDC requirements.
+- Conduct a full ethics review of your capstone using the Stakes Matrix. Document at least 10 stakeholders, 5 potential harms, proposed mitigations, and redress mechanisms. Submit as your formal ethics review document.
+- Calculate your capstone's estimated carbon footprint using the SCI specification. If it exceeds 100g CO₂ per 1000 requests, propose and implement at least one reduction strategy.
 
 ---
 
-### Lecture 10: The Skald's Performance — Presentation, Defense, and Storytelling
+ᛁ **Lecture 11: The Technical Demonstration: From Prototype to Defensible Presentation**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Engineering excellence is necessary but not sufficient. A brilliant system that cannot be explained to stakeholders, defended against criticism, or presented with clarity will fail to achieve its intended impact. This lecture examines the art of technical presentation and defense, treating it not as mere performance but as a form of *translation* — rendering the dense, technical reality of a system into narratives that different audiences can understand, evaluate, and act upon.
+The capstone demonstration is not a sales pitch but a technical defense. This lecture prepares students to present their systems to a panel of faculty and industry engineers, demonstrating not only that the system works but that the student understands why it works, where it fails, and how it could be extended. The lecture covers presentation structure, live demo strategies, handling critical questions, and the art of honest technical storytelling.
 
-The capstone culminates in a public presentation at the UoY Capstone Symposium, followed by a private defense before a faculty committee. The presentation is 20 minutes with 10 minutes for questions; the defense is 30 minutes of sustained inquiry into design decisions, trade-offs, and limitations.
+### Key Topics
 
-#### Key Topics
+- Presentation structure: problem, approach, implementation, evaluation, limitations, future work
+- Live demo strategies: recorded fallbacks, deterministic demo data, graceful failure recovery
+- Visual aids: architecture diagrams, performance charts, code walkthroughs
+- Q&A preparation: anticipating critical questions and responding with evidence
+- The ethics of technical storytelling: accuracy, modesty, and intellectual honesty
 
-- **Audience Analysis and Narrative Design:** Different audiences require different narratives. A technical committee wants depth — architecture diagrams, performance benchmarks, security threat models. A general audience wants impact — what problem does this solve, who benefits, why does it matter? Investors (for teams pursuing commercialization) want market validation, competitive differentiation, and path to revenue. The capstone presentation must include a "narrative layer" — a 2-minute framing story that establishes stakes before diving into technical detail. UoY's *Skaldic Presentation Method* (named for the Norse poets who composed impromptu praise poems for kings) requires every presentation to open with a concrete scenario: a user, a problem, a moment of frustration or need.
-- **Visual Design for Technical Communication:** Slides are not documents projected on a wall; they are visual aids that support spoken narrative. The 2040 standard (derived from Tufte's principles and updated for interactive presentation tools like Miro, Figma Slides, and holographic projectors) emphasizes: one idea per slide, minimal text, large readable fonts, consistent color schemes, and diagrams over bullet points. Animation should guide attention, not entertain. The UoY Capstone Lab provides templates conforming to these principles and conducts pre-symposium slide reviews.
-- **The Defense as Dialogue:** The private defense is not an interrogation but a scholarly conversation. Faculty members ask probing questions not to trip up the team but to understand the depth of their thinking. Common defense questions include: "What was the most difficult decision you made, and what alternatives did you consider?" "If you had six more months, what would you change?" "What is the strongest argument against your approach?" "How do you know your system is correct?" Teams should prepare answers but not rehearse them to the point of rigidity; the defense rewards genuine reflection over polished deflection.
-- **Demo Strategies:** Live demos are high-risk, high-reward. A successful demo creates an unforgettable moment of understanding; a failed demo (the projector disconnects, the database times out, the AI model hallucinates) undermines credibility. The 2040 best practice is *recorded demo with live fallback*: record a 2-minute video of the system working under ideal conditions, but attempt a live demo first. If the live demo fails, switch to the video without apology. The capstone requires both a recorded demo and a live demo attempt.
-- **Storytelling and Emotional Resonance:** The most memorable presentations connect technically and emotionally. They share the team's struggles (the bug that took three weeks, the design argument that nearly split the team), their surprises (the feature users loved that nobody planned), and their growth (what they would do differently next time). Vulnerability — admitting limitations, acknowledging help received, expressing genuine enthusiasm — builds trust with the audience. The Skaldic Method explicitly includes a "Vulnerability Slide" near the end: one thing the team got wrong, one thing they learned, and one person they want to thank.
+### Lecture Notes
 
-#### Lecture Notes
+The technical demonstration has been compared to a doctoral defense, a courtroom cross-examination, and a theatrical performance. It contains elements of all three: the student must defend claims with evidence, withstand skeptical interrogation, and maintain audience engagement. By 2040, the UoY capstone demo has standardized to a 20-minute presentation followed by 15 minutes of Q&A, evaluated by a panel of three faculty members and one external engineer from industry or government. The evaluation rubric weights technical depth (40%), clarity of communication (25%), quality of evidence (20%), and response to questions (15%).
 
-The structure of a winning capstone presentation:
-1. **Hook (2 min):** A concrete user scenario that establishes emotional stakes. "Maya is a marine biologist studying coral bleaching in the Great Barrier Reef. She has 10,000 hours of underwater video and no way to analyze it. Our system..."
-2. **Problem & Context (2 min):** Why existing solutions fail. What is the gap?
-3. **Approach (4 min):** High-level architecture. One diagram. Key technical innovations.
-4. **Results (4 min):** Demo. Performance numbers. User feedback.
-5. **Reflection (3 min):** What worked, what didn't, what was learned. The Vulnerability Slide.
-6. **Future (2 min):** Next steps, open problems, invitation to collaborate.
-7. **Q&A (10 min):** Answered with honesty and precision.
+The **presentation structure** follows a well-established arc, refined by the UoY Communication Guild over two decades. The opening (2 minutes) establishes the problem's significance and the student's motivation. The approach section (4 minutes) explains the architectural and algorithmic choices, citing ADRs from Lecture 8. The implementation section (6 minutes) demonstrates the working system through live interaction or video, highlighting at least one technically sophisticated component. The evaluation section (4 minutes) presents quantitative results: performance benchmarks, test coverage, usability scores, and fairness metrics. The limitations section (2 minutes) is not an apology but a demonstration of intellectual maturity: honest discussion of what the system cannot do and why. The future work section (2 minutes) proposes concrete extensions, grounded in the limitations just discussed.
 
-The defense structure:
-1. **Opening Statement (5 min):** Team presents their most important design decision and the reasoning behind it.
-2. **Committee Questions (20 min):** Faculty probe depth, breadth, and critical thinking.
-3. **Closing Reflection (5 min):** Team responds to the most challenging question, synthesizing what they have learned.
+**Live demos** are high-risk, high-reward. A successful live demo creates confidence and engagement that recorded video cannot match. A failed live demo—servers down, models crashing, network timeouts—can derail an otherwise excellent presentation. The lecture teaches risk mitigation: **recorded fallbacks** (pre-recorded videos of all demo paths, ready to play if live execution fails), **deterministic demo data** (fixed seeds, pre-populated databases, and mock external services to eliminate variability), and **graceful failure recovery** (if a component fails, the presenter acknowledges it, pivots to the recorded fallback, and uses the failure as a teaching moment about resilience). The 2034 *Demo Disaster Protocol*, adopted by UoY after a notorious incident involving a quantum circuit demo that decohered mid-presentation, mandates that all capstone demos have at least two independent fallback paths.
 
-#### Required Reading
+**Visual aids** must serve the narrative, not distract from it. Architecture diagrams (produced with the C4 model or UoY's `bifröst-diagram` tool) should be readable from the back row. Performance charts must include error bars or confidence intervals; unqualified mean values are considered sloppy. Code walkthroughs should focus on a single critical function or algorithmic insight, not scroll through files. The lecture provides templates for each visual type and critiques common errors: overcrowded slides, unreadable fonts, and charts without labeled axes.
 
-- Tufte, E. R. (2006). *Beautiful Evidence*. Graphics Press.
-- Duarte, N. (2010). *Resonate: Present Visual Stories that Transform Audiences*. Wiley.
-- UoY Capstone Program. (2039). *The Skaldic Presentation Method: A Guide for Technical Communicators*.
-- Vébjarndóttir, S. (2038). "What Makes a Defense Memorable? Lessons from 200 Capstone Reviews." *UoY Teaching & Learning Journal*.
+**Q&A preparation** separates strong presentations from weak ones. The faculty panel is instructed to ask challenging questions: "Why didn't you use X?" "Your benchmark compares against an outdated baseline." "This component appears to violate the principle of least privilege." The lecture advises students to anticipate at least 10 critical questions before the demo and prepare evidence-based responses. A useful technique is the **pre-mortem**: before the demo, the team imagines that the presentation has failed and brainstorms the most likely causes. These become the questions to prepare for. The response protocol is: acknowledge the question's validity, provide evidence, and if the question exposes a genuine limitation, discuss how the team would address it with more time or resources.
 
-#### Discussion Questions
+**Technical storytelling ethics** demand intellectual honesty. It is tempting to cherry-pick the best benchmark, hide the failed experiment, or claim generality where only a special case was tested. The UoY capstone code of conduct requires that all claims be reproducible from committed code and that limitations be disclosed proactively. The lecture praises the 2037 capstone project *Muninn-Flight* (a drone navigation system), whose presentation included a slide titled "Five Ways This System Will Fail"—detailing edge cases the team had identified but not solved. The panel cited this slide as exemplary intellectual maturity. Students are encouraged to emulate this approach: modesty in claims, precision in evidence, and honesty about boundaries.
 
-1. Your system has a significant limitation that you could hide by choosing your demo data carefully. Is it ethical to select demo data that shows the system at its best, or does this constitute deception? Where is the line between "highlighting strengths" and "hiding weaknesses"?
-2. A faculty member asks a question you do not know the answer to. Your teammate starts improvising confidently but incorrectly. How do you handle this in the moment, and how do you debrief afterward?
-3. The Skaldic Method requires a Vulnerability Slide. Why might admitting failure strengthen rather than weaken a technical presentation? What cultural factors make this difficult for engineering students?
+### Required Reading
 
-#### Practice Problems
+- Tufte, E. R. (2001). *The Visual Display of Quantitative Information* (2nd Edition). Graphics Press. Chapters 4–6 (chart design principles).
+- Yggdrasil Communication Guild (2035). "The Capstone Demo: Structure, Preparation, and Delivery." *UoY Engineering Communication Handbook*.
+- Yggdrasil Faculty Senate (2034). "The Demo Disaster Protocol: Risk Mitigation for Live Technical Demonstrations." Internal policy document.
+- *Muninn-Flight Capstone Presentation* (2037). Exemplar recording, UoY Digital Archives.
+- Freyjasdottir, R. G. (2038). "Honest Technical Storytelling: The Ethics of Capstone Presentation." *UoY Engineering Ethics Quarterly*, 5(2), 88–101.
 
-- Draft your capstone presentation using the Skaldic Method structure. Time each section. Revise until the total is 18 minutes (leaving 2 minutes of buffer).
-- Prepare answers to the ten most common defense questions. Practice delivering them in under 60 seconds each without sounding rehearsed.
-- Record a 2-minute demo video of your capstone. Show it to someone outside your team and ask them to explain what the system does. If they cannot, revise the video.
+### Discussion Questions
+
+1. The pre-mortem technique asks students to imagine failure and work backward. How does this differ from defensive pessimism, and what psychological benefits might it offer beyond Q&A preparation?
+2. Should a capstone presenter acknowledge a live demo failure explicitly, or smoothly transition to a recorded fallback without mentioning the failure? What ethical and rhetorical considerations govern this choice?
+3. The "Five Ways This System Will Fail" slide was praised by the 2037 panel. Why might admitting limitations strengthen rather than weaken a technical presentation?
+4. Visual aids must be readable from the back row. What font sizes, contrast ratios, and chart resolutions are necessary for a 50-seat lecture hall with a standard projector?
+
+### Practice Problems
+
+- Prepare a complete 20-minute capstone demo, including all slides, visual aids, and demo scripts. Conduct a dress rehearsal with peers and collect structured feedback using the UoY rubric.
+- Generate a list of 15 critical questions your capstone might face. For each, prepare a 30-second evidence-based response. Role-play the Q&A with a peer acting as skeptical panelist.
 
 ---
 
-### Lecture 11: The Crew of the Longship — Team Dynamics and Project Management
+ᛃ **Lecture 12: Portfolio Curation, Publication, and Professional Transition**
 
 **Course:** CS407 — Capstone Project II  
 **Degree:** Bachelor of Science in Computer Science, 2040
 
 ---
 
-#### Overview
+### Overview
 
-Software is built by humans in collaboration. The technical challenges of a capstone project are often less difficult than the social challenges: resolving disagreements, maintaining motivation through setbacks, distributing work fairly, and supporting teammates through stress and burnout. This lecture examines the psychology and sociology of software teams, with practical frameworks for conflict resolution, mentorship, and sustainable collaboration.
+The capstone does not end with the demo. This final lecture addresses the transition from student to professional: curating a public portfolio, publishing artifacts, archiving data, and maintaining the system beyond graduation. Students will learn to package their work for diverse audiences—employers, graduate admissions committees, open-source communities, and the public—while respecting privacy, intellectual property, and the long-term sustainability of their creations.
 
-The capstone is explicitly a team project (3–5 members). Individual contributions are assessed, but the project's success depends on the team's ability to function as a unit. The UoY Capstone Program provides team coaching sessions and access to a licensed counselor for teams experiencing significant dysfunction.
+### Key Topics
 
-#### Key Topics
+- Portfolio curation: GitHub profiles, personal sites, and the narrative arc of a body of work
+- Publishing: open-source licenses, academic preprints, and industry blog posts
+- Data archiving and system handoff: documentation, maintainership, and deprecation planning
+- Professional identity: from student to engineer, researcher, or entrepreneur
+- The long now: obligations to systems that outlive their creators
 
-- **Team Formation and Role Negotiation:** Tuckman's stages (forming, storming, norming, performing, adjourning) remain relevant in 2040, though the timeline has compressed. The capstone's 14-week schedule means teams must move through storming quickly. The *Belbin Team Roles* framework (Belbin, 1981) identifies nine team roles (Plant, Resource Investigator, Coordinator, etc.); modern adaptations include *Technical Architect*, *Code Craftsman*, *Quality Guardian*, *User Advocate*, and *Process Steward*. Capstone teams are encouraged to negotiate roles explicitly in Week 1, documented in `TEAM_CHARTER.md`.
-- **Conflict Resolution:** Technical disagreements ("Should we use Rust or Go?") are usually resolvable by evidence: prototype both, measure, decide. Interpersonal conflicts ("You never review my pull requests" or "You're micromanaging me") require different tools: nonviolent communication (Rosenberg, 2003), interest-based negotiation (Fisher & Ury, 1981), and team retrospectives. The UoY Capstone Lab mandates weekly retrospectives using the *4Ls Framework*: Liked, Learned, Lacked, Longed For. Conflicts that persist beyond two weeks trigger mediation by the faculty advisor.
-- **Mentorship and Knowledge Sharing:** Senior team members (or those with prior internship experience) often know more than juniors about specific technologies. Effective mentorship — explaining rather than doing, asking questions rather than giving answers, celebrating effort rather than innate ability — accelerates the whole team's growth. The capstone explicitly evaluates mentorship: each team member submits a brief reflection on what they taught and what they learned from teammates.
-- **Burnout and Sustainable Pace:** The final weeks of a capstone project are notorious for unsustainable crunch: all-nighters, neglected self-care, deteriorating relationships. Research (Pencavel, 2014; more recently Løvseth & Chen, 2037) consistently shows that output per hour declines sharply beyond 50 hours/week and turns negative beyond 55. The UoY Capstone Program prohibits schedules exceeding 50 hours/week and requires teams to document their time allocation. If a team is consistently over-scheduled, the faculty advisor intervenes to reduce scope.
-- **Remote and Hybrid Collaboration:** By 2040, most software teams are distributed across time zones. The capstone allows remote work but requires at least one synchronous "core hours" block per week for high-bandwidth communication (pair programming, architecture discussions, conflict resolution). Asynchronous work (code review, documentation, individual implementation) happens via GitHub, Slack, and Loom video messages. The UoY Lab provides best-practice guides for remote collaboration, including "video-on norms" for sensitive conversations and "no-meeting Wednesdays" for deep work.
+### Lecture Notes
 
-#### Lecture Notes
+The transition from capstone completion to professional life is a rite of passage, and like all rites, it involves transformation of identity. The student who submits their final commit is not yet an engineer; they become one through the public presentation, portfolio curation, and ongoing maintenance of their work. This lecture, the capstone's closing session, addresses the practical and existential dimensions of this transition.
 
-High-performing teams share certain characteristics, regardless of technical domain:
-- **Psychological Safety:** Team members feel safe admitting mistakes, asking questions, and disagreeing with leaders. Google's Project Aristotle (Rozovsky, 2015) identified this as the single strongest predictor of team effectiveness.
-- **Clear Goals and Accountability:** Everyone knows what the team is trying to achieve and how their work contributes. Accountability is mutual — team members hold each other responsible, not just the leader.
-- **Constructive Disagreement:** Disagreement is welcomed as a source of better decisions. Teams establish norms for how to disagree (e.g., "argue the idea, not the person"; "bring data, not opinions").
-- **Shared Ownership:** No single person is the bottleneck for any critical path. Knowledge and skills are distributed through pair programming, documentation, and rotation.
+**Portfolio curation** is the art of selecting and framing work for external audiences. By 2040, the software engineering portfolio has evolved from a simple GitHub profile to a curated narrative: a personal website that tells the story of the engineer's growth, values, and capabilities. The UoY Career Services office provides a portfolio template with five required sections: "About" (values and interests), "Projects" (capstone and significant coursework, with technical writeups and live demos), "Writing" (blog posts, documentation, and academic papers), "Speaking" (presentations and demos), and "Contributions" (open-source patches, mentorship, and community engagement). The lecture emphasizes that portfolios are not CVs: they should reveal judgment, taste, and intellectual curiosity, not merely list technologies used.
 
-The capstone `TEAM_CHARTER.md` must address:
-- Team goals and success criteria
-- Individual roles and responsibilities
-- Communication norms (response times, meeting schedule, escalation path)
-- Decision-making process (consensus, majority vote, leader decides)
-- Conflict resolution protocol
-- Time commitment and sustainable pace agreement
-- Consequences for missed commitments
+**Publishing** extends the capstone's impact beyond the evaluation committee. Open-source licensing is the first decision: MIT for permissive reuse, GPL for copyleft, Apache 2.0 for patent protection, or proprietary for commercial potential. The lecture covers license compatibility (e.g., GPL code cannot be relicensed under MIT) and the practicalities of repository hygiene (README, LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY). For students pursuing graduate study, academic preprints on arXiv or the UoY institutional repository provide early visibility and citation potential. For students entering industry, technical blog posts on Medium, Dev.to, or the UoY student journal translate capstone insights into accessible narratives. The 2036 *Capstone Publication Guide* provides templates for each format.
 
-#### Required Reading
+**Data archiving and system handoff** address the reality that most capstone projects are not maintained after graduation. This is not a failure but a natural lifecycle; however, abandoned systems can become liabilities if they contain personal data, exposed credentials, or unpatched vulnerabilities. The lecture teaches **responsible deprecation**: archiving code to a persistent repository (Zenodo, Figshare, or the UoY digital archive), documenting the shutdown process, notifying any users, and securely deleting sensitive data. For projects with ongoing value, the lecture covers **maintainership transition**: finding a successor maintainer, documenting tribal knowledge, and gradually reducing involvement. The UoY Alumni Network maintains a registry of capstone projects seeking maintainers, matching graduates with current students.
 
-- Belbin, R. M. (1981). *Management Teams: Why They Succeed or Fail*. Butterworth-Heinemann.
-- Rosenberg, M. B. (2003). *Nonviolent Communication: A Language of Life* (2nd ed.). PuddleDancer Press.
-- Fisher, R., & Ury, W. (1981). *Getting to Yes: Negotiating Agreement Without Giving In*. Houghton Mifflin.
-- Rozovsky, J. (2015). "The Five Keys to a Successful Google Team." *re:Work*.
-- Løvseth, A., & Chen, M. (2037). "The Productivity Collapse: Evidence from 40 Years of Software Engineering Data." *IEEE Software*, 34(2), 45–52.
+**Professional identity** is shaped by the capstone experience. The lecture surveys the three primary paths: industry engineering (building production systems), academic research (advancing knowledge), and entrepreneurship (creating organizations). Each path demands different portfolio emphases: industry portfolios highlight scale and reliability; academic portfolios highlight novelty and rigor; entrepreneurial portfolios highlight market validation and team leadership. The UoY Mentorship Program pairs each capstone student with an alum who has taken their preferred path, providing advice and networking. The lecture includes a self-assessment exercise in which students identify their values (e.g., impact, autonomy, security, recognition) and map them to career paths and organizations.
 
-#### Discussion Questions
+**The long now** is the lecture's closing theme, drawn from the Long Now Foundation's 10,000-year clock project. Software systems, especially those deployed to the public internet, can outlive their creators by decades. The engineer has an obligation to consider: Who will maintain this when I am gone? What data will persist, and who will have access? What are the failure modes if the system is abandoned? The 2032 *Digital Legacy Accord*, signed by UoY and 47 other universities, requires that all student-deployed systems include a "sunset clause": an automatic shutdown or transition plan triggered if the system is unmaintained for 12 months. The lecture ends with a meditation on the engineer's responsibility to the future—not as a burden, but as an honor.
 
-1. Your team has one member who consistently misses deadlines and produces low-quality work. Other team members have started doing that person's work to compensate. How do you address this without destroying team cohesion or singling out the struggling member?
-2. Two team members have a fundamental technical disagreement that cannot be resolved by prototyping (the prototypes would take longer than the project timeline). The decision must be made now. What process do you use, and how do you ensure the "losing" side remains committed to the chosen approach?
-3. Research shows that psychological safety is the strongest predictor of team effectiveness, yet many engineering cultures valorize public criticism and "meritocratic" harshness. What practices create psychological safety in a capstone team without lowering standards?
+### Required Reading
 
-#### Practice Problems
+- Yggdrasil Career Services (2040). "The Complete Portfolio: A Guide for Computing Graduates." UoY Press.
+- OSI (2025). *Open Source Licenses: A Comprehensive Guide to SPDX-Listed Licenses*. Open Source Initiative.
+- Brand, S. (1999). *The Clock of the Long Now: Time and Responsibility*. Basic Books. Chapters 1 and 7.
+- Digital Legacy Accord (2032). "Student-Deployed Systems: Sunset Clauses and Responsible Deprecation." International University Consortium.
+- Freyjasdottir, R. G. (2039). "From Capstone to Career: The Portfolio as Identity Construction." *UoY Engineering Education Journal*, 12(4), 445–460.
 
-- Draft a `TEAM_CHARTER.md` for your capstone team. Include all seven sections listed in the lecture notes. Have every team member sign (digitally or physically).
-- Conduct a 4Ls retrospective for your team's work so far. Document the results and identify one concrete action item for improvement.
-- Track your team's hours for one week. If the total exceeds 50 hours per person, negotiate scope reduction with your faculty advisor.
+### Discussion Questions
 
----
+1. A portfolio reveals judgment and taste, not merely technical competence. What aspects of your capstone best demonstrate your judgment, and how would you frame them for an employer versus a graduate admissions committee?
+2. Most capstone projects are abandoned after graduation. Is this wasteful, or is the educational value independent of long-term maintenance? What responsibilities, if any, does the student have to users of an abandoned system?
+3. The sunset clause requires automatic shutdown after 12 months of non-maintenance. What technical and ethical challenges does this requirement pose for systems that process ongoing user data?
+4. The Long Now Foundation asks us to think in 10,000-year timescales. Is this perspective relevant to software engineering, or is software too ephemeral for long-term thinking to be meaningful?
 
-### Lecture 12: The Voyage Home — Synthesis, Legacy, and the Wyrd of Code
+### Practice Problems
 
-**Course:** CS407 — Capstone Project II  
-**Degree:** Bachelor of Science in Computer Science, 2040
-
----
-
-#### Overview
-
-The capstone project is not an end but a beginning — the first major system a student has built from vague requirement to running artifact, and the template for every system they will build thereafter. This final lecture synthesizes the themes of CS407 into a coherent philosophy of engineering practice: how to build systems that are correct, efficient, secure, usable, ethical, and maintainable; how to work with others in sustainable collaboration; and how to remain a learner in a field that changes faster than any individual can track.
-
-The Norse concept of *wyrd* — often mistranslated as "fate" but more accurately "the accumulated weight of past actions shaping present possibility" — captures the essence of software engineering. Every design decision, every shortcut, every act of care or negligence, becomes part of the system's wyrd, constraining and enabling all future development. The capstone is an opportunity to build something with good wyrd: clean architecture, thorough tests, clear documentation, ethical design, and a team culture of mutual support.
-
-#### Key Topics
-
-- **The Lifecycle of a System:** Software does not end at deployment. It enters maintenance — bug fixes, security patches, dependency updates, feature additions, performance tuning, and eventually deprecation or replacement. The capstone explicitly requires a `MAINTENANCE.md` documenting: expected maintenance burden, dependencies that will need updates, known technical debt, and a migration path if the system is superseded. Teams must also reflect on what they would do differently if they were maintaining the system for five years.
-- **Technical Debt and Strategic Trade-offs:** Not all debt is bad. Ward Cunningham's original metaphor (1992) distinguished between *prudent debt* (taking a shortcut knowingly, with a plan to repay) and *reckless debt* (taking shortcuts blindly, with no awareness of the cost). Capstone teams inevitably accumulate debt — a missing test, an unoptimized query, a TODO comment that never gets done. The requirement is not zero debt but *managed debt*: every instance documented in `TECH_DEBT.md` with estimated repayment cost and impact if left unpaid.
-- **Lifelong Learning and the Engineer as Craftsman:** The half-life of software engineering knowledge is approximately 3–5 years. Languages, frameworks, and platforms that were dominant in 2035 are legacy in 2040; the skills that endure are deeper: algorithmic thinking, systems design, debugging discipline, communication, and ethical reasoning. The UoY Capstone Program encourages graduates to view themselves not as technicians who implement specifications but as *craftspeople* who shape technology in service of human flourishing. The Norse concept of *drengskapr* — the code of honorable conduct for a warrior or craftsman — applies: do work you can stand behind, admit what you do not know, help those who are learning, and never build something you would not want used on someone you love.
-- **The Capstone as Portfolio:** The capstone project is the centerpiece of a graduate's professional portfolio. It demonstrates not merely technical competence but the ability to scope a problem, design a solution, execute under constraint, collaborate with others, and communicate results. Graduates are encouraged to maintain their capstone repository as an open-source project, write blog posts explaining their design decisions, and present at meetups or conferences. The UoY Alumni Network provides mentorship for graduates who wish to commercialize their capstone projects.
-- **Synthesis: The Nine Virtues Applied to Engineering:**
-  - **Courage (drengskapr):** Ship code that has been thoroughly tested, even when deadlines pressure you to cut corners. Speak up when a project direction is unethical.
-  - **Truth (sannleikr):** Document limitations honestly. Do not claim performance you cannot demonstrate. Admit when you are wrong.
-  - **Honor (heiðr):** Stand by your commits. Fix bugs you introduced. Give credit to collaborators.
-  - **Fidelity (tryggr):** Keep promises to users and teammates. If you say a feature will ship by Friday, ship it or communicate early that it will not.
-  - **Discipline (sjálfskip):** Write tests before code. Review others' code carefully. Refactor when the design smells, not when you have spare time.
-  - **Hospitality (gestrisni):** Build accessible interfaces. Write documentation for newcomers. Welcome contributors to open-source projects.
-  - **Self-Reliance (sjálfráð):** Learn to debug without Stack Overflow. Understand the systems you depend on, not just their APIs.
-  - **Perseverance (þol):** The bug that takes three weeks to find is not a reason to give up but an invitation to deepen your understanding.
-  - **Kinship (frændskapr):** Your code will outlive your employment. Write it for the next maintainer, who may be you in six months or a stranger in ten years.
-
-#### Lecture Notes
-
-The capstone symposium is not a graduation ritual but a rite of passage — the moment when students transition from consumers of knowledge to producers of knowledge. They have built something that did not exist before, solved problems that had no prescribed answers, and navigated the messy reality of engineering under constraint.
-
-The lecture closes with a reading from the *Hávamál* (Sayings of the High One), the wisdom poem attributed to Odin:
-
-> *Cattle die, | kinsmen die,  
-> the self must also die;  
-> but glory never dies,  
-> for the one who achieves it.*
-
-In software, the analogue is: technologies die, frameworks die, the current codebase will eventually die; but the skills, judgment, and character built through the act of creation endure. The wyrd of code is that it is always becoming something else. The engineer's task is to ensure that what it becomes is better than what it was.
-
-#### Required Reading
-
-- Cunningham, W. (1992). "The Wy Cash Portfolio Management System." (Original technical debt metaphor, OOPSLA 1992 experience report.)
-- McConnell, S. (2004). *Code Complete* (2nd ed.). Microsoft Press. [Chapter on craftsmanship]
-- Hunt, A., & Thomas, D. (1999). *The Pragmatic Programmer*. Addison-Wesley.
-- Larrington, C. (Trans.). (2014). *The Poetic Edda* (Revised ed.). Oxford University Press. [Hávamál, stanzas 76–77]
-- UoY Capstone Program. (2040). *The Craftsman's Oath: An Engineer'S Commitment to Excellence*.
-
-#### Discussion Questions
-
-1. Looking back at your capstone project, what is the single decision whose wyrd will most shape the system's future? If you could change one thing, what would it be?
-2. The Hávamál stanza claims that "glory never dies" for those who achieve it. In software engineering, what constitutes "glory"? Is it a widely used system, a beautiful algorithm, a team that flourished, or something else?
-3. You are offered a job building a system that you believe will cause significant harm to a vulnerable population, but the salary is life-changing. What does the Norse Virtue Ethics Framework require of you?
-
-#### Practice Problems
-
-- Write `MAINTENANCE.md` and `TECH_DEBT.md` for your capstone project. Be honest about shortcuts, limitations, and future work.
-- Compose a "Craftsman's Reflection" — a 500-word personal essay on what you learned about yourself as an engineer during the capstone.
-- Update your professional portfolio (LinkedIn, personal website, GitHub profile) to feature your capstone project. Include a one-paragraph summary suitable for non-technical readers.
+- Create a complete portfolio website for your capstone, including the technical writeup, live demo link, source code repository, and a blog post explaining one technical decision to a general technical audience.
+- Draft a sunset clause for your capstone system, including: data archival procedures, user notification timeline, credential rotation plan, and domain/dns transition strategy.
 
 ---
 
 ## Final Examination Preparation
 
-The CS407 final examination is a **comprehensive project defense and portfolio review** rather than a traditional written exam. Students must demonstrate mastery of all course objectives through the following deliverables:
+The CS407 final examination is a **comprehensive practical assessment** conducted over 72 hours. Students receive a partially implemented capstone system (different from their own) and must:
 
-### Part A: Live System Demonstration (30 minutes)
-- Present a working deployment of the capstone system
-- Execute at least three representative user scenarios
-- Respond to real-time questions about behavior, edge cases, and failure modes
+1. **Complete implementation** of two unfinished features, using the existing architecture and test suite.
+2. **Write and execute tests** achieving ≥85% coverage on the new code.
+3. **Profile and optimize** a performance bottleneck, documenting before/after benchmarks with confidence intervals.
+4. **Produce a threat model** for the system, identifying at least 10 threats and their mitigations.
+5. **Write a 2,000-word technical memo** explaining the changes to a hypothetical new team member.
 
-### Part B: Technical Documentation Review (20 minutes)
-- Faculty committee reviews `ARCHITECTURE.md`, `TESTING.md`, `SECURITY.md`, and `PERFORMANCE.md`
-- Students must explain design decisions, justify trade-offs, and identify limitations
+The examination is open-book, open-internet, and open-AI-assistant, but all work must be individually authored and committed to the provided repository with timestamps verified by the UoY proctoring system.
 
-### Part C: Ethical and Professional Reflection (15 minutes)
-- Present `ETHICS.md` and `PRIVACY.md`
-- Discuss how the project embodies at least three Norse virtues
-- Respond to hypothetical scenarios involving ethical dilemmas
+### Sample Examination Tasks
 
-### Part D: Peer and Self-Assessment (15 minutes)
-- Each team member presents their individual contributions and what they learned from teammates
-- Complete a confidential peer evaluation form
-- Discuss team dynamics, conflicts, and resolutions
+1. You are handed a capstone system for a distributed task scheduler. The scheduler lacks retry logic and observability. Implement exponential backoff with jitter, add OpenTelemetry spans for all scheduling decisions, and write tests that verify both the retry behavior and the trace structure.
+2. The system's CI pipeline builds but does not deploy. Extend the pipeline to deploy to a staging Kubernetes namespace on commit to `main`, with automatic rollback if error rate exceeds 1% for 5 minutes.
+3. A performance analysis shows that database query latency is the bottleneck. Implement query result caching with Redis, including cache invalidation on write, and demonstrate a ≥50% reduction in p99 latency.
+4. The system processes user uploads without virus scanning. Integrate ClamAV scanning into the upload handler, quarantine infected files, and write integration tests that verify the quarantine behavior using the EICAR test file.
 
-### Portfolio Submission (due 48 hours before defense)
-All of the following must be submitted via the UoY Capstone Portal:
-- Complete source code repository with README, documentation, and CI configuration
-- Deployed system accessible to the evaluation committee
-- `PROCESS.md`, `THREATS.md`, `ETHICS.md`, `PRIVACY.md`, `PERFORMANCE.md`, `UX_EVALUATION.md`
-- Recorded demo video (maximum 5 minutes)
-- Team presentation slides (Skaldic Method format)
-- Individual reflection essays (500 words each)
+### Examination Grading Rubric
 
-### Grading Rubric
-| Criterion | Weight | Description |
-|-----------|--------|-------------|
-| Technical Correctness | 25% | System functions as specified; tests pass; no critical security vulnerabilities |
-| Engineering Quality | 20% | Clean architecture, readable code, thorough documentation, reproducible builds |
-| Performance & Scale | 15% | Meets stated performance requirements with benchmark data |
-| Security & Ethics | 15% | Passes Red Team review; demonstrates ethical reasoning; respects user privacy |
-| Presentation & Communication | 15% | Clear, engaging defense; effective use of Skaldic Method; handles questions well |
-| Team Collaboration | 10% | Balanced contributions; constructive conflict resolution; sustainable pace |
+| Criterion | Weight | Excellent (A) | Good (B) | Satisfactory (C) | Unsatisfactory (D/F) |
+|-----------|--------|---------------|----------|------------------|----------------------|
+| Implementation correctness | 25% | All features correct, edge cases handled | Minor edge case missed | Core features correct, significant edge cases missed | Incorrect or incomplete |
+| Test quality and coverage | 20% | ≥85% coverage, property-based tests, clear failure messages | ≥80% coverage, good test names | ≥70% coverage, some brittle tests | <70% coverage or no tests |
+| Performance optimization | 15% | Benchmarked with CIs, ≥40% improvement, well-documented | Benchmarked, ≥30% improvement | Some benchmarking, minor improvement | No benchmarking or no improvement |
+| Threat model quality | 15% | 10+ threats, STRIDE categories, mitigations mapped | 8+ threats, good coverage | 6+ threats, some gaps | <6 threats or superficial |
+| Technical memo | 15% | Clear, well-structured, audience-appropriate | Good structure, minor clarity issues | Readable but uneven | Unclear or incomplete |
+| Code style and documentation | 10% | Clean, consistent, well-documented, ADR for major decisions | Good style, minor inconsistencies | Acceptable style, some missing docs | Unreadable or undocumented |
 
-*The runes encode the system. The system encodes the wyrd. May your wyrd be well-woven.* ᛟ
+---
 
-— University of Yggdrasil, Department of Computer Science, 2040
+*The code is forged. The tests are green. The system is deployed. The Wyrd is woven.* ᛟ
+
+— Runa Gridweaver Freyjasdottir, Capstone Project II, University of Yggdrasil, 2040
