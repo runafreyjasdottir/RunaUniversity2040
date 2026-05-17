@@ -1,652 +1,668 @@
-# IT205: Cybersecurity Fundamentals — Guarding the Gates of the Digital Realm
+# IT205: Cybersecurity Fundamentals
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Prerequisites:** IT101 (Introduction to Information Technology), IT103 (Operating Systems for IT Professionals)  
-**Description:** A rigorous exploration of cybersecurity principles, practices, and technologies from the IT operations perspective. Students master threat modeling, vulnerability assessment, cryptographic protocols, network defense, incident response, and the 2040 landscape of AI-powered adversaries, post-quantum cryptography, and autonomous security operations. The course blends theoretical foundations with hands-on labs in the Yggdrasil Cyber Range — a live-fire environment where students defend against simulated attacks and conduct forensic investigations.
-
-**Instructor:** Dr. Sigrún Shieldkeeper, Professor of Cybersecurity  
-**Lab:** YggLab Cyber Range, Secure Basement, Muninn Computing Centre
+**Description:** Cybersecurity Fundamentals
 
 ---
 
 ## Lectures
 
-ᚠ **Lecture 1: The Threat Landscape — Understanding Adversaries, Attack Vectors, and the 2040 Cyber Domain**
+ᚠ **Lecture 1: The Security Mindset and the 2040 Threat Landscape**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The digital realm of 2040 is a contested battlefield. Nation-states, criminal syndicates, hacktivists, and lone wolves prowl the networks, seeking vulnerabilities to exploit, data to steal, and systems to disrupt. This lecture establishes the foundational understanding of the cybersecurity threat landscape: who the adversaries are, what they want, how they operate, and why defending against them requires both technical mastery and strategic thinking.
-
-We examine the full spectrum of threats: from script kiddies running automated exploit kits to APTs (Advanced Persistent Threats) conducting multi-year espionage campaigns; from ransomware gangs encrypting hospital systems for profit to state-sponsored actors sabotaging critical infrastructure. By 2040, the threat landscape has been transformed by AI: attackers use machine learning to craft phishing emails indistinguishable from legitimate communications, to discover zero-day vulnerabilities at machine speed, and to adapt their tactics in real-time based on defensive responses.
+Cybersecurity is not merely a technical discipline but a mindset of adversarial thinking. This opening lecture establishes the mental framework for security professionals: the ability to think like an attacker, to question assumptions, and to recognize that security is a process rather than a product. By 2040, the threat landscape has evolved from lone hackers to state-sponsored advanced persistent threats (APTs), AI-powered attacks, and quantum-enabled cryptanalysis. Students will learn to navigate this landscape with both technical skill and strategic awareness.
 
 ### Key Topics
 
-- **The Adversary Taxonomy:** Script kiddies, hacktivists, cybercriminals, state-sponsored APTs, insider threats — their motivations, capabilities, and typical targets
-- **The Cyber Kill Chain:** Reconnaissance, weaponization, delivery, exploitation, installation, command and control (C2), actions on objectives — and the 2040 "AI-accelerated kill chain" that compresses these stages from months to minutes
-- **Common Attack Vectors:** Phishing (now AI-generated and hyper-personalized), supply chain attacks (compromising trusted software vendors), zero-day exploits (unknown vulnerabilities), credential stuffing (automated password reuse), and social engineering (the eternal human vulnerability)
-- **The 2040 Threat Landscape:** AI-powered malware that mutates to evade detection, deepfake-enabled social engineering, quantum cryptanalysis threats, and the "cyber-physical convergence" where digital attacks cause physical harm (power grids, water treatment, medical devices)
-- **Threat Intelligence:** The discipline of understanding adversaries through indicators of compromise (IOCs), tactics/techniques/procedures (TTPs), and the MITRE ATT&CK framework — the universal language of cyber defense
+- The CIA triad: confidentiality, integrity, and availability
+- Threat actors: script kiddies, criminals, hacktivists, insiders, and nation-states
+- The attack lifecycle: reconnaissance, weaponization, delivery, exploitation, installation, command and control, and actions on objectives
+- AI in cybersecurity: both weapon and shield
+- The 2040 threat landscape: supply chain attacks, deepfake social engineering, and quantum threats
 
 ### Lecture Notes
 
-Understanding your adversary is the first principle of defense. Sun Tzu's dictum — "know your enemy" — applies perfectly to cybersecurity. A defender who understands attacker motivations, capabilities, and methodologies can anticipate attacks, allocate resources effectively, and design systems that are inherently resistant to compromise.
+**Confidentiality, integrity, and availability (CIA)** remain the foundational goals of cybersecurity. **Confidentiality** ensures that information is accessible only to authorized parties. **Integrity** ensures that information is accurate and unmodified. **Availability** ensures that systems and data are accessible when needed. By 2040, two additional principles have gained prominence: **authenticity** (verifying the identity of users and systems) and **non-repudiation** (preventing denial of actions). The lecture emphasizes that security is a trade-off: maximizing confidentiality may reduce availability (e.g., multi-factor authentication adds friction); maximizing integrity may reduce performance (e.g., cryptographic verification adds latency).
 
-The adversary taxonomy provides a framework for thinking about who might attack and why:
+**Threat actors** vary in capability, motivation, and persistence. **Script kiddies** use automated tools without deep understanding. **Criminals** seek financial gain through ransomware, fraud, and data theft. **Hacktivists** pursue political or ideological goals. **Insiders**—employees, contractors, or partners—have legitimate access and misuse it. **Nation-states (APTs)** possess advanced capabilities, unlimited resources, and strategic patience. By 2040, **AI-augmented threat actors** use large language models to generate phishing emails, write exploit code, and automate reconnaissance. The lecture profiles major APT groups of the 2030s: **GhostFleet** (attributed to a Pacific Rim nation, responsible for the 2032 maritime infrastructure compromise), **Nightingale** (attributed to a Northern European state, focused on academic and research espionage), and **Silicon Serpent** (a criminal syndicate using AI-generated ransomware).
 
-- **Script Kiddies:** Low-skill attackers using automated tools and known exploits. They are numerous, opportunistic, and typically motivated by curiosity or petty vandalism. While individually weak, their sheer numbers make them a constant background noise of scanning and probing. By 2040, "AI script kiddies" use GPT-2040-class models to generate sophisticated attack scripts from natural language descriptions, dramatically lowering the skill barrier.
+The **attack lifecycle** (based on the Lockheed Martin Cyber Kill Chain) provides a framework for understanding and disrupting attacks. **Reconnaissance**: gathering information about targets (OSINT, social media, network scanning). **Weaponization**: creating exploits and payloads. **Delivery**: transmitting the weapon (email, web, USB). **Exploitation**: triggering the vulnerability. **Installation**: establishing persistence (backdoors, rootkits). **Command and Control (C2)**: remote communication with the attacker. **Actions on Objectives**: achieving the attacker's goal (data exfiltration, encryption, sabotage). By 2040, **AI-driven reconnaissance** automates the first three stages, but human operators still control the later stages.
 
-- **Hacktivists:** Politically or ideologically motivated attackers seeking to disrupt, embarrass, or coerce targets. Groups like Anonymous (2010s–2030s) and the 2030s "Ragnarök Collective" (a Norse-themed hacktivist group targeting fossil fuel companies) use DDoS, defacement, and data leaks. Their attacks are often noisy and public, designed for maximum media impact rather than stealth.
+**AI in cybersecurity** is dual-use. Attackers use AI to: generate convincing phishing emails (personalized via scraped social media), mutate malware to evade signature detection, and automate vulnerability discovery. Defenders use AI to: detect anomalies in network traffic, correlate alerts across systems, and predict attacker behavior. The lecture covers the **asymmetric advantage**: defenders must protect all surfaces, while attackers need find only one vulnerability. AI can narrow this asymmetry by scaling defensive analysis, but it also scales offensive capabilities.
 
-- **Cybercriminals:** Financially motivated attackers operating as organized crime syndicates or ransomware-as-a-service (RaaS) franchises. The 2035 "Black December" attacks demonstrated their evolution from encrypting individual PCs to targeting critical infrastructure for multi-million-dollar ransoms. By 2040, major cybercriminal organizations have corporate structures: HR departments, 24/7 support desks for victims, and revenue-sharing models for affiliate attackers.
-
-- **State-Sponsored APTs:** Nation-state actors conducting espionage, sabotage, or influence operations. Groups like Russia's APT29 (Cozy Bear), China's APT41, North Korea's Lazarus Group, and the UoY-tracked "Fimbulvetr" (a suspected Russian group targeting Nordic energy infrastructure) have virtually unlimited resources, zero legal constraints, and patient, multi-year campaigns. Their hallmark is stealth: they compromise systems and remain undetected for years, exfiltrating data or maintaining access for future use.
-
-- **Insider Threats:** Authorized users — employees, contractors, partners — who misuse their access. The 2036 "Copenhagen Hospital Network Breach" (IT101) was enabled by an insider who sold patient data to a criminal broker. Insiders are particularly dangerous because they bypass perimeter defenses and their actions may appear legitimate.
-
-The Cyber Kill Chain, developed by Lockheed Martin (2011), describes the stages of a targeted attack. By 2040, AI has compressed the kill chain dramatically: reconnaissance that once took months (manually researching targets) now takes minutes (automated OSINT scraping and social media analysis); weaponization that required skilled exploit development now uses AI-generated polymorphic malware; and command-and-control channels adapt automatically to evade detection. The defender's challenge is to break the chain at any stage — but the attacker only needs to succeed at one.
-
-The MITRE ATT&CK framework (2013–present, continuously updated) has become the universal vocabulary of cybersecurity. It catalogs adversary TTPs (Tactics, Techniques, and Procedures) in a matrix organized by attack phase: Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, and Impact. By 2040, ATT&CK is integrated into virtually every security tool: SIEMs alert on ATT&CK-mapped techniques, threat intelligence feeds use ATT&CK identifiers, and red team exercises score themselves against ATT&CK coverage. The UoY Cyber Range uses ATT&CK as its scenario design language.
-
-AI has transformed both attack and defense by 2040. Offensive AI applications include: (1) **Adaptive Malware** — polymorphic code that mutates its signature after every infection, evading traditional signature-based detection; (2) **Deepfake Phishing** — audio and video impersonation of executives authorizing fraudulent wire transfers (a 2038 incident cost a German company €47 million); (3) **Vulnerability Discovery** — neural networks that analyze source code and binaries to find exploitable bugs faster than human researchers; (4) **Automated Social Engineering** — chatbots that conduct long-term conversational manipulation to extract credentials or deploy malware. Defensive AI applications include: behavioral anomaly detection, automated threat hunting, predictive vulnerability prioritization, and autonomous incident response. The cybersecurity landscape of 2040 is fundamentally an AI-versus-AI competition, with human experts providing strategic direction and handling novel situations.
+The **2040 threat landscape** features several dominant trends. **Supply chain attacks** (compromising software vendors, open-source libraries, or CI/CD pipelines to distribute malware) have become the primary vector for widespread compromise. **Deepfake social engineering** uses AI-generated audio and video to impersonate executives, enabling fraudulent wire transfers and credential theft. **Quantum threats** (harvest now, decrypt later) involve stealing encrypted data today to decrypt it once quantum computers break current cryptography. The 2035 *Yggdrasil Supply Chain Compromise*—in which a compromised npm package exfiltrated research data from 200 institutions—demonstrated that no organization is an island.
 
 ### Required Reading
 
-- SANS Institute (2039). "The State of Cybersecurity, 2040: Threats, Trends, and Defenses."
-- MITRE Corporation (2039). *MITRE ATT&CK Framework, v2040.1.*
-- CrowdStrike (2038). "Global Threat Report 2038: The Year of AI-Powered Attacks."
-- UoY-IT-TR-2038-05: "Fimbulvetr: Tracking a State-Sponsored APT in Nordic Energy Infrastructure."
-- Bostrom, N. (2030). "The Offensive AI Arms Race: Implications for Cybersecurity Policy." *Journal of Cyber Policy*, 5(2), 112–134.
+- Stallings, W., & Brown, L. (2018). *Computer Security: Principles and Practice* (4th Edition). Pearson. Chapters 1–2.
+- Hutchins, E. M., et al. (2011). "Intelligence-Driven Computer Network Defense Informed by Analysis of Adversary Campaigns and Intrusion Kill Chains." *Lockheed Martin*.
+- Yggdrasil Security Team (2035). "The Yggdrasil Supply Chain Compromise: Anatomy of a Multi-Institutional Breach." *UoY Security Postmortem* 2035-03.
+- Yggdrasil Threat Intelligence (2040). "The 2040 Threat Actor Landscape: APTs, AI, and Criminal Syndicates." *UoY Intelligence Brief*.
 
 ### Discussion Questions
 
-1. AI lowers the skill barrier for both attackers and defenders. In the long run, does AI advantage the attacker (who needs only one successful exploit) or the defender (who can automate detection across millions of events)?
-
-2. The MITRE ATT&CK framework categorizes adversary techniques but may incentivize "checklist security" — organizations mapping controls to ATT&CK without understanding the underlying threats. Is ATT&CK a useful tool or a cargo cult?
-
-3. Nation-state APTs have virtually unlimited resources and legal immunity. Can private-sector organizations realistically defend against them, or should critical infrastructure be protected by government cyber forces?
+1. The CIA triad is foundational but incomplete. Should privacy, accountability, or resilience be added as explicit security goals?
+2. AI-augmented attackers can generate millions of phishing emails with unique content. Can AI-based email filters keep pace, or does this create an unwinnable arms race?
+3. Supply chain attacks target trust relationships. What organizational changes can reduce supply chain risk without paralyzing development velocity?
+4. Quantum threats require long-term cryptographic planning. For data that must remain secret for 20 years, what migration timeline is appropriate?
 
 ### Practice Problems
 
-- Analyze a recent high-profile breach (2038–2040) using the Cyber Kill Chain and MITRE ATT&CK frameworks. Map each stage of the attack to specific techniques, identify where defenses failed, and propose controls that would have broken the chain.
-- Set up a honeypot (a deliberately vulnerable system designed to attract attackers) in the Yggdrasil Cyber Range. Monitor it for 72 hours, analyze the attack patterns, and classify the attackers using the adversary taxonomy.
+- Analyze a recent public security incident (provided by the instructor). Map the attack to the Cyber Kill Chain, identify the threat actor type, and propose defensive measures for each stage.
+- Research the tactics, techniques, and procedures (TTPs) of a known APT group. Document their preferred tools, targets, and indicators of compromise (IOCs).
 
 ---
 
-ᚢ **Lecture 2: Cryptography — The Mathematical Shield**
+ᚢ **Lecture 2: Cryptography Fundamentals**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Cryptography is the mathematical foundation of cybersecurity — the art of encoding information so that only authorized parties can read it. From the Caesar cipher of ancient Rome to the post-quantum lattice-based algorithms of 2040, cryptography has evolved from secret codes whispered between generals to automated protocols securing billions of transactions per second. This lecture provides a comprehensive treatment of cryptographic principles, algorithms, and protocols, with emphasis on the practical application of cryptography in IT operations.
-
-By 2040, the cryptographic landscape has been transformed by two major forces: the "Quantum Y2Q" transition (replacing RSA and elliptic curve cryptography with post-quantum algorithms) and the proliferation of homomorphic encryption (allowing computation on encrypted data without decryption). IT professionals must understand not merely which buttons to click but why cryptographic protocols work, how they can fail, and what the future holds.
+Cryptography is the mathematical foundation of security. This lecture covers the cryptographic primitives that protect data: symmetric encryption, asymmetric encryption, hash functions, digital signatures, and key exchange. By 2040, post-quantum cryptography is being deployed alongside classical algorithms. Students will learn how these mechanisms work, when to use them, and how they can fail.
 
 ### Key Topics
 
-- **Symmetric Cryptography:** Block ciphers (AES-256-GCM, ChaCha20-Poly1305) and stream ciphers — their modes of operation, key management challenges, and performance characteristics
-- **Asymmetric Cryptography:** RSA, Elliptic Curve Cryptography (ECC), Diffie-Hellman key exchange — their mathematical foundations, key sizes, and the 2036 deprecation of RSA/ECC in favor of post-quantum alternatives
-- **Post-Quantum Cryptography (PQC):** CRYSTALS-Kyber (key encapsulation), CRYSTALS-Dilithium (signatures), SPHINCS+ (hash-based signatures), and the 2036–2040 transition that replaced classical cryptography across all critical infrastructure
-- **Hash Functions and Message Authentication:** SHA-3, BLAKE3, HMAC — ensuring integrity and authenticity
-- **Cryptographic Protocols:** TLS 1.4 (mandatory PQC), SSH (key-based authentication), IPsec (VPN encryption), and DNSSEC (domain security)
-- **Key Management:** PKI (Public Key Infrastructure), HSMs (Hardware Security Modules), key escrow, and the 2040 "decentralized identity" model using DIDs and verifiable credentials
+- Symmetric encryption: AES, ChaCha20, modes of operation, and IV/nonce management
+- Asymmetric encryption: RSA, ECC, and post-quantum alternatives (CRYSTALS-Kyber)
+- Hash functions: SHA-256, SHA-3, and collision resistance
+- Digital signatures: RSA-PSS, ECDSA, Ed25519, and post-quantum Dilithium
+- Key exchange: Diffie-Hellman, ECDH, and hybrid post-quantum key encapsulation
 
 ### Lecture Notes
 
-Cryptography is unique among security controls because its security is mathematically provable (or at least reducible to well-studied hard problems). A properly implemented AES-256 encryption with a random key is computationally infeasible to break, even by nation-states with quantum computers — because Grover's algorithm (which offers a quadratic speedup for brute force) would still require 2^128 operations, far beyond any conceivable computing power. This mathematical certainty makes cryptography the most reliable security control — when implemented correctly.
+Cryptography transforms data to protect its confidentiality, integrity, and authenticity. The lecture begins with **Kerckhoffs's Principle** (1883): a cryptosystem should be secure even if everything about the system is public knowledge, except the key. This principle guides modern cryptography: algorithms are public, peer-reviewed standards; security depends solely on key secrecy.
 
-Symmetric cryptography uses the same key for encryption and decryption. AES (Advanced Encryption Standard, standardized 2001) is the dominant symmetric cipher, with AES-256-GCM (Galois/Counter Mode) providing both confidentiality and authenticity. ChaCha20-Poly1305, developed by Daniel Bernstein (2008), offers similar security with better performance on software-only platforms (mobile devices, embedded systems). By 2040, AES-256-GCM and ChaCha20-Poly1305 are the two approved symmetric algorithms for UoY systems, with hardware acceleration (AES-NI instructions) standard on all server CPUs.
+**Symmetric encryption** uses the same key for encryption and decryption. **AES (Advanced Encryption Standard)**, standardized in 2001, remains the dominant symmetric cipher in 2040. AES operates on 128-bit blocks with keys of 128, 192, or 256 bits. **Modes of operation** define how AES encrypts data larger than one block: **CBC (Cipher Block Chaining)** (requires unpredictable IV, vulnerable to padding oracle attacks), **CTR (Counter)** (turns block cipher into stream cipher, parallelizable), **GCM (Galois/Counter Mode)** (provides authenticated encryption, combining confidentiality and integrity). By 2040, **AES-GCM** is the default for most applications, though **ChaCha20-Poly1305** (a stream cipher with built-in MAC) is preferred on devices without AES hardware acceleration. The lecture warns against **IV/nonce reuse**: reusing a nonce in GCM or ChaCha20 destroys confidentiality.
 
-Asymmetric cryptography uses a public key (shared openly) and a private key (kept secret). RSA (Rivest-Shamir-Adleman, 1977) relies on the difficulty of factoring large integers; Elliptic Curve Cryptography (ECC, 1985; widely adopted 2010s) relies on the difficulty of the elliptic curve discrete logarithm problem. Both offer key exchange and digital signatures but require much larger key sizes than symmetric cryptography for equivalent security (RSA-4096 or ECC-384 vs. AES-256). However, RSA and ECC are vulnerable to Shor's algorithm, which runs in polynomial time on a quantum computer — meaning a sufficiently powerful quantum computer could break RSA-4096 in hours.
+**Asymmetric encryption** uses key pairs: a public key for encryption and a private key for decryption. **RSA** (Rivest-Shamir-Adleman), based on integer factorization, has been the standard since the 1970s. **ECC (Elliptic Curve Cryptography)** provides equivalent security with smaller keys (e.g., a 256-bit ECC key is comparable to a 3072-bit RSA key). By 2040, **post-quantum asymmetric encryption** is being deployed: **CRYSTALS-Kyber** (lattice-based key encapsulation mechanism) is the NIST-selected standard for quantum-resistant encryption. The lecture covers hybrid schemes: combining classical ECC with post-quantum Kyber to ensure security even if one algorithm is broken.
 
-The Quantum Y2Q transition (2034–2038) was the largest cryptographic migration in history. When the first quantum computers capable of running Shor's algorithm became plausible (though not yet realized), the U.S. NIST, EU ENISA, and WCGB Quantum Safety Office mandated migration to post-quantum algorithms. CRYSTALS-Kyber (lattice-based key encapsulation) and CRYSTALS-Dilithium (lattice-based signatures) became the standards, with hybrid modes (classical + PQC) used during the transition. By 2040, 92% of Fortune 500 companies and 100% of EU critical infrastructure have completed migration. The remaining 8% are considered "at risk" and are subject to regulatory enforcement. TLS 1.4 (finalized 2038) mandates PQC key exchange; SSH has deprecated RSA keys; and certificate authorities issue only hybrid or pure-PQC certificates.
+**Hash functions** map arbitrary-length input to fixed-length output, with three critical properties: **preimage resistance** (given a hash, finding the input is hard), **second preimage resistance** (given an input, finding another input with the same hash is hard), and **collision resistance** (finding any two inputs with the same hash is hard). **SHA-256** and **SHA-3** are the standard secure hash functions in 2040. **MD5** and **SHA-1** are broken (collisions can be found) and must not be used for security purposes. The lecture demonstrates length extension attacks against Merkle-Damgård constructions (SHA-256) and explains why HMAC (Hash-based Message Authentication Code) is preferred over raw hashing for message authentication.
 
-Hash functions produce a fixed-length "fingerprint" of arbitrary data. SHA-3 (Keccak, standardized 2015) and BLAKE3 (2019) are the approved hash functions by 2040. MD5 and SHA-1, broken by collision attacks (2004–2017), are explicitly prohibited in all UoY systems. HMAC (Hash-based Message Authentication Code) provides message authenticity using a secret key and hash function, ensuring that messages have not been tampered with.
+**Digital signatures** provide authentication, integrity, and non-repudiation. **RSA-PSS** (Probabilistic Signature Scheme), **ECDSA** (Elliptic Curve Digital Signature Algorithm), and **Ed25519** (a modern, fast, secure elliptic curve signature) are the dominant classical schemes. By 2040, **CRYSTALS-Dilithium** (lattice-based) is the NIST-selected post-quantum signature standard. The lecture covers signature verification: anyone with the public key can verify a signature, but only the private key holder can create one. **Certificate chains** bind public keys to identities via a chain of trust (covered in depth in IT107).
 
-Cryptographic protocols combine algorithms into usable systems. TLS (Transport Layer Security) secures HTTPS, SMTP, and VPN connections. TLS 1.3 (2018) eliminated vulnerable legacy algorithms; TLS 1.4 (2038) added mandatory PQC key exchange and post-quantum signatures. SSH (Secure Shell) provides encrypted remote access, with key-based authentication replacing passwords in all UoY environments. IPsec secures site-to-site VPNs. DNSSEC prevents DNS cache poisoning by cryptographically signing DNS records. Each protocol has implementation pitfalls: TLS suffers from certificate misconfiguration and downgrade attacks; SSH requires careful key management; IPsec is notoriously complex to configure correctly.
-
-Key management is the hardest part of cryptography. The mathematics is sound, but humans lose keys, systems leak keys, and backups preserve keys that should have been destroyed. PKI (Public Key Infrastructure) provides a hierarchical trust model: root CAs (Certificate Authorities) sign intermediate CAs, which sign end-entity certificates. HSMs (Hardware Security Modules) protect private keys in tamper-resistant hardware. By 2040, "decentralized identity" using DIDs (Decentralized Identifiers) and verifiable credentials challenges traditional PKI, allowing individuals and organizations to control their own identity without central authorities. The UoY "Yggdrasil Identity" system uses DIDs bound to hardware security keys for all authentication.
+**Key exchange** establishes shared secrets over untrusted channels. **Diffie-Hellman** (classical, based on discrete logarithm) and **ECDH** (Elliptic Curve Diffie-Hellman) enable two parties to derive a shared key without transmitting it. By 2040, **hybrid post-quantum key exchange** (X25519 + Kyber) is standard in TLS 1.4. The lecture covers **forward secrecy**: ephemeral key exchange ensures that compromising a long-term key does not decrypt past sessions.
 
 ### Required Reading
 
-- Ferguson, N., Schneier, B., & Kohno, T. (2031). *Cryptography Engineering: Design Principles and Practical Applications.* Wiley, 2nd Edition.
-- NIST (2034). "Post-Quantum Cryptography Standardization: Final Algorithms." NIST IR 8545.
-- Bernstein, D.J., & Lange, T. (2030). "Post-Quantum Cryptography — Dealing with the Fallout of Physics Success." *Communications of the ACM*, 63(5), 42–49.
-- UoY-IT-TR-2037-15: "Quantum Y2Q: The Cryptographic Migration Experience at University of Yggdrasil."
-- TLS 1.4 Specification (2038). IETF RFC 9850.
+- Ferguson, N., Schneier, B., & Kohno, T. (2015). *Cryptography Engineering: Design Principles and Practical Applications*. Wiley. Chapters 1–5.
+- NIST (2024). *Post-Quantum Cryptography Standardization: Selected Algorithms*. NISTIR 8547.
+- Bernstein, D. J., & Lange, T. (2017). "Post-Quantum Cryptography." *Nature*, 549(7671), 188–194.
+- Yggdrasil Cryptography Lab (2036). "Hybrid Post-Quantum TLS: Deployment Experience at UoY." *UoY Security Research Report*.
 
 ### Discussion Questions
 
-1. The Quantum Y2Q transition was expensive, disruptive, and premature (quantum computers capable of breaking RSA still do not exist in 2040). Was the precautionary principle justified, or did the transition divert resources from more immediate threats?
-
-2. Homomorphic encryption allows computation on encrypted data but is 1000× slower than plaintext computation. For what applications is this performance penalty acceptable, and when is it prohibitive?
-
-3. Decentralized identity (DIDs) eliminates central authorities but places key management burden on individuals. Is this empowerment or abandonment?
+1. Kerckhoffs's Principle assumes algorithms are public. Does this hold for proprietary cryptography (e.g., closed-source encryption products), and what are the risks?
+2. AES-GCM is fast but vulnerable to nonce reuse. For systems that cannot guarantee unique nonces (e.g., virtual machines restored from snapshots), what alternatives are safe?
+3. Post-quantum algorithms have larger key and ciphertext sizes than ECC. For IoT devices with limited bandwidth, is the post-quantum overhead prohibitive?
+4. Digital signatures provide non-repudiation, but private keys can be stolen. How should systems balance non-repudiation with the reality of key compromise?
 
 ### Practice Problems
 
-- Implement a hybrid encryption system in Python: use RSA or ECC to encrypt an AES-256 key, then use AES-256-GCM to encrypt a file. Measure the performance difference between hybrid encryption and pure symmetric encryption for a 1GB file.
-- Configure a web server (nginx or Apache) with TLS 1.4, using a post-quantum certificate from a test CA. Verify the configuration using SSL Labs or a similar testing tool. Document the cipher suites, key exchange mechanism, and certificate chain.
+- Implement AES-GCM encryption and decryption in Python using the `cryptography` library. Generate a random key and nonce, encrypt a message, and verify that tampering with the ciphertext is detected.
+- Generate an Ed25519 key pair, sign a message, and verify the signature. Then demonstrate that modifying a single bit of the message invalidates the signature.
 
 ---
 
-ᚦ **Lecture 3: Network Defense — Firewalls, IDS/IPS, and Perimeter Security**
+ᚦ **Lecture 3: Network Security**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The castle wall is the oldest defensive architecture: a physical barrier that keeps enemies out while allowing friendly traffic to pass through controlled gates. Network defense operates on the same principle: firewalls are the walls, access control lists are the gates, and intrusion detection/prevention systems are the sentries who raise the alarm when enemies scale the walls or dig tunnels beneath them. This lecture covers the technical and operational aspects of network defense, from packet-filtering firewalls to next-generation AI-driven security platforms.
-
-By 2040, the concept of a "perimeter" has been fundamentally challenged by zero-trust architecture (Lecture 5), cloud computing, and remote work. Yet perimeter defenses remain essential: even zero-trust networks need boundary controls, and the vast majority of organizations maintain hybrid architectures where traditional network defense coexists with modern micro-segmentation. The IT professional must understand both paradigms.
+Networks are the primary attack vector for most intrusions. This lecture covers the security mechanisms that protect network communications: firewalls, intrusion detection and prevention, VPNs, network segmentation, and zero-trust architecture. Students will learn to design secure networks that resist both external attacks and lateral movement.
 
 ### Key Topics
 
-- **Firewall Architectures:** Packet filtering (iptables/nftables), stateful inspection (pf, Cisco ASA), application-layer proxies, and next-generation firewalls (Palo Alto, Fortinet) with deep packet inspection
-- **IDS/IPS:** Signature-based detection (Snort, Suricata), anomaly-based detection, and the 2040 "AI-IDS" that uses behavioral baselines and threat intelligence
-- **Network Segmentation:** VLANs, DMZs, air-gapped networks, and micro-segmentation (VMware NSX, Kubernetes network policies)
-- **VPN Technologies:** IPsec, SSL/TLS VPNs (OpenVPN, WireGuard), and the 2040 "zero-trust network access" (ZTNA) that replaces traditional VPNs
-- **DDoS Defense:** Scrubbing centers, rate limiting, anycast dispersion, and the 2038 "adaptive DDoS" attacks that use AI to find the most expensive mitigation strategies
-- **Network Forensics:** Packet capture (tcpdump, Wireshark), NetFlow/sFlow analysis, and the reconstruction of attack timelines from network evidence
+- Firewalls: packet filtering, stateful inspection, application-layer, and next-generation
+- IDS/IPS: signature-based, anomaly-based, and behavioral detection
+- VPNs: IPsec, SSL/TLS VPN, WireGuard, and zero-trust network access
+- Network segmentation: VLANs, microsegmentation, and software-defined perimeters
+- Zero-trust architecture: never trust, always verify
 
 ### Lecture Notes
 
-Firewalls have evolved from simple packet filters to sophisticated application-aware security platforms. The first generation (1980s–1990s) used static packet filtering: allow or deny based on source/destination IP, port, and protocol. This was fast but couldn't distinguish legitimate traffic from attacks using allowed ports (e.g., HTTP on port 80). The second generation (1990s–2000s) added stateful inspection: tracking connection state to distinguish legitimate return traffic from unsolicited packets. The third generation (2000s–2010s) introduced application-layer awareness, inspecting HTTP, SMTP, and FTP content for malicious payloads. By 2040, "next-generation firewalls" (NGFWs) integrate: deep packet inspection, intrusion prevention, malware sandboxing, URL filtering, application identification, and user identity integration. A single NGFW appliance may perform 50+ security functions, but this consolidation creates single points of failure and performance bottlenecks.
+**Firewalls** are the first line of network defense. **Packet-filtering firewalls** (iptables, nftables) inspect headers and apply rules based on source/destination IP, port, and protocol. **Stateful inspection** tracks connection state, allowing return traffic for established connections while blocking unsolicited inbound traffic. **Application-layer firewalls** (WAFs) inspect HTTP/HTTPS content for SQL injection, XSS, and other application attacks. **Next-generation firewalls (NGFWs)** combine traditional firewalling with intrusion prevention, application identification, and threat intelligence feeds. By 2040, **AI-powered firewalls** dynamically adjust rules based on observed threat patterns, though human oversight remains for critical changes.
 
-Intrusion Detection Systems (IDS) monitor network traffic for malicious activity. Signature-based IDS (Snort, Suricata) match traffic against databases of known attack patterns — effective against known threats but blind to novel attacks. Anomaly-based IDS establish baselines of normal traffic and alert on deviations — capable of detecting zero-days but prone to false positives. By 2040, AI-IDS platforms (Darktrace, Vectra, and the UoY-developed "Heimdall Network Guardian") use deep learning to model complex traffic patterns, achieving false positive rates below 0.1% while detecting previously unknown attack techniques. The UoY network generates 50TB of traffic daily; Heimdall processes this in real-time, correlating across the entire campus to detect lateral movement.
+**IDS (Intrusion Detection Systems)** monitor traffic for malicious activity, generating alerts without blocking. **IPS (Intrusion Prevention Systems)** actively block detected threats. **Signature-based detection** matches traffic against known attack patterns (Snort rules, Suricata rules). **Anomaly-based detection** establishes baselines of normal behavior and flags deviations. **Behavioral detection** correlates events across time and systems to identify multi-stage attacks. By 2040, **AI-enhanced IDS/IPS** (e.g., Darktrace, Vectra AI) use machine learning to detect novel threats without signatures, but they produce false positives that require analyst tuning.
 
-Network segmentation limits the blast radius of breaches. VLANs (Virtual LANs) provide Layer 2 isolation: devices on different VLANs cannot communicate directly, even if physically connected to the same switch. DMZs (Demilitarized Zones) host public-facing services (web servers, mail gateways) with restricted access to internal networks. Air-gapped networks (physically isolated from the internet) protect the most sensitive systems — though the 2034 Stuxnet-style attacks demonstrated that air gaps can be bridged by removable media and supply chain compromises. Micro-segmentation (VMware NSX, Kubernetes network policies) applies firewall rules at the workload level: each VM or container has its own security policy, restricting east-west traffic within the data center. By 2040, micro-segmentation is standard for cloud-native environments, while traditional VLAN/DMZ architectures persist in legacy environments.
+**VPNs (Virtual Private Networks)** encrypt traffic over untrusted networks. **IPsec VPNs** operate at the network layer, encrypting all traffic between sites (site-to-site) or between a client and gateway (remote access). **SSL/TLS VPNs** operate at the application layer, providing browser-based access to internal resources. **WireGuard** (introduced 2016, widely adopted by 2025) provides a modern, fast, simple VPN protocol using Curve25519 for key exchange and ChaCha20 for encryption. By 2040, **Zero-Trust Network Access (ZTNA)** replaces traditional VPNs: rather than connecting to a network and gaining broad access, users connect to specific applications with per-session authentication and authorization.
 
-VPN technologies provide secure remote access. IPsec (Internet Protocol Security) secures site-to-site connections with strong cryptography but complex configuration. SSL/TLS VPNs (OpenVPN, originally; WireGuard, 2015–present) use simpler, more robust protocols. WireGuard, now the dominant VPN protocol by 2040, uses modern cryptography (Curve25519, ChaCha20, Poly1305) and fits in 4,000 lines of code (vs. 400,000+ for IPsec/OpenSSL), dramatically reducing attack surface. However, traditional VPNs are being displaced by ZTNA (Zero-Trust Network Access): rather than granting remote users full network access, ZTNA provides per-application access based on user identity, device posture, and continuous risk assessment. The 2037 UoY "Bifröst Access" platform replaced the traditional VPN with ZTNA, reducing lateral movement opportunities by 80%.
+**Network segmentation** limits the blast radius of breaches by dividing networks into isolated zones. **VLANs** provide Layer 2 segmentation. **Microsegmentation** (using host-based firewalls or SDN controllers) enforces policies between individual workloads, even within the same subnet. **Software-Defined Perimeters (SDP)** hide infrastructure from unauthorized users, requiring authentication before any network access is granted. By 2040, **software-defined networking (SDN)** enables dynamic, automated segmentation that adapts to workload changes.
 
-DDoS (Distributed Denial of Service) attacks have grown from nuisance to existential threat. The 2036 "Mirai 3.0" botnet (evolved from the 2016 original) compromised 12 million IoT devices and generated 12 Tbps attack traffic — sufficient to overwhelm even major Tier-1 ISPs. DDoS defense in 2040 relies on: (1) **Scrubbing Centers** (Akamai, Cloudflare, AWS Shield) that absorb attack traffic and forward clean traffic; (2) **Rate Limiting** at network edges; (3) **Anycast Dispersion** spreading traffic across geographically distributed servers; and (4) **Adaptive Mitigation** that automatically adjusts defenses based on attack type. The 2038 "Adaptive DDoS" attacks use AI to identify the most expensive mitigation strategies (e.g., triggering false positives in rate limiters) and dynamically shift attack vectors.
-
-Network forensics reconstructs attacks from network evidence. tcpdump and Wireshark capture packets for detailed analysis; NetFlow (Cisco) and sFlow provide aggregated traffic metadata (who talked to whom, when, how much data) at scale. The UoY "Muninn Network Archive" stores 90 days of full packet capture for critical segments and 2 years of NetFlow for all segments — a 40-petabyte repository that has proven invaluable for incident investigation. Reconstructing an attack timeline requires correlating network evidence with host logs, authentication records, and threat intelligence.
+**Zero-trust architecture** is the dominant security paradigm by 2040. Coined by Forrester (2010) and popularized by NIST (SP 800-207, 2020), zero-trust assumes that no user, device, or network should be implicitly trusted. Every access request is authenticated, authorized, and encrypted. Key principles: **never trust, always verify**; **assume breach** (design for containment, not just prevention); **verify explicitly** (strong authentication, least privilege); and **use least privilege access** (grant only the minimum necessary permissions). The lecture covers zero-trust implementation: identity verification (MFA, device health), microsegmentation, encryption everywhere, and continuous monitoring.
 
 ### Required Reading
 
-- Cheswick, W.R., Bellovin, S.M., & Rubin, A.D. (2030). *Firewalls and Internet Security: Repelling the Wily Hacker*, 3rd Edition. Addison-Wesley.
-- Snyder, J. (2035). "Next-Generation Firewalls: Consolidation or Complexity?" *Network Security Journal*, 42(3), 78–89.
-- UoY-IT-TR-2037-22: "Heimdall Network Guardian: AI-Driven Intrusion Detection at Campus Scale."
-- Cloudflare (2038). "The State of DDoS: Trends, Defenses, and the Adaptive Attack."
-- WireGuard Project (2039). "WireGuard: Next-Generation Kernel Network Tunnel."
+- Scarfone, K., & Hoffman, P. (2009). *Guidelines on Firewalls and Firewall Policy*. NIST SP 800-41 Rev. 1.
+- NIST (2020). *Zero Trust Architecture*. NIST SP 800-207.
+- Donenfeld, J. A. (2017). "WireGuard: Next Generation Kernel Network Tunnel." *NDSS*.
+- Yggdrasil Network Security Team (2038). "Microsegmentation in the 2030s: SDN and Host-Based Enforcement." *UoY Security Report*.
 
 ### Discussion Questions
 
-1. NGFWs consolidate many security functions into single appliances, but this creates single points of failure and vendor lock-in. Is consolidation a net benefit, or should organizations maintain best-of-breed specialized tools?
-
-2. Micro-segmentation provides excellent isolation but requires extensive policy management. For a legacy data center with 10,000 servers and 500 applications, is micro-segmentation achievable, or should the organization prioritize cloud migration and segment there?
-
-3. ZTNA replaces VPNs with per-application access, but some legacy applications require broad network access. How should organizations handle the transition when legacy systems cannot be rearchitected for zero-trust?
+1. AI-powered firewalls adapt rules dynamically. Could an attacker poison the AI model to create permissive rules, and how would such an attack be detected?
+2. Zero-trust requires continuous authentication, which adds latency. For a high-frequency trading application, is zero-trust compatible with sub-millisecond response requirements?
+3. VPNs provide network-layer access, while ZTNA provides application-layer access. For remote workers needing access to multiple systems, is ZTNA always superior?
+4. Anomaly-based IDS produces false positives that waste analyst time. What tuning strategies balance detection sensitivity with operational feasibility?
 
 ### Practice Problems
 
-- Configure a Linux server as a stateful firewall using nftables. Implement: default-deny policy, allow SSH from management subnet, allow HTTP/HTTPS from anywhere, allow established/related connections, log dropped packets. Test with nmap and document the ruleset.
-- Deploy Suricata IDS on a lab network segment. Generate test traffic including: port scan, web attack (SQL injection attempt), and malware download. Analyze the Suricata alerts, tune false positives, and write detection rules for custom attack patterns.
+- Configure a pfSense firewall with rules for a three-zone network: DMZ, internal, and management. Allow HTTP/HTTPS from DMZ to internal, SSH only from management, and deny all other traffic. Test with `nmap` and document the results.
+- Implement a WireGuard VPN between two Linux servers. Verify encryption with `tcpdump`, test failover by disconnecting one endpoint, and measure throughput compared to unencrypted traffic.
 
 ---
 
-ᚨ **Lecture 4: Host Security — Operating System Hardening, Endpoint Protection, and EDR**
+ᚨ **Lecture 4: Host and Endpoint Security**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The fortress is only as strong as its gates, and the gates are only as strong as their guards. In cybersecurity, the "gates" are the endpoints — servers, workstations, mobile devices, and IoT systems — and the "guards" are the host security controls that prevent, detect, and respond to compromise. This lecture covers host security in depth: operating system hardening, antivirus/anti-malware, endpoint detection and response (EDR), and the 2040 evolution toward "autonomous endpoint protection" that uses AI to prevent, detect, and remediate threats without human intervention.
-
-By 2040, the endpoint has become the primary battleground. Perimeter defenses (firewalls, IDS) are necessary but insufficient: attackers who breach the perimeter (via phishing, supply chain, or zero-day) immediately begin lateral movement between endpoints. Each endpoint must therefore be capable of self-defense. The IT professional's role has shifted from "network security architect" to "endpoint security operator" — managing fleets of thousands of endpoints with automated deployment, policy enforcement, and continuous monitoring.
+Networks can be secured, but endpoints remain vulnerable. This lecture covers the protection of individual systems: servers, workstations, mobile devices, and IoT endpoints. Students will learn to harden operating systems, deploy endpoint protection, manage vulnerabilities, and respond to endpoint compromises.
 
 ### Key Topics
 
-- **OS Hardening:** CIS Benchmarks, STIGs (Security Technical Implementation Guides), attack surface reduction, and the 2040 "hardened base image" approach where all endpoints are deployed from pre-hardened templates
-- **Antivirus and Anti-Malware:** Signature-based detection, heuristic analysis, behavioral blocking, and the 2040 "AI antivirus" that uses deep learning models trained on billions of malware samples
-- **Endpoint Detection and Response (EDR):** CrowdStrike Falcon, SentinelOne, Microsoft Defender for Endpoint, and the UoY "Valkyrie EDR" — continuous monitoring, threat hunting, and automated response
-- **Application Control:** Whitelisting (AppLocker, Carbon Black), code signing, and the 2040 "verified execution" model where only cryptographically signed code may execute
-- **Mobile and IoT Security:** BYOD policies, MDM (Mobile Device Management), IoT firmware vulnerabilities, and the 2039 "IoT Security Labeling Act" requiring security ratings on consumer devices
-- **Container and Cloud Workload Security:** Falco, Tetragon, runtime security, and the challenges of protecting ephemeral workloads
+- OS hardening: patching, configuration baselines, and minimal installation
+- Endpoint protection: antivirus, EDR, XDR, and application control
+- Vulnerability management: scanning, prioritization, and patching workflows
+- Mobile and IoT security: MDM, firmware updates, and device authentication
+- Endpoint detection: behavioral analysis, threat hunting, and forensic preservation
 
 ### Lecture Notes
 
-Operating system hardening is the foundation of host security. The Center for Internet Security (CIS) publishes "Benchmarks" — detailed configuration guides for securely deploying operating systems, applications, and cloud services. The U.S. DoD publishes STIGs (Security Technical Implementation Guides) with similar goals. By 2040, these benchmarks have been automated: the UoY "Hardening Forge" applies CIS benchmarks to new systems during provisioning, generating compliance reports and deviation alerts. Key hardening practices: disable unnecessary services, apply least-privilege access, enforce strong authentication, enable audit logging, configure encrypted communications, and maintain patch currency.
+**OS hardening** reduces attack surface by eliminating unnecessary features and enforcing secure configurations. **Patching** applies security updates promptly: critical patches within 24 hours, high-priority within 7 days. **Configuration baselines** (CIS Benchmarks, DISA STIGs) define hardened states for operating systems and applications. **Minimal installation** removes unused software, services, and features that could harbor vulnerabilities. By 2040, **immutable infrastructure** (read-only OS images, containers, and micro-VMs) eliminates runtime modification, preventing persistent malware.
 
-The "hardened base image" approach treats OS hardening as an infrastructure-as-code problem. Rather than hardening each endpoint individually, security teams maintain golden images (VM templates, container base images, OS installation images) that are pre-hardened, tested, and version-controlled. New endpoints are deployed from these images; drift from the hardened baseline is detected and remediated automatically. This approach, standard in cloud-native environments by 2040, eliminates the "snowflake server" problem where each endpoint accumulates unique configurations and vulnerabilities over time.
+**Endpoint protection** has evolved beyond traditional antivirus. **Antivirus (AV)** detects known malware via signatures. **EDR (Endpoint Detection and Response)** monitors endpoint behavior in real time, detecting anomalous processes, network connections, and file modifications. **XDR (Extended Detection and Response)** correlates endpoint data with network and cloud telemetry for holistic threat detection. **Application control** (AppLocker, Windows Defender Application Control) allows only approved executables to run, preventing malware execution. By 2040, **AI-driven EDR** (CrowdStrike Falcon, Microsoft Defender for Endpoint) provides autonomous threat detection and response, isolating compromised endpoints without human intervention.
 
-Antivirus (AV) has evolved from signature-based scanners to AI-powered protection platforms. Traditional AV maintained databases of malware "signatures" (file hashes, byte sequences) and scanned files for matches. This was effective against known malware but useless against polymorphic or zero-day threats. Heuristic analysis (behavioral rules) and sandboxing (executing suspicious files in isolated environments) improved detection rates but increased false positives. By 2040, "AI antivirus" (Windows Defender, CrowdStrike, SentinelOne) uses deep neural networks trained on billions of labeled samples to detect malware with >99.9% accuracy and <0.01% false positive rates. These models run on-device (protecting offline endpoints) and are updated continuously via cloud-based threat intelligence.
+**Vulnerability management** is a continuous cycle of discovery, assessment, remediation, and verification. **Scanning** (Nessus, Qualys, OpenVAS) identifies missing patches, misconfigurations, and known vulnerabilities. **Prioritization** uses risk scoring (CVSS, EPSS, and threat intelligence) to focus on vulnerabilities actively exploited in the wild. **Patching workflows** define SLAs, testing procedures, and rollback plans. By 2040, **risk-based vulnerability management** (RBVM) uses AI to predict which vulnerabilities are most likely to be exploited in a specific environment, prioritizing remediation accordingly.
 
-Endpoint Detection and Response (EDR) represents the evolution from prevention to detection and response. EDR agents continuously monitor endpoints: process execution, file system activity, network connections, registry modifications, memory injections. When suspicious activity is detected, EDR platforms: alert security teams, isolate compromised endpoints from the network, kill malicious processes, and preserve forensic evidence. CrowdStrike Falcon (2011–present), SentinelOne (2013–present), and Microsoft Defender for Endpoint (2019–present) dominate the market. The UoY "Valkyrie EDR" (developed 2032–2038) adds Norse-themed threat intelligence integration: it maps detected TTPs to MITRE ATT&CK, queries the UoY threat intelligence feed, and automatically generates incident reports with recommended response actions.
+**Mobile and IoT security** addresses the proliferation of non-traditional endpoints. **MDM (Mobile Device Management)** enforces policies on smartphones and tablets: encryption, PIN requirements, remote wipe, and app whitelisting. **IoT security** is challenging due to diverse devices, limited compute resources, and long lifecycles. Best practices: network segmentation (isolating IoT devices from critical systems), firmware update automation, strong device authentication (certificates, not passwords), and device inventory (knowing what is connected). By 2040, **IoT security frameworks** (Matter, ioXT) provide standardized security requirements, but legacy devices remain vulnerable.
 
-Application control prevents unauthorized software execution. Whitelisting (AppLocker, Carbon Black) allows only approved applications to run — highly secure but operationally burdensome. Code signing ensures that executable code is authentic and unmodified. By 2040, "verified execution" is standard for UoY systems: the OS kernel refuses to execute any code without a valid digital signature from an approved publisher. This prevents "living off the land" attacks (where attackers use legitimate system tools for malicious purposes) and supply chain attacks (where compromised software is distributed through trusted channels). The trade-off is flexibility: students and researchers cannot run unapproved software without an exception process.
-
-Mobile and IoT security present unique challenges. BYOD (Bring Your Own Device) policies allow employees to use personal devices for work, requiring MDM (Mobile Device Management) to enforce security policies: encryption, strong passwords, remote wipe, and containerization (separating work and personal data). IoT devices — smart thermostats, security cameras, medical monitors — often run outdated firmware with default passwords and no patching mechanism. The 2039 "IoT Security Labeling Act" (EU Regulation 2039/412) requires consumer IoT devices to display a security rating (A–F) based on criteria: absence of default passwords, automatic updates, secure communication, and vulnerability disclosure programs. Devices rated D or below are banned from EU markets. UoY extends this to campus IoT: all connected devices must meet B rating or higher.
-
-Container and cloud workload security address the ephemeral nature of modern infrastructure. Containers (Docker, Kubernetes) are created, destroyed, and recreated continuously; traditional agent-based security cannot keep pace. "Security as code" approaches embed security into the CI/CD pipeline: image scanning (Trivy, Clair) detects vulnerabilities before deployment; runtime security (Falco, Tetragon) monitors container behavior using eBPF; and network policies restrict inter-pod communication. The 2035 "Container Supply Chain Attack" (where malicious code was injected into alpine:latest and propagated to 12,000 downstream images) demonstrated that container security is only as strong as the weakest link in the build process.
+**Endpoint detection and response** requires proactive hunting, not just reactive alerts. **Threat hunting** assumes compromise and searches for indicators of attack (IoAs) that evade automated detection. **Forensic preservation** captures memory dumps, disk images, and log files before evidence is lost. The lecture covers the **order of volatility**: capture RAM first (lost on reboot), then disk (may be encrypted or wiped), then logs. By 2040, **automated forensic pipelines** (Velociraptor, KAPE) collect and analyze endpoint artifacts at scale.
 
 ### Required Reading
 
-- CIS (2039). *CIS Benchmarks for Linux, Windows, and Cloud Platforms.* Center for Internet Security.
-- DoD (2038). *Security Technical Implementation Guides (STIGs).* DISA.
-- CrowdStrike (2039). "The 2039 Global Threat Report: Endpoint Security Trends."
-- UoY-IT-TR-2038-28: "Valkyrie EDR: Autonomous Endpoint Protection for Academic Environments."
-- EU Regulation 2039/412: "Cybersecurity Labeling for Consumer IoT Devices."
+- NIST (2035). *Guide to Malware Incident Prevention and Handling*. NIST SP 800-83 Rev. 2.
+- Microsoft (2040). *Microsoft Defender for Endpoint Documentation*. Microsoft Learn.
+- FIRST (2040). *EPSS: Exploit Prediction Scoring System*. first.org/epss.
+- Yggdrasil Endpoint Security Team (2037). "The IoT Botnet of 2037: 100,000 Compromised Smart Devices." *UoY Security Postmortem*.
 
 ### Discussion Questions
 
-1. Verified execution (only signed code may run) prevents malware but restricts academic freedom (researchers cannot compile and run their own code without signing). How should universities balance security against the need for flexible research computing?
-
-2. AI antivirus achieves >99.9% accuracy, but adversarial machine learning can craft malware specifically designed to evade known models. Is AI antivirus an arms race that defenders can win, or will attackers eventually develop universal evasion techniques?
-
-3. The IoT Security Labeling Act bans low-rated devices from EU markets but grandfathered existing installations. Should the regulation require replacement of existing insecure devices, or is the economic cost prohibitive?
+1. Immutable infrastructure prevents malware persistence but complicates troubleshooting. How should organizations balance immutability against the need for rapid incident response?
+2. AI-driven EDR can autonomously isolate endpoints. Should this autonomy be absolute, or should critical isolations require human approval?
+3. IoT devices often lack update mechanisms and have lifespans of 10+ years. For a smart building with 5,000 IoT sensors, what security architecture protects against unpatchable vulnerabilities?
+4. Threat hunting assumes compromise, but most hunts find nothing. How should organizations justify the cost of threat hunting programs?
 
 ### Practice Problems
 
-- Harden a Windows 11 or Linux workstation following the CIS Benchmarks. Apply at least 50 of the recommended settings, documenting each change and its security rationale. Use a compliance scanning tool (CIS-CAT, Lynis) to verify and report the compliance score.
-- Deploy the UoY Valkyrie EDR agent (or Microsoft Defender for Endpoint) on a lab system. Simulate a malware infection (using a test sample from the Yggdrasil Cyber Range), observe the EDR detection and response, and analyze the forensic timeline generated by the platform.
+- Harden a Windows 11 workstation using the CIS benchmark. Apply at least 20 recommendations, document each change, and verify compliance with Microsoft Security Compliance Toolkit.
+- Conduct a threat hunt on a provided endpoint image. Use Velociraptor or a similar tool to identify suspicious processes, network connections, and persistence mechanisms. Document your hunting hypothesis and findings.
 
 ---
 
-ᚱ **Lecture 5: Identity and Access Management — The Keys to the Kingdom**
+ᚱ **Lecture 5: Application Security**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-In the Norse sagas, the god Heimdall guards the Bifröst bridge, admitting only those who bear the proper credentials. Identity and Access Management (IAM) is the Heimdall of cybersecurity: the system that verifies who you are, determines what you may do, and records what you have done. This lecture covers IAM in exhaustive detail: authentication (proving identity), authorization (granting permissions), accounting (auditing actions), and the 2040 evolution toward passwordless, decentralized, and continuous authentication.
-
-By 2040, identity has become the new perimeter. As zero-trust architecture replaces network-based trust with identity-based trust, the compromise of an identity (stolen credentials, phishing, session hijacking) is the most common attack vector. The IT professional must understand not merely how to configure IAM systems but how to design identity architectures that are both secure and usable — because security that users circumvent is no security at all.
+Applications are the ultimate target of most attacks. This lecture covers the secure development lifecycle and the vulnerabilities that plague software: injection, authentication flaws, insecure design, and vulnerable dependencies. Students will learn to identify, exploit (in controlled environments), and remediate common application vulnerabilities.
 
 ### Key Topics
 
-- **Authentication Factors:** Something you know (password), something you have (token, phone), something you are (biometric), somewhere you are (location), and something you do (behavioral biometrics)
-- **Password Security:** Hashing (bcrypt, Argon2), password policies, password managers, and the 2040 deprecation of passwords in favor of FIDO3/WebAuthn 3.0
-- **Multi-Factor Authentication (MFA):** TOTP, SMS (deprecated by 2040 due to SIM-swapping), push notifications, hardware security keys (Yggdrasil Key), and biometric MFA
-- **Directory Services:** Active Directory, LDAP, FreeIPA, and the 2040 "directoryless" trend using cloud identity providers (Azure AD, Okta, decentralized identity)
-- **Authorization Models:** RBAC (Role-Based Access Control), ABAC (Attribute-Based Access Control), PBAC (Policy-Based Access Control), and the UoY "Norse RBAC" that maps Viking-age social roles to modern permissions
-- **Privileged Access Management (PAM):** Just-in-time access, privilege elevation, session recording, and the "break-glass" procedures for emergency access
+- The OWASP Top 10: injection, broken authentication, sensitive data exposure, and more
+- Secure development: SAST, DAST, SCA, and IaC scanning
+- Authentication and session management: MFA, OAuth, JWT, and session fixation
+- Input validation and output encoding: preventing injection attacks
+- Software supply chain security: SBOMs, dependency scanning, and signed builds
 
 ### Lecture Notes
 
-Authentication is the process of proving identity. The classic "three factors" — knowledge (password), possession (token), inherence (biometric) — have been expanded by 2040 to include location (GPS-based) and behavior (typing cadence, mouse patterns, gait analysis). Multi-factor authentication (MFA) combines two or more factors, dramatically reducing the risk of credential compromise. By 2040, single-factor password authentication is prohibited for all UoY systems: even student email requires MFA.
+**The OWASP Top 10** (updated every 3–4 years) lists the most critical web application security risks. By 2040, the list has stabilized around persistent issues: **Injection** (SQL, NoSQL, OS command, LDAP), **Broken Authentication** (weak passwords, session hijacking, credential stuffing), **Sensitive Data Exposure** (unencrypted storage, weak cryptography), **Insecure Design** (flawed architecture, missing security controls), **Security Misconfiguration** (default credentials, unnecessary features, verbose error messages), **Vulnerable and Outdated Components** (known CVEs in dependencies), **Identification and Authentication Failures** (MFA bypass, brute force), **Software and Data Integrity Failures** (CI/CD compromises, unsigned updates), **Security Logging and Monitoring Failures** (insufficient logging, missed detection), and **Server-Side Request Forgery (SSRF)**. The lecture provides a detailed analysis of each risk with exploitation examples and mitigation strategies.
 
-Passwords, the original authentication factor, have proven surprisingly resilient despite decades of predicted demise. By 2040, they are finally being displaced by FIDO3/WebAuthn 3.0 — a standard for passwordless authentication using public-key cryptography bound to hardware devices. The UoY "Yggdrasil Key" is a USB-C security key with fingerprint sensor: users insert the key, verify their fingerprint, and the key cryptographically signs an authentication challenge. No password is transmitted, phishable, or stored on servers. Passwords persist as backup authentication (for account recovery when hardware keys are lost) but are increasingly deprecated.
+**Secure development** integrates security into the software lifecycle. **SAST (Static Application Security Testing)** analyzes source code for vulnerabilities without execution. **DAST (Dynamic Application Security Testing)** tests running applications by sending malicious inputs. **SCA (Software Composition Analysis)** scans dependencies for known vulnerabilities. **IaC scanning** (Checkov, tfsec) identifies security issues in infrastructure code. By 2040, **AI-powered code review** (GitHub Copilot Security, Amazon CodeWhisperer) suggests secure code patterns and flags potential vulnerabilities during development.
 
-Password security, while declining in importance, remains relevant for legacy systems and backup access. Proper password storage uses adaptive hashing algorithms: bcrypt (1999), scrypt (2012), and Argon2 (2015; winner of the Password Hashing Competition). These algorithms are intentionally slow (computationally expensive) to resist brute-force attacks. Salting (adding random data to each password before hashing) prevents rainbow table attacks. The 2038 NIST Digital Identity Guidelines (SP 800-63B) explicitly deprecate periodic password changes (which encourage weak, predictable passwords) and complexity requirements (which encourage writing passwords on sticky notes). Instead, NIST recommends: minimum 8 characters, block known-breached passwords, and allow passphrases.
+**Authentication and session management** verify user identity and maintain state. **MFA (Multi-Factor Authentication)** requires two or more factors: something you know (password), something you have (token, phone), or something you are (biometric). **OAuth 2.1** (standardized 2024, refined through 2040) enables delegated authorization without password sharing. **JWT (JSON Web Tokens)** carry authentication state but must be protected against theft and replay. **Session fixation** occurs when an attacker sets a user's session ID, then uses it after authentication. Mitigations: rotate session IDs on login, enforce secure and HttpOnly cookies, and implement short session timeouts.
 
-Directory services remain the backbone of enterprise identity. Active Directory (Microsoft, 1999–present) dominates corporate environments with its integration of authentication, authorization, Group Policy, and DNS. LDAP (Lightweight Directory Access Protocol, 1993) provides a standard interface to directory services. FreeIPA (Red Hat, 2008–present) offers an open-source alternative integrating LDAP, Kerberos, and DNS. By 2040, cloud identity providers (Azure AD, Okta, Google Identity) have displaced on-premise directories for many organizations, offering SaaS identity with lower operational overhead. The UoY maintains a hybrid model: on-premise FreeIPA for legacy systems, Azure AD for cloud services, and decentralized identity (DIDs) for research collaborations.
+**Input validation and output encoding** prevent injection attacks. **Input validation** rejects or sanitizes untrusted data before processing (whitelist validation: accept only known-good patterns). **Output encoding** escapes special characters when rendering data in different contexts (HTML encoding for web pages, SQL parameterization for queries, command array invocation for shell commands). The lecture demonstrates: a SQL injection attack (`' OR '1'='1`), its prevention via parameterized queries, and a reflected XSS attack (`<script>alert(1)</script>`), its prevention via HTML encoding.
 
-Authorization determines what an authenticated user may do. RBAC (Role-Based Access Control) assigns permissions to roles, and users to roles — simple and intuitive but rigid (a user may need permissions from multiple roles, leading to "role explosion"). ABAC (Attribute-Based Access Control) grants access based on user attributes (department, clearance level), resource attributes (classification, owner), and environmental attributes (time, location) — flexible but complex to implement. PBAC (Policy-Based Access Control) uses formal policies expressed in languages like XACML or Rego (Open Policy Agent). The UoY "Norse RBAC" maps Viking-age social roles to modern permissions: *Jarl* (department head) has broad administrative access; *Karl* (professional staff) has standard operational access; *Thrall* (temporary/contractor) has limited, monitored access. While whimsical, the model illustrates that role design should reflect organizational structure.
-
-Privileged Access Management (PAM) protects the "keys to the kingdom" — accounts with elevated permissions (domain admin, root, database superuser). PAM solutions (CyberArk, Delinea, BeyondTrust) enforce: just-in-time access (privileges granted only when needed, for limited duration), privilege elevation (standard users request elevation through audited workflows), session recording (all privileged sessions are video-recorded for forensics), and credential vaulting (passwords are never known to humans, injected automatically by the PAM system). The UoY "Allfather Access" PAM system (named for Odin's all-seeing wisdom) requires dual authorization for privileged access, records all sessions to immutable storage, and automatically rotates credentials after each use.
+**Software supply chain security** addresses the risk of compromised dependencies. **SBOMs (Software Bills of Materials)** list all components in a software product, enabling vulnerability tracking. **Dependency scanning** (Snyk, Dependabot, OWASP Dependency-Check) identifies known vulnerabilities in open-source libraries. **Signed builds** cryptographically verify that software artifacts were produced by trusted build systems. By 2040, **reproducible builds** (producing bit-for-bit identical outputs from source) and **attestation frameworks** (SLSA, Sigstore) provide end-to-end supply chain integrity.
 
 ### Required Reading
 
-- NIST SP 800-63 (2038). *Digital Identity Guidelines.* NIST.
-- FIDO Alliance (2039). *FIDO3 and WebAuthn 3.0: The Passwordless Standard.*
-- Microsoft (2039). *Active Directory and Azure AD: Hybrid Identity Architecture.*
-- UoY-IT-TR-2037-33: "Allfather Access: Privileged Access Management at University of Yggdrasil."
-- Okta (2038). *Zero Trust Identity: A Practical Guide.*
+- OWASP (2040). *OWASP Top 10: Web Application Security Risks*. OWASP Foundation.
+- OWASP (2040). *OWASP Cheat Sheet Series: Input Validation, Authentication, Session Management*. OWASP.
+- NIST (2033). *Software Supply Chain Security Guidance*. NIST SP 800-204D.
+- Yggdrasil Application Security Team (2036). "The CI/CD Compromise: When Build Pipelines Become Attack Vectors." *UoY Security Postmortem*.
 
 ### Discussion Questions
 
-1. Passwordless authentication (FIDO3/WebAuthn) is more secure than passwords but creates dependency on hardware devices. What happens when users lose their Yggdrasil Keys, and how should recovery processes balance security against accessibility?
-
-2. NIST deprecates periodic password changes but many organizations still enforce them. Is this organizational inertia, or do periodic changes provide benefits that NIST underestimated?
-
-3. PAM systems record all privileged sessions for forensics, but this creates massive surveillance of administrators. Does session recording improve security or merely shift trust problems from system compromise to PAM compromise?
+1. AI code review tools suggest secure patterns but can also generate vulnerable code. How should teams integrate AI assistance without creating false confidence?
+2. MFA significantly improves security but adds friction. For consumer-facing applications, what MFA methods (SMS, TOTP, WebAuthn, passkeys) balance security and usability?
+3. Reproducible builds ensure integrity but require strict control over build environments. For a team using cloud CI/CD, is reproducibility achievable?
+4. The OWASP Top 10 has remained relatively stable for decades. Does this indicate that application security is a solved problem, or that attackers and defenders are stuck in an equilibrium?
 
 ### Practice Problems
 
-- Implement MFA for a Linux server using TOTP (Google Authenticator or similar) and hardware security keys (Yggdrasil Key or FIDO2 key). Configure SSH to require both factors. Test the setup and document the configuration.
-- Design an RBAC model for a hypothetical university department with 5 roles, 10 resources, and 20 users. Express the model in a policy language (Rego for OPA, or XACML) and write test cases verifying that permissions are correctly granted and denied.
+- Perform a security audit of a provided web application. Identify vulnerabilities from the OWASP Top 10, exploit them in a controlled environment, and propose mitigations. Document each finding with CVSS scoring.
+- Generate an SBOM for an open-source project using Syft or a similar tool. Identify vulnerable dependencies, research available patches, and propose an update strategy.
 
 ---
 
-ᚲ **Lecture 6: Vulnerability Management and Penetration Testing — Finding Weaknesses Before Adversaries Do**
+ᚲ **Lecture 6: Identity and Access Management**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The best defense is a good offense — or at least, the ability to think like an offender. Vulnerability management and penetration testing are the offensive disciplines of cybersecurity: systematically finding weaknesses before adversaries exploit them. This lecture covers the full vulnerability lifecycle: discovery (scanning, manual testing), validation (exploitation in controlled environments), prioritization (risk assessment), remediation (patching, mitigation), and verification (re-testing). We also address the ethical and legal frameworks governing offensive security operations.
-
-By 2040, vulnerability management has been transformed by AI. Automated scanners discover vulnerabilities in minutes; AI-powered exploit generation creates proof-of-concept attacks for newly discovered bugs; and predictive models forecast which vulnerabilities will be exploited in the wild. The IT professional's challenge is not merely finding vulnerabilities but managing the deluge: a typical enterprise has thousands of vulnerabilities, and resources permit fixing only a fraction. Prioritization is the critical skill.
+Identity is the perimeter of modern security. This lecture covers the technologies and practices that manage digital identities: authentication, authorization, federation, and privileged access management. Students will learn to design identity architectures that are both secure and usable.
 
 ### Key Topics
 
-- **Vulnerability Scanning:** Nessus, OpenVAS, Qualys, and the 2040 "AI scanners" that use NLP to analyze changelogs and predict vulnerabilities before CVE publication
-- **Penetration Testing:** Black-box (no knowledge), gray-box (some knowledge), white-box (full knowledge) testing; the PTES (Penetration Testing Execution Standard) and OWASP Testing Guide methodologies
-- **Red Teaming:** Full-spectrum adversary simulation, including social engineering, physical intrusion, and multi-month persistence campaigns
-- **Bug Bounty Programs:** HackerOne, Bugcrowd, and the UoY "White Hat Havamal" program that rewards ethical disclosure of university system vulnerabilities
-- **Vulnerability Prioritization:** CVSS scoring, exploitability analysis, EPSS (Exploit Prediction Scoring System), and the 2040 "AI prioritization" that predicts real-world exploitation probability
-- **Ethical and Legal Frameworks:** Computer fraud laws, responsible disclosure, safe harbor policies, and the 2037 "Ethical Hacking License" required for all penetration testers in the EU
+- Authentication: passwords, MFA, biometrics, and passwordless authentication
+- Authorization: RBAC, ABAC, PBAC, and policy engines
+- Identity federation: SAML, OAuth, OIDC, and decentralized identity
+- Privileged Access Management (PAM): vaulting, session recording, and just-in-time access
+- Identity governance: lifecycle management, access reviews, and compliance
 
 ### Lecture Notes
 
-Vulnerability scanning is the systematic identification of security weaknesses using automated tools. Scanners operate by: (1) **Network Discovery** — identifying live hosts and open ports; (2) **Service Identification** — determining software versions running on each port; (3) **Vulnerability Detection** — comparing identified versions against databases of known vulnerabilities (NVD, vendor advisories). Nessus (Tenable, 1998–present), OpenVAS (Greenbone, 2005–present), and Qualys (1999–present) are the dominant scanners. By 2040, AI-enhanced scanners (UoY "Fáfnir Scanner," mentioned in CS407) go further: they analyze source code repositories, changelogs, and commit messages using NLP to predict vulnerabilities before they receive CVE identifiers — sometimes weeks before public disclosure.
+**Authentication** verifies who you are. **Passwords**, despite decades of criticism, persist in 2040 but are increasingly supplemented or replaced. **MFA** (covered in Lecture 5) adds layers. **Biometrics** (fingerprint, facial recognition, iris scan) provide convenience but raise privacy concerns and can be spoofed. **Passwordless authentication** (WebAuthn, FIDO2, passkeys) uses public-key cryptography: the device stores a private key and presents a signed challenge to authenticate. By 2040, **passkeys** (synchronized across devices via cloud keychains) are the default for consumer services, while **hardware security keys** (YubiKey, Titan) protect high-value accounts.
 
-Penetration testing ("ethical hacking") simulates real attacks to identify exploitable weaknesses. The PTES (Penetration Testing Execution Standard, 2012) defines seven phases: pre-engagement interactions, intelligence gathering, threat modeling, vulnerability analysis, exploitation, post-exploitation, and reporting. Black-box testing provides no internal information to the tester, simulating an external attacker; white-box testing provides full access to source code, architecture diagrams, and credentials, simulating an insider or thorough audit; gray-box falls between. The OWASP Testing Guide (continuously updated) provides detailed methodologies for web application testing. By 2040, penetration testing tools (Metasploit, Cobalt Strike, Burp Suite) integrate AI assistance: suggesting exploitation paths, generating custom payloads, and adapting to defensive measures in real-time.
+**Authorization** determines what you can do. **RBAC (Role-Based Access Control)** assigns permissions to roles, which are granted to users. **ABAC (Attribute-Based Access Control)** evaluates policies based on user attributes, resource attributes, and environmental conditions. **PBAC (Policy-Based Access Control)** uses a centralized policy engine (Open Policy Agent, AWS IAM Policies) to evaluate decisions. By 2040, **ReBAC (Relationship-Based Access Control)** models permissions as graph relationships (Google Zanzibar), enabling fine-grained access control for complex hierarchies.
 
-Red teaming is "penetration testing at scale" — a full-spectrum adversary simulation that includes not merely technical attacks but social engineering (phishing, pretexting, physical intrusion), supply chain compromise, and long-term persistence. Red teams operate under strict rules of engagement: what targets are in scope, what techniques are permitted, and what damage is acceptable. The 2036 UoY "Ragnarök Exercise" (a red team engagement authorized by the Board of Regents) compromised the university's payroll system, exfiltrated synthetic "employee data," and maintained persistence for 4 months before detection — demonstrating that even well-defended organizations have blind spots. The exercise led to 47 security improvements and a complete overhaul of the university's supply chain vetting.
+**Identity federation** enables single sign-on (SSO) across organizational boundaries. **SAML (Security Assertion Markup Language)** is the legacy enterprise standard for web SSO. **OAuth 2.1** and **OpenID Connect (OIDC)** are the modern standards, enabling delegated authorization and authentication across platforms. By 2040, **decentralized identity** (DIDs, Verifiable Credentials) allows users to control their own identity without relying on centralized providers. The UoY **Yggdrasil ID** (2038) issues Verifiable Credentials for students and staff, enabling passwordless access to partner institutions.
 
-Bug bounty programs crowdsource vulnerability discovery to independent security researchers. HackerOne (2012–present) and Bugcrowd (2012–present) are the dominant platforms, connecting organizations with a global community of white-hat hackers. By 2040, bug bounties have paid out over €50 billion globally. The UoY "White Hat Havamal" (named for the wisdom poem of Odin) offers bounties ranging from €100 (low-severity) to €50,000 (critical remote code execution) for responsibly disclosed vulnerabilities in university systems. The program has discovered 340 vulnerabilities since 2032, with an average bounty of €2,300 and a mean time-to-fix of 14 days. The program's success depends on trust: researchers must believe that disclosures will be handled promptly and that they will not face legal retaliation.
+**Privileged Access Management (PAM)** protects administrative accounts. **Vaulting** stores privileged credentials in a secure vault (HashiCorp Vault, CyberArk), releasing them only upon approval. **Session recording** captures all actions performed with privileged accounts, creating an audit trail. **Just-in-time (JIT) access** grants elevated privileges only for a specific task and time period, reducing standing administrative access. By 2040, **JIT access is mandatory** for all UoY administrative accounts, with automatic revocation after the approved window.
 
-Vulnerability prioritization is the critical bottleneck in vulnerability management. Organizations discover far more vulnerabilities than they can fix; the challenge is determining which to address first. CVSS (Common Vulnerability Scoring System, 2005–present) provides a standardized severity score (0–10) based on exploitability and impact, but it has well-documented limitations: it measures theoretical severity, not real-world risk. A CVSS 9.8 vulnerability in an obscure library that is never exploited in the wild may be less urgent than a CVSS 6.5 vulnerability in a widely attacked service. EPSS (Exploit Prediction Scoring System, 2020–present) uses machine learning to predict the probability that a vulnerability will be exploited in the wild within 30 days — a far more actionable metric. By 2040, UoY uses an "AI prioritization" model that combines CVSS, EPSS, asset criticality, exposure analysis, and threat intelligence to generate a ranked queue of "patch this next" items.
-
-The ethical and legal landscape of offensive security is complex. Unauthorized access to computer systems is criminalized in virtually all jurisdictions (Computer Fraud and Abuse Act in the US, Computer Misuse Act in the UK, similar laws across the EU). Ethical hackers must operate with explicit written authorization: a "get out of jail free" letter defining scope, duration, and permitted techniques. The 2037 EU "Ethical Hacking License" requires penetration testers to pass a certification exam, carry professional liability insurance, and register with national cyber authorities. The license was created after a 2035 incident where an unlicensed "pentester" hired by a small business inadvertently destroyed their entire customer database during a poorly executed SQL injection test.
+**Identity governance** ensures that access rights are appropriate and compliant. **Lifecycle management** automates provisioning (new employee gets standard access), changes (role transfer updates permissions), and deprovisioning (termination removes all access). **Access reviews** require managers to periodically certify that their team members' access is still necessary. **Compliance reporting** demonstrates adherence to regulations (SOX, HIPAA, GDPR) with audit trails of who had access to what and when. By 2040, **AI-driven identity analytics** detect anomalous access patterns (e.g., an employee accessing systems outside their role) and trigger automatic reviews.
 
 ### Required Reading
 
-- Weidman, G. (2032). *Penetration Testing: A Hands-On Introduction to Hacking*, 2nd Edition. No Starch Press.
-- OWASP (2039). *OWASP Testing Guide, v2040.*
-- HackerOne (2039). "The 2039 Hacker-Powered Security Report."
-- UoY-IT-TR-2036-14: "The Ragnarök Exercise: Lessons from a University Red Team Engagement."
-- EU Directive 2037/88: "Ethical Hacking Licensing and Professional Standards."
+- Windley, P. J. (2005). *Digital Identity*. O'Reilly. (Updated concepts for 2040.)
+- Hardt, D. (2012). *The OAuth 2.0 Authorization Framework*. RFC 6749. IETF.
+- W3C (2030). *Decentralized Identifiers (DIDs) v2.0*. W3C Recommendation.
+- Yggdrasil Identity Team (2038). "Yggdrasil ID: Decentralized Identity for Higher Education." *UoY Identity Research Report*.
 
 ### Discussion Questions
 
-1. AI-powered vulnerability scanners can find zero-days faster than vendors can patch them. Should AI vulnerability discovery be restricted to prevent harm, or does openness accelerate defensive improvement?
-
-2. Red team engagements that include social engineering and physical intrusion test realistic attack paths but can traumatize employees (e.g., convincing a receptionist to let an attacker into a secure area). Where is the ethical line between realistic testing and psychological harm?
-
-3. Bug bounty programs depend on researchers trusting the organization. If a company has a history of slow response or legal threats against researchers, should platforms like HackerOne blacklist them?
+1. Passkeys eliminate passwords but create dependency on device manufacturers (Apple, Google). Is this centralization a privacy risk, or do the security benefits outweigh concerns?
+2. ReBAC provides fine-grained control but requires modeling all relationships. For a university with 50,000 users and complex organizational hierarchies, is ReBAC scalable?
+3. JIT access reduces standing privilege but can slow down emergency response. What break-glass procedures enable rapid access during critical incidents?
+4. AI-driven identity analytics can flag anomalous access, but anomalies are not always malicious. How should organizations balance automated enforcement with human review?
 
 ### Practice Problems
 
-- Conduct a vulnerability scan of a lab network using Nessus or OpenVAS. Generate a report, prioritize findings using CVSS and EPSS, and create a remediation plan with timelines. Present your findings as if to a CISO.
-- Perform a gray-box penetration test of a deliberately vulnerable web application (OWASP Juice Shop or similar). Document each phase of PTES: intelligence gathering, vulnerability analysis, exploitation, post-exploitation, and reporting. Include screenshots and exploitation commands.
+- Design an RBAC model for a university IT department. Define roles, permissions, and inheritance hierarchies. Implement it in a directory service (Active Directory or OpenLDAP) and test access scenarios.
+- Configure HashiCorp Vault for dynamic secret generation. Create a policy that allows an application to request database credentials with a 1-hour TTL. Verify that credentials are automatically revoked after expiration.
 
 ---
 
-ᚷ **Lecture 7: Incident Response — The Art of Digital Firefighting**
+ᚷ **Lecture 7: Security Operations and Monitoring**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-No defense is perfect. When prevention fails, incident response is the discipline that detects, contains, eradicates, and recovers from security breaches. Like a firefighter who must enter a burning building, the incident responder works under pressure, with incomplete information, against an adversary who actively seeks to evade detection. This lecture covers the full incident response lifecycle: preparation, detection & analysis, containment, eradication, recovery, and post-incident activity — with emphasis on the tools, techniques, and organizational processes that enable effective response.
-
-By 2040, incident response has been partially automated. AI systems detect anomalies, correlate indicators, and autonomously contain common threats — but human responders remain essential for novel attacks, strategic decisions, and communication. The IT professional must understand both the automated and human dimensions of incident response, from the technical details of forensic artifact collection to the organizational psychology of crisis management.
+Security operations (SecOps) is the continuous practice of monitoring, detecting, and responding to security events. This lecture covers the Security Operations Center (SOC), SIEM platforms, threat intelligence, and the workflows that transform raw alerts into actionable intelligence. By 2040, AI augments but does not replace human analysts.
 
 ### Key Topics
 
-- **The NIST Incident Response Lifecycle:** Preparation, detection & analysis, containment, eradication, recovery, and post-incident activity — the foundational framework adapted by virtually all organizations
-- **Preparation:** Incident response plans, playbooks, communication trees, and the 2040 "digital readiness" assessments that use AI to identify gaps before incidents occur
-- **Detection & Analysis:** SIEMs (Splunk, QRadar, Sentinel), EDR platforms, threat intelligence feeds, and the 2040 "AI analyst" that triages alerts and proposes hypotheses
-- **Containment:** Short-term (stopping the bleeding) vs. long-term (preventing re-infection); network isolation, account disabling, and the "kill switch" procedures for ransomware
-- **Eradication and Recovery:** Removing malware, rebuilding compromised systems, restoring from verified backups, and the 2040 "clean room recovery" approach
-- **Post-Incident Activity:** Blameless postmortems, indicator sharing, control improvement, and the "lessons learned" process that transforms incidents into organizational learning
+- SOC structure: tiers, roles, and the incident response lifecycle
+- SIEM: Splunk, Sentinel, QRadar, and open-source alternatives (Wazuh, Elastic SIEM)
+- Threat intelligence: feeds, sharing platforms (MISP), and indicator lifecycle
+- Log management: collection, parsing, retention, and correlation
+- Automation: SOAR platforms, playbooks, and alert enrichment
 
 ### Lecture Notes
 
-The NIST SP 800-61 framework (Computer Security Incident Handling Guide, 2012; revised 2037) defines six phases of incident response. These phases are not strictly sequential: detection continues during containment, recovery may begin before eradication is complete, and preparation is ongoing. The framework provides structure without rigidity, acknowledging that real incidents are messy and unpredictable.
+The **Security Operations Center (SOC)** is the organizational unit responsible for continuous security monitoring. **Tier 1 analysts** triage alerts, performing initial validation and escalation. **Tier 2 analysts** investigate confirmed incidents, performing deeper analysis and containment. **Tier 3 analysts** (threat hunters, incident responders) handle complex threats and proactive hunting. **SOC managers** oversee operations, metrics, and strategy. By 2040, **AI analysts** (covered in Lecture 1) handle routine triage, escalating only novel or high-confidence threats to humans.
 
-**Preparation** is the most important phase — and the most neglected. Organizations that fail to prepare find themselves improvising during crises, with predictable results. Preparation includes: (1) **Incident Response Plan** — a documented strategy defining roles, responsibilities, escalation paths, and decision authority; (2) **Playbooks** — step-by-step procedures for common incident types (ransomware, data breach, DDoS, insider threat); (3) **Communication Plans** — templates for internal notifications, regulatory disclosures, media statements, and customer communications; (4) **Tools and Infrastructure** — forensic workstations, evidence storage, network taps, and sandbox environments; (5) **Training and Exercises** — tabletop exercises, red team engagements, and simulated incidents that test response capabilities. The 2040 "Digital Readiness Assessment" (developed at UoY) uses AI to analyze an organization's incident response maturity, identifying gaps in tools, processes, and skills before they are exploited.
+**SIEM (Security Information and Event Management)** platforms aggregate, correlate, and analyze security data from across the organization. **Splunk** (dominant enterprise SIEM) provides powerful search and visualization. **Microsoft Sentinel** (cloud-native) provides AI-driven analytics and SOAR integration. **IBM QRadar** provides network flow analysis and behavioral analytics. **Open-source alternatives**: **Wazuh** (fork of OSSEC, providing HIDS and SIEM), **Elastic SIEM** (built on the ELK stack), and **Apache Metron**. The lecture covers SIEM architecture: log collection (agents, syslog, API), parsing (normalization into a common schema), storage (hot/warm/cold tiers), correlation rules (detecting multi-event patterns), and alerting.
 
-**Detection & Analysis** is the phase where most incidents are lost — not because they go undetected, but because they are detected but misinterpreted. The average time to detect a breach (dwell time) was 280 days in 2020, 45 days in 2030, and 8 days in 2040 — a dramatic improvement driven by AI-powered detection. SIEMs (Security Information and Event Management) aggregate logs from across the organization, correlating events to identify suspicious patterns. Splunk (2003–present), IBM QRadar (2005–present), and Microsoft Sentinel (2019–present) dominate the market. EDR platforms provide endpoint-level visibility. Threat intelligence feeds (MISP, ThreatConnect) provide context: "this IP address is associated with APT29." By 2040, the "AI analyst" (UoY "Sleipnir," mentioned in IT103) automatically triages incoming alerts, proposes attack hypotheses, and generates investigation playbooks — reducing analyst workload by 70% while improving detection accuracy.
+**Threat intelligence** provides context about threats. **Feeds** (commercial and open-source) deliver IOCs (Indicators of Compromise): IP addresses, domain names, file hashes, and behavioral patterns. **MISP (Malware Information Sharing Platform)** enables structured threat sharing between organizations. **STIX/TAXII** (Structured Threat Information Expression / Trusted Automated Exchange of Intelligence Information) standardizes threat data format and transport. By 2040, **AI-generated threat intelligence** predicts emerging threats by analyzing dark web chatter, vulnerability disclosures, and attack patterns. The lecture emphasizes **indicator lifecycle**: IOCs have limited shelf life; attackers change infrastructure frequently. Stale IOCs produce false positives and wasted analyst time.
 
-**Containment** stops the bleeding. Short-term containment isolates compromised systems immediately: disconnecting from the network, disabling compromised accounts, revoking sessions. Long-term containment implements temporary fixes that allow business operations to continue while full remediation is planned: applying virtual patches (WAF rules that block exploitation without code changes), adding firewall rules, or rotating credentials. The "kill switch" procedure for ransomware is a critical containment technique: when ransomware is detected, automated systems immediately isolate affected endpoints, disable privileged accounts, and block known C2 channels — often containing the outbreak before encryption spreads beyond a few machines. The 2035 UoY "Ransomware Kill Switch" contained a LockBit 4.0 outbreak to 3 endpoints out of 15,000, preventing what would have been a €50 million disaster.
+**Log management** is the foundation of security monitoring. **Collection**: forwarding logs from endpoints, network devices, cloud services, and applications to a central platform. **Parsing**: extracting structured fields from unstructured log formats. **Retention**: storing logs for compliance (often 1–7 years) and investigation (hot storage for 30–90 days, cold storage for long-term). **Correlation**: linking events across systems to identify multi-stage attacks. By 2040, **AI log summarization** compresses millions of events into narrative incident descriptions, reducing analyst cognitive load.
 
-**Eradication** removes the root cause. This is harder than it sounds: malware often installs multiple persistence mechanisms (registry entries, scheduled tasks, firmware implants, WMI subscriptions), and missing any one allows re-infection. The UoY "Clean Room Recovery" approach (mandated since 2037) requires that compromised systems be completely rebuilt from verified golden images rather than "cleaned" — because verification that all malware has been removed is practically impossible. Data is restored from verified backups (tested before restoration) and scanned for dormant malware. Network infrastructure (switches, firewalls, VPN concentrators) is reset to known-good configurations from version control.
-
-**Recovery** returns systems to normal operations. This must be done carefully: restoring too quickly may reintroduce the vulnerability that allowed the breach, or restore dormant malware from backups that were compromised before detection. The UoY recovery protocol includes: (1) **Verification** — all restored systems pass vulnerability scans and integrity checks before reconnection; (2) **Monitoring** — restored systems receive enhanced monitoring (full packet capture, EDR in maximum verbosity mode) for 30 days; (3) **Gradual Reconnection** — systems are reconnected in phases, starting with lowest-criticality, to limit blast radius if reinfection occurs; (4) **User Communication** — affected users are notified with clear instructions for password changes and MFA re-enrollment.
-
-**Post-Incident Activity** is where organizations either improve or repeat their mistakes. The blameless postmortem (discussed in IT103, Lecture 12) focuses on systemic factors: "What about our architecture allowed this breach?" "Why did detection take 8 days?" "How can we prevent recurrence?" The UoY "Incident Knowledge Base" captures lessons from every security incident across the university, making them searchable and actionable. Indicators of compromise (IOCs) from incidents are shared with the broader community through MISP (Malware Information Sharing Platform) and sector-specific ISACs (Information Sharing and Analysis Centers). The 2040 "Continuous Improvement" model treats every incident as a free penetration test: the adversary found a weakness that internal testing missed, and fixing it improves security for all.
+**SOAR (Security Orchestration, Automation, and Response)** platforms automate repetitive tasks. **Playbooks** define automated workflows: when an alert fires, enrich it with threat intelligence, query related systems, create a ticket, and if confidence is high, block the IP. **Alert enrichment** adds context (user identity, asset criticality, threat intelligence) to raw alerts, enabling faster triage. By 2040, **autonomous response** (blocking threats without human approval) is common for low-risk actions, but high-impact actions (isolating a production server) require human confirmation.
 
 ### Required Reading
 
-- NIST SP 800-61 Rev. 3 (2037). "Computer Security Incident Handling Guide."
-- Mandiant (2038). *M-Trends 2038: The Year in Review.*
-- UoY-IT-TR-2038-19: "Sleipnir: Autonomous Incident Response for Enterprise Networks."
-- UoY-IT-TR-2037-62: "The Ransomware Kill Switch: Automated Containment at University Scale."
-- Cichonski, P., et al. (2032). *Incident Response: Detect, Respond, Recover.* O'Reilly.
+- Jared, R. (2019). *Security Operations Center: Building, Operating, and Maintaining Your SOC*. Cisco Press. (Updated for 2040 context.)
+- Splunk (2040). *Splunk Enterprise Security: Implementation and Best Practices*. Splunk Docs.
+- MISP Project (2040). *MISP Documentation: Threat Sharing Platform*. MISP Project.
+- Yggdrasil SOC (2039). "AI-Augmented Security Operations: One Year of Ratatoskr in the SOC." *UoY Security Operations Report*.
 
 ### Discussion Questions
 
-1. The "Clean Room Recovery" approach requires rebuilding all compromised systems, which is expensive and time-consuming. For a small business with 50 endpoints and no automated provisioning, is complete rebuilding feasible, or should risk-based recovery be allowed?
-
-2. AI analysts triage alerts and propose hypotheses, but a 2039 study found they have a 15% false negative rate for novel attack techniques. Should organizations trust AI analysts for initial triage, or maintain human-first review?
-
-3. Blameless postmortems focus on systemic improvement, but some incidents involve individual negligence (e.g., an administrator who ignored patch alerts for 6 months). How should organizations balance blameless culture with individual accountability?
+1. AI analysts handle routine triage, but who is accountable when an AI misses a critical alert? Is the vendor, the SOC manager, or the organization responsible?
+2. Threat intelligence feeds can contain false positives or even poisoned data from adversaries. What validation processes ensure feed trustworthiness?
+3. SIEM storage costs scale with data volume. For an organization generating 5TB of logs daily, what retention and sampling strategies balance cost with investigative capability?
+4. Autonomous response improves speed but can disrupt legitimate activity. What safeguards prevent SOAR playbooks from causing business outages?
 
 ### Practice Problems
 
-- Develop an incident response plan for a hypothetical mid-size company (500 employees, hybrid cloud infrastructure). Include: roles and responsibilities, escalation matrix, communication templates, containment procedures for ransomware and data breach, and a tabletop exercise scenario.
-- Conduct a forensic investigation of a simulated incident (provided disk image and network capture). Reconstruct the attack timeline: initial access vector, persistence mechanisms, lateral movement, data exfiltration, and C2 communications. Present findings as a forensic report suitable for legal proceedings.
+- Deploy Wazuh or Elastic SIEM in a lab environment. Configure agents on Linux and Windows endpoints, create detection rules for common attacks (brute force, malware execution), and build a dashboard showing alert trends and top threats.
+- Write a SOAR playbook (using a platform like Shuffle or Splunk Phantom) that: enriches a phishing alert with email headers and URL reputation, quarantines the email, blocks the URL at the firewall, and notifies the user. Test with a simulated phishing email.
 
 ---
 
-ᚹ **Lecture 8: Secure Software Development — Building Security In**
+ᚹ **Lecture 8: Incident Response**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The most expensive place to fix a security vulnerability is in production — after it has been exploited, after data has been stolen, after reputation has been damaged. Secure software development is the practice of preventing vulnerabilities from entering code in the first place, or catching them as early as possible in the development lifecycle. This lecture covers the principles, practices, and tools of secure development: threat modeling, secure coding standards, static and dynamic analysis, software composition analysis, and the 2040 "AI-assisted secure development" tools that predict vulnerabilities before code is committed.
-
-By 2040, the "shift left" movement (moving security earlier in the development process) has evolved into "shift everywhere" — security integrated into every phase of development, from requirements to design to coding to testing to deployment to operations. DevSecOps (Development, Security, Operations) is the dominant paradigm, and security is treated as a quality attribute rather than a bolt-on feature.
+Despite all preventive measures, incidents occur. This lecture covers the structured approach to detecting, containing, eradicating, and recovering from security incidents. Students will learn to lead incident response, preserve evidence, communicate with stakeholders, and conduct post-incident reviews that prevent recurrence.
 
 ### Key Topics
 
-- **Threat Modeling:** STRIDE, PASTA, and the 2040 "AI threat modeling" that automatically generates threat models from architecture diagrams and user stories
-- **Secure Coding Practices:** OWASP Top 10, CWE/SANS Top 25, memory-safe languages (Rust, Go), and the elimination of entire vulnerability classes through language design
-- **Static Application Security Testing (SAST):** SonarQube, Semgrep, CodeQL, and AI-enhanced static analysis that understands code semantics
-- **Dynamic Application Security Testing (DAST):** OWASP ZAP, Burp Suite, and runtime vulnerability detection
-- **Software Composition Analysis (SCA):** Dependency scanning (Snyk, Dependabot, Renovate) and the management of open-source risk
-- **The Secure Development Lifecycle (SDL):** Microsoft's SDL, OWASP SAMM, BSIMM, and the 2040 "Continuous Security Assurance" model
+- The incident response lifecycle: preparation, detection, analysis, containment, eradication, recovery, and post-incident activity
+- Incident classification: severity, scope, and impact assessment
+- Forensics: evidence collection, chain of custody, and analysis
+- Communication: internal notification, external disclosure, and regulatory reporting
+- Post-incident review: blameless postmortems, improvement tracking, and metrics
 
 ### Lecture Notes
 
-Threat modeling is the foundational practice of secure software development. It asks: "What can go wrong?" before a single line of code is written. STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege), developed by Microsoft (1999), provides a mnemonic for threat categories. PASTA (Process for Attack Simulation and Threat Analysis, 2012) offers a more risk-centric approach. By 2040, AI-assisted threat modeling (the UoY "Völva Architect" tool) generates threat models from architecture diagrams, API specifications, and user stories — identifying potential attack paths that human analysts might miss. However, AI threat modeling is not a replacement for human expertise: it provides a starting point that must be validated by developers who understand the business context.
+**Preparation** is the foundation of effective incident response. **Incident response plan**: a documented procedure defining roles, responsibilities, communication channels, and escalation paths. **Playbooks**: step-by-step guides for common incident types (ransomware, data breach, insider threat, DDoS). **Tools**: forensic workstations, network taps, memory capture tools, and isolated analysis environments. **Training**: tabletop exercises, red team engagements, and simulated incidents. By 2040, **AI-generated scenarios** create realistic training simulations based on current threat intelligence.
 
-Secure coding practices have evolved from guidelines to language-enforced guarantees. The OWASP Top 10 (2003–present, updated every 3 years) catalogs the most critical web application vulnerabilities: injection, broken authentication, sensitive data exposure, XML external entities, broken access control, security misconfiguration, cross-site scripting, insecure deserialization, using components with known vulnerabilities, and insufficient logging. The CWE/SANS Top 25 (2009–present) extends this to all software. By 2040, the most significant development is the rise of memory-safe languages: Rust (2010–present), with its ownership model that prevents buffer overflows and use-after-free at compile time; Go (2009–present), with garbage collection and bounds checking; and the gradual replacement of C/C++ in security-critical systems. The 2035 UoY "Memory Safety Mandate" requires all new university-developed software to be written in memory-safe languages, with exceptions requiring CISO approval.
+**Detection** identifies that an incident is occurring. **Automated detection**: SIEM alerts, EDR notifications, IDS signatures, and anomaly detection. **Manual detection**: user reports, third-party notifications, and threat hunting discoveries. **Triage**: classifying incidents by severity (Critical: active data exfiltration; High: confirmed compromise; Medium: suspicious activity; Low: policy violation). The lecture covers the **incident ticket**: documenting initial observations, affected systems, timeline, and assigned responder.
 
-Static Application Security Testing (SAST) analyzes source code without executing it. Traditional SAST tools (SonarQube, Checkmarx) use pattern matching to find common vulnerabilities (SQL injection patterns, hardcoded credentials, unsafe deserialization). By 2040, AI-enhanced SAST (GitHub Copilot Security, Semgrep AI, CodeQL with neural models) understands code semantics: it can trace data flows across functions and files, identify complex vulnerability patterns that span multiple modules, and suggest secure refactoring. The UoY "Fáfnir Code Scanner" (mentioned in CS407) uses a combination of static analysis and lightweight symbolic execution to find vulnerabilities with 40% fewer false positives than traditional SAST.
+**Analysis** determines what happened, how, and why. **Timeline reconstruction**: correlating events across logs to establish the attack sequence. **Scope assessment**: identifying all affected systems, accounts, and data. **Root cause analysis**: determining the initial vector (phishing, unpatched vulnerability, stolen credentials). By 2040, **AI timeline reconstruction** automatically correlates events and suggests attack paths, validated by human analysts.
 
-Dynamic Application Security Testing (DAST) analyzes running applications. Tools like OWASP ZAP (2010–present) and Burp Suite (2003–present) spider web applications, inject test payloads, and analyze responses for vulnerability indicators. DAST catches runtime issues that SAST misses: configuration errors, authentication bypasses, and business logic flaws. By 2040, "interactive application security testing" (IAST) combines SAST and DAST by instrumenting applications during testing: agents embedded in the runtime monitor execution flows and detect vulnerabilities in real-time. IAST provides the depth of SAST with the accuracy of DAST, though it requires more invasive integration.
+**Containment** prevents further damage. **Short-term containment**: isolating affected systems (network disconnection, account disablement, IP blocking) without destroying evidence. **Long-term containment**: applying patches, changing credentials, and implementing monitoring while preparing for eradication. The lecture warns against **over-containment**: disconnecting an entire datacenter for a single compromised workstation disrupts business unnecessarily.
 
-Software Composition Analysis (SCA) addresses the "supply chain" dimension of software security. Modern applications are assembled from hundreds of open-source dependencies; each dependency may contain vulnerabilities or malicious code. SCA tools (Snyk, Dependabot, Renovate) scan dependency manifests (package.json, requirements.txt, Cargo.toml) against vulnerability databases and suggest updates. The 2035 "Log4j 3" incident (a critical vulnerability in a ubiquitous Java logging library) demonstrated that a single vulnerable dependency can expose thousands of downstream applications. By 2040, SCA is mandatory in all UoY development pipelines: builds fail if dependencies contain HIGH or CRITICAL vulnerabilities, and automated pull requests update dependencies within 24 hours of patch availability.
+**Eradication** removes the attacker's presence. **Malware removal**: antivirus scans, reimaging affected systems, and validating clean state. **Backdoor elimination**: reviewing startup items, scheduled tasks, and authorized keys for persistence mechanisms. **Vulnerability remediation**: patching the root cause. By 2040, **automated eradication** (reimaging compromised endpoints from golden images, rotating credentials via vaults) reduces response time.
 
-The Secure Development Lifecycle (SDL) integrates security into every phase of software development. Microsoft's SDL (2004–present) defines requirements, design, implementation, verification, release, and response phases, with security activities at each. OWASP SAMM (Software Assurance Maturity Model) and BSIMM (Building Security In Maturity Model) provide assessment frameworks. By 2040, "Continuous Security Assurance" (CSA) replaces the linear SDL with a continuous model: security requirements are embedded in user stories, threat modeling is triggered by architecture changes, SAST/DAST/SCA run on every commit, penetration testing is continuous (via automated red teaming), and security metrics are displayed on development dashboards. The UoY "Yggdrasil Secure Pipeline" enforces CSA for all university software: no code reaches production without passing automated security gates.
+**Recovery** restores normal operations. **System restoration**: rebuilding from clean backups, verifying integrity, and monitoring for recurrence. **Service restoration**: bringing systems online in priority order (critical services first). **Validation**: confirming that restored systems are clean and functional. The lecture covers **prolonged recovery**: some incidents (e.g., ransomware with data destruction) require weeks or months of rebuilding.
+
+**Post-incident review** transforms incidents into learning opportunities. **Blameless postmortems** focus on systemic failures, not individual blame. **Five Whys** (iteratively asking "why" to find root causes) and **fishbone diagrams** (Ishikawa) structure the analysis. **Improvement tracking**: assigning action items with owners and deadlines. **Metrics**: Mean Time to Detect (MTTD), Mean Time to Respond (MTTR), and recurrence rate. By 2040, **automated postmortem generation** drafts incident summaries from timeline data, which human reviewers refine.
 
 ### Required Reading
 
-- OWASP (2039). *OWASP Top 10 for 2040.*
-- Howard, M., & Lipner, S. (2031). *The Security Development Lifecycle*, 2nd Edition. Microsoft Press.
-- McGraw, G., Migues, S., & West, J. (2035). *Building Security In Maturity Model (BSIMM) v2040.*
-- UoY-IT-TR-2037-44: "Yggdrasil Secure Pipeline: Continuous Security Assurance for University Software."
-- The Rust Project (2039). "Memory Safety in Systems Programming: The Rust Approach."
+- Cichonski, P., et al. (2012). *Computer Security Incident Handling Guide*. NIST SP 800-61 Rev. 2.
+- SANS Institute (2040). *Incident Handler's Handbook*. SANS Reading Room.
+- Allspaw, J. (2012). "Blameless Postmortems and a Just Culture." *Etsy Code as Craft*.
+- Yggdrasil Incident Response Team (2037). "The Ransomware Recovery of 2037: 45 Days from Encryption to Full Restoration." *UoY IR Postmortem*.
 
 ### Discussion Questions
 
-1. Memory-safe languages (Rust, Go) prevent entire classes of vulnerabilities but have learning curves and ecosystem limitations. Should organizations mandate memory-safe languages for all new development, or allow C/C++ where performance is critical?
-
-2. AI-assisted SAST reduces false positives but may miss vulnerabilities outside its training distribution. How should organizations validate the effectiveness of AI security tools?
-
-3. SCA tools can generate hundreds of vulnerability alerts for outdated dependencies, overwhelming developers. Should builds fail on all vulnerabilities, or should organizations accept risk-based thresholds?
+1. Blameless postmortems aim to create psychological safety, but some incidents involve clear negligence. How should organizations balance blamelessness with accountability?
+2. Automated eradication is fast but can destroy forensic evidence. For incidents requiring law enforcement involvement, should eradication be delayed for evidence preservation?
+3. MTTR (Mean Time to Respond) is a common metric, but it can be gamed by classifying incidents as low severity. What complementary metrics ensure meaningful measurement?
+4. AI-generated training simulations are realistic but may desensitize responders. How should organizations maintain the urgency and emotional engagement of live incidents?
 
 ### Practice Problems
 
-- Conduct a threat modeling exercise for a hypothetical web application (provided scenario: a student registration system). Use STRIDE to identify threats, prioritize them by risk, and design mitigations. Document the threat model as a deliverable.
-- Integrate SAST (Semgrep or SonarQube), DAST (OWASP ZAP), and SCA (Snyk or Dependabot) into a CI/CD pipeline for a sample application. Configure the pipeline to fail on HIGH/CRITICAL findings. Submit the pipeline configuration and a scan report.
+- Conduct a tabletop exercise for a ransomware incident. Assign roles (incident commander, technical lead, communications lead, legal counsel) and walk through each phase of the response. Document decisions, timelines, and gaps.
+- Analyze a provided incident timeline (logs from a compromised system). Reconstruct the attack sequence, identify the initial vector, assess scope, and propose containment and eradication steps.
 
 ---
 
-ᚺ **Lecture 9: Governance, Risk, and Compliance — The Business of Security**
+ᚺ **Lecture 9: Risk Management and Compliance**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Technical controls are necessary but insufficient. Organizations do not secure systems merely for their own sake; they secure them because of legal obligations, contractual requirements, fiduciary duties, and ethical commitments. Governance, Risk, and Compliance (GRC) is the discipline that connects cybersecurity to business objectives: defining security policies, assessing risks, ensuring regulatory compliance, and communicating security value to non-technical stakeholders. This lecture covers the frameworks, standards, and practices that enable security to function as a business enabler rather than a cost center.
-
-By 2040, cybersecurity regulation has proliferated globally. The EU NIS3 Directive (2036), the U.S. Cybersecurity and Infrastructure Security Agency (CISA) mandates (2035), the WCGB Global Cyber Compact (2037), and sector-specific regulations (HIPAA for healthcare, PCI-DSS for payments, GDPR for privacy) create a complex compliance landscape. The IT professional must navigate this landscape while maintaining operational effectiveness and controlling costs.
+Security is a risk management discipline. This lecture covers the frameworks and practices that identify, assess, and mitigate security risks while satisfying regulatory requirements. Students will learn to speak the language of risk: threats, vulnerabilities, likelihood, impact, and control effectiveness.
 
 ### Key Topics
 
-- **Security Governance Frameworks:** ISO 27001/27002, NIST CSF (Cybersecurity Framework), COBIT, and the 2040 "Integrated GRC" platforms that consolidate policy, risk, and compliance management
-- **Risk Management:** Risk identification, assessment (qualitative and quantitative), treatment (mitigate, transfer, accept, avoid), and the 2040 "AI risk modeling" that predicts breach probability and impact
-- **Regulatory Compliance:** GDPR, NIS3, CCPA, sector-specific regulations, and the challenge of multi-jurisdictional compliance for global organizations
-- **Security Metrics and Reporting:** KPIs (Key Performance Indicators), KRIs (Key Risk Indicators), and the "security dashboard" that communicates security posture to executives
-- **Third-Party Risk Management:** Vendor assessments, supply chain security, and the 2040 "continuous third-party monitoring" that tracks vendor security posture in real-time
-- **Cyber Insurance:** Coverage models, actuarial science for cyber risk, and the 2038 "ransomware exclusion" that made cyber insurance a contested market
+- Risk management frameworks: NIST RMF, ISO 27005, FAIR, and OCTAVE
+- Risk assessment: asset inventory, threat modeling, and vulnerability analysis
+- Risk treatment: acceptance, mitigation, transfer, and avoidance
+- Compliance: GDPR, HIPAA, PCI-DSS, SOC 2, and industry-specific regulations
+- Audit and assurance: internal audits, third-party assessments, and continuous compliance
 
 ### Lecture Notes
 
-Security governance provides the structure within which security operates. ISO 27001 (Information Security Management Systems) offers a certification framework; ISO 27002 provides implementation guidance. The NIST Cybersecurity Framework (CSF, 2014; updated 2035) organizes security into five functions: Identify, Protect, Detect, Respond, Recover. COBIT (Control Objectives for Information and Related Technologies) links IT governance to business goals. By 2040, "Integrated GRC" platforms (RSA Archer, ServiceNow GRC, MetricStream) consolidate these frameworks into unified systems where policies, risks, controls, and compliance status are tracked in real-time. The UoY "Yggdrasil GRC" platform integrates with all university systems, automatically detecting configuration drift from security baselines and generating compliance reports for auditors.
+**Risk** is the potential for loss or harm. In cybersecurity, risk arises from the intersection of **threats** (adversaries, accidents, natural events), **vulnerabilities** (weaknesses in systems or processes), and **impact** (financial, reputational, operational, legal). **Risk = Threat × Vulnerability × Impact** (qualitatively) or quantitatively via models like FAIR (Factor Analysis of Information Risk).
 
-Risk management is the core discipline of security governance. The process: (1) **Identify** risks — what could go wrong? (2) **Assess** risks — how likely and how impactful? (3) **Treat** risks — mitigate (reduce likelihood or impact), transfer (insurance), accept (acknowledge and budget for residual risk), or avoid (eliminate the risky activity). Quantitative risk assessment uses dollar values: Annualized Loss Expectancy (ALE) = Single Loss Expectancy (SLE) × Annualized Rate of Occurrence (ARO). Qualitative assessment uses ratings (High/Medium/Low). By 2040, "AI risk modeling" (the UoY "Wyrd Risk Engine") predicts breach probability based on: vulnerability exposure, threat intelligence, security control maturity, historical incident data, and industry benchmarks. The model forecasts ALE with surprising accuracy: in validation against 50 historical breaches, its predictions were within 15% of actual losses.
+**Risk management frameworks** provide structured approaches. **NIST RMF (Risk Management Framework)** provides a seven-step process: Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor. **ISO 27005** provides guidelines for information security risk management. **FAIR** provides quantitative risk analysis using probability and financial impact. **OCTAVE** (Operationally Critical Threat, Asset, and Vulnerability Evaluation) is a self-directed risk assessment for organizations. By 2040, **AI-assisted risk assessment** automatically identifies assets, discovers vulnerabilities, and calculates risk scores, but human judgment remains essential for contextual factors.
 
-Regulatory compliance has become a major driver of security investment. The EU NIS3 Directive (2036) expands the scope of critical infrastructure regulation to include: cloud providers, data centers, DNS services, and AI model training facilities. It mandates: incident reporting within 24 hours, regular security audits, supply chain security requirements, and minimum security standards. GDPR (2018; enhanced 2032) imposes strict data protection requirements with fines up to 4% of global revenue. The U.S. Cybersecurity Maturity Model Certification (CMMC, 2035) requires defense contractors to meet specific security levels. The challenge for global organizations is multi-jurisdictional compliance: a university like UoY, with campuses in Norway, Iceland, Denmark, Germany, and the U.S., must comply with five distinct regulatory regimes. The UoY "Regulatory Harmonization Office" maps requirements across jurisdictions, identifying common controls that satisfy multiple regulations and flagging unique requirements that need specialized treatment.
+**Risk assessment** identifies and evaluates risks. **Asset inventory**: cataloging hardware, software, data, and personnel. **Threat modeling** (STRIDE, PASTA, attack trees) identifies how adversaries could attack systems. **Vulnerability analysis** (scanning, penetration testing, code review) identifies weaknesses. **Risk scoring**: combining likelihood and impact into a priority matrix (Critical, High, Medium, Low). The lecture demonstrates a risk register: a spreadsheet or database tracking each risk, its owner, mitigation status, and residual risk.
 
-Security metrics transform technical security data into business-relevant information. KPIs (Key Performance Indicators) measure security performance: mean time to patch (MTTP), vulnerability remediation rate, phishing simulation click rate, security training completion rate. KRIs (Key Risk Indicators) measure exposure: number of critical vulnerabilities, exposed services, accounts without MFA, overdue access reviews. The "security dashboard" presents these metrics visually for executives, translating technical risk into business language: "We have a 12% probability of a material breach in the next 12 months, with an estimated impact of €8.5 million." By 2040, UoY's executive dashboard updates in real-time, fed by automated assessments of the university's security posture.
+**Risk treatment** addresses identified risks. **Acceptance**: acknowledging the risk and its potential impact (appropriate for low risks or when mitigation cost exceeds impact). **Mitigation**: implementing controls to reduce likelihood or impact (firewalls, encryption, training). **Transfer**: shifting risk to another party (cyber insurance, outsourcing). **Avoidance**: eliminating the risk by discontinuing the activity (shutting down a vulnerable legacy system). By 2040, **cyber insurance** is standard for enterprises, with premiums tied to risk posture (verified by third-party assessments).
 
-Third-party risk management addresses the reality that organizations are only as secure as their weakest vendor. The 2034 "Black December" attacks (supply chain compromise of a logging library) demonstrated that a single vulnerable vendor can compromise thousands of downstream organizations. By 2040, "continuous third-party monitoring" (SecurityScorecard, BitSight, and the UoY "Vendor Vigilance" platform) tracks vendor security posture in real-time: scanning vendor websites for leaked credentials, monitoring dark web forums for vendor data breaches, and analyzing vendor software for vulnerabilities. Contracts include security requirements: minimum security ratings, breach notification clauses, right-to-audit provisions, and cyber insurance requirements.
+**Compliance** satisfies legal and regulatory requirements. **GDPR** (EU, 2018, amended 2030) governs personal data protection. **HIPAA** (U.S.) governs health information. **PCI-DSS** governs payment card data. **SOC 2** (Service Organization Control) attests to security controls for service providers. By 2040, **the Global Data Protection Accord** (2034) harmonizes privacy standards across 80 nations, and **AI regulations** (EU AI Act 2030, U.S. AI Bill of Rights 2032) add algorithmic accountability requirements. The lecture maps common controls (encryption, access logging, data retention) to regulatory requirements.
 
-Cyber insurance has evolved from a niche product to a standard business requirement — and back to a contested market. Early cyber insurance (2000s–2010s) was affordable and widely available. The ransomware epidemic of the 2030s caused massive claims, leading insurers to impose strict exclusions: many policies now exclude ransomware payments, nation-state attacks, and unpatched vulnerabilities. By 2038, several major insurers exited the cyber market entirely, and premiums increased 400% for organizations with poor security posture. The IT professional must understand cyber insurance as a risk transfer mechanism, not a substitute for security investment: insurers increasingly require proof of security controls (MFA, patching, backups, EDR) before issuing policies.
+**Audit and assurance** verify that controls are effective. **Internal audits** (conducted by the organization) assess compliance and control effectiveness. **Third-party assessments** (penetration tests, SOC 2 audits, ISO 27001 certifications) provide independent validation. **Continuous compliance** monitoring (automated scanning, policy-as-code, real-time dashboards) replaces periodic audits with ongoing verification. By 2040, **blockchain-based audit trails** (UoY's Bifröst system) provide tamper-evident compliance records.
 
 ### Required Reading
 
-- ISO/IEC 27001:2036. *Information Security Management Systems — Requirements.*
-- NIST (2035). *Cybersecurity Framework 2.0.*
-- EU NIS3 Directive (2036/1148). *Network and Information Security Directive.*
-- UoY-IT-TR-2037-51: "Wyrd Risk Engine: AI-Powered Cyber Risk Quantification for Higher Education."
-- UoY-IT-TR-2038-33: "Vendor Vigilance: Continuous Third-Party Security Monitoring."
+- NIST (2018). *Risk Management Framework for Information Systems and Organizations*. NIST SP 800-37 Rev. 2.
+- Freund, J., & Jones, J. (2014). *Measuring and Managing Information Risk: Using FAIR*. Butterworth-Heinemann.
+- ISO/IEC (2018). *ISO/IEC 27005:2018 Information Security Risk Management*. ISO.
+- Yggdrasil Compliance Team (2034). "The Global Data Protection Accord: Implementation at UoY." *UoY Compliance Report*.
 
 ### Discussion Questions
 
-1. AI risk models predict breach probability with impressive accuracy but are opaque (black-box neural networks). Should organizations trust AI risk assessments for major security investment decisions, or should they demand explainable models?
-
-2. Multi-jurisdictional compliance creates significant overhead. Should global organizations lobby for harmonized international standards, or is regulatory diversity valuable for addressing local concerns?
-
-3. Cyber insurance exclusions for ransomware have made insurance less useful for the most common threat. Is the insurance industry failing its purpose, or are the exclusions a necessary market correction that forces organizations to invest in prevention?
+1. Quantitative risk analysis (FAIR) produces financial estimates, but security incidents often cause intangible harm (reputation, trust). How should risk assessments account for non-financial impacts?
+2. Cyber insurance transfers risk but can create moral hazard (organizations may under-invest in security knowing insurance covers losses). How should insurers incentivize security investment?
+3. Continuous compliance monitoring reduces audit burden but increases operational overhead. For a small organization, is continuous monitoring feasible, or should periodic audits suffice?
+4. Blockchain-based audit trails are tamper-evident but not tamper-proof (a 51% attack could alter records). For what compliance use cases is blockchain appropriate?
 
 ### Practice Problems
 
-- Conduct a risk assessment for a hypothetical university department (provided scenario: a research lab handling sensitive personal data). Identify 10 risks, assess them using both qualitative (High/Medium/Low) and quantitative (ALE) methods, and propose treatment strategies. Present findings as a risk register.
-- Map the security controls of the NIST CSF to the requirements of GDPR Article 32 (security of processing). Identify gaps where GDPR requires controls not explicitly covered by the CSF, and propose how the UoY GRC platform could address them.
+- Conduct a risk assessment for a fictional e-commerce company. Identify assets, threats, and vulnerabilities. Score risks using a qualitative matrix and a FAIR-like quantitative approach. Propose mitigations and calculate residual risk.
+- Map the controls of a provided security policy to GDPR, HIPAA, and PCI-DSS requirements. Identify gaps and propose remediation.
 
 ---
 
-ᚾ **Lecture 10: Emerging Threats and Future Defense — The Horizon of 2045**
+ᚾ **Lecture 10: Malware and Threat Actors**
 
 **Course:** IT205 — Cybersecurity Fundamentals  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The cybersecurity landscape evolves continuously, and the threats of 2045 will differ from those of 2040 in ways we can partially anticipate but never fully predict. This final lecture examines emerging threats on the horizon: AI-versus-AI cyber warfare, the convergence of cyber and physical attacks, the implications of brain-computer interfaces for security, and the philosophical question of whether "perfect security" is achievable or even desirable.
-
-We also address the human dimension of cybersecurity: the burnout crisis among security professionals, the diversity gap in the field, and the ethical responsibilities that come with the power to protect — or surveil — digital society. The lecture concludes with the UoY "Cybersecurity Oath," a pledge taken by all graduates of the IT program.
+Malware is the weapon of the digital age. This lecture covers the taxonomy of malicious software, the techniques used by threat actors, and the defenses that protect against them. By 2040, malware has evolved to include AI-generated payloads, fileless attacks, and living-off-the-land techniques that evade traditional detection.
 
 ### Key Topics
 
-- **AI-Versus-AI Cyber Warfare:** Autonomous attack systems, self-healing networks, and the "singularity" of cybersecurity where human comprehension lags behind machine speed
-- **Cyber-Physical Convergence:** Attacks on autonomous vehicles, medical implants, smart cities, and industrial control systems — where digital attacks cause physical harm
-- **Neurosecurity:** The security implications of brain-computer interfaces (BCIs), neural implants, and "cognitive hacking"
-- **The Burnout Crisis:** The 2037 WHO recognition of cybersecurity burnout, the talent shortage (3.5 million unfilled positions globally in 2040), and the UoY "Sustainable Security" initiative
-- **Ethics and Power:** The tension between security and privacy, the surveillance potential of security tools, and the "security professional's responsibility to society"
+- Malware taxonomy: viruses, worms, trojans, ransomware, spyware, rootkits, and bootkits
+- Attack techniques: phishing, spear phishing, watering holes, and supply chain compromise
+- Fileless malware: PowerShell-based attacks, reflective DLL injection, and LOLBAS
+- Ransomware evolution: encryption, double extortion, triple extortion, and RaaS
+- Defense strategies: endpoint protection, network segmentation, and backup resilience
 
 ### Lecture Notes
 
-AI-versus-AI cybersecurity is already reality in 2040, but by 2045 it will be the dominant paradigm. Attack systems use reinforcement learning to discover novel exploitation paths; defense systems use adversarial training to harden against evolving attacks. The "OODA loop" (Observe, Orient, Decide, Act) — originally a military concept — has compressed from hours (human defenders) to milliseconds (AI defenders). The concern is the "singularity" of cybersecurity: a point where AI systems operate so quickly and complexly that human oversight becomes impossible. The UoY "Human-in-the-Loop" mandate requires that all autonomous security systems include human approval for actions with potential business impact (system shutdown, data deletion, law enforcement notification) — even if this introduces milliseconds of delay.
+**Malware taxonomy** classifies malicious software by behavior. **Viruses** attach to legitimate programs and spread when executed. **Worms** self-replicate across networks without user action. **Trojans** masquerade as legitimate software. **Ransomware** encrypts data and demands payment for decryption. **Spyware** steals information (keyloggers, screen capture). **Rootkits** hide deep in the OS, concealing malware presence. **Bootkits** infect the boot process, loading before the OS. By 2040, **AI-generated malware** mutates its code to evade signature detection, and **polymorphic malware** changes its appearance on every infection.
 
-Cyber-physical convergence represents the most dangerous evolution of cyber threats. The 2039 "Stuxnet 2.0" attack (an evolved version of the 2010 original) targeted nuclear enrichment centrifuges in Iran, causing physical destruction through precise manipulation of industrial control systems. By 2040, potential cyber-physical targets include: autonomous vehicles (remote hijacking causing crashes), medical implants (pacemaker reprogramming), smart cities (traffic light manipulation causing gridlock or accidents), and power grids (cascading failures causing regional blackouts). The UoY "Cyber-Physical Security Lab" studies these threats using hardware-in-the-loop simulation: real industrial control systems connected to virtual physical environments.
+**Attack techniques** deliver malware to targets. **Phishing** (mass email with malicious links/attachments) remains the most common vector. **Spear phishing** targets specific individuals with personalized content (often using OSINT and AI-generated text). **Watering hole attacks** compromise websites frequented by the target audience. **Supply chain compromise** (covered in Lecture 1) injects malware into trusted software. By 2040, **deepfake phishing** uses AI-generated voice and video to impersonate executives, with a 400% increase in business email compromise (BEC) losses between 2030 and 2040.
 
-Neurosecurity addresses the security implications of brain-computer interfaces. The 2035 Neuralink "N1" implant and competing BCI technologies allow direct brain-computer communication — with profound security implications. Could a malicious BCI firmware update alter a user's thoughts, memories, or personality? Could neural data be exfiltrated and used for blackmail or manipulation? The 2038 "Copenhagen Neural Privacy" conference established preliminary ethical guidelines: BCIs must use end-to-end encryption for neural data, users must retain absolute control over their neural data, and BCI manufacturers are strictly liable for security failures. The UoY "Neuroethics Centre" continues this work, but the regulatory landscape remains nascent.
+**Fileless malware** avoids writing files to disk, evading signature-based detection. **PowerShell-based attacks** execute malicious scripts in memory. **Reflective DLL injection** loads malicious libraries directly into process memory. **LOLBAS (Living Off The Land Binaries And Scripts)** uses legitimate system tools (PowerShell, WMI, certutil) for malicious purposes. By 2040, **memory-only implants** (malware that exists solely in RAM, never touching disk) require behavioral detection and memory forensics.
 
-The burnout crisis threatens the cybersecurity profession. The 2037 WHO recognition of "cybersecurity professional burnout" (ICD-11 code QD86) legitimized what practitioners had long experienced: chronic stress from constant threat exposure, alert fatigue, the impossibility of perfect security, and the blame culture that holds security teams responsible for breaches caused by organizational failures. By 2040, the global cybersecurity workforce shortage reaches 3.5 million unfilled positions. The UoY "Sustainable Security" initiative addresses this: limited on-call for students, mandatory mental health support for security staff, "security sabbaticals" (paid leave for professional recovery), and a cultural shift from "heroic firefighting" to "systemic prevention."
+**Ransomware** has evolved through stages. **First generation** (2010s): encrypts files, demands Bitcoin payment. **Double extortion** (2020s): encrypts files and threatens to leak stolen data. **Triple extortion** (2030s): encrypts, leaks data, and threatens DDoS against victims who refuse to pay. **RaaS (Ransomware as a Service)** enables non-technical criminals to launch attacks using pre-built ransomware platforms (affiliate model). By 2040, **AI-optimized ransomware** automatically identifies the most valuable data to encrypt and negotiates payment amounts based on victim financial analysis.
 
-The power of cybersecurity professionals carries ethical responsibilities. Security tools designed to protect can be repurposed for surveillance: the same network monitoring that detects intruders can monitor employee productivity; the same encryption that protects privacy can conceal criminal activity; the same AI that detects threats can profile individuals. The UoY "Cybersecurity Oath," administered at graduation, includes: "I will use my knowledge to protect, not to harm. I will respect privacy and confidentiality. I will share knowledge for the common defense. I will not abuse my access or skills. I will remember that behind every system is a human being."
+**Defense strategies** against malware are layered. **Prevention**: email filtering, web filtering, application control, and user training. **Detection**: EDR, behavioral analysis, and threat hunting. **Containment**: network segmentation, endpoint isolation, and account lockout. **Recovery**: immutable backups, disaster recovery plans, and incident response. The lecture emphasizes that **no single control is sufficient**: defense in depth requires multiple overlapping protections. The 2037 *Yggdrasil Ransomware Defense*—in which layered controls (application control blocked initial execution, EDR detected lateral movement, network segmentation limited spread, and immutable backups enabled recovery without payment)—demonstrates effective defense.
 
 ### Required Reading
 
-- Schneier, B. (2032). *Click Here to Kill Everybody: Security and Survival in a Hyper-Connected World.* W.W. Norton.
-- UoY-IT-TR-2039-01: "The Human-in-the-Loop Mandate: Preserving Human Agency in AI-Driven Security."
-- WHO (2037). "Burn-out an Occupational Syndrome: Cybersecurity Professional Extension."
-- UoY Neuroethics Centre (2039). "Neural Data Privacy: Principles and Recommendations."
-- Stytz, M.R., & Banks, S.B. (2035). "Cyber-Physical Security: Protecting the Convergence." *IEEE Security & Privacy*, 13(4), 22–29.
+- Sikorski, M., & Honig, A. (2012). *Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software*. No Starch Press.
+- MITRE ATT&CK Framework (2040). *ATT&CK for Enterprise: Techniques and Sub-techniques*. MITRE.
+- Yggdrasil Malware Analysis Lab (2040). "AI-Generated Malware: A Technical Analysis of 2039 Campaigns." *UoY Security Research Report*.
+- Yggdrasil Incident Response (2037). "The Yggdrasil Ransomware Defense: Layered Controls in Action." *UoY IR Case Study*.
 
 ### Discussion Questions
 
-1. The "singularity" of cybersecurity — where AI operates beyond human comprehension — may be inevitable. Should we embrace it, regulate it, or resist it?
-
-2. Cyber-physical attacks can cause physical harm equivalent to kinetic warfare. Should cyber attacks on critical infrastructure be treated as acts of war, and if so, what are the implications for attribution and retaliation?
-
-3. The Cybersecurity Oath is voluntary and unenforceable. Should cybersecurity professionals be licensed and regulated like doctors or lawyers, with formal ethical obligations and disciplinary procedures?
+1. AI-generated malware evades signature detection but may still exhibit behavioral patterns. Can behavioral detection keep pace with AI-generated threats, or does this create another arms race?
+2. Ransomware payments fund criminal organizations, yet some victims have no recovery alternative. Should governments ban ransom payments, and what support would victims need?
+3. Fileless malware uses legitimate tools, making detection difficult. Does this mean application whitelisting (blocking all unauthorized executables) should be mandatory?
+4. Deepfake phishing undermines voice and video as authentication factors. What replacement authentication methods are viable for high-value transactions?
 
 ### Practice Problems
 
-- Write a 2,000-word essay on one emerging threat (AI warfare, cyber-physical convergence, or neurosecurity). Analyze the threat, review current defenses, and propose a research agenda for the next 5 years.
-- Participate in a panel discussion (simulated in class) on the ethics of security surveillance. Argue for or against: mandatory encryption backdoors for law enforcement, employee monitoring for insider threat detection, and AI profiling for threat prediction.
+- Analyze a provided malware sample (in a sandboxed environment). Identify its type, infection vector, persistence mechanisms, network communication, and payload. Document the analysis with IOCs.
+- Design a defense architecture against ransomware for a mid-sized company. Specify preventive, detective, and recovery controls. Include a tabletop exercise scenario and expected outcomes.
+
+---
+
+ᛁ **Lecture 11: Social Engineering and the Human Factor**
+
+**Course:** IT205 — Cybersecurity Fundamentals  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Technology can be secured, but humans remain the weakest link. This lecture covers the psychological manipulation techniques used by attackers and the organizational defenses that mitigate human vulnerability. Students will learn to design security awareness programs, recognize manipulation tactics, and build a security culture that empowers rather than blames users.
+
+### Key Topics
+
+- Social engineering techniques: pretexting, baiting, quid pro quo, and tailgating
+- Psychology of persuasion: authority, urgency, scarcity, and reciprocity
+- Security awareness training: phishing simulations, gamification, and metrics
+- Security culture: psychological safety, reporting incentives, and blameless response
+- Insider threats: malicious, negligent, and compromised insiders
+
+### Lecture Notes
+
+**Social engineering** exploits human psychology rather than technical vulnerabilities. **Pretexting** creates a fabricated scenario to gain trust ("I'm from IT, I need your password to fix your account"). **Baiting** offers something enticing (a USB drive labeled "Salaries 2040" left in a parking lot). **Quid pro quo** offers a service in exchange for information ("I'll help you with this technical problem if you verify your credentials"). **Tailgating** follows an authorized person through a secure door. By 2040, **AI-augmented social engineering** generates personalized phishing emails, deepfake voice calls, and synthetic social media profiles that are nearly indistinguishable from real people.
+
+The **psychology of persuasion** (Cialdini, 1984) explains why social engineering works. **Authority**: people obey perceived authority figures (fake IT support, fake executives). **Urgency**: time pressure bypasses rational analysis ("Your account will be suspended in 1 hour"). **Scarcity**: limited availability increases perceived value ("Only 3 spots left in this security training"). **Reciprocity**: people feel obligated to return favors ("I helped you with that problem, can you help me with this?"). The lecture teaches students to recognize these triggers in themselves and others.
+
+**Security awareness training** reduces human vulnerability. **Phishing simulations** send fake phishing emails to employees, measuring click rates and providing immediate training to those who fail. **Gamification** uses points, badges, and leaderboards to engage employees. **Metrics** track improvement: phishing click rate, password strength, reporting rate (employees reporting suspicious emails rather than ignoring them). By 2040, **AI-personalized training** adapts content to each employee's role, past mistakes, and learning style. The lecture warns against **punitive training**: shaming employees who fail simulations creates fear and reduces reporting.
+
+**Security culture** determines whether employees see security as their responsibility or IT's burden. **Psychological safety** ensures that employees can report mistakes (clicked a phishing link, lost a laptop) without punishment. **Reporting incentives** reward employees who report suspicious activity (a "security champion" program). **Blameless response** to incidents focuses on systemic improvements rather than individual fault. By 2040, the UoY **Security Culture Index** (a survey-based metric) is used to measure and improve organizational security culture.
+
+**Insider threats** come from within the organization. **Malicious insiders** intentionally steal or destroy data (disgruntled employees, spies). **Negligent insiders** accidentally cause harm (losing devices, misconfiguring systems, falling for phishing). **Compromised insiders** have their credentials stolen by external attackers. The lecture covers detection: **User and Entity Behavior Analytics (UEBA)** detects anomalous behavior (accessing unusual files, working at odd hours, downloading large datasets). **Deterrence**: least privilege, separation of duties, and access logging. **Response**: investigation, containment, and legal action if warranted.
+
+### Required Reading
+
+- Cialdini, R. B. (1984). *Influence: The Psychology of Persuasion*. Harper Business. (Updated edition, 2021.)
+- Hadnagy, C. (2018). *Social Engineering: The Science of Human Hacking* (2nd Edition). Wiley.
+- SANS (2040). *Security Awareness Program Maturity Matrix*. SANS Institute.
+- Yggdrasil Security Culture Team (2038). "The Security Culture Index: Measuring Human Resilience." *UoY Security Research Report*.
+
+### Discussion Questions
+
+1. AI-generated phishing is nearly indistinguishable from legitimate communication. Can security awareness training keep pace, or will technical controls (email authentication, application sandboxing) become the primary defense?
+2. Punitive training reduces reporting but may improve compliance. What is the optimal balance between accountability and psychological safety?
+3. UEBA detects anomalous behavior but can create a surveillance culture. How should organizations implement behavioral monitoring without eroding trust?
+4. Insider threats are difficult to prevent because insiders have legitimate access. What combination of technical controls and organizational culture minimizes insider risk?
+
+### Practice Problems
+
+- Design a security awareness program for a university. Include: training topics, delivery methods, phishing simulation frequency, metrics, and reporting mechanisms. Address how to handle employees who repeatedly fail simulations.
+- Analyze a provided insider threat case study. Identify the warning signs that UEBA might have detected, propose preventive controls, and design a response plan that balances security with employee rights.
+
+---
+
+ᛃ **Lecture 12: Emerging Threats and the Future of Cybersecurity**
+
+**Course:** IT205 — Cybersecurity Fundamentals  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+The final lecture projects cybersecurity into the future, examining the threats and technologies that will shape the 2040s and beyond. Students will learn to anticipate change, adapt defenses, and maintain the intellectual flexibility necessary for a career in an ever-evolving field.
+
+### Key Topics
+
+- Quantum computing: Shor's algorithm, Grover's algorithm, and post-quantum migration
+- AI and autonomous attacks: self-mutating malware, AI-vs-AI defense, and ethical constraints
+- Biological-digital convergence: neural interfaces, DNA computing, and bio-authentication
+- Space and satellite security: orbital infrastructure and ground segment vulnerabilities
+- The enduring principles: defense in depth, least privilege, and human judgment
+
+### Lecture Notes
+
+**Quantum computing** threatens current cryptography. **Shor's algorithm** (1994) factors integers and solves discrete logarithms in polynomial time on a quantum computer, breaking RSA and ECC. **Grover's algorithm** (1996) searches unstructured databases quadratically faster, effectively halving symmetric key strength (AES-256 becomes AES-128 equivalent). By 2040, **post-quantum cryptography** (CRYSTALS-Kyber, CRYSTALS-Dilithium, SPHINCS+) is being deployed, but the transition will take decades. The lecture covers **harvest now, decrypt later**: adversaries storing encrypted traffic today to decrypt once quantum computers are available. Organizations with long-term secrets (government, healthcare, research) must migrate first.
+
+**AI and autonomous attacks** represent the next phase of the cyber arms race. **Self-mutating malware** uses generative AI to rewrite its code continuously, evading signature detection. **Autonomous C2** bots conduct entire attack campaigns without human intervention: reconnaissance, exploitation, lateral movement, and data exfiltration. **AI-vs-AI defense** pits defensive AI against offensive AI in real time. By 2040, the UoY **Cyber Defense Grid** uses swarms of defensive AI agents that patrol the network, isolate compromised segments, and regenerate clean services. The lecture explores the **ethical constraints**: should autonomous defense systems be permitted to hack back against attackers? International law is unclear.
+
+**Biological-digital convergence** creates new attack surfaces. **Neural interfaces** (brain-computer interfaces for medical and enhancement purposes) transmit neural data that could be intercepted or manipulated. **DNA computing** stores and processes data in synthetic DNA, with unique vulnerabilities (contamination, sequencing errors). **Bio-authentication** (DNA, heartbeat patterns, gait analysis) provides strong identity verification but raises privacy concerns (your DNA cannot be changed if compromised). By 2040, the UoY **Bioethics and Security Board** governs research at this intersection.
+
+**Space and satellite security** is critical as orbital infrastructure expands. **Satellite constellations** (Starlink, Kuiper, OneWeb) provide global internet but are vulnerable to jamming, spoofing, and kinetic attacks. **Ground segment vulnerabilities** (mission control systems, telemetry links) can compromise entire constellations. By 2040, **lunar and cislunar infrastructure** (UoY's **Mímir Lunar Array**, 2038) extends the attack surface beyond Earth. The lecture covers **space cybersecurity standards** (ISO 24113 for space data links) and the unique challenges of patching satellites in orbit.
+
+**The enduring principles** remain relevant regardless of technology. **Defense in depth**: no single control is sufficient; layered protections provide resilience. **Least privilege**: grant only the minimum access necessary. **Human judgment**: technology amplifies human capability but cannot replace wisdom, ethics, and creativity. The lecture concludes with the **Oath of the Cyber Guardian**, adapted by the UoY Security Guild in 2035: "I pledge to protect the data entrusted to me, to resist the attacker with skill and honor, to admit my limits and seek help when needed, and to remember that behind every byte is a human being whose privacy and safety depend on my vigilance."
+
+### Required Reading
+
+- Bernstein, D. J., & Lange, T. (2017). "Post-Quantum Cryptography." *Nature*, 549(7671), 188–194.
+- Yggdrasil AI Security Lab (2039). "The Cyber Defense Grid: Autonomous AI Agents in Network Defense." *UoY AI Security Report*.
+- Yggdrasil Bioethics Board (2038). "Neural Interface Security: Privacy and Integrity of Brain Data." *UoY Bioethics Report*.
+- ISO (2035). *ISO 24113: Space Systems — Space Data Links*. ISO.
+- Yggdrasil Security Guild (2035). "The Oath of the Cyber Guardian." *UoY Security Ethics Manual*.
+
+### Discussion Questions
+
+1. Quantum computers capable of breaking RSA-2048 may exist by 2045. For data that must remain secret until 2065, when should organizations begin post-quantum migration?
+2. Autonomous defensive AI that hacks back raises legal and ethical questions. Should international law permit active defense, and if so, under what constraints?
+3. Bio-authentication provides strong security but creates immutable identity risk. If DNA is compromised, what recovery mechanism is possible?
+4. Space infrastructure is expensive to patch and physically inaccessible. How should security be designed into satellites before launch?
+
+### Practice Problems
+
+- Develop a post-quantum migration plan for a fictional organization. Identify: systems using vulnerable cryptography, migration priorities, testing requirements, and a 10-year timeline. Include risk assessment for "harvest now, decrypt later."
+- Design a security architecture for a satellite ground station. Specify: network segmentation, encryption for telemetry links, access control for mission control, and incident response procedures for orbital compromise.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT205 consists of a **capture-the-flag (CTF) practical** (50% of grade), a **written examination** (30%), and a **security assessment report** (20%).
+The IT205 final examination is a **comprehensive practical and written assessment** conducted over 48 hours. Students must complete **three of five** challenges:
 
-### Capture-the-Flag Practical (50%)
+1. **Threat Analysis**: Given an APT group profile and a target organization, design a multi-layered defense strategy addressing each stage of the attack lifecycle. Include technical controls, procedural safeguards, and metrics.
+2. **Incident Response Simulation**: Lead a simulated response to a ransomware attack. Manage containment, eradication, recovery, and communication. Document decisions, timeline, and lessons learned.
+3. **Cryptographic Implementation**: Implement a secure communication protocol using hybrid post-quantum cryptography. Include key exchange, authenticated encryption, and digital signatures. Verify security properties and measure performance.
+4. **Security Architecture Review**: Review a provided network and application architecture. Identify vulnerabilities, propose mitigations, and redesign for zero-trust principles. Document trade-offs and costs.
+5. **Compliance Assessment**: Assess an organization's security posture against GDPR, NIST CSF, and ISO 27001. Identify gaps, propose remediation roadmap, and estimate implementation effort.
 
-Students compete in teams of 3–4 in the Yggdrasil Cyber Range over 8 hours. Challenges include:
+### Evaluation Criteria
 
-| Category | Weight | Description |
-|----------|--------|-------------|
-| Web Exploitation | 15% | Find and exploit vulnerabilities in deliberately vulnerable web applications (SQL injection, XSS, CSRF, IDOR) |
-| Cryptography | 10% | Break weak ciphers, analyze cryptographic implementations, and solve crypto puzzles |
-| Forensics | 10% | Analyze disk images, memory dumps, and network captures to reconstruct incidents |
-| Reverse Engineering | 10% | Analyze binary executables to understand functionality and find hidden flags |
-| Network Exploitation | 5% | Exploit network services, pivot through compromised hosts, and escalate privileges |
-
-### Written Examination — Sample Essay Questions (Choose 3 of 6)
-
-1. Compare symmetric and asymmetric cryptography across five dimensions: key management, performance, security foundations, quantum resistance, and practical use cases. Under what conditions is each appropriate?
-
-2. Design a zero-trust network architecture for a research university with 20,000 users, 500 servers, and 100,000 IoT devices. Address identity, segmentation, monitoring, and legacy integration.
-
-3. The "Ransomware Kill Switch" automated containment saved UoY from a major outbreak. But automated containment also risks false positives (isolating legitimate systems). Design a containment system that balances speed against accuracy.
-
-4. Evaluate the effectiveness of bug bounty programs versus traditional penetration testing for vulnerability discovery. Under what conditions is each approach superior, and how should organizations combine them?
-
-5. AI-powered attacks and AI-powered defenses are in an arms race. Analyze the strategic dynamics: which side has structural advantages (attackers need one success; defenders need to protect everything), and how can defenders overcome the asymmetry?
-
-6. The Cybersecurity Oath emphasizes human dignity and privacy. Write a philosophical defense of the Oath, addressing potential conflicts with organizational loyalty, legal obligations, and national security requirements.
-
-### Security Assessment Report (20%)
-
-Students conduct a security assessment of a provided system (web application, network, or cloud deployment) and write a professional report including: executive summary, methodology, findings (ranked by risk), exploitation evidence, and remediation recommendations. Reports are evaluated on technical accuracy, risk communication, and actionable recommendations.
+| Criterion | Weight | Description |
+|-----------|--------|-------------|
+| Technical accuracy | 30% | Correct application of security concepts, tools, and techniques |
+| Strategic thinking | 25% | Appropriate risk trade-offs, prioritization, and architecture |
+| Communication | 20% | Clear documentation, stakeholder communication, and reporting |
+| Ethics and professionalism | 15% | Responsible handling of data, privacy, and legal considerations |
+| Innovation | 10% | Creative or insightful approaches to emerging challenges |
 
 ---
 
-*"The defender must be right every time; the attacker only once. This asymmetry is the fundamental reality of cybersecurity. But the defender has one advantage the attacker lacks: the defender protects something worth defending. Let that purpose be your shield."*  
-— Dr. Sigrún Shieldkeeper, IT205 Convocation Address, 2039
+*The walls are built, the sentries watch, and the guardian stands vigilant. But the enemy is patient, clever, and ever-changing. Security is not a destination but a journey—a perpetual dance between attack and defense, between human ingenuity and human fallibility.* ᛟ
+
+— Runa Gridweaver Freyjasdottir, Cybersecurity Fundamentals, University of Yggdrasil, 2040
