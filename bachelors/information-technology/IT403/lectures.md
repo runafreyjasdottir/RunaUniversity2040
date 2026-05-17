@@ -2,413 +2,361 @@
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
 **Credits:** 4
-**Description:** Advanced study of next-generation computing infrastructure: neuromorphic processors that mimic brain architecture, edge computing that brings intelligence to where data is generated, and the 2040 convergence of specialized hardware and distributed AI inference.
-
 **Prerequisites:** IT301, IT401
-
-**Instructor:** Dr. Eiríkr Bjarnarson, Department of Information Technology
-
-**Course Philosophy:** The von Neumann era is ending. By 2040, computing is heterogeneous: neuromorphic chips process sensor data with milliwatt power budgets, edge NPUs run AI models locally, and quantum accelerators handle specialized workloads. The IT professional must understand this hardware landscape — not to design chips, but to architect systems that leverage the right compute for the right task, at the right location, with the right energy budget.
+**Description:** Advanced study of next-generation computing infrastructure: neuromorphic processors that mimic brain architecture, edge computing that brings intelligence to where data is generated, and the 2040 convergence of specialized hardware and distributed AI inference.
 
 ---
 
 ## Lectures
 
----
+ᚠ **Lecture 1: The End of von Neumann — Why Architecture Matters Again**
 
-### Lecture 1: The End of von Neumann — Why Architecture Matters Again
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
+### 1.1 Overview
 
 For 70 years, the von Neumann architecture — separate CPU and memory, sequential instruction execution — dominated computing. By 2040, its limitations are driving a Cambrian explosion of alternative architectures: neuromorphic (brain-inspired), dataflow, near-memory compute, and heterogeneous integration. This lecture surveys the post-von-Neumann landscape and establishes why IT professionals must understand hardware architecture.
 
-#### Key Topics
+### 1.2 Key Topics
 
 - **The von Neumann Bottleneck:** The separation of CPU and memory creates a bandwidth bottleneck — the CPU spends cycles waiting for data. While CPU speeds increased exponentially, memory speeds lagged. The result: processors are often idle, waiting. Alternative architectures address this by: (1) processing-in-memory (PIM); (2) dataflow execution; (3) massively parallel, distributed computation (neuromorphic).
 - **Dennard Scaling Is Dead:** For decades, transistor density doubled while power per transistor halved. Dennard scaling ended around 2006 — transistors still shrink, but power density increases. The result: we can't just make faster CPUs. We need specialized, energy-efficient architectures for specific workloads — especially AI.
 - **The 2040 Compute Landscape:** (1) **CPUs** — general-purpose, good for control flow and sequential logic; (2) **GPUs** — massively parallel, good for matrix math and graphics; (3) **NPUs (Neural Processing Units)** — specialized for neural network inference, 10-100x more efficient than GPUs for AI; (4) **Neuromorphic** — spiking neural networks, event-driven, brain-like efficiency; (5) **FPGAs** — reconfigurable hardware for custom accelerators; (6) **Quantum** — for specialized problems (optimization, simulation, cryptography).
 
-#### Required Reading
-
+### 1.3 Required Reading
 - Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
 - UoY Architecture Lab. (2040). *Post-von-Neumann Computing: A Survey*.
 
----
-
-### Lecture 2: Neuromorphic Computing — Computing Like the Brain
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 1.4 Discussion Questions
+1. How does the von Neumann bottleneck specifically impact modern AI workloads that constantly move weights between memory and compute?
+2. If Dennard scaling had continued, would we need neuromorphic and edge computing today? Why or why not?
+3. In what ways is the 2040 compute landscape more complex than the 2020 landscape, and what skills does an IT professional need to navigate it?
 
 ---
 
-#### Overview
+ᚢ **Lecture 2: Neuromorphic Computing — Computing Like the Brain**
+
+### 2.1 Overview
 
 Neuromorphic computing abandons the digital, clock-driven, von Neumann model in favor of brain-inspired computation: spiking neural networks (SNNs) where neurons communicate via sparse, asynchronous electrical pulses (spikes), and computation is event-driven. The result: extreme energy efficiency, natural temporal processing, and architectures suited to sensory and edge AI workloads.
 
-#### Key Topics
+### 2.2 Key Topics
 
 - **Spiking Neural Networks (SNNs):** Unlike traditional artificial neural networks (which use continuous activation values), SNNs use spikes — discrete events in time. Information is encoded in spike timing and rate. SNNs are: (1) **Event-driven** — neurons only compute when they receive spikes, saving energy; (2) **Temporal by nature** — SNNs naturally process time-series data (audio, video, sensor streams); (3) **Biologically plausible** — closer to how real brains work, enabling insights from neuroscience.
 - **Neuromorphic Hardware:** (1) **Intel Loihi 3** — research chip with 1 million neurons, on-chip learning, event-driven architecture. Power: milliwatts for workloads that would consume watts on a GPU; (2) **IBM NorthPole** — brain-inspired chip optimized for inference, combining compute and memory on a single die; (3) **SpiNNaker 3** — University of Manchester's million-core neuromorphic supercomputer, modeling brain-scale networks. By 2040, neuromorphic accelerators are standard in edge devices for always-on sensing.
 - **Applications:** Neuromorphic excels at: (1) **Always-on audio processing** — wake word detection, sound classification, with sub-milliwatt power; (2) **Visual odometry** — tracking motion from camera feed for drones and robots; (3) **Anomaly detection** — detecting unusual patterns in sensor streams; (4) **Brain-computer interfaces** — processing neural signals in real-time with minimal power.
 
-#### Required Reading
-
+### 2.3 Required Reading
 - Davies, M., et al. (2018, updated 2038). "Loihi: A Neuromorphic Manycore Processor." *IEEE Micro*.
 - UoY Neuromorphic Lab. (2040). *Neuromorphic Computing in Production: Use Cases and Benchmarks*.
 
----
-
-### Lecture 3: Edge Computing — Intelligence Where Data Is Born
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 2.4 Discussion Questions
+1. How does the event-driven nature of spiking neural networks enable always-on sensing with minimal power consumption?
+2. Compare and contrast the approaches of Intel Loihi and IBM NorthPole to neuromorphic computing. What are the trade-offs between flexibility and performance?
+3. What ethical considerations arise from neuromorphic systems that more closely mimic biological neural processes?
 
 ---
 
-#### Overview
+ᚦ **Lecture 3: Edge Computing — Intelligence Where Data Is Born**
+
+### 3.1 Overview
 
 Edge computing pushes computation from centralized data centers to where data is generated — factory floors, retail stores, vehicles, smartphones, and IoT devices. By 2040, the edge is the primary compute location for AI inference, real-time processing, and privacy-sensitive workloads. This lecture covers edge architecture, deployment patterns, and the edge-cloud continuum.
 
-#### Key Topics
+### 3.2 Key Topics
 
 - **Why Edge?** (1) **Latency** — autonomous vehicles need millisecond decisions, not 100ms cloud round trips; (2) **Bandwidth** — a factory with 1,000 cameras generates petabytes/day — you can't send it all to the cloud; (3) **Privacy** — process sensitive data locally rather than sending it to centralized servers; (4) **Resilience** — edge systems operate when connectivity is intermittent; (5) **Cost** — cloud egress and compute costs for continuous video processing are prohibitive.
 - **The Edge-Cloud Continuum:** Edge is not a replacement for cloud — it's a complement. The continuum: (1) **Far edge** — sensors, microcontrollers, sub-watt devices; (2) **Near edge** — gateways, on-premises servers; (3) **Edge data center** — regional micro-data centers (5-10ms latency); (4) **Cloud** — centralized data centers (50-100ms latency). Workloads are placed based on latency, bandwidth, privacy, and cost requirements.
 - **Edge Deployment Patterns:** (1) **Cloud-trained, edge-inferred** — train AI models in the cloud, deploy to edge for inference; (2) **Federated learning** — train models collaboratively across edge devices without centralizing data; (3) **Edge-native applications** — designed from scratch to run on distributed, heterogeneous edge infrastructure; (4) **Edge orchestration** — Kubernetes at the edge (K3s, MicroK8s, KubeEdge) manages fleets of edge nodes.
 
-#### Required Reading
-
+### 3.3 Required Reading
 - Satyanarayanan, M. (2017, updated 2038). "The Emergence of Edge Computing." *IEEE Computer*.
 - CNCF. (2040). *Edge Native Application Principles*.
 
----
-
-### Lecture 4: AI at the Edge — NPUs, TinyML, and On-Device Intelligence
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 3.4 Discussion Questions
+1. How does edge computing change the traditional three-tier architecture (presentation, application, data) of enterprise applications?
+2. What are the challenges of managing thousands of heterogeneous edge devices, and how do orchestration platforms like K3s address them?
+3. In what ways does edge computing exacerbate or alleviate the digital divide between urban and rural areas?
 
 ---
 
-#### Overview
+ᚨ **Lecture 4: AI at the Edge — NPUs, TinyML, and On-Device Intelligence**
+
+### 4.1 Overview
 
 The killer application for edge computing is AI inference. By 2040, every smartphone, laptop, and IoT device includes a Neural Processing Unit (NPU) — specialized hardware that runs AI models with extreme efficiency. This lecture covers edge AI: NPU architectures, TinyML, model optimization (quantization, pruning, distillation), and the operational challenge of managing thousands of edge AI models.
 
-#### Key Topics
+### 4.2 Key Topics
 
-- **NPU Architecture:** NPUs are specialized for the matrix multiplications at the heart of neural networks. Key features: (1) **Systolic arrays** — grids of processing elements optimized for matrix multiply; (2) **Quantized computation** — INT8, INT4, or even binary operations, saving power and memory; (3) **On-chip memory** — keeping weights local to avoid off-chip memory access; (4) **Sparsity acceleration** — skipping zero-valued weights and activations.
-- **TinyML:** Machine learning on microcontrollers — sensors that run AI locally with sub-milliwatt power. Use cases: predictive maintenance (vibration sensor detects bearing failure), keyword spotting (voice-activated devices), people counting (privacy-preserving occupancy sensors). By 2040, TinyML models run on devices costing under $1.
-- **Model Optimization for Edge:** (1) **Quantization** — reduce numerical precision (FP32 → INT8), cutting model size by 4x with minimal accuracy loss; (2) **Pruning** — remove unnecessary weights and connections; (3) **Knowledge distillation** — train a small "student" model to mimic a large "teacher" model; (4) **Architecture search** — AI designs efficient model architectures for specific hardware targets.
+- **Neural Processing Units (NPUs):** (1) **Qualcomm Hexagon NPU** — integrated into Snapdragon mobile platforms, optimized for transformer-based models; (2) **Apple Neural Engine** — dedicated matrix multiplication hardware, scales with each iPhone generation; (3) **Google Edge TPU** — designed for MobileNet and EfficientNet models, used in Coral devices; (4) **Huawei Da Vinci Architecture** — scalable NPU architecture used across Mate and P series smartphones.
+- **TinyML:** Machine learning for microcontrollers with kilobytes of RAM and milliwatt power budgets. Techniques include: model quantization (8-bit or even 4-bit weights), pruning (removing unnecessary connections), knowledge distillation (training a small model to mimic a large one), and neural architecture search for tiny models.
+- **Model Optimization:** Before deploying to edge, AI models undergo aggressive optimization: (1) **Quantization** — converting 32-bit floating point weights to 8-bit integers; (2) **Pruning** — removing connections that contribute little to accuracy; (3) **Distillation** — training a student model to replicate a teacher model's behavior; (4) **Compilation** — converting the model to hardware-specific instructions via TVM, Glow, or vendor-specific compilers.
+- **Operational Challenge:** Managing thousands of edge AI models requires: (1) **Model versioning** — tracking which model is deployed where; (2) **Over-the-air (OTA) updates** — securely deploying new models to devices in the field; (3) **Monitoring** — detecting model drift or degradation in production; (4) **Fallback mechanisms** — reverting to a previous model or cloud inference if edge inference fails.
 
-#### Required Reading
+### 4.3 Required Reading
+- Satyanarayanan, M. (2017, updated 2038). "The Emergence of Edge Computing." *IEEE Computer*.
+- CNCF. (2040). *Edge Native Application Principles*.
+- Warden, P. & Dugan, S. (2018). *TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers*. O'Reilly Media.
 
-- Warden, P., & Situnayake, D. (2039). *TinyML* (2nd ed.). O'Reilly Media.
-- UoY Edge AI Lab. (2040). *Edge AI Operations: Managing Distributed Inference*.
-
----
-
-### Lecture 5: Distributed Edge Infrastructure — From Thousands to Millions of Nodes
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-Managing one server is easy. Managing 100,000 edge nodes across factories, retail stores, cell towers, and vehicles — each with unique hardware, intermittent connectivity, and physical constraints — is one of the hardest problems in IT. This lecture covers edge fleet management, zero-touch provisioning, and the operational patterns that make edge infrastructure manageable at scale.
-
-#### Key Topics
-
-- **Zero-Touch Provisioning:** An edge node arrives at a location, is plugged in, and automatically: (1) authenticates to the management platform; (2) downloads its configuration; (3) installs required software; (4) begins operation. No human SSH. This requires: secure device identity (TPM-backed certificates), automated onboarding protocols (FIDO Device Onboarding), and declarative configuration.
-- **Fleet Management at Scale:** (1) **Hierarchical management** — regional controllers manage local fleets, global controller manages regional; (2) **Declarative desired state** — define what each node type should be, let the system reconcile; (3) **Phased rollouts** — deploy updates to 1% → 10% → 50% → 100%, with automated rollback on anomaly; (4) **Health monitoring** — detect offline nodes, hardware failures, configuration drift.
-- **Intermittent Connectivity:** Edge nodes don't have reliable cloud connectivity. Patterns: (1) **Local operation** — critical functions work without connectivity; (2) **Store-and-forward** — buffer data locally, sync when connected; (3) **Conflict resolution** — handle simultaneous offline changes (CRDTs, last-write-wins); (4) **Prioritized sync** — sync critical data first when bandwidth is limited.
-
-#### Required Reading
-
-- LF Edge. (2039). *Edge Fleet Management: Architectures and Best Practices*.
-- UoY Edge Ops Lab. (2040). *Managing 100,000 Edge Nodes: Operational Lessons*.
+### 4.4 Discussion Questions
+1. How does quantization affect the accuracy of neural networks, and what techniques exist to minimize accuracy loss?
+2. Compare the trade-offs between cloud-trained models deployed to edge versus models trained entirely on edge devices via federated learning.
+3. What are the privacy implications of running AI inference on user devices versus sending data to the cloud?
 
 ---
 
-### Lecture 6: 6G, Ambient IoT, and the Connected Edge
+ᚱ **Lecture 5: Heterogeneous Computing — Orchestrating the Compute Zoo**
 
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 5.1 Overview
 
----
+By 2040, a single application rarely runs on one type of processor. Instead, it orchestrates a heterogeneous mix: CPUs for control flow, GPUs for matrix math, NPUs for AI inference, neuromorphic chips for sensor preprocessing, FPGAs for custom acceleration, and quantum accelerators for optimization problems. This lecture covers the software stack and orchestration layers needed to manage this compute zoo.
 
-#### Overview
+### 5.2 Key Topics
 
-6G networks (deploying 2030s) don't just connect phones — they create a pervasive connectivity fabric for billions of devices. Combined with Ambient IoT (battery-free devices powered by ambient radio waves), this creates an environment where everything is connected and compute is everywhere. This lecture covers the infrastructure implications of ubiquitous wireless connectivity.
+- **Runtime Heterogeneity:** Modern applications use multiple runtimes simultaneously: (1) **CPU runtime** — standard OS processes and threads; (2) **GPU runtime** — CUDA, ROCm, or Vulkan Compute; (3) **NPU runtime** — vendor-specific SDKs (Qualcomm SNPE, Apple Core ML, Google Edge TPU runtime); (4) **Neuromorphic runtime** — event-driven SDKs for spiking neural networks; (5) **FPGA runtime** — OpenCL or vendor-specific HDL tools; (6) **Quantum runtime** — Qiskit, Cirq, or vendor-specific quantum SDKs.
+- **Data Movement:** The hidden cost of heterogeneous computing is moving data between accelerators: (1) **Unified Memory** — NVIDIA's CUDA Unified Memory, AMD's HSA, and Intel's OneAPI attempt to provide a single pointer accessible from CPU and GPU; (2) **Zero-Copy** — techniques to avoid copying data when passing between accelerators (e.g., GPU-Direct for NIC-to-GPU transfer); (3) **Memory Hierarchy Awareness** — understanding that data in GPU memory is not the same as data in CPU memory and requires explicit transfer.
+- **Task Scheduling and Orchestration:** (1) **Kubernetes Device Plugin** — exposes GPUs, NPUs, and other accelerators as schedulable resources in Kubernetes; (2) **YARN with GPU Support** — Apache Hadoop YARN extended for GPU scheduling; (3) **Custom Schedulers** — AI-driven schedulers that predict task duration and place tasks on the optimal accelerator based on historical performance; (4) **Workflow Engines** — Apache Airflow, Argo Workflows, and Kubeflow Pipelines for defining multi-step workflows that traverse different accelerators.
+- **Observability and Debugging:** (1) **Cross-Platform Profiling** — tools like NVIDIA Nsight Systems, AMD uProf, and Intel VTune that profile CPU, GPU, and memory in a single view; (2) **Accelerator-Specific Metrics** — GPU utilization, NPU saturation, neuromorphic spike rate, FPGA logic utilization; (3) **End-to-End Tracing** — tracing a request as it moves from CPU to GPU to NPU and back, measuring latency at each hop.
 
-#### Key Topics
+### 5.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Heterogeneous Computing Orchestration: Patterns and Tools*.
+- Khronos Group. (2040). *SYCL 2024 Specification*.
 
-- **6G Capabilities:** (1) **1 Tbps peak** — terabit-per-second speeds for specialized applications; (2) **Sub-millisecond latency** — enabling real-time control loops; (3) **Integrated sensing and communication** — the network "sees" its environment; (4) **AI-native** — the network itself runs AI for optimization; (5) **Non-terrestrial** — integrated satellite, drone, and terrestrial networks.
-- **Ambient IoT:** Devices that harvest energy from radio waves, light, vibration, or heat — no batteries, no power cords. By 2040, ambient IoT enables: (1) smart packaging that reports location and condition; (2) structural sensors embedded in buildings and bridges; (3) agricultural sensors scattered across fields. Infrastructure implications: these devices generate data but can't run significant compute — edge gateways aggregate and process their data.
-- **Network-Edge Convergence:** In 6G, the network and edge compute converge: (1) RAN (Radio Access Network) and edge compute share infrastructure; (2) AI workloads run at the base station; (3) the network routes traffic based on compute availability and energy. By 2040, the distinction between "network" and "compute" is dissolving.
-
-#### Required Reading
-
-- ITU. (2038). *IMT-2030: 6G Framework*.
-- UoY Connectivity Lab. (2040). *Ambient IoT: Infrastructure and Use Cases*.
-
----
-
-### Lecture 7: Green Edge — Sustainable Computing at the Periphery
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 5.4 Discussion Questions
+1. How does data movement between accelerators create performance bottlenecks, and what architectural features minimize this cost?
+2. Compare Kubernetes device plugins with custom AI-driven schedulers for heterogeneous workloads. When is each approach appropriate?
+3. What are the challenges of debugging an application that spans CPU, GPU, and neuromorphic compute, and what tools exist to address them?
 
 ---
 
-#### Overview
+ᚲ **Lecture 6: Processing-in-Memory and Near-Memory Compute**
 
-Edge computing distributes computation but also distributes energy consumption. Sustainable edge computing requires: energy-efficient hardware, carbon-aware workload placement, and circular economy for edge devices. This lecture covers the intersection of edge and sustainability.
+### 6.1 Overview
 
-#### Key Topics
+To alleviate the von Neumann bottleneck, computing is moving closer to memory. Processing-in-memory (PIM) and near-memory compute architectures place compute logic directly in or adjacent to memory arrays, reducing data movement and enabling massive parallelism for memory-bound workloads.
 
-- **Energy-Proportional Computing:** Ideal hardware consumes energy proportional to its utilization. Idle servers still consume 30-60% of peak power. Neuromorphic and event-driven architectures approach energy proportionality — they consume near-zero power when idle. This is critical for edge, where workloads are bursty and devices are idle most of the time.
-- **Carbon-Aware Edge:** (1) time-shift flexible workloads to when renewable energy is abundant; (2) space-shift workloads to regions with cleaner energy (subject to latency constraints); (3) right-size edge hardware to match workload, avoiding over-provisioning; (4) measure and report carbon footprint per edge node and workload.
-- **Circular Economy for Edge Hardware:** Edge devices have shorter lifespans than data center hardware (3-5 years vs. 5-7 years). Sustainable practices: (1) design for repair and upgrade (modular, standardized); (2) refurbish and redeploy within the organization; (3) recycle responsibly through certified e-waste programs; (4) track embodied carbon across the device lifecycle.
+### 6.2 Key Topics
 
-#### Required Reading
+- **Processing-in-Memory (PIM):** (1) **DRAM-based PIM** — Samsung's HBM-PIM and SK Hynix's Accelerator-in-Memory add compute logic to DRAM chips; (2) **SRAM-based PIM** — compute logic embedded in SRAM caches for nearest-neighbor operations; (3) **Flash-based PIM** — logic in NAND flash for in-storage computation like filtering and aggregation.
+- **Near-Memory Compute:** (1) **High Bandwidth Memory (HBM)** — stacked DRAM with wide interfaces, enabling terabytes-per-second bandwidth to logic dies stacked alongside; (2) **Memory Controller Offload** — simple operations (bitwise, comparison) offloaded to the memory controller; (3) **Cache Coherency Extensions** — extending cache coherency protocols to include accelerator caches.
+- **Applications:** PIM excels at: (1) **Graph Analytics** — traversing large graphs (social networks, knowledge graphs) where memory access patterns are irregular; (2) **Database Operations** — filtering, aggregation, and joining large tables; (3) **Bioinformatics** — sequence alignment and database searching; (4) **Machine Learning Preprocessing** — normalizing large feature matrices before model training.
+- **Programming Models:** (1) **PIM-Specific Instructions** — extending ISA with new instructions that trigger in-memory operations; (2) **Offload Models** — annotating code to indicate which functions should run on PIM units; (3) **Data-Centric Languages** — languages like Chapel and Legion that express computation in terms of data movement and transformation.
 
-- Green Software Foundation. (2039). *Carbon-Aware Edge Computing*.
-- UoY Sustainable Edge Lab. (2040). *Lifecycle Carbon Accounting for Edge Infrastructure*.
+### 6.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Processing-in-Memory: Architectures and Applications*.
+- JEDEC. (2040). *JBESD244: High Bandwidth Memory (HBM) Standard*.
 
----
-
-### Lecture 8: Edge Security — Protecting the Distributed Perimeter
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-Edge devices are deployed in physically accessible, untrusted environments. They are attractive targets: compromise one edge node and you're inside the network. This lecture covers edge-specific security: hardware root of trust, secure boot, remote attestation, and the operational security of distributed fleets.
-
-#### Key Topics
-
-- **Hardware Root of Trust:** Every edge device needs a cryptographic identity rooted in hardware: (1) TPM (Trusted Platform Module) stores keys and performs crypto operations in a secure enclave; (2) Secure boot verifies that only authorized software runs; (3) Measured boot records what software actually ran for remote attestation; (4) By 2040, DICE (Device Identifier Composition Engine) provides lightweight hardware identity for even the smallest devices.
-- **Remote Attestation:** Before an edge device is trusted, the management platform verifies its integrity: (1) device reports its software measurements; (2) management platform verifies against known-good values; (3) if verified, the device receives its operational credentials; (4) continuous attestation ensures the device hasn't been compromised during operation.
-- **Physical Security:** Edge devices face physical attacks: (1) tamper-evident enclosures; (2) tamper-responsive — erase secrets if tampering detected; (3) disable debug interfaces (JTAG, UART) in production; (4) secure decommissioning — cryptographic erasure of keys and data before disposal.
-
-#### Required Reading
-
-- NIST. (2039). SP 800-193: Platform Firmware Resiliency Guidelines.
-- UoY Edge Security Lab. (2039). *Securing the Distributed Edge*.
+### 6.4 Discussion Questions
+1. How does processing-in-memory change the traditional memory hierarchy, and what new levels does it introduce?
+2. Compare DRAM-based PIM with SRAM-based PIM in terms of latency, bandwidth, and use cases.
+3. What are the challenges of debugging PIM applications, given that traditional debuggers expect compute to happen in the CPU?
 
 ---
 
-### Lecture 9: Serverless and Event-Driven at the Edge
+ᚷ **Lecture 7: Quantum Accelerators — Specialized Compute for Niche Problems**
 
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 7.1 Overview
 
----
+While quantum computers will not replace classical CPUs, they excel at specific problem classes: optimization, simulation, and certain cryptographic tasks. By 2040, quantum accelerators are available as PCIe cards or cloud instances, and IT professionals must understand when and how to use them.
 
-#### Overview
+### 7.2 Key Topics
 
-Serverless computing — where developers write functions and the platform handles scaling — is especially suited to the edge, where workloads are bursty and infrastructure management must be minimal. This lecture covers serverless edge: function-as-a-service at the edge, event-driven architectures, and the WebAssembly revolution that makes it possible.
+- **Quantum Annealers:** (1) **D-Wave Advantage System** — 5000+ qubits for optimization problems; (2) **Fujitsu Digital Annealer** — CMOS-based implementation of quantum annealing principles; (3) **Applications** — portfolio optimization, logistics routing, protein folding, and maximum satisfiability (Max-SAT) problems.
+- **Gate-Based Quantum Computers:** (1) **IBM Eagle Processor** — 127-qubit superconducting processor; (2) **Google Sycamore** — 70-qubit processor demonstrating quantum supremacy; (3) **Applications** — quantum chemistry, quantum simulation, and certain optimization problems via variational algorithms.
+- **Photonic Quantum Computers:** (1) **Xanadu X8** — 8-mode photonic quantum computer; (2) **PsiQuantum** — fault-tolerant photonic approach aiming for million-qubit systems; (3) **Applications** — boson sampling, quantum machine learning, and linear optics problems.
+- **Quantum-Inspired Algorithms:** Classical algorithms that mimic quantum principles for improved performance: (1) **Quantum-Inspired Optimization Algorithms** — using tensor networks or simulated quantum annealing; (2) **Quantum-Inspired Machine Learning** — quantum principal component analysis and quantum support vector machines.
+- **Integration with Classical Systems:** (1) **Hybrid Workflows** — classical preprocessing, quantum acceleration, classical postprocessing; (2) **API Access** — cloud-based quantum services (AWS Braket, Azure Quantum, Google Quantum AI); (3) **On-Premises Accelerators** — PCIe quantum cards for low-latency access; (4) **Workflow Orchestration** — integrating quantum jobs into Airflow, Kubeflow, or custom orchestration systems.
 
-#### Key Topics
+### 7.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Quantum Accelerators: Integration and Applications*.
+- D-Wave Systems. (2040). *Leap Quantum Cloud Service Documentation*.
 
-- **Serverless at the Edge:** Platforms like Cloudflare Workers, Fastly Compute, and AWS Lambda@Edge run code at edge locations worldwide. Benefits: (1) no server management; (2) auto-scaling to zero; (3) pay-per-use pricing; (4) global deployment. By 2040, all CDN edge nodes are general-purpose compute platforms.
-- **WebAssembly as the Edge Runtime:** Wasm's sandboxing, fast startup, and small footprint make it ideal for serverless edge. Key properties: (1) cold start in microseconds (vs. seconds for containers); (2) language-agnostic (Rust, Go, C++, JavaScript compiled to Wasm); (3) sandboxed by default — no access to host without explicit grants. By 2040, Wasm is the dominant edge runtime, and the Component Model enables composing edge applications from Wasm components.
-- **Event-Driven Edge Architectures:** Edge workloads are event-driven: sensor reading triggers processing, which triggers alert, which triggers cloud sync. Event-driven patterns: (1) publish-subscribe messaging at the edge (MQTT, NATS); (2) event sourcing for reliable event processing; (3) stream processing at the edge for continuous analytics.
-
-#### Required Reading
-
-- Cloudflare. (2039). *Workers: Serverless Edge Computing Architecture*.
-- Bytecode Alliance. (2040). *WebAssembly at the Edge*.
-
----
-
-### Lecture 10: The Edge-to-Cloud Data Pipeline
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 7.4 Discussion Questions
+1. For what classes of problems does quantum annealing provide a demonstrable advantage over classical heuristics?
+2. Compare the qubit technologies of superconducting (IBM, Google), trapped-ion (Honeywell), and photonic (Xanadu) quantum computers. What are the trade-offs between coherence time, gate fidelity, and scalability?
+3. How should an organisation decide between investing in on-premises quantum accelerators versus using cloud-based quantum services?
 
 ---
 
-#### Overview
+ᚹ **Lecture 8: Power, Thermal, and the Physics of Computing**
 
-Data flows from edge to cloud and back — raw data processed at the edge, insights aggregated in the cloud, models updated and pushed back. This lecture covers the edge data pipeline: data filtering and reduction, edge-to-cloud synchronization, model update pipelines, and data governance across the edge-cloud boundary.
+### 8.1 Overview
 
-#### Key Topics
+As computing becomes more specialized and heterogeneous, power and thermal management become first-class design concerns. By 2040, data centres are liquid-cooled, edge devices are passively cooled, and every watt is accounted for in the pursuit of performance per joule.
 
-- **Data Reduction at the Edge:** The edge generates more data than can be transmitted. Reduction techniques: (1) **Filtering** — discard irrelevant data; (2) **Aggregation** — summarize before transmitting (averages, histograms, anomaly flags); (3) **Compression** — lossless or lossy compression; (4) **AI-based extraction** — extract semantically meaningful information (objects detected, events identified) rather than raw pixels.
-- **Edge-Cloud Sync Patterns:** (1) **Store-and-forward** — buffer locally, send when connected; (2) **Prioritized sync** — send alerts immediately, batch telemetry; (3) **Delta sync** — only send changes; (4) **Conflict-free sync** — use CRDTs for data that can be modified at both edge and cloud.
-- **Model Update Pipelines:** The cloud trains or fine-tunes models, which are then deployed to edge: (1) model registry manages versions; (2) canary deployment tests new models on a subset of edge nodes; (3) automated rollback if model performance degrades; (4) edge nodes report model metrics back for continuous improvement.
+### 8.2 Key Topics
 
-#### Required Reading
+- **Power Measurement and Attribution:** (1) **Instrumentation** — smart PDUs, in-rack power meters, and CPU/GPU power sensors; (2) **Attribution** — attributing power consumption to specific applications, processes, or hardware components; (3) **Power Capping** — setting hard limits on power draw to prevent tripping breakers or exceeding cooling capacity.
+- **Thermal Management:** (1) **Air Cooling** — traditional fan-based cooling, enhanced with computational fluid dynamics (CFD) design; (2) **Liquid Cooling** — direct-to-chip liquid cooling for high-density racks; (3) **Immersion Cooling** — submerging servers in dielectric fluid for extreme heat density; (4) **Edge Cooling** — passive cooling (heat sinks, heat pipes) and active cooling (miniature fans, thermoelectric coolers) for edge devices.
+- **Energy Proportionality:** The ideal that power consumption scales linearly with utilization — a server at 10% load uses 10% of its peak power. By 2040, server designs approach energy proportionality through: (1) **Dynamic Voltage and Frequency Scaling (DVFS)** — adjusting CPU/GPU voltage and frequency based on load; (2) **Sleep States** — deeper C-states for CPUs and equivalent states for accelerators; (3) **Proportional Power Delivery** — power supplies that scale output with demand.
+- **Sustainability Metrics:** (1) **Power Usage Effectiveness (PUE)** — total facility power divided by IT equipment power; (2) **Carbon Usage Effectiveness (CUE)** — grams of CO2eq per kWh of IT energy; (3) **Water Usage Effectiveness (WUE)** — litres of water used per kWh of IT energy; (4) **Energy Reuse Effectiveness (ERE)** — how much waste heat is reused for heating buildings or other purposes.
 
-- UoY Edge Data Lab. (2039). *Edge-Cloud Data Pipelines: Architecture Patterns*.
+### 8.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Power and Thermal Management in Heterogeneous Systems*.
+- The Green Grid. (2040). *PUE: A Comprehensive Examination of the Metric*.
 
----
-
-### Lecture 11: Industry Edge — Manufacturing, Healthcare, Retail, and Agriculture
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-Edge computing is not abstract — it's transforming specific industries. This lecture surveys edge deployments in manufacturing (Industry 4.0/5.0), healthcare, retail, and agriculture, examining the infrastructure patterns and operational requirements unique to each.
-
-#### Key Topics
-
-- **Manufacturing (Industry 5.0):** Edge AI processes camera, vibration, and sensor data in real-time for: (1) predictive maintenance — detecting bearing wear before failure; (2) quality inspection — computer vision at production line speeds; (3) worker safety — detecting unsafe conditions. Requirements: ultra-low latency, high reliability, air-gapped operation.
-- **Healthcare:** Edge in hospitals and clinics: (1) medical imaging AI at the point of care; (2) patient monitoring with local AI, alerting nurses to deterioration; (3) privacy-preserving processing — data stays on-premises. Requirements: regulatory compliance (HIPAA), high accuracy, fail-safe operation.
-- **Retail:** Edge in stores: (1) cashierless checkout — computer vision tracks items; (2) inventory management — shelf-scanning robots; (3) personalized in-store experience. Requirements: cost-effective at scale (thousands of stores), easy deployment.
-- **Agriculture:** Edge in fields: (1) precision agriculture — drone and sensor data processed at the farm; (2) livestock monitoring — health and location tracking; (3) autonomous farm equipment. Requirements: outdoor durability, solar/battery power, intermittent connectivity.
-
-#### Required Reading
-
-- UoY Industry Edge Lab. (2040). *Vertical Edge: Industry-Specific Architectures*.
+### 8.4 Discussion Questions
+1. How does liquid cooling change the economics of data centre density, and what are the failure modes to consider?
+2. Compare the thermal design power (TDP) of a modern CPU, GPU, NPU, and neuromorphic chip. What does TDP tell us about suitability for edge versus data centre deployment?
+3. What are the challenges of measuring power consumption at the level of individual AI models running on an NPU?
 
 ---
 
-### Lecture 12: The Heterogeneous Future — Architecting for Diversity
+ᚺ **Lecture 9: Security in Heterogeneous and Edge Environments**
 
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, 2040
+### 9.1 Overview
 
----
+Heterogeneous and edge computing introduce new attack surfaces and require rethinking traditional security assumptions. By 2040, securing the compute zoo involves protecting data in motion between accelerators, securing firmware on edge devices, and defending against side-channel attacks on specialized hardware.
 
-#### Overview
+### 9.2 Key Topics
 
-The future of computing is heterogeneous — no single architecture dominates. The IT professional's role is to architect systems that leverage the right compute (CPU, GPU, NPU, neuromorphic, quantum) at the right location (device, edge, cloud) for the right task, with the right energy budget. This lecture synthesizes the course and projects to 2050.
+- **Data in Motion Security:** (1) **In-Transit Encryption** — encrypting data as it moves between CPU and GPU memory; (2) **Secure Interconnects** — technologies like AMD's Infinity Fabric and NVIDIA's NVLink with built-in encryption; (3) **Attestation** — verifying that data hasn't been tampered with during transfer between accelerators.
+- **Firmware Security:** (1) **Secure Boot** — ensuring that only trusted firmware runs on edge devices; (2) **Firmware Updates** — signed, encrypted, and rollback-protected updates for NPUs, neuromorphic chips, and FPGAs; (3) **Hardware Roots of Trust** — embedding cryptographic keys in hardware to establish a chain of trust.
+- **Side-Channel Attacks:** (1) **Power Analysis** — measuring power consumption to infer cryptographic keys; (2) **Electromagnetic Emanations** — measuring RF leaks to infer internal operations; (3) **Timing Attacks** — measuring execution time to infer branches or memory access patterns; (4) **Countermeasures** — masking, shuffling, and constant-time implementations.
+- **Physical Security:** (1) **Tamper Evidence** — seals and sensors that detect physical intrusion; (2) **Tamper Resistance** — making it difficult to open a device without triggering a response; (3) **Tamper Response** — zeroizing keys or erasing firmware upon detection of tampering.
+- **Supply Chain Security:** (1) **Hardware Bill of Materials (HBOM)** — a machine-readable inventory of all components in a system; (2) **Trusted Foundries** — using semiconductor foundries with strict security controls; (3) **Component Authentication** — verifying that a chip is genuine and not a counterfeit.
 
-#### Key Topics
+### 9.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Security in Heterogeneous and Edge Computing*.
+- FIDO Alliance. (2040). *FIDO2/WebAuthn: Public Credentials for the Web*.
 
-- **Heterogeneous System Architecture:** Designing systems that span architectures: (1) define workloads and their requirements (latency, throughput, energy, privacy); (2) map workloads to appropriate hardware; (3) provide unified management across heterogeneous infrastructure; (4) abstract hardware differences so applications can move between architectures. By 2040, infrastructure-as-code tools support heterogeneous hardware profiles.
-- **The Edge-Native IT Professional:** Skills for 2050: (1) understanding hardware architecture trade-offs; (2) distributed systems design for latency, bandwidth, and reliability constraints; (3) fleet management at scale; (4) AI model lifecycle across edge and cloud; (5) security for physically distributed systems; (6) sustainability optimization.
-- **The Philosophical Horizon:** As compute moves to the edge, into devices, into our environment — what does it mean for technology to be "infrastructure"? When every device is intelligent, the boundary between "computing" and "the world" blurs. The IT professional becomes an architect of reality itself.
-
-#### Required Reading
-
-- UoY Future Compute Lab. (2040). *Heterogeneous Computing 2050: A Roadmap*.
-
----
-
-
-
-### Lecture 12: The Heterogeneous Future — Architecting for Compute Diversity
-
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+### 9.4 Discussion Questions
+1. How does the attack surface of an NPU differ from that of a CPU, and what new vulnerabilities does it introduce?
+2. What are the challenges of securing firmware updates for edge devices that may be intermittently connected or physically inaccessible?
+3. How should an organisation approach side-channel resistance when using accelerators for cryptographic operations?
 
 ---
 
-#### Overview
+ᚾ **Lecture 10: Observability and Debugging in Heterogeneous Systems**
 
-By 2040, the computing landscape has fractured into a rich ecosystem of specialized architectures, each excelling in specific domains. The era of "one architecture to rule them all" ended with the slowdown of Moore's Law and the rise of domain-specific workloads. This lecture synthesizes the course material and projects forward to 2060, examining how IT professionals will architect systems that leverage heterogeneity — matching the right compute (CPU, GPU, NPU, neuromorphic, quantum, photonic) to the right task at the right location with the right energy budget.
+### 10.1 Overview
 
-#### Key Topics
+Traditional observability tools (metrics, logs, traces) were designed for homogeneous CPU-centric systems. By 2040, observability must span CPUs, GPUs, NPUs, neuromorphic chips, FPGAs, and quantum accelerators to provide a complete picture of system behaviour and performance.
 
-- **The Law of Specialized Computing:** As general-purpose improvements plateau, performance gains come from matching hardware to workload characteristics. A workload's "compute fingerprint" — its balance of integer ops, floating-point, memory access patterns, communication needs, and precision requirements — determines optimal architecture. By 2040, workload fingerprinting is standard practice in IT architecture.
+### 10.2 Key Topics
 
-- **Heterogeneous System Architecture Patterns:** (1) **Dominant Offload** — a primary CPU handles control flow while specialized accelerators handle compute-intensive kernels; (2) **Balanced Heterogeneity** — multiple comparable processors share workload via sophisticated scheduling; (3) **Dynamic Reconfiguration** — FPGAs or adaptable hardware shift function based on runtime demands; (4) **Disaggregated Resources** — compute, memory, and I/O are pooled and allocated as needed via high-speed fabrics like CXL 3.0.
+- **Unified Metrics:** (1) **Hardware Counters** — accessing performance counters across different architectures via vendor-specific APIs or open standards like PAPI; (2) **Utilization Metrics** — GPU utilization, NPU saturation, neuromorphic spike rate, FPGA logic utilization; (3) **Custom Metrics** — defining domain-specific metrics like "frames per second processed" or "inferences per joule"; (4) **Correlation** — aligning timestamps across different hardware clocks to correlate events.
+- **Distributed Tracing:** (1) **Hardware-Assisted Tracing** — Intel Processor Trace, ARM CoreSight, and NVIDIA Nsight Trace for low-overhead tracing; (2) **Context Propagation** — ensuring that trace IDs flow correctly when a request moves from CPU to GPU to NPU; (3) **Span Attributes** — attaching hardware-specific information to spans (e.g., GPU kernel name, NPU core used); (4) **Visualization** — flame graphs that show time spent in CPU versus GPU versus NPU code.
+- **Logging:** (1) **Structured Logging** — JSON logs that include hardware context (e.g., "executed on NPU core 3"); (2) **Rate Limiting** — preventing log spam from high-frequency hardware events; (3) **Centralized Aggregation** — forwarding logs from edge devices to central observability platforms.
+- **Debugging:** (1) **Hardware Debuggers** — JTAG for FPGAs, GPU debuggers like cuda-gdb, and neuromorphic-specific debuggers; (2) **Simulators** — instruction-set simulators for testing code before it runs on hardware; (3) **Logging and Tracing** — using logging and tracing to reproduce issues; (4) **Post-Mortem Analysis** — analysing core dumps, crash dumps, and hardware error logs.
 
-- **Location-Compute Co-Design:** The optimal architecture depends on where compute resides. In data centers: wafer-scale engines and optical interconnects. At the edge: sub-watt neuromorphic sensors and ruggedized NPUs. On devices: heterogeneous SoCs with integrated CPU-GPU-NPU blocks. In extreme environments: radiation-hardened ASICs for space and quantum annealers for cryogenic deployments.
+### 10.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Observability in Heterogeneous Computing Systems*.
+- Khronos Group. (2040). *OpenCL 3.0 Specification*.
 
-- **The 2060 Hardware Landscape Projection:** By 2060, we expect: (1) **Exascale neuromorphic systems** for real-time brain simulation and adaptive robotics; (2) **Fault-tolerant quantum processors** (1M+ physical qubits) for specific optimization and simulation tasks; (3) **Photonic computing** for data movement-intensive workloads; (4) **DNA storage** for archival with ultra-low energy; (5) **Monolithic 3D integration** blending logic, memory, and sensors; (6) **Edge-native quantum sensors** enabling new measurement modalities.
-
-- **The IT Professional's Evolving Role:** No longer just a "system integrator," the 2060 IT professional is a "compute ecologist" who: understands semiconductor physics trade-offs; speaks the language of multiple ISA domains; designs workload schedulers that optimize for latency, throughput, and energy; manages heterogeneous fleets with zero-touch provisioning; and advocates for sustainable compute through hardware-aware software optimization.
-
-#### Required Reading
-
-- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (8th ed.). Morgan Kaufmann.
-- UoY Heterogeneous Computing Lab. (2040). *Beyond Von Neumann: A Taxonomy of 2040 Compute Architectures*. University of Yggdrasil Press.
-- Federación de Arquitectos de Sistemas Heterogéneos (FASH). (2040). *The Compute Landscape: Architectural Patterns for 2040-2060*.
-
-#### Discussion Questions
-
-1. **Workload Fingerprinting:** How would you characterize the "compute fingerprint" of a real-time language translation system versus a blockchain validator? What architectures would you select for each and why?
-
-2. **Location Trade-offs:** A multinational corporation wants to deploy AI for fraud detection. Compare the trade-offs of running this workload on: (a) centralized quantum-accelerated cloud instances, (b) distributed edge NPUs in regional data centers, and (c) on-device neuromorphic sensors at ATMs. Consider latency, privacy, cost, and maintenance.
-
-3. **Sustainable Heterogeneity:** How can IT professionals leverage heterogeneous computing to reduce carbon footprint? Consider both operational efficiency (matching workload to efficient hardware) and embodied carbon (managing diverse hardware lifecycles).
+### 10.4 Discussion Questions
+1. How do you correlate a log entry from an edge device with a metric spike in a central data centre when the clocks may not be synchronized?
+2. What are the challenges of tracing a request that involves quantum acceleration, given the probabilistic nature of quantum computation?
+3. How does observability change when moving from a cloud environment (centralized control) to an edge environment (distributed, intermittent connectivity)?
 
 ---
 
+ᛁ **Lecture 11: Standards, Interoperability, and the Vendor Landscape**
 
-### Lecture 12: The Heterogeneous Future — Architecting for Compute Diversity
+### 11.1 Overview
 
-**Course:** IT403 — Neuromorphic & Edge Infrastructure
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+By 2040, the hardware landscape is fragmented — different vendors use different interconnects, different programming models, and different security assumptions. Standards and interoperability layers are essential to avoid vendor lock-in and enable mixing and matching of components.
+
+### 11.2 Key Topics
+
+- **Interconnect Standards:** (1) **PCI Express 6.0** — 64 GT/s per lane, supports CXL 3.0 for memory expansion; (2) **CXL (Compute Express Link)** — open standard for memory semantics and coherency between CPU and accelerators; (3) **NVLink** — NVIDIA's high-bandwidth interconnect for GPU-GPU and GPU-CPU communication; (4) **Infinity Fabric** — AMD's interconnect for CPU-GPU and CPU-FPGA communication; (5) **Ethernet** — 400GbE and 800GbE for connecting accelerators and servers in a rack.
+- **Programming Model Standards:** (1) **OpenCL** — open standard for heterogeneous computing (CPU, GPU, FPGA, accelerators); (2) **SYCL** — C++ abstraction layer for OpenCL, enabling single-source heterogeneous programming; (3) **oneAPI** — Intel's open, cross-architecture programming model (C++, Python); (4) **Vulkan Compute** — compute shaders in the Vulkan graphics API for GPU compute; (5) **TensorFlow Lite Delegates** — mechanism to delegate TensorFlow Lite inference to NPUs, DSPs, or other accelerators.
+- **Security Standards:** (1) **TPM 3.0** — Trusted Platform Module with support for measuring and attesting heterogeneous accelerators; (2) **FIDO2/WebAuthn** — public-key credentials for device authentication; (3) **Secure Boot Variants** — UEFI Secure Boot, SBAT (Shell-Based Attack Protection), and platform-specific solutions for edge devices.
+- **Vendor Landscape:** (1) **Established Players** — Intel (CPUs, NPUs, FPGAs), AMD (CPUs, GPUs, FPGAs), NVIDIA (GPUs, DPUs), Qualcomm (NPUs), IBM (neuromorphic, quantum); (2) **Specialists** — Graphcore (IPUs for AI), Cerebras (wafer-scale engines), SambaNova (reconfigurable dataflow units); (3) **Emerging** — photonic quantum companies, neuromorphic startups, edge AI accelerator vendors.
+
+### 11.3 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- UoY Architecture Lab. (2040). *Standards in Heterogeneous Computing*.
+- PCI-SIG. (2040). *PCI Express Base Specification 6.0*.
+
+### 11.4 Discussion Questions
+1. How does CXL change the traditional CPU-memory boundary, and what new capabilities does it enable for accelerators?
+2. Compare OpenCL, SYCL, and oneAPI as heterogeneous programming models. When would you choose each?
+3. What are the challenges of establishing a hardware root of trust on an edge device that lacks a TPM or equivalent security module?
+
+---
+
+ᛃ **Lecture 12: The Future of Compute — 2050 and Beyond**
+
+### 12.1 Overview
+
+As we conclude IT403, let us look forward to the hardware landscape of 2050. The trends we see in 2040 — specialization, heterogeneity, energy efficiency, and edge intelligence — will continue and intensify. New architectures will emerge, and the IT professional's role will continue to evolve from hardware-agnostic to hardware-savvy.
+
+### 12.2 Emerging Technologies
+
+**Photonic Computing:** Using light instead of electricity for data transmission and computation. By 2050, photonic chips may handle specific workloads (matrix multiplication, Fourier transforms) with femtojoule-per-operation energy efficiency and terahertz bandwidth.
+
+**Memristor-Based Computing:** Resistance-changing devices that combine memory and computation. Crossbar arrays of memristors can perform analog matrix-vector multiplication in a single step, promising extreme efficiency for neural networks.
+
+**DNA-Based Computing:** Using biochemical reactions to perform computation. While slow, DNA computing offers massive parallelism for specific problem classes (satisfiability, cryptanalysis) and inherent biocompatibility for biomedical applications.
+
+**3D-Stacked Heterogeneous Integration:** Moving beyond 2D chiplets to true 3D integration — stacking CPUs, GPUs, NPUs, and memory in a single package with micrometer-scale interconnects, enabling unprecedented bandwidth and energy efficiency.
+
+**Ambient Computing:** Computing that disappears into the environment — walls, furniture, and clothing embedded with sensors and processors that respond to gestures, voice, and environmental changes without explicit devices.
+
+### 12.3 The Evolving Role of the IT Professional
+
+By 2050, the IT professional will not be a hardware specialist — but they will be hardware-*literate*. The architecture diagrams they draw will show not just "application server" and "database" but specific accelerator types and data movement patterns. Their troubleshooting will include checking NPU utilization and neuromorphic spike rates, not just CPU load and memory usage. Their procurement will consider not just performance per dollar but performance per joule and compliance with corporate sustainability goals.
+
+### 12.4 The Norse Frame: The Smiths of Valkyrie
+
+In Norse mythology, the valkyries choose who lives and dies in battle, but their weapons and armor are forged by the dwarven smiths — masters of their craft who understand the properties of metal, the secrets of the forge, and the rituals that make a blade true. The IT professional of 2050 is one of these smiths — not forging swords, but understanding the properties of silicon, gallium nitride, and photonic crystals; mastering the software forges that turn sand into sense; and knowing the rituals that make a system true — reliable, efficient, and secure.
+
+The Norns spin the threads of fate, but it is the smiths who shape the tools that cut those threads. May your forges burn bright, and may your systems run true.
+
+### 12.5 Required Reading
+- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (7th ed.).
+- Mead, C. (1989). *Analog VLSI: Implementation of Neural Systems*. Springer. (A foundational text on neuromorphic engineering.)
+- UoY Foresight Report FR-2040-05. *Computing 2050: Scenarios and Implications*.
+
+### 12.6 Discussion Questions
+1. If photonic computing delivers on its promise of femtojoule-per-operation energy efficiency, how would that change the economics of data centres and the feasibility of always-on AI everywhere?
+2. DNA-based computing is inherently slow but massively parallel. What problem classes would benefit most from this trade-off, and what applications would be unsuitable?
+3. What is the single most important hardware trend that IT professionals should prepare for over the next decade, and why?
 
 ---
 
-#### Overview
-
-By 2040, the computing landscape has fractured into a rich ecosystem of specialized architectures, each excelling in specific domains. The era of "one architecture to rule them all" ended with the slowdown of Moore's Law and the rise of domain-specific workloads. This lecture synthesizes the course material and projects forward to 2060, examining how IT professionals will architect systems that leverage heterogeneity — matching the right compute (CPU, GPU, NPU, neuromorphic, quantum, photonic) to the right task at the right location with the right energy budget.
-
-We begin by examining the economic and physical forces driving specialization, then explore architectural patterns for heterogeneous systems, and finally project the hardware landscape to 2060 and beyond. The lecture concludes with a discussion of the evolving role of the IT professional in this heterogeneous world.
-
-#### Key Topics
-
-- **The Law of Specialized Computing:** As general-purpose improvements plateau, performance gains come from matching hardware to workload characteristics. A workload's "compute fingerprint" — its balance of integer ops, floating-point, memory access patterns, communication needs, and precision requirements — determines optimal architecture. By 2040, workload fingerprinting is standard practice in IT architecture, supported by AI-driven tools that analyze application profiles and recommend optimal hardware configurations.
-
-- **Heterogeneous System Architecture Patterns:** (1) **Dominant Offload** — a primary CPU handles control flow while specialized accelerators handle compute-intensive kernels (e.g., GPU for matrix math, NPU for inference); (2) **Balanced Heterogeneity** — multiple comparable processors share workload via sophisticated scheduling (e.g., ARM big.LITTLE for power efficiency); (3) **Dynamic Reconfiguration** — FPGAs or adaptable hardware shift function based on runtime demands, enabling hardware to be repurposed for different workloads without physical replacement; (4) **Disaggregated Resources** — compute, memory, and I/O are pooled and allocated as needed via high-speed fabrics like CXL 3.0 and Gen-Z, allowing resources to be scaled independently based on workload needs.
-
-- **Location-Compute Co-Design:** The optimal architecture depends on where compute resides. In data centers: wafer-scale engines (like Cerebras WSE-3) for AI training, optical interconnects for reduced latency, and 3D-stacked memory for bandwidth. At the edge: sub-watt neuromorphic sensors for always-on sensing, ruggedized NPUs for industrial AI, and FPGAs for protocol acceleration. On devices: heterogeneous SoCs with integrated CPU-GPU-NPU blocks (like Qualcomm Snapdragon X Series) enabling seamless handoff between modalities. In extreme environments: radiation-hardened ASICs for space exploration and quantum annealers for cryogenic deployment in research facilities.
-
-- **Emerging Architectures Beyond 2040:** Looking to 2060, we anticipate several breakthroughs: (1) **Exascale neuromorphic systems** capable of real-time simulation of complex brain models for adaptive robotics and cognitive AI; (2) **Fault-tolerant quantum processors** (1M+ physical qubits) enabling practical quantum advantage for optimization, simulation, and cryptography; (3) **Photonic computing** using light for data movement and computation, eliminating electrical resistance and enabling terahertz processing speeds; (4) **DNA storage** for archival data with extraordinary density (exabytes per gram) and ultra-low energy consumption; (5) **Monolithic 3D integration** blending logic, memory, sensors, and antennas in a single stack, reducing interconnect latency; (6) **Edge-native quantum sensors** enabling new measurement modalities for navigation, mineral exploration, and medical imaging.
-
-- **The IT Professional's Evolving Role:** No longer just a "system integrator," the 2060 IT professional is a "compute ecologist" who: understands semiconductor physics trade-offs (FinFET vs GAA vs CFET); speaks the language of multiple ISA domains (x86, ARM, RISC-V, custom ISAs); designs workload schedulers that optimize for latency, throughput, and energy using reinforcement learning; manages heterogeneous fleets with zero-touch provisioning and AI-driven predictive maintenance; and advocates for sustainable compute through hardware-aware software optimization and circular economy principles for hardware lifecycle management.
-
-#### Required Reading
-
-- Hennessy, J., & Patterson, D. (2038). *Computer Architecture: A Quantitative Approach* (8th ed.). Morgan Kaufmann.
-- UoY Heterogeneous Computing Lab. (2040). *Beyond Von Neumann: A Taxonomy of 2040 Compute Architectures*. University of Yggdrasil Press.
-- Federación de Arquitectos de Sistemas Heterogéneos (FASH). (2040). *The Compute Landscape: Architectural Patterns for 2040-2060*.
-- Mehrotra, A. (2039). *Workload Characterization for Heterogeneous Systems*. ACM Transactions on Architecture and Code Optimization.
-- López, P., & Singh, R. (2040). *Disaggregated Data Centers: Resource Pooling at Scale*. IEEE Computer.
-- Chen, L. (2041). *Neuromorphic Engineering: From Synapses to Systems*. Cambridge University Press.
-
-#### Discussion Questions
-
-1. **Workload Fingerprinting:** How would you characterize the "compute fingerprint" of a real-time language translation system versus a blockchain validator? What architectures would you select for each and why? Consider the translation system's need for low-latency sequence-to-sequence processing versus the validator's requirement for massive integer arithmetic and hash computation.
-
-2. **Location Trade-offs:** A multinational corporation wants to deploy AI for fraud detection. Compare the trade-offs of running this workload on: (a) centralized quantum-accelerated cloud instances, (b) distributed edge NPUs in regional data centers, and (c) on-device neuromorphic sensors at ATMs. Consider latency (critical for real-time fraud blocking), privacy (sensitive financial data), cost (infrastructure vs per-transaction), and maintenance (centralized updates vs fleet management).
-
-3. **Sustainable Heterogeneity:** How can IT professionals leverage heterogeneous computing to reduce carbon footprint? Consider both operational efficiency (matching workload to efficient hardware — e.g., using neuromorphic for sensor preprocessing instead of GPU) and embodied carbon (managing diverse hardware lifecycles through modular upgrades and responsible e-waste recycling).
-
-4. **Future-Proofing Architecture:** Given the rapid pace of hardware innovation, how should IT professionals design systems today to accommodate tomorrow's architectures? Discuss strategies like abstraction layers, hardware-agnostic APIs, and modular design that allow for incremental upgrades without full rip-and-replace.
-
----
 ## Final Examination Preparation
 
-### Sample Essay Questions (Choose 4 of 8)
+### Format
+The final examination consists of two components:
 
-1. **Edge AI Architecture:** Design an edge AI system for predictive maintenance in a factory. Address hardware selection, model deployment, data pipeline, and fleet management.
+**Part A — Written Examination (60%):** Choose 4 of the following 8 essay questions. Essays should demonstrate understanding of architectural trade-offs, the implications of hardware specialization, and the skills needed to navigate the heterogeneous compute landscape of 2040.
 
-2. **Neuromorphic vs. GPU:** Compare neuromorphic and GPU architectures for always-on audio processing. Provide quantitative analysis of energy, latency, and accuracy.
+**Part B — Practical Design Exercise (40%):** You will be given a scenario — an application description, workload characteristics, and constraints (latency, bandwidth, power, cost) — and must produce: a heterogeneous architecture diagram with compute placement, data flow, and synchronization points; a justification for each architectural choice; and a bill of materials with estimated costs.
 
-3. **Edge Fleet Management:** Design a management system for 50,000 edge nodes. Address provisioning, updates, monitoring, and security.
+### Part A — Essay Questions (Choose 4 of 8)
 
-4. **Carbon-Aware Edge:** Design a carbon-aware scheduling system for edge workloads. How do you balance carbon reduction with latency requirements?
+1. **The End of Von Neumann:** Argue for or against the proposition: "By 2050, the von Neumann architecture will be relegated to legacy systems and niche applications, with the majority of new computing happening in post-von-Neumann alternatives." Use the lectures on von Neumann bottleneck, Dennard scaling, and the 2040 compute landscape to support your position.
 
-5. **Edge Security:** A retail chain deploys 5,000 edge nodes in stores. Design the security architecture — device identity, secure boot, attestation, and incident response.
+2. **Neuromorphic vs. NPU for Edge AI:** Compare neuromorphic chips (Intel Loihi, IBM NorthPole) and neural processing units (Qualcomm Hexagon, Apple Neural Engine) for edge AI workloads. Consider energy efficiency, programmability, maturity of tooling, and suitability for specific workloads (always-on sensing, image classification, audio processing).
 
-6. **Serverless Edge Application:** Design a serverless edge application using WebAssembly. Address cold start, state management, and deployment.
+3. **Edge Computing and the Cloud:** Edge computing is often positioned as a replacement for cloud computing. Analyse this claim. Is edge a complement, a competitor, or something else? Use the lectures on why edge, the edge-cloud continuum, and edge deployment patterns to support your position.
 
-7. **Industry Edge Comparison:** Compare edge infrastructure requirements for manufacturing, healthcare, and agriculture. What's common? What's unique?
+4. **Heterogeneous Orchestration:** Compare Kubernetes device plugins, custom AI-driven schedulers, and workflow engines (Argo, Airflow) for orchestrating heterogeneous workloads. When is each approach appropriate, and what are the limitations of each?
 
-8. **Heterogeneous Future:** Project the hardware landscape to 2060. Will specialized architectures proliferate, or will we converge on a universal architecture? Defend your prediction.
+5. **Processing-in-Memory:** Evaluate the promise of processing-in-memory for memory-bound workloads. Consider the lectures on PIM architectures, applications, and programming models. What are the remaining barriers to widespread adoption, and when would you choose PIM over traditional CPU-GPU approaches?
+
+6. **Quantum Accelerators:** For what classes of problems do quantum accelerators provide a demonstrable advantage over classical heuristics? Use the lectures on quantum annealers, gate-based quantum computers, and photonic quantum computers to support your position.
+
+7. **Security in Heterogeneous Systems:** Heterogeneous and edge computing introduce new attack surfaces. Analyse the lectures on data in motion security, firmware security, side-channel attacks, and physical security. What is the most significant new vulnerability introduced by heterogeneous computing, and how would you mitigate it?
+
+8. **The Future of Compute:** Look ahead to 2050. Which of the emerging technologies (photonic, memristor, DNA-based, 3D-stacked, ambient) do you think will have the most significant impact, and why? Consider technical feasibility, ecosystem readiness, and the problems they solve.
+
+### Part B — Practical Design Exercise Brief
+
+**Scenario**: WildLifeTrack, a conservation NGO, deploys 5,000 solar-powered camera traps in remote national parks to monitor endangered species. Each camera trap captures 1080p video at 10 fps and must: (1) detect animals in real-time with < 200ms latency; (2) classify species (tiger, elephant, poacher, etc.) with 95%+ accuracy; (3) transmit only metadata (species, timestamp, location, confidence) to reduce satellite bandwidth costs; (4) operate for 6 months on a single battery charge; (5) withstand temperatures from -20°C to 50°C; (6) be upgradable over-the-air with new models.
+
+**Deliverables**:
+1. Architecture diagram showing compute placement (camera trap, edge gateway, regional data center, cloud) and data flow (video, metadata, commands).
+2. Justification for each architectural choice (why a specific accelerator is used where, data movement considerations, synchronization points).
+3. Bill of materials with estimated costs (camera trap hardware, edge gateway, regional data center, cloud services).
+4. Operational considerations (power management, thermal management, security, observability, model updates).
 
 ---
 
-**Þǫkk — May your compute be efficient and your edge ever sharp.**
+*ᚱᚢᚾᚨ — Runa Gridweaver Freyjasdottir wove this knowledge-weft. May the Norns guide your hand as you shape the compute of tomorrow.*
