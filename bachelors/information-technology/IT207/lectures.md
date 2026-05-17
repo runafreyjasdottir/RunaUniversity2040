@@ -1,535 +1,659 @@
-# IT207: IT Service Management (ITIL, DevOps, SRE)
+# IT207: IT Service Management
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Prerequisites:** IT201 — System Administration; IT205 — Cybersecurity Fundamentals (recommended)  
-**Description:** A comprehensive study of the frameworks, practices, and cultures that enable the reliable delivery of IT services at scale. Covers ITIL 4 (the de facto global standard for service management), DevOps (the integration of development and operations), Site Reliability Engineering (SRE, Google's approach to scaling operations), and the emerging AIOps paradigm of 2040. Students learn to design service value streams, manage incidents and changes, measure reliability through service level objectives (SLOs), and implement continuous improvement cycles. The course culminates in a capstone project where students design an IT service management system for a simulated enterprise.
-
-**Instructor:** Prof. Baldr Hákonarson, Senior Lecturer in Service Operations  
-**Lab:** Frigg Operations Centre, Room 112 (Simulated NOC/SOC environment)  
-**Office Hours:** Wednesdays, 10:00-12:00, via Yggdrasil Service Portal
+**Description:** IT Service Management (ITIL, DevOps, SRE)
 
 ---
 
 ## Lectures
 
-ᚠ **Lecture 1: The Service Economy — Why IT Service Management Matters**
+ᚠ **Lecture 1: The IT Service Management Mindset**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
-
----
-
-### Overview
-
-Information Technology is no longer a back-office function; it is the primary value delivery mechanism of modern organizations. This lecture establishes the foundational premise of IT service management: that IT must be managed as a **service** — a means of enabling value for customers through the facilitation of outcomes — rather than as a collection of technologies. We examine the evolution from "IT as cost center" to "IT as strategic partner," the economic logic of service management, and the cultural shifts required to move from reactive firefighting to proactive service excellence. By 2040, every organization is a technology organization; service management is the discipline that ensures technology delivers business value reliably, efficiently, and securely.
-
-### Key Topics
-
-- **The Service Paradigm:** A service is a means of delivering value to customers by facilitating outcomes they want to achieve without the ownership of specific costs and risks. IT services include: infrastructure services (compute, storage, network), application services (email, ERP, CRM), business services (student registration, financial reporting), and enabling services (security operations, service desk, training). The service provider's job is not to manage technology but to **co-create value** with customers by understanding their needs and designing services that meet them.
-- **IT Service Management (ITSM) Evolution:** From the 1980s mainframe era (centralized IT departments, waterfall project management) through the 1990s process standardization (ITIL v1/v2, CCTA, process maturity models), the 2000s alignment frameworks (COBIT, ISO 20000, balanced scorecards), the 2010s agile and DevOps revolutions (breaking down silos, continuous delivery, automation), to the 2020s-2040s platform engineering and AIOps era (self-service platforms, AI-assisted operations, autonomous remediation). Each evolution added capabilities without fully replacing previous paradigms; modern organizations use hybrid models.
-- **The Four Dimensions of Service Management:** ITIL 4 organizes service management into four dimensions: **Organizations and People** (culture, skills, roles, communication), **Information and Technology** (services, information, knowledge, supporting technologies), **Partners and Suppliers** (relationships, contracts, integration, multi-sourcing), and **Value Streams and Processes** (activities, workflows, controls, deliverables). No single dimension is sufficient; effective service management balances all four.
-- **The Cost of Downtime:** By 2040, the global cost of IT downtime exceeds $10 trillion annually. The direct costs (lost revenue, recovery expenses, regulatory fines) are dwarfed by indirect costs (reputational damage, customer churn, employee burnout). High-profile outages: the 2032 CloudStrike DNS failure (taking down 40% of Fortune 500 websites for 6 hours), the 2035 Nordic Banking Network collapse (3-day payment system outage affecting 20 million customers), and the 2037 Yggdrasil Learning Platform outage (final exam week, 48 hours offline, requiring manual examination procedures). These cases demonstrate that service management is not academic theory; it is business continuity.
-
-### Lecture Notes
-
-The central insight of IT service management is that **technology is not the product; value is.** A student does not want a database; they want to register for courses. A researcher does not want a server; they want to run simulations. A clinician does not want a network; they want to access patient records. The service provider who understands this distinction designs services around outcomes, not components. The service provider who does not understand it delivers technically perfect systems that fail to meet user needs.
-
-**The ITSM profession** has matured from a back-office function to a strategic discipline. The modern ITSM practitioner is part technologist, part business analyst, part psychologist, and part diplomat. They must understand cloud architecture, negotiate with vendors, mediate between development and operations teams, and translate business requirements into technical specifications. The Yggdrasil ITSM program emphasizes this interdisciplinary approach: students take courses in business communication, project management, and organizational psychology alongside technical subjects.
-
-**Service culture** is the hardest aspect of ITSM to implement. Technical staff often view service management processes as bureaucratic overhead: "Why do I need a change request to restart a server?" The answer: because in a complex system, a seemingly simple action can have cascading effects. The 2034 Yggdrasil research prefix leak (Lecture 1 of IT107) was caused by an unapproved configuration change. The change would have taken 30 minutes to review; the outage lasted 20 minutes; the reputational damage persisted for months. Service management processes exist to prevent such failures by ensuring that changes are assessed, authorized, and communicated.
-
-### Required Reading
-
-- AXELOS. (2036). *ITIL 4 Foundation*, 3rd Edition. TSO. Chapters 1-3.
-- Orand, B. (2035). *IT Service Management: A Guide for the Modern Era*. Yggdrasil University Press. Chapters 1-2.
-- IDC. (2040). "The Global Cost of IT Downtime: 2040 Report." (Read the executive summary and sector analysis.)
-
-### Discussion Questions
-
-1. A developer argues that ITIL processes slow down innovation and that "move fast and break things" is the correct philosophy. How do you respond? Under what circumstances is each philosophy appropriate, and how do you balance them?
-2. The "service paradigm" defines a service as facilitating outcomes without transferring ownership of costs and risks. But in cloud computing, customers do bear some risks (data breaches, vendor lock-in). Is cloud computing truly a service under this definition? What are the implications?
-3. A 6-hour outage costs a company $100 million in lost revenue. The CEO proposes investing $50 million in redundancy to prevent future outages. Is this a good investment? What analytical framework would you use to evaluate it?
-
----
-
-ᚢ **Lecture 2: ITIL 4 — The Service Value System and Guiding Principles**
-
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-ITIL (Information Technology Infrastructure Library) is the most widely adopted framework for IT service management, with over 5 million certified practitioners by 2040. ITIL 4, released in 2019 and updated through 2040, represents a paradigm shift from process-centric service management to **value-centric service management**. This lecture covers the ITIL 4 Service Value System (SVS): the guiding principles, governance, service value chain, practices, and continual improvement model that together enable organizations to co-create value with stakeholders.
+IT Service Management (ITSM) is the discipline of designing, delivering, managing, and improving the way information technology is used within organizations. By 2040, ITSM has evolved from a process-centric framework (ITIL) to a culture of continuous improvement that integrates DevOps practices and Site Reliability Engineering (SRE). This lecture establishes the foundational mindset: IT exists not for its own sake but to enable business outcomes, and every technical decision must be evaluated through the lens of service value.
 
 ### Key Topics
 
-- **The Seven Guiding Principles:** (1) **Focus on value** — everything the organization does should link back to value for stakeholders; (2) **Start where you are** — assess current state honestly before implementing change; (3) **Progress iteratively with feedback** — avoid big bang transformations; deliver value in small increments; (4) **Collaborate and promote visibility** — break down silos; share information across teams; (5) **Think and work holistically** — no service component exists in isolation; optimize the whole, not the parts; (6) **Keep it simple and practical** — eliminate waste; do only what adds value; (7) **Optimize and automate** — automate standard tasks to free humans for complex judgment. These principles are universal: they apply to ITSM, DevOps, agile, and any organizational improvement effort.
-- **The Service Value System (SVS):** ITIL 4's core model. The SVS receives **inputs** (opportunities and demands from stakeholders) and produces **outputs** (value in the form of products and services). Components: **Guiding Principles** (recommendations for all decisions), **Governance** (evaluation, direction, and monitoring of the organization), **Service Value Chain** (the set of activities required to create value), **Practices** (resources for performing work), and **Continual Improvement** (embedded in all components). The SVS is not a linear process; it is an ecosystem where components interact dynamically.
-- **The Service Value Chain:** Six activities that form the core workflow: **Plan** (ensuring shared understanding of vision and status), **Improve** (ensuring continual improvement), **Engage** (understanding stakeholder needs), **Design & Transition** (ensuring products and services meet expectations), **Obtain/Build** (ensuring service components are available), and **Deliver & Support** (ensuring services are delivered and supported). These activities are not sequential; they form a flexible chain where any activity can trigger any other. The value chain is implemented through **value streams** — specific combinations of activities for particular scenarios (e.g., "respond to incident" or "onboard new employee").
-- **Governance in ITIL 4:** Governance is the means by which an organization is directed and controlled. ITIL 4 defines three governance activities: **Evaluate** (assessing the organization's strategy, portfolio, and performance), **Direct** (setting policies, priorities, and resources), and **Monitor** (measuring performance and ensuring compliance). Governance is not separate from management; it is the framework within which management operates. The Yggdrasil University Council provides governance for IT services through the Digital Strategy Committee, which evaluates proposals, directs investment, and monitors outcomes.
+- The service mindset: IT as a service provider, not a cost center
+- The evolution from ITIL v3 to ITIL 4 and beyond
+- DevOps: breaking down silos between development and operations
+- SRE: applying software engineering to operations problems
+- The 2040 landscape: AI-assisted service management, autonomous remediation, and human-AI collaboration
 
 ### Lecture Notes
 
-ITIL 4 is not a cookbook; it is a **philosophy of service**. Unlike ITIL v3, which prescribed 26 processes with rigid inputs, activities, and outputs, ITIL 4 provides principles and models that organizations adapt to their context. This flexibility is both ITIL 4's strength and its criticism: adherents praise its adaptability; detractors argue it is too vague to implement without external consulting. The truth is that ITIL 4, like any framework, requires intelligent adaptation to organizational culture, size, and maturity.
+**The service mindset** reframes IT's role in the organization. Rather than viewing IT as a technical function that implements requests, ITSM treats IT as a service provider that co-creates value with the business. Every service has a **service value chain**: planning, improvement, engagement, design and transition, obtain/build, and deliver/support. The lecture introduces the **Service Value System (SVS)** from ITIL 4, which connects organizational inputs (opportunity, demand) to outputs (value) through guided principles, governance, service value chain activities, and continual improvement.
 
-**The guiding principles** are deceptively simple. "Focus on value" seems obvious, yet many IT organizations measure themselves by technical metrics (server uptime, ticket resolution time) rather than business outcomes (student satisfaction, research output, administrative efficiency). The Yggdrasil IT Service Desk shifted from measuring "tickets closed per hour" to "student success rate" (did the student achieve their goal?) and saw satisfaction scores increase by 40%.
+**ITIL (Information Technology Infrastructure Library)** originated in the UK government (1980s) and became the dominant ITSM framework. **ITIL v3** (2007) organized ITSM around five lifecycle stages: Service Strategy, Service Design, Service Transition, Service Operation, and Continual Service Improvement. **ITIL 4** (2019) shifted to a more holistic, flexible approach, emphasizing the Service Value System, the four dimensions of service management (Organizations and People, Information and Technology, Partners and Suppliers, Value Streams and Processes), and the guiding principles (Focus on Value, Start Where You Are, Progress Iteratively with Feedback, Collaborate and Promote Visibility, Think and Work Holistically, Keep It Simple and Practical, Optimize and Automate). By 2040, **ITIL 5** (2032) has integrated AI governance, quantum-safe service design, and planetary-scale service architectures.
 
-**The service value chain** replaces ITIL v3's linear process model with a flexible activity network. This better reflects modern service delivery, where activities are not sequential but interleaved. A DevOps team simultaneously plans sprints, engages with users, designs features, builds code, delivers releases, and improves based on feedback — all within a two-week iteration. The value chain model captures this reality without forcing it into artificial process boundaries.
+**DevOps** emerged from the Agile software movement (late 2000s) to address the dysfunction between development (measured by feature velocity) and operations (measured by stability). DevOps integrates these goals through shared responsibility, automated pipelines, and cultural change. The **CALMS model** (Culture, Automation, Lean, Measurement, Sharing) summarizes DevOps principles. By 2040, **Platform Engineering** has emerged as the evolution of DevOps: internal developer platforms abstract infrastructure complexity, enabling developers to self-service while maintaining governance.
+
+**SRE (Site Reliability Engineering)**, pioneered by Google (2003, publicized 2016), applies software engineering practices to operations. SRE teams write code to automate toil (repetitive manual work), design for reliability, and manage error budgets. The **error budget** is a revolutionary concept: rather than requiring 100% uptime (which stifles innovation), SRE defines an acceptable level of unreliability (e.g., 99.9% uptime = 0.1% error budget). When the error budget is exhausted, feature launches pause until reliability improves. By 2040, **AI SREs** (covered in IT301) handle routine toil, but human SREs remain essential for architectural decisions and incident command.
+
+**The 2040 landscape** integrates AI into every aspect of service management. **AIOps** (Artificial Intelligence for IT Operations) uses machine learning to correlate alerts, predict failures, and suggest remediations. **Autonomous remediation** (self-healing systems) resolves common issues without human intervention. **Human-AI collaboration** means that AI handles routine decisions (scaling, routing, patching) while humans handle novel, high-stakes decisions (architecture changes, security incidents, ethical dilemmas). The lecture emphasizes that AI augments but does not replace human judgment in ITSM.
 
 ### Required Reading
 
-- AXELOS. (2036). *ITIL 4 Foundation*, 3rd Edition. TSO. Chapters 4-6.
-- Cannon, D. (2035). "From ITIL v3 to ITIL 4: A Critical Analysis." *Journal of Service Management*. (Read the section on value chain vs. process model.)
+- Axelos (2019). *ITIL Foundation: ITIL 4 Edition*. TSO. (Updated for 2040 context.)
+- Kim, G., et al. (2016). *The DevOps Handbook*. IT Revolution Press.
+- Beyer, B., et al. (2016). *Site Reliability Engineering*. O'Reilly.
+- Yggdrasil ITSM Team (2032). "ITIL 5: Service Management in the Age of AI." *UoY ITSM Research Report*.
 
 ### Discussion Questions
 
-1. ITIL 4's flexibility allows adaptation but also permits "ITIL in name only" implementations where organizations adopt the vocabulary without the substance. How do you assess whether an organization has genuinely implemented ITIL 4 or is merely performing compliance theater?
-2. The guiding principle "start where you are" conflicts with the common consulting impulse to rip and replace. When is incremental improvement appropriate, and when is transformational change necessary? What criteria determine the approach?
-3. The service value chain includes "Engage" as a core activity. In a large university with 50,000 students, how do you "engage" effectively at scale? What mechanisms exist for understanding stakeholder needs without being overwhelmed by noise?
+1. ITIL 5 integrates AI governance. Should AI decision-making in ITSM be auditable and explainable, or is black-box optimization acceptable for routine operations?
+2. The error budget concept accepts some unreliability for innovation speed. For a hospital's patient monitoring system, is any error budget ethically acceptable?
+3. Platform Engineering abstracts infrastructure but can create dependency on the platform team. How should organizations balance self-service with platform reliability?
+4. AIOps promises to reduce alert fatigue, but can also create complacency. How should organizations maintain human situational awareness when AI handles most routine alerts?
+
+### Practice Problems
+
+- Map the service value chain for a fictional e-commerce platform. Identify inputs, activities, and outputs for each stage. Propose metrics that demonstrate value creation.
+- Calculate an error budget for a service with 99.95% SLO. Determine how much downtime is permitted per month and how feature velocity should be adjusted when the budget is exhausted.
 
 ---
 
-ᚦ **Lecture 3: Service Design and Architecture — Designing for Reliability**
+ᚢ **Lecture 2: ITIL Practices: Service Strategy and Design**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Reliability is not an accident; it is the result of intentional design. This lecture covers the principles of **service design**: translating business requirements into technical specifications, designing for maintainability, scalability, and resilience, and creating service architectures that degrade gracefully under stress. We examine design patterns for reliability (redundancy, failover, circuit breakers, bulkheads, rate limiting), the role of architecture decision records (ADRs) in capturing design rationale, and the tension between design perfection and time-to-market. The Yggdrasil Student Information System serves as a case study: designed in 2028 for 30,000 students, now serving 52,000 with 99.99% uptime.
+ITIL 4 defines 34 management practices organized into three categories: service management, technical management, and general management. This lecture covers the practices most relevant to service strategy and design: service portfolio management, service level management, capacity management, availability management, and service design coordination.
 
 ### Key Topics
 
-- **Service Design Processes:** ITIL 4's Design & Transition practice encompasses: requirement gathering (functional and non-functional), service level design (availability, capacity, performance targets), technical architecture (infrastructure, application, data, network), operational model (support structure, monitoring, backup), and service acceptance criteria (how we know the service is ready for production). The design process must balance competing constraints: cost vs. performance, time-to-market vs. quality, flexibility vs. standardization. The Yggdrasil Architecture Review Board evaluates all designs against the Yggdrasil Security Baseline, Cost Efficiency Policy, and Sustainability Charter.
-- **Design Patterns for Reliability:** **Redundancy** (N+1, N+2 configurations; no single point of failure); **Failover** (automatic detection of failure and redirection to backup systems); **Circuit Breakers** (preventing cascading failures by stopping requests to failing downstream services); **Bulkheads** (isolating failures to prevent them from spreading — the compartmentalization principle from naval architecture); **Rate Limiting** (preventing overload by throttling requests); **Graceful Degradation** (reducing functionality rather than failing entirely — e.g., showing cached data when real-time data is unavailable); and **Chaos Engineering** (deliberately injecting failures to test resilience). The Yggdrasil Cloud Platform implements all of these patterns by default.
-- **Service Level Objectives (SLOs) and Error Budgets:** SRE philosophy (developed at Google, adopted globally by 2040) defines reliability targets as SLOs: "the service will respond to 99.9% of requests within 200ms." The **error budget** is the complement: 0.1% of requests may exceed 200ms. If the error budget is exhausted, new feature development halts until reliability improves. This aligns incentives: product teams want to ship features; SRE enforces quality gates. The Yggdrasil Learning Platform SLO: 99.95% availability during term time, 99.9% during breaks; error budgets are reviewed weekly by the Platform Engineering Team.
-- **Architecture Decision Records (ADRs):** Every significant architectural decision is documented in an ADR: context (what problem are we solving?), decision (what did we choose?), consequences (what are the trade-offs?), status (proposed, accepted, deprecated), and alternatives considered. ADRs create organizational memory, prevent repeated debates, and enable new team members to understand why the system is built the way it is. The Yggdrasil Architecture Repository contains 800+ ADRs spanning a decade of decisions.
+- Service portfolio: pipeline, catalog, and retired services
+- Service level management: SLAs, OLAs, and UCs
+- Capacity and performance management: demand forecasting and resource planning
+- Availability management: HA architectures, resilience, and recovery
+- Service design: the four Ps (People, Products, Processes, Partners)
 
 ### Lecture Notes
 
-Service design is where the abstract meets the concrete. A business requirement ("students must be able to register for courses") becomes a technical architecture (web frontend, API gateway, registration microservice, database, payment processor, notification service), which becomes an operational reality (monitoring, alerting, on-call rotations, runbooks, capacity planning). The designer's job is to anticipate how the service will behave under load, under attack, under failure, and under growth — and to make choices that are resilient to all of these.
+**Service portfolio management** maintains the complete set of services across three states. **Service pipeline**: proposed and in-development services. **Service catalog**: live services available to customers. **Retired services**: decommissioned services with archived data. The portfolio ensures that IT investments align with business strategy and that resources are allocated to the highest-value initiatives. By 2040, **AI portfolio optimization** models the ROI of service investments, accounting for risk, strategic alignment, and resource constraints.
 
-**The reliability paradox:** Users want 100% availability, but achieving it is exponentially expensive. 99% availability allows 3.65 days of downtime per year; 99.9% allows 8.76 hours; 99.99% allows 52.6 minutes; 99.999% allows 5.26 minutes. Each additional "9" requires more redundancy, more monitoring, more automation, and more operational discipline. The SLO framework forces explicit conversation: "We can achieve 99.99% for $500,000 per year, or 99.999% for $2,000,000. Is the extra reliability worth the cost?" The Yggdrasil Learning Platform targets 99.95% because the cost of the final 0.04% exceeds the benefit.
+**Service level management** defines, agrees upon, and monitors service targets. **SLAs (Service Level Agreements)** are contracts between IT and customers specifying measurable targets (availability, response time, resolution time). **OLAs (Operational Level Agreements)** are internal agreements between IT teams (e.g., network team promises 4-hour response to server team). **UCs (Underlying Contracts)** are agreements with third-party suppliers. The lecture covers **SLA design**: targets must be achievable, measurable, and meaningful. Unrealistic SLAs (e.g., 99.999% uptime without redundancy) create false expectations. **Penalty clauses** and **credits** enforce SLA compliance, but excessive penalties can strain the IT-business relationship.
 
-**Chaos engineering** is the ultimate test of design. By deliberately injecting failures — killing servers, corrupting network packets, saturating CPU — teams discover weaknesses that testing cannot reveal. Netflix's Chaos Monkey (pioneered 2011) evolved into sophisticated failure injection platforms by 2040. The Yggdrasil Chaos Engineering Program runs monthly "game days" where failure scenarios are injected into production systems (during low-risk windows) to validate resilience. The rule: if you haven't tested it, it doesn't work.
+**Capacity and performance management** ensures that services have sufficient resources to meet demand. **Demand management** influences customer behavior to smooth demand (e.g., encouraging off-peak usage). **Resource modeling** predicts future capacity needs based on growth trends, seasonality, and planned changes. **Performance tuning** optimizes existing resources (covered in IT203 for databases, and in this lecture for application and infrastructure capacity). By 2040, **predictive capacity management** uses AI to forecast demand 72 hours in advance, automatically provisioning resources before shortages occur.
+
+**Availability management** maximizes service uptime. **Availability** is calculated as: (Total Time - Downtime) / Total Time. **Mean Time Between Failures (MTBF)** measures reliability; **Mean Time To Repair (MTTR)** measures recoverability. High availability requires redundancy: **N+1** (one spare component), **N+2** (two spares), **2N** (fully duplicated). **Recovery objectives**: **RTO (Recovery Time Objective)**—maximum acceptable downtime; **RPO (Recovery Point Objective)**—maximum acceptable data loss. By 2040, **autonomous availability management** (self-healing systems, predictive failure replacement) has reduced MTTR from hours to minutes for common failures.
+
+**Service design** creates new or changed services. The **four Ps** ensure comprehensive design: **People** (skills, roles, training), **Products** (technology, tools, infrastructure), **Processes** (workflows, procedures, metrics), and **Partners** (suppliers, vendors, outsourced functions). The lecture covers **design coordination**: managing dependencies between design activities, ensuring that changes to one component do not break others. By 2040, **digital twins** (virtual models of services) enable design validation in simulation before deployment.
 
 ### Required Reading
 
-- Beyer, B. et al. (2036). *Site Reliability Engineering*, 2nd Edition. O'Reilly. Chapters 2-4, 7.
-- Nygard, M.T. (2035). *Release It!*, 3rd Edition. Pragmatic Bookshelf. Chapters 2-5, 9-10.
-- Yggdrasil Architecture Team. (2040). "The Yggdrasil SLO Handbook: Defining, Measuring, and Enforcing Reliability Targets." *UoY Technical Report* TR-2040-05.
+- Axelos (2019). *ITIL 4: Direct, Plan and Improve*. TSO.
+- Axelos (2019). *ITIL 4: Create, Deliver and Support*. TSO.
+- Yggdrasil Capacity Management (2035). "Predictive Capacity Management at UoY: From Reactive to Proactive." *UoY Operations Report*.
 
 ### Discussion Questions
 
-1. A product team wants to ship a new feature that increases revenue by 10% but violates the error budget, reducing availability from 99.9% to 99.5%. The SRE team blocks the release. Who is right? What decision framework resolves this conflict?
-2. Chaos engineering injects failures into production. A game day causes an unexpected cascade failure that affects real users. Was the game day irresponsible, or is this an acceptable risk? What safeguards should exist?
-3. ADRs document decisions but can become stale as technology evolves. An ADR from 2028 mandates a monolithic architecture; the team now wants microservices. Should the ADR be updated, deprecated, or preserved as historical record? What is your ADR lifecycle policy?
+1. AI portfolio optimization can recommend canceling low-ROI services that have political support. How should organizations balance data-driven recommendations with stakeholder relationships?
+2. SLA penalties can incentivize performance but may cause IT to prioritize SLA metrics over genuine service quality. What complementary metrics prevent gaming?
+3. Predictive capacity management reduces waste but requires accurate forecasting. For a new service with no historical data, what baseline capacity should be provisioned?
+4. Digital twins enable design validation but add modeling overhead. For a simple CRUD application, is twin modeling justified?
+
+### Practice Problems
+
+- Design an SLA for a university learning management system. Define: availability target, response time targets for different request types, support hours, escalation paths, and penalty/credit structure. Ensure targets are achievable given the existing infrastructure.
+- Build a capacity forecast for a service expecting 50% user growth over 6 months. Model CPU, memory, storage, and bandwidth requirements. Specify when additional resources should be provisioned to avoid performance degradation.
 
 ---
 
-ᚨ **Lecture 4: Service Transition and Change Management — Controlled Evolution**
+ᚦ **Lecture 3: ITIL Practices: Service Transition and Change Management**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Change is the leading cause of IT service disruption: 80% of outages are caused by changes, not by spontaneous failures. This lecture covers **service transition** — the process of moving new or changed services into production — and **change management** (or change enablement, in ITIL 4 terminology) — the governance process that ensures changes are assessed, authorized, and implemented with minimal risk. We examine change models (standard, normal, emergency), the CAB (Change Advisory Board) structure, automated change validation, and the DevOps approach to high-velocity change. The goal: enabling rapid innovation without sacrificing stability.
+Service transition moves services from design to live operation. This lecture covers change management, release management, deployment management, and the practices that ensure changes are introduced safely and predictably. By 2040, continuous deployment has shortened transition cycles from months to minutes, but the principles of risk management and testing remain essential.
 
 ### Key Topics
 
-- **Change Types and Models:** ITIL 4 defines three change types: **Standard Changes** (low risk, pre-authorized, well-understood — e.g., adding a new user, deploying a routine patch); **Normal Changes** (require assessment and authorization — most changes fall here, assessed by the Change Advisory Board); and **Emergency Changes** (urgent fixes requiring expedited authorization — e.g., security patches for actively exploited vulnerabilities). The 2040 evolution: **automated standard changes** (self-service portals where users deploy pre-approved blueprints with automatic compliance checking), **data-driven normal changes** (machine learning models that assess change risk based on historical data, test coverage, and blast radius), and **war-room emergency changes** (pre-authorized emergency protocols with mandatory post-implementation review).
-- **The Change Advisory Board (CAB):** The CAB is a cross-functional team that reviews, assesses, and authorizes changes. Membership: IT operations (can we support this?), development (what are we changing?), security (what are the risks?), business representatives (what is the impact on users?), and finance (what does it cost?). The CAB evaluates: business justification, technical impact, risk assessment, rollback plan, testing evidence, and communication plan. By 2040, many organizations use **virtual CABs** (asynchronous review via workflow tools) and **automated CABs** (AI-assisted risk scoring with human oversight for high-risk changes). The Yggdrasil CAB meets weekly for normal changes and operates a 24/7 virtual queue for emergency changes.
-- **Release and Deployment Management:** The technical process of packaging, testing, and deploying changes. **Release pipelines** (CI/CD — Continuous Integration/Continuous Deployment) automate build, test, and deployment: developers commit code → automated tests run → code is reviewed → deployed to staging → integration tests run → deployed to production (with canary or blue-green deployment). **Deployment strategies:** big bang (all at once — risky), rolling (gradual replacement — moderate risk), blue-green (parallel environments — low risk, high cost), and canary (deploy to 1% of users, monitor, then expand — lowest risk). The Yggdrasil Platform uses canary deployments for all production changes, with automatic rollback if error rates exceed SLOs.
-- **Testing and Validation:** Changes must be tested before deployment. Test types: unit tests (individual components), integration tests (component interactions), end-to-end tests (full user workflows), performance tests (load, stress, soak), security tests (SAST, DAST, penetration testing), and chaos tests (failure injection). **Test coverage** is not merely line coverage but behavioral coverage: does the test suite exercise error handling, edge cases, and concurrent access? The Yggdrasil deployment policy requires 80% line coverage, 100% coverage of critical paths, and passing security scans as prerequisites for CAB approval.
+- Change management: types of change (standard, normal, emergency), CAB, and change models
+- Release management: release packaging, scheduling, and communication
+- Deployment management: blue-green, canary, feature flags, and rollback
+- Knowledge management: documentation, runbooks, and wikis
+- Testing: unit, integration, system, acceptance, and chaos engineering
 
 ### Lecture Notes
 
-Change management is the most politically fraught process in ITSM. Developers resent it as bureaucratic obstruction; operations teams depend on it for stability; business leaders are frustrated when urgent changes are delayed. The art of change management is not to prevent change but to **enable safe change** — providing guardrails that allow speed without recklessness.
+**Change management** controls the lifecycle of changes. **Standard changes**: low-risk, pre-authorized changes (patching, password resets). **Normal changes**: require assessment and authorization by the Change Advisory Board (CAB). **Emergency changes**: rapid authorization for critical fixes (e.g., security patches). By 2040, **AI change risk assessment** analyzes historical data to predict the risk of a change, enabling low-risk changes to be auto-approved and high-risk changes to receive additional scrutiny.
 
-**The DevOps critique of traditional change management** is that it creates a adversarial relationship between development and operations. Developers want to ship code; operations wants to prevent outages; change management becomes the battlefield. The DevOps solution: **automated governance**. Instead of a human CAB reviewing every change, the "CAB" is a set of automated checks: tests must pass, security scans must be clean, SLOs must not be violated. If the automated checks pass, the change deploys automatically. Human review is reserved for changes that fail checks or exceed risk thresholds. The Yggdrasil Platform Engineering team implements this model: 70% of changes are fully automated; 25% require automated risk scoring with human approval; 5% require full CAB review.
+**The CAB (Change Advisory Board)** reviews and authorizes changes. Traditional CABs meet weekly, reviewing all proposed changes. By 2040, **virtual CABs** (asynchronous review via collaboration platforms) and **AI-assisted CABs** (auto-approving low-risk changes, flagging conflicts) have replaced most in-person meetings. However, **major changes** (architecture overhauls, datacenter migrations) still require human deliberation.
 
-**Emergency changes** are the exception that tests the rule. When a critical vulnerability is announced (e.g., Log4Shell, Heartbleed, or their 2040 equivalents), speed is essential: every minute of delay is a minute of exposure. But speed without control creates new risks. The Yggdrasil emergency change protocol: (1) pre-authorized war room activation, (2) impact assessment within 30 minutes, (3) patch deployment to staging within 2 hours, (4) automated testing within 4 hours, (5) production deployment within 6 hours, (6) continuous monitoring for 48 hours, and (7) mandatory post-incident review within 1 week. This protocol balances urgency with discipline.
+**Release management** packages and schedules changes. **Major releases** (quarterly, containing many changes) have given way to **continuous delivery** (daily or hourly small releases). **Release notes** document changes for users and support staff. **Communication plans** ensure stakeholders are informed of upcoming changes. By 2040, **automated release notes** (generated from commit messages, ticket descriptions, and AI summarization) accompany every deployment.
+
+**Deployment management** introduces changes into production. **Blue-green deployment** maintains two identical environments, switching traffic from the old (blue) to the new (green). **Canary deployment** routes a small percentage of traffic to the new version, monitoring for errors before full rollout. **Feature flags** (toggles) enable code to be deployed without being activated, allowing gradual feature rollouts and instant rollback. **Rollback procedures** restore the previous version if the new deployment fails. By 2040, **progressive delivery** (automated canary analysis using AI-driven anomaly detection) is standard for critical services.
+
+**Knowledge management** captures and shares organizational knowledge. **Documentation**: architecture diagrams, API references, and configuration guides. **Runbooks**: step-by-step procedures for common operations (restarting a service, handling an alert). **Wikis** (Confluence, Notion, GitLab Wiki) enable collaborative knowledge creation. **AI knowledge assistants** (e.g., UoY's **Mímir Knowledge Engine**) answer operational questions by querying documentation, runbooks, and historical incidents. By 2040, **generative AI** creates first drafts of documentation from code and configuration, which human experts review and refine.
+
+**Testing** validates that changes work as intended. **Unit tests** verify individual components. **Integration tests** verify component interactions. **System tests** verify end-to-end functionality. **Acceptance tests** verify that the service meets business requirements. **Chaos engineering** (Netflix pioneered) intentionally introduces failures (killing instances, injecting latency, corrupting data) to validate resilience. By 2040, **AI-generated test cases** create comprehensive test suites from requirements documents, and **autonomous chaos agents** continuously test production resilience.
 
 ### Required Reading
 
-- Humble, J. & Farley, D. (2036). *Continuous Delivery*, 2nd Edition. Addison-Wesley. Chapters 1-3, 10-12.
-- Kim, G. et al. (2035). *The DevOps Handbook*, 2nd Edition. IT Revolution Press. Chapters 8-10.
-- AXELOS. (2036). *ITIL 4: Direct, Plan and Improve*. TSO. Chapter 4: "Change Enablement."
+- Axelos (2019). *ITIL 4: Drive Stakeholder Value*. TSO.
+- Humble, J., & Farley, D. (2010). *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation*. Addison-Wesley.
+- Beyer, B., et al. (2018). *The Site Reliability Workbook*. O'Reilly. Chapter 16 ("Chaos Engineering").
+- Yggdrasil Release Engineering (2036). "Progressive Delivery at UoY: From Monthly Releases to Continuous Deployment." *UoY DevOps Report*.
 
 ### Discussion Questions
 
-1. A developer submits a change to the CAB with no tests, no rollback plan, and no security review. They argue the change is "simple" and the process is "overkill." How do you respond? What is the minimum viable change documentation, and who defines it?
-2. Automated change governance requires trust in automated tests. But tests can have false negatives (missing bugs) and false positives (blocking good changes). How do you maintain confidence in the automated gate without making it so strict that it blocks innovation?
-3. The 2032 CloudStrike outage was caused by a configuration change that bypassed the normal change process as an "emergency." How do you prevent emergency change protocols from becoming a loophole for normal changes? What checks and balances exist?
+1. AI change risk assessment can auto-approve changes but may miss novel risks. Should all changes require human review, or is the efficiency gain of auto-approval worth the residual risk?
+2. Canary deployments reduce blast radius but can expose a subset of users to bugs. How should organizations select canary populations (random, geographic, user segment) to balance risk and representativeness?
+3. Generative AI creates documentation drafts, but inaccurate documentation is worse than none. What review processes ensure AI-generated documentation is trustworthy?
+4. Chaos engineering intentionally breaks production. For a financial trading system, is chaos engineering reckless, or can it be done safely?
+
+### Practice Problems
+
+- Design a change management process for a cloud-native application. Define: change types, approval workflows, CAB composition, risk assessment criteria, and rollback procedures. Create a change request for a database schema update and walk it through the process.
+- Implement a canary deployment pipeline. Deploy a new version to 5% of users, monitor error rates and latency, and automatically promote to 100% if metrics are healthy or rollback if thresholds are breached. Document the pipeline and monitoring dashboards.
 
 ---
 
-ᚱ **Lecture 5: Service Operation — Incident, Problem, and Event Management**
+ᚨ **Lecture 4: ITIL Practices: Service Operation and Incident Management**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Even perfectly designed services fail. When they do, operational practices determine whether the failure is a minor blip or a catastrophic outage. This lecture covers the core ITIL operational practices: **incident management** (restoring normal service as quickly as possible), **problem management** (identifying and eliminating root causes of incidents), and **event management** (monitoring and responding to automated alerts). We examine the 2040 operational landscape, where AIOps (Artificial Intelligence for IT Operations) handles routine events, human operators focus on complex incidents, and problem management uses predictive analytics to prevent failures before they occur.
+Service operation maintains live services, responds to incidents, fulfills requests, and manages problems. This lecture covers incident management, request fulfillment, problem management, and the operational practices that keep services running smoothly.
 
 ### Key Topics
 
-- **Incident Management:** An incident is an unplanned interruption or reduction in quality of an IT service. The incident management process: **detection** (automated monitoring, user reports), **logging** (recording time, symptoms, affected services), **categorization** (matching to known patterns), **prioritization** (impact × urgency), **diagnosis** (identifying cause), **resolution** (fixing or circumventing), **closure** (confirming restoration and documenting lessons), and **communication** (keeping stakeholders informed). Key metrics: Mean Time To Detect (MTTD), Mean Time To Respond (MTTR), Mean Time To Resolve (MTTR-sometimes distinguished from respond), and incident frequency. The Yggdrasil Service Desk targets MTTD <5 minutes (via automated alerting) and MTTR <30 minutes for critical incidents.
-- **Problem Management:** A problem is the underlying cause of one or more incidents. **Reactive problem management** (identifying root causes after incidents occur) uses techniques: 5 Whys (iterative questioning), Ishikawa diagrams (fishbone diagrams mapping causes to categories), fault tree analysis (top-down logical decomposition), and formal methods (model checking, static analysis). **Proactive problem management** (preventing problems before they cause incidents) uses trend analysis (identifying patterns in incident data), capacity planning (preventing resource exhaustion), and chaos engineering (discovering weaknesses). The Yggdrasil Problem Management Team reviews all major incidents (Priority 1 and 2) and conducts root cause analysis within 72 hours.
-- **Event Management:** An event is any detectable occurrence in the IT infrastructure. Events are classified: **informational** (routine status updates — logged but not alerted), **warning** (threshold approaching — logged and may trigger proactive action), and **exception** (failure or breach — logged and alerted immediately). By 2040, **AIOps platforms** (Moogsoft, BigPanda, Dynatrace Davis) use machine learning to: correlate related events into incidents (reducing alert noise by 90%), identify anomalous patterns (detecting failures before they impact users), and suggest remediation actions (auto-remediating routine issues). The Yggdrasil AIOps platform processes 100,000 events per minute, auto-remediates 40% of routine issues, and escalates 5% to human operators.
-- **Major Incident Management:** A major incident is a high-impact, urgent disruption requiring extraordinary response. The major incident process: activate the **Major Incident Team** (cross-functional war room with technical, communications, and business leads), establish **command and control** (clear roles: incident commander, scribe, communications lead, technical lead), implement **stakeholder communication** (regular status updates to executives, users, and regulators), and conduct **post-incident review** (blameless retrospective focusing on systemic improvements). The Yggdrasil Major Incident Protocol requires executive notification within 15 minutes, user communication within 30 minutes, and a blameless post-mortem within 5 business days.
+- Incident management: detection, logging, categorization, prioritization, diagnosis, resolution, and closure
+- Request fulfillment: service requests, self-service portals, and automation
+- Problem management: root cause analysis, known error database, and proactive problem prevention
+- Event management: monitoring, alerting, and correlation
+- Major incident management: war rooms, communication, and post-incident review
 
 ### Lecture Notes
 
-Operational excellence is invisible. When services work, nobody notices the operations team; when they fail, everyone blames them. The operations professional's job is to make the invisible infrastructure reliable, to respond to failures with calm competence, and to learn from every incident. It is a discipline of vigilance, humility, and continuous improvement.
+**Incident management** restores normal service operation as quickly as possible. The lifecycle: **Detection** (automated alerts, user reports). **Logging** (creating a ticket with timestamp, description, affected service). **Categorization** (classifying by service and symptom). **Prioritization** (based on impact and urgency: Critical = widespread service outage; High = significant degradation; Medium = partial impact; Low = minor inconvenience). **Diagnosis** (identifying cause). **Resolution** (fixing or workaround). **Closure** (verifying restoration, documenting actions). By 2040, **AI incident triage** automatically categorizes, prioritizes, and routes incidents, and **autonomous resolution** handles common issues (disk full → clean temp files; service down → restart; high latency → scale up).
 
-**Incident management vs. problem management** is the most commonly confused distinction in ITSM. Incident management is about **speed**: restore service now, investigate later. Problem management is about **depth**: understand why the incident happened and prevent recurrence. These are separate processes with different metrics: incident management is measured by MTTR (faster is better); problem management is measured by recurrence rate (fewer repeat incidents is better). An organization with fast incident response but no problem management is a firefighting culture — heroic but unsustainable.
+**Request fulfillment** handles routine service requests: password resets, software installations, access requests, and hardware provisioning. **Self-service portals** (ServiceNow, Jira Service Management, UoY's **Yggdrasil Portal**) enable users to submit and track requests. **Automation** handles standard requests without human intervention: **chatbots** resolve password resets; **workflow engines** provision accounts; **configuration management** deploys software. By 2040, **conversational AI** handles 80% of routine requests, escalating only complex or sensitive issues to human agents.
 
-**Blameless post-mortems** are the cultural innovation that separates learning organizations from punitive ones. When an outage occurs, the natural human response is to find who is at fault and punish them. This response destroys psychological safety and drives incidents underground (people hide mistakes to avoid blame). The blameless post-mortem focuses on **systemic factors**: what about our processes, tools, or assumptions allowed this mistake to happen? The 2034 Yggdrasil prefix leak post-mortem identified not "the engineer who made the typo" but "the lack of automated configuration validation that would have caught the typo before deployment."
+**Problem management** eliminates root causes of incidents. **Reactive problem management** investigates incidents after they occur. **Proactive problem management** identifies and fixes problems before they cause incidents (trend analysis, capacity planning, vulnerability remediation). **Known Error Database (KEDB)**: a repository of documented problems with workarounds and permanent fixes. By 2040, **AI problem prediction** identifies clusters of related incidents and suggests root causes, while **automated problem remediation** applies permanent fixes to prevent recurrence.
+
+**Event management** monitors infrastructure and applications for abnormal conditions. **Events** (state changes) are categorized as **Informational** (normal operation), **Warning** (approaching threshold), and **Exception** (threshold breached). **Alerting** notifies operators of exceptions. **Correlation** groups related events to reduce noise (e.g., a network outage generates hundreds of alerts; correlation produces one "network down" alert). By 2040, **AIOps correlation** (covered in IT203 and IT301) uses ML to identify causal relationships between events, filtering 99% of noise.
+
+**Major incident management** coordinates response to critical outages. **War rooms** (physical or virtual) assemble technical leads, communications, and business stakeholders. **Communication**: regular updates to users, executives, and regulators. **Post-incident review**: blameless analysis with improvement actions. By 2040, **AI war room assistants** (UoY's **Huginn Incident Assistant**) gather data, suggest hypotheses, and draft communications in real time.
 
 ### Required Reading
 
-- Allspaw, J. (2035). "Blameless PostMortems and a Just Culture." *Yggdrasil Operations Review*. (The foundational essay on blameless incident analysis.)
-- AXELOS. (2036). *ITIL 4: Create, Deliver and Support*. TSO. Chapters 3-5.
-- Gartner. (2040). "The State of AIOps: From Hype to Production." (Read the maturity model and adoption statistics.)
+- Axelos (2019). *ITIL 4: Create, Deliver and Support*. TSO. Chapters 4–6.
+- Allspaw, J. (2012). "Blameless Postmortems and a Just Culture." *Etsy Code as Craft*.
+- Yggdrasil Operations (2039). "The AI War Room: Huginn Incident Assistant in Practice." *UoY Operations Report*.
 
 ### Discussion Questions
 
-1. An engineer accidentally deletes a production database during maintenance. The incident is restored from backup within 2 hours, but 4 hours of data is lost. The engineer is terrified of punishment. How do you conduct the post-mortem? What do you say to the engineer? What systemic changes do you implement?
-2. AIOps auto-remediates routine issues but sometimes makes incorrect decisions (e.g., restarting a service that is intentionally paused for maintenance). How do you build trust in automated remediation? What human oversight is appropriate?
-3. MTTR is a common operational metric, but it can be gamed: teams close incidents quickly by applying workarounds rather than fixes, leading to recurring incidents. How do you measure operational effectiveness without perverse incentives?
+1. Autonomous incident resolution handles common issues but may apply inappropriate fixes to edge cases. What safeguards prevent AI from worsening incidents?
+2. Self-service portals reduce workload but can frustrate users with complex issues. How should organizations design escalation paths that are visible and accessible?
+3. Proactive problem management requires investing in fixes before incidents occur. How should organizations justify this preventive spending to budget-conscious leadership?
+4. Major incident communication must balance transparency with avoiding panic. What communication cadence and content keep stakeholders informed without causing alarm?
+
+### Practice Problems
+
+- Design an incident management process for a cloud-native microservices platform. Define: severity levels, escalation paths, on-call rotations, communication templates, and post-incident review procedures. Create a runbook for a "database connection pool exhausted" incident.
+- Implement a self-service portal for common IT requests. Automate at least three requests (password reset, software installation, access request) using a workflow engine. Measure user satisfaction and request resolution time.
 
 ---
 
-ᚲ **Lecture 6: DevOps — Culture, Automation, and Measurement**
+ᚱ **Lecture 5: DevOps: Culture, Automation, and Measurement**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-DevOps is not a tool, a team, or a job title — it is a **cultural and professional movement** that stresses communication, collaboration, and integration between software developers and IT operations professionals. This lecture covers the three pillars of DevOps: **culture** (shared ownership, blamelessness, learning from failure), **automation** (infrastructure as code, CI/CD pipelines, automated testing), and **measurement** (deployment frequency, lead time, change failure rate, MTTR — the DORA metrics). We trace DevOps from its 2009 origins through the 2010s "DevOps toolchain" era to the 2040 "platform engineering" era, where internal developer platforms abstract infrastructure complexity and enable self-service deployment.
+DevOps is both a cultural movement and a set of technical practices. This lecture covers the DevOps lifecycle, the tools that enable it, and the metrics that measure its success. By 2040, DevOps has matured into Platform Engineering, but its core principles remain the foundation of modern IT delivery.
 
 ### Key Topics
 
-- **The CALMS Model:** Culture (shared goals, psychological safety, blameless post-mortems), Automation (eliminating toil through scripting and tooling), Lean (eliminating waste, optimizing flow), Measurement (data-driven decision making), and Sharing (openness, collaboration, knowledge transfer). The CALMS model provides a holistic framework for DevOps adoption: organizations that focus only on automation (buying CI/CD tools without cultural change) fail; organizations that address all five dimensions succeed. The Yggdrasil Platform Engineering Team uses CALMS as a maturity assessment tool, scoring each dimension quarterly.
-- **The DORA Metrics:** The DevOps Research and Assessment (DORA) team's four key metrics predict software delivery performance: **Deployment Frequency** (how often deployments occur — elite teams deploy on demand, multiple times per day), **Lead Time for Changes** (time from code commit to production — elite teams: <1 hour), **Change Failure Rate** (percentage of changes causing production failures — elite teams: <5%), and **Time to Restore Service** (MTTR after failure — elite teams: <1 hour). The 2040 state of practice: elite teams deploy 50+ times per day with <2% change failure rate. The Yggdrasil Student Portal deploys 30 times per day on average, with a 1.5% change failure rate.
-- **Infrastructure as Code (IaC):** Managing infrastructure (servers, networks, databases, load balancers) through machine-readable definition files rather than manual configuration. Tools: Terraform (declarative, multi-cloud), Pulumi (programmatic, general-purpose languages), Ansible (imperative, agentless), and CloudFormation (AWS-native). IaC enables: version control (infrastructure changes are code-reviewed), reproducibility (identical environments across dev/staging/prod), and automated testing (static analysis, policy-as-code, compliance scanning). The Yggdrasil infrastructure is 100% defined as code; no manual server configuration is permitted.
-- **CI/CD and GitOps:** Continuous Integration (automated build and test on every code commit) and Continuous Delivery (automated deployment to production after passing tests). **GitOps** (pioneered by Weaveworks, ubiquitous by 2040) uses Git as the single source of truth for infrastructure and application state: operators commit desired state to Git; automated agents (ArgoCD, Flux) reconcile the live system with the Git state. GitOps provides: full audit trail (who changed what, when), easy rollback (revert the Git commit), and drift detection (alerts when live state diverges from Git). The Yggdrasil Platform uses GitOps for all Kubernetes workloads, with ArgoCD managing 2,000+ application deployments.
+- The DevOps infinity loop: plan, code, build, test, release, deploy, operate, monitor
+- CI/CD pipelines: version control, automated builds, testing, and deployment
+- Infrastructure as Code (IaC): Terraform, Ansible, and declarative configuration
+- GitOps: version-controlled infrastructure and operations
+- DevOps metrics: deployment frequency, lead time, MTTR, and change failure rate
 
 ### Lecture Notes
 
-DevOps is the most significant operational innovation since the assembly line. Before DevOps, software development and IT operations were separate organizations with conflicting goals: developers were measured by features shipped; operations was measured by uptime. The inevitable result: developers threw code "over the wall" to operations, who struggled to deploy and maintain it. DevOps breaks down this wall by making both teams responsible for the full lifecycle: "you build it, you run it."
+**The DevOps infinity loop** visualizes the continuous flow from planning to monitoring and back. **Plan**: requirements, prioritization, and sprint planning. **Code**: development, peer review, and branch management. **Build**: compilation, packaging, and artifact creation. **Test**: automated and manual validation. **Release**: approval, scheduling, and packaging. **Deploy**: moving artifacts to production. **Operate**: running and maintaining services. **Monitor**: observing behavior and feeding insights back to planning. By 2040, this loop is fully automated for standard changes, with human intervention only for architectural decisions and incident response.
 
-**The "you build it, you run it" principle** is transformative but challenging. Developers who run their own services gain direct feedback from production (they feel the pain of their own design decisions), but they also acquire operational responsibilities that may not align with their skills or interests. The platform engineering model addresses this: a platform team builds internal developer platforms that abstract operational complexity (deployment, monitoring, security scanning, incident response) behind self-service APIs and GUIs. Developers "run" their services in the sense that they are responsible for them, but the platform handles the mechanical operations.
+**CI/CD pipelines** automate the build, test, and deployment process. **Version control** (Git, GitHub, GitLab) is the single source of truth. **Automated builds** compile code and create artifacts on every commit. **Automated testing** runs unit, integration, and security tests. **Deployment automation** moves tested artifacts to staging and production. **Pipeline as Code** (Jenkinsfile, GitLab CI, GitHub Actions) defines pipelines in version-controlled files. By 2040, **AI pipeline optimization** automatically parallelizes tests, selects optimal test subsets, and predicts deployment risk.
 
-**Toil** is the operational work that is manual, repetitive, automatable, tactical, devoid of enduring value, and that scales linearly with service growth. Examples: manually provisioning user accounts, manually deploying code, manually rotating logs, manually responding to routine alerts. DevOps demands that teams measure their toil and systematically eliminate it through automation. Google's SRE book sets a target: no more than 50% of an engineer's time should be spent on toil; the rest should be spent on engineering (improving systems, building automation, reducing future toil). The Yggdrasil Platform Engineering team tracks toil metrics and prioritizes automation projects that eliminate the most toil per engineering hour invested.
+**Infrastructure as Code (IaC)** manages infrastructure through version-controlled configuration files. **Declarative IaC** (Terraform, CloudFormation, ARM templates) describes desired state; the tool converges actual state to match. **Imperative IaC** (Ansible, Chef, Puppet) executes commands to reach desired state. **Immutable infrastructure** (Packer, container images) replaces rather than modifies servers, eliminating configuration drift. By 2040, **AI-generated IaC** creates infrastructure definitions from natural language requirements, which engineers review and refine.
+
+**GitOps** extends version control to operations. All infrastructure and application changes are made via Git pull requests. An automated agent (Flux, ArgoCD) watches the Git repository and converges the live system to match. GitOps provides: **auditability** (all changes tracked in Git), **reproducibility** (any state can be recreated from a commit), and **rollback** (reverting a commit rolls back the system). By 2040, **GitOps is the default** for Kubernetes and cloud-native deployments.
+
+**DevOps metrics** (DORA metrics, from the DevOps Research and Assessment team) measure performance. **Deployment Frequency**: how often deployments occur (elite = multiple per day). **Lead Time for Changes**: time from commit to production (elite = less than one hour). **Mean Time to Recovery (MTTR)**: time to recover from failure (elite = less than one hour). **Change Failure Rate**: percentage of changes causing incidents (elite = less than 5%). By 2040, **AI-driven DORA dashboards** automatically calculate these metrics and benchmark against industry peers.
 
 ### Required Reading
 
-- Kim, G. et al. (2035). *The DevOps Handbook*, 2nd Edition. IT Revolution Press. Chapters 1-4, 11-14.
-- Forsgren, N. et al. (2036). *Accelerate: The Science of Lean Software and DevOps*, Updated Edition. IT Revolution Press. (Read the DORA metrics research and case studies.)
-- Limoncelli, T.A. et al. (2035). *The Site Reliability Workbook*. O'Reilly. Chapters 1-3.
+- Kim, G., et al. (2016). *The DevOps Handbook*. IT Revolution Press. Chapters 1–4.
+- Morris, K. (2020). *Infrastructure as Code* (2nd Edition). O'Reilly.
+- Weaveworks (2040). *GitOps Documentation: Principles and Practices*. weave.works.
+- Yggdrasil Platform Team (2037). "From DevOps to Platform Engineering: The UoY Journey." *UoY DevOps Report*.
 
 ### Discussion Questions
 
-1. DevOps requires cultural change, but culture cannot be mandated by management. How do you cultivate DevOps culture in an organization with deeply entrenched silos? What are the leverage points for cultural transformation?
-2. "You build it, you run it" makes developers responsible for operations. But developers may lack operational expertise, leading to poorly maintained services. Is platform engineering the solution, or does it reintroduce the wall between dev and ops under a different name?
-3. A team argues that their manual deployment process is "simple" and "works fine," resisting CI/CD automation. They deploy once per month with few failures. How do you make the business case for automation? What metrics demonstrate the cost of manual processes?
+1. AI pipeline optimization can skip tests it deems unnecessary. What validation ensures that skipped tests do not hide regressions?
+2. GitOps provides auditability but requires all changes to go through Git. For emergency fixes (e.g., production outage at 3 AM), is the GitOps overhead acceptable?
+3. AI-generated IaC accelerates infrastructure creation but may produce suboptimal designs. Should AI-generated code be treated as a starting point or a final product?
+4. DORA metrics benchmark against industry, but every organization is different. Should teams focus on absolute metrics or improvement trends?
+
+### Practice Problems
+
+- Build a CI/CD pipeline for a sample application. Include: automated build, unit tests, integration tests, security scan (SAST), and deployment to a staging environment. Measure pipeline duration and identify bottlenecks.
+- Implement GitOps for a Kubernetes application. Store manifests in Git, configure ArgoCD or Flux for automatic synchronization, and demonstrate rollback by reverting a commit. Document the architecture and operational procedures.
 
 ---
 
-ᚷ **Lecture 7: Site Reliability Engineering (SRE) — Google’s Approach to Scaling**
+ᚲ **Lecture 6: Site Reliability Engineering**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Site Reliability Engineering (SRE) is what you get when you treat operations as a software problem and staff it with software engineers. Developed at Google in the early 2000s and codified in the *Site Reliability Engineering* book (2016), SRE has become the dominant operational paradigm for large-scale technology organizations by 2040. This lecture covers the core SRE practices: **error budgets** (balancing reliability and innovation), **toil reduction** (automating operational work), **service level objectives** (quantifying reliability), **on-call engineering** (humans + automation for incident response), and **capacity planning** (ensuring sufficient resources without wasteful over-provisioning). We examine how SRE differs from traditional operations and from DevOps, and how organizations adopt SRE practices at different scales.
+SRE applies software engineering principles to operations problems. This lecture covers the core SRE practices: SLOs, error budgets, toil reduction, and reliability engineering. By 2040, SRE has evolved to include AI-assisted reliability, but the fundamental concepts of quantifying and managing reliability remain unchanged.
 
 ### Key Topics
 
-- **Error Budgets and Reliability Trade-offs:** SRE's central innovation: product development and SRE agree on an availability target (SLO), which implies an error budget (100% - SLO). If the service is 99.9% available, the error budget is 0.1% downtime per year (8.76 hours). When the error budget is healthy, product teams can launch new features. When the error budget is exhausted, launches freeze until reliability improves. This **aligns incentives**: product teams are motivated to build reliable features (because unreliable features cost them launch velocity), and SRE teams are motivated to enable launches (because overly conservative SLOs unnecessarily block innovation). The Yggdrasil Learning Platform has a term-time SLO of 99.95% (4.38 hours error budget per year) and a break-time SLO of 99.9% (8.76 hours).
-- **Toil and Engineering Time:** SRE teams spend their time on two categories: **toil** (manual, repetitive, automatable work) and **engineering** (improving systems, building automation, developing new capabilities). Google's rule: SRE teams should spend no more than 50% of their time on toil; if toil exceeds 50%, the team stops taking on new operational responsibilities until toil is reduced through automation or process improvement. The Yggdrasil SRE team tracks toil quarterly: currently 35% toil, 65% engineering, with a target of 25% toil by 2042.
-- **Service Level Objectives, Indicators, and Agreements:** **SLIs** (Service Level Indicators) are quantitative measures of service quality (e.g., request latency, error rate, throughput). **SLOs** (Service Level Objectives) are target values for SLIs (e.g., "99% of requests complete in <200ms"). **SLAs** (Service Level Agreements) are contracts with consequences: if the service fails to meet the SLO, the provider pays penalties or offers credits. SRE focuses on SLOs, not SLAs: internal operational targets that drive engineering decisions. The Yggdrasil Platform defines SLIs for every service, with tier-based SLOs (Tier 1: 99.99%, Tier 2: 99.95%, Tier 3: 99.9%).
-- **On-Call and Incident Response:** SRE teams rotate on-call responsibilities, with strict limits on burden: no more than one incident per 12-hour shift requiring human intervention, and compensation for on-call work (time off or pay). On-call engineers are supported by **playbooks** (documented procedures for common incidents), **automated remediation** (self-healing systems that resolve routine issues), and **escalation paths** (senior engineers and subject matter experts available for complex incidents). The Yggdrasil SRE rotation is one week in four, with automated systems handling 80% of alerts without waking the on-call engineer.
-- **Capacity Planning and Load Testing:** Capacity planning ensures that services have sufficient resources to handle demand without excessive waste. Methods: **demand forecasting** (extrapolating from historical growth and planned launches), **load testing** (simulating peak traffic to identify bottlenecks), and **auto-scaling** (automatically adding or removing resources based on real-time demand). The 2040 approach: **predictive auto-scaling** (ML models forecast demand 30-60 minutes ahead, pre-warming resources before traffic arrives) and **bin packing optimization** (efficiently distributing workloads across servers to minimize cost). The Yggdrasil Cloud Platform uses predictive auto-scaling for all Tier 1 services, reducing over-provisioning by 30%.
+- Service Level Objectives (SLOs): defining and measuring reliability
+- Error budgets: balancing reliability and innovation
+- Toil: identifying, measuring, and eliminating manual work
+- Reliability engineering: graceful degradation, circuit breakers, and bulkheads
+- On-call: rotation design, incident response, and burnout prevention
 
 ### Lecture Notes
 
-SRE is not a job title; it is a **way of thinking about operations**. The SRE practitioner is a software engineer who happens to work on operational problems. They write code to automate toil, design systems for reliability, and use data to make decisions. The SRE book's subtitle — "How Google Runs Production Systems" — is descriptive, not prescriptive: SRE principles apply to organizations of any size, though implementation details vary.
+**SLOs (Service Level Objectives)** quantify the desired reliability of a service. Unlike SLAs (external contracts), SLOs are internal targets that guide engineering decisions. An SLO is expressed as a percentage over a time window: "99.9% of requests in the last 30 days completed in under 200ms." SLOs should be **specific** (measurable), **achievable** (based on historical performance), **relevant** (aligned with user experience), and **time-bound** (evaluated over defined windows). The lecture covers **SLI (Service Level Indicator)**: the metric being measured (latency, error rate, throughput). **SLO**: the target value. **SLA**: the external contract (often less stringent than SLO to provide a buffer).
 
-**Error budgets** are the mechanism by which SRE resolves the traditional conflict between development and operations. Without error budgets, development wants to launch features (risking reliability) and operations wants to block launches (preserving reliability). The debate is subjective and political. With error budgets, the debate becomes objective and data-driven: "We agreed on 99.9% availability. We have used 80% of the error budget this quarter. We can launch one more feature, but then we freeze until the next quarter." This removes emotion from the decision and aligns both teams around a shared goal.
+**Error budgets** are the key SRE innovation. If the SLO is 99.9%, the error budget is 0.1% (43.8 minutes of downtime per month). When the budget is consumed, feature launches halt until reliability improves. This aligns incentives: product managers want features, but they also want reliability; the error budget forces a data-driven trade-off. The lecture covers **burn rate**: how fast the error budget is consumed. A **burn rate alert** (e.g., "at current rate, error budget will be exhausted in 3 days") triggers proactive response. By 2040, **AI burn rate prediction** forecasts budget exhaustion 72 hours in advance.
 
-**Toil is the enemy of engineering.** Every hour an SRE spends manually restarting servers, copying log files, or updating configuration is an hour not spent improving the system. Toil compounds: as the service grows, the toil grows linearly, consuming an ever-larger fraction of the team's capacity. The only sustainable response is automation: writing software that eliminates the toil permanently. The Yggdrasil SRE team maintains a "toil budget": each quarter, they allocate 20% of engineering capacity to toil-reduction projects, ensuring that operational work does not consume the entire team.
+**Toil** is repetitive, manual work that scales linearly with service growth. SRE mandates that each engineer spend no more than 50% of their time on toil (the rest on project work that improves the service). Toil examples: manual deployments, ticket-based provisioning, log analysis, and alert response. **Toil reduction**: automating repetitive tasks, building self-service tools, and improving reliability to reduce alert volume. By 2040, **AI toil elimination** handles routine tasks, but human SREs define what to automate and verify that automation works correctly.
+
+**Reliability engineering** designs systems that fail gracefully. **Graceful degradation**: when overloaded, the system maintains core functionality while disabling non-essential features (e.g., a search engine returns basic results instead of rich snippets under load). **Circuit breakers**: when a dependency fails repeatedly, the circuit breaker stops calling it, allowing the dependency to recover (covered in IT107). **Bulkheads**: isolating failures to a subset of the system (e.g., per-tenant resource limits prevent one tenant from consuming all capacity). By 2040, **AI-driven reliability** automatically adjusts circuit breaker thresholds and bulkhead limits based on real-time conditions.
+
+**On-call** is the operational responsibility of responding to alerts outside business hours. **Rotation design**: fair distribution among team members, with consideration for timezone and personal circumstances. **Incident response**: following runbooks, escalating when needed, and communicating status. **Burnout prevention**: limiting on-call frequency (Google recommends no more than one in four weeks), providing recovery time after incidents, and ensuring that on-call load decreases as automation improves. By 2040, **AI on-call assistants** handle initial triage, but human SREs retain authority for major incidents.
 
 ### Required Reading
 
-- Beyer, B. et al. (2036). *Site Reliability Engineering*, 2nd Edition. O'Reilly. Chapters 1-4, 7, 10, 15.
-- Beyer, B. et al. (2035). *The Site Reliability Workbook*. O'Reilly. Chapters 1-3, 7-9.
-- Jones, C. et al. (2036). "SRE at Scale: Lessons from Organizations Beyond Google." *ACM Queue*. (Case studies from Netflix, Amazon, and Yggdrasil.)
+- Beyer, B., et al. (2016). *Site Reliability Engineering*. O'Reilly. Chapters 2–4.
+- Beyer, B., et al. (2018). *The Site Reliability Workbook*. O'Reilly. Chapters 1–3.
+- Jones, C., et al. (2021). "SRE: Error Budgets and Toil Budgets." *ACM Queue*, 19(2).
+- Yggdrasil SRE Team (2038). "AI Burn Rate Prediction: Preventing Budget Exhaustion Before It Happens." *UoY SRE Report*.
 
 ### Discussion Questions
 
-1. Error budgets create a "shared pain" model where product teams feel the consequences of unreliable features. But what if the product team disagrees with the SLO? They might argue that 99.99% is unnecessarily conservative. How do you negotiate SLOs? What data informs the negotiation?
-2. Google's "50% toil" rule assumes that toil can always be automated. What about operational work that requires human judgment (e.g., investigating novel security incidents, mediating complex customer issues)? Is this toil or engineering? How do you categorize it?
-3. SRE was developed at Google, which has a single monolithic code repository and a unified infrastructure stack. How do you adapt SRE practices to an organization with heterogeneous technologies, legacy systems, and siloed teams? What compromises are necessary?
+1. AI burn rate prediction is accurate 85% of the time. For the 15% of false predictions, should teams trust the AI and reduce feature velocity, or maintain human judgment?
+2. The 50% toil cap ensures project work but may be arbitrary for teams with naturally low toil. Should toil caps be team-specific?
+3. Graceful degradation improves availability but reduces functionality. How should product managers define which features are essential vs. non-essential?
+4. On-call burnout is a serious occupational hazard. What organizational policies (compensation, rotation limits, post-incident recovery) best prevent burnout?
+
+### Practice Problems
+
+- Define SLOs, SLIs, and error budgets for a university registration system. Calculate burn rates for different failure scenarios. Design an alert that fires when burn rate indicates budget exhaustion within 7 days.
+- Identify toil in a provided operations workflow. Quantify the time spent on toil, propose automation, and estimate the time savings. Implement at least one automation and measure its impact.
 
 ---
 
-ᚹ **Lecture 8: Monitoring, Observability, and AIOps**
+ᚷ **Lecture 7: Monitoring, Observability, and AIOps**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-You cannot manage what you cannot measure, and you cannot measure what you cannot see. This lecture covers the three pillars of operational visibility: **monitoring** (knowing when something is wrong based on predefined thresholds and alerts), **observability** (understanding why something is wrong based on telemetry exploration), and **AIOps** (using artificial intelligence to augment human operational capabilities). By 2040, the distinction between monitoring and observability has blurred: modern platforms provide both, using high-cardinality telemetry (metrics, logs, traces) and AI-assisted analysis to detect, diagnose, and remediate issues faster than humanly possible.
+You cannot manage what you cannot see. This lecture covers the systems and practices that provide visibility into IT services: monitoring, logging, tracing, and the observability platforms that integrate them. By 2040, AIOps has transformed raw telemetry into actionable intelligence.
 
 ### Key Topics
 
-- **Metrics, Logs, and Traces (The Three Pillars):** **Metrics** are numerical measurements over time (CPU usage, request latency, error rate — typically stored in time-series databases like Prometheus, InfluxDB, or M3). **Logs** are timestamped records of events (application logs, system logs, audit logs — typically stored in Elasticsearch, Loki, or Splunk). **Traces** follow requests across distributed systems (OpenTelemetry spans, Jaeger traces, Zipkin traces), enabling identification of latency bottlenecks in microservices architectures. The 2040 standard: unified telemetry pipelines that collect all three types, correlate them automatically, and present them through a single interface.
-- **Observability vs. Monitoring:** Monitoring asks "Is the system healthy?" based on known indicators. Observability asks "Why is the system behaving this way?" based on exploratory analysis of telemetry. Monitoring is sufficient for stable systems with known failure modes; observability is necessary for complex distributed systems where novel failures emerge constantly. The shift from monitoring to observability reflects the shift from monoliths to microservices: in a monolith, you can predict what will fail; in a distributed system, you cannot. The Yggdrasil Platform uses both: monitoring for known conditions, observability for unknown unknowns.
-- **AIOps Platforms:** AIOps applies machine learning to operational data for: **anomaly detection** (identifying unusual patterns without predefined thresholds), **event correlation** (grouping thousands of alerts into a small number of actionable incidents), **root cause analysis** (suggesting probable causes based on historical patterns), **predictive maintenance** (forecasting failures before they occur), and **automated remediation** (executing runbooks without human intervention). Leading platforms: Dynatrace Davis, Datadog Watchdog, Moogsoft, and the open-source OpenTelemetry Collector with ML plugins. The Yggdrasil AIOps platform reduces alert noise by 95% and auto-remediates 40% of routine issues.
-- **Distributed Tracing and OpenTelemetry:** In a microservices architecture, a single user request may traverse 20+ services. When the request is slow, which service is the bottleneck? Distributed tracing assigns a unique trace ID to each request and propagates it across service boundaries, creating a detailed latency map. **OpenTelemetry** (CNCF project, standard by 2030) provides vendor-neutral APIs, SDKs, and collectors for traces, metrics, and logs. By 2040, OpenTelemetry is the de facto standard; vendor-specific agents are deprecated. The Yggdrasil Platform auto-instruments all services with OpenTelemetry, with trace sampling rates adjusted by service criticality.
-- **SLI/SLO Monitoring and Alerting:** Alerts should be based on SLOs, not symptoms. "CPU > 90%" is a symptom alert — it may or may not affect users. "Error rate > 0.1% for 5 minutes" is an SLO-based alert — it directly measures user impact. Google's alerting philosophy: pages should be **urgent, actionable, and user-facing**. If an alert is not urgent (can wait until morning), not actionable (no clear response), or not user-facing (internal metric with no customer impact), it should be a ticket, not a page. The Yggdrasil on-call rotation receives ~3 pages per week, all of which meet the urgent-actionable-user-facing criteria.
+- Monitoring: metrics, logs, and traces (the three pillars of observability)
+- Observability platforms: Prometheus, Grafana, ELK, Jaeger, and Datadog
+- SLI measurement: latency, error rate, throughput, and saturation
+- Distributed tracing: OpenTelemetry, span context, and trace analysis
+- AIOps: anomaly detection, root cause analysis, and predictive alerting
 
 ### Lecture Notes
 
-Operational visibility is the foundation of reliability. An organization with perfect architecture but no visibility is flying blind: failures go undetected, degradation goes unnoticed, and improvements are unmeasured. The evolution from monitoring to observability to AIOps reflects the increasing complexity of systems: as systems become more complex, human operators need more sophisticated tools to understand them.
+**Monitoring** collects and displays data about system behavior. **Metrics** (numeric time-series data: CPU usage, request latency, error rate) are the foundation. **Logs** (textual event records) provide context for anomalies. **Traces** (request paths through distributed systems) reveal latency bottlenecks and dependencies. Together, these are the **three pillars of observability**. By 2040, **profiles** (CPU, memory, and I/O profiles) and **eBPF-based kernel events** have become a fourth pillar, providing deep system visibility without instrumentation.
 
-**High-cardinality metrics** are the technical enabler of modern observability. Traditional monitoring systems struggled with cardinality: a metric with many unique label combinations (e.g., `http_requests_total{method="GET",endpoint="/api/users",status="200",user_id="12345"}`) would overwhelm the time-series database. Modern systems (Thanos, Cortex, Mimir, VictoriaMetrics) use columnar storage and aggregation techniques to handle billions of time series. The Yggdrasil observability platform stores 50 million active time series with 30-day retention, queried through a Prometheus-compatible API.
+**Observability platforms** integrate the three pillars. **Prometheus** (metrics collection and alerting). **Grafana** (visualization and dashboards). **ELK stack** (Elasticsearch, Logstash, Kibana for log analysis). **Jaeger** (distributed tracing). **Datadog** (commercial integrated platform). By 2040, **unified observability platforms** (OpenTelemetry-based) collect metrics, logs, and traces with a single agent and query language, replacing the fragmented toolchains of the 2020s.
 
-**The danger of over-alerting** is well-documented: an on-call engineer woken by 20 false-positive alerts per night will soon stop responding to alerts entirely (alert fatigue). The solution is not to add more alerts but to add **better** alerts: SLO-based, symptom-oriented, and carefully tuned. The Yggdrasil SRE team maintains a "alert quality score": (true positives) / (true positives + false positives). Alerts with a score <50% are revised or removed. The team target is 90% alert quality.
+**SLI measurement** requires careful metric selection. **Latency**: time to respond (distinguish average from tail latency—p95, p99). **Error rate**: percentage of failed requests. **Throughput**: requests per second. **Saturation**: how close to capacity (CPU, memory, disk, connections). The **four golden signals** (latency, errors, traffic, saturation) provide a minimal but effective monitoring set. By 2040, **user-centric SLIs** (page load time, transaction completion rate) supplement infrastructure metrics.
+
+**Distributed tracing** follows requests across microservices. **OpenTelemetry** (CNCF project, merged OpenTracing and OpenCensus) provides vendor-neutral instrumentation. **Spans** represent individual operations; **traces** link spans across service boundaries via **context propagation** (trace IDs in headers). Trace analysis identifies: latency bottlenecks (which service is slow), error propagation (which service originated the error), and dependency mapping (which services call which). By 2040, **AI trace analysis** automatically identifies anomalous latency patterns and suggests optimizations.
+
+**AIOps** applies AI to IT operations. **Anomaly detection**: ML models identify metrics that deviate from historical patterns (e.g., unusual CPU spikes, unexpected error rates). **Root cause analysis**: correlating anomalies across metrics, logs, and traces to identify the likely cause. **Predictive alerting**: forecasting failures before they occur (e.g., disk will be full in 3 days). By 2040, **causal AI** (distinguishing correlation from causation) has improved root cause accuracy from 60% to 85%, but human validation remains for critical decisions.
 
 ### Required Reading
 
-- Majors, C., Fong-Jones, L., & Wilk, G. (2036). *Observability Engineering*. O'Reilly. Chapters 1-4, 7-9.
-- Gartner. (2040). "Market Guide for AIOps Platforms." (Read the capability assessment and vendor landscape.)
-- OpenTelemetry Project. (2040). *OpenTelemetry Documentation*. https://opentelemetry.io/docs/ (Read the introduction and instrumentation guides.)
+- Newell, A. (2018). "The Three Pillars of Observability." *Honeycomb Blog*.
+- OpenTelemetry (2040). *OpenTelemetry Documentation: Getting Started*. opentelemetry.io.
+- Gartner (2038). *Market Guide for AIOps Platforms*. Gartner Research.
+- Yggdrasil Observability Team (2039). "Causal AI for Root Cause Analysis: From Correlation to Causation." *UoY AIOps Report*.
 
 ### Discussion Questions
 
-1. AIOps promises to reduce operational burden, but it also creates dependency on opaque ML models. When an AIOps system makes an incorrect remediation decision, who is responsible? How do you maintain human accountability in an AI-augmented operation?
-2. Distributed tracing adds overhead to every request (propagating trace IDs, recording spans). For a high-throughput service processing 100,000 requests per second, this overhead can be significant. How do you balance observability completeness against performance cost? What sampling strategies exist?
-3. An executive demands a real-time dashboard showing "system health" as a single green/yellow/red indicator. You argue that such a simplification is misleading. How do you communicate the complexity of distributed system health? What visualization approaches convey nuance without overwhelming?
+1. eBPF provides deep kernel visibility but requires privileged access. For multi-tenant environments, how should eBPF access be controlled?
+2. Unified observability platforms reduce tool fragmentation but create vendor lock-in. Should organizations adopt open standards (OpenTelemetry) or commercial integrated platforms?
+3. AI anomaly detection can identify subtle deviations but produces false positives. What tuning strategies balance sensitivity with alert fatigue?
+4. Causal AI improves root cause analysis but is not perfect. For a critical incident where causal AI suggests a cause with 85% confidence, should engineers investigate alternative causes?
+
+### Practice Problems
+
+- Deploy a monitoring stack (Prometheus + Grafana) for a sample application. Define SLIs, create dashboards, and configure alerts. Measure alert accuracy (true positives vs. false positives) over one week.
+- Implement distributed tracing with OpenTelemetry for a microservices application. Identify the slowest span in a trace, optimize it, and measure the latency improvement. Document the trace architecture and instrumentation points.
 
 ---
 
-ᚺ **Lecture 9: Agile, Lean, and IT Service Delivery**
+ᚹ **Lecture 8: Configuration Management and Asset Management**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Agile and Lean are not software development methodologies; they are **philosophies of work** that emphasize iterative delivery, customer collaboration, and waste elimination. This lecture examines how agile and lean principles intersect with IT service management: agile development (Scrum, Kanban, SAFe), lean IT (value stream mapping, kaizen, just-in-time delivery), and the 2040 evolution toward **flow-based delivery** (continuous flow of value from idea to production, managed through WIP limits, cycle time metrics, and pull-based scheduling). We address the tension between agile's embrace of change and ITIL's emphasis on control, and how modern organizations reconcile them.
+Configuration management ensures that IT assets and their relationships are accurately documented and controlled. This lecture covers the Configuration Management Database (CMDB), configuration items, change control, and the practices that maintain configuration integrity. By 2040, automated discovery and AI-driven relationship mapping have replaced manual CMDB maintenance.
 
 ### Key Topics
 
-- **Agile Fundamentals:** The Agile Manifesto (2001) values: individuals and interactions over processes and tools, working software over comprehensive documentation, customer collaboration over contract negotiation, responding to change over following a plan. Scrum (2-week sprints, product backlog, daily standups, sprint reviews) and Kanban (visual workflow, WIP limits, continuous flow) are the dominant agile frameworks. By 2040, **agile maturity** has evolved: most organizations practice "agile" (small iterations, cross-functional teams); fewer practice "Agile" (rigid Scrum ceremonies); and the leading edge practices **flow-based delivery** (no sprints, just continuous prioritization and delivery).
-- **Lean IT and Value Stream Mapping:** Lean (originating in Toyota Production System) focuses on eliminating waste (muda): overproduction, waiting, transport, over-processing, inventory, motion, defects, and unused talent. **Value stream mapping** visualizes the end-to-end flow of value from customer request to delivered service, identifying wait times, handoffs, and rework. The Yggdrasil IT Value Stream Mapping Program identified that 70% of "lead time" for new services was spent waiting: waiting for approval, waiting for resources, waiting for testing environments. By eliminating these waits, the average service delivery time dropped from 6 months to 3 weeks.
-- **SAFe and Enterprise Agile:** The Scaled Agile Framework (SAFe) attempts to apply agile practices to large enterprises with hundreds of teams. Critics argue SAFe is "agile in name only" — too prescriptive, too top-down, and too focused on process over people. Proponents argue it provides necessary coordination for large-scale delivery. By 2040, the enterprise agile landscape has diversified: Spotify's squad model (autonomous teams with weak coordination), Team Topologies (organizing teams into stream-aligned, platform, enabling, and complicated-subsystem types), and unSAFe (enterprise agility without SAFe's prescriptive framework). The Yggdrasil IT organization uses Team Topologies: 12 stream-aligned teams, 3 platform teams, and 2 enabling teams.
-- **Agile and ITIL Integration:** The perceived conflict: ITIL emphasizes process control, change approval, and documentation; agile emphasizes speed, autonomy, and minimal documentation. The resolution: **right-sized process**. Standard changes (low risk, pre-approved) flow through agile pipelines without CAB review. Normal changes (higher risk) require CAB approval but use agile ceremonies for assessment. Emergency changes use pre-authorized protocols. Documentation is automated (architecture decisions in ADRs, runbooks generated from code, compliance evidence collected automatically). The Yggdrasil ITSM-Agile Integration Guide defines 12 integration patterns for common scenarios.
+- Configuration Management Database (CMDB): structure, data model, and maintenance
+- Configuration Items (CIs): hardware, software, documentation, and people
+- Discovery and mapping: automated asset scanning and dependency mapping
+- Change control: versioning, baselines, and rollback
+- Asset management: lifecycle, procurement, and disposal
 
 ### Lecture Notes
 
-Agile and ITIL are not enemies; they are **complements that address different concerns**. Agile answers "How do we build the right thing quickly?" ITIL answers "How do we ensure what we built works reliably?" An organization that is agile without ITIL ships features quickly but suffers from outages and technical debt. An organization that is ITIL without agile ships reliable services that fail to meet evolving user needs. The modern organization needs both: agile for innovation, ITIL for stability, and DevOps/SRE as the bridge between them.
+**The CMDB** is the authoritative repository of configuration information. It stores **Configuration Items (CIs)**: any component that needs to be managed (servers, network devices, applications, databases, licenses, documentation, even people in their roles). Each CI has **attributes** (name, version, location, owner) and **relationships** (depends on, connected to, part of). The CMDB enables **impact analysis** (what breaks if this server fails?), **change planning** (which CIs are affected by a proposed change?), and **incident diagnosis** (what changed before this failure?). By 2040, **graph-based CMDBs** (Neo4j, Amazon Neptune) replace relational CMDBs, enabling complex relationship queries.
 
-**Flow-based delivery** is the 2040 synthesis of agile and lean. Instead of two-week sprints with batch planning, teams work from a continuously prioritized backlog, pulling work when they have capacity. WIP (Work In Progress) limits ensure that teams do not start more work than they can finish, reducing context switching and improving cycle time. Cycle time (time from start to finish) and throughput (items completed per week) replace velocity (story points per sprint) as the primary metrics. The Yggdrasil Platform Engineering team uses flow-based delivery with a WIP limit of 3 items per engineer, achieving an average cycle time of 4 days for standard features.
+**Configuration Items** span the entire IT ecosystem. **Hardware CIs**: servers, storage, network devices, workstations, mobile devices. **Software CIs**: operating systems, applications, middleware, patches. **Documentation CIs**: architecture diagrams, runbooks, procedures. **People CIs**: roles, teams, contact information. **Service CIs**: business services, technical services, SLAs. The lecture covers **CI granularity**: too coarse ("the datacenter") lacks actionable detail; too fine ("every process") creates maintenance overhead. The right level depends on the organization's size and complexity.
 
-**Team Topologies** is the organizational design framework that enables agile at scale. The insight: not all teams should be structured the same way. **Stream-aligned teams** (also called "product teams") own a stream of work from idea to production and are aligned to business domains. **Platform teams** provide internal services (deployment platforms, monitoring tools, security scanning) that reduce cognitive load for stream-aligned teams. **Enabling teams** (experts in security, compliance, performance) help stream-aligned teams overcome specific obstacles. **Complicated-subsystem teams** own complex components (machine learning models, low-level networking) that require deep expertise. The Yggdrasil IT reorganization of 2035 used Team Topologies to reduce cross-team dependencies by 60%.
+**Discovery and mapping** populate the CMDB automatically. **Network discovery** (nmap, SNMP scanning) identifies devices. **Agent-based discovery** (installed on endpoints) collects detailed software and hardware inventory. **Cloud discovery** (AWS Config, Azure Resource Graph, Google Cloud Asset Inventory) captures cloud resources. **Dependency mapping** traces connections between CIs (application A uses database B on server C). By 2040, **AI relationship inference** analyzes network traffic, logs, and configuration to discover dependencies without manual documentation.
+
+**Change control** ensures configuration changes are authorized and traceable. **Versioning**: tracking CI state over time (Git for code, CMDB history for infrastructure). **Baselines**: approved configurations that serve as reference points. **Rollback**: restoring previous configurations when changes fail. The lecture covers **configuration drift**: unauthorized changes that deviate from the approved baseline. **Drift detection** (AWS Config Rules, Terraform plan, Chef InSpec) identifies and remediates drift automatically. By 2040, **self-healing configuration** automatically corrects drift within minutes.
+
+**Asset management** tracks the financial and contractual aspects of IT assets. **Lifecycle**: procurement, deployment, operation, maintenance, and disposal. **Procurement**: vendor selection, purchasing, and licensing. **Disposal**: secure data destruction (cryptographic erasure, physical destruction) and environmental compliance (e-waste recycling). By 2040, **circular IT** (refurbishment, reuse, and sustainable disposal) is standard practice at UoY.
 
 ### Required Reading
 
-- Beck, K. et al. (2001/2035). *The Agile Manifesto*. (The original manifesto; read with the 2035 retrospective on agile evolution.)
-- Skelton, M. & Pais, M. (2035). *Team Topologies*, 2nd Edition. IT Revolution Press. Chapters 1-4, 7.
-- Poppendieck, M. & Poppendieck, T. (2035). *Lean Software Development*, Updated Edition. Addison-Wesley. Chapters 1-3, 6.
+- Axelos (2019). *ITIL 4: Direct, Plan and Improve*. TSO. Chapter 7 ("Configuration Management").
+- Microsoft (2040). *Azure CMDB and Asset Management Documentation*. Microsoft Learn.
+- AWS (2040). *AWS Config: Configuration and Compliance Monitoring*. AWS Documentation.
+- Yggdrasil Asset Management (2037). "AI-Driven CMDB Maintenance: From Manual to Autonomous." *UoY Operations Report*.
 
 ### Discussion Questions
 
-1. SAFe is widely adopted by large enterprises but criticized by agile purists as "waterfall in agile clothing." Is SAFe a legitimate scaling framework or a cargo cult? Under what circumstances does it succeed or fail?
-2. Team Topologies defines four team types, but real organizations have messy boundaries. A team starts as stream-aligned but gradually accumulates platform responsibilities. How do you prevent "platform drift"? When and how do you split teams?
-3. The integration of agile and ITIL requires compromise. A strict ITIL practitioner insists on full CAB review for every production change; an agile coach insists on continuous deployment without gates. How do you mediate? What is the minimum viable governance for continuous delivery?
+1. AI relationship inference can discover dependencies but may miss logical dependencies (e.g., two applications that must be upgraded together). How should CMDBs capture inferred vs. documented relationships?
+2. Self-healing configuration corrects drift automatically but may override intentional emergency changes. What exceptions and approval workflows prevent inappropriate rollbacks?
+3. Circular IT extends asset lifecycle but may increase support costs for older hardware. What is the optimal replacement cycle for a given total cost of ownership?
+4. Graph-based CMDBs enable complex queries but require new skills. For organizations with relational CMDB expertise, is migration worth the learning curve?
+
+### Practice Problems
+
+- Design a CMDB data model for a university IT department. Define CIs, attributes, and relationships for: datacenter infrastructure, cloud resources, business applications, and user devices. Implement the model in a graph database and populate it with sample data.
+- Implement automated discovery for a lab environment. Scan the network, collect hardware and software inventory, and map dependencies. Compare the discovered data to manually documented data and identify discrepancies.
 
 ---
 
-ᚻ **Lecture 10: Continuous Improvement and Service Measurement**
+ᚺ **Lecture 9: IT Governance and Policy**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-Continuous improvement is the engine that drives service excellence. Without it, services stagnate: technical debt accumulates, user needs evolve unchecked, and operational practices become outdated. This lecture covers the frameworks, metrics, and cultural practices that enable sustained improvement: **ITIL's Continual Improvement Model** (identify, plan, execute, evaluate), **kaizen** (incremental daily improvement), **Six Sigma** (statistical quality control), **balanced scorecards** (measuring across financial, customer, process, and learning dimensions), and the **metrics-driven culture** of high-performing IT organizations. We examine the danger of vanity metrics and the importance of actionable metrics that drive behavioral change.
+Governance ensures that IT serves organizational objectives while managing risk and complying with regulations. This lecture covers IT governance frameworks, policy development, and the mechanisms that align IT decisions with business strategy. By 2040, AI governance has become a critical discipline as autonomous systems make increasingly consequential decisions.
 
 ### Key Topics
 
-- **The ITIL Continual Improvement Model:** A structured approach: (1) **What is the vision?** (align improvement with organizational strategy), (2) **Where are we now?** (baseline current performance), (3) **Where do we want to be?** (define measurable targets), (4) **How do we get there?** (plan initiatives), (5) **Take action** (execute improvements), (6) **Did we get there?** (measure results), (7) **How do we keep the momentum going?** (embed improvements, iterate). The model is not a one-time project but a perpetual cycle. The Yggdrasil Continual Improvement Office coordinates improvement initiatives across IT, with quarterly reviews and an annual improvement strategy.
-- **Kaizen and Daily Improvement:** Kaizen (Japanese: "change for better") emphasizes small, daily improvements by frontline workers rather than large top-down initiatives. Examples: a service desk analyst suggesting a knowledge base article template that reduces ticket resolution time by 2 minutes; a developer refactoring a test that takes 30 seconds to run into one that takes 5 seconds. Cumulatively, these micro-improvements produce macro results. The Yggdrasil "Improvement Monday" program dedicates the first Monday of each month to team-identified improvements, with no feature development scheduled.
-- **Metrics and Measurement:** Good metrics are: **comparative** (show change over time), **understandable** (clear to all stakeholders), **ratios or rates** (rather than absolute numbers, which scale with organization size), and **actionable** (drive behavioral change). Bad metrics are vanity metrics (total page views — up because you bought ads, not because the product improved) or gaming targets (support tickets closed per hour — up because agents close tickets without resolving issues). The Yggdrasil IT Balanced Scorecard measures: financial (IT cost per student, cloud spend efficiency), customer (student satisfaction, faculty NPS), process (deployment frequency, change failure rate, MTTR), and learning (training hours, certification attainment, internal mobility).
-- **Benchmarking and Maturity Models:** Benchmarking compares organizational performance against peers or industry standards. The **CMMI** (Capability Maturity Model Integration) defines five maturity levels: Initial (chaotic), Managed (projects controlled), Defined (organization-wide standards), Quantitatively Managed (metrics-driven), and Optimizing (continuous improvement). By 2040, most organizations target Level 3-4; Level 5 is rare and often not cost-effective. The Yggdrasil IT organization achieved CMMI Level 4 in 2037, with quantitative management of all core service delivery processes.
+- IT governance frameworks: COBIT, ISO 38500, and NIST CSF
+- Policy development: structure, lifecycle, and enforcement
+- Risk governance: appetite, tolerance, and escalation
+- Compliance governance: regulatory mapping, audit, and certification
+- AI governance: explainability, accountability, and bias mitigation
 
 ### Lecture Notes
 
-Continuous improvement is the antidote to organizational entropy. Left to themselves, systems become more complex, processes become more bureaucratic, and services become less aligned with user needs. Improvement requires intention: dedicated time, clear metrics, and a culture that rewards learning from failure rather than punishing it.
+**IT governance** is the system by which organizations direct and control IT. **COBIT (Control Objectives for Information and Related Technologies)**, maintained by ISACA, provides a comprehensive framework for IT governance and management. **ISO 38500** provides principles for effective IT governance. **NIST CSF (Cybersecurity Framework)** organizes cybersecurity activities into five functions: Identify, Protect, Detect, Respond, Recover. The lecture maps these frameworks to practical activities: strategic planning, resource allocation, risk management, and performance measurement.
 
-**The metrics paradox** is that measuring something changes behavior — often in unintended ways. When a hospital measured "time to see a doctor," doctors began treating simple cases first to reduce average wait time, leaving complex cases waiting longer. When a software team measures "lines of code written," developers write verbose code. The solution: **measure outcomes, not outputs**. Measure "student success rate" (did the student achieve their goal?) rather than "tickets closed" (how many interactions occurred?). Measure "deployment frequency" (how often can we deliver value?) rather than "hours worked" (how busy were we?).
+**Policy development** creates the rules that guide IT behavior. **Structure**: policy (high-level principle), standard (mandatory requirement), procedure (step-by-step process), and guideline (recommendation). **Lifecycle**: draft, review, approve, communicate, enforce, and retire. **Enforcement**: technical controls (configuration management, access controls), procedural controls (audits, reviews), and cultural controls (training, incentives). By 2040, **policy-as-code** (Rego, Open Policy Agent) embeds policies in infrastructure definitions, enabling automated enforcement.
 
-**Benchmarking** provides valuable context but dangerous comparison. Knowing that your MTTR is 2 hours while the industry median is 4 hours is useful context. But concluding that you are "better" than the industry is misleading: your systems may be simpler, your incidents less severe, or your measurement methodology different. The Yggdrasil IT benchmarking program uses the **Experience Level Framework** (XLF): comparing metrics only with peer institutions of similar size, complexity, and mission. Comparisons with Google or Amazon are discouraged as uninformative.
+**Risk governance** establishes the organization's approach to risk. **Risk appetite**: the amount of risk the organization is willing to accept (high appetite for innovation, low appetite for regulatory compliance). **Risk tolerance**: the acceptable deviation from risk appetite. **Escalation**: procedures for risks that exceed tolerance. By 2040, **AI risk modeling** (scenario simulation, Monte Carlo analysis) quantifies the probability and impact of complex risk combinations.
+
+**Compliance governance** ensures adherence to laws, regulations, and standards. **Regulatory mapping**: identifying which regulations apply to which systems (GDPR for student data, HIPAA for health data, PCI-DSS for payment data). **Audit**: internal and external assessments of compliance. **Certification**: ISO 27001, SOC 2, and other attestations. By 2040, **continuous compliance monitoring** (automated scanning, policy-as-code, real-time dashboards) has replaced periodic audit cycles.
+
+**AI governance** addresses the unique risks of AI systems. **Explainability**: the ability to understand how AI makes decisions (required by GDPR 2030 and EU AI Act). **Accountability**: assigning responsibility for AI decisions to human owners. **Bias mitigation**: detecting and correcting unfair outcomes. **Safety**: ensuring AI systems do not cause harm. By 2040, the UoY **AI Governance Board** reviews all AI systems before deployment, requiring explainability assessments, bias audits, and human oversight plans.
 
 ### Required Reading
 
-- AXELOS. (2036). *ITIL 4: Direct, Plan and Improve*. TSO. Chapters 1-3, 5-6.
-- Imai, M. (2035). *Gemba Kaizen*, 2nd Edition. McGraw-Hill. Chapters 1-3.
-- Pande, P.S. et al. (2035). *The Six Sigma Way*, Updated Edition. McGraw-Hill. Chapters 1-2, 5.
+- ISACA (2040). *COBIT 2020 Framework and Implementation Guide*. ISACA.
+- ISO/IEC (2015). *ISO/IEC 38500:2015 Governance of IT for the Organization*. ISO.
+- NIST (2035). *AI Risk Management Framework (AI RMF 1.0)*. NIST.
+- Yggdrasil Governance Office (2038). "AI Governance at UoY: Principles, Processes, and Practices." *UoY Governance Report*.
 
 ### Discussion Questions
 
-1. A team identifies 20 improvement opportunities but has capacity for 3. How do they prioritize? What framework evaluates impact, effort, risk, and strategic alignment?
-2. "Improvement Monday" dedicates one day per month to improvements. A product manager argues that this slows feature delivery. How do you justify the investment? What evidence supports (or refutes) the value of dedicated improvement time?
-3. A metric intended to improve service quality ("average resolution time") inadvertently causes agents to rush complex cases, reducing quality. How do you design metrics that cannot be gamed? What combination of metrics captures both speed and quality?
+1. Policy-as-code enables automated enforcement but can create rigid rules that block necessary exceptions. How should organizations balance automation with flexibility?
+2. AI risk modeling quantifies complex risks but relies on assumptions that may not hold. How should organizations validate AI risk models?
+3. Explainability requirements for AI vary by risk level (high-risk AI requires full explainability; low-risk accepts partial). Who should determine the risk level, and what appeals process exists?
+4. Continuous compliance monitoring reduces audit burden but increases operational overhead. For a small organization, is continuous compliance cost-effective?
+
+### Practice Problems
+
+- Develop an IT governance framework for a mid-sized company. Map COBIT processes to organizational roles, define decision rights, and create a RACI matrix for key IT decisions.
+- Write a set of policies (acceptable use, data classification, incident response) using the policy structure (policy, standard, procedure, guideline). Ensure consistency, enforceability, and alignment with regulatory requirements.
 
 ---
 
-ᚾ **Lecture 11: Platform Engineering — The Future of Internal Infrastructure**
+ᚾ **Lecture 10: Supplier and Vendor Management**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-As organizations adopt cloud-native technologies, Kubernetes, microservices, and DevOps, the complexity faced by application developers has exploded. **Platform engineering** is the discipline of building internal platforms that abstract this complexity, enabling developers to deploy, monitor, and operate services through self-service interfaces without needing expertise in the underlying infrastructure. This lecture covers: the platform engineering model (platform teams as product teams serving internal customers), the internal developer platform (IDP) architecture (backstage, service catalog, golden paths, infrastructure APIs), and the 2040 frontier of **platform as a product** (treating internal platforms with the same rigor as customer-facing products: user research, product roadmaps, and NPS scores).
+Modern IT relies on external suppliers for hardware, software, cloud services, and professional services. This lecture covers the practices that manage these relationships: procurement, contract management, performance monitoring, and risk mitigation. By 2040, AI-driven vendor assessment has streamlined due diligence, but human judgment remains essential for strategic partnerships.
 
 ### Key Topics
 
-- **Platform Teams and Team Topologies:** In the Team Topologies model, **platform teams** provide internal services that reduce cognitive load for stream-aligned teams. The platform team's customers are internal developers; their product is the developer experience. This reframe is crucial: a platform team that builds what they think developers need (without asking) produces tools that are ignored; a platform team that researches developer pain points and builds solutions produces tools that are adopted. The Yggdrasil Platform Engineering Team conducts quarterly developer experience surveys and maintains a public roadmap prioritized by developer NPS scores.
-- **Internal Developer Platforms (IDPs):** An IDP is a layer of abstraction between developers and infrastructure: developers interact with the platform (via CLI, GUI, or GitOps) rather than directly with AWS, Kubernetes, or Terraform. Key components: **Service Catalog** (a directory of all services with ownership, dependencies, and documentation — Backstage is the leading open-source solution), **Golden Paths** (pre-approved, best-practice templates for common tasks: "create a new web service," "add a database," "set up monitoring"), **Self-Service Infrastructure** (developers provision resources through the platform, with guardrails enforced automatically), and **Developer Portal** (a unified interface for all developer tools and documentation). The Yggdrasil Developer Portal (built on Backstage) serves 800+ developers with 50+ golden paths.
-- **Golden Paths and Guardrails:** A golden path is a supported, best-practice approach to accomplishing a task. It is not the only approach — developers can "go off-road" if needed — but the golden path is the easiest, fastest, and safest option. Guardrails (enforced by the platform) prevent common mistakes: all golden-path services include automated security scanning, all databases are encrypted by default, all deployments use canary rollouts. The platform does not prevent customization; it makes the safe choice the default. The Yggdrasil golden path for "new web service" provisions: a Git repository with CI/CD, a Kubernetes namespace with resource quotas, a monitoring dashboard, a logging pipeline, and a security scan — all in under 5 minutes.
-- **Platform as a Product:** The 2040 evolution treats the internal platform as a product with dedicated product managers, user researchers, and roadmaps. The platform team measures: **adoption rate** (percentage of teams using golden paths), **time-to-service** (how long to deploy a new service), **developer satisfaction** (NPS, CSAT), and **incident reduction** (fewer production issues from misconfigured infrastructure). The Yggdrasil Platform Engineering team publishes quarterly "State of the Platform" reports with metrics, roadmap updates, and case studies — treated with the same seriousness as customer-facing product announcements.
+- Supplier lifecycle: selection, onboarding, operation, and offboarding
+- Contract management: SLAs, penalties, and exit clauses
+- Performance monitoring: KPIs, scorecards, and business reviews
+- Risk mitigation: multi-sourcing, vendor audits, and continuity planning
+- Strategic partnerships: co-innovation, joint ventures, and ecosystem collaboration
 
 ### Lecture Notes
 
-Platform engineering is the response to a genuine crisis: the operational complexity of modern infrastructure has exceeded the cognitive capacity of individual developers. A developer in 2010 needed to know a programming language, a framework, and a database. A developer in 2040 needs to know Kubernetes, service meshes, observability, security scanning, GitOps, infrastructure as code, cloud networking, and cost optimization — in addition to programming. This is unsustainable. Platform engineering restores developer productivity by providing paved roads through the complexity.
+**Supplier selection** evaluates potential vendors against technical, financial, and cultural criteria. **Technical evaluation**: product capabilities, architecture, integration, and scalability. **Financial evaluation**: total cost of ownership, pricing models, and financial stability. **Cultural evaluation**: values alignment, communication style, and responsiveness. By 2040, **AI vendor assessment** analyzes vendor financials, security posture, and customer satisfaction from public and proprietary data, generating risk scores and recommendations.
 
-**The "you build it, you run it" principle** (from DevOps) is correct in intent but incomplete in practice. Developers should own their services, but they should not need to become experts in every layer of the stack. The platform team handles the infrastructure expertise; developers handle the application expertise. The boundary is negotiated: the platform provides compute, storage, networking, and observability; the developer provides code, configuration, and business logic. Both collaborate on security, reliability, and cost.
+**Contract management** formalizes the supplier relationship. **SLAs**: service targets, measurement methods, and remediation procedures. **Penalties**: financial consequences for SLA breaches (service credits, termination rights). **Exit clauses**: data portability, transition assistance, and termination fees. The lecture emphasizes **exit planning**: organizations must be able to leave a supplier without operational disruption. By 2040, **smart contracts** (blockchain-based self-executing agreements) automate penalty calculation and payment for measurable SLA breaches.
 
-**Golden paths are not golden cages.** A common criticism of platform engineering is that it stifles innovation by forcing all teams into the same mold. The Yggdrasil response: golden paths are defaults, not mandates. Teams can request exceptions ("we need a GPU-enabled node for ML training"), which the platform team evaluates and either supports (adding the capability to the platform) or denies (with explanation). This negotiation ensures that the platform evolves to meet real needs while maintaining standards. Over time, many "exceptions" become new golden paths.
+**Performance monitoring** ensures that suppliers deliver value. **KPIs**: quantitative metrics (uptime, response time, ticket resolution time). **Scorecards**: periodic assessments combining KPIs with qualitative factors (innovation, partnership, communication). **Business reviews**: quarterly or annual meetings to discuss performance, roadmap alignment, and improvement opportunities. By 2040, **continuous vendor monitoring** (real-time SLA dashboards, automated sentiment analysis of support interactions) supplements periodic scorecards.
+
+**Risk mitigation** reduces dependency on individual suppliers. **Multi-sourcing**: using multiple suppliers for critical services (e.g., cloud providers, internet transit). **Vendor audits**: assessing supplier security, compliance, and operational practices. **Continuity planning**: procedures for supplier failure (switching to backup suppliers, activating internal capabilities). The 2033 *Yggdrasil Cloud Provider Outage*—in which a major cloud provider's 12-hour regional failure disrupted research computing—demonstrated the need for multi-cloud continuity.
+
+**Strategic partnerships** go beyond transactional supplier relationships. **Co-innovation**: joint development of new technologies. **Joint ventures**: shared investment in specialized capabilities. **Ecosystem collaboration**: participating in industry consortiums and open-source communities. By 2040, the UoY **Nordic Tech Alliance** (a partnership with 12 universities and 8 technology companies) co-develops educational technology, sharing costs and intellectual property.
 
 ### Required Reading
 
-- Team Topologies. (2035). *Platform Engineering: What You Need to Know Now*. IT Revolution Press. Chapters 1-3, 5.
-- Spotify. (2035). *Backstage: The Open Platform for Developer Portals*. https://backstage.io/docs/ (Read the overview and architecture sections.)
-- Yggdrasil Platform Engineering Team. (2040). "The Yggdrasil Developer Platform: A Case Study in Internal Product Management." *UoY Technical Report* TR-2040-11.
+- Axelos (2019). *ITIL 4: Direct, Plan and Improve*. TSO. Chapter 9 ("Supplier Management").
+- Gartner (2037). *Magic Quadrant for IT Services and Vendor Management*. Gartner Research.
+- Yggdrasil Procurement (2033). "The Cloud Provider Outage: Lessons in Multi-Cloud Continuity." *UoY Operations Postmortem*.
+- Yggdrasil Partnership Office (2039). "The Nordic Tech Alliance: A Model for Academic-Industry Collaboration." *UoY Strategic Partnership Report*.
 
 ### Discussion Questions
 
-1. Platform teams serve internal developers, not external customers. How does this difference affect product management practices? What remains the same, and what must be adapted?
-2. A team requests an infrastructure configuration that violates the platform's security baseline (e.g., a public database with no encryption). The team argues they are building a prototype and will fix it later. How does the platform team respond? What is the balance between enabling experimentation and enforcing standards?
-3. Golden paths can create dependency on the platform team. If the platform team is slow to add new capabilities, stream-aligned teams may "go rogue" and build their own infrastructure. How do you prevent platform team bottlenecks? What organizational structures enable platform scalability?
+1. AI vendor assessment streamlines due diligence but may miss qualitative factors (cultural fit, strategic vision). Should AI assessment be the primary input or a starting point?
+2. Smart contracts automate penalty enforcement but are only as good as the data feeds (oracles) that trigger them. How should oracle reliability be ensured?
+3. Multi-sourcing reduces dependency but increases complexity (multiple APIs, data models, and operational procedures). What is the optimal number of suppliers for a critical service?
+4. Strategic partnerships create shared intellectual property. How should universities balance open research with proprietary commercial interests?
+
+### Practice Problems
+
+- Evaluate three cloud providers for a university workload. Create a scorecard with technical, financial, and cultural criteria. Assign weights, score each vendor, and recommend a primary and backup provider with justification.
+- Design a supplier continuity plan for a critical SaaS application. Specify: backup provider selection criteria, data migration procedures, transition timeline, and fallback to manual processes if automation fails.
 
 ---
 
-ᛁ **Lecture 12: The Capstone — Designing an Enterprise Service Management System**
+ᛁ **Lecture 11: Continuous Improvement and Lean IT**
 
-**Course:** IT207 — IT Service Management (ITIL, DevOps, SRE)  
-**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
 ### Overview
 
-The IT207 capstone challenges students to design a comprehensive IT service management system for a fictional enterprise: a 5,000-person Nordic healthcare technology company ("NordicHealth") launching a remote patient monitoring platform. Working in teams of 4-5, students define service catalogs, design value streams, establish SLOs, create change management processes, design monitoring and observability architectures, and present a governance framework. The project is evaluated on comprehensiveness, feasibility, alignment with business objectives, and innovation. The final deliverable is a 50-page service management design document and a 20-minute presentation to a panel of ITSM practitioners.
+IT service management is never finished. This lecture covers the methodologies that drive ongoing improvement: Lean principles, Six Sigma, Kaizen, and the Plan-Do-Check-Act cycle. By 2040, AI-assisted improvement identifies optimization opportunities at scale, but human creativity remains the engine of innovation.
 
 ### Key Topics
 
-- **Project Scope and Constraints:** NordicHealth's platform monitors patients with chronic conditions using wearable IoT devices, cloud analytics, and a clinician dashboard. Constraints: HIPAA-equivalent compliance (Nordic Data Compact), 99.99% availability requirement (lives depend on it), 6-month time-to-market, $2 million IT budget, and a hybrid cloud architecture (on-premises patient data, cloud analytics). Students must balance these constraints while designing a service management system that is neither under-engineered (risking outages and compliance failures) nor over-engineered (consuming budget and delaying launch).
-- **Service Catalog and Value Streams:** Students define 8-10 IT services (e.g., "Patient Data Ingestion," "Clinician Dashboard," "Alert Notification," "Compliance Reporting") with service owners, SLAs, and dependencies. They design value streams for three scenarios: new patient onboarding, software release, and security incident response. The value stream maps must include: activities, responsible teams, tools, handoffs, wait times, and improvement opportunities.
-- **SLOs and Error Budgets:** Students define quantitative reliability targets for each service, with justification based on business impact. They calculate error budgets and design policies for feature freezes, emergency changes, and degradation strategies. They also design a monitoring and alerting architecture (metrics, logs, traces, SLO-based alerts) and an incident response framework (severity levels, escalation paths, communication templates).
-- **Governance and Continuous Improvement:** Students design a governance structure (CAB composition, meeting cadence, escalation paths), a change model (standard, normal, emergency), and a continual improvement process (quarterly reviews, improvement backlog, success metrics). They also address organizational design: team structures (stream-aligned, platform, enabling), roles and responsibilities, and skill development plans.
+- Lean IT: waste elimination, value stream mapping, and flow optimization
+- Six Sigma: DMAIC, statistical process control, and defect reduction
+- Kaizen: continuous small improvements and employee empowerment
+- PDCA: Plan-Do-Check-Act cycle for iterative improvement
+- AI-assisted improvement: pattern recognition, simulation, and recommendation
 
 ### Lecture Notes
 
-The capstone is where the abstract frameworks of ITIL, DevOps, and SRE become concrete decisions. A student who has memorized the ITIL service value chain must now apply it: "How does 'Engage' work when the customer is a chronically ill patient who may not understand technology?" A student who understands SLOs must now negotiate them: "Is 99.99% availability worth the cost, or should we accept 99.95% and invest the savings in better clinician training?"
+**Lean IT** applies manufacturing lean principles to IT. **The seven wastes** (adapted from Toyota Production System): **defects** (errors, incidents), **overproduction** (unnecessary features, excess capacity), **waiting** (approval delays, handoff delays), **non-utilized talent** (underusing employee skills), **transportation** (unnecessary data movement), **inventory** (excess work in progress), **motion** (unnecessary context switching), and **extra-processing** (redundant reviews, duplicate data entry). **Value stream mapping**: visualizing the end-to-end process from request to delivery, identifying waste and bottlenecks. **Flow optimization**: reducing batch sizes, eliminating queues, and parallelizing work. By 2040, **AI value stream analysis** automatically identifies waste from process mining data.
 
-**The design constraint exercise** is intentionally challenging. Students consistently discover that they cannot have everything: they must choose between speed and reliability, between compliance and usability, between centralization and autonomy. These trade-offs are the essence of service management. The team that acknowledges trade-offs explicitly and justifies their choices wins higher marks than the team that promises everything.
+**Six Sigma** reduces process variation and defects. **DMAIC**: **Define** (problem, scope, goals), **Measure** (current performance), **Analyze** (root causes), **Improve** (solutions), **Control** (sustain improvements). **Statistical process control**: monitoring process metrics to detect deviation from normal. **Defect reduction**: reducing errors to 3.4 per million opportunities (Six Sigma level). By 2040, **AI Six Sigma** automatically detects process variation, suggests root causes, and simulates improvement scenarios.
 
-**The presentation to practitioners** is the capstone's most valuable component. Students present to a panel of CISOs, SRE leads, and IT directors who ask hard questions: "How would you handle a ransomware attack during a pandemic surge?" "What happens when your error budget is exhausted during a regulatory audit?" "How do you justify a $200,000 observability investment to a CFO who sees it as 'nice to have'?" These questions simulate the real pressures of IT leadership and teach students to think on their feet.
+**Kaizen** (Japanese for "improvement") empowers employees to make small, continuous improvements. Unlike top-down transformation, Kaizen encourages frontline workers to identify and fix problems in their immediate environment. **Kaizen events**: intensive workshops (typically 3–5 days) focused on a specific process. **Suggestion systems**: formal mechanisms for employees to propose improvements. By 2040, **AI suggestion systems** analyze operational data to recommend improvements, but human judgment selects and implements them.
+
+**PDCA (Plan-Do-Check-Act)** is the iterative improvement cycle. **Plan**: identify an opportunity and design a change. **Do**: implement the change on a small scale. **Check**: measure the results against expectations. **Act**: standardize the change if successful, or iterate if not. PDCA applies to all ITSM processes: incident management (plan a new triage workflow, pilot it, measure resolution times, roll out or refine), change management (plan a new CAB structure, test it, measure change success rates, adjust). By 2040, **AI PDCA automation** runs thousands of micro-experiments in parallel, accelerating improvement cycles.
+
+**AI-assisted improvement** uses machine learning to identify optimization opportunities. **Pattern recognition**: detecting recurring issues, seasonal trends, and systemic weaknesses. **Simulation**: modeling the impact of proposed changes before implementation. **Recommendation**: suggesting improvements based on benchmarks and best practices. The lecture emphasizes that AI suggests, but humans decide: improvement requires understanding organizational context, stakeholder needs, and cultural factors that AI cannot model.
 
 ### Required Reading
 
-- AXELOS. (2036). *ITIL 4: Direct, Plan and Improve*. TSO. (Reference for governance and improvement design.)
-- Beyer, B. et al. (2036). *Site Reliability Engineering*, 2nd Edition. O'Reilly. (Reference for SLO and error budget design.)
-- Kim, G. et al. (2035). *The DevOps Handbook*, 2nd Edition. IT Revolution Press. (Reference for value stream and team design.)
+- Womack, J. P., & Jones, D. T. (2003). *Lean Thinking*. Free Press.
+- Pyzdek, T., & Keller, P. (2014). *The Six Sigma Handbook* (4th Edition). McGraw-Hill.
+- Imai, M. (1997). *Gemba Kaizen: A Commonsense Approach to a Continuous Improvement Strategy*. McGraw-Hill.
+- Yggdrasil Process Improvement (2038). "AI-Assisted PDCA: Running 10,000 Micro-Experiments at UoY." *UoY Operations Report*.
 
 ### Discussion Questions
 
-1. Your capstone team disagrees on the availability target for the clinician dashboard. One member insists on 99.999% (5 minutes downtime per year); another argues 99.9% is sufficient and the cost difference ($800,000) should fund additional nurses. How do you resolve this? What evidence do you gather?
-2. The CIO of NordicHealth demands that all changes be approved by her personally. This creates a bottleneck: changes wait 2 weeks for approval. How do you propose an alternative governance model that maintains accountability without paralysis?
-3. Six months into the project, a critical vendor (the IoT device manufacturer) goes bankrupt. The platform depends on their proprietary API. What is your contingency plan? How does your service management system detect and respond to supplier failure?
+1. AI value stream analysis identifies waste but may miss human factors (morale, creativity, collaboration). How should organizations supplement AI analysis with human judgment?
+2. Six Sigma targets 3.4 defects per million, which may be excessive for IT processes where 99% is often sufficient. Is Six Sigma appropriate for all IT processes, or should defect targets be context-specific?
+3. Kaizen empowers employees but requires time away from operational duties. How should organizations balance improvement activities with service delivery?
+4. AI PDCA automation accelerates improvement but may run experiments that affect live users. What safeguards ensure that automated experiments do not degrade user experience?
+
+### Practice Problems
+
+- Map the value stream for a software deployment process. Identify waste, measure lead time and defect rate, and propose Lean improvements. Implement at least one improvement and measure the impact.
+- Apply DMAIC to a recurring IT problem (e.g., slow ticket resolution, frequent password resets). Define the problem, measure current state, analyze root causes, implement improvements, and establish controls to sustain gains.
+
+---
+
+ᛃ **Lecture 12: ITSM in 2040: The Future of Service Management**
+
+**Course:** IT207 — IT Service Management  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+The final lecture synthesizes the course's themes and projects ITSM into the future. By 2040, AI manages routine operations, but human judgment remains essential for strategy, ethics, and innovation. Students will learn to embrace automation while cultivating the skills that make them irreplaceable: creativity, empathy, and ethical reasoning.
+
+### Key Topics
+
+- The autonomous IT organization: AI-managed services, self-healing systems, and human oversight
+- The evolving IT professional: from technician to architect, from operator to strategist
+- Ethics in ITSM: automation bias, accountability, and the human cost of optimization
+- Sustainability: green IT, circular economy, and carbon-aware computing
+- The enduring principles: value creation, continuous improvement, and service excellence
+
+### Lecture Notes
+
+**The autonomous IT organization** uses AI to manage routine service management tasks. **AI service desks** handle 90% of incidents without human intervention. **Self-healing systems** detect and correct failures automatically. **Autonomous capacity management** scales resources based on predicted demand. **AI change advisory boards** approve low-risk changes instantly. By 2040, the UoY IT department operates with 60% fewer operational staff than in 2020, but the remaining staff are higher-skilled architects, strategists, and ethicists.
+
+**The evolving IT professional** must adapt to this transformation. **Technicians** who performed routine tasks (patching, provisioning, password resets) have been automated out of existence. **Architects** who design systems, integrate platforms, and optimize workflows are in high demand. **Strategists** who align IT with business goals, manage vendor relationships, and govern AI systems are essential. **Ethicists** who ensure that AI decisions are fair, transparent, and accountable are a new and growing role. The lecture provides a career roadmap: master one technical domain deeply, develop architectural thinking, cultivate business acumen, and engage with ethical questions.
+
+**Ethics in ITSM** addresses the human impact of optimization. **Automation bias**: the tendency to trust AI decisions without critical evaluation. The 2036 *Yggdrasil Routing Incident*—in which an AI system routed all student traffic through a single network path to minimize cost, causing a 4-hour outage during enrollment—demonstrated automation bias. **Accountability**: when AI makes a bad decision, who is responsible? The AI vendor, the IT department, or the executive who approved the system? **Human cost of optimization**: automation can eliminate jobs, deskill workers, and create stress for those who remain. The lecture argues that ITSM must optimize for human flourishing, not just efficiency.
+
+**Sustainability** is an increasingly critical ITSM concern. **Green IT**: reducing energy consumption through efficient hardware, virtualization, and AI-optimized cooling. **Circular economy**: extending hardware life, refurbishing equipment, and recycling e-waste. **Carbon-aware computing**: scheduling workloads during periods of low-carbon energy availability. By 2040, UoY's **Sustainable IT Policy** requires all new services to include a carbon impact assessment and a mitigation plan.
+
+**The enduring principles** of ITSM remain relevant regardless of technology. **Value creation**: IT exists to enable business outcomes, not for its own sake. **Continuous improvement**: services can always be better, faster, cheaper, or more reliable. **Service excellence**: meeting and exceeding customer expectations is the ultimate measure of IT success. The lecture concludes with the **Service Professional's Pledge**, adapted by the UoY IT Guild in 2036: "I pledge to create value through technology, to improve continuously, to respect the humans I serve, and to balance efficiency with empathy, automation with wisdom, and progress with sustainability."
+
+### Required Reading
+
+- Brynjolfsson, E., & McAfee, A. (2014). *The Second Machine Age*. W.W. Norton.
+- Yggdrasil Ethics Board (2036). "Automation Bias and Accountability in AI-Driven ITSM." *UoY Ethics Report*.
+- Yggdrasil Sustainability Office (2039). "Carbon-Aware Computing: Scheduling Workloads for Planetary Health." *UoY Sustainability Report*.
+- Yggdrasil IT Guild (2036). "The Service Professional's Pledge." *UoY IT Ethics Manual*.
+
+### Discussion Questions
+
+1. Autonomous IT organizations require fewer operational staff. What responsibilities do organizations have to retrain or support workers displaced by automation?
+2. Automation bias is a cognitive tendency, not a technical failure. Can training programs reduce automation bias, or is it an inherent human limitation?
+3. Carbon-aware computing shifts workloads to times and locations with cleaner energy. For latency-sensitive services (e.g., real-time collaboration), is carbon awareness compatible with performance requirements?
+4. The Service Professional's Pledge balances efficiency with empathy. For an organization facing financial pressure, is this balance achievable, or does economics override empathy?
+
+### Practice Problems
+
+- Design an autonomous IT service desk for a university. Specify: AI capabilities, human escalation triggers, knowledge base integration, and metrics. Address ethical concerns (automation bias, job displacement, accountability).
+- Conduct a carbon impact assessment for a university data center. Estimate current emissions, identify reduction opportunities (efficiency, renewable energy, workload scheduling), and propose a 5-year sustainability roadmap.
 
 ---
 
 ## Final Examination Preparation
 
-The IT207 final examination assesses both theoretical understanding and practical application of service management principles.
+The IT207 final examination is a **comprehensive practical and written assessment** conducted over 48 hours. Students must complete **three of five** challenges:
 
-### Written Component (90 minutes, closed book)
+1. **Service Design**: Design a new IT service for a university department. Define the service value chain, create SLAs and OLAs, design the CMDB structure, and specify monitoring and reporting requirements.
+2. **DevOps Transformation**: Transform a traditional IT operations team into a DevOps/SRE model. Specify: cultural changes, CI/CD pipeline design, SLO definitions, error budget policies, and toil reduction plan.
+3. **Incident Command**: Lead a simulated major incident (e.g., datacenter outage, ransomware attack). Manage the war room, coordinate technical response, communicate with stakeholders, and conduct a blameless postmortem.
+4. **Governance Framework**: Develop an IT governance framework for a multi-national organization. Map regulatory requirements, define policies, create risk assessment methodology, and specify compliance monitoring.
+5. **Continuous Improvement Project**: Apply Lean, Six Sigma, or Kaizen to an IT process. Map the value stream, identify waste, measure baseline performance, implement improvements, and demonstrate sustained improvement with statistical evidence.
 
-**Section A: Short Answer (30%)**
-- Define the ITIL 4 Service Value System and explain how the service value chain differs from the ITIL v3 process model.
-- What are the four DORA metrics? Explain how each metric predicts organizational performance and how they interact.
-- Describe the error budget concept. How does it resolve the traditional conflict between development velocity and operational stability?
+### Evaluation Criteria
 
-**Section B: Problem Solving (40%)**
-- A SaaS company has a 99.9% availability SLO but has experienced three major outages in the past quarter, exhausting the error budget. The product team wants to launch a major new feature at the end of the quarter. The SRE team argues for a feature freeze. As the VP of Engineering, what is your decision? What data do you need, and what compromises do you propose?
-- Design a change management process for an organization that deploys 50 times per day. The process must balance speed (no deployment delays) with safety (no production outages from bad changes). What is automated, what is human-reviewed, and what are the escalation paths?
-- A service desk receives 10,000 tickets per month. The average resolution time is 4 hours, but customer satisfaction is low (NPS: -10). Analysis shows that 60% of tickets are for password resets. Design a self-service and automation strategy that improves both efficiency and satisfaction.
-
-**Section C: Essay (30%)**
-- Choose one:
-  1. "Platform engineering is the natural evolution of DevOps, not its replacement." Evaluate this claim. What does platform engineering add to DevOps, and what does it risk losing?
-  2. ITIL is criticized as bureaucratic and anti-agile. Is this criticism fair? Can ITIL 4 and agile coexist, or are they fundamentally incompatible? Use evidence from the course to support your argument.
-  3. AIOps promises to automate operational decision-making. In what areas is AIOps most effective, and where does human judgment remain essential? What are the risks of over-automation in IT operations?
-
-### Practical Assessment (Take-home project, 1 week)
-
-Students receive a case study of a fictional organization with documented IT service management challenges. Deliverables:
-1. A service catalog with 5-7 services, including owners, SLAs, and dependencies.
-2. A value stream map for one scenario (e.g., onboarding a new employee) with identified waste and improvement recommendations.
-3. A proposed SLO framework with SLIs, targets, error budgets, and alerting rules for the organization's critical service.
-4. A 2-page executive summary for the CIO explaining the current state, proposed improvements, and expected outcomes.
-
-### Sample Practice Problems
-
-1. An organization measures "tickets closed per hour" as a key performance indicator for the service desk. Over time, ticket closure rates increase but customer satisfaction decreases. What is happening? What metrics would better capture service desk effectiveness?
-2. A DevOps team deploys 20 times per day with 1% change failure rate. An ITIL practitioner argues this proves DevOps is reckless. How do you demonstrate that this team's performance is actually superior to a traditional team deploying monthly with 0% failure rate?
-3. Design an on-call rotation for a team of 6 engineers that ensures 24/7 coverage, limits on-call burden to one week in four, and provides compensation (time off or pay). Include escalation paths and handoff procedures.
+| Criterion | Weight | Description |
+|-----------|--------|-------------|
+| Technical depth | 25% | Accurate application of ITSM frameworks, tools, and practices |
+| Strategic thinking | 25% | Alignment of IT decisions with business objectives and risk appetite |
+| Communication | 20% | Clear documentation, stakeholder communication, and process design |
+| Ethics and sustainability | 15% | Responsible consideration of human impact, bias, and environmental cost |
+| Innovation | 15% | Creative or insightful approaches to emerging challenges |
 
 ---
 
-*"Service management is the art of making technology serve human needs. The frameworks are tools; the people are the purpose. Master the tools, never forget the purpose, and you will build services that endure." — Prof. Baldr Hákonarson, IT207 Opening Lecture, 2040*
+*The service never sleeps. The pager rings, the alert fires, and the professional responds—not because they must, but because they have chosen the path of service. In the quiet hours before dawn, when the systems hum and the metrics glow green, there is honor in this vigil.* ᛟ
+
+— Runa Gridweaver Freyjasdottir, IT Service Management, University of Yggdrasil, 2040
