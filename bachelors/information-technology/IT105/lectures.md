@@ -1,366 +1,587 @@
 # IT105: Programming for IT (Python, Bash, PowerShell)
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4
-**Prerequisites:** IT101 (Foundations of Information Technology)
-**Description:** A practical, intensive course in programming for IT professionals. Students master three dominant scripting environments — Python, Bash, and PowerShell — learning to automate system administration tasks, manipulate data, orchestrate infrastructure, and build tools that solve real operational problems. By 2040, the IT professional who cannot code is as limited as the scribe who cannot write. This course treats programming not as software engineering but as **operational literacy**: the ability to express procedures in executable form, to compose reliable automation, and to reason about the behaviour of systems through the lens of code. All lab exercises are performed on live systems in the Yggdrasil IT Sandbox — a virtualised environment where mistakes are encouraged, logged, and analysed.
+**Credits:** 4  
+**Prerequisites:** IT101  
+**Description:** The foundational programming course for IT professionals. Students master the three languages that dominate operational automation in 2040: Python (the lingua franca of infrastructure scripting), Bash (the native tongue of Linux systems), and PowerShell (the automation engine of the Windows ecosystem). The course emphasises practical problem-solving over software engineering theory: reading log files, querying APIs, transforming data, orchestrating remote systems, and building tools that eliminate toil. Every lecture includes live coding and a lab assignment that solves a real operational problem.
+
+**Instructor:** Dr. Sigrún Vérendóttir, Department of Information Technology  
+**Lab:** YggLab Code Forge, Muninn Computing Centre, Second Floor  
+**Office Hours:** Mondays and Wednesdays, 13:00-15:00 UTC
 
 ---
 
-## Lecture 1: Programming as Operational Literacy — The IT Professional's Code
+## Lectures
 
-Programming is the craft of instructing machines to perform tasks. For software engineers, it is the primary vocation; for IT professionals, it is a **force multiplier** that transforms tedious manual work into reliable, repeatable automation. This lecture establishes the conceptual framework: what programming means in an IT context, why it matters, and how the three languages of this course — Python, Bash, and PowerShell — serve different but complementary roles.
+ᚠ **Lecture 1: The Automation Mindset — Why IT Professionals Must Program**
 
-**The automation imperative** in IT is driven by scale. A single administrator in 1990 might manage 10 servers; in 2010, 100; in 2040, a single platform engineer manages 10,000+ containerised services across multiple cloud providers. Manual administration at this scale is impossible; automation is not a luxury but a survival mechanism. **Infrastructure as Code (IaC)** — expressing infrastructure configuration in version-controlled, executable text — is the dominant paradigm. Tools like Terraform, Ansible, Pulumi, and the University's *Völundr* framework all rely on the ability to write and reason about code.
-
-**Python** is the lingua franca of IT automation. It is a high-level, interpreted language with clean syntax, extensive libraries, and cross-platform support. Python's **standard library** includes modules for file I/O, networking, regular expressions, JSON/XML parsing, database access, and concurrent execution. The **third-party ecosystem** (PyPI, with 5+ million packages in 2040) provides tools for virtually every IT task: **Ansible** (configuration management), **SaltStack** (orchestration), **Paramiko** (SSH), **Requests** (HTTP), **Pandas** (data manipulation), **Psycopg2** (PostgreSQL), **Boto3** (AWS), and thousands more. Python's **readability** makes it ideal for scripts that must be maintained by teams, not just their original authors.
-
-**Bash** (the Bourne Again Shell) is the native command language of Linux and macOS. It is not a general-purpose programming language but a **command interpreter** that excels at: chaining programs together with pipes and redirection; automating sequences of system commands; and writing portable scripts that run on virtually any Unix-like system. Bash's strength is its **integration**: every command-line tool on a Linux system is a Bash function waiting to be called. Its weakness is **maintainability**: complex Bash scripts become unreadable quickly, and debugging is notoriously difficult. The rule of thumb: use Bash for simple sequences (<100 lines), Python for anything more complex.
-
-**PowerShell** is Microsoft's modern command shell and scripting language. Unlike Bash, which passes text between commands, PowerShell passes **objects** (structured data with properties and methods). This makes PowerShell exceptionally powerful for managing Windows systems, Active Directory, Azure, and Microsoft 365. In 2040, **PowerShell Core** (the cross-platform, open-source version) runs on Linux and macOS as well, making it a viable choice for heterogeneous environments. PowerShell's **cmdlets** (verb-noun commands like `Get-Process`, `Invoke-RestMethod`) are self-documenting and discoverable, and its **pipeline** preserves object structure across commands.
-
-**The Yggdrasil IT Sandbox** is the live environment for all IT105 labs. Each student receives a **personal namespace** within a Kubernetes cluster: a Linux VM (for Bash and Python), a Windows container (for PowerShell), and a shared network segment where students can connect their environments and observe the effects of their scripts on live services. The Sandbox includes **deliberately faulted systems** that students must diagnose and repair using only scripts — no GUI access is permitted after the first two weeks.
-
-**Required Reading:**
-- Eric S. Raymond, "The Art of Unix Programming" (Addison-Wesley, 2003/2035), ch. 1 ("Philosophy") and ch. 7 ("Multiprogramming")
-- Al Sweigart, *Automate the Boring Stuff with Python* (2nd ed., No Starch Press, 2019/2035), ch. 1–3
-- Richard Blum & Christine Bresnahan, *Linux Command Line and Shell Scripting Bible* (4th ed., Wiley, 2021/2035), ch. 1–2
-- Bruce Payette & Richard Siddaway, *Windows PowerShell in Action* (4th ed., Manning, 2035), ch. 1
-- University of Yggdrasil, "The IT Sandbox: A Live Kubernetes Environment for IT Education" (2039)
-
-**Discussion Questions:**
-1. Python is often called a "scripting language," but it is Turing-complete and capable of building complex applications. Is the distinction between "scripting" and "programming" meaningful, or is it merely a social hierarchy that devalues certain kinds of code?
-2. Bash scripts are notorious for becoming unmaintainable. Is this a fundamental limitation of the language, or a consequence of programmers using Bash for tasks that should be written in Python?
-3. PowerShell's object pipeline is more powerful than Bash's text pipeline, but it is also more complex. For a heterogeneous environment (Linux and Windows), is PowerShell's cross-platform capability sufficient reason to adopt it as the primary shell, or does Bash's ubiquity on Linux make it the safer default?
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 2: Python Fundamentals — Variables, Types, Control Flow, and Functions
+### Overview
 
-Python's elegance lies in its simplicity. This lecture covers the core language features that every IT professional must internalise: data types, control structures, functions, and the standard library.
+This opening lecture establishes programming not as an abstract skill but as the primary tool of the IT professional. The technician performs tasks manually; the professional writes code that performs tasks automatically, consistently, and at scale. The lecture introduces the "automation paradox" (automated systems require more skilled operators to design but less skilled operators to run), the economic case for automation (return on investment calculations), and the ethical dimension (automating away drudgery to free humans for creative and judgment-intensive work). Students write their first operational script before the lecture ends.
 
-**Variables and types.** Python is **dynamically typed**: variable types are determined at runtime, not declared in advance. The built-in types include: **int** (arbitrary-precision integers), **float** (IEEE 754 double-precision), **str** (Unicode strings), **bool** (True/False), **list** (ordered, mutable sequences), **tuple** (ordered, immutable sequences), **dict** (key-value mappings), **set** (unordered collections of unique elements), and **None** (the null value). **Type hints** (PEP 484, introduced in Python 3.5, standard by 2040) allow optional static type annotation: `def greet(name: str) -> str:`. While not enforced at runtime, type hints improve code clarity, enable IDE autocomplete, and support static analysis tools like **mypy**.
+### Key Topics
 
-**Control flow.** Python provides **if/elif/else** for conditional execution, **for** and **while** for iteration, and **try/except/finally** for exception handling. The **with** statement manages resources (files, locks, database connections) that require setup and teardown. **List comprehensions** (`[x*2 for x in range(10) if x % 2 == 0]`) provide concise, readable ways to create lists. **Generator expressions** (`(x*2 for x in range(10))`) create iterators that yield values lazily, conserving memory for large sequences.
+- **The Technician versus the Professional:** A technician knows how to restart a service, create a user account, or check disk space. A professional writes a script that restarts the service with pre-flight health checks, creates user accounts from a CSV file with validation and logging, and monitors disk space continuously with predictive alerting. The lecture quantifies the difference: a task performed manually 100 times per year, taking 5 minutes each, costs 8.3 hours. A script that takes 2 hours to write and test pays for itself in the first year and generates 6.3 hours of saved time annually thereafter.
+- **The Automation Paradox:** As systems become more automated, the remaining failures require deeper expertise to diagnose. A self-healing system that automatically replaces failed nodes reduces routine work but produces novel failure modes that no one has seen before. The lecture argues that automation does not eliminate the need for expertise; it elevates the expertise to a higher level. The IT professional of 2040 designs automation, debugs automation failures, and governs automated systems — they do not merely execute manual procedures.
+- **When to Automate and When Not To:** The decision framework. Automate: tasks performed more than twice, tasks with high error rates, tasks requiring audit trails, tasks that scale linearly with system count. Do not automate: one-off tasks, tasks with rapidly changing requirements, tasks where human judgment is essential (e.g., incident triage for novel attacks), and tasks where the automation cost exceeds the manual cost. The lecture includes case studies of over-automation (a company that automated a quarterly report with 2,000 lines of Terraform and YAML when a 20-line Python script would have sufficed) and under-automation (a team that manually provisioned 500 VMs over three months).
+- **The Three Languages of IT:** Python, Bash, and PowerShell as a triad. Python for complex logic, data processing, and API interaction. Bash for quick system tasks, text processing pipelines, and glue between tools. PowerShell for Windows ecosystem management and object-oriented automation. The lecture emphasises that fluency in all three is the 2040 baseline; professionals who know only one are limited in the environments they can operate.
+- **Live Coding:** Students open a terminal and write a Bash one-liner that lists all files modified in the last 24 hours, sorted by size. Then they write a Python script that does the same thing with `pathlib` and `datetime`. Then they write a PowerShell command that achieves the same on Windows. The point is not the specific task but the realisation that the same operational concept maps to three different syntaxes.
 
-**Functions** are first-class objects: they can be assigned to variables, passed as arguments, and returned from other functions. **Keyword arguments** (`def connect(host, port=22, timeout=30)`) improve readability and flexibility. **Variable-length arguments** (`*args` for positional, `**kwargs` for keyword) enable flexible APIs. **Lambda expressions** (`lambda x: x**2`) create anonymous functions for short operations. **Decorators** (`@retry`) modify function behaviour without changing the function definition — a powerful pattern for logging, caching, authentication, and retry logic.
+### Lecture Notes
 
-**The standard library** is Python's greatest asset for IT work. **os** and **pathlib** provide cross-platform file system operations. **subprocess** executes external commands and captures output. **sys** and **argparse** handle command-line arguments. **json**, **csv**, and **xml.etree** parse common data formats. **re** provides regular expressions for pattern matching. **datetime** and **time** handle dates and timestamps. **hashlib** computes cryptographic hashes. **socket**, **urllib**, and **http.client** provide low-level network access. **threading** and **multiprocessing** enable concurrent execution. In 2040, **asyncio** (introduced in Python 3.4, mature by 2040) is the standard for high-performance network programming: `async def` and `await` enable thousands of concurrent connections without the complexity of threads.
+The automation mindset is a cultural shift as much as a technical one. Many IT organisations are trapped in a "ticket culture": every request becomes a ticket, assigned to a human, executed manually, and closed. This culture scales linearly with staff size and creates bottlenecks. The automation culture treats operational tasks as code: version-controlled, tested, reviewed, and deployed. A request to create 50 user accounts becomes a pull request to the identity management repository, reviewed by a peer, and applied automatically. The same governance (review, audit, rollback) applies, but the execution is machine-speed rather than human-speed.
 
-**Lab Exercise:** Students write a Python script that: reads a CSV file of server inventory; filters for servers with CPU utilisation > 80%; generates an HTML report with colour-coded warnings; and emails the report to the operations team. This single exercise integrates file I/O, data parsing, conditionals, string formatting, and external communication.
+The economic case for automation is often miscalculated. Managers see "2 hours to write a script" and compare it to "5 minutes to do it manually," concluding that automation is not worth it. But this ignores: the cumulative time over repetitions, the error rate of manual work (a 1% error rate on 1,000 manual operations means 10 errors to remediate), the opportunity cost (the human could be doing higher-value work), and the audit trail (manual actions are often unlogged; scripts log automatically). The lecture provides a calculator: given task frequency, manual time, error rate, and hourly cost, compute the break-even point for automation.
 
-**Required Reading:**
-- Guido van Rossum et al., *The Python Language Reference* (3.15, 2040), §3 ("Data Model") and §4 ("Execution Model")
-- Luciano Ramalho, *Fluent Python* (2nd ed., O'Reilly, 2022/2035), ch. 1–5
-- Jake VanderPlas, *Python Data Science Handbook* (O'Reilly, 2016/2035), ch. 1 ("IPython: Beyond Normal Python")
-- University of Yggdrasil, "Python Style Guide for IT Operations: PEP 8, Type Hints, and Documentation Standards" (2039)
+The ethical dimension is often overlooked. Repetitive manual IT work is soul-destroying: clicking through the same wizard 50 times, copying and pasting the same configuration with minor variations, checking the same dashboard every morning. Automation eliminates this drudgery, freeing humans for work that requires judgment, creativity, and empathy: designing resilient architectures, mentoring junior engineers, responding to novel incidents, and advocating for users. The Yggdrasil IT Department's automation charter explicitly states: "We automate tasks, not people. Every automation project must include a plan for redeploying the time saved to higher-value work."
 
-**Discussion Questions:**
-1. Dynamic typing makes Python code concise but can lead to runtime errors that static typing would catch. Does the productivity gain of dynamic typing outweigh the reliability cost, or should IT scripts always use type hints and static analysis?
-2. Python's Global Interpreter Lock (GIL) prevents true parallelism in threads. For CPU-bound IT tasks, is multiprocessing (which uses separate processes and more memory) an acceptable workaround, or should Python be avoided for CPU-intensive automation?
-3. asyncio enables massive concurrency but introduces complexity (event loops, coroutines, futures). For a typical IT script that makes a few API calls, is asyncio worth the learning curve, or are synchronous requests with a session pool sufficient?
+### Required Reading
 
----
+- Limoncelli, T.A. et al. (2032). *The Practice of System and Network Administration*, 4th Edition. Addison-Wesley. Chapter 21 (Automation).
+- Sweigart, A. (2034). *Automate the Boring Stuff with Python*, 3rd Edition. No Starch Press. Introduction and Chapter 1.
+- Jones, R. & Hicks, J. (2034). *PowerShell in Action*, 4th Edition. Manning. Chapter 1.
+- Yggdrasil IT Automation Charter (2040). "Principles, Economics, and Ethics of Operational Automation."
 
-## Lecture 3: Python for System Administration — os, subprocess, pathlib, and shutil
+### Discussion Questions
 
-Python's true power for IT professionals emerges when it is applied to system administration. This lecture covers the modules and patterns that enable Python to inspect, manipulate, and orchestrate systems.
-
-**os** and **os.path** provide low-level operating system interfaces. `os.listdir()` enumerates directory contents. `os.walk()` traverses directory trees recursively. `os.environ` accesses environment variables. `os.getpid()`, `os.getuid()`, `os.getgid()` inspect process and user identity. `os.path.join()`, `os.path.exists()`, `os.path.getsize()` manipulate file paths portably. In 2040, **pathlib** (introduced in Python 3.4, standard by 2040) is the preferred approach: `Path('/etc/hosts')` creates a path object with methods like `.exists()`, `.read_text()`, `.write_text()`, `.glob('*.conf')`, and `.chmod(0o644)`. Pathlib is more readable and less error-prone than string-based path manipulation.
-
-**subprocess** executes external commands. `subprocess.run(['ls', '-la'], capture_output=True, text=True)` runs a command and captures its output. The **shell=True** parameter allows shell syntax but introduces security risks (shell injection); it should be avoided when possible. `subprocess.Popen` provides lower-level control: non-blocking execution, streaming output, and bidirectional communication. For complex pipelines, **plumbum** (a third-party library) provides a Pythonic interface: `(ls['-la'] | grep['python'])()`.
-
-**shutil** (shell utilities) provides high-level file operations: `shutil.copy()`, `shutil.move()`, `shutil.rmtree()`, `shutil.make_archive()`, `shutil.disk_usage()`. **tempfile** creates temporary files and directories that are automatically cleaned up. **glob** finds files matching wildcard patterns. **fnmatch** provides Unix shell-style pattern matching.
-
-**Monitoring and inspection** scripts are a staple of IT operations. A script that checks disk usage on all servers and alerts when usage exceeds 90% might: read a list of servers from a configuration file; SSH into each server using **Paramiko**; execute `df -h` and parse the output; compare usage to thresholds; and send alerts via email, Slack, or a ticketing system. A script that rotates log files might: find all `.log` files older than 30 days; compress them with `gzip`; move them to an archive directory; and delete archives older than 1 year.
-
-**Configuration management** with Python is more flexible than shell scripts but requires discipline. **Dataclasses** (Python 3.7+) provide concise class definitions for structured configuration. **Pydantic** (a third-party library) validates configuration against schemas, catching errors at startup rather than runtime. **YAML** and **TOML** parsers (PyYAML, tomli) read human-friendly configuration files. The University's *Völundr* framework uses Pydantic models to validate infrastructure configurations before applying them.
-
-**Lab Exercise:** Students write a **server health check** script in Python that: reads a YAML configuration specifying health check parameters (CPU threshold, memory threshold, disk threshold, endpoints to check); collects metrics from the local system (CPU via `psutil`, memory via `/proc/meminfo`, disk via `shutil.disk_usage`); checks HTTP endpoints with `requests` and `asyncio`; writes results to a JSON log; and exits with code 0 (healthy) or 1 (unhealthy) for integration with monitoring systems.
-
-**Required Reading:**
-- Doug Hellmann, *The Python Standard Library by Example* (Addison-Wesley, 2011/2035), ch. 5 ("File System"), ch. 17 ("Subprocesses")
-- Kenneth Reitz & Tanya Schlusser, *The Hitchhiker's Guide to Python* (O'Reilly, 2016/2035), ch. 14 ("System Administration")
-- Giancarlo Zaccone & Alessandro Molina, *Python Parallel Programming Cookbook* (2nd ed., Packt, 2035), ch. 3 ("Asyncio")
-- University of Yggdrasil, "Völundr Framework: Python-Based Infrastructure as Code" (2039)
-
-**Discussion Questions:**
-1. subprocess.run is powerful but dangerous: shell=True can lead to command injection, and capturing large outputs can exhaust memory. What are the best practices for using subprocess safely in production IT scripts?
-2. pathlib is more Pythonic than os.path, but many existing scripts use os.path. Is it worth refactoring legacy scripts to use pathlib, or is consistency with existing code more important than using the latest idiom?
-3. psutil is a third-party library that provides cross-platform system metrics. Should the Python standard library include functionality like psutil, or is the division between standard library and third-party packages healthy for the ecosystem?
+1. Your team spends 4 hours per week on manual certificate renewal. Estimate the total annual cost (including error remediation and opportunity cost) and the break-even point for full automation. Present your calculation with assumptions.
+2. "Automation concentrates expertise." Explain this statement using the concept of the automation paradox. If routine tasks are automated, what happens to junior engineers who previously learned by performing those tasks?
+3. The Norse *húskarl* maintained the longhouse not through sporadic heroic effort but through steady, disciplined daily labour. How does this quotidian stewardship inform the IT professional's approach to automation as a continuous practice rather than a one-time project?
 
 ---
 
-## Lecture 4: Python for Data Processing — Parsing, Transformation, and Reporting
+ᚢ **Lecture 2: Python Fundamentals for Operations**
 
-IT professionals spend a significant portion of their time processing data: log files, configuration files, inventory databases, monitoring metrics, and API responses. This lecture covers the tools and techniques for extracting, transforming, and reporting data in Python.
-
-**Text processing** is the foundation. **String methods** (`split()`, `strip()`, `replace()`, `find()`, `startswith()`) handle basic manipulation. **Regular expressions** (`re` module) provide powerful pattern matching: `re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', log_line)` extracts IP addresses. **f-strings** (`f"Server {hostname} has {cpu}% CPU usage"`) provide readable string formatting. In 2040, **structured pattern matching** (`match/case`, introduced in Python 3.10) enables elegant handling of complex data shapes.
-
-**CSV processing** uses the **csv** module for simple cases and **Pandas** for complex analysis. `csv.DictReader` reads CSV files as dictionaries; `csv.DictWriter` writes them. Pandas **DataFrames** provide spreadsheet-like manipulation: filtering (`df[df['cpu'] > 80]`), grouping (`df.groupby('datacenter').mean()`), merging (`pd.merge(df1, df2, on='server_id')`), and pivoting (`df.pivot_table(...)`). For large datasets that do not fit in memory, **Dask** provides parallel, out-of-core DataFrame operations.
-
-**JSON processing** is essential for API work. `json.loads()` parses JSON strings; `json.dumps()` serialises Python objects. The **Requests** library (`requests.get(url).json()`) is the standard for HTTP API interaction. **JMESPath** provides query languages for JSON: `jmespath.search("servers[?status=='running'].name", data)` extracts running server names. **jq** (a command-line tool, not Python, but often used alongside Python scripts) provides similar functionality for shell pipelines.
-
-**XML processing** uses **xml.etree.ElementTree** for simple cases and **lxml** for performance-critical or schema-validated work. XPath expressions navigate XML trees: `tree.findall('.//server[@status="active"]')`. For configuration files, **YAML** (PyYAML) and **TOML** (tomli) are preferred over XML for human readability.
-
-**Reporting and visualisation** transform raw data into actionable information. **Jinja2** templates generate HTML, XML, or configuration files from data. **Matplotlib** and **Seaborn** create static plots for dashboards. **Plotly** and **Bokeh** create interactive web-based visualisations. In 2040, **Streamlit** and **Gradio** enable rapid creation of data apps with minimal code. The **Yggdrasil Operations Dashboard** — used by the University IT team — is built with Streamlit and displays real-time metrics from 50,000+ campus devices.
-
-**Lab Exercise:** Students analyse a 1 GB Apache access log file. They write a Python script that: parses each line to extract IP, timestamp, URL, status code, and response size; identifies the top 10 most requested URLs; calculates the 95th percentile response time; detects potential DDoS attacks (IPs with >1000 requests in a 1-minute window); and generates an HTML report with tables and charts.
-
-**Required Reading:**
-- Jeffrey E. F. Friedl, *Mastering Regular Expressions* (3rd ed., O'Reilly, 2006/2035), ch. 1–4
-- Wes McKinney, *Python for Data Analysis* (3rd ed., O'Reilly, 2022/2035), ch. 5–8
-- Kenneth Reitz, "Requests: HTTP for Humans" (documentation, 2040)
-- Armin Ronacher, "Jinja2 Documentation" (2040)
-- University of Yggdrasil, "The Operations Dashboard: Building Real-Time IT Metrics Apps with Streamlit" (2039)
-
-**Discussion Questions:**
-1. Regular expressions are powerful but notoriously difficult to read and maintain. For complex log parsing, are regexes still the best tool, or should structured logging (e.g., JSON-formatted logs) eliminate the need for regex parsing?
-2. Pandas is the standard for data manipulation in Python, but it is memory-intensive and single-threaded. For IT workloads that process large datasets (e.g., analysing months of log data), is Dask or Polars a better choice, or should such workloads be handled by dedicated data pipeline tools (Spark, Flink)?
-3. Streamlit and Gradio enable rapid dashboard creation, but they are not as customisable as React or Vue. For IT dashboards that need to be maintained for years, is the speed of development worth the long-term maintainability trade-off?
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 5: Python for Networking — socket, requests, paramiko, and asyncio
+### Overview
 
-Networks are the circulatory system of IT. This lecture covers Python's networking capabilities, from low-level socket programming to high-level HTTP clients and SSH automation.
+Python is the most important programming language for IT professionals in 2040. This lecture covers the Python fundamentals that every operator needs: data types, control flow, functions, file I/O, and the standard library modules most relevant to operations (`os`, `sys`, `pathlib`, `subprocess`, `json`, `csv`, `re`, `datetime`, `argparse`). The emphasis is not on software engineering (classes, inheritance, design patterns) but on practical scripting: reading data, processing it, and producing output.
 
-**Socket programming** is the foundation of network communication. The **socket** module provides access to the BSD socket interface: `socket.socket(socket.AF_INET, socket.SOCK_STREAM)` creates a TCP socket. **Server sockets** bind to an address, listen for connections, and accept clients; **client sockets** connect to remote addresses. Low-level socket programming is rarely needed in 2040 (higher-level libraries handle the details), but understanding sockets is essential for debugging network issues and optimising performance. **socketserver** and **http.server** provide simple server frameworks for prototyping.
+### Key Topics
 
-**HTTP clients** are the workhorses of API interaction. **Requests** (`requests.get()`, `requests.post()`, `requests.put()`, `requests.delete()`) provides a clean, intuitive API for HTTP operations. **Session objects** (`requests.Session()`) persist cookies and connection pools across requests, improving performance for repeated API calls. **Authentication** (Basic Auth, Bearer tokens, OAuth2) is handled through parameters or adapters. **Retries** and **timeouts** prevent hung connections. In 2040, **httpx** is the emerging standard: it provides a Requests-compatible API with **HTTP/2 support** and **async compatibility**. The University's *Bifröst API Client* is built on httpx and is used for all internal API interactions.
+- **Python Syntax and Data Structures:** Variables, types (int, float, str, bool, None), collections (list, tuple, dict, set), and comprehensions (list comprehensions as the Pythonic replacement for filter-map). The lecture covers: truthiness (empty collections are falsy), string formatting (f-strings as the modern standard, with alignment, padding, and number formatting), and the `collections` module (`Counter`, `defaultdict`, `deque` for operational tasks).
+- **Control Flow and Functions:** `if/elif/else`, `for` and `while` loops (with `break`, `continue`, `else` clauses), `try/except/finally` error handling, and function definition (positional and keyword arguments, default values, `*args` and `**kwargs`). The lecture emphasises: explicit error handling over silent failures ("errors should never pass silently" — The Zen of Python), and the use of `raise` with meaningful messages.
+- **File I/O and Path Manipulation:** Reading and writing text and binary files (context managers with `with open(...)`), `pathlib.Path` as the modern replacement for `os.path` (path joining, globbing, iterating directories, checking existence and permissions), and temporary files (`tempfile` module). The hands-on lab: write a script that recursively finds all `.log` files in `/var/log`, counts lines in each, and produces a summary sorted by size.
+- **The Standard Library for Operations:** `os` (environment variables, process ID, system calls), `sys` (command-line arguments, stdout/stderr, exit codes), `subprocess` (running external commands safely — the lecture warns against `os.system` and `shell=True` due to injection risks), `json` (parsing API responses), `csv` (reading spreadsheets), `re` (regular expressions for log parsing), `datetime` (timestamp manipulation, timezone handling with `zoneinfo`), and `argparse` (building CLI tools). The lecture includes a "standard library scavenger hunt": given a task, identify the correct module without importing external libraries.
+- **The 2040 Python Ecosystem:** Type hints (`typing` module, `mypy` for static analysis), `pydantic` for data validation, `rich` for beautiful terminal output, `httpx` for modern HTTP client (async-capable, HTTP/2 support), and `typer` / `click` for CLI frameworks. The lecture covers: when to use external libraries (complex tasks, tested solutions) versus standard library (portability, no dependency management).
 
-**SSH automation** enables secure remote administration. **Paramiko** is the standard Python library for SSHv2: it can execute commands (`exec_command`), transfer files (SFTP), and tunnel ports. **Fabric** (built on Paramiko) provides a higher-level API for running commands across multiple hosts in parallel. **Ansible** (discussed in Lecture 8) uses Paramiko under the hood for its SSH connections. For Windows remote management, **pywinrm** provides WinRM (Windows Remote Management) access from Python.
+### Lecture Notes
 
-**asyncio for networking** enables massive concurrency without threads. An asyncio HTTP client might: create an `aiohttp.ClientSession`; launch hundreds of `async` tasks, each fetching a URL; `await` the results; and process them as they complete. This pattern is essential for: scanning thousands of hosts for open ports; fetching metrics from hundreds of servers; and orchestrating concurrent API calls. The **async/await** syntax (introduced in Python 3.5) is now the standard for high-performance network code. **uvloop** (a Cython-based event loop) provides 2–4x performance improvement over the default asyncio loop.
+Python's dominance in IT automation is not accidental. It is readable enough that a team member can understand a script written six months ago by a colleague who has since left. It has libraries for virtually every system and API. It runs on every platform. And it is interactive: the REPL (Read-Eval-Print Loop) allows experimentation, gradual script development, and immediate feedback. The IT professional who cannot drop into a Python REPL to test an API call or parse a JSON response is handicapped.
 
-**Lab Exercise:** Students write a **network scanner** in Python using asyncio: it reads a list of IP ranges from a configuration file; concurrently probes common ports (22, 80, 443, 3306, 5432, 8080) on all hosts; identifies the service version by banner grabbing; writes results to a SQLite database; and generates an HTML report with interactive tables. The scanner must handle 10,000+ hosts in under 5 minutes.
+The `pathlib` module, introduced in Python 3.4 and mature by 2040, has largely replaced `os.path`. Instead of `os.path.join('/var', 'log', 'nginx')`, you write `Path('/var/log/nginx')`. Instead of `os.path.exists(path)`, you write `path.exists()`. Instead of `glob.glob('/var/log/*.log')`, you write `Path('/var/log').glob('*.log')`. The object-oriented approach is more readable, more composable, and less error-prone. The lecture includes a side-by-side comparison: the same file-finding task in `os.path` style (8 lines, hard to read) versus `pathlib` style (3 lines, explicit and chainable).
 
-**Required Reading:**
-- W. Richard Stevens, Bill Fenner & Andrew M. Rudoff, *UNIX Network Programming, Volume 1: The Sockets Networking API* (3rd ed., Addison-Wesley, 2003/2035), ch. 1–4
-- Cory Benfield, "httpx Documentation" (2040)
-- Jeff Forcier, "Paramiko Documentation" (2040)
-- Andrew Svetlov, "aiohttp Documentation" (2040)
-- University of Yggdrasil, "The Bifröst API Client: asyncio-Based Internal API Orchestration" (2039)
+Error handling in operational scripts is critical. A script that fails silently is worse than no script at all, because it creates false confidence. The lecture teaches defensive scripting: validate inputs before processing, check return codes from subprocess calls, handle expected exceptions (file not found, network timeout, permission denied), and let unexpected exceptions propagate with full tracebacks (so they can be diagnosed). The `logging` module replaces `print()` for operational scripts: structured logs with timestamps, severity levels, and context are essential for debugging in production.
 
-**Discussion Questions:**
-1. Python's socket module provides low-level control, but most IT tasks are better served by high-level libraries (Requests, Paramiko). Is socket programming still a necessary skill for IT professionals, or is it an obsolete artefact of a bygone era?
-2. asyncio enables massive concurrency but can be difficult to debug (stack traces become complex, deadlocks are subtle). Does the performance gain justify the complexity, or should threads or processes be preferred for simplicity?
-3. Network scanning is a legitimate administrative task, but the same techniques can be used maliciously. What ethical and legal guidelines should govern the use of automated network scanning in IT operations?
+The `subprocess` module is the correct way to run external commands from Python. The lecture warns strongly against `os.system()` (deprecated, insecure, no output capture) and against `subprocess.call(..., shell=True)` (shell injection vulnerability if user input is passed). The correct pattern is `subprocess.run(['cmd', 'arg1', 'arg2'], capture_output=True, text=True, check=True)`, which: runs the command without a shell (safe from injection), captures stdout/stderr, decodes as text, and raises `CalledProcessError` if the command fails. The lecture includes a horror story: a 2032 cloud provider's automation script used `os.system(f"rm -rf {user_input}")` and a user named `; rm -rf /` deleted the entire system.
 
----
+### Required Reading
 
-## Lecture 6: Bash Fundamentals — The Unix Philosophy in Action
+- Sweigart, A. (2034). *Automate the Boring Stuff with Python*, 3rd Edition. No Starch Press. Chapters 1-6, 10-12.
+- Reitz, K. & Schlusser, T. (2031). *The Hitchhiker's Guide to Python*, 2nd Edition. O'Reilly. Chapters 1-3.
+- Python Software Foundation. (2040). "Python Standard Library Documentation: os, pathlib, subprocess, json, csv."
 
-Bash is the command interpreter of Linux and the glue that binds the Unix toolchain. This lecture covers Bash fundamentals: command execution, redirection, pipelines, variables, conditionals, loops, and functions.
+### Discussion Questions
 
-**Command execution** in Bash follows a simple grammar: `command [options] [arguments]`. Options typically begin with `-` (single character) or `--` (long form). **Quoting** is essential: single quotes (`'...'`) prevent all expansion; double quotes (`"..."`) allow variable expansion but prevent word splitting; backticks (`` `...` ``) or `$()` execute commands and capture output. **Wildcards** (`*`, `?`, `[...]`) match filenames. **Brace expansion** (`{a,b,c}`) generates sequences. **Tilde expansion** (`~` becomes the home directory).
-
-**Redirection** controls input and output streams. `>` redirects stdout to a file (overwrite); `>>` appends; `2>` redirects stderr; `&>` redirects both stdout and stderr; `<` redirects stdin from a file; `<<` creates a here-document; `<<<` creates a here-string. **Pipes** (`|`) connect the stdout of one command to the stdin of another, enabling powerful composition: `cat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -10` extracts the top 10 IP addresses from an Apache log. In 2040, **process substitution** (`<(...)` and `>(...)`) and **named pipes** (FIFOs) extend the pipeline model for complex workflows.
-
-**Variables and expansion.** Bash variables are untyped strings by default. `name=value` assigns a variable; `$name` or `${name}` expands it. **Special variables** include: `$0` (script name), `$1`, `$2`, ... (positional parameters), `$@` (all parameters), `$#` (parameter count), `$?` (exit status of last command), `$$` (PID), and `$!` (PID of last background job). **Parameter expansion** provides powerful string manipulation: `${name:-default}`, `${name:=default}`, `${name:?error}`, `${name:offset:length}`, `${name#pattern}`, `${name%pattern}`, `${name//old/new}`. In 2040, **associative arrays** (`declare -A arr`) enable dictionary-like data structures in Bash 5.x+.
-
-**Control structures.** `if [ condition ]; then ... fi` tests conditions; `[` is actually a command (`test`), and conditions use string or numeric comparison operators (`-eq`, `-ne`, `-lt`, `-gt`, `-le`, `-ge`, `=`, `!=`, `-z`, `-n`, `-e`, `-f`, `-d`). `for var in list; do ... done` iterates over lists. `while [ condition ]; do ... done` and `until [ condition ]; do ... done` provide loop constructs. `case word in pattern) ... ;; esac` provides pattern matching. **Functions** (`function_name() { ... }`) enable code reuse. **Arithmetic** uses `$((expression))` or `let`.
-
-**Lab Exercise:** Students write a Bash script that: parses `/proc/meminfo` to calculate memory usage percentage; checks all running processes with `ps` and reports any using >50% CPU; finds the 10 largest files in `/var/log` using `find` and `du`; compresses logs older than 7 days with `gzip`; and emails a summary report using `mail` or `sendmail`.
-
-**Required Reading:**
-- Brian W. Kernighan & Rob Pike, *The Unix Programming Environment* (Prentice Hall, 1984/2035), ch. 3–5
-- Arnold Robbins & Nelson H. F. Beebe, *Classic Shell Scripting* (O'Reilly, 2005/2035), ch. 2–6
-- Greg Wooledge ("GreyCat") & others, "BashFAQ" and "BashPitfalls" (<http://mywiki.wooledge.org/>, 2040)
-- GNU Bash Reference Manual (v5.4, 2035), §3 ("Basic Shell Features")
-
-**Discussion Questions:**
-1. Bash scripts are notoriously fragile: spaces in filenames break unquoted variables, `set -e` behaves unpredictably with pipelines, and error handling is verbose. Is Bash fundamentally unsuited for robust automation, or do these problems stem from programmer ignorance of best practices?
-2. The Unix philosophy ("do one thing well, compose with pipes") is elegant but assumes that all tools agree on a common text format. When tools output structured data (JSON, XML), pipes become awkward. Is the Unix philosophy still relevant in 2040, or has it been superseded by object pipelines (PowerShell) and API-driven workflows?
-3. Bash is the default shell on Linux, but **zsh** and **fish** offer superior interactive features (autocompletion, syntax highlighting, history search). Should IT professionals switch to modern shells for interactive use while keeping Bash for scripting, or does the proliferation of shells create more confusion than benefit?
+1. Compare `os.path` and `pathlib` for a script that must find all configuration files (`*.conf`) in `/etc` and its subdirectories, skipping symbolic links. Write both versions and evaluate readability, safety, and maintainability.
+2. A junior engineer writes `os.system(f"ping -c 4 {host}")` where `host` comes from user input. Explain the injection vulnerability and rewrite the code safely using `subprocess.run` with a list argument.
+3. The Norse *rímur* (metrical sagas) followed strict formal rules that made them memorable and transmissible across generations. How does Python's emphasis on readability and "one obvious way to do it" parallel the formal constraints that preserve knowledge across time?
 
 ---
 
-## Lecture 7: Bash for System Administration — find, awk, sed, and cron
+ᚦ **Lecture 3: Python for Systems Administration**
 
-Beyond basic scripting, Bash for IT requires mastery of the Unix toolchain: the classic utilities that have been refined over 50 years. This lecture covers the most powerful tools in the administrator's arsenal.
-
-**find** is the most versatile file search tool. `find /var/log -name "*.log" -mtime +7` finds log files older than 7 days. `find /home -type f -size +100M` finds large files. `find . -name "*.py" -exec grep -l "TODO" {} \;` searches for Python files containing "TODO". `find` supports complex logical expressions (`-and`, `-or`, `-not`), actions (`-print`, `-delete`, `-exec`, `-ok`), and optimisation (`-maxdepth`, `-prune`). In 2040, **fd** (a Rust-based `find` alternative) is popular for interactive use due to its speed and intuitive syntax, but `find` remains the standard for scripts.
-
-**awk** is a pattern-scanning and processing language. It processes input line by line, splitting each line into fields (`$1`, `$2`, ...). `awk '{print $1, $4}' access.log` prints the first and fourth fields. `awk '/error/ {count++} END {print count}'` counts lines matching "error". `awk '{sum+=$2} END {print sum/NR}'` calculates the average of the second field. awk supports variables, conditionals, loops, arrays, and functions. It is Turing-complete and can replace many small Python scripts. In 2040, **gawk** (GNU awk) is the standard implementation, with extensions for networking, CSV parsing, and arbitrary-precision arithmetic.
-
-**sed** (stream editor) performs basic text transformations: substitution (`s/old/new/g`), deletion (`/pattern/d`), insertion, and extraction. `sed -i 's/localhost/127.0.0.1/g' config.txt` replaces all occurrences in a file. `sed -n '/START/,/END/p'` extracts lines between two patterns. sed is less powerful than awk but faster for simple transformations. In 2040, **ripgrep** (`rg`) and **sd** (a sed alternative with intuitive syntax) are popular for interactive use, but `sed` remains essential for scripts.
-
-**cron** is the Unix job scheduler. `crontab -e` edits the user's cron table; entries specify minute, hour, day of month, month, day of week, and command. `0 2 * * * /usr/local/bin/backup.sh` runs a backup at 2 AM daily. **systemd timers** (the modern replacement for cron) provide more flexibility: dependencies, randomized delays, persistent timers (run missed jobs after downtime), and integration with journal logging. In 2040, **systemd timers** are the default on most Linux distributions, but cron is still widely used and understood. The University's *Skuld Scheduler* (named after the Norn of the future) is a systemd-based job orchestrator that manages 5,000+ automated tasks across campus systems.
-
-**Lab Exercise:** Students write a **log rotation and analysis** pipeline entirely in Bash: a `find` command identifies Apache logs older than 30 days; `gzip` compresses them; `awk` extracts the hour of day and counts requests per hour; `sort` and `uniq` identify the busiest hours; and a `systemd timer` runs the pipeline daily. The script must handle errors gracefully (e.g., no logs to rotate) and log its actions to syslog.
-
-**Required Reading:**
-- Dale Dougherty & Arnold Robbins, *sed & awk* (2nd ed., O'Reilly, 1997/2035), ch. 1–5, 7–8
-- Michael J. Pilone & Matthew Russell, *cron: The Job Scheduler* (O'Reilly, 2005/2035) — available as systemd timer documentation
-- Julia Evans, *Bite Size Linux* (Wizard Zines, 2035) — zines on find, awk, sed, and cron
-- University of Yggdrasil, "The Skuld Scheduler: systemd-Based Job Orchestration at Scale" (2039)
-
-**Discussion Questions:**
-1. awk is a complete programming language that is older than Python. Is it still worth learning awk in 2040, or has Python rendered it obsolete for all but the most performance-critical text processing?
-2. cron is simple but lacks dependencies, retries, and distributed execution. systemd timers add some of these features, but they are Linux-specific. For cross-platform scheduling, should IT professionals use Python-based schedulers (APScheduler, Celery), or is the simplicity of cron/systemd worth the platform limitation?
-3. find, awk, sed, and grep are powerful but have cryptic syntax. Modern alternatives (fd, ripgrep, sd) are more user-friendly but not universally installed. Should IT scripts use modern tools (and require their installation) or stick to POSIX-standard utilities for maximum portability?
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 8: PowerShell Fundamentals — Cmdlets, Objects, and the Pipeline
+### Overview
 
-PowerShell is the modern command shell for Windows and, increasingly, for cross-platform administration. This lecture covers PowerShell's unique features: the object pipeline, cmdlets, providers, and remoting.
+This lecture applies Python to real IT operational tasks: managing users and permissions, querying system state, interacting with APIs, and automating routine maintenance. Students write scripts that solve problems they will encounter in production: "list all processes consuming more than 1GB RAM," "find certificates expiring in the next 30 days," "synchronise user accounts between two systems via their REST APIs." The lecture emphasises the "sysadmin Python" style: pragmatic, robust, and focused on getting the job done.
 
-**Cmdlets** are PowerShell commands with a **verb-noun** naming convention: `Get-Process`, `Stop-Service`, `Invoke-RestMethod`, `Set-Location`. This convention makes commands **self-documenting** and **discoverable**: `Get-Command -Verb Get -Noun Process` finds all commands that get processes. **Aliases** provide familiar names for users coming from other shells: `ls`, `dir`, `cat`, `rm`, `ps`, `curl` are all aliases for PowerShell cmdlets. **Parameters** are strongly typed and support tab completion, validation, and dynamic help.
+### Key Topics
 
-**The object pipeline** is PowerShell's defining feature. Unlike Bash, which passes text between commands, PowerShell passes **.NET objects** with properties and methods. `Get-Process | Where-Object {$_.CPU -gt 100} | Sort-Object CPU -Descending | Select-Object -First 5` finds the top 5 CPU-intensive processes. Each command outputs objects; the next command operates on those objects without parsing text. This eliminates the fragile text-parsing that plagues Bash pipelines. **Methods** can be invoked on piped objects: `(Get-Date).AddDays(7)` returns the date one week from now. **Properties** are accessed with dot notation: `$process.Name`, `$process.Id`, `$process.CPU`.
+- **Process and System Information:** The `psutil` library as the cross-platform tool for process and system monitoring. The lecture covers: CPU (per-core usage, frequency, times), memory (virtual, resident, shared, swap), disk (partitions, usage, I/O counters), network (interfaces, connections, I/O counters), and sensors (temperatures, fans, battery). The hands-on lab: write a "system health" script that collects all these metrics and outputs a JSON report.
+- **User and Permission Management:** Reading `/etc/passwd`, `/etc/shadow`, and `/etc/group` (with appropriate warnings about the sensitivity of shadow files). The `pwd` and `grp` modules for looking up user information. The `crypt` module (legacy) and the 2040 replacements (`passlib`, `bcrypt`, `argon2`) for password hashing. The lecture covers: creating users programmatically (with `subprocess` to `useradd` or platform APIs), setting passwords securely, and managing SSH authorized_keys files.
+- **Interacting with APIs:** The `httpx` and `requests` libraries for HTTP operations. The lecture covers: GET, POST, PUT, DELETE, headers, query parameters, JSON payloads, authentication (Bearer tokens, API keys, basic auth), error handling (status codes, retries with `tenacity`, timeout management), and pagination (handling API responses that span multiple pages). The hands-on lab: query the GitHub API to list all repositories for an organisation, handling pagination and rate limits.
+- **SSH and Remote Execution:** The `paramiko` library for SSHv2 connections, SFTP file transfer, and remote command execution. The lecture covers: host key verification (the security implications of `AutoAddPolicy`), key-based authentication, executing commands remotely and streaming output, and the `fabric` library as a higher-level orchestration tool. The 2040 additions: `asyncssh` for concurrent remote operations and `mitogen` for Ansible-like connection reuse.
+- **Scheduled Tasks and Daemons:** The `schedule` library for in-process scheduling, `APScheduler` for more complex requirements, and integration with system cron (`python-crontab` for reading and writing crontabs). The lecture covers: when to use Python scheduling (complex logic, dynamic intervals) versus cron (simple, system-level, robust), and the 2040 best practice of containerising scheduled tasks as Kubernetes CronJobs.
 
-**Providers** expose data stores as if they were file systems. `Get-PSProvider` lists providers: **FileSystem** (directories and files), **Registry** (Windows registry keys and values), **Certificate** (certificate stores), **Environment** (environment variables), **Variable** (PowerShell variables), **Function** (PowerShell functions), **Alias** (aliases), and **WSMan** (WS-Management configuration). `cd Cert:\LocalMachine\My` navigates to the certificate store; `Get-ChildItem` lists certificates; `Remove-Item` deletes them. This unified namespace simplifies administration: the same commands manage files, registry, certificates, and remote sessions.
+### Lecture Notes
 
-**Remoting** enables remote administration over WinRM (Windows Remote Management). `Invoke-Command -ComputerName Server01 -ScriptBlock { Get-Process }` runs a command on a remote machine. `Enter-PSSession -ComputerName Server01` opens an interactive session. **PowerShell Direct** enables remoting into Hyper-V VMs without network connectivity. **SSH remoting** (PowerShell 7+) allows PowerShell to connect to Linux and macOS systems over SSH, enabling cross-platform administration from a single shell. In 2040, **PowerShell Universal** (Ironman Software) provides a web-based dashboard and API for running PowerShell scripts across thousands of machines.
+`psutil` is the Swiss Army knife of system monitoring in Python. It abstracts platform differences (Linux, Windows, macOS, FreeBSD) behind a consistent API. A script that reports CPU usage works identically on all platforms, which is invaluable in heterogeneous environments. The lecture includes a "system dashboard" script that uses `psutil` to collect metrics and `rich` to display a live-updating table of CPU, memory, disk, and network usage — a practical tool that students can deploy on their own servers.
 
-**Lab Exercise:** Students write a PowerShell script that: connects to a remote Windows server using `Invoke-Command`; retrieves a list of services with `Get-Service`; filters for services that are running but set to manual start (potential security risks); stops suspicious services with `Stop-Service`; writes results to a CSV file; and emails the report using `Send-MailMessage`. The script must handle authentication (using credential objects or certificate-based auth) and error cases (unreachable servers, insufficient permissions).
+API interaction is the dominant mode of systems integration in 2040. Whether provisioning cloud resources, updating DNS records, querying monitoring systems, or managing identity providers, the IT professional spends significant time writing HTTP clients. The lecture emphasises: always handle timeouts (an unresponsive API should not hang your script indefinitely), always retry transient failures (status 429, 502, 503, 504 with exponential backoff), and always validate responses (a 200 OK with malformed JSON is still a failure). The `httpx` library is preferred over `requests` in 2040 because it supports both sync and async APIs, HTTP/2, and connection pooling natively.
 
-**Required Reading:**
-- Bruce Payette & Richard Siddaway, *Windows PowerShell in Action* (4th ed., Manning, 2035), ch. 2–5
-- Don Jones & Jeffery Hicks, *Learn PowerShell in a Month of Lunches* (4th ed., Manning, 2035), ch. 1–10
-- Adam Bertram, *PowerShell for Sysadmins* (No Starch Press, 2020/2035), ch. 1–4
-- Microsoft, "PowerShell 7 Documentation" (2040)
-- University of Yggdrasil, "Cross-Platform Administration with PowerShell 7: The Yggdrasil Experience" (2039)
+Remote execution via SSH is both powerful and dangerous. `paramiko` enables Python scripts to log into remote servers and execute commands, but this creates a security boundary: the script holds credentials, and a compromise of the script machine compromises all target machines. The lecture covers: using SSH agent forwarding rather than storing keys, restricting remote commands via `authorized_keys` command restrictions, and the principle that "if you are SSHing to more than three machines from a script, you should be using a configuration management tool (Ansible, Salt, Puppet) instead."
 
-**Discussion Questions:**
-1. PowerShell's object pipeline is more powerful than Bash's text pipeline, but it requires understanding .NET object models. For administrators who are not programmers, is the learning curve worth the productivity gain?
-2. PowerShell is cross-platform in theory (PowerShell Core runs on Linux and macOS), but many cmdlets are Windows-specific. Is PowerShell genuinely a cross-platform solution, or is it primarily a Windows administration tool with limited Linux utility?
-3. PowerShell remoting uses WinRM, which is a SOAP-based protocol. In an era where REST and gRPC dominate API design, is WinRM an anachronism, or does its integration with Windows authentication (Kerberos, NTLM) justify its continued use?
+### Required Reading
 
----
+- Sweigart, A. (2034). *Automate the Boring Stuff with Python*, 3rd Edition. Chapters 7-8, 12, 16.
+- Reitz, K. & Schlusser, T. (2031). *The Hitchhiker's Guide to Python*, 2nd Edition. Chapters 4-5.
+- GitHub API Documentation (2040). "REST API v3: Authentication, Pagination, Rate Limits."
 
-## Lecture 9: PowerShell for Advanced Administration — DSC, Desired State, and Automation
+### Discussion Questions
 
-Beyond interactive administration, PowerShell enables **Desired State Configuration (DSC)** — declarative infrastructure management that ensures systems maintain a specified configuration. This lecture covers DSC, advanced scripting patterns, and PowerShell's role in modern DevOps.
-
-**Desired State Configuration (DSC)** is PowerShell's declarative configuration management framework. A **DSC configuration** is a script that defines the desired state of a system: "the Web-Server feature must be installed, the C:\InetPub directory must exist with specific permissions, and the Default Web Site must be running." DSC **compiles** the configuration into a MOF (Managed Object Format) file, which is **enacted** by the **Local Configuration Manager (LCM)** on the target node. The LCM periodically checks the actual state against the desired state and **remediates** drift (self-healing). DSC resources are **idempotent**: running the same configuration multiple times produces the same result. In 2040, **DSC v3** supports cross-platform resources (Linux and Windows) and integrates with Azure Policy and AWS Config.
-
-**Advanced scripting patterns** in PowerShell include: **splatting** (`@params` passing parameters as hashtables); **error handling** (`try/catch/finally`, `$ErrorActionPreference`, `-ErrorAction` parameter); **logging** (`Start-Transcript`, `Write-EventLog`, structured logging with **PSFramework**); **progress reporting** (`Write-Progress`); **parallel execution** (`ForEach-Object -Parallel`, introduced in PowerShell 7); and **modularisation** (functions, modules, and the PowerShell Gallery). **Classes** (introduced in PowerShell 5) enable object-oriented scripting for complex automation frameworks.
-
-**PowerShell in DevOps** bridges the gap between Windows administration and modern CI/CD pipelines. **Pester** is the PowerShell testing framework: it supports unit tests, integration tests, and infrastructure tests (verifying that a system is in the desired state). **Invoke-Build** and **psake** are build automation tools. **PowerShell Universal** provides a web dashboard and REST API for scheduling and executing scripts. **Azure PowerShell** and **AWS Tools for PowerShell** manage cloud resources. In 2040, **PowerShell is the standard** for Windows-based CI/CD pipelines, and its cross-platform capabilities make it viable for heterogeneous environments.
-
-**Lab Exercise:** Students write a **DSC configuration** that: ensures IIS is installed on a Windows server; creates a website with a specific physical path and binding; configures SSL with a certificate from the local store; sets appropriate NTFS permissions; and ensures the Application Pool is running. They then write a Pester test suite that verifies the configuration was applied correctly and remains in the desired state after a simulated configuration drift.
-
-**Required Reading:**
-- Ritesh Modi, *Windows PowerShell Desired State Configuration Revealed* (Apress, 2014/2035), ch. 1–5
-- Mike F. Robbins, *The Pester Book: A Practical Guide to Testing PowerShell Code* (2020/2035)
-- Michael Greene et al., "DSC v3: Cross-Platform Desired State Configuration" (Microsoft, 2035)
-- University of Yggdrasil, "DSC in the Yggdrasil Data Centre: Managing 500 Windows Servers with Declarative Configuration" (2039)
-
-**Discussion Questions:**
-1. DSC is declarative (specify what, not how), but writing DSC resources often requires imperative code. Is DSC genuinely declarative, or is it a thin declarative veneer over imperative PowerShell scripts?
-2. Pester enables infrastructure testing, but infrastructure tests are slower and more brittle than unit tests. Should infrastructure testing be part of the CI pipeline (where slow tests delay feedback) or run separately (where failures may be discovered too late)?
-3. PowerShell's integration with Windows is deep and powerful, but Linux administration remains dominated by Bash and Python. Will PowerShell ever achieve parity with Bash on Linux, or will the two coexist as domain-specific tools?
+1. Design a Python script that monitors disk usage on 50 servers and sends an alert (via email or Slack webhook) when any disk exceeds 90% full. The script must handle SSH authentication securely, timeout gracefully on unreachable hosts, and produce a summary report. Outline your design and identify the key libraries.
+2. A REST API returns paginated results with a `Link` header (RFC 5988). Write a Python generator that yields all items across all pages, handling rate limits (429 status with `Retry-After` header) and network timeouts.
+3. The Norse *goði* mediated between local communities and the broader legal system, travelling between settlements to resolve disputes. How does this mediating, connecting role parallel the function of API integration scripts that bridge disparate systems?
 
 ---
 
-## Lecture 10: Cross-Platform Scripting — Choosing the Right Tool for the Job
+ᚨ **Lecture 4: Text Processing and Data Transformation**
 
-The modern IT environment is heterogeneous: Linux servers, Windows desktops, macOS laptops, embedded devices, and cloud services. This lecture provides a decision framework for choosing between Python, Bash, and PowerShell, and introduces patterns for writing scripts that run across platforms.
-
-**Decision matrix:**
-- **Linux-only server tasks** (log rotation, process monitoring, file management): Bash for simple tasks (<100 lines, no complex data structures), Python for complex tasks.
-- **Windows-only server tasks** (Active Directory management, IIS configuration, registry manipulation): PowerShell is the clear choice.
-- **Cross-platform server tasks** (API interaction, data processing, cloud resource management): Python is the most portable choice.
-- **Quick one-liners and interactive exploration**: Bash on Linux, PowerShell on Windows.
-- **Configuration management and orchestration**: Ansible (Python-based) for Linux, DSC (PowerShell-based) for Windows, Terraform (HCL) for cloud-agnostic infrastructure.
-- **High-performance networking**: Python with asyncio, or Go (which compiles to a single binary and is increasingly popular for IT tools).
-
-**Writing portable scripts** requires discipline. **Python portability** is generally excellent: the same script runs on Linux, Windows, and macOS with minimal changes. Key considerations: use `pathlib` instead of hardcoded paths; use `os.pathsep` and `os.linesep` for platform-specific separators; use `subprocess` with lists (not shell strings) to avoid shell syntax differences; and handle line endings (Windows CRLF vs. Unix LF). **Cross-platform Bash** is possible but limited: Git Bash and WSL (Windows Subsystem for Linux) provide Bash on Windows, but native Windows tools have different command-line syntax. **Cross-platform PowerShell** (PowerShell Core) runs on Linux but lacks many Windows-specific cmdlets.
-
-**Hybrid scripts** combine languages for maximum effect. A common pattern: a Python script orchestrates the workflow, calling Bash scripts on Linux nodes and PowerShell scripts on Windows nodes. **Polyglot pipelines** use the right tool for each step: Bash for text processing, Python for data analysis, PowerShell for Windows management, and Go for high-performance components. The **Yggdrasil Standard Automation Stack** is a polyglot framework: Python provides the orchestration layer; Bash modules handle Linux-specific tasks; PowerShell modules handle Windows-specific tasks; and all modules communicate through a shared JSON interface.
-
-**The future of IT scripting** in 2040 includes **AI-assisted code generation** (GitHub Copilot, Amazon CodeWhisperer, and the University's *Skald* assistant generate Bash, Python, and PowerShell from natural language descriptions). While AI accelerates development, it also introduces risks: generated code may contain subtle bugs, security vulnerabilities, or deprecated patterns. The IT professional must remain the **critical reviewer** of AI-generated scripts, not merely the requester.
-
-**Lab Exercise:** Students write a **cross-platform server inventory script**. The script: detects the operating system (Linux or Windows); collects system information (hostname, OS version, CPU model, total memory, disk usage, running services); formats the data as JSON; and uploads it to a central API. On Linux, it uses Python with `psutil` and `subprocess`; on Windows, it uses Python with `wmi` or `pywin32`. The script must handle errors gracefully, retry failed uploads, and log its actions.
-
-**Required Reading:**
-- Al Sweigart, *Automate the Boring Stuff with Python* (2nd ed.), ch. 6 ("Manipulating Strings") and ch. 10 ("Organising Files")
-- Brendan Gregg, *BPF Performance Tools* (Addison-Wesley, 2019/2035), ch. 1 ("Introduction") — for Linux performance scripting
-- Don Jones, "The Monad Manifesto" (Microsoft, 2002/2035) — the original vision for PowerShell
-- University of Yggdrasil, "The Standard Automation Stack: A Polyglot Framework for Heterogeneous Environments" (2039)
-
-**Discussion Questions:**
-1. In a heterogeneous environment, is it better to standardise on one language (e.g., Python for everything) and accept the limitations on certain platforms, or to embrace polyglot scripting and manage the complexity of multiple languages?
-2. AI code generation promises to eliminate the need to learn syntax, but it also produces code that the user may not fully understand. Is AI-assisted scripting a genuine productivity gain, or does it create a generation of administrators who cannot debug the code they deploy?
-3. Go is increasingly popular for IT tools (Docker, Kubernetes, Terraform are all written in Go). Should Python, Bash, and PowerShell administrators learn Go, or is it a specialist language that does not belong in the general IT toolkit?
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 11: Version Control, Testing, and Documentation for IT Scripts
+### Overview
 
-Professional scripts are not written once and forgotten; they are maintained, improved, and shared. This lecture covers the software engineering practices that distinguish professional automation from throwaway hacks.
+IT professionals spend an extraordinary amount of time processing text: log files, configuration files, CSV exports, JSON payloads, and command output. This lecture covers the tools and techniques for transforming unstructured or semi-structured text into structured, actionable information. Topics include regular expressions, log parsing strategies, data format conversions (CSV, JSON, YAML, XML), and the Python libraries that make text processing efficient and robust (`re`, `csv`, `json`, `pyyaml`, `xml.etree`, `pandas` for larger datasets).
 
-**Version control** with **Git** is mandatory for IT scripts. A Git repository for automation scripts should: have a clear directory structure (`scripts/`, `modules/`, `configs/`, `tests/`, `docs/`); use meaningful commit messages ("Fix memory threshold in health_check.py" not "Update"); follow a branching strategy (e.g., GitFlow or trunk-based development); and include a README with installation instructions, usage examples, and contribution guidelines. **Git hooks** can enforce code quality: pre-commit hooks run linters (pylint, flake8, shellcheck, PSScriptAnalyzer) before allowing commits. **GitLab CI/CD** or **GitHub Actions** can run tests and deploy scripts automatically. In 2040, **the University's automation repositories** are public (where appropriate) and follow the same standards as open-source projects.
+### Key Topics
 
-**Testing** ensures that scripts behave correctly. **Unit tests** verify individual functions in isolation (using **pytest** for Python, **bats** for Bash, **Pester** for PowerShell). **Integration tests** verify that scripts interact correctly with external systems (databases, APIs, file systems). **Linting** (`pylint`, `flake8`, `black`, `mypy` for Python; `shellcheck` for Bash; `PSScriptAnalyzer` for PowerShell) catches syntax errors, style violations, and potential bugs before execution. **Static analysis** (`bandit` for Python security scanning; `psalm` for type checking) identifies vulnerabilities and type mismatches. In 2040, **AI-assisted testing** (e.g., **Hypothesis** for property-based testing, which generates random inputs to find edge cases) is standard for critical scripts.
+- **Regular Expressions:** The domain-specific language for pattern matching. The lecture covers: literal characters, character classes (`\d`, `\w`, `\s`, negated classes), quantifiers (`*`, `+`, `?`, `{m,n}`), anchors (`^`, `$`, ``), groups and capturing (`(...)`), non-capturing groups (`(?:...)`), backreferences, and lookahead/lookbehind. The practical focus is on log parsing: extracting IP addresses, timestamps, HTTP status codes, and error messages from web server logs. The hands-on lab: write a regex that parses a standard Apache combined log format line into its components.
+- **Log Parsing Strategies:** The three approaches: simple regex (fast, brittle), structured parsing (parsing known formats with dedicated libraries), and heuristic parsing (guessing formats and extracting key-value pairs). The lecture covers: the `logging` module's format parsing, syslog format variations, JSON Lines (one JSON object per line, the 2040 standard for structured logging), and the ELK/PLG stack's ingestion pipelines. The 2040 reality: most modern applications emit structured logs (JSON) that require no regex parsing; legacy applications emit text that still requires the skills taught in this lecture.
+- **Data Format Conversions:** CSV (the `csv` module: `DictReader` and `DictWriter` for header-aware processing, handling dialects and quoting), JSON (the `json` module: `load`, `loads`, `dump`, `dumps`, custom encoders for datetime and Decimal), YAML (the `PyYAML` library: safe loading with `safe_load` to prevent code execution, the 2040 security requirement), and XML (the `xml.etree.ElementTree` module for simple parsing, `lxml` for complex schemas). The hands-on lab: convert a CSV export of user data into JSON, validating that all required fields are present and email addresses match a regex pattern.
+- **Working with Larger Datasets:** When text data exceeds available RAM (common with multi-gigabyte log files), the lecture covers: streaming processing (reading one line at a time rather than loading the entire file), generator expressions (memory-efficient pipelines), chunking (processing fixed-size blocks), and the `pandas` library for out-of-core analytics. The 2040 additions: `polars` (a faster DataFrame library written in Rust) and `duckdb` (an in-process analytical database that can query CSV and JSON directly with SQL).
+- **Data Cleaning and Validation:** Real data is messy. The lecture covers: handling missing values (empty strings, `None`, `"N/A"`), normalising text (case folding, whitespace stripping, Unicode normalisation with `unicodedata`), detecting anomalies (outliers, impossible dates, invalid identifiers), and the `pydantic` library for declarative data validation (define a schema, validate incoming data, get clear error messages). The hands-on lab: clean a "dirty" dataset of server inventory with inconsistent date formats, mixed case hostnames, and missing serial numbers.
 
-**Documentation** is the bridge between the script author and future maintainers. **Inline comments** explain *why* (not *what* — the code should explain what). **Docstrings** (Python) or **comment-based help** (PowerShell) document functions, parameters, and return values. **README files** provide installation, usage, and troubleshooting guidance. **CHANGELOG** files track versions and changes. **Architecture Decision Records (ADRs)** document why specific technologies or approaches were chosen. In 2040, **AI-assisted documentation** (e.g., tools that generate docstrings from code analysis) reduces the burden, but human review remains essential.
+### Lecture Notes
 
-**Lab Exercise:** Students take a "spaghetti script" (a poorly written, undocumented Bash script provided by the instructors) and refactor it into a professional-quality Python module: add functions with docstrings; write pytest unit tests; add type hints; run pylint and mypy; write a README; and commit the changes to Git with meaningful messages. This exercise teaches that professional scripting is not about writing new code but about maintaining and improving existing code.
+Regular expressions are simultaneously indispensable and dangerous. They are indispensable because they can extract structure from unstructured text in a single line of code. They are dangerous because they are write-only: a regex written today is incomprehensible tomorrow, and subtle errors (greedy versus lazy quantifiers, unanchored matches, catastrophic backtracking) cause bugs that are difficult to diagnose. The lecture teaches the "readable regex" style: use verbose mode (`re.VERBOSE`) to add whitespace and comments, break complex patterns into named groups (`(?P<ip>\d{1,3}(?:\.\d{1,3}){3})`), and always test with a comprehensive suite of inputs including edge cases.
 
-**Required Reading:**
-- Karl Fogel, *Producing Open Source Software* (2nd ed., O'Reilly, 2017/2035), ch. 4 ("Social and Political Infrastructure") and ch. 6 ("Communications")
-- Brian Okken, *Python Testing with pytest* (2nd ed., Pragmatic Bookshelf, 2022/2035), ch. 1–4
-- Michael W. Lucas, *PAM Mastery* (Tilted Windmill Press, 2035) — for understanding the Unix authentication stack that many scripts interact with
-- University of Yggdrasil, "IT Automation Style Guide: Git, Testing, and Documentation Standards" (2039)
+Catastrophic backtracking is the regex performance killer. A pattern like `(a+)+` on a long string of 'a's followed by a non-matching character causes exponential execution time. In 2037, a popular log analysis tool caused a production outage because a regex with nested quantifiers took 30 minutes to process a 100MB log file. The lesson: always test regex performance on large inputs, use possessive quantifiers (`++`, `*+`) where possible, and consider parser combinators or dedicated parsers for complex grammars instead of regex.
 
-**Discussion Questions:**
-1. Many IT professionals view version control as unnecessary for "just a script." Is this attitude justified for small scripts, or does it create a culture where critical automation is unmaintainable?
-2. Testing IT scripts is difficult because they interact with external systems (databases, APIs, file systems) that are hard to mock. Are integration tests worth the effort for scripts, or is manual testing sufficient?
-3. Documentation is often neglected because it is not immediately rewarding. What organisational incentives (or disincentives) would encourage IT professionals to document their scripts properly?
+Structured logging (JSON Lines) has largely replaced plain text logging in 2040, but the IT professional still encounters legacy systems that emit unstructured text. The ability to write a regex, test it, and deploy it in a log shipping pipeline is a fundamental skill. The lecture includes a "regex debugging" session where students use `regex101.com` (or its 2040 successor) to step through pattern matching and understand why a particular string matches or fails.
+
+Data validation with `pydantic` is a game-changer for operational scripts. Instead of manually checking `if 'email' in data and '@' in data['email']`, you define a model:
+```python
+from pydantic import BaseModel, EmailStr
+class User(BaseModel):
+    name: str
+    email: EmailStr
+    role: str = "student"
+```
+And `User(**data)` either returns a valid object or raises a detailed validation error. This pattern is used throughout the Yggdrasil automation codebase for API request validation, configuration parsing, and inventory management.
+
+### Required Reading
+
+- Friedl, J.E.F. (2033). *Mastering Regular Expressions*, 4th Edition. O'Reilly. Chapters 1-3, 6.
+- Sweigart, A. (2034). *Automate the Boring Stuff with Python*, 3rd Edition. Chapters 12-13, 16.
+- pydantic Documentation (2040). "Models, Validation, and Settings Management."
+
+### Discussion Questions
+
+1. A log file contains 10 million lines in an unknown custom format. Design a systematic approach to parsing it: how would you determine the format, prototype the parser, validate correctness, and optimise performance for production use?
+2. Compare regex-based parsing with structured logging (JSON Lines) for operational data. What are the maintainability, performance, and reliability trade-offs? Under what conditions would you advocate migrating a legacy text-logging system to structured logging?
+3. The Norse *rúnar* (runes) were a structured symbol system encoding both phonetic and magical information. How does the dual nature of runes — as practical writing and as structured data — parallel the evolution of log formats from human-readable text to machine-structured JSON?
 
 ---
 
-## Lecture 12: Automation Architecture — Designing Reliable, Scalable, and Maintainable Systems
+ᚱ **Lecture 5: Bash and the Unix Shell — The Native Tongue of Linux**
 
-The final lecture synthesises the course into a holistic view of automation architecture. A collection of scripts is not an automation system; a system requires design principles that ensure reliability, scalability, and maintainability.
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
-**Reliability** means that automation works correctly and consistently. **Idempotency** (applying the same operation multiple times produces the same result) is the foundational principle: a script that installs a package should check if it is already installed before attempting installation. **Error handling** (graceful degradation, retries with exponential backoff, circuit breakers) prevents cascading failures. **Observability** (logging, metrics, tracing) enables operators to understand what the automation is doing and why it failed. **State management** (storing state in databases, files, or configuration management systems) ensures that automation can resume after interruption. In 2040, **event-driven architectures** (using message queues like RabbitMQ, Apache Kafka, or cloud-native services like AWS EventBridge) decouple automation components and improve resilience.
+---
 
-**Scalability** means that automation can handle growth. **Horizontal scaling** (adding more workers) is preferred over **vertical scaling** (bigger machines). **Distributed execution** (Ansible with multiple forks, Celery workers, Kubernetes Jobs) parallelises work across machines. **Caching** (memoising expensive operations) reduces redundant work. **Lazy evaluation** (computing results only when needed) conserves resources. **Asynchronous processing** (queues, callbacks, event loops) prevents blocking and improves throughput. The **Yggdrasil Automation Platform** (built on Kubernetes, RabbitMQ, and Python) scales from managing 10 servers to 10,000 by adding worker pods dynamically.
+### Overview
 
-**Maintainability** means that automation can be understood, modified, and extended by people other than the original author. **Modularity** (small, focused functions and modules) reduces cognitive load. **Abstraction** (hiding implementation details behind clear interfaces) enables changes without breaking consumers. **Configuration externalisation** (storing environment-specific settings in files or databases, not hardcoded in scripts) enables the same code to run in development, staging, and production. **Dependency management** (pinning package versions, using virtual environments, containerising scripts) prevents "it works on my machine" problems. In 2040, **AI-assisted refactoring** (tools that suggest code improvements, detect dead code, and modernise deprecated patterns) augments human maintainers.
+Bash is the default shell on most Linux systems and the lingua franca of server administration. This lecture covers Bash fundamentals: variables, control structures, functions, and the composition of small tools into powerful pipelines. The emphasis is on the Unix philosophy (each tool does one thing well; tools are composed via pipes) and the practical skills that enable efficient system interaction: history expansion, job control, and environment configuration.
 
-**The Yggdrasil Automation Philosophy** — codified in the University's IT runbook — emphasises: **start simple** (Bash for one-off tasks, Python for recurring tasks, dedicated platforms for enterprise orchestration); **compose, don't duplicate** (reuse existing modules and tools); **fail fast and loud** (scripts should exit with descriptive errors, not silently corrupt data); **audit everything** (every automated action is logged and attributable); and **design for humans** (automation should reduce toil, not create new forms of it). The IT105 course culminates in a **capstone project**: students design and implement an automation system for a real University operational problem (e.g., automated software license auditing, dynamic classroom scheduling, or predictive maintenance for lab equipment).
+### Key Topics
 
-**Required Reading:**
-- Niall Murphy et al., *Site Reliability Engineering: How Google Runs Production Systems* (O'Reilly, 2016/2035), ch. 6 ("Monitoring Distributed Systems"), ch. 8 ("Release Engineering")
-- Gene Kim et al., *The DevOps Handbook* (2nd ed., IT Revolution, 2021/2035), ch. 7 ("The Three Ways")
-- Charity Majors et al., *Observability Engineering* (O'Reilly, 2022/2035), ch. 1–3
-- Mark Burgess, *In Search of Certainty: The Science of Our Information Infrastructure* (2nd ed., xt Axis Press, 2035), ch. 4 ("Promises and Implications")
-- University of Yggdrasil, "The Yggdrasil Automation Philosophy: Principles and Practices" (2040)
+- **Shell Fundamentals:** The command-line interface as a programming environment. Variables (local and exported), quoting (single vs. double quotes, the critical difference in expansion), special variables (`$?` for exit status, `$$` for PID, `$#`, `$*`, `$@` for arguments), and arithmetic (`$(( ))`). The lecture covers: the difference between shell builtins (`cd`, `echo`, `read`), external commands (`ls`, `grep`, `cat`), and functions; and why this distinction matters for performance and portability.
+- **Pipes, Redirection, and Process Substitution:** The `|` pipe (connecting stdout of one command to stdin of another), redirection (`>`, `>>`, `<`, `2>`, `&>`, heredocs `<<EOF`), and process substitution (`<( )` and `>( )` — treating command output as a file). The lecture includes a "one-liner of the day" series: complex tasks accomplished by composing simple tools. Example: `find /var/log -name "*.log" -mtime +7 | xargs gzip` finds and compresses old logs.
+- **Text Processing Tools:** `grep` (pattern matching with `-E` extended regex, `-v` inversion, `-c` count, `-o` only matching), `sed` (stream editing: substitution, deletion, address ranges), `awk` (field-oriented text processing, the underappreciated power tool), `cut` (column extraction), `sort` and `uniq` (with `-c` for counting duplicates), `tr` (character translation), `wc` (line/word/byte counts), and `head`/`tail` (with `-f` for following live logs). The hands-on lab: parse a web server access log to find the top 10 IP addresses by request count, using only these tools.
+- **Control Structures and Scripting:** `if/then/elif/else/fi`, `for/in/do/done`, `while/do/done`, `case/esac`, and functions. The lecture covers: `set -euo pipefail` (the "strict mode" that makes scripts fail fast on errors, undefined variables, and pipeline failures), `trap` for signal handling and cleanup, and temporary file management (`mktemp`). The hands-on lab: write a robust backup script that checks preconditions, creates a timestamped archive, verifies the archive, and logs all actions.
+- **Environment and Configuration:** Shell startup files (`.bashrc`, `.bash_profile`, `.profile`, `/etc/profile`, `/etc/bash.bashrc` — the loading order and when each applies), environment variables (`PATH`, `LANG`, `EDITOR`, `PS1` for the prompt), and aliases (when appropriate and when harmful). The lecture covers: the 2040 trend toward `direnv` (directory-specific environment variables) and `starship` (cross-shell prompt configuration), and the dangers of over-customising production shells.
 
-**Discussion Questions:**
-1. Reliability, scalability, and maintainability are often in tension: making a system more reliable (e.g., adding retries) can reduce maintainability (more complex code). How should automation architects balance these competing concerns?
-2. Event-driven architectures improve resilience but introduce new failure modes (lost messages, duplicate processing, out-of-order events). Are event-driven systems fundamentally more complex than synchronous systems, or is the complexity merely shifted?
-3. The Yggdrasil Automation Philosophy emphasises "design for humans." In an era of AI-generated automation, does the human operator remain the primary user, or should automation be designed primarily for machine-to-machine interaction?
+### Lecture Notes
+
+Bash is simultaneously simple and treacherous. Simple because any command you can type interactively can be placed in a script. Treacherous because the quoting rules are subtle, word splitting is automatic and often surprising, and error handling is opt-in rather than default. The lecture teaches defensive Bash: always use `set -euo pipefail` at the top of every script, always quote variables (`"$var"` not `$var`), always check exit codes, and never parse `ls` output.
+
+The `set -euo pipefail` incantation is worth memorising: `-e` exits immediately if any command fails (non-zero exit status); `-u` treats unset variables as errors; `-o pipefail` causes a pipeline to fail if any command in it fails, not just the last one. Together, these options transform Bash from a language that silently continues past errors into one that fails fast and visibly. The lecture includes a demonstration: with `set -euo pipefail`, the script `rm -rf "$UNSET_VAR/"` fails immediately with an error; without it, the script expands to `rm -rf /` and deletes the entire filesystem.
+
+Pipes are the compositional glue of the Unix philosophy. A command that outputs one record per line can be piped to `sort`, `uniq`, `grep`, `awk`, or any other line-oriented tool. This enables ad-hoc analysis: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head` extracts IP addresses, counts occurrences, and shows the top 10 — a complete log analysis in a single line. The lecture emphasises that this is not a gimmick but a design pattern: small, focused tools with line-oriented text interfaces compose into solutions more flexibly than monolithic applications.
+
+`awk` is the most underappreciated tool in the sysadmin's kit. It is a full programming language (variables, conditionals, loops, functions, associative arrays) specialised for field-oriented text processing. An `awk` one-liner can replace 50 lines of Python for tasks like: summing a column, filtering records based on multiple conditions, reformatting tabular data, or building frequency tables. The lecture includes an `awk` tutorial: start with `{print $1}` (print the first field), progress to `$3 > 100 {sum += $3} END {print sum}` (sum the third field for records where it exceeds 100), and culminate in a script that generates a summary report from a CSV file.
+
+### Required Reading
+
+- Blum, R. & Bresnahan, C. (2033). *Linux Command Line and Shell Scripting Bible*, 6th Edition. Wiley. Chapters 1-5, 11-13, 19-20.
+- Robbins, A. (2032). *Effective awk Programming*, 5th Edition. O'Reilly. Chapters 1-3, 7.
+- Google Shell Style Guide (2040). "Best Practices for Bash in Production."
+
+### Discussion Questions
+
+1. A junior sysadmin writes: `for f in $(ls *.txt); do cat $f; done`. Identify at least three bugs or bad practices in this script and rewrite it robustly.
+2. Explain the difference between `grep`, `sed`, and `awk` in terms of their primary use cases and processing models. For each, give an example of a task where it is the most appropriate tool and one where it is inappropriate.
+3. The Norse *flokkr* (warband) was composed of individuals with specific roles (skirmishers, shield-bearers, archers) who combined into a coordinated force. How does this composition of specialised roles parallel the Unix pipeline philosophy of combining single-purpose tools?
+
+---
+
+ᚲ **Lecture 6: Advanced Bash — Orchestration, Error Handling, and Maintainability**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Beyond one-liners, Bash scripts can orchestrate complex workflows: deploying applications, running backups, provisioning infrastructure, and managing multi-step pipelines. This lecture covers advanced Bash scripting: arrays, associative arrays (dictionaries), string manipulation, error handling patterns, logging, parallelism, and testing. The emphasis is on writing Bash scripts that are robust enough for production — not merely "works on my machine" convenience scripts.
+
+### Key Topics
+
+- **Arrays and Associative Arrays:** Indexed arrays (`arr=(a b c)`, `${arr[0]}`, `${#arr[@]}` for length, `${arr[@]}` for all elements) and associative arrays (`declare -A dict`, `dict[key]=value`, `${dict[$key]}`). The lecture covers: iterating over arrays safely (`for item in "${arr[@]}"; do`), and the critical difference between `"$*"` (single string) and `"$@"` (array of strings) when passing arguments.
+- **String Manipulation:** Bash's built-in string operations: substring extraction (`${var:offset:length}`), pattern removal (`${var#prefix}`, `${var%suffix}`), replacement (`${var/old/new}`), and length (`${#var}`). The lecture covers: when to use Bash string manipulation (simple cases, no external process) versus `sed` or `awk` (complex cases), and the performance implications.
+- **Error Handling Patterns:** Beyond `set -e`: explicit error checking (`if ! cmd; then ...; fi`), custom error functions, `trap` for cleanup (removing temporary files, restoring state on script exit, handling `SIGINT` and `SIGTERM`), and the `ERR` trap for running code on any command failure. The lecture covers: idempotency (running the script twice should not cause errors), and the "main" function pattern that localises script logic.
+- **Logging and Observability:** Writing scripts that produce structured, timestamped, severity-annotated logs. The lecture covers: `logger` (sending messages to syslog), `ts` (timestamping from `moreutils`), and the custom `log()` function pattern:
+```bash
+log() { local level=$1; shift; echo "$(date '+%Y-%m-%d %H:%M:%S') [$level] $*" >&2; }
+```
+The 2040 best practice: scripts should log to stderr by default, allowing stdout to be piped to other tools while logs are captured separately.
+- **Parallelism and Job Control:** Background processes (`cmd &`), the `wait` builtin, `xargs -P` (parallel execution with xargs), and GNU `parallel` (more sophisticated parallel execution with load balancing). The lecture covers: process substitution for parallel output collection, `flock` for file-based locking (preventing concurrent script runs), and the dangers of uncontrolled parallelism (resource exhaustion, race conditions). The hands-on lab: write a script that backs up 100 directories in parallel, limiting concurrency to 8 jobs to avoid overwhelming the backup server.
+- **Testing Bash Scripts:** The `bats` (Bash Automated Testing System) framework for unit-testing Bash scripts. The lecture covers: writing test cases, mocking commands (replacing real commands with test doubles), and CI integration. The 2040 reality: while many Bash scripts are untested, critical infrastructure scripts (deployment, backup, provisioning) must have test coverage.
+
+### Lecture Notes
+
+Bash scripts that grow beyond 50 lines become maintenance liabilities. The language lacks modules, classes, static typing, and comprehensive standard libraries. Every line of Bash is a line that can silently fail, misinterpret a variable, or behave differently on macOS versus Linux. The lecture teaches strategies for keeping Bash scripts manageable: break long scripts into functions, use `local` variables, add comments explaining intent (not mechanics), and — most importantly — consider whether the task has outgrown Bash and should be rewritten in Python or Go.
+
+The associative array (`declare -A`) is Bash 4+ feature that enables dictionary-like data structures. This is invaluable for configuration management: `declare -A config=([host]="db1" [port]="5432" [user]="admin")`, then `${config[host]}` retrieves the value. The lecture includes a "configuration parser" script that reads key-value pairs from a file into an associative array, validates required keys, and applies defaults — a pattern used in many Yggdrasil operational scripts.
+
+`trap` is the mechanism for ensuring cleanup regardless of how a script exits. A typical pattern:
+```bash
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT
+```
+This guarantees that the temporary directory is removed when the script exits normally, via `exit`, via `errexit` (`set -e`), or via `Ctrl+C` (`SIGINT`). Without `trap`, temporary files accumulate, consuming disk space and potentially exposing sensitive data. The lecture includes a case study: a backup script that created temporary archives in `/tmp` but did not clean them up; over six months, `/tmp` grew to 400GB, causing application failures.
+
+Parallelism in Bash is deceptively simple. Running `cmd &` eight times and then `wait` launches eight background jobs. But what if one fails? `wait` returns the exit status of the last job waited for, not all jobs. The lecture teaches the "parallel with exit code collection" pattern using file descriptors or the `wait -n` loop. For production use, GNU `parallel` is preferred: it handles load balancing, rate limiting, output ordering, and progress reporting. The command `parallel -j 8 backup_dir ::: */` backs up all directories with 8 concurrent jobs, producing output in the order of completion.
+
+### Required Reading
+
+- Blum, R. & Bresnahan, C. (2033). *Linux Command Line and Shell Scripting Bible*, 6th Edition. Wiley. Chapters 14-18, 23.
+- Cooper, M. (2031). *Advanced Bash-Scripting Guide*, 12th Edition. The Linux Documentation Project. Chapters 5, 15, 27.
+- GNU Parallel Documentation (2040). "Tutorial, Examples, and Best Practices."
+
+### Discussion Questions
+
+1. A deployment script has grown to 300 lines of Bash with nested conditionals, temporary files, and remote SSH commands. Describe the symptoms that indicate this script has outgrown Bash, and propose a migration strategy to Python or Go that preserves existing functionality.
+2. Design a Bash script that must run as a singleton (only one instance at a time) across multiple servers. Describe three locking mechanisms and their failure modes: file locks (`flock`), directory creation (`mkdir`), and network-based locks (Redis, Consul).
+3. The Norse *lögrétta* (law-speaker's court) required formal procedures that were followed precisely regardless of circumstances. How does this formal rigour parallel the need for strict error handling and cleanup in production Bash scripts?
+
+---
+
+ᚷ **Lecture 7: PowerShell Fundamentals — Objects, Pipelines, and Discovery**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+PowerShell is not "Bash for Windows." It is a fundamentally different paradigm: an object-oriented shell where the pipeline passes structured objects rather than text streams. This lecture covers PowerShell fundamentals: cmdlets, the object pipeline, providers, discovery commands (`Get-Command`, `Get-Help`, `Get-Member`), variables and types, control flow, and functions. Students learn to "think in objects" and leverage PowerShell's unique strengths for Windows administration and cross-platform automation.
+
+### Key Topics
+
+- **Cmdlets and Verb-Noun Naming:** PowerShell commands follow a strict `Verb-Noun` convention (`Get-Process`, `Set-Location`, `Invoke-RestMethod`). The lecture covers: the approved verb list (Get, Set, New, Remove, Start, Stop, Invoke, Out, Write, Read), the benefit of discoverability (you can guess command names), and aliases (convenient but discouraged in scripts for readability). The hands-on lab: use `Get-Command` and `Get-Help` to discover and learn about commands for managing Windows services.
+- **The Object Pipeline:** Unlike Bash, where `ls | grep foo` filters text lines, PowerShell's `Get-Process | Where-Object {$_.Name -like "*foo*"}` filters objects by property. The lecture covers: `Where-Object` (filtering), `Select-Object` (choosing properties), `Sort-Object` (sorting by property), `Group-Object` (grouping), `Measure-Object` (aggregating: count, sum, average, min, max), and `ForEach-Object` (iterating and transforming). The power of object pipelines: you can filter, sort, group, and format data without fragile text parsing.
+- **Providers and Drives:** PowerShell providers expose data stores as drives. The lecture covers: the FileSystem provider (`C:`, `/` on Linux), the Registry provider (`HKLM:`, `HKCU:`), the Certificate provider (`Cert:`), the Environment provider (`Env:`), and the Variable provider (`Variable:`). You can navigate and manipulate these stores using the same commands (`Get-ChildItem`, `Set-Location`, `Remove-Item`) regardless of the underlying store. The hands-on lab: use `Get-ChildItem` to list registry keys, environment variables, and certificates.
+- **Variables, Types, and Operators:** PowerShell variables (`$var`) are loosely typed but can be strongly typed (`[int]$count = 0`). The lecture covers: arrays (`@()`) and hash tables (`@{}`), splatting (passing parameters as a hashtable), the range operator (`1..10`), and comparison operators (`-eq`, `-ne`, `-gt`, `-lt`, `-like`, `-match`, `-contains` — the source of many bugs for newcomers accustomed to `=`, `!=`, `>`). The 2040 additions: class definitions (PowerShell 5+), enums, and the `using` statement for namespace imports.
+- **Control Flow and Functions:** `if/elseif/else`, `switch` (with wildcard, regex, and file matching modes), `for`, `foreach`, `while`, `do/while`, `break`, `continue`, and `return`. Functions: parameters (`param()` block), mandatory parameters, parameter validation (`[ValidateNotNullOrEmpty()]`, `[ValidateRange(1,100)]`), pipeline input (`ValueFromPipeline`), and comment-based help. The lecture emphasises: functions should be small, testable, and documented; scripts should use `CmdletBinding()` for advanced function features (verbose output, debug stepping, parameter validation).
+
+### Lecture Notes
+
+PowerShell's object pipeline is its defining feature and its steepest learning curve for Linux administrators accustomed to text. The key insight is that text is lossy: when you pipe `ls -l` to `awk '{print $5}'`, you are extracting the fifth whitespace-separated field, hoping it is the file size. If the output format changes (e.g., a filename with spaces), the extraction breaks. In PowerShell, `Get-ChildItem | Select-Object -Property Length` extracts the `Length` property by name; it will never break due to formatting changes because the property is typed and named.
+
+The `Get-Member` cmdlet is the sysadmin's microscope for PowerShell objects. Piping any object to `Get-Member` reveals its type, properties, methods, and events. This is essential because cmdlets produce objects with dozens of properties, only some of which are displayed by default. `Get-Process | Get-Member` shows that process objects have properties like `Id`, `Name`, `CPU`, `WorkingSet`, `PagedMemorySize`, `Threads`, and methods like `Kill()`, `Refresh()`, `WaitForExit()`. Without `Get-Member`, you are guessing at available properties.
+
+Splatting is a PowerShell technique that improves readability and enables dynamic parameter construction. Instead of:
+```powershell
+Get-WinEvent -LogName Security -MaxEvents 10 -FilterXPath "*[System[(EventID=4624)]]"
+```
+You write:
+```powershell
+$params = @{LogName="Security"; MaxEvents=10; FilterXPath="*[System[(EventID=4624)]]"}
+Get-WinEvent @params
+```
+This is more readable, allows conditional parameter inclusion, and enables parameter reuse across multiple calls. The lecture includes a "dynamic parameter builder" pattern where parameters are constructed based on runtime conditions.
+
+Comment-based help transforms a function into a self-documenting command. By adding a `<# .SYNOPSIS ... .DESCRIPTION ... .PARAMETER ... .EXAMPLE ... #>` block before the function, you enable `Get-Help` to display formatted help. This is not merely documentation; it is discoverable documentation that integrates with PowerShell's help system and IDE IntelliSense. The Yggdrasil PowerShell coding standard mandates comment-based help for all functions longer than 10 lines.
+
+### Required Reading
+
+- Jones, R. & Hicks, J. (2034). *PowerShell in Action*, 4th Edition. Manning. Chapters 1-3, 5-6.
+- Wilson, E. (2032). *Windows PowerShell Step by Step*, 5th Edition. Microsoft Press. Chapters 1-4.
+- Microsoft Learn. (2040). "PowerShell 101: Introduction to PowerShell."
+
+### Discussion Questions
+
+1. A Linux administrator argues that PowerShell's object pipeline is unnecessary complexity and that text-based pipelines are simpler. Counter this argument with specific examples where object pipelines prevent bugs that text pipelines would introduce.
+2. Design a PowerShell function `Get-DiskHealthReport` that queries disk space, SMART status, and I/O statistics from multiple servers. The function should accept pipeline input for server names, support `-WhatIf` and `-Verbose`, and produce objects with properties for each metric. Include comment-based help.
+3. The Norse *bragarfull* (chieftain's toast) followed a strict ritual form: who could speak, what could be vowed, the order of cups. How does this structured, typed ritual parallel PowerShell's typed objects and formal cmdlet naming conventions?
+
+---
+
+ᚹ **Lecture 8: PowerShell for Automation — Remoting, DSC, and Modules**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+PowerShell's real power lies in its automation capabilities: managing remote systems, enforcing desired state, and packaging reusable code in modules. This lecture covers PowerShell Remoting (WinRM, SSH transport, JEA), Desired State Configuration (DSC), module development, and the 2040 cross-platform ecosystem. Students write a DSC configuration that enforces a standard web server setup and deploy it to a remote node.
+
+### Key Topics
+
+- **PowerShell Remoting:** The `Invoke-Command` cmdlet for executing commands on remote systems via WinRM (Windows Remote Management, based on WS-MAN) or SSH. The lecture covers: enabling remoting (`Enable-PSRemoting`), trusted hosts, credential management (`Get-Credential`, certificate-based authentication), and session reuse (`New-PSSession`, `Invoke-Command -Session`, `Enter-PSSession` for interactive remoting). The 2040 reality: SSH transport is now preferred over WinRM for cross-platform remoting, and PowerShell 7+ supports SSH natively.
+- **Just Enough Administration (JEA):** The principle of least privilege applied to PowerShell remoting. JEA endpoints are constrained sessions where users can only run specific commands with specific parameters. The lecture covers: session configurations (`New-PSSessionConfigurationFile`), role definitions (`VisibleCmdlets`, `VisibleFunctions`), and the security benefits (an operator who needs to restart IIS should not have full admin rights). The hands-on lab: create a JEA endpoint that allows helpdesk staff to restart services and view event logs but nothing else.
+- **Desired State Configuration (DSC):** Declarative configuration management for Windows (and, via DSC v3, Linux). The lecture covers: configuration documents (MOF files), resources (built-in: File, Registry, Service, Package, Script; community: from the PowerShell Gallery), local configuration manager (LCM, the engine that applies configurations), and pull mode (configurations hosted on a pull server, nodes check in periodically). The 2040 evolution: Azure Automanage, Azure Policy Guest Configuration, and the open-source `dsc` command-line tool that works cross-platform.
+- **Modules and the PowerShell Gallery:** Packaging functions, cmdlets, providers, and DSC resources into reusable modules. The lecture covers: module structure (`.psd1` manifest, `.psm1` root module, nested modules), versioning (semantic versioning), publishing to the PowerShell Gallery (and private galleries like the Yggdrasil Internal Gallery), and dependency management (`RequiredModules` in the manifest). The hands-on lab: create a module containing three functions for certificate management, write Pester tests, and publish it to a local repository.
+- **Cross-Platform PowerShell:** PowerShell 7+ runs on Linux and macOS, using .NET Core. The lecture covers: platform detection (`$IsLinux`, `$IsWindows`, `$IsMacOS`), path handling (`Join-Path` for cross-platform paths), and the limitations (some Windows-specific modules are not available on Linux). The 2040 reality: many organisations run PowerShell Core as their primary automation language across all platforms, using it as a consistent alternative to the Bash/Python split.
+
+### Lecture Notes
+
+PowerShell Remoting is the Windows equivalent of SSH, but with deeper integration into the operating system. Where SSH gives you a shell on a remote system, PowerShell remoting gives you the ability to execute commands on 1,000 systems simultaneously with a single `Invoke-Command` call. The `-ThrottleLimit` parameter controls concurrency; the `-AsJob` parameter runs commands in the background; and the `-FilePath` parameter executes an entire script on remote systems. This is the foundation of Windows fleet management at scale.
+
+JEA is one of the most important security features in Windows administration. Without JEA, giving a junior admin remote access means giving them full administrative rights (or creating complex local accounts with restricted permissions). With JEA, you create a constrained endpoint that exposes only the commands the admin needs, with only the parameters they are allowed to use, running under a privileged virtual account that they never directly possess. If the junior admin's credentials are compromised, the attacker gains only the limited capability of the JEA endpoint — not full system access.
+
+DSC represents the "infrastructure as code" philosophy for Windows. Instead of manually configuring a server (install IIS, set bindings, enable authentication, deploy content), you write a DSC configuration that describes the desired state. The LCM applies this state, correcting drift automatically. DSC can operate in push mode (admin pushes configuration to nodes) or pull mode (nodes check a central server for their configuration). The 2040 best practice is pull mode with Azure Policy Guest Configuration, which provides centralised reporting and compliance auditing.
+
+Cross-platform PowerShell in 2040 is a mature reality. PowerShell 7.x runs on Linux, macOS, and Windows, and the module ecosystem has adapted. The `PSReadLine` module provides Bash-like line editing, the `z` module provides directory jumping, and the `oh-my-posh` theme engine provides beautiful prompts. For Linux administrators, the decision is no longer "Bash or PowerShell?" but "Which is more appropriate for this specific task?" The Yggdrasil standard: use Bash for quick system tasks on Linux; use PowerShell for cross-platform automation, Windows management, and API interaction.
+
+### Required Reading
+
+- Jones, R. & Hicks, J. (2034). *PowerShell in Action*, 4th Edition. Manning. Chapters 10-11, 13.
+- Microsoft. (2039). *Desired State Configuration v3 — The Cross-Platform Guide*.
+- Yggdrasil Windows Operations Team. (2040). "JEA Implementation and Best Practices."
+
+### Discussion Questions
+
+1. Compare SSH-based remote management (running commands via SSH keys) with PowerShell Remoting (WinRM/SSH with JEA) for a Windows server fleet of 500 machines. Evaluate security, auditability, performance, and operational complexity.
+2. A DSC configuration drifted from the desired state because an administrator manually changed a setting. The LCM detected the drift and corrected it, but the application failed during the 2-minute correction window. How do you balance the benefits of automated drift correction against the risks of unexpected reconfiguration?
+3. The Norse *heimþingi* (home assembly) gathered the household to settle domestic matters without waiting for the district *thing*. How does this distributed, household-level governance parallel the concept of local configuration management (DSC LCM) operating autonomously while coordinating with central policy?
+
+---
+
+ᚺ **Lecture 9: APIs and Web Services — The Glue of Modern Infrastructure**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Application Programming Interfaces (APIs) are the primary mechanism by which IT systems communicate in 2040. This lecture covers RESTful API design principles, HTTP fundamentals, authentication mechanisms, and practical client programming in Python and PowerShell. Students interact with real APIs: cloud provider APIs, monitoring system APIs, and the Yggdrasil internal API for infrastructure management.
+
+### Key Topics
+
+- **HTTP Fundamentals:** Methods (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS), status codes (1xx informational, 2xx success, 3xx redirection, 4xx client error, 5xx server error — with emphasis on the most common: 200, 201, 204, 301, 400, 401, 403, 404, 409, 422, 429, 500, 502, 503, 504), headers (Content-Type, Accept, Authorization, User-Agent, Cache-Control, ETag, X-Request-ID), and the request/response cycle. The lecture includes a "status code bingo" game where students map scenarios to the correct status code.
+- **RESTful Design Principles:** Resources identified by URIs, standard HTTP methods for CRUD operations, statelessness (each request contains all necessary information; the server does not store client state between requests), and HATEOAS (Hypermedia as the Engine of Application State — though the lecture notes that pure HATEOAS is rare in 2040, with OpenAPI specifications being the dominant contract format). The lecture covers: resource nesting (`/users/123/orders`), query parameters for filtering and pagination (`?limit=10&offset=20`), and the difference between PUT (idempotent replace) and PATCH (partial update).
+- **Authentication and Security:** API keys (simple but limited), Basic Auth (username:password Base64-encoded, only over HTTPS), Bearer tokens (JWT access tokens with expiration, the 2040 standard), OAuth 2.0 / OIDC (the authorisation framework for delegated access: authorisation code flow, client credentials flow, PKCE for public clients), and mutual TLS (client certificates for high-security scenarios). The lecture covers: token refresh logic, storing credentials securely (environment variables, secret managers like HashiCorp Vault or Azure Key Vault, never hardcoded), and the principle of least privilege for API keys.
+- **Python API Clients:** The `httpx` library (async-capable, HTTP/2, connection pooling) and `requests` (the classic synchronous library). The lecture covers: session objects (persistent cookies and connection reuse), retry strategies (`tenacity` library: exponential backoff, jitter, retry on specific status codes), timeout configuration (connect timeout vs. read timeout), and response validation (`pydantic` models for deserialising JSON responses). The hands-on lab: write a Python client for the Yggdrasil Infrastructure API that lists all VMs, filters by status, and exports to CSV.
+- **PowerShell API Clients:** `Invoke-RestMethod` (higher-level, automatically parses JSON/XML) and `Invoke-WebRequest` (lower-level, returns raw response object). The lecture covers: `-Headers` for custom headers, `-Body` for request payloads, `-ContentType` and `-Method`, handling pagination (following `next` links in response headers), and credential management (`Get-Secret` from the `Microsoft.PowerShell.SecretManagement` module). The hands-on lab: replicate the Python VM client in PowerShell.
+
+### Lecture Notes
+
+HTTP is the universal protocol of IT integration. Whether provisioning a VM, updating a DNS record, querying a monitoring system, or sending a Slack notification, the mechanism is an HTTP request. The IT professional who cannot construct an HTTP request, interpret a status code, or debug a failed API call is as limited as a sailor who cannot tie a knot.
+
+Status codes are not suggestions; they are contracts. A 404 means "the resource you requested does not exist" — retrying will not help unless the resource is created. A 429 means "you are rate-limited" — retrying immediately will fail and may increase the rate-limit penalty; you must wait (respecting the `Retry-After` header). A 503 means "the service is temporarily unavailable" — retrying with exponential backoff is appropriate. A 500 means "internal server error" — retrying might work if the error was transient, but persistent 500s indicate a bug. The lecture includes a "status code decision tree" that maps each code to the appropriate client action.
+
+OAuth 2.0, despite its complexity, is the dominant authorisation framework in 2040. The lecture simplifies it to three flows relevant to IT automation: Client Credentials (machine-to-machine: your script authenticates as itself using a client ID and secret), Authorization Code (user-delegated: a user grants your application access to their resources), and Device Code (for input-constrained devices like TVs or IoT sensors). For IT scripts, Client Credentials is the norm: the script runs as a service principal with specific API permissions.
+
+Token management is a common source of operational bugs. Access tokens expire (typically after 1 hour), and scripts must refresh them using a refresh token or by re-authenticating. A script that works for 59 minutes and then fails with 401 is not "intermittently buggy"; it is "correctly implementing an incorrect token refresh strategy." The lecture teaches the "token cache" pattern: acquire a token, use it until near expiry, refresh transparently, and share the cache across concurrent requests. The `msal` library (Microsoft Authentication Library) and `authlib` (general-purpose OAuth) handle this automatically in 2040.
+
+### Required Reading
+
+- Richardson, L. & Amundsen, M. (2034). *RESTful Web APIs*, 2nd Edition. O'Reilly. Chapters 1-3, 7-8.
+- IETF RFC 9110 (HTTP Semantics) and RFC 9112 (HTTP/1.1) — selected sections.
+- Microsoft Identity Platform Documentation (2040). "OAuth 2.0 and OpenID Connect Protocols."
+
+### Discussion Questions
+
+1. An API returns 500 Internal Server Error for 0.1% of requests. Your script currently retries all 500s with exponential backoff. A colleague argues that 500s should not be retried because they indicate server bugs, not transient failures. Evaluate both positions and design a retry policy that handles different 500 scenarios appropriately.
+2. Compare API key authentication with OAuth 2.0 Client Credentials for a script that provisions cloud infrastructure. What are the security, auditability, and operational trade-offs? Under what conditions would you choose each?
+3. The Norse *kaupmadr* (merchant) operated across linguistic and cultural boundaries, relying on shared protocols of trade: weights, measures, gestures, and the Thing's legal framework. How does this shared protocol parallel the function of REST APIs and OpenAPI specifications in enabling interoperability between disparate systems?
+
+---
+
+ᚾ **Lecture 10: Databases and Data Manipulation for IT**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+IT professionals do not need to be database administrators, but they must be able to query, update, and manipulate data stored in databases. This lecture covers SQL fundamentals (SELECT, INSERT, UPDATE, DELETE, JOIN, aggregation), database access from Python (`sqlite3`, `psycopg` for PostgreSQL) and PowerShell (`Invoke-Sqlcmd`), and the practical data tasks that IT professionals encounter: inventory management, log analysis, configuration tracking, and reporting.
+
+### Key Topics
+
+- **SQL Fundamentals:** The relational model (tables, rows, columns, primary keys, foreign keys, constraints) and the core SQL commands: `SELECT` (with `WHERE`, `ORDER BY`, `LIMIT`/`OFFSET`, `DISTINCT`), `JOIN` (INNER, LEFT, RIGHT, FULL — with Venn diagrams illustrating each), `GROUP BY` and aggregation (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`, `HAVING`), `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`. The lecture covers: subqueries (correlated and non-correlated), Common Table Expressions (CTEs with `WITH`), and window functions (`ROW_NUMBER()`, `RANK()`, `LEAD()`, `LAG()` — the 2040 essential for advanced analytics). The hands-on lab: given a database of server inventory, write queries to find underutilised machines, track hardware warranty status, and generate a depreciation report.
+- **Python Database Access:** The `sqlite3` module (built-in, file-based, perfect for scripts and local data stores) and `psycopg` (the PostgreSQL adapter, the 2040 standard for production databases). The lecture covers: connection strings, cursors, parameterized queries (essential for preventing SQL injection — never use string concatenation for SQL), transactions (`commit` and `rollback`), and context managers (`with conn:` for automatic cleanup). The hands-on lab: write a Python script that reads a CSV of new user accounts, validates the data, and inserts them into a SQLite database with error handling for duplicates.
+- **PowerShell Database Access:** `Invoke-Sqlcmd` for SQL Server, and the `Npgsql` module for PostgreSQL. The lecture covers: executing queries and returning result sets as objects, parameterized queries with `SqlParameter`, and exporting results to CSV (`Export-Csv`) or JSON (`ConvertTo-Json`). The hands-on lab: write a PowerShell script that queries a database for certificates expiring in the next 60 days and emails a report to the security team.
+- **NoSQL for IT Professionals:** Not all data is relational. The lecture introduces: document stores (MongoDB — querying JSON-like documents with `find` and aggregation pipelines), key-value stores (Redis — for caching, session management, and lightweight queues), and time-series databases (InfluxDB — for metrics and monitoring data). The 2040 reality: IT professionals increasingly encounter these databases in their infrastructure and must be able to query them for operational data.
+- **Data Reporting and Export:** Generating reports from database queries. The lecture covers: CSV export (the universal interchange format), HTML report generation (using templating engines like Jinja2 in Python), and Excel export (using `openpyxl` or `ImportExcel` in PowerShell). The 2040 best practice: reports should be generated automatically by scheduled scripts, published to a dashboard or sent via email, and archived for audit purposes.
+
+### Lecture Notes
+
+SQL is the most durable skill in IT. It has been the standard query language for relational databases since the 1970s and remains essential in 2040. The IT professional who cannot write a `JOIN`, aggregate with `GROUP BY`, or use a CTE to break a complex query into readable steps is limited in their ability to extract insight from operational data. The lecture emphasises that SQL is not "developer work"; it is "data literacy," and every IT professional must be data-literate.
+
+Parameterized queries are the single most important security practice in database access. SQL injection — the technique of manipulating input to alter the structure of a SQL query — remains one of the most common vulnerabilities in 2040, despite being well-understood for decades. The lecture includes a dramatic demonstration: a script that uses string concatenation (`query = "SELECT * FROM users WHERE name = '" + user_input + "'"`) and a malicious input (`'; DROP TABLE users; --`) that destroys data. The fix is simple and universal: use parameterized queries (`cursor.execute("SELECT * FROM users WHERE name = ?", (user_input,))`), which treat input as data, not as executable SQL.
+
+Window functions are the most powerful SQL feature that many IT professionals do not know. Unlike aggregation functions that collapse rows into a single result, window functions calculate a value across a "window" of related rows while preserving the original rows. `ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC)` assigns a rank to each employee within their department by salary. `LEAD(order_date) OVER (PARTITION BY customer ORDER BY order_date)` retrieves the next order date for each customer, enabling gap analysis. These functions transform complex reporting queries from hundreds of lines into tens of lines.
+
+### Required Reading
+
+- Beaulieu, A. (2033). *Learning SQL*, 4th Edition. O'Reilly. Chapters 1-9, 14.
+- psycopg Documentation (2040). "Basic Module Usage, SQL Composition, Performance."
+- Yggdrasil Data Operations Guide (2040). "Query Standards and SQL Style Guide."
+
+### Discussion Questions
+
+1. A junior engineer writes: `query = "SELECT * FROM servers WHERE hostname = '" + hostname + "'"`. Explain the SQL injection vulnerability and rewrite the query using parameterised queries in Python (`psycopg`), PowerShell (`Invoke-Sqlcmd`), and Bash (`sqlite3` with bound parameters).
+2. Design a SQL query that reports the monthly growth rate of a server fleet: total machines, new additions, decommissions, and net change. Use window functions to calculate running totals and month-over-month differences. Explain your schema assumptions.
+3. The Norse *lögberg* (law rock) was where the lawspeaker recited the law from memory, and every free person had the right to know the law. How does this principle of accessible, structured public knowledge inform the design of database schemas and reporting systems that make organisational data transparent to those who need it?
+
+---
+
+ᛁ **Lecture 11: Configuration Management and Infrastructure as Code**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Manual configuration is the enemy of consistency and reproducibility. This lecture introduces Infrastructure as Code (IaC) and configuration management through the lens of IT automation: Ansible (agentless, Python-powered, YAML-based), Terraform (declarative infrastructure provisioning), and the emerging 2040 tools (Pulumi for general-purpose language IaC, Crossplane for Kubernetes-native infrastructure). Students write Ansible playbooks and Terraform configurations that provision and configure real lab infrastructure.
+
+### Key Topics
+
+- **Infrastructure as Code Principles:** The core concepts: idempotency (running the same code twice produces the same result), immutability (replacing rather than modifying infrastructure), declarative versus imperative paradigms, and version control (all infrastructure code in Git, with peer review and CI/CD). The lecture covers: the "cattle, not pets" metaphor (servers are replaceable instances, not unique snowflakes), and the 2040 reality that IaC is not optional for teams managing more than a handful of systems.
+- **Ansible:** The agentless configuration management tool that uses SSH (or WinRM) to push configurations. The lecture covers: inventory files (static and dynamic), playbooks (YAML lists of tasks), modules (`copy`, `template`, `package`, `service`, `user`, `cron`, `debug`), variables and facts (`ansible_facts` for OS discovery), conditionals and loops, handlers (triggered actions), and roles (reusable, composable playbook components). The hands-on lab: write a playbook that hardens a Linux server: updates packages, configures SSH, sets up a firewall, creates a monitoring user, and installs the node_exporter service.
+- **Terraform:** The declarative tool for provisioning infrastructure across cloud providers, on-premises systems, and SaaS services. The lecture covers: HCL (HashiCorp Configuration Language), providers (AWS, Azure, GCP, VMware, Kubernetes), resources and data sources, state management (local vs. remote state, state locking, state versioning), variables and outputs, and modules (reusable infrastructure components). The hands-on lab: write a Terraform configuration that provisions a virtual machine on the Yggdrasil Bifröst Cloud, attaches a disk, and configures a security group.
+- **Pulumi and Crossplane:** The 2040 alternatives. Pulumi allows infrastructure definition in general-purpose languages (Python, TypeScript, Go) rather than HCL, enabling loops, conditionals, and abstraction that are awkward in Terraform. Crossplane treats infrastructure as Kubernetes custom resources, enabling GitOps workflows where `kubectl apply` provisions cloud resources. The lecture covers: when to choose each tool (Terraform for broad provider support and ecosystem; Pulumi for complex logic and team language preferences; Crossplane for Kubernetes-native shops).
+- **Testing and Validation:** `ansible-lint` for playbook quality, `terraform validate` and `terraform plan` for pre-deployment verification, and the 2040 additions: OPA (Open Policy Agent) for policy-as-code ("no security group may allow 0.0.0.0/0 to port 22"), and Terratest (Go-based integration testing for Terraform). The lecture emphasises: always run `terraform plan` before `apply`, always review diffs, and never commit credentials to version control.
+
+### Lecture Notes
+
+Ansible's agentless architecture is both its greatest advantage and its limitation. Advantage: no software needs to be installed on target systems; you only need SSH access and Python. Limitation: Ansible pushes configuration from the control node, which does not scale to tens of thousands of targets without significant parallelism and can be slow for large fleets. For the Yggdrasil lab environment (50-100 servers), Ansible is ideal. For hyperscale environments (10,000+ nodes), agent-based tools (Salt, Puppet, Chef) or pull-based models (Ansible pull, Kubernetes controllers) are preferred.
+
+Ansible's YAML syntax is readable but verbose. A simple task — copy a file, ensure a service is running — requires 4-6 lines of YAML. A complex playbook with conditionals, loops, and error handling can become unreadable. The lecture teaches the "Ansible readability" style: use comments, break large playbooks into roles, use variables rather than hardcoded values, and leverage Jinja2 templating for dynamic configuration. The Yggdrasil Ansible standard requires: all playbooks must pass `ansible-lint`, all variables must be documented in `defaults/main.yml`, and all tasks must have `name` descriptions.
+
+Terraform's state file is its Achilles heel. Terraform maintains a mapping between the resources defined in HCL and the actual resources in the cloud provider. This state is stored in a file (local or remote) and is the source of truth for Terraform operations. If the state is lost or corrupted, Terraform cannot manage the infrastructure. If the state is accessed concurrently by two administrators, corruption is likely. The 2040 best practice: remote state with locking (Terraform Cloud, AWS S3 with DynamoDB locking, Azure Blob with leases) and state versioning (so previous states can be restored). The lecture includes a horror story: two administrators ran `terraform apply` simultaneously from their laptops, corrupting the state and orphaning 47 cloud resources that had to be manually reconciled.
+
+The "Terraform plan before apply" rule is absolute. `terraform plan` shows what Terraform intends to do: create, modify, or destroy resources. Reviewing this plan is the primary safety mechanism against accidental destruction. The lecture mandates: no `terraform apply` without a prior `plan`, no `terraform apply -auto-approve` in production (the `-auto-approve` flag skips the confirmation prompt), and all plans must be reviewed by a second engineer before application. These rules have prevented countless outages at Yggdrasil.
+
+### Required Reading
+
+- Hochstein, L. & Moser, R. (2033). *Ansible: Up and Running*, 3rd Edition. O'Reilly. Chapters 1-6.
+- Brikman, Y. (2034). *Terraform: Up and Running*, 4th Edition. O'Reilly. Chapters 1-5.
+- Kief Morris. (2032). *Infrastructure as Code*, 2nd Edition. O'Reilly. Chapters 1-3, 8.
+
+### Discussion Questions
+
+1. Compare Ansible (agentless, push-based) and Salt (agent-based, pub-sub) for a university IT environment with 500 Linux servers, 200 Windows workstations, and 50 network switches. Evaluate scalability, security, complexity, and operational fit.
+2. A `terraform plan` shows that it will destroy and recreate a database instance because the `instance_type` changed from `db.t3.medium` to `db.t3.large`. The database contains production data. What is your response? How would you modify the infrastructure code to avoid this risk in the future?
+3. The Norse *hǫlmganga* (duel on an island) followed strict rules: the island was marked with hazel poles, and stepping outside meant forfeiture. How does this bounded, rule-governed arena parallel the concept of idempotent, declarative infrastructure code that produces predictable results within defined boundaries?
+
+---
+
+ᛃ **Lecture 12: The Automation Challenge — Capstone Practical**
+
+**Course:** IT105 — Programming for IT (Python, Bash, PowerShell)  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+The final lecture is a 48-hour capstone challenge. Students receive a realistic scenario: a new department needs 20 virtual machines provisioned, hardened, monitored, and documented. The challenge requires writing scripts in Python, Bash, and PowerShell; interacting with APIs; querying databases; and applying infrastructure-as-code principles. The evaluation criteria emphasise correctness, robustness, documentation, and the ability to explain design decisions.
+
+### Key Topics
+
+- **Challenge Specification:** Students must: (1) write a Python script that reads a CSV of server requirements and calls the Yggdrasil Cloud API to provision VMs, (2) write an Ansible playbook that hardens the VMs (updates, SSH config, firewall, monitoring agent), (3) write a Bash script that verifies the provisioning (checks VM status, pings each host, validates SSH access), (4) write a PowerShell script that generates a compliance report (VM names, IPs, OS versions, patch levels) and emails it to the instructor, and (5) write a Terraform configuration that provisions a shared database for the department and configures access controls.
+- **Error Handling and Robustness:** All scripts must handle expected errors (API rate limits, network timeouts, SSH failures) and fail gracefully. The lecture reviews: retry logic with exponential backoff, idempotency (running the provisioning script twice should not create duplicate VMs), and rollback procedures (if provisioning fails halfway, the script should clean up partial resources).
+- **Documentation and Handoff:** Every script must include: a header comment explaining purpose and usage, inline comments for complex logic, a README explaining dependencies and execution instructions, and a runbook for troubleshooting common failures. The lecture emphasises: code is written once and read many times; the author who does not document is condemning their colleagues to reverse-engineering.
+- **Live Demonstration:** The final 30 minutes is a live demo where the student runs their scripts, explains their design, and responds to examiner questions. The examiner may introduce a failure (e.g., an API returns 503, a VM refuses SSH connections) and ask the student to diagnose and fix it in real time.
+
+### Lecture Notes
+
+The Automation Challenge is designed to be stressful and realistic. In production IT, deadlines are tight, requirements are vague, and things break unexpectedly. The challenge simulates this: the CSV has inconsistent data (missing fields, invalid formats), the API has rate limits that require throttling, and the Ansible playbook fails on one VM because it has a different OS version. Students who have mastered the course material will navigate these issues calmly; those who have merely memorised syntax will struggle.
+
+Idempotency is the most important quality of operational scripts. A provisioning script that creates duplicate resources when run twice is dangerous; a hardening script that appends the same configuration line to a file every time it runs will eventually break the file. The lecture teaches idempotency patterns: check before create (`if not exists: create`), use Ansible's native idempotency (modules are designed to be safe to rerun), and design API clients to track state. The "safety check" pattern: before any destructive operation, log the intended action and require confirmation, or check a state file to verify the operation has not already been performed.
+
+The live demonstration tests not just technical skill but operational composure. When a script fails during a demo, the professional does not panic; they read the error message, trace the execution flow, identify the assumption that was violated, and implement a fix. The examiner is not looking for perfection; they are looking for systematic reasoning under pressure. A student who says "I don't know why it failed, but here's how I would find out" scores higher than one who makes wild guesses.
+
+### Required Reading
+
+- Yggdrasil IT105 Challenge Brief (2040). "Scenario, Requirements, Evaluation Criteria, and Submission Guidelines."
+- Kief Morris. (2032). *Infrastructure as Code*, 2nd Edition. O'Reilly. Chapter 12 (Testing and Delivery).
+
+### Discussion Questions
+
+1. Your provisioning script fails after creating 12 of 20 VMs due to an API rate limit. Design a resumable script that can be re-run safely, creating only the missing VMs without affecting the existing ones. What state management approach do you use?
+2. A colleague argues that Bash is sufficient for all IT automation and that learning Python and PowerShell is unnecessary. Construct a counter-argument using specific examples where Bash is inadequate and Python or PowerShell provide essential capabilities.
+3. The Norse *skald* composed poetry not merely for entertainment but to preserve knowledge — genealogies, laws, and heroic deeds — in memorable form. How does the skald's role as a knowledge preserver parallel the IT professional's obligation to document their automation in durable, transmissible form?
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT105 is a **practical coding assessment** (4 hours, 60% of grade) combined with a **code review and architecture document** (40% of grade).
+The IT105 final examination assesses programming proficiency across Python, Bash, and PowerShell, with emphasis on practical operational problem-solving. It consists of two components:
 
-**Practical Coding Assessment (60%):**
-Students receive a scenario (e.g., "A new web application has been deployed. Write automation to: monitor its health, rotate its logs, back up its database nightly, and alert the team on failure") and must implement a complete solution using Python, Bash, or PowerShell (or a combination). The solution is evaluated on: correctness (does it work?); robustness (does it handle errors?); readability (can another administrator understand it?); and professionalism (is it tested, documented, and version-controlled?).
+### Component A: Written Examination (60%)
 
-**Code Review and Architecture Document (40%):**
-Students submit their capstone project (or the practical assessment solution) along with: a README explaining the design; a test suite with ≥80% coverage; and an architecture document (500 words) explaining the design decisions, trade-offs, and future extensions.
+A 2.5-hour written examination with six questions, of which students must answer four.
 
-**Sample Practical Scenarios:**
+**Sample Questions:**
 
-1. **Log Anomaly Detection:** Write a Python script that tails an Apache log file in real time, detects anomalous request patterns (e.g., sudden spikes in 404 errors, repeated login failures from a single IP), and sends alerts to a Slack webhook. The script must run continuously, handle log rotation, and be resilient to temporary network failures.
+1. **Python Scripting:** Write a Python script that parses a web server access log in combined log format, extracts all unique IP addresses, performs reverse DNS lookups, and outputs a CSV with columns: IP, hostname, request_count, last_request_time. Include error handling for DNS timeouts and malformed log lines.
 
-2. **Cross-Platform User Provisioning:** Write a script (Python + Bash/PowerShell) that reads a CSV file of new employees and creates their accounts on both Linux (LDAP) and Windows (Active Directory) systems. The script must generate random passwords, enforce complexity requirements, and email credentials securely.
+2. **Bash Scripting:** Write a Bash script that takes a directory path as an argument, finds all files larger than 100MB modified in the last 30 days, compresses them individually with gzip, verifies the compressed archives (gzip -t), and logs all actions to a timestamped log file. The script must be robust: handle spaces in filenames, check preconditions, and exit with appropriate status codes.
 
-3. **Infrastructure Health Dashboard:** Write a Python script using asyncio that collects health metrics (CPU, memory, disk, network) from 50 servers concurrently, stores the results in a SQLite database, and generates a static HTML dashboard with tables and charts. The script must complete in under 30 seconds.
+3. **PowerShell Scripting:** Write a PowerShell function `Get-ServiceHealth` that accepts a list of server names via pipeline, queries the status of critical services (WinRM, DHCP, DNS) on each, and returns objects with properties: ServerName, ServiceName, Status, StartType, LastExitCode. Include comment-based help and support for `-Credential`.
 
-**Grading:**
-- A (Excellent): Correct, robust, readable, and professional code. Architecture document demonstrates deep understanding of trade-offs. Code review reveals no significant issues.
-- B (Good): Correct and robust code with minor readability or documentation gaps. Architecture document is competent but lacks depth.
-- C (Satisfactory): Code works but has significant gaps in error handling, testing, or documentation. Architecture document is superficial.
-- D (Poor): Code has functional errors or is poorly structured. Little or no testing or documentation.
-- F (Fail): Code does not work or is missing. No architecture document.
+4. **API Interaction:** A cloud provider's API requires OAuth 2.0 Client Credentials authentication. Describe the token acquisition flow, explain how your script would handle token refresh, and write the Python code (using `httpx` or `requests-oauthlib`) to authenticate and make a paginated API request.
+
+5. **SQL Querying:** Given a database schema for server inventory (servers, departments, warranty_contracts), write SQL queries to: (a) find all servers in the "Engineering" department with warranties expiring in the next 90 days, (b) calculate the total hardware value per department, and (c) identify servers that have not had a maintenance record in the last year.
+
+6. **Automation Design:** A company has 1,000 Linux servers that need quarterly security patching. Currently, a team of 4 engineers performs this manually over two weeks. Design an automated patching workflow using Ansible (or an alternative tool of your choice). Include: pre-patch validation, patch application, post-patch verification, rollback procedures, and reporting. Address the risks of automated patching and how you would mitigate them.
+
+### Component B: Live Coding Examination (40%)
+
+A 90-minute practical examination in the lab. Students are given three operational tasks (one suitable for Python, one for Bash, one for PowerShell) and must implement working solutions. Internet access is permitted for documentation lookup, but copying code from existing repositories is prohibited.
+
+**Evaluation Criteria:**
+- Correctness (script produces correct output for test cases)
+- Robustness (handles edge cases, errors, and invalid input)
+- Readability (clear variable names, comments, logical structure)
+- Efficiency (appropriate algorithms, no unnecessary resource consumption)
+- Style (follows language conventions and course style guides)
+
+---
+
+*Code is the sword of the IT professional. Wield it with precision, maintain it with discipline, and pass it to the next generation with clarity.* ᛟ
+
+— Dr. Sigrún Vérendóttir, University of Yggdrasil, 2040
