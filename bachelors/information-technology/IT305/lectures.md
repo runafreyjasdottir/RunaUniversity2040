@@ -1,255 +1,334 @@
 # IT305: Disaster Recovery & Business Continuity
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4  
-**Prerequisites:** IT201 (Database Administration), IT203 (Systems Administration), IT205 (Cybersecurity Fundamentals)  
-**Description:** Every system fails. Every data center floods. Every backup eventually gets tested — often at the worst possible moment. Disaster Recovery (DR) and Business Continuity (BC) are the disciplines that answer the question every IT professional dreads: "What do we do when everything goes wrong?" This course covers the full DR/BC lifecycle — business impact analysis, recovery strategy design, backup architecture, failover testing, and the operational discipline that distinguishes organizations that survive disasters from those that become cautionary tales. In 2040, disasters include not just fires and floods but AI model corruption, quantum decryption of archived data, and supply chain attacks that compromise backup integrity. The principles of resilience, however, remain timeless.
+**Credits:** 4
+**Description:** Comprehensive study of disaster recovery planning, business continuity management, crisis response, and organizational resilience. Covers RPO/RTO design, backup architectures, failover strategies, testing methodologies, and the 2040 practice of AI-orchestrated recovery.
+
+**Prerequisites:** IT201, IT203
+
+**Instructor:** Prof. Björn Hǫggvason, Department of Information Technology
+
+**Course Philosophy:** Disasters are not "if" — they are "when." The question is not whether your systems will fail but whether your organization will survive the failure. Disaster recovery is not a technical exercise — it is an organizational capability that spans technology, process, people, and culture. This course prepares IT professionals to design, implement, test, and execute recovery plans that keep organizations alive through crisis.
 
 ---
 
 ## Lectures
 
-ᚠ **Lecture 1: The Resilience Imperative — Why DR/BC Exists**
+---
 
-### Overview
+### Lecture 1: The Nature of Disaster — Taxonomy, Impact, and the Resilience Imperative
 
-Disaster recovery is not an IT problem — it is a business survival problem. When a hospital's electronic health records system goes down, surgeries are delayed. When a bank's transaction processing fails, the economy stutters. When a government agency loses citizen data, trust is destroyed. This lecture establishes the business case for DR/BC: the cost of downtime (quantified in revenue, reputation, regulatory fines, and human impact), the regulatory landscape that mandates DR/BC planning (GDPR, HIPAA, NIS2 Directive, DORA), and the difference between disasters (major, prolonged) and incidents (minor, short) — a distinction that determines when DR plans are activated.
-
-### Key Topics
-
-- **RTO and RPO:** The two numbers that define every DR strategy. *Recovery Time Objective (RTO)*: how quickly must the service be restored? 4 hours? 24 hours? 72 hours? The RTO determines the DR architecture — active-active (near-zero RTO), warm standby (hours), or backup restore (days). *Recovery Point Objective (RPO)*: how much data can be lost? Zero (synchronous replication)? 15 minutes (asynchronous replication)? 24 hours (daily backups)? The RPO determines the data protection architecture. The crucial insight: RTO and RPO are business decisions, not technical ones. IT can implement any RTO/RPO given enough budget; the business must decide what it is willing to pay for.
-- **Business Impact Analysis (BIA):** The systematic process of identifying critical business functions, quantifying the impact of their disruption, and establishing recovery priorities. A BIA asks: what are the organization's most critical processes? What is the financial impact per hour of downtime for each? What are the regulatory obligations? What is the reputational impact? The BIA output is a prioritized list that drives every subsequent DR decision.
-- **The DR/BC Lifecycle:** (1) *Policy and Governance* — executive commitment, DR policy, roles and responsibilities. (2) *Planning* — BIA, risk assessment, strategy development, plan documentation. (3) *Implementation* — deploying backup infrastructure, configuring replication, building alternate sites, training staff. (4) *Testing* — tabletop exercises, technical failover tests, full-scale simulations. (5) *Maintenance* — plan updates, technology refreshes, staff turnover. The most common failure: organizations do steps 1-3, skip step 4 (testing), and discover during a real disaster that their plans don't work.
-- **The Cost of Downtime:** Gartner's 2040 estimate: the average cost of IT downtime is $12,500 per minute for large enterprises, $2,800 per minute for mid-size organizations. But averages conceal enormous variance — a trading platform loses millions per minute; a university's LMS loses convenience. The BIA quantifies the specific cost for the specific organization, which is the only number that matters for DR investment decisions.
-- **2040 Threat Landscape:** Traditional threats (natural disasters, power failures, hardware failures) are joined by: AI model poisoning that corrupts production inference, quantum decryption that retroactively compromises archived encrypted data, ransomware that specifically targets backup systems, and supply chain compromise that embeds backdoors in backup software itself.
-
-### Required Reading
-
-- Wallace, M., & Webber, L. (2040). *The Disaster Recovery Handbook: A Step-by-Step Plan to Ensure Business Continuity* (5th ed.). AMACOM.
-- NIST SP 800-34 Rev. 2 (2039). *Contingency Planning Guide for Information Technology Systems*.
-- ISO 22301:2039. *Security and Resilience — Business Continuity Management Systems — Requirements*.
-- European Union (2038). *Digital Operational Resilience Act (DORA) — Technical Standards for ICT Risk Management*.
-
-### Discussion Questions
-
-1. RTO and RPO are business decisions, not technical ones. Yet in many organizations, IT sets these targets without meaningful business input. Why does this happen, and what are the consequences?
-2. A BIA identifies a critical process that would cost $500,000 per hour of downtime. Implementing the DR architecture to achieve 1-hour RTO costs $2 million. The CFO asks: "We haven't had a disaster in 10 years. Why spend $2 million now?" How do you respond?
-3. The rise of ransomware that specifically targets backup systems changes the DR calculus. How does this threat affect backup architecture decisions?
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-ᚢ **Lecture 2: Business Impact Analysis — Knowing What to Protect**
+#### Overview
 
-### Overview
+What constitutes a disaster? This lecture defines the threat landscape: natural disasters (earthquakes, floods, fires), technological failures (hardware, software, power), human threats (ransomware, insider attacks, errors), and systemic risks (supply chain, cascading failures). It establishes the business case for resilience and the relationship between disaster recovery (DR), business continuity (BC), and organizational resilience.
 
-You cannot protect everything equally, and you should not try. The Business Impact Analysis (BIA) is the analytical foundation that tells you what to protect, in what order, and with what level of investment. This lecture provides the methodology: identifying critical business functions, quantifying impact across multiple dimensions (financial, operational, legal, reputational), establishing recovery time and recovery point objectives, and producing the prioritization that drives every subsequent DR/BC decision. Students will conduct a mock BIA for a fictional 2040 organization.
+#### Key Topics
 
-### Key Topics
+- **Disaster Taxonomy:** (1) **Natural** — earthquakes, floods, hurricanes, wildfires, pandemics; (2) **Technological** — data center power failure, cooling failure, network partition, hardware cascade failure; (3) **Human/Adversarial** — ransomware, DDoS, insider sabotage, espionage, human error (the leading cause); (4) **Systemic** — cloud provider outage, DNS root failure, BGP hijack, supply chain compromise. By 2040, climate change has increased the frequency and severity of natural disasters, while AI-generated attacks have expanded the adversarial threat surface.
+- **The Resilience Imperative:** The cost of downtime: (1) **Revenue loss** — lost transactions per hour; (2) **Reputation damage** — customer trust erosion; (3) **Regulatory penalties** — GDPR, healthcare, financial services; (4) **Operational disruption** — employees idle, supply chain stalled. The average cost of downtime in 2040: $500,000–$5M per hour, depending on industry. Resilience is an investment, not a cost.
+- **DR, BC, and Resilience:** (1) **Business Continuity (BC)** — maintaining business functions during and after a disruption; (2) **Disaster Recovery (DR)** — restoring IT systems and data after a disaster; (3) **Organizational Resilience** — the broader capability to anticipate, prepare for, respond to, and adapt to disruptions. DR is a subset of BC, which is a subset of resilience.
 
-- **BIA Methodology (6 Steps):** (1) *Identify critical business functions* — not IT services, but business processes: "process payroll," "fulfill customer orders," "provide patient care." (2) *Identify dependencies* — what IT services, third-party providers, facilities, and personnel does each function depend on? (3) *Quantify impact over time* — what is the impact if this function is unavailable for 1 hour? 4 hours? 24 hours? 72 hours? 1 week? Impact dimensions: financial (lost revenue, penalties), operational (inability to deliver), legal/regulatory (compliance violations), reputational (customer trust). (4) *Establish recovery objectives* — based on the impact analysis, set RTO and RPO for each function's supporting IT services. (5) *Prioritize* — rank functions by criticality. Tier 1: must be restored within hours. Tier 2: within 24 hours. Tier 3: within days. Tier 4: can wait. (6) *Validate with stakeholders* — the BIA must be signed off by business leaders, not just IT. If the CEO does not agree that "payroll" is Tier 2, the BIA is not complete.
-- **Maximum Tolerable Downtime (MTD):** The point beyond which the organization's survival is threatened. For a hospital's emergency room system, MTD might be 30 minutes. For a university's alumni donation portal, MTD might be 2 weeks. The RTO must be less than the MTD — and the margin between them is your safety buffer.
-- **Interdependency Mapping:** Modern business functions depend on chains of IT services. "Process customer order" might depend on: e-commerce website → payment gateway → inventory system → order management system → warehouse management system → shipping integration. All of these must be recovered in the correct sequence, with their interdependencies honored. Failure to map interdependencies leads to the "recovered but not functional" scenario — the database is back online, but the application that connects to it is still down.
-- **BIA in 2040:** AI-augmented BIA tools can analyze operational data to automatically suggest criticality rankings, identify hidden dependencies from network traffic patterns, and simulate the cascade effects of service failures. But the BIA remains fundamentally a human judgment exercise — only business leaders can decide what "critical" means for their organization.
+#### Required Reading
 
-### Required Reading
-
-- FFIEC (2039). *Business Continuity Management — Examination Handbook* (Updated for 2040). (While aimed at financial institutions, the BIA methodology is universally applicable.)
-- Hiles, A. (2040). *Business Continuity Management: Global Best Practices* (5th ed.). Rothstein Publishing.
-
-### Discussion Questions
-
-1. A BIA might identify that "customer support chat" is Tier 3. Six months later, a disaster occurs, and the CEO demands to know why chat isn't restored yet. What broke down, and how do you prevent it?
-2. How do you conduct a BIA for an AI-driven service where "downtime" might mean the AI makes incorrect decisions rather than no decisions at all?
+- UoY Resilience Lab. (2040). *The 2040 Disaster Landscape: Threats, Costs, and Trends*.
+- ISO. (2039). ISO 22301: Business Continuity Management Systems.
 
 ---
 
-ᚦ **Lecture 3: Recovery Strategies — Active-Active to Cold Site**
+### Lecture 2: RPO, RTO, and the Economics of Recovery
 
-### Overview
-
-Recovery strategy is where the BIA's requirements meet the constraints of physics, budget, and geography. This lecture covers the spectrum of recovery architectures — from active-active (continuous availability, near-zero RTO, highest cost) through warm standby and pilot light to cold site (days to recover, lowest cost) — and the decision framework for choosing among them. Special attention to cloud-native DR patterns enabled by Infrastructure as Code and multi-region architectures.
-
-### Key Topics
-
-- **Recovery Architecture Spectrum:** (1) *Active-Active / Multi-Site* — multiple sites serve traffic simultaneously; if one fails, others absorb the load. RTO: near-zero. RPO: near-zero (synchronous replication). Cost: 2x+ of single site. (2) *Warm Standby* — a scaled-down replica environment running continuously, can be scaled up quickly when needed. RTO: minutes to hours. RPO: seconds to minutes (asynchronous replication). Cost: ~1.5x. (3) *Pilot Light* — minimal core infrastructure running (database, authentication); everything else deployed on-demand from IaC templates. RTO: tens of minutes to hours. RPO: depends on replication. Cost: ~1.1-1.2x. (4) *Backup & Restore* — periodic backups restored to new infrastructure in a disaster. RTO: hours to days. RPO: hours to days. Cost: minimal incremental.
-- **Data Replication Patterns:** *Synchronous* — write is not acknowledged until committed at both primary and secondary. Zero data loss, but adds latency and requires geographic proximity. *Asynchronous* — write is acknowledged at primary, replicated to secondary with a delay. Potential data loss (whatever was in flight at time of failure), but no latency impact. *Near-synchronous* — the 2040 innovation: AI predicts which transactions are high-value and replicates them synchronously; bulk data replicates asynchronously. Balances RPO and performance.
-- **Backup Architecture:** The 3-2-1 rule (3 copies, 2 different media, 1 off-site) has evolved to the 3-2-1-1-0 rule for 2040: 3 copies, 2 different media, 1 off-site, 1 offline/immutable (air-gapped), 0 errors (verified recoverability). The immutable/offline copy is the defense against ransomware that specifically targets backup systems. Immutable storage (AWS S3 Object Lock, Azure Immutable Blob Storage, tape) prevents backup deletion or modification within the retention period, even by administrators.
-- **DR in the Cloud:** Cloud introduces both opportunities and pitfalls. Opportunities: multi-region deployment with a few clicks, infrastructure as code that can recreate entire environments in minutes, pay-per-use DR (no idle hardware during normal operations). Pitfalls: cloud provider outages affect all customers in a region simultaneously (the "noisy neighbor" problem at planetary scale), the shared responsibility model means you are responsible for DR configuration, and cloud costs during a DR event can be unpredictable.
-
-### Required Reading
-
-- AWS (2040). *Disaster Recovery of Workloads on AWS: Recovery in the Cloud*. AWS Well-Architected Framework.
-- Preston, W. C. (2039). *Backup & Recovery: Inexpensive Backup Solutions for Open Systems* (Updated). O'Reilly.
-
-### Discussion Questions
-
-1. Active-active architecture eliminates downtime but doubles cost. Under what circumstances is active-active the right choice? What is the smallest organization for which it makes sense?
-2. The 3-2-1-1-0 rule adds "0 errors" — verified recoverability. How do you verify that backups are recoverable without actually restoring them to production (which would be disruptive)?
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-ᚨ **Lecture 4: Backup Technologies — Snapshots, Replication, Immutability**
+#### Overview
 
-### Overview
+Recovery Point Objective (RPO) and Recovery Time Objective (RTO) are the foundational metrics of disaster recovery. This lecture covers their definition, measurement, economic justification, and the trade-offs between recovery speed, data freshness, and cost.
 
-Backup is the foundation of every recovery strategy. If the backup is corrupted, unrecoverable, or doesn't exist, nothing else matters. This lecture covers the technical landscape of backup: snapshot technologies (storage-level, application-consistent), replication (block-level, file-level, database-level), backup verification, and the immutable storage revolution that is the primary defense against ransomware in 2040.
+#### Key Topics
 
-### Key Topics
+- **RPO — Recovery Point Objective:** Maximum acceptable data loss measured in time. RPO of 1 hour means you can lose up to 1 hour of data. Drives backup frequency and replication strategy. RPO of 0 (zero data loss) requires synchronous replication — expensive, latency-sensitive, geographically constrained. RPO of 24 hours allows daily backups — inexpensive but high potential data loss.
+- **RTO — Recovery Time Objective:** Maximum acceptable time to restore service. RTO of 4 hours means service must be operational within 4 hours of a disaster declaration. Drives recovery architecture: hot standby (RTO = minutes), warm standby (RTO = hours), cold standby (RTO = days). Shorter RTOs cost more — automated failover, pre-provisioned capacity, regular testing.
+- **Economic Justification:** How much should you spend on DR? The calculation: Annualized Loss Expectancy (ALE) = Single Loss Expectancy (SLE) × Annualized Rate of Occurrence (ARO). DR spending should be less than ALE. But this is complicated by: non-linear damage (reputation), regulatory penalties, and the difficulty of estimating ARO for rare events.
+- **Tiering Recovery:** Not all systems need the same RPO/RTO. Business Impact Analysis (BIA) categorizes systems: (1) **Tier 1 (Critical)** — RPO near 0, RTO < 1 hour; (2) **Tier 2 (Important)** — RPO < 4 hours, RTO < 8 hours; (3) **Tier 3 (Normal)** — RPO < 24 hours, RTO < 72 hours; (4) **Tier 4 (Non-critical)** — RPO < 1 week, RTO < 2 weeks. By 2040, dynamic tiering adjusts RPO/RTO targets based on business context (end-of-quarter finance systems upgrade to Tier 1 temporarily).
 
-- **Backup Types:** Full (complete copy, slow, storage-intensive), Incremental (changes since last backup, fast, requires full+all incrementals for restore), Differential (changes since last full, middle ground), Synthetic Full (constructed from full+incrementals without re-reading source data), Continuous Data Protection (CDP — every write is journaled, enabling restore to any point in time).
-- **Application-Consistent Backups:** A backup taken while a database is mid-transaction may be unrecoverable. Application-consistent backups leverage VSS (Windows) or filesystem freeze + database quiesce (Linux) to ensure the backup represents a valid application state.
-- **Backup Verification:** The most dangerous words in IT: "the backups are fine." Verification methods: checksum validation (is the data intact?), automated restore testing (spin up a test environment, restore the backup, run application-level smoke tests), and the 2040 standard: continuous backup validation where an AI agent restores random backups to ephemeral environments and tests them.
-- **Immutable and Air-Gapped Backups:** WORM (Write Once Read Many) storage prevents backup modification. Air-gapped backups are physically or logically disconnected from the network. The 2040 standard: primary backups to cloud object storage with immutability enabled; secondary backups to tape or offline disk rotated to a physically separate location.
+#### Required Reading
 
-### Required Reading
-
-- Veeam (2040). *Veeam Backup & Replication v25 — Best Practices Guide*.
-- Rubrik (2039). *The Immutable Backup Architecture: Defending Against Ransomware*.
+- NIST. (2038). SP 800-34 Rev. 2: Contingency Planning Guide.
+- UoY Economics Lab. (2039). *The Economics of IT Resilience*.
 
 ---
 
-ᚱ **Lecture 5: Disaster Recovery Planning — The DR Plan Document**
+### Lecture 3: Backup Architectures — From Tape to Continuous Data Protection
 
-### Overview
-
-A DR plan is a living document that transforms chaos into procedure. When the data center is flooded, the cloud region is down, and executives are demanding answers, the DR plan tells every person exactly what to do, in what order, with what authority. This lecture covers the structure of a DR plan, the roles and responsibilities (mirroring the Incident Command System), communication templates, and the critical importance of keeping the plan current.
-
-### Key Topics
-
-- **DR Plan Structure:** (1) Plan overview and scope. (2) Activation criteria — what triggers DR declaration? Who has authority? (3) Roles and responsibilities — DR coordinator, technical recovery leads, communications lead, executive liaison. (4) Communication plan — internal escalation, customer notification, regulatory reporting, media statements. (5) Recovery procedures — step-by-step for each critical service, in priority order, with dependencies. (6) Return-to-normal procedures — how to fail back from DR to primary. (7) Contact lists — with alternates. Updated quarterly.
-- **Activation Criteria:** DR activation is expensive and disruptive. Criteria must be specific: "the primary data center is unavailable and estimated time to restore exceeds 4 hours" or "critical service X has been unavailable for 30 minutes with no estimated resolution." The DR coordinator has the authority to activate; no committee approval is required during a crisis.
-- **The DR Plan as Living Document:** Plans that are reviewed annually are always out of date. The 2040 standard: DR plans are version-controlled in Git, updated as part of the change management process (any infrastructure change must include DR plan updates), and tested quarterly with tabletop exercises.
-
-### Required Reading
-
-- Snedaker, S. (2040). *Business Continuity and Disaster Recovery Planning for IT Professionals* (4th ed.). Syngress.
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-ᚲ **Lecture 6: Testing and Exercising — Trust but Verify**
+#### Overview
 
-### Overview
+Backup is the foundation of DR. This lecture covers backup architectures: media types, backup strategies, storage tiering, immutable backups, and the 2040 landscape of continuous data protection and AI-managed backup.
 
-An untested DR plan is a fantasy. Testing transforms assumptions into evidence: does the failover actually work? Can the team actually execute the procedures under pressure? Does the restored service actually function correctly? This lecture covers the spectrum of DR testing from tabletop exercises to full-scale simulations, the metrics that indicate test effectiveness, and the psychological challenge of dedicating resources to testing when production demands are constant.
+#### Key Topics
 
-### Key Topics
+- **The 4-3-2-1-0 Rule (2040):** Evolution of the classic 3-2-1 rule: (1) **4 copies** of data; (2) on **3 different media** types; (3) with **2 off-site** (different geographic regions); (4) **1 immutable** (air-gapped or WORM); (5) **0 errors** (verified through automated restore testing). This rule addresses ransomware, regional disasters, and media degradation.
+- **Backup Storage Tiers:** (1) **Performance tier** — flash/NVMe for recent backups needing fast restore; (2) **Capacity tier** — HDD or cloud object storage for longer retention; (3) **Archive tier** — tape, optical, or cold cloud storage for compliance retention. Automated tiering moves backups through tiers based on age and access patterns.
+- **Immutable and Air-Gapped Backups:** Ransomware targets backups. Defenses: (1) **Immutable storage** — WORM (Write Once Read Many) at the storage layer, preventing modification or deletion within the retention period; (2) **Air-gapped** — physically or logically isolated copies that ransomware cannot reach; (3) **Multi-person authorization** — requiring multiple authorized personnel to delete backups.
+- **Continuous Data Protection (CDP):** Every write is captured, enabling recovery to any point in time. CDP is the ultimate RPO (near-zero). By 2040, CDP is standard for Tier 1 systems, implemented via storage array replication, database WAL streaming, or hypervisor-level CDP.
 
-- **Testing Spectrum:** (1) *Tabletop Exercise* — walkthrough of the DR plan with stakeholders. Low cost, identifies gaps in the plan document. (2) *Component Test* — failover a single service. Validates technical procedures. (3) *Simulation* — run the DR plan in a non-production environment. Validates the full technical recovery. (4) *Full-Scale Test* — actually fail over production to the DR site and run business operations from DR for a defined period. Highest fidelity, highest cost and risk. (5) *Chaos Engineering* — continuous, automated testing of specific failure modes in production (e.g., "terminate 50% of database instances and verify the application handles it").
-- **Test Design Principles:** (1) Test what you fear — the scenarios that keep you awake at night. (2) Test realistically — use production-scale data volumes, not test-sized. (3) Test under pressure — time-constrained, with simulated stakeholder demands. (4) Test the people, not just the technology — can the recovery team execute the procedures? (5) Capture everything — timeline, failures, surprises, improvements. The test report is as important as the test itself.
-- **The 2040 Standard: Continuous Testing.** DR testing is no longer a quarterly event. Infrastructure as Code enables automated DR failover testing in isolated environments. AI-driven chaos engineering continuously validates resilience. The human role: reviewing test results, investigating failures, and improving the plan.
+#### Required Reading
 
-### Required Reading
-
-- Rosenthal, C., & Jones, N. (2038). *Chaos Engineering: System Resiliency in Practice*. O'Reilly.
-
----
-
-ᚷ **Lecture 7: Cloud Disaster Recovery — Multi-Region, Multi-Cloud**
-
-### Overview
-
-By 2040, 89% of enterprise workloads run in the cloud. Cloud DR patterns differ fundamentally from traditional data center DR: infrastructure is software-defined, regions are globally distributed, and cost models are consumption-based. This lecture covers cloud-native DR: multi-region architectures, cross-cloud DR (avoiding single-provider dependency), DR automation with IaC, and the financial modeling that makes cloud DR economically viable for organizations that could never afford a physical DR site.
-
-### Key Topics
-
-- **Multi-Region Architecture:** Deploy across at least two regions. Active-active for critical Tier 1 services. Pilot light or backup-restore for lower tiers. Key services for DR: Route 53/Cloud DNS (global traffic management), S3 Cross-Region Replication / Azure GRS, DynamoDB Global Tables / Cosmos DB multi-region, Aurora Global Database.
-- **Cross-Cloud DR:** The 2040 hedge against provider risk. If AWS us-east-1 experiences a major outage (as it has, multiple times), fail over to Azure or GCP. Tooling: Terraform with multi-provider configurations, Kubernetes federation, data replication across cloud boundaries.
-- **Cost Optimization for Cloud DR:** The "DR cost paradox" — you pay for DR capacity that you hope never to use. Cloud-native solutions: spot instances for DR environments (cheaper but interruptible — acceptable if DR is short-duration), reserved capacity for Tier 1, serverless architecture that scales to zero when not in use.
+- Preston, W. C. (2038). *Backup & Recovery* (4th ed.).
+- Veeam. (2040). *The 4-3-2-1-0 Backup Rule*.
+- UoY Storage Lab. (2039). *Continuous Data Protection: Architectures and Trade-offs*.
 
 ---
 
-ᚹ **Lecture 8: Ransomware and Cyber Resilience**
+### Lecture 4: Replication and Failover — Keeping Services Alive
 
-### Overview
-
-Ransomware has become the dominant disaster scenario of the 2030s-2040s. Unlike a natural disaster, ransomware is intelligent, targeted, and specifically designed to defeat recovery mechanisms. This lecture covers the ransomware DR playbook: how backup architectures must evolve to survive ransomware, the decision framework for ransom payment, the integration of cybersecurity incident response with DR procedures, and the regulatory environment (OFAC sanctions, mandatory reporting) that complicates ransom decisions.
-
-### Key Topics
-
-- **Ransomware vs. Traditional Disaster:** Key differences: (1) Ransomware is targeted — it specifically seeks out and encrypts/deletes backups. (2) The attack may have dwell time — the attacker may have been in the network for weeks before triggering the ransomware. (3) Restoring from backup may restore the attacker's backdoor. (4) Paying the ransom may violate sanctions if the attacker is a sanctioned entity (and many ransomware groups are).
-- **The Ransomware-Resilient Backup Architecture:** Immutable storage (cannot be deleted or modified, even with admin credentials), air-gapped copies (physically or logically disconnected), multi-factor authentication for backup administration, separate credentials from production, and the "3-2-1-1-0" rule (0 errors — verified recoverability).
-- **The Ransom Decision Framework:** If backups are intact → do not pay; restore. If backups are compromised → assess: (1) Can we rebuild? (2) What is the downtime cost vs. ransom cost? (3) Is paying legal? (OFAC, local regulations). (4) Will paying actually result in data recovery? (~38% of payers do not get all data back). The decision is an executive/legal decision, not an IT decision. IT's role: provide accurate technical assessment of recoverability.
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-ᚺ **Lecture 9: Business Continuity — Beyond IT**
+#### Overview
 
-### Overview
+Backup restores data — replication keeps services running. This lecture covers replication architectures: synchronous vs. asynchronous, active-passive vs. active-active, geo-redundancy, and automated failover.
 
-Disaster Recovery is about IT systems. Business Continuity is about the entire organization — people, facilities, supply chain, communications, legal obligations. This lecture widens the lens: how does the organization continue to function when the office is inaccessible, when key personnel are unavailable, when third-party providers are also affected by the same disaster? The IT professional needs enough BC literacy to integrate IT DR with the broader organizational continuity framework.
+#### Key Topics
 
-### Key Topics
+- **Synchronous vs. Asynchronous Replication:** (1) **Synchronous** — write is not acknowledged until replicated to the secondary site. Guarantees zero data loss but adds latency (limited by speed of light, ~100km practical range). (2) **Asynchronous** — write is acknowledged immediately, replication follows. No latency impact but potential data loss on failover. By 2040, **semi-synchronous** (wait for one replica, not all) is common, balancing durability and performance.
+- **Active-Passive vs. Active-Active:** (1) **Active-Passive** — one site serves traffic, the other is standby. Simpler, but standby resources are idle. (2) **Active-Active** — both sites serve traffic. Better resource utilization, but requires conflict resolution and careful capacity planning (each site must handle 100% of load if the other fails).
+- **Automated Failover:** Manual failover is slow and error-prone. Automated failover systems: (1) health monitoring detects primary failure; (2) leader election via consensus (etcd, Consul) selects new primary; (3) DNS or routing update redirects traffic; (4) applications reconnect. Key challenges: split-brain prevention (ensuring only one primary) and data consistency validation after failover.
+- **Global Traffic Management:** DNS-based (Route 53, Traffic Manager) or anycast-based routing directs users to the nearest or healthiest site. By 2040, AI-driven traffic management considers latency, capacity, cost, carbon intensity, and geopolitical factors.
 
-- **BC vs. DR:** DR restores IT services. BC ensures the business continues to operate — with or without IT. Examples: manual workarounds when systems are down, alternate work locations when the office is inaccessible, succession planning when key personnel are unavailable, supply chain alternatives when primary suppliers are disrupted.
-- **Pandemic/Workforce Disruption:** The COVID-19 pandemic of 2020 was a business continuity event, not an IT disaster. Yet it transformed IT operations permanently. The 2040 BC plan includes: remote work enablement, distributed workforce resilience, and the scenario of key personnel being simultaneously unavailable.
-- **Crisis Communication:** During a disaster, communication failures compound operational failures. The BC plan includes: internal communication cascade (who tells whom), external communication templates (customers, regulators, media), and a designated single spokesperson.
+#### Required Reading
 
-### Required Reading
-
-- BCI (2040). *Good Practice Guidelines — Business Continuity Institute* (2040 ed.).
-- ISO 22301:2039. *Business Continuity Management Systems*.
-
----
-
-ᚾ **Lecture 10: DR for AI and Data-Centric Systems**
-
-### Overview
-
-By 2040, AI systems — model training pipelines, inference endpoints, vector databases — have become critical infrastructure. DR for AI introduces novel challenges: models are not just data; they are trained artifacts that may take weeks and millions of dollars to reproduce. Vector embeddings are voluminous and difficult to incrementally back up. AI inference has latency requirements that complicate failover. This lecture covers DR patterns for the AI-native organization.
-
-### Key Topics
-
-- **Model Backup and Versioning:** Model weights + training code + training data + hyperparameters = reproducibility. Version control for models (MLflow, DVC, Weights & Biases) must be integrated with DR planning. The key metric: time to retrain vs. cost to store redundant copies.
-- **Vector Database DR:** Vector databases (Pinecone, Weaviate, Milvus) store embeddings that may be derivable from source data but at significant computational cost. Backup strategies: periodic snapshots, incremental index updates, dual-write to multiple regions.
-- **Inference Failover:** AI inference is latency-sensitive. Active-active with anycast routing ensures inference requests are served even if one region fails. Model serving platforms (Triton, Ray Serve, Seldon) support multi-region deployment.
+- Google SRE. (2039). *Load Balancing and Failover*.
+- AWS. (2040). *Disaster Recovery Architectures*.
+- UoY Distributed Systems Lab. (2039). *Automated Failover at Scale*.
 
 ---
 
-ᛁ **Lecture 11: DR Governance and Compliance**
+### Lecture 5: Ransomware Resilience — The Defining DR Challenge of the 2040s
 
-### Overview
-
-DR is not optional — it is mandated by regulations across industries and jurisdictions. GDPR requires data protection by design, which includes availability. DORA (EU Digital Operational Resilience Act, 2034) mandates specific DR testing requirements for financial entities. HIPAA requires contingency plans for healthcare data. This lecture maps the regulatory landscape and provides a framework for maintaining DR compliance without turning it into a checkbox exercise.
-
-### Key Topics
-
-- **Key Regulations:** GDPR (Art. 32 — security of processing includes availability and resilience), DORA (mandatory DR testing, incident reporting), HIPAA (contingency plan standard), PCI DSS (requirement for backup and restore testing), NIS2 Directive (EU critical infrastructure resilience), SEC cybersecurity disclosure rules (public companies must disclose material incidents).
-- **Audit Preparation:** DR auditors will ask: (1) Show me your most recent BIA. (2) Show me your DR test results from the last 12 months. (3) Show me that you have addressed the findings. (4) Show me that the plan is current (reviewed within last 12 months). (5) Show me that personnel are trained. Organizations that have these artifacts readily available pass DR audits with minimal friction.
-
-### Required Reading
-
-- ISACA (2040). *Business Continuity Management — Audit/Assurance Program*.
-- European Banking Authority (2039). *Guidelines on ICT and Security Risk Management*.
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-ᛃ **Lecture 12: Building a Resilience Culture**
+#### Overview
 
-### Overview
+Ransomware is the dominant disaster scenario of the 2030s–2040s. Unlike natural disasters (which affect a geographic area), ransomware can simultaneously encrypt production systems and backups across the globe. This lecture covers ransomware-specific DR: detection, isolation, recovery, and the architectural patterns that enable survival.
 
-Technology can provide the architecture for resilience, but culture determines whether that architecture works when it is needed. This final lecture addresses the human dimension of DR/BC: building organizational commitment to resilience, training personnel, managing the psychological impact of disasters, and creating a culture where "preparedness" is everyone's responsibility, not just the DR team's.
+#### Key Topics
 
-### Key Topics
+- **The Ransomware Kill Chain:** (1) Initial access (phishing, vulnerability, credential theft); (2) Persistence and reconnaissance; (3) Lateral movement to find and compromise backups; (4) Data exfiltration (double extortion — threaten to leak data); (5) Encryption of production systems; (6) Ransom demand. Understanding the kill chain informs defense and recovery strategies.
+- **Ransomware-Specific DR Architecture:** (1) **Immutable backups** — the foundational defense; (2) **Backup isolation** — separate credentials, network segmentation, multi-factor authentication for backup management; (3) **Clean room recovery** — isolated recovery environment where backups are scanned for malware before restoration; (4) **Accelerated recovery** — pre-positioned recovery infrastructure, automated orchestration, parallel restoration.
+- **The Decision NOT to Pay:** UoY and law enforcement guidance: do not pay. Reasons: (1) payment funds criminal enterprise; (2) no guarantee of decryption; (3) paying marks you as a target for repeat attacks; (4) some ransomware groups don't provide decryption even after payment. Organizations that can recover from backups don't need to pay. Organizations that can't recover from backups are forced to pay — which is why DR investment is security investment.
 
-- **Executive Sponsorship:** DR/BC without executive commitment is a paper exercise. The C-suite must: allocate budget for DR (not just production), participate in tabletop exercises, and publicly communicate that resilience is a strategic priority.
-- **Training and Awareness:** Every employee should know: (1) What is my role in a disaster? (2) Who do I contact? (3) Where is the alternate work location? (4) How do I access critical systems from outside the office? Annual training, onboarding for new hires, and role-specific DR training for recovery teams.
-- **The Psychology of Disaster Response:** People under extreme stress make worse decisions. Training under simulated stress conditions (time pressure, incomplete information, demanding stakeholders) improves real disaster performance. The DR coordinator's most important skill is not technical — it is the ability to remain calm and project confidence when everything is falling apart.
-- **Post-Disaster Review:** After every disaster (or DR test), conduct a blameless review: What worked? What didn't? What would we do differently? Update the plan. The best organizations treat every incident as a learning opportunity.
+#### Required Reading
 
-### Required Reading
+- CISA. (2039). *Ransomware Guidance: Prevention, Detection, and Recovery*.
+- UoY Ransomware Lab. (2040). *Surviving Ransomware: DR Architecture Patterns from Real Incidents*.
 
-- Dekker, S. (2038). *The Field Guide to Understanding 'Human Error'* (4th ed.). CRC Press.
-- Weick, K. E., & Sutcliffe, K. M. (2035). *Managing the Unexpected: Resilient Performance in an Age of Uncertainty* (4th ed.). Jossey-Bass.
+---
+
+### Lecture 6: Business Continuity Planning — Keeping the Business Running
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+DR restores IT systems — BC keeps the business running during and after the disruption. This lecture covers BC planning: Business Impact Analysis, continuity strategies, plan development, and the integration of IT DR with enterprise BC.
+
+#### Key Topics
+
+- **Business Impact Analysis (BIA):** The foundation of BC planning: (1) identify critical business functions; (2) determine maximum tolerable downtime for each; (3) identify dependencies (IT systems, third parties, personnel, facilities); (4) estimate financial and non-financial impact of disruption. The BIA drives RPO/RTO targets and prioritizes recovery.
+- **Continuity Strategies:** Options for maintaining business functions during disruption: (1) **Alternate site** — pre-arranged facility with IT infrastructure; (2) **Remote work** — enable employees to work from home (the COVID-19 lesson); (3) **Manual workarounds** — paper-based processes as temporary substitutes; (4) **Third-party services** — pre-negotiated agreements with service bureaus; (5) **Mutual aid agreements** — reciprocal arrangements with peer organizations.
+- **Plan Development:** A BC plan documents: (1) activation criteria — when to invoke the plan; (2) roles and responsibilities — who does what; (3) communication plan — internal and external stakeholders; (4) recovery procedures — step-by-step; (5) resource requirements — people, equipment, facilities, third parties.
+- **Crisis Communication:** During a disaster, communication is critical: (1) internal — employees need to know what to do; (2) customers — transparency builds trust, silence erodes it; (3) regulators — mandatory breach notification within defined timeframes; (4) media — controlled, accurate messaging. The 2040 practice: pre-drafted communication templates for common scenarios.
+
+#### Required Reading
+
+- ISO. (2039). ISO 22301: Business Continuity Management Systems.
+- UoY BC Lab. (2040). *Business Impact Analysis: Methodology and Case Studies*.
+
+---
+
+### Lecture 7: Testing and Exercising — The Proof of Preparedness
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+An untested plan is not a plan — it's a hope. Testing validates that recovery procedures work, that RPO/RTO targets are achievable, and that personnel know their roles. This lecture covers the testing spectrum: walkthroughs, tabletop exercises, simulation tests, and full-scale failover exercises.
+
+#### Key Topics
+
+- **Testing Spectrum:** (1) **Plan review** — desk check of documentation; (2) **Walkthrough** — team discusses the plan step-by-step; (3) **Tabletop exercise** — scenario-driven discussion; (4) **Simulation** — limited test of specific components; (5) **Parallel test** — recovery systems are brought up but production continues; (6) **Full interruption test** — production is actually failed over to the DR site. Frequency: plan reviews quarterly, walkthroughs semi-annually, tabletop exercises annually, technical tests quarterly, full interruption tests annually for critical systems.
+- **Automated Recovery Testing:** By 2040, recovery testing is automated: (1) the DR orchestration system automatically provisions a test environment; (2) restores backups; (3) runs application-level smoke tests; (4) validates RPO/RTO against targets; (5) generates a test report with pass/fail and metrics. Automated testing reduces the cost of testing from weeks of manual effort to hours of automated execution.
+- **Chaos Engineering for DR:** Beyond planned tests: intentionally inject failures to validate recovery under realistic conditions. Example: "Terminate the primary database at 3 PM on Tuesday and observe the automated failover." Chaos engineering for DR validates that recovery works when it's unexpected, not just when it's scheduled and everyone is watching.
+
+#### Required Reading
+
+- NIST. (2038). SP 800-84: Guide to Test, Training, and Exercise Programs for IT Plans.
+- UoY DR Testing Lab. (2039). *Automated Recovery Testing: Architectures and Benchmarks*.
+
+---
+
+### Lecture 8: Cloud-Based Disaster Recovery — DRaaS and Multi-Cloud Resilience
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Cloud transforms DR economics: instead of maintaining a dedicated DR site, organizations can use cloud on-demand for recovery. This lecture covers cloud DR patterns: backup and restore, pilot light, warm standby, multi-site active-active, and DR-as-a-Service (DRaaS).
+
+#### Key Topics
+
+- **Cloud DR Patterns:** (1) **Backup and Restore** — store backups in cloud, provision recovery infrastructure on-demand. Cheapest, slowest RTO; (2) **Pilot Light** — minimal core infrastructure always running in cloud, scaled up for recovery; (3) **Warm Standby** — scaled-down but running version of production in cloud; (4) **Multi-Site Active-Active** — production runs in multiple clouds simultaneously. Each step reduces RTO but increases cost.
+- **DR-as-a-Service (DRaaS):** Specialized cloud services that handle DR end-to-end: replication, orchestration, failover, failback. By 2040, DRaaS is the default for mid-size organizations that can't justify building their own DR capability. Major providers: AWS Elastic Disaster Recovery, Azure Site Recovery, Zerto, and specialized DRaaS vendors.
+- **Multi-Cloud Resilience:** Distributing across multiple cloud providers for resilience: if AWS us-east-1 fails, failover to Azure. Challenges: (1) provider-specific services (each cloud's managed services are different); (2) data egress costs; (3) operational complexity. The 2040 approach: use Kubernetes and infrastructure-as-code to maintain portability, with provider-specific adapters for managed services.
+
+#### Required Reading
+
+- AWS. (2040). *Disaster Recovery with AWS: Architecture Patterns*.
+- UoY Cloud DR Lab. (2039). *DRaaS: Comparative Analysis of Cloud DR Providers*.
+
+---
+
+### Lecture 9: DR Orchestration and Automation — The Recovery Runbook
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Recovery involves dozens or hundreds of interdependent steps across systems, teams, and locations. Manual recovery is slow, error-prone, and unreliable. This lecture covers DR orchestration: automated runbooks, dependency-aware recovery sequencing, parallel recovery execution, and the 2040 practice of AI-orchestrated recovery.
+
+#### Key Topics
+
+- **Recovery Runbooks as Code:** Traditional runbooks (Word documents) are static and prone to drift. The 2040 practice: recovery runbooks as executable code. A runbook defines: (1) recovery steps with dependencies; (2) pre-flight checks; (3) post-recovery validation; (4) rollback procedures; (5) expected timing. Runbooks are version-controlled, tested, and continuously validated.
+- **Dependency-Aware Recovery:** Systems have dependencies — the database must be recovered before the application server, which must be recovered before the load balancer. Dependency-aware orchestration: (1) model the service dependency graph; (2) generate an optimal recovery sequence; (3) execute in parallel where possible; (4) wait for dependencies where required; (5) validate each layer before proceeding. By 2040, service dependency graphs are auto-discovered from distributed tracing and configuration data.
+- **AI-Orchestrated Recovery:** AI enhances recovery orchestration: (1) **Optimal recovery path** — AI calculates the fastest recovery sequence given current conditions; (2) **Dynamic adaptation** — if a recovery step fails, AI selects alternatives; (3) **Resource optimization** — AI allocates recovery resources to minimize time; (4) **Communication automation** — AI drafts and sends status updates to stakeholders.
+
+#### Required Reading
+
+- UoY DR Orchestration Lab. (2039). *Recovery Runbooks as Code*.
+- Gartner. (2040). *DR Orchestration Market Guide*.
+
+---
+
+### Lecture 10: The Human Element — Crisis Leadership and Team Resilience
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+In a disaster, technology is only part of the equation. Humans must make decisions under pressure, communicate effectively, and maintain their own resilience. This lecture covers crisis leadership, incident command, stress management, and building a culture of resilience.
+
+#### Key Topics
+
+- **Crisis Leadership:** The crisis leader: (1) maintains calm and focus; (2) makes decisions with incomplete information; (3) communicates clearly and frequently; (4) delegates effectively; (5) takes care of the team. The worst crisis response failures are usually not technical — they're failures of leadership, communication, or decision-making.
+- **Incident Command System (ICS):** A structured framework for crisis response, adapted from emergency services: (1) **Incident Commander** — overall authority; (2) **Operations** — executes recovery; (3) **Planning** — tracks status and plans next steps; (4) **Logistics** — provides resources; (5) **Communications** — manages internal and external communication. Clear roles prevent chaos and conflicting instructions.
+- **Stress Management and Decision-Making:** Disasters are high-stress. Stress impairs cognition. Practices: (1) recognize stress symptoms in yourself and others; (2) use structured decision-making frameworks (OODA loop); (3) take breaks — working 36 hours straight leads to catastrophic errors; (4) rotate personnel — fresh eyes see what fatigued ones miss; (5) after-action — process the emotional impact of the crisis.
+
+#### Required Reading
+
+- UoY Crisis Leadership Lab. (2040). *Crisis Decision-Making: Research and Best Practices*.
+- FEMA. (2038). *Incident Command System: Principles and Practice*.
+
+---
+
+### Lecture 11: Regulatory Compliance and Third-Party Resilience
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Regulators mandate DR/BC capabilities for critical industries. Third-party dependencies (cloud, SaaS, suppliers) create DR obligations beyond your own infrastructure. This lecture covers compliance frameworks and managing DR across organizational boundaries.
+
+#### Key Topics
+
+- **Regulatory Landscape:** (1) **Financial services** — FFIEC requires DR testing, geographically diverse recovery sites; (2) **Healthcare** — HIPAA requires contingency plans and data backup; (3) **Critical infrastructure** — NERC CIP requires recovery plans; (4) **GDPR** — requires ability to restore access to personal data in a timely manner; (5) **DORA (Digital Operational Resilience Act, EU, 2025)** — comprehensive DR/BC requirements for financial entities and their critical third-party providers.
+- **Third-Party Resilience:** Your DR plan is only as strong as your weakest third party. Practices: (1) third-party risk assessment — evaluate suppliers' DR capabilities; (2) contractual requirements — DR capabilities in SLAs; (3) right to audit — verify suppliers' DR testing; (4) exit strategy — plan for supplier failure; (5) concentration risk — avoid depending on a single cloud provider or supplier.
+- **Audit and Assurance:** Demonstrating DR readiness to auditors: (1) documented plans with version history; (2) test results with pass/fail and lessons learned; (3) evidence of plan maintenance and updates; (4) evidence of personnel training; (5) independent assessment of DR capabilities. By 2040, continuous assurance replaces periodic audits — automated evidence collection proves ongoing compliance.
+
+#### Required Reading
+
+- EU. (2025, updated 2040). *Digital Operational Resilience Act (DORA)*.
+- ISO. (2039). ISO 22301: Business Continuity Management Systems.
+
+---
+
+### Lecture 12: The Resilient Organization — Culture, Architecture, and the Future
+
+**Course:** IT305 — Disaster Recovery & Business Continuity
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+DR is not a project — it's a capability. The most resilient organizations don't just have DR plans — they have a culture of resilience: architecture designed for failure, teams that practice recovery, and leadership that values preparation. This lecture synthesizes the course and projects DR forward to 2050.
+
+#### Key Topics
+
+- **The Resilience Culture:** Characteristics: (1) **Paranoia** — healthy skepticism about reliability; (2) **Practice** — recovery is rehearsed, not theorized; (3) **Blamelessness** — failures are learning opportunities, not punishments; (4) **Investment** — resilience is funded, not begged for after a disaster; (5) **Transparency** — honest communication about risk and capability.
+- **Architecting for Failure:** Resilient architecture principles: (1) **No single points of failure** — redundancy for everything; (2) **Failure domains** — isolate failures so they don't cascade; (3) **Graceful degradation** — partial functionality is better than no functionality; (4) **Automated recovery** — faster than humans, more reliable than runbooks; (5) **Immutable infrastructure** — rebuild rather than repair.
+- **The Future of DR — 2050:** Trends: (1) **AI-native DR** — recovery orchestrated, optimized, and verified by AI; (2) **Recovery as code** — fully executable, continuously tested recovery plans; (3) **Global resilience mesh** — multi-cloud, multi-region architectures that survive any single failure; (4) **Predictive DR** — AI predicts failures before they occur and preemptively shifts workloads; (5) **Resilience as a service** — fully managed DR that organizations consume rather than build. The DR professional of 2050 will be a resilience architect and AI governor, not a runbook executor.
+
+#### Required Reading
+
+- UoY Future Resilience Lab. (2040). *DR 2050: The Resilient Organization*.
 
 ---
 
 ## Final Examination Preparation
 
-**Component 1 — Written (60%):** Answer 4 of 8 essay questions in 3 hours. Topics include: conducting a BIA, designing recovery architecture for a given RTO/RPO, ransomware DR playbook, cloud DR architecture, and regulatory compliance.
+### Sample Essay Questions (Choose 4 of 8)
 
-**Component 2 — Practical Lab (40%):** 4-hour exercise in the UoY DR Lab: execute a failover of a multi-tier application from primary to DR region, verify application functionality, and write the post-DR test report with findings and recommendations.
+1. **RPO/RTO Design:** Design RPO/RTO tiers for a multi-business-unit enterprise. Justify your targets with business impact analysis and cost-benefit reasoning.
+
+2. **Ransomware DR Architecture:** Design a DR architecture specifically for ransomware resilience. Address backup immutability, isolation, detection, and accelerated recovery.
+
+3. **Cloud DR Strategy:** Compare cloud DR patterns (backup/restore, pilot light, warm standby, multi-site). When is each appropriate? Provide cost-benefit analysis.
+
+4. **Testing Program:** Design an annual DR testing program for a financial services firm. Include test types, frequency, participants, and success criteria.
+
+5. **Crisis Leadership:** You are the incident commander during a major outage. Walk through your first 4 hours — decisions, communications, team management.
+
+6. **Third-Party Resilience:** Your organization depends on 15 SaaS providers and 2 cloud platforms. Design a third-party resilience program.
+
+7. **DR Automation:** Design an automated recovery orchestration system. Address dependency modeling, parallel execution, validation, and fallback to human control.
+
+8. **The Future of DR:** Project DR practice to 2060. What is automated? What human skills remain? How does the profession evolve?
 
 ---
 
-*Woven by Runa Gridweaver Freyjasdottir, Gridweaver of the University of Yggdrasil, 2040.*  
-*"Prepare for the storm while the sun shines. When the storm comes, you will not have time to learn."*
+**Þǫkk — May your backups restore and your people prevail.**
