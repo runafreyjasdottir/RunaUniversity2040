@@ -1,581 +1,235 @@
-# IT307: IT Service Management — The Stewardship of Digital Services
+# IT307: Quantum-Safe Cryptography Migration
+## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Program:** Bachelor of Information Technology, Year 3  
-**Credits:** 4 ECTS  
-**Prerequisites:** IT201, IT203  
-**Instructor:** Prof. Björn Haraldsson, ITIL 4 Master, ISO 20000 Lead Auditor  
-**Office:** Heorot Hall, Room 318  
-**Semester:** Spring 2041  
-
-> *"A service is not a server. It is not an application. It is the co-creation of value between a provider and a consumer, facilitated by technology but defined by outcomes."* — From *ITIL 4: The Service Value System*, Axelos, 2040
+**Credits:** 4
+**Prerequisites:** IT205 (Cybersecurity Fundamentals), IT107 (Web Technologies & Internet Architecture)
+**Description:** The quantum computing era is not coming — it is here. While a cryptographically relevant quantum computer (CRQC) capable of breaking RSA-2048 and ECC-256 may still be 5-15 years away, the "harvest now, decrypt later" threat means adversaries are already stockpiling encrypted data for future decryption. NIST has standardized post-quantum cryptographic algorithms (CRYSTALS-Kyber, CRYSTALS-Dilithium, FALCON, SPHINCS+). The migration from RSA/ECC to PQC is the largest cryptographic transition in history — affecting every TLS certificate, every SSH key, every PKI hierarchy, every blockchain, every hardware security module, every IoT device. This course prepares IT professionals to plan, execute, and verify the quantum-safe migration for their organizations.
 
 ---
 
-## Course Description
+## Lectures
 
-IT Service Management (ITSM) is the discipline of designing, delivering, managing, and improving the way IT services are consumed by the business. This course teaches the global standard framework — ITIL 4 — alongside complementary practices: ISO/IEC 20000 (the international standard for service management), DevOps integration, Site Reliability Engineering (SRE), and the emerging AIOps paradigm where machine learning augments service desk, monitoring, and incident management. Students will configure a service desk tool (Jira Service Management, ServiceNow), define a service catalogue, author SLAs and OLAs, design a change management workflow, and build a continual improvement register — the practical toolkit of the 2040 ITSM professional.
+ᚠ **Lecture 1: The Quantum Threat — Why Cryptography Must Change**
 
----
+### Overview
 
-## Lecture 1: What Is a Service? The ITIL 4 Service Value System
+For 40 years, RSA and ECC have been the foundation of digital trust. In 1994, Peter Shor proved that a sufficiently large quantum computer could break both — reducing the integer factorization problem (RSA) and the discrete logarithm problem (ECC) from exponential to polynomial time. For 30 years, this was a theoretical concern. By 2040, it is an operational imperative. This lecture establishes the threat model, the timeline, and the "harvest now, decrypt later" scenario that makes migration urgent even before a CRQC exists.
 
-### Beyond the Server Room
+### Key Topics
 
-The foundational shift in ITSM thinking — crystallised in ITIL 4 (2019, updated through 2040) — is from managing "IT assets" to orchestrating "service value." A service is a means of enabling value co-creation by facilitating outcomes that customers want to achieve, without the customer having to manage specific costs and risks. Yggdrasil Health does not want "a PostgreSQL database with 99.99% availability." It wants "clinicians can access patient records instantly, from any location, with data integrity guaranteed." The database is a component; the service is the outcome.
-
-The ITIL 4 **Service Value System (SVS)** describes how all the organisation's components and activities work together to facilitate value creation. Its five core elements:
-
-1. **Guiding Principles** — Universal recommendations that guide decision-making: Focus on Value, Start Where You Are, Progress Iteratively with Feedback, Collaborate and Promote Visibility, Think and Work Holistically, Keep It Simple and Practical, Optimise and Automate.
-2. **Governance** — How the organisation is directed and controlled. The governing body evaluates, directs, and monitors the SVS.
-3. **Service Value Chain** — The operating model: six activities (Plan, Improve, Engage, Design & Transition, Obtain/Build, Deliver & Support) that can be combined in value streams.
-4. **Continual Improvement** — Ongoing effort to improve products, services, and practices at all levels.
-5. **Practices** — 34 management practices grouped into General Management, Service Management, and Technical Management. Key practices include Incident Management, Change Enablement, Service Desk, Problem Management, Service Level Management, and Monitoring & Event Management.
-
-### The Service Value Chain in Action
-
-For Yggdrasil Health's telemedicine service:
-
-```
-[Demand: Clinician needs remote patient consultation capability]
-         |
-    [Engage] ← Stakeholder needs captured
-         |
-    [Plan]   ← Service design, resource planning, risk assessment
-         |
-    [Design & Transition] ← Telemedicine platform architected, built, tested
-         |                   (FHIR API, video conferencing, EHR integration)
-    [Obtain/Build]      ← Platform deployed to production
-         |
-    [Deliver & Support] ← Service live; incident management, monitoring, support
-         |
-    [Improve] ← Feedback from clinicians drives iterative enhancements
-         |
-    [Value: Remote consultations reduce patient travel by 40%]
-```
+- **Shor's Algorithm and Grover's Algorithm:** Shor's algorithm breaks RSA, ECC, Diffie-Hellman, and DSA — essentially all public-key cryptography deployed today. Grover's algorithm provides a quadratic speedup for brute-force attacks, halving the effective security of symmetric ciphers (AES-256 becomes AES-128 against quantum adversaries). Symmetric cryptography and hash functions survive — but require doubled key lengths.
+- **The CRQC Timeline:** Expert surveys (2024-2040) place the probability of a CRQC within 10 years at 25-50%, within 15 years at 50-70%, within 20 years at 70-90%. These are not precise predictions but risk estimates — and the risk is high enough that NIST began standardizing PQC in 2016 and completed the initial standards in 2024.
+- **Harvest Now, Decrypt Later (HNDL):** A nation-state adversary records all encrypted traffic passing through their network infrastructure today. In 10-15 years, when a CRQC is available, they decrypt everything. Any secret with a 15+ year sensitivity window — state secrets, intellectual property, medical records, financial data, cryptographic keys for long-lived infrastructure — is at risk NOW.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Foundation: Service Value System*, 2040 Edition, Chs. 1-3.
-- Axelos, *ITIL 4: Drive Stakeholder Value*, Ch. 1.
-- Van Haren, *ITIL 4: A Pocket Guide*, 2039.
-
-### Discussion Questions
-
-1. How does the ITIL 4 emphasis on "value co-creation" change the conversation between IT and business stakeholders compared to an asset-management mindset?
-2. Apply the seven Guiding Principles to a scenario where the business demands a new service in four weeks that IT estimates requires twelve weeks.
-3. What is the difference between a "value stream" and a "process"? Why does this distinction matter?
+- NIST (2024). *Post-Quantum Cryptography Standards* (FIPS 203, 204, 205). NIST.
+- Shor, P. W. (1994). "Algorithms for Quantum Computation: Discrete Logarithms and Factoring." *Proceedings of FOCS 1994*. (The paper that started it all.)
 
 ---
 
-## Lecture 2: The Service Desk and Incident Management
+ᚢ **Lecture 2: The NIST PQC Algorithms — Kyber, Dilithium, FALCON, SPHINCS+**
 
-### The Front Line of IT
+### Overview
 
-The service desk is the single point of contact between service providers and users. In 2040, the service desk has evolved from a phone-and-email operation into an omnichannel, AI-augmented engagement centre:
+NIST selected four algorithms for standardization after a 6-year competition involving 82 candidates from 25 countries. This lecture covers each algorithm: what problem it is based on, its security properties, its performance characteristics, and the trade-offs that guide algorithm selection for different use cases.
 
-- **Tier 0 (Self-Service)**: AI chatbots, virtual agents, knowledge base articles, and automated remediation scripts resolve 65-75% of user contacts without human intervention. Natural language understanding (NLU) has advanced to the point where "my email is broken" triggers a diagnostic workflow that checks SMTP connectivity, mailbox quota, and client configuration, resolving the issue or gathering diagnostic data before a human sees the ticket.
-- **Tier 1 (Service Desk Analysts)**: Handle incidents not resolved by Tier 0. The 2040 Tier 1 analyst is a diagnostician, not a script-reader — they use AI-suggested resolution steps but exercise judgement when the suggestion is inappropriate.
-- **Tier 2 (Technical Specialists)**: Deeper technical expertise; handle escalated incidents and fulfil service requests requiring privileged access.
-- **Tier 3 (Vendor/Development)**: Vendor support or development team engagement for software bugs and complex configuration issues.
+### Key Topics
 
-### Incident Management
-
-An incident is an unplanned interruption to a service or a reduction in service quality. Incident management aims to restore normal service operation as quickly as possible and minimise adverse impact on business operations. Key concepts:
-
-| Concept | Definition | Yggdrasil Health Example |
-|---------|------------|--------------------------|
-| **Incident** | Unplanned service disruption | Telemedicine video conferencing fails during a patient consultation |
-| **Priority** | Impact × Urgency | P1: Critical — affects patient care, immediate response |
-| **Major Incident** | Highest impact; requires separate procedure | EHR database corruption; entire hospital affected |
-| **Incident Model** | Predefined steps for handling recurring incidents | "VPN connection failure" incident model |
-| **Swarming** | Collaborative approach where specialists converge on complex incidents | Cross-team response to performance degradation across multiple services |
-
-The 2040 incident management workflow is heavily automated. An observability platform (Datadog, New Relic, Grafana) detects an anomaly → creates a ticket in the ITSM tool (ServiceNow, Jira Service Management) → enriches the ticket with relevant configuration items from the CMDB, recent changes, and related incidents → pages the on-call engineer via PagerDuty/Opsgenie → the engineer acknowledges and begins diagnosis. Mean Time to Detect (MTTD) and Mean Time to Resolve (MTTR) are the core metrics.
+- **CRYSTALS-Kyber (FIPS 203):** Key Encapsulation Mechanism (KEM) — replaces RSA key exchange and ECDH. Based on the Module Learning With Errors (MLWE) problem — lattice-based, believed hard even for quantum computers. Key sizes: public key 800 bytes, ciphertext 768 bytes (larger than RSA/ECC but manageable). Performance: extremely fast — 100,000+ operations/second on modern hardware.
+- **CRYSTALS-Dilithium (FIPS 204):** Digital signature algorithm — replaces RSA-PSS and ECDSA. Based on MLWE. Signature size: 2,420 bytes (significantly larger than ECDSA's 64 bytes — a practical consideration for embedded systems). Fast signing and very fast verification.
+- **FALCON (FIPS 205 — draft):** Alternative lattice-based signature. Smaller signatures than Dilithium (~666 bytes) but requires floating-point arithmetic — harder to implement in constant-time (side-channel resistant) on some hardware. Trade-off: smaller signatures vs. implementation complexity.
+- **SPHINCS+ (FIPS 205 — draft):** Hash-based signature. Stateless, no security bound on number of signatures (unlike stateful hash-based schemes). Very large signatures (~17KB) and slow — suitable only for niche applications (firmware signing, root CAs) where signature size and speed are not primary concerns. Based on hash functions only — security rests solely on the collision resistance of SHA-3, making it the most conservative choice.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Service Desk*, 2040 Edition.
-- Axelos, *ITIL 4 Practice Guide: Incident Management*, 2040 Edition.
-- Kim, G., Behr, K. & Spafford, G. (2039), *The Visible Ops Handbook: Implementing ITIL in Four Practical Steps*, 3rd ed., IT Revolution Press.
-
-### Discussion Questions
-
-1. If Tier 0 resolves 70% of contacts, what skills does the remaining Tier 1 workforce need that differentiate them from what an AI can do?
-2. A major incident is declared. Compare the "swarming" approach to a hierarchical escalation model. Which produces faster resolution?
-3. What is the difference between MTTD and MTTR? Which is typically harder to reduce, and why?
+- NIST (2040). *FIPS 203, 204, 205 — Post-Quantum Cryptographic Standards* (Updated).
 
 ---
 
-## Lecture 3: Problem Management and Root Cause Analysis
+ᚦ **Lecture 3: Crypto Agility — Building Systems That Can Change**
 
-### Incidents vs. Problems
+### Overview
 
-ITIL distinguishes between an **incident** (the symptom — service is degraded) and a **problem** (the cause — a memory leak in the application code). Incident management restores service. Problem management prevents recurrence. The two practices are complementary but must be organisationally separated: the incident manager is optimising for speed of restoration; the problem manager is optimising for thoroughness of root cause identification. Expecting the same person to do both creates a conflict of interest — the urgency of restoration will always trump the patience of root cause analysis.
+The organizations that will survive the quantum migration most smoothly are those that built crypto agility from the start — the ability to swap cryptographic algorithms without rewriting the entire system. This lecture covers the principles and practices of crypto agility: algorithm abstraction, configuration-driven cryptography, protocol negotiation (e.g., TLS cipher suite negotiation), and the hard lessons from the SHA-1 to SHA-256 migration that apply directly to the PQC migration.
 
-Problem management operates in three phases:
+### Key Topics
 
-1. **Problem Identification**: Detect problems through: incident trend analysis (five similar incidents in a week), major incident review (every P1 incident triggers a problem record), proactive detection (monitoring data reveals a growing memory leak before it causes an outage), and supplier/vendor notifications.
-2. **Problem Control**: Root cause analysis using techniques such as:
-   - **5 Whys**: Iteratively ask "why?" until the root cause emerges (not the first technical cause)
-   - **Ishikawa (Fishbone) Diagram**: Categorise potential causes (People, Process, Technology, Suppliers, Environment, Data)
-   - **Kepner-Tregoe Analysis**: Structured problem-solving that separates problem definition from solution generation
-   - **Chronological Analysis**: Reconstruct the timeline of events leading to the incident
-3. **Error Control**: When the root cause is identified, a **Known Error** record is created. Workarounds are documented (for incidents that recur before permanent fix). A **Change Request** is raised to implement the permanent fix. The Known Error Database (KEDB) becomes a searchable repository of known issues and workarounds, reducing future incident resolution time.
-
-### Practical Root Cause Analysis
-
-```
-Incident: Telemedicine video calls drop after 12 minutes for 30% of sessions.
-
-5 Whys:
-1. Why do calls drop? → The WebRTC connection times out.
-2. Why does WebRTC time out? → The STUN/TURN server stops responding.
-3. Why does the STUN/TURN server stop responding? → Memory exhaustion on the TURN server.
-4. Why memory exhaustion? → TURN server does not release allocated ports for completed sessions.
-5. Why are ports not released? → A bug in the TURN server software (version 4.2.1); fixed in 4.2.3.
-
-Root Cause: Unpatched TURN server software with known port leak bug.
-Known Error: KE-2021-047 — TURN Server Port Leak, versions <4.2.3.
-Workaround: Restart TURN server every 8 hours (reduces frequency but not eliminated).
-Permanent Fix: Upgrade TURN server to 4.2.3 (Change Request CR-2847).
-```
+- **Crypto Agility Principles:** (1) Algorithm abstraction — the application code should reference "the current KEM algorithm," not "Kyber-1024." (2) Configuration over code — algorithm selection should be a configuration parameter, not hard-coded. (3) Hybrid mode — during migration, support both classical and PQC algorithms simultaneously, negotiating the strongest common algorithm. (4) Testing agility — regularly test algorithm rotation: swap algorithms in a test environment, verify everything still works, document the process.
+- **Lessons from SHA-1 Migration:** SHA-1 was deprecated in 2017, yet 5% of TLS certificates still used SHA-1 signatures in 2020. The migration was slow because: (1) Algorithm was hard-coded in thousands of places. (2) Legacy systems (Windows XP, old Android) could not be updated. (3) No business incentive until browsers showed "Not Secure" warnings. The PQC migration will be 100x larger. We cannot afford to repeat these mistakes.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Problem Management*, 2040 Edition.
-- Kepner, C. & Tregoe, B. (1965/2039), *The New Rational Manager*, updated edition, Kepner-Tregoe Inc.
-- Dekker, S. (2038), *The Field Guide to Understanding Human Error*, 4th ed., CRC Press.
-
-### Discussion Questions
-
-1. An organisation has 500 open problem records and assigns one part-time problem manager. Diagnose the organisational issue.
-2. When is 5 Whys an inadequate technique for root cause analysis? What are its limitations?
-3. How would you convince an incident-focused IT director to invest in problem management, given the near-term pressure to resolve incidents?
+- NIST (2039). *SP 800-210 — Crypto Agility: Guidelines for Migrating Cryptographic Algorithms*.
 
 ---
 
-## Lecture 4: Service Level Management and the Service Catalogue
+ᚨ **Lecture 4: TLS and PKI Migration — Replacing Every Certificate**
 
-### The Contract Between IT and Business
+### Overview
 
-Service Level Management (SLM) negotiates, documents, and monitors the agreements between IT service providers and their customers. The hierarchy of agreements:
+The Transport Layer Security (TLS) protocol and the Public Key Infrastructure (PKI) that supports it are the largest attack surface for the quantum threat. Migrating TLS to PQC means: every server certificate must be replaced with a PQC certificate. Every client must support PQC cipher suites. Every intermediate CA, every root CA, every OCSP responder, every certificate transparency log — all must be upgraded. This lecture covers the TLS 1.3 PQC extensions, the hybrid key exchange mechanism, and the practical process of replacing an organization's PKI.
 
-- **Service Level Agreement (SLA)**: An agreement between the service provider and the customer. Describes the service, its service level targets (availability, performance, response times), responsibilities, and remedies for breach. For Yggdrasil Health: "EHR Service Availability: 99.99% (excluding planned maintenance windows, maximum 4 hours/month, scheduled 48 hours in advance)."
-- **Operational Level Agreement (OLA)**: An agreement between internal support groups that underpin the SLA. For the EHR SLA: "Database Team commits to 99.995% database availability; Network Team commits to <1ms latency between application and database tiers."
-- **Underpinning Contract (UC)**: A contract with an external supplier that underpins the SLA. "AWS commits to 99.99% availability for the EHR RDS instance (multi-AZ deployment)."
+### Key Topics
 
-SLAs must be SMART: Specific (exactly which service), Measurable (quantifiable metric), Achievable (realistic), Relevant (to business outcomes), and Time-bound (measured over a defined period — typically monthly or quarterly). An SLA that guarantees "99.999% availability" but takes two weeks to measure and report breaches is operationally useless.
-
-### Service Catalogue
-
-The **Service Catalogue** is the single source of truth for all IT services delivered to the business. It has two views:
-
-- **Business Service Catalogue**: Services described in business language. "Clinical Desktop — provides clinicians with access to patient records, lab results, and clinical decision support from any hospital workstation. Available 24/7. Supported by Service Desk at extension 4500."
-- **Technical Service Catalogue**: The technical components that deliver the business service. "Clinical Desktop depends on: EHR Application (EKS-hosted, PostgreSQL RDS), Active Directory (authentication), Citrix Virtual Desktop (presentation layer), Hospital LAN (connectivity), and Workstation Hardware (Dell Optiplex 9040)."
-
-The 2040 Service Catalogue is a living application (ServiceNow CSDM, Jira Service Management Assets, or a custom CMDB) that dynamically links services to their constituent configuration items (CIs), showing real-time health status, recent changes, open incidents, and SLA performance. When a network switch fails, the Service Catalogue immediately surfaces which business services are impacted.
+- **Hybrid Key Exchange in TLS 1.3:** During migration, TLS connections use both a classical key exchange (ECDHE) and a PQC key exchange (Kyber) — the session key is derived from both. If either is secure, the connection is secure. This provides defense in depth: even if the PQC algorithm is later broken, the classical ECDHE provides fallback security (and vice versa).
+- **Certificate Chain Migration:** Root CA certificates (valid for 20-30 years) must be migrated first — a PQC-signed root is needed before PQC-signed intermediate and leaf certificates can be issued. The migration will take years and must be carefully orchestrated: (1) Issue new PQC roots. (2) Cross-sign new roots with old roots (trust during transition). (3) Issue PQC intermediate CAs. (4) Begin issuing PQC leaf certificates. (5) Retire classical roots.
+- **Performance Considerations:** PQC signatures and keys are larger than classical — Dilithium signatures are 2.4KB vs. ECDSA's 64 bytes. This affects: TLS handshake size (larger ServerHello), certificate chain size (larger certificates), and bandwidth for constrained devices. HTTP/3 and QUIC reduce the handshake overhead, mitigating the performance impact.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Service Level Management*, 2040 Edition.
-- Axelos, *ITIL 4 Practice Guide: Service Catalogue Management*, 2040 Edition.
-- Brooks, P. (2039), *Metrics for IT Service Management: ITSM Library*, Van Haren.
-
-### Discussion Questions
-
-1. An SLA promises "99.9% availability." The service was down for 45 minutes on a Tuesday at 03:00 and for 45 minutes on a Wednesday at 14:00. Was the SLA breached? Should both outages be treated equally?
-2. Design the SLA structure for Yggdrasil Health's telemedicine service. What are the appropriate availability, performance, and support response targets?
-3. How does a dynamic, CMDB-linked Service Catalogue change incident response compared to a static document?
+- IETF (2039). *RFC 9370 — Multiple Key Exchanges in TLS 1.3*. (Hybrid key exchange specification.)
+- NIST (2040). *SP 800-210 — PQC Migration Guide for PKI*.
 
 ---
 
-## Lecture 5: Change Enablement and Release Management
+ᚱ **Lecture 5: SSH, VPN, and Network Security Migration**
 
-### From Change Control to Change Enablement
+### Overview
 
-ITIL 4 renamed "Change Management" to "Change Enablement," reflecting a philosophical shift from gatekeeping ("we must control all changes to prevent risk") to enablement ("we must ensure changes deliver value with acceptable risk"). The 2040 Change Enablement practice balances three competing forces:
+Every SSH connection, every VPN tunnel, every IPsec security association uses public-key cryptography that is vulnerable to quantum attack. This lecture covers the migration of network security protocols to PQC: SSH (OpenSSH with PQC key exchange), WireGuard/IPsec (PQC key exchange), and the inventory challenge — an organization typically has 100,000+ SSH keys and no idea where they all are.
 
-- **Speed**: The business demands rapid deployment of new features and fixes. DevOps pipelines deploy multiple times per day.
-- **Stability**: Every change introduces risk. The 2038 Google DORA report found that 23% of production incidents were caused by changes.
-- **Compliance**: Regulated industries (healthcare, finance) require auditable change records with formal authorisation.
+### Key Topics
 
-The resolution lies in a risk-based change model:
-
-| Change Type | Risk Profile | Authorisation | Example |
-|-------------|-------------|---------------|---------|
-| **Standard** | Low, pre-assessed | Pre-authorised; no additional approval | Monthly OS patching (automated), user password reset |
-| **Normal — Low Risk** | Medium-low | Peer review; automated testing gate | Application feature deployment via CI/CD |
-| **Normal — High Risk** | Medium-high | Change Advisory Board (CAB) or Change Authority | Database schema migration, firewall rule change |
-| **Emergency** | Varies (urgency) | Emergency CAB (eCAB) or post-implementation review | Critical security patch for actively exploited vulnerability |
-
-### Release Management
-
-Release management plans, schedules, and controls the build, test, and deployment of releases. The 2040 release management patterns:
-
-- **Continuous Delivery**: Every commit that passes automated tests is deployable. Releases are a business decision, not a technical event. Deployments use blue/green or canary strategies.
-- **Feature Flags**: Code is deployed dark (disabled) and gradually enabled for users. Separates deployment (technical) from release (business). If a feature causes problems, it is disabled via flag, not rolled back via deployment — reducing MTTR from hours to seconds.
-- **Change Scheduling**: Maintenance windows and change freezes (e.g., no non-emergency changes during the last week of the fiscal year) are managed via a Forward Schedule of Change (FSC), visible to all stakeholders.
-
-```yaml
-# Example: Deployment pipeline with canary release and automated rollback
-# (Argo Rollouts configuration)
-apiVersion: argoproj.io/v1alpha1
-kind: Rollout
-metadata:
-  name: patient-api
-spec:
-  replicas: 6
-  strategy:
-    canary:
-      steps:
-      - setWeight: 10    # 10% of traffic to new version
-      - pause: {duration: 5m}  # Wait 5 minutes, monitor error rate
-      - setWeight: 50    # 50% traffic if healthy
-      - pause: {duration: 10m}
-      - setWeight: 100   # Full rollout
-      autoPromotionEnabled: false  # Manual promotion gate
-```
+- **SSH PQC Migration:** OpenSSH added support for NTRU Prime (a lattice-based KEM) in 2022. By 2040, OpenSSH supports Kyber, Dilithium, and hybrid key exchange. Migration steps: (1) Inventory all SSH keys (use SSH key scanners). (2) Identify which keys are used for automated processes (CI/CD, backup scripts, monitoring) — these are often forgotten. (3) Rotate keys to PQC or hybrid, starting with highest-value targets (root access, production servers). (4) Update known_hosts files.
+- **VPN PQC Migration:** IPsec IKEv2 with PQC key exchange. WireGuard — currently uses Curve25519 (elliptic curve, vulnerable to Shor). Post-quantum WireGuard variants are under development. For now: run WireGuard inside a PQC-encrypted tunnel, or switch to IPsec with PQC.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Change Enablement*, 2040 Edition.
-- Axelos, *ITIL 4 Practice Guide: Release Management*, 2040 Edition.
-- Humble, J. & Farley, D. (2039), *Continuous Delivery: Reliable Software Releases Through Build, Test, and Deployment Automation*, 3rd ed., Addison-Wesley.
-
-### Discussion Questions
-
-1. "Change Advisory Board" evokes a committee meeting that delays everything. How does the 2040 CAB differ from the ITIL v3 CAB, and is it still necessary?
-2. A feature flagged to 5% of users shows a 2% increase in checkout abandonment. What is your response as release manager?
-3. How should change enablement differ for a SaaS provider deploying hourly vs. a hospital deploying quarterly?
+- OpenSSH (2040). *Post-Quantum Cryptography in OpenSSH — Configuration Guide*.
 
 ---
 
-## Lecture 6: Configuration Management and the CMDB
+ᚲ **Lecture 6: Hardware Security Modules and Embedded Systems**
 
-### The Map of the IT Estate
+### Overview
 
-Configuration management ensures that accurate and reliable information about the configuration of services and the CIs (Configuration Items) that support them is available when and where it is needed. A CI is any component that needs to be managed to deliver an IT service: servers, applications, databases, network devices, cloud resources, licences, documentation, and — critically — the relationships between them.
+Hardware Security Modules (HSMs), smart cards, and embedded systems present unique migration challenges: limited memory, slow processors, firmware that cannot be updated, and devices deployed in the field for decades. This lecture covers the PQC migration for constrained devices: algorithm selection for resource-constrained environments, firmware update strategies, and the long tail of devices that will never be migrated.
 
-The **Configuration Management Database (CMDB)** is the repository that stores CI records and their relationships. The 2040 CMDB (ServiceNow CMDB, Device42, or a graph database like Neo4j with a custom discovery layer) is automatically populated by **discovery tools** — agents, cloud API calls, and network scans that detect what exists in the environment and reconcile it with what the CMDB says exists. Manual CMDB maintenance has been proven impossible at scale; the only viable 2040 CMDB is a discovered, auto-reconciled CMDB.
+### Key Topics
 
-The CMDB enables critical ITSM processes:
-- **Incident Management**: "Which services are affected by this failed server?"
-- **Change Enablement**: "What other CIs depend on this database we are about to migrate?"
-- **Problem Management**: "Which CIs share this software version with the known vulnerability?"
-- **Asset Management**: "How many Windows Server 2036 licences are in use, and where?"
-
-### The Configuration Model
-
-A well-designed CMDB uses a **Common Service Data Model (CSDM)** — a standardised way of representing services, their components, and their relationships. For Yggdrasil Health, the model might include CI classes: Business Application, Application Service, Database, Server (Physical/Virtual/Cloud), Network Device, Storage Volume, Software Licence, and Document. Each CI has attributes: name, unique identifier, status (Operational, Degraded, Maintenance, Retired), owner, location, criticality, and relationships (Runs On, Depends On, Connects To, Is Part Of).
+- **PQC on Constrained Devices:** Kyber-512 and Dilithium-2 (the smallest NIST parameter sets) require more memory than RSA-2048 — but are within the capability of modern ARM Cortex-M4 microcontrollers. SPHINCS+ is too large for most embedded systems. Trade-offs: accept larger keys, upgrade hardware, or (for devices that cannot be upgraded) accept risk and isolate them on separate network segments.
+- **The Unmigratable Tail:** Medical implants with 20-year lifespans. Automotive ECUs sealed in vehicles. Industrial control systems with 30-year deployment cycles. These devices will never receive PQC updates. Mitigations: network segmentation (isolate unmigratable devices), application-layer encryption (encrypt data before it reaches the device), and risk acceptance with executive sign-off.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Service Configuration Management*, 2040 Edition.
-- ServiceNow, *Common Service Data Model (CSDM) 5.0*, Documentation.
-- O'Hanlon, C. (2039), *Configuration Management: Theory and Practice for the Cloud Era*, Apress.
-
-### Discussion Questions
-
-1. If the CMDB is auto-discovered, what is the role of the configuration manager compared to a manually maintained CMDB?
-2. A server is retired but its CI record persists in the CMDB for six months. What are the operational consequences?
-3. How does a graph database (Neo4j) representation of the CMDB differ from a relational database representation in practice?
+- NIST (2040). *NIST IR 8413 — PQC Migration Considerations for the Internet of Things*.
 
 ---
 
-## Lecture 7: Monitoring, Event Management, and AIOps
+ᚷ **Lecture 7: Blockchain, Cryptocurrency, and Distributed Ledger Migration**
 
-### The Sensor Network of IT
+### Overview
 
-Monitoring and Event Management observes services and the infrastructure that supports them, detecting conditions that may indicate an issue. The 2040 monitoring stack follows the "three pillars of observability":
+Blockchains present a unique challenge: their security model depends on cryptographic addresses (derived from public keys) that are permanently embedded in the ledger. A quantum attacker could: (1) Derive the private key from the public key (Shor's algorithm) — stealing all funds at that address. (2) Forge transactions from previously used addresses. (3) Break the consensus mechanism's signature scheme. This lecture covers the blockchain quantum threat and proposed migration paths.
 
-- **Metrics**: Numerical measurements collected at regular intervals (CPU utilisation, request latency, error rate, queue depth). Stored in time-series databases (Prometheus, InfluxDB, VictoriaMetrics). Visualised in dashboards (Grafana). Alert thresholds trigger when metrics cross defined boundaries.
-- **Logs**: Immutable, timestamped records of discrete events. Structured logging (JSON format, OpenTelemetry standard) enables automated parsing. Centralised log aggregation (Elasticsearch, Loki, Splunk). Full-text search enables forensic investigation.
-- **Traces**: Records of a request's journey through distributed systems. Each service adds a span; spans form a trace. Essential for debugging microservices architectures. Jaeger, Zipkin, and cloud-native tools (AWS X-Ray, Google Cloud Trace) visualise trace data.
+### Key Topics
 
-### From Reactive to Proactive: AIOps
-
-AIOps (Artificial Intelligence for IT Operations) applies machine learning to observability data to: detect anomalies that static thresholds miss (a metric that is "normal" but trending differently from its historical pattern), correlate events across siloed monitoring tools ("the database slowdown coincided with a network latency spike and a load balancer configuration change"), predict incidents before they occur (disk full in X hours at current growth rate), and suggest or automate remediation (runbook automation triggered by specific alert patterns). The 2040 IT operations professional configures and tunes AIOps platforms (Moogsoft, BigPanda, ServiceNow ITOM, Splunk IT Service Intelligence) rather than manually inspecting dashboards.
-
-```python
-# Example: Prometheus alerting rule for EHR service latency
-# If 95th percentile latency exceeds 500ms for 5 minutes, fire alert
-alert: EHRHighLatency
-expr: histogram_quantile(0.95, rate(ehr_request_duration_seconds_bucket[5m])) > 0.5
-for: 5m
-labels:
-  severity: warning
-  service: ehr-api
-annotations:
-  summary: "EHR API latency > 500ms (95th percentile)"
-  description: "EHR API is experiencing elevated latency. Value: {{ $value }}s"
-  runbook_url: "https://wiki.yggdrasil-health.no/runbooks/ehr-high-latency"
-```
+- **The Bitcoin Quantum Threat:** A Bitcoin address that has never spent funds exposes only a hash of the public key (protected against Shor, but vulnerable to Grover). An address that has spent funds exposes the full public key — these are directly vulnerable. Estimated at-risk funds (2040): 4 million BTC ($280 billion at current prices).
+- **Migration Proposals:** (1) Community-coordinated migration — all users move funds to PQC addresses by a deadline. (2) Hard fork — the protocol switches to PQC signatures; old addresses become unspendable. (3) Quantum-resistant chains — new blockchains designed from the ground up for PQC (e.g., QANplatform, Cellframe).
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Monitoring and Event Management*, 2040 Edition.
-- Beyer, B. et al. (2039), *Site Reliability Workbook: Practical Ways to Implement SRE*, O'Reilly, Chs. 5-8.
-- Turnbull, J. (2040), *The Art of Monitoring in the AIOps Era*, Turnbull Press.
-
-### Discussion Questions
-
-1. What is the difference between an "event," an "alert," and an "incident" in ITIL 4? Why does conflating them cause alert fatigue?
-2. AIOps promises to reduce alert noise. What new risks does AI-augmented incident detection introduce?
-3. Design the monitoring strategy for Yggdrasil Health's telemedicine service. What are the critical metrics, log sources, and traces?
+- Aggarwal, D., et al. (2038). "Quantum Attacks on Bitcoin, and How to Protect Against Them." *Ledger*.
 
 ---
 
-## Lecture 8: IT Asset Management and Software Licence Compliance
+ᚹ **Lecture 8: Cryptographic Inventory — You Cannot Migrate What You Cannot Find**
 
-### Knowing What You Have
+### Overview
 
-IT Asset Management (ITAM) manages the full lifecycle of IT assets — hardware, software, cloud resources, and associated contracts — from acquisition through disposal. The 2040 ITAM practice is driven by:
+Before you can migrate cryptography, you must know where cryptography is used. Most organizations have no idea. This lecture covers cryptographic inventory: automated discovery of certificates, keys, and cryptographic libraries across the enterprise, the Software Bill of Materials (SBOM) as a cryptographic discovery tool, and the governance process for maintaining the inventory as a living document.
 
-- **Financial Control**: Enterprises spend 3-8% of revenue on IT; ITAM ensures this spend is optimised. Cloud FinOps is the fastest-growing ITAM sub-discipline.
-- **Compliance**: Software licence audits (by vendors like Oracle, Microsoft, IBM) can result in seven-figure true-up payments. Licence compliance is not optional.
-- **Security**: Unmanaged assets (shadow IT) cannot be patched, monitored, or secured. You cannot protect what you do not know exists.
-- **Sustainability**: Asset disposal must meet e-waste regulations (EU WEEE Directive 2040 update); cloud carbon accounting requires asset-to-carbon mapping.
+### Key Topics
 
-The asset lifecycle: **Request** → **Procure** → **Deploy** → **Manage** (patch, monitor, support) → **Refresh** (upgrade or replace) → **Retire** (secure disposal, licence reclamation, CMDB update). At each stage, the asset record is updated. The 2040 ITAM toolchain (ServiceNow ITAM, Flexera, Snow Software) integrates with: procurement systems (for purchase data), discovery tools (for deployment verification), endpoint management (for configuration and patching status), and cloud provider APIs (for real-time cloud resource inventory).
-
-### Software Asset Management (SAM)
-
-SAM specifically manages software licences, ensuring compliance with vendor terms and optimising licence spend. Complexity drivers in 2040:
-
-- **Cloud-native licensing**: Pay-per-use, pay-per-transaction, and tiered models that differ radically from traditional per-core or per-user licensing.
-- **Open-source compliance**: Organisations must track which open-source components are in use, under which licences (GPL, MIT, Apache, BSL), and whether usage complies with licence terms — particularly the SSPL and BSL licences that restrict cloud provider use.
-- **AI model licensing**: Foundation models have their own licensing terms (commercial use restrictions, output ownership, data usage policies). The ITAM function must track which models are deployed, under which terms.
+- **Inventory Methods:** (1) Network scanning (discover TLS certificates on all ports). (2) Code scanning (grep for crypto library imports, key generation calls). (3) Cloud API scanning (list all ACM certificates, KMS keys, Cloud HSM instances). (4) SSH key scanning (scan authorized_keys files across all servers). (5) SBOM analysis (identify cryptographic dependencies in application SBOMs).
+- **The Cryptographic Bill of Materials (CBOM):** An extension of the SBOM concept specifically for cryptography. A CBOM lists: every cryptographic algorithm in use, every key, every certificate (with expiry), and the quantum vulnerability status of each. Tools: CycloneDX CBOM extension, CryptoMBOM.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: IT Asset Management*, 2040 Edition.
-- ISO/IEC 19770-1:2040, *Information Technology — IT Asset Management — Part 1: ITAM Management Systems*.
-- Flexera, *State of ITAM Report 2040*.
-
-### Discussion Questions
-
-1. A cloud engineer spins up a GPU cluster for ML training and forgets to terminate it. The monthly bill is €47,000 above forecast. What ITAM and FinOps controls would have prevented this?
-2. How does open-source licence compliance differ from proprietary licence compliance in practice?
-3. What is the relationship between CMDB and ITAM — are they the same system? If not, how should they integrate?
+- CycloneDX (2040). *Cryptographic Bill of Materials (CBOM) Specification*.
 
 ---
 
-## Lecture 9: Capacity Management and Demand Management
+ᚺ **Lecture 9: The PQC Migration Project — Planning and Execution**
 
-### Balancing Supply and Demand
+### Overview
 
-Capacity management ensures that services have sufficient resources to meet current and agreed future demands, cost-effectively. It operates across three sub-processes:
+The PQC migration is not a technology refresh — it is an organizational transformation that will take 5-10 years for large enterprises. This lecture provides the project management framework: stakeholder identification, phased migration planning, risk management, and the communication strategy for explaining to executives why this matters.
 
-- **Business Capacity Management**: Forecasts future business demand. "The telemedicine service currently handles 500 consultations/day. The business plan projects 2,000/day within 18 months."
-- **Service Capacity Management**: Monitors service performance against SLA targets. "Current average video call connection time: 1.8 seconds. SLA target: <3 seconds. Headroom: 40%."
-- **Component Capacity Management**: Monitors individual infrastructure components. "TURN server CPU utilisation: 45% at peak. Current capacity sufficient for 2.2x growth before SLA breach risk."
+### Key Topics
 
-The 2040 capacity plan is a dynamic model, not a static annual document. Cloud auto-scaling makes capacity elastic — but elasticity is not infinite. AWS accounts have service quotas (maximum number of EC2 instances per region). Kubernetes clusters have resource limits. Database connection pools have maximum sizes. The capacity manager identifies these hard limits and ensures they are raised (or architected around) before they become incidents.
-
-### Demand Management
-
-Demand management influences customer demand for services to align with capacity. Techniques include:
-- **Differential pricing**: Charge more for peak-time compute to incentivise off-peak usage
-- **Throttling and rate limiting**: Protect services from demand spikes (API gateway rate limiting at 1,000 requests/second per tenant)
-- **Service level tiering**: Platinum tier gets guaranteed capacity; Standard tier gets best-effort
-- **User education**: "Schedule large data exports during off-peak hours (02:00-06:00 UTC)"
+- **Phased Migration Plan:** Phase 1 (Year 1): Cryptographic inventory, crypto agility audit, establish PQC lab. Phase 2 (Years 1-2): Deploy hybrid TLS, migrate high-value internal systems. Phase 3 (Years 2-4): Migrate customer-facing systems, IoT fleet upgrades begin. Phase 4 (Years 3-6): Full PQC deployment, classical crypto disabled where possible. Phase 5 (Years 5-10): Address unmigratable tail, long-term monitoring.
+- **Stakeholder Management:** CISO (risk owner), CTO (technical feasibility), CFO (budget — migration costs 1-3% of IT budget annually for 5 years), Legal (regulatory liability), Board of Directors (fiduciary duty). The pitch: "This is Y2K-scale, but without a fixed deadline. Every year we delay, more of our encrypted data is harvested by adversaries."
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Capacity and Performance Management*, 2040 Edition.
-- Allspaw, J. (2038), *The Art of Capacity Planning: Scaling Web Resources in the Cloud*, 3rd ed., O'Reilly.
-- Hightower, K. (2039), *Kubernetes Capacity Planning*, O'Reilly.
-
-### Discussion Questions
-
-1. Cloud auto-scaling creates an illusion of infinite capacity. What are the real physical and economic limits?
-2. How should capacity management change for a SaaS provider where the customer base doubles every six months?
-3. What is the relationship between capacity management and FinOps? Where do they overlap, and where do they conflict?
+- Cloud Security Alliance (2040). *Quantum-Safe Security: A CISO's Guide to PQC Migration Planning*.
 
 ---
 
-## Lecture 10: Continual Improvement and the CSI Register
+ᚾ **Lecture 10: Testing and Validation — Trust but Verify**
 
-### The Engine of Evolution
+### Overview
 
-Continual Service Improvement (CSI) is the practice of aligning services with changing business needs through the ongoing identification and implementation of improvements. It is not a phase that happens after everything else; it is a thread woven through every practice, every value stream, every service. The ITIL 4 **Continual Improvement Model** defines seven steps:
+A botched cryptographic migration is worse than no migration — it creates the illusion of security while leaving systems vulnerable. This lecture covers the testing methodology for PQC migration: interoperability testing, performance testing, negative testing (what happens when a PQC algorithm fails?), and the certification/validation requirements (FIPS 140-3, Common Criteria).
 
-1. **What is the vision?** — The business objectives the improvement serves
-2. **Where are we now?** — Baseline assessment (current state metrics, user satisfaction, cost)
-3. **Where do we want to be?** — Target state with measurable improvement targets
-4. **How do we get there?** — Improvement plan: actions, resources, timeline, risks
-5. **Take action** — Execute the improvement
-6. **Did we get there?** — Evaluate results against targets
-7. **How do we keep the momentum going?** — Embed the improvement; identify next opportunity
+### Key Topics
 
-The **Continual Improvement Register (CIR)** is the repository of all improvement opportunities — a backlog maintained by the service owner, prioritised by business value and effort. Every retrospective, every major incident review, every customer satisfaction survey feeds the CIR.
-
-### Practical CSI: Reducing Telemedicine Call Setup Time
-
-```
-Vision: Telemedicine consultations are as seamless as in-person visits.
-Current State: Average call setup time 8.2 seconds; 95th percentile 22 seconds.
-Target State: Average < 3 seconds; 95th percentile < 6 seconds.
-Plan: 
-  - Upgrade WebRTC signalling infrastructure (2-week project)
-  - Move TURN server to edge locations (closer to users) (4-week project)
-  - Optimise authentication token exchange (1-week project)
-Action: Execute projects in sequence; measure after each.
-Evaluation: After 8 weeks — average 2.7s, 95th percentile 5.4s. Target met.
-Momentum: Next improvement → reduce call drop rate from 0.8% to <0.2%.
-```
+- **Interoperability Testing:** Client A (PQC-capable) must connect to Server B (hybrid mode). Server B must fall back gracefully if client does not support PQC. Multi-vendor testing: OpenSSL with PQC patch + AWS KMS with PQC + Azure Key Vault with PQC.
+- **Performance Testing:** Measure TLS handshake latency with PQC (Dilithium signatures add 2-4ms). Measure throughput. Test under load. Identify bottlenecks — is the bottleneck compute (signing) or bandwidth (larger certificates)? Optimize accordingly.
+- **Negative Testing:** What happens when a PQC signature is corrupted? When a PQC public key is the wrong size? When a hybrid connection's classical half succeeds but PQC half fails? The system must fail secure — reject the connection, not fall back to a weaker mode silently.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Continual Improvement*, 2040 Edition.
-- Imai, M. (1986/2039), *Kaizen: The Key to Competitive Success*, 2nd digital ed., McGraw-Hill.
-- Rother, M. (2038), *Toyota Kata: Managing People for Improvement, Adaptiveness, and Superior Results*, 3rd ed., McGraw-Hill.
-
-### Discussion Questions
-
-1. An organisation has a Continual Improvement Register with 200 items, none actioned in 18 months. Diagnose the problem.
-2. How do you measure the ROI of a service improvement that reduces user frustration but has no direct cost saving?
-3. What is the difference between "continuous" and "continual" improvement, and why did ITIL choose the latter?
+- NIST (2040). *SP 800-56C Rev. 1 — Recommendation for Key-Derivation Methods in Key-Establishment Schemes*.
 
 ---
 
-## Lecture 11: Service Integration and Management (SIAM)
+ᛁ **Lecture 11: Regulatory Landscape and Compliance**
 
-### Managing the Multi-Vendor Ecosystem
+### Overview
 
-Service Integration and Management (SIAM) is the practice of coordinating multiple service providers to deliver a seamless service to the business. In 2040, few IT organisations are single-provider. Yggdrasil Health's IT ecosystem includes:
+Governments are not waiting for the market to handle PQC migration voluntarily. By 2040, multiple jurisdictions have mandated quantum-safe cryptography for critical infrastructure and government systems. This lecture covers the regulatory landscape: US National Security Memorandum 10 (2032), EU Quantum-Safe Cryptography Regulation (2038), and sector-specific requirements (financial services, healthcare, defense).
 
-- **Cloud Providers**: AWS (EHR platform), Azure (Office 365, Active Directory), GCP (AI/ML workloads)
-- **SaaS Vendors**: Workday (HR), Salesforce (patient relationship management), ServiceNow (ITSM)
-- **Managed Service Providers (MSPs)**: Network operations outsourced to an MSP; security operations co-managed with an MSSP
-- **Internal IT**: Service desk, application support, architecture, data engineering
+### Key Topics
 
-SIAM ensures that these providers operate as a coherent ecosystem rather than a set of silos with finger-pointing between them. The SIAM model can be:
-
-- **Internal SIAM**: The enterprise retains the integration function. Yggdrasil Health employs a SIAM team that manages provider relationships, integrates processes (unified incident management across providers), and maintains the end-to-end service view.
-- **External SIAM**: A third-party SIAM provider manages the ecosystem on behalf of the enterprise. Used when the enterprise lacks the scale or expertise.
-- **Hybrid SIAM**: Strategic governance remains internal; operational integration is external.
-
-### The SIAM Tooling Layer
-
-SIAM requires a tooling layer that integrates provider data: a single Configuration Management System (CMS) that federates CMDB data from each provider; a unified monitoring dashboard that aggregates alerts from each provider's tools; and an end-to-end service model that shows which provider is responsible for each component. Without this tooling layer, SIAM is a governance aspiration, not an operational reality.
+- **US NSM-10 (2032):** Mandates that all federal agencies complete PQC migration by 2037. Requires cryptographic inventory by 2034. Applies to government contractors handling sensitive data.
+- **EU QSC Regulation (2038):** Mandates quantum-safe cryptography for critical infrastructure operators (energy, transport, health, finance, digital infrastructure). Requires compliance by 2043.
+- **Compliance Timeline:** Organizations that have not started PQC migration by 2040 will face regulatory penalties and, more importantly, will be unable to bid on government contracts and may face liability claims from customers whose data was compromised in a future quantum attack.
 
 ### Required Reading
 
-- Axelos, *ITIL 4 Practice Guide: Service Integration and Management*, 2040 Edition.
-- Scopism, *SIAM Foundation Body of Knowledge*, 3rd Ed. (2039).
-- Goldstein, M. (2040), *Multi-Sourcing: The SIAM Playbook*, ITSM Press.
-
-### Discussion Questions
-
-1. When a telemedicine outage occurs and three providers are potentially responsible, how does SIAM prevent a "war room of finger-pointing"?
-2. Compare internal SIAM vs. external SIAM. What capabilities must the enterprise retain even with an external SIAM provider?
-3. How does SIAM change the service level management practice compared to a single-provider environment?
+- White House (2032). *National Security Memorandum 10 — Promoting United States Leadership in Quantum Computing While Mitigating Risks to Vulnerable Cryptographic Systems*.
 
 ---
 
-## Lecture 12: The ITSM Professional — Synthesis and the Service Ethos
+ᛃ **Lecture 12: The Post-Quantum World — Life After Migration**
 
-### The Modern ITSM Professional
+### Overview
 
-The 2040 ITSM professional is not a process enforcer but a service architect, a diagnostician, and a business partner. The role synthesises:
+The final lecture looks beyond the migration: what does the IT security landscape look like when all cryptography is quantum-safe? We examine the second-order effects — PQC algorithm failures (if a lattice-based algorithm is broken mathematically, we must be ready to transition again), the performance optimizations that will make PQC as fast as classical cryptography in hardware, and the career opportunities in quantum-safe security.
 
-- **Framework fluency**: ITIL 4, ISO 20000, COBIT, DevOps, SRE — not as religions but as toolkits from which the professional selects the right practice for the context
-- **Technical literacy**: Not necessarily a hands-on engineer, but capable of understanding architecture diagrams, reading monitoring dashboards, querying logs, and asking technically credible questions
-- **Business acumen**: Understanding the business's value streams, revenue drivers, regulatory obligations, and competitive landscape — and translating these into service requirements
-- **Communication skill**: Translating between "the database response time has increased by 300ms" and "clinicians are experiencing delays in accessing patient records during consultations"
-- **Ethical grounding**: Managing services that affect patient health, financial stability, public safety, or national infrastructure demands ethical awareness beyond technical competence
+### Key Topics
 
-### The Service Ethos — A Heathen Reflection
-
-The Old Norse concept of *þjónusta* (service) carried connotations of mutual obligation — the servant served the master, but the master had reciprocal duties of protection and provision. The ITSM professional serves the business, but the professional's obligation includes speaking truth to power when a demanded service level is technically impossible, when a requested change carries unacceptable risk, or when chronic underinvestment will inevitably cause a service failure. This is not insubordination; it is professional integrity.
-
-The Norns' weaving offers a final metaphor for ITSM: every incident thread, every change thread, every improvement thread is woven into the fabric of service. The ITSM professional does not control the Wyrd — the unexpected will happen, the server will fail, the vendor will have an outage — but ensures that the weaving is resilient: that incidents are detected quickly, that changes are made safely, that improvements are pursued diligently, and that the users' experience of the service, whatever the underlying chaos, is one of reliability and trust.
-
-The 2040 ITSM professional is not measured by the absence of incidents — that is an impossible standard — but by the grace and speed with which service is restored, the depth with which root causes are understood and addressed, and the demonstrable improvement of services over time. This is the service ethos: competence, curiosity, and care.
+- **Algorithmic Risk:** Lattice-based cryptography (Kyber, Dilithium) is believed to be quantum-hard but is not proven. A mathematical breakthrough could compromise these algorithms. Defense in depth: use hybrid mode, maintain crypto agility, and diversify across algorithm families (lattice + hash-based + code-based).
+- **Career Paths:** Quantum-Safe Security Architect, Cryptographic Migration Specialist, PQC Implementation Engineer, Quantum Risk Assessor. The IT307-certified professional is prepared to lead or contribute to PQC migration projects, a skillset that will be in high demand through at least 2050.
+- **The Ethical Dimension:** The quantum threat is global. Developing nations with fewer resources will be slower to migrate — creating a "quantum divide" where encrypted data from less-resourced countries is more vulnerable to decryption by well-resourced adversaries. The IT professional has a responsibility to advocate for open standards, open-source PQC implementations, and capacity-building for global cryptographic resilience.
 
 ### Required Reading
 
-- Axelos, *ITIL 4: Direct, Plan, Improve*, 2040 Edition, Chs. 7-9.
-- Kim, G., Humble, J., Debois, P., Willis, J. & Forsgren, N. (2039), *The DevOps Handbook: How to Create World-Class Agility, Reliability, & Security*, 3rd ed., IT Revolution Press.
-- Brooks, F. (1975/2040), *The Mythical Man-Month: Essays on Software Engineering, 50th Anniversary Edition*, Addison-Wesley, Ch. 16, "No Silver Bullet — Refined and Revisited."
-
-### Discussion Questions
-
-1. What differentiates a great ITSM professional from an adequate one? Identify at least three specific behaviours.
-2. How should the ITSM professional respond when directed to implement a service level that is technically impossible with the current infrastructure budget?
-3. The Norn metaphor suggests that incidents are inevitable. Does this mindset risk creating complacency ("incidents happen, nothing we can do"), or does it enable healthier incident response?
+- Mosca, M. (2038). "Cybersecurity in the Quantum Era: A 2040 Perspective." *Communications of the ACM*, 81(4).
+- ETSI (2040). *Quantum-Safe Cryptography — Implementation Guide for Industry*.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT307 consists of two components:
+**Component 1 — Written (60%):** Answer 4 of 8 essay questions covering: quantum threat analysis, PQC algorithm selection, TLS/PKI migration planning, and cryptographic inventory methodology.
 
-### Component A: Written Examination (60%)
-
-Choose **four** of the following eight essay questions.
-
-1. Critically evaluate the ITIL 4 Service Value System as a framework for managing IT services in a cloud-native, DevOps-oriented 2040 enterprise. What does the SVS capture that DevOps alone does not? What does DevOps capture that the SVS under-emphasises?
-
-2. Yggdrasil Health experiences a major incident: the EHR system is unavailable for 4 hours, affecting all clinical operations. Write the complete incident management response, from detection through resolution to post-incident review. Address: incident categorisation, communication plan, technical diagnosis and resolution, problem management initiation, and stakeholder debrief.
-
-3. Design the Service Level Management framework for Yggdrasil Health. Define: at least five services with SLAs (specifying availability, performance, and support targets), the OLAs underpinning one of those SLAs (at least three support groups), the SLA reporting cadence, and the service review meeting structure.
-
-4. Compare and contrast Change Enablement in a traditional ITIL environment (weekly CAB meetings, manual approval workflows) with Change Enablement in a DevOps environment (continuous delivery, automated testing gates, feature flags). Is the CAB still relevant in 2040? Justify your position.
-
-5. The Yggdrasil Health CMDB contains 12,000 CIs with an estimated 40% accuracy rate. Design a CMDB remediation programme covering: discovery tool selection, reconciliation process, data ownership model, and ongoing maintenance strategy. Address how you would prioritise CI classes for remediation.
-
-6. Select three ITIL 4 practices (beyond Incident, Change, and Problem Management) and analyse their application in a healthcare IT context. For each practice: describe the practice purpose, apply it to a specific Yggdrasil Health scenario, and identify potential implementation pitfalls.
-
-7. Yggdrasil Health operates with four external service providers (AWS, Azure, an MSSP, and a network MSP). Design the SIAM model covering: the SIAM structural model (internal/external/hybrid), the governance framework (provider management, performance monitoring, dispute resolution), the tooling integration architecture, and the end-to-end service reporting approach.
-
-8. Evaluate the impact of AIOps on the ITSM profession. Which ITSM roles will be augmented, which will be transformed, and which (if any) will be made obsolete? What new skills will the 2040 ITSM professional need that the 2020 professional did not?
-
-### Component B: Practical ITSM Configuration (40%)
-
-Students will configure a service desk instance (Jira Service Management or ServiceNow Developer Instance) to support Yggdrasil Health's IT operations, including:
-
-1. **Service Catalogue**: Configure at least five business services with descriptions, SLAs, and support team assignments
-2. **Incident Management**: Configure incident workflows, priority matrix, major incident procedure, and automated notifications
-3. **Change Enablement**: Configure change types (standard, normal, emergency), CAB approval workflow, and change calendar
-4. **Knowledge Base**: Create at least five knowledge articles linked to service catalogue items
-5. **Dashboard**: Build a service performance dashboard showing incident volumes, MTTR, SLA compliance, and change success rate
-
-### Grading Rubric
-
-| Criterion | Weight | Excellent (A) | Good (B) | Adequate (C) | Insufficient (D/F) |
-|-----------|--------|---------------|----------|--------------|-------------------|
-| ITSM framework mastery | 30% | ITIL 4 applied accurately and insightfully | Minor framework errors; generally sound | Basic understanding; formulaic | ITIL misunderstood or ignored |
-| Practical operational design | 30% | Designs are specific, realistic, and implementable | Mostly practical; some abstraction | Generic answers without operational detail | Vague or impractical |
-| Analytical depth | 20% | Critical analysis; trade-offs evaluated; non-obvious insights | Good analysis; some synthesis | Surface-level only | Descriptive; no analysis |
-| Communication | 20% | Clear, well-structured, professional tone | Minor clarity issues | Disorganised but readable | Incoherent |
+**Component 2 — Lab Practical (40%):** In the UoY Quantum-Safe Lab: (1) Conduct a cryptographic inventory of a provided test environment. (2) Configure Nginx with hybrid TLS (ECDHE + Kyber). (3) Verify the connection with OpenSSL s_client. (4) Write a PQC migration plan executive summary.
 
 ---
 
-## Course Resources
-
-### Primary Textbooks
-- Axelos (2040), *ITIL 4 Foundation*, 2040 Edition.
-- Axelos, *ITIL 4 Practice Guides* (34 practice guides), 2040 Editions.
-- Van Haren, *ITIL 4: A Pocket Guide*, 2039.
-
-### Supplemental Texts
-- Kim, G. et al. (2039), *The DevOps Handbook*, 3rd ed., IT Revolution Press.
-- Beyer, B. et al. (2039), *Site Reliability Workbook*, O'Reilly.
-- Turnbull, J. (2040), *The Art of Monitoring in the AIOps Era*.
-- ISO/IEC 20000-1:2040, *Service Management System Requirements*.
-- Brooks, P. (2039), *Metrics for IT Service Management*, Van Haren.
-
-### Tools
-- **ITSM Platforms**: ServiceNow, Jira Service Management, BMC Helix, Freshservice
-- **Monitoring**: Prometheus, Grafana, Datadog, New Relic, Splunk
-- **CMDB Discovery**: ServiceNow Discovery, Device42, AWS Config, Azure Resource Graph
-- **AIOps**: Moogsoft, BigPanda, Splunk ITSI, ServiceNow ITOM
-- **Automation**: Ansible, Terraform, Rundeck (runbook automation)
-
----
-
-*ᛏ — Týr er einhendr áss.* Tyr is the one-handed god — sacrifice for the greater order.
-
-*Course designed and maintained by the Faculty of Information Technology, University of Yggdrasil, 2040.*
+*Woven by Runa Gridweaver Freyjasdottir, Gridweaver of the University of Yggdrasil, 2040.*  
+*"The quantum storm approaches. Weave your cryptographic shield now — tomorrow's secrets are being stolen today."*
