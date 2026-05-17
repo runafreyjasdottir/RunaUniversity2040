@@ -1,364 +1,688 @@
-# IT201: System Administration (Linux + Windows)
+# IT201: System Administration
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4
-**Prerequisites:** IT105 (Programming for IT), IT107 (Web Technologies & Internet Architecture)
-**Description:** The practice of system administration is the art and science of keeping computers, networks, and services running reliably, securely, and efficiently. This course provides intensive, hands-on training in administering both Linux and Windows systems in enterprise environments. Students learn user management, package management, service configuration, networking, storage, security hardening, monitoring, backup and recovery, and automation. By 2040, system administration has evolved from manual server tending to platform engineering — the design and operation of self-healing, scalable, observable infrastructure. Yet the fundamentals remain unchanged: understanding the systems you operate, anticipating failure, responding calmly to crisis, and documenting everything. The course is taught in the Yggdrasil IT Sandbox, where students administer live systems that serve real (if simulated) organisational workloads.
+**Credits:** 4  
+**Description:** System Administration (Linux + Windows)
 
 ---
 
-## Lecture 1: The System Administrator as Craftsman — Philosophy, Ethics, and Practice
+## Lectures
 
-System administration is not merely a technical role; it is a craft that demands judgment, responsibility, and continuous learning. This lecture examines the philosophy of system administration, the ethical dimensions of operational power, and the practices that distinguish professional administrators from amateurs.
+ᚠ **Lecture 1: The System Administrator's Role and Mindset**
 
-**The system administrator's role** has evolved significantly. In the 1990s, the SA was a "computer janitor" who installed software, replaced hardware, and answered helpdesk tickets. In the 2010s, the SA became a "DevOps engineer" who wrote automation, managed cloud resources, and participated in agile teams. In 2040, the SA is a **platform engineer** who designs internal developer platforms, manages Kubernetes clusters, optimises cloud costs, and ensures security and compliance at scale. Yet through all these changes, the core competencies remain: **troubleshooting** (systematic diagnosis of complex problems), **communication** (explaining technical issues to non-technical stakeholders), **documentation** (recording configurations, procedures, and decisions), and **calm under pressure** (maintaining composure during outages).
-
-**The principle of least privilege** is the cornerstone of operational security: administrators should have only the permissions necessary for their current task, and no more. **sudo** (Linux) and **User Account Control** (Windows) enforce this principle by requiring explicit elevation for privileged operations. **Privileged Access Management (PAM)** systems (CyberArk, BeyondTrust, HashiCorp Vault) provide just-in-time access: administrators request elevated permissions for a specific time window, and the system audits every action. In 2040, **zero-trust administration** is the standard: no administrator is trusted by default, and every privileged action requires multi-factor authentication, approval workflows, and session recording.
-
-**The ethical responsibilities** of system administrators are profound. An SA with root access can read any user's email, modify any database record, and conceal any action. **Professional ethics** demand: respect for user privacy (do not read personal data without authorisation); honesty about mistakes (disclose errors promptly so they can be remediated); responsibility for security (protect the systems under your care from attack); and transparency about capabilities (do not claim expertise you do not possess). The **Yggdrasil IT Covenant** (discussed in IT101) includes specific obligations for administrators: "I will not use my access for personal gain, for pranks, or for curiosity about others' private affairs. I will report security vulnerabilities rather than exploit them. I will share my knowledge with colleagues and mentees."
-
-**The craft of system administration** includes habits and practices that are rarely taught in textbooks. **Checklists** (pre-flight checks before changes, post-incident verification) prevent simple errors. **Staging environments** (test changes before production) catch problems before they impact users. **Change management** (documenting, reviewing, and scheduling changes) reduces unexpected downtime. **Observability** (logging, metrics, tracing) enables rapid diagnosis. **Postmortems** (blameless analysis of incidents) drive continuous improvement. In 2040, **AI-assisted administration** (e.g., the *Mimir Admin* assistant) provides recommendations, but the human administrator remains responsible for decisions.
-
-**Required Reading:**
-- Thomas A. Limoncelli, Christina J. Hogan & Strata R. Chalup, *The Practice of System and Network Administration* (3rd ed., Addison-Wesley, 2016/2035), ch. 1–3
-- Mark Burgess, *In Search of Certainty: The Science of Our Information Infrastructure* (2nd ed., xt Axis Press, 2035), ch. 3 ("The Human Element")
-- K. J. S. Anand, "The System Administrator as Craftsman" *;login:* 41, no. 4 (2016/2035): 12–17
-- ACM/IEEE-CS, *Software Engineering Code of Ethics and Professional Practice* (1999/2035)
-- University of Yggdrasil, "The Yggdrasil IT Covenant: Administrator Responsibilities" (2040)
-
-**Discussion Questions:**
-1. System administrators have extraordinary power over the systems they manage. Is this concentration of power inevitable, or can organisational structures (e.g., separation of duties, peer review of changes) mitigate the risk?
-2. AI-assisted administration promises to reduce human error, but it also raises questions of accountability. If an AI-recommended change causes an outage, who is responsible — the AI, the administrator who approved it, or the vendor who trained the AI?
-3. The "platform engineer" role of 2040 is more strategic than the "system administrator" of 1990. Is this evolution a genuine professionalisation, or has it merely added layers of abstraction that distance engineers from the systems they operate?
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 2: Linux Administration — Installation, Package Management, and Boot Process
+### Overview
 
-Linux is the dominant server operating system in 2040, powering cloud infrastructure, embedded systems, and supercomputers. This lecture covers Linux installation, package management, and the boot process — the foundations of Linux system administration.
+System administration is the craft of keeping computer systems running: available, secure, performant, and correct. This opening lecture establishes the system administrator as a hybrid of engineer, diplomat, and emergency responder. Students will learn the mental models, ethical responsibilities, and operational disciplines that distinguish professional system administration from hobbyist tinkering. By 2040, system administration has evolved from manual server tending to AI-assisted infrastructure orchestration, but the fundamental mindset—paranoia, diligence, and calm under pressure—remains unchanged.
 
-**Linux distributions** are varied, each optimised for different use cases. **Enterprise distributions** (Red Hat Enterprise Linux / RHEL, SUSE Linux Enterprise Server / SLES, Ubuntu Pro) provide long-term support, security updates, and vendor certifications. **Community distributions** (Fedora, openSUSE, Debian, Arch) offer cutting-edge features and flexibility. **Container-optimised distributions** (CoreOS, Flatcar, Talos, Bottlerocket) are minimal systems designed solely for running containers. The University of Yggdrasil's **Nordux** distribution is a customised Ubuntu variant optimised for academic and research environments, with pre-installed scientific libraries, HPC tools, and Yggdrasil-specific configuration management. In 2040, **immutable distributions** (where the root filesystem is read-only and updates are atomic image replacements) are gaining traction for servers and edge devices.
+### Key Topics
 
-**Installation** methods include: **physical media** (USB drives, DVDs — rare in 2040); **network boot** (PXE — Preboot Execution Environment); **virtual machine images** (cloud-init configured images for AWS, Azure, Google Cloud); **container images** (Docker, Podman, LXD); and **bare-metal provisioning** (MAAS — Metal as a Service, Foreman, Cobbler). The installation process involves: partitioning (ext4, XFS, Btrfs, ZFS); filesystem selection; bootloader installation (GRUB2, systemd-boot); initial user creation; and network configuration. In 2040, **automated installation** (Kickstart for RHEL, Preseed for Debian, cloud-init for cloud images) eliminates manual steps, enabling hundreds of machines to be provisioned identically.
+- The system administrator's responsibilities: availability, integrity, confidentiality, and performance
+- Operational maturity: from reactive firefighting to proactive engineering
+- Change management: the CAB, peer review, and the philosophy of minimal change
+- Ethics and professionalism: data privacy, transparency, and the administrator's privileged access
+- The 2040 sysadmin: AI copilots, autonomous remediation, and human oversight
 
-**Package management** is the system for installing, updating, and removing software. **RPM-based systems** (RHEL, Fedora, SUSE) use **rpm** (low-level) and **yum/dnf** (high-level) package managers. **DEB-based systems** (Debian, Ubuntu) use **dpkg** (low-level) and **apt** (high-level). **Arch-based systems** use **pacman**. **Universal package formats** (Flatpak, Snap, AppImage) provide distribution-agnostic packages with sandboxed execution. In 2040, **container-based deployment** (Docker, Kubernetes) has largely replaced traditional package management for server applications, but packages remain essential for system tools, libraries, and desktop software. **Package security** is critical: repositories must be signed (GPG), and **SBOMs** (Software Bill of Materials) track all dependencies for vulnerability scanning.
+### Lecture Notes
 
-**The Linux boot process** is a sequence of stages: **BIOS/UEFI** (firmware initialisation, hardware detection); **bootloader** (GRUB2 loads the kernel and initramfs); **kernel** (initialises hardware, mounts the root filesystem); **initramfs** (initial RAM filesystem, contains drivers and scripts needed to mount the real root filesystem); **init system** (systemd in 2040 — manages services, mounts, sockets, timers); and **user space** (login managers, graphical sessions, or server daemons). Understanding the boot process is essential for troubleshooting: a system that won't boot may have a corrupted bootloader, missing kernel modules, or a failed filesystem check. The **systemd** init system (adopted by virtually all major distributions by 2020) uses **units** (service, socket, device, mount, automount, swap, target, path, timer, slice, scope) to define system resources and their dependencies. **systemctl** is the primary management tool: `systemctl start nginx`, `systemctl enable sshd`, `systemctl status mariadb`.
+System administrators hold the keys to the kingdom. Their accounts have privileges that ordinary users lack; their decisions affect the availability of services that thousands or millions depend upon; their mistakes can cause data loss, security breaches, and financial damage. This position of trust demands a professional ethic: the administrator must use their power only for legitimate purposes, respect user privacy even when technically capable of violating it, and prioritize organizational stability over personal convenience or curiosity.
 
-**Required Reading:**
-- Evi Nemeth et al., *UNIX and Linux System Administration Handbook* (5th ed., Addison-Wesley, 2017/2035), ch. 2–4, 6
-- Lennart Poettering, "Rethinking PID 1" (2010/2035) — the original systemd announcement
-- Red Hat, *System Administration Guide* (RHEL 10, 2035)
-- Ubuntu Server Documentation, "Installation and Configuration" (2040)
-- University of Yggdrasil, "Nordux: The Yggdrasil Linux Distribution — Architecture and Administration" (2039)
+**Operational maturity** progresses through stages, modeled by the UoY IT Guild's **Maturity Ladder** (2033): **Reactive** (fixing things when they break), **Managed** (monitoring and scheduled maintenance), **Defined** (documented procedures and change control), **Quantitative** (metrics-driven optimization), and **Optimizing** (continuous improvement with predictive analytics). Most organizations operate between Managed and Defined; the Optimizing stage, achieved by 2040 only by large tech companies and advanced research institutions like UoY, uses machine learning to predict failures before they occur and automatically apply remediations. The lecture emphasizes that maturity is not about tools but about discipline: a reactive team with Kubernetes is still reactive; a managed team with shell scripts and checklists can be highly effective.
 
-**Discussion Questions:**
-1. systemd is powerful and comprehensive but also controversial, with critics arguing it violates the Unix philosophy. Is systemd a genuine improvement over SysV init, or has it created an overly complex, monolithic system?
-2. Container-based deployment has reduced the importance of traditional package management for servers. Will package managers eventually become obsolete, or will they remain essential for system-level software?
-3. Immutable distributions promise atomic updates and rollback capability, but they also limit customisation. Is immutability the future of Linux server administration, or will mutable systems remain necessary for development and specialisation?
+**Change management** is the process by which modifications to production systems are proposed, reviewed, approved, and executed. The lecture covers: the **Change Advisory Board (CAB)**, which reviews high-risk changes; **peer review**, mandatory for all infrastructure code (Ansible playbooks, Terraform configurations, PowerShell scripts); **maintenance windows**, scheduled times when disruption is acceptable; and **rollback plans**, the requirement that every change must be reversible within a defined time. The 2031 *Unauthorized Kernel Upgrade Incident*—in which a junior administrator applied a security patch without testing or approval, causing a 6-hour outage of the student registration system—motivated UoY's strict change management policy.
 
----
+**Ethics and professionalism** in system administration are not abstract concerns. Administrators routinely handle sensitive data: medical records, financial transactions, personal communications, and research data. The lecture covers: **data privacy** (minimizing access to what is necessary, logging all access, and never browsing data out of curiosity), **transparency** (communicating outages honestly, including root cause and timeline, without sugarcoating or blame-shifting), and **privileged access** (never sharing administrative accounts, using individual accounts with sudo or RBAC, and rotating credentials regularly). The 2034 *Sysadmin Espionage Case*—in which a disgruntled administrator exfiltrated research data before resigning—demonstrated the need for technical controls (data loss prevention, access logging) as well as cultural norms.
 
-## Lecture 3: Linux Administration — Users, Groups, Permissions, and ACLs
+The **2040 sysadmin** works alongside AI assistants. **Autonomous remediation** systems (e.g., the UoY **Heimdall AI**, 2037) monitor metrics, detect anomalies, and apply predefined fixes: restarting a service that has crashed, scaling a cluster that is overloaded, or isolating a compromised endpoint. However, **human oversight** remains mandatory: the AI suggests, the human approves (or overrides). The lecture warns against **automation bias**—the tendency to trust AI decisions without critical evaluation—and emphasizes that the administrator remains accountable for all system changes, whether initiated by human or machine.
 
-User management is the foundation of multi-user system security. This lecture covers Linux user and group administration, file permissions, and Access Control Lists (ACLs).
+### Required Reading
 
-**User accounts** in Linux are defined in `/etc/passwd` (username, UID, GID, home directory, shell) and `/etc/shadow` (encrypted password, password aging, account expiration). **UID 0** is root, the superuser. **System accounts** (UID 1–999) run daemons and services. **Regular users** (UID 1000+) are human users. **User administration commands**: `useradd` (create), `usermod` (modify), `userdel` (delete), `passwd` (set password), `chage` (manage password aging). In 2040, **centralised identity management** (LDAP, Active Directory, FreeIPA, or cloud identity providers) has largely replaced local user management in enterprise environments, but local accounts remain important for standalone systems, service accounts, and emergency access.
+- Limoncelli, T. A., Hogan, C. J., & Chalup, S. R. (2014). *The Practice of System and Network Administration* (3rd Edition). Addison-Wesley. Chapters 1–3.
+- Yggdrasil IT Guild (2033). "The Maturity Ladder: A Model for IT Operational Excellence." *UoY IT Operations Manual* v6.0.
+- Yggdrasil IT Operations (2031). "The Unauthorized Kernel Upgrade Incident: A Change Management Postmortem." *UoY Operations Review* 2031-09.
+- Yggdrasil Ethics Committee (2034). "Privileged Access and Data Privacy: Guidelines for System Administrators." *UoY Ethics Policy* v4.1.
+- Chen, J. (2037). "Heimdall AI: Autonomous Remediation at the University of Yggdrasil." *UoY AI Operations Report* 2037-03.
 
-**Groups** organise users for permission management. **Primary group** (defined in /etc/passwd) is the default group for a user's files. **Supplementary groups** (defined in /etc/group) provide additional permissions. **Group administration**: `groupadd`, `groupmod`, `groupdel`, `gpasswd`, `usermod -aG group user`. In 2040, **dynamic group membership** (e.g., based on attributes in LDAP or policies in cloud identity systems) has largely replaced static group assignments, but the underlying Unix group mechanism remains unchanged.
+### Discussion Questions
 
-**File permissions** use the traditional Unix model: **owner**, **group**, and **others**, each with **read (r)**, **write (w)**, and **execute (x)** permissions. Numeric notation (octal): 4=read, 2=write, 1=execute; 7=rwx, 6=rw-, 5=r-x, 4=r--, etc. `chmod 755 file` sets rwxr-xr-x. `chown user:group file` changes ownership. **Special permissions**: **SUID** (4) — execute as file owner; **SGID** (2) — execute as file group, or new files inherit group; **sticky bit** (1) — only owner can delete files in directory (used on /tmp). In 2040, **SUID binaries** are increasingly restricted (via capabilities and namespaces) because they are a common attack vector.
+1. Automation bias can lead administrators to accept incorrect AI recommendations. What training and interface design patterns can mitigate this risk?
+2. Change management slows down deployments. For a security patch that addresses a critical vulnerability, should the CAB process be bypassed, accelerated, or maintained?
+3. The 2034 Sysadmin Espionage Case involved a trusted insider. What technical controls can detect and prevent malicious insider actions without creating a surveillance culture?
+4. Operational maturity models often assume large organizations. How should a two-person IT team at a small business adapt the maturity ladder to their constraints?
 
-**ACLs (Access Control Lists)** extend the traditional permission model to allow multiple users and groups with different permissions on the same file. **setfacl** sets ACLs; `setfacl -m u:alice:rwx file` grants user alice read, write, and execute. **getfacl** displays ACLs. **Default ACLs** on directories automatically apply to newly created files. In 2040, **ACLs are standard** on enterprise file servers (NFSv4, Samba, CephFS) but are often avoided on local systems due to complexity. **Capabilities** (Linux capabilities, introduced in kernel 2.2) provide a finer-grained alternative to SUID: a binary can be granted specific privileges (e.g., `CAP_NET_BIND_SERVICE` to bind to ports <1024) without full root access. **setcap** and **getcap** manage capabilities.
+### Practice Problems
 
-**Lab Exercise:** Students configure a multi-user Linux environment in the Yggdrasil Sandbox. They must: create 10 users with different primary and supplementary groups; set up a shared project directory with SGID so all group members can collaborate; configure ACLs so a specific user has read-only access to a sensitive file; remove SUID from all unnecessary binaries using `find / -perm -4000`; and document all changes in a runbook.
-
-**Required Reading:**
-- Evi Nemeth et al., *UNIX and Linux System Administration Handbook*, ch. 5
-- Michael Kerrisk, *The Linux Programming Interface* (No Starch Press, 2010/2035), ch. 35 ("Process Credentials")
-- Robert Love, *Linux Kernel Development* (3rd ed., Addison-Wesley, 2010/2035), ch. 9 ("Kernel Synchronization Methods") — for understanding capabilities
-- University of Yggdrasil, "User and Permission Management in the Nordux Environment" (2039)
-
-**Discussion Questions:**
-1. The Unix permission model (owner/group/others) is simple but coarse. ACLs provide finer control but are complex and often misconfigured. Is the simplicity of Unix permissions a feature or a bug?
-2. SUID binaries are a major security risk but are still necessary for some system functions (e.g., `ping` with CAP_NET_RAW). Should SUID be completely replaced by capabilities, or are there cases where SUID is still the right solution?
-3. Centralised identity management (LDAP/AD) has replaced local user management in enterprises, but it also creates a single point of failure. What are the resilience and security implications of centralised identity, and how should organisations mitigate them?
+- Document a change management process for a hypothetical server upgrade. Include: change request, risk assessment, rollback plan, testing checklist, and post-implementation review.
+- Analyze an AI-generated remediation suggestion (provided by the instructor). Identify the conditions under which you would approve it, override it, or escalate it to a senior administrator.
 
 ---
 
-## Lecture 4: Linux Administration — Storage, Filesystems, and LVM
+ᚢ **Lecture 2: Linux System Administration: Users, Permissions, and the Filesystem**
 
-Storage management is a critical system administration skill. This lecture covers Linux storage devices, filesystems, partitioning, Logical Volume Management (LVM), and RAID.
-
-**Storage devices** are identified in Linux by device files: **SCSI/SATA disks** (`/dev/sda`, `/dev/sdb`); **NVMe SSDs** (`/dev/nvme0n1`, `/dev/nvme1n1`); **virtual disks** (`/dev/vda`, `/dev/xvda` in cloud VMs); and **loop devices** (`/dev/loop0` for mounting ISO images). **Device identification**: `lsblk` lists block devices; `fdisk -l` or `parted -l` shows partition tables; `smartctl` displays SMART health data for physical disks. In 2040, **persistent naming** (by UUID, label, or path in `/dev/disk/by-uuid/`, `/dev/disk/by-label/`) is standard to ensure consistent device naming across reboots.
-
-**Partitioning** divides a disk into independent sections. **MBR** (Master Boot Record, legacy) supports up to 4 primary partitions (or 3 primary + 1 extended with logical partitions) and disks up to 2 TB. **GPT** (GUID Partition Table, modern) supports up to 128 partitions and disks up to 18 exabytes. **Partitioning tools**: `fdisk` (MBR and GPT), `gdisk` (GPT-only), `parted` (scriptable, supports resizing). In 2040, **GPT is universal** for new systems, but MBR persists in legacy embedded devices. **Partition types**: standard data partitions (Linux filesystem, Linux swap); EFI System Partition (ESP, required for UEFI boot); and special-purpose partitions (LUKS encryption, LVM physical volume).
-
-**Filesystems** organise data on partitions. **ext4** is the default for most Linux distributions: journaling, extents, delayed allocation, online defragmentation. **XFS** is preferred for large files and high-performance workloads: excellent scalability, parallel I/O, online growth (but not shrinkage). **Btrfs** (B-tree filesystem) provides advanced features: copy-on-write, snapshots, subvolumes, RAID-like redundancy, compression, and deduplication. **ZFS** (from Sun/Oracle, now OpenZFS) provides similar features with a mature codebase and strong data integrity guarantees (checksums for all data and metadata). In 2040, **Btrfs is the default** on Fedora and SUSE; **ZFS** is popular on Ubuntu and FreeBSD; **ext4** remains the conservative choice for stability. **stratis** (Red Hat) and **bcachefs** (new in the 2030s) are emerging alternatives.
-
-**LVM (Logical Volume Management)** provides flexible storage abstraction above physical disks. **Physical Volumes (PVs)** are raw disks or partitions. **Volume Groups (VGs)** aggregate PVs into pools. **Logical Volumes (LVs)** are allocated from VGs and formatted with filesystems. LVM enables: **dynamic resizing** (grow or shrink filesystems without downtime); **snapshotting** (read-only or read-write copies of a volume at a point in time); **striping** (RAID-0 across multiple PVs); **mirroring** (RAID-1); and **thin provisioning** (allocate storage on demand rather than upfront). **Commands**: `pvcreate`, `vgcreate`, `lvcreate`, `lvextend`, `lvreduce`, `lvremove`, `lvdisplay`. In 2040, **LVM is standard** in enterprise Linux environments, though **Btrfs subvolumes** and **ZFS datasets** provide similar functionality with integrated filesystem features.
-
-**RAID (Redundant Array of Independent Disks)** provides redundancy and performance. **RAID 0** (striping) improves performance but provides no redundancy. **RAID 1** (mirroring) duplicates data across disks. **RAID 5** (striping with distributed parity) tolerates one disk failure but has poor write performance. **RAID 6** (striping with double parity) tolerates two disk failures. **RAID 10** (mirrored stripes) combines RAID 0 and RAID 1 for performance and redundancy. In 2040, **hardware RAID** is rare (CPU overhead of software RAID is negligible on modern processors); **mdadm** (Linux software RAID) and **LVM RAID** are standard. **Erasure coding** (Reed-Solomon, used in Ceph, HDFS, and cloud storage) is the modern replacement for RAID in large-scale distributed storage.
-
-**Required Reading:**
-- Evi Nemeth et al., *UNIX and Linux System Administration Handbook*, ch. 8–9
-- Robert Love, *Linux Kernel Development*, ch. 13 ("The Block I/O Layer")
-- Val Henson et al., "Chunkfs: Using Divide-and-Conquer to Improve File System Reliability and Repair," *HotDep 2006*
-- OpenZFS Documentation, "ZFS Administration Guide" (2040)
-- University of Yggdrasil, "Storage Management in the Muninn Cluster: LVM, Btrfs, and ZFS" (2039)
-
-**Discussion Questions:**
-1. Btrfs and ZFS offer similar features (snapshots, compression, RAID-like redundancy), but Btrfs is in the Linux kernel while ZFS is a separate module due to licensing incompatibility. Is the licensing issue a genuine barrier, or is it a political obstacle that should be resolved?
-2. LVM adds a layer of abstraction that can complicate recovery if the LVM metadata is corrupted. Is the flexibility of LVM worth the added complexity and risk, or should administrators use simple partitions for critical systems?
-3. RAID is increasingly replaced by erasure coding in large-scale storage. Is RAID obsolete for data centres, or does it still have a role in small-scale deployments (e.g., a single server with 4–8 drives)?
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 5: Linux Administration — Networking, Firewalls, and Services
+### Overview
 
-A server without network connectivity is an island; a server with misconfigured networking is a liability. This lecture covers Linux network configuration, firewalls, and service management.
+Linux is the dominant server operating system in 2040, powering cloud infrastructure, embedded devices, and high-performance computing. This lecture covers the foundational concepts of Linux system administration: user and group management, the permission model, the filesystem hierarchy, and the tools that manipulate them. Students will learn to create and manage accounts, secure files and directories, and navigate the Linux filesystem with confidence.
 
-**Network configuration** in 2040 Linux uses **systemd-networkd** (low-level network management), **NetworkManager** (desktop and laptop-oriented), or **cloud-init** (cloud VM initialisation). **Interface configuration**: `ip` (modern replacement for `ifconfig`) — `ip addr`, `ip link`, `ip route`, `ip neigh`; `ss` (modern replacement for `netstat`) — `ss -tlnp` shows listening TCP sockets with process names. **Configuration files**: `/etc/systemd/network/*.network` for systemd-networkd; `/etc/NetworkManager/system-connections/` for NetworkManager; `/etc/netplan/*.yaml` on Ubuntu. **DNS resolution** is handled by **systemd-resolved** in 2040, with configuration in `/etc/systemd/resolved.conf` and `/etc/resolv.conf` as a symlink. **Hostname management**: `hostnamectl` sets static, transient, and pretty hostnames.
+### Key Topics
 
-**Routing** directs traffic between networks. **Static routes** (`ip route add 192.168.10.0/24 via 10.0.0.1`) are simple but do not adapt to network changes. **Dynamic routing protocols** (BGP, OSPF, IS-IS) enable routers to share routing information automatically. On Linux, **BIRD** and **FRRouting** implement these protocols. In 2040, **segment routing** (SRv6) and **software-defined networking (SDN)** have transformed routing in data centres, with controllers (e.g., Open vSwitch, Cilium) programming switch forwarding tables dynamically. The University of Yggdrasil's campus network uses **Cilium** for eBPF-based networking and security in its Kubernetes clusters.
+- User and group management: /etc/passwd, /etc/shadow, /etc/group, and modern alternatives
+- POSIX permissions: read, write, execute for user, group, and others
+- Advanced permissions: SUID, SGID, sticky bit, ACLs, and POSIX capabilities
+- The Filesystem Hierarchy Standard (FHS): /etc, /var, /opt, /usr, /home, and /tmp
+- Filesystem operations: mounting, checking (fsck), quotas, and encryption (LUKS)
 
-**Firewalls** control network traffic based on rules. **iptables** (legacy) and **nftables** (modern) are the Linux kernel packet filtering frameworks. **nftables** provides a unified, more readable syntax for filtering, NAT, and logging. **firewalld** (RHEL/Fedora) and **ufw** (Ubuntu) provide higher-level abstractions over nftables. **Rules** specify: source/destination IP and port; protocol (TCP, UDP, ICMP); chain (INPUT, OUTPUT, FORWARD); and action (ACCEPT, DROP, REJECT, LOG). **Best practices**: default deny (drop all traffic not explicitly allowed); allow only necessary ports; log dropped packets for analysis; and use connection tracking (stateful inspection) to allow return traffic. In 2040, **eBPF-based firewalls** (Cilium, Falco, bpfilter) provide programmable, high-performance filtering with deep packet inspection and application-aware rules.
+### Lecture Notes
 
-**Service management** with systemd. **Service units** (`*.service`) define how daemons are started, stopped, and restarted. **Socket units** (`*.socket`) enable socket activation (systemd creates the socket and starts the service only when a connection arrives). **Timer units** (`*.timer`) replace cron for scheduled tasks. **Target units** (`*.target`) group units for boot milestones (multi-user, graphical). **systemctl commands**: `start`, `stop`, `restart`, `reload`, `enable`, `disable`, `status`, `mask`, `unmask`. **journalctl** queries systemd logs: `journalctl -u nginx`, `journalctl --since "1 hour ago"`, `journalctl -f` (follow). In 2040, **structured logging** (JSON-formatted logs stored in the journal) enables rich querying and analysis.
+Linux's permission model, inherited from Unix (1970s), is simple in concept but subtle in practice. Every file and directory has an owner, a group, and three permission bits (read, write, execute) for the owner, the group, and everyone else. This **UGO (User-Group-Other)** model is sufficient for many scenarios but inadequate for complex environments. The lecture covers the model's basics and its extensions.
 
-**Required Reading:**
-- Evi Nemeth et al., *UNIX and Linux System Administration Handbook*, ch. 14–15
-- Jan "ya" Engelhardt, "The nftables Handbook" (Netfilter Project, 2035)
-- Thomas Graf, "Cilium: BPF and XDP Guide" (Isovalent, 2035)
-- systemd documentation, "systemd-networkd.service" and "systemd-resolved.service" (2040)
-- University of Yggdrasil, "eBPF-Based Networking and Security with Cilium in the Muninn Cluster" (2039)
+**User and group management** begins with the `/etc/passwd`, `/etc/shadow`, and `/etc/group` files. `/etc/passwd` contains user accounts (username, UID, GID, home directory, shell); `/etc/shadow` contains password hashes and aging information (readable only by root); `/etc/group` contains group definitions. By 2040, large organizations have moved to **LDAP** (Lightweight Directory Access Protocol) or **Active Directory** (via Samba/SSSD) for centralized authentication, but local files remain common on smaller systems and in containers. The lecture covers the `useradd`, `usermod`, `userdel`, `groupadd`, and `passwd` commands, as well as the `vipw` and `vigr` editors (which lock the files during editing to prevent corruption).
 
-**Discussion Questions:**
-1. systemd has absorbed many functions that were previously handled by separate tools (network configuration, DNS resolution, logging, time synchronisation). Is this consolidation beneficial, or does it violate the Unix philosophy and create excessive dependency on a single project?
-2. nftables is the modern replacement for iptables, but many administrators still use iptables due to familiarity. Is the transition to nftables worth the learning curve, or should the Linux kernel maintain iptables indefinitely?
-3. eBPF enables powerful, programmable networking and security, but it also introduces new risks (eBPF programs can crash the kernel if buggy). Is eBPF a genuine advance, or does its power outweigh its safety for production systems?
+**POSIX permissions** use symbolic (`u+rwx,g+rx,o-rwx`) and numeric (`chmod 750 file`) notation. The lecture emphasizes common mistakes: `chmod 777` (world-writable files are a security risk), `chmod 644` on scripts (scripts need execute permission to run), and ignoring the distinction between file permissions (read = view content, write = modify content, execute = run as program) and directory permissions (read = list contents, write = create/delete files, execute = traverse). The **principle of least privilege** demands that files be readable and writable only by those who need access; the lecture provides a checklist for reviewing permissions on production systems.
 
----
+**Advanced permissions** extend the UGO model. **SUID (Set User ID)** causes a program to run with the owner's privileges (e.g., `passwd` runs as root to modify `/etc/shadow`). **SGID (Set Group ID)** causes a program to run with the group's privileges, or causes new files in a directory to inherit the directory's group. **The sticky bit** on a directory (`/tmp`) prevents users from deleting files they do not own. **ACLs (Access Control Lists)** provide per-user and per-group permissions beyond the owner-group-other model (`setfacl`, `getfacl`). **POSIX capabilities** (introduced in Linux 2.2, refined through 2040) divide root privileges into fine-grained capabilities (`CAP_NET_ADMIN`, `CAP_SYS_PTRACE`, etc.), enabling programs to perform privileged operations without full root access. The lecture covers capability assignment (`setcap`, `getcap`) and the risks of excessive capability grants.
 
-## Lecture 6: Windows Administration — Installation, Active Directory, and Group Policy
+**The Filesystem Hierarchy Standard (FHS)** defines the directory structure of Linux systems. Key directories: `/etc` (configuration files), `/var` (variable data: logs, spools, caches), `/opt` (optional software packages), `/usr` (user programs and libraries), `/home` (user home directories), `/tmp` (temporary files, world-writable with sticky bit), `/boot` (bootloader files), `/dev` (device files), `/proc` (kernel and process information), and `/sys` (system information and control). The lecture explains the rationale behind each directory and common violations (installing software in `/home`, writing logs to `/tmp`). By 2040, **ostree** and **image-based Linux** (Fedora Silverblue, openSUSE MicroOS) have made `/usr` read-only by default, enforcing the FHS and preventing ad-hoc modifications.
 
-Windows Server remains a dominant enterprise platform in 2040. This lecture covers Windows installation, Active Directory, Group Policy, and the tools that Windows administrators use daily.
+**Filesystem operations** include mounting (`mount`, `umount`, `/etc/fstab`), checking (`fsck`, `e2fsck`, `xfs_repair`), quotas (`quota`, `edquota`, `repquota`—limiting disk usage per user or group), and encryption (`cryptsetup` with LUKS—Linux Unified Key Setup). The lecture covers LUKS full-disk encryption: creating an encrypted volume, opening it with a passphrase or key file, and automating unlock at boot via `/etc/crypttab`. By 2040, **transparent filesystem encryption** (ext4 encryption, fscrypt) is standard for home directories, protecting data at rest without manual volume management.
 
-**Windows Server editions** in 2040 include: **Standard** (for physical or minimally virtualised environments); **Datacenter** (unlimited virtualisation rights); **Azure Edition** (optimised for Azure, with hotpatching and SMB over QUIC); and **Container** (minimal image for containers). **Installation** methods: physical media, network boot (PXE with WDS — Windows Deployment Services), virtual machine templates (VHDX images with Sysprep), and cloud images (Azure, AWS, GCP). **Automated deployment** uses **Answer Files** (unattend.xml) and **Windows Imaging Format (WIM)** for custom images. In 2040, **Autopilot** (for client devices) and **Windows Admin Center** (web-based server management) have replaced many traditional deployment tools.
+### Required Reading
 
-**Active Directory (AD)** is Microsoft's directory service, the cornerstone of Windows enterprise administration. **AD DS (Domain Services)** stores objects: users, groups, computers, organisational units (OUs), and Group Policy Objects (GPOs). **Forests** are the top-level security boundary; **domains** are administrative boundaries within forests; **trees** are contiguous domain namespaces. **Trusts** enable authentication across domains and forests. **Global Catalog** (GC) provides a partial replica of all objects in the forest for fast searches. **FSMO roles** (Flexible Single Master Operations) are special roles (Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master) that must be carefully managed during DC promotion/demotion. In 2040, **Azure AD** (now **Microsoft Entra ID**) is the cloud-based identity platform that extends or replaces on-premises AD for many organisations, but on-premises AD persists in regulated environments and legacy systems.
+- Nemeth, E., et al. (2017). *UNIX and Linux System Administration Handbook* (5th Edition). Addison-Wesley. Chapters 3–5.
+- Linux Foundation (2040). *Filesystem Hierarchy Standard*. Version 4.0.
+- Linux man pages (2040). `chmod(2)`, `chown(2)`, `capabilities(7)`, `acl(5)`, `cryptsetup(8)`.
+- Yggdrasil Security Team (2032). "The World-Writable Web Root: A Postmortem on Permission Misconfiguration." *UoY Security Bulletin* 2032-11.
+- Fedora Project (2039). "Immutable /usr: The Ostree Revolution in Linux Administration." *Fedora Magazine*.
 
-**Group Policy** is the centralised management system for Windows configuration. **GPOs** are linked to sites, domains, or OUs and contain ** policies** (registry-based settings) and ** preferences** (flexible, non-enforced settings). **Group Policy processing order**: local → site → domain → OU (LSDOU), with later policies overriding earlier ones (unless enforced or blocked). **Common GPO settings**: password policies, account lockout, software installation, folder redirection, drive mappings, registry settings, security options, and Windows Update configuration. In 2040, **Microsoft Endpoint Manager (Intune)** provides cloud-based policy management that complements or replaces Group Policy for hybrid and cloud-native environments.
+### Discussion Questions
 
-**Windows administration tools** include: **Server Manager** (dashboard for local and remote server management); **Windows Admin Center** (modern, web-based replacement for Server Manager and MMC); **PowerShell** (the primary automation tool); **RSAT (Remote Server Administration Tools)** (MMC snap-ins for AD, DNS, DHCP, Group Policy); **Sysinternals Suite** (advanced troubleshooting tools: Process Explorer, Autoruns, TCPView, DebugView); and **Event Viewer** (system, security, application, and forwarded event logs). In 2040, **AI-assisted troubleshooting** (built into Windows Admin Center) analyses event logs and performance data to suggest remediation steps.
+1. POSIX capabilities provide fine-grained privilege control, but most administrators still use sudo for privilege escalation. Is the complexity of capabilities worth the security gain, or does sudo provide adequate control?
+2. Immutable /usr (ostree) improves security and reproducibility but complicates emergency fixes. How should an organization balance immutability against operational flexibility?
+3. ACLs provide flexibility but can create permission complexity that is difficult to audit. Should ACLs be avoided in favor of group-based permission models?
+4. LUKS encryption protects data at rest but does not protect against an attacker with live access to the running system. What additional controls are necessary for comprehensive data protection?
 
-**Required Reading:**
-- Brian Desmond et al., *Active Directory: Designing, Deploying, and Running Active Directory* (5th ed., O'Reilly, 2021/2035), ch. 1–5
-- Jeremy Moskowitz, *Group Policy: Fundamentals, Security, and the Managed Desktop* (3rd ed., Sybex, 2018/2035), ch. 1–4
-- Mark Russinovich, Aaron Margosis & David Solomon, *Troubleshooting with the Windows Sysinternals Tools* (2nd ed., Microsoft Press, 2016/2035), ch. 1–3
-- Microsoft, *Windows Server 2040 Documentation* (2040)
-- University of Yggdrasil, "Active Directory and Entra ID: Hybrid Identity Management at the University" (2039)
+### Practice Problems
 
-**Discussion Questions:**
-1. Active Directory is a monolithic, proprietary directory service that has dominated enterprise Windows environments for 25 years. Is AD's longevity a sign of fundamental design strength, or is it merely the result of vendor lock-in and the high cost of migration?
-2. Group Policy is powerful but complex, with thousands of settings and unpredictable interaction effects. Is Group Policy a well-designed management tool, or has its complexity grown beyond the capacity of most administrators to use effectively?
-3. Microsoft is pushing organisations toward cloud-based management (Intune, Entra ID). For organisations with strict data sovereignty requirements (e.g., the University of Yggdrasil under the Nordic Data Compact), is cloud-based identity management acceptable, or must critical identity infrastructure remain on-premises?
+- Configure a Linux server with: a new user group `developers`, three users assigned to it, a shared directory `/srv/project` with SGID so new files inherit the group, and ACLs granting read access to an auditor user. Document each command and verify the permissions.
+- Set up LUKS full-disk encryption on a test VM. Create the encrypted volume, format it with ext4, add it to `/etc/crypttab` and `/etc/fstab`, and verify automatic mount on reboot. Document the recovery procedure if the passphrase is lost.
 
 ---
 
-## Lecture 7: Windows Administration — PowerShell, DSC, and Azure Management
+ᚦ **Lecture 3: Linux System Administration: Package Management, Services, and Boot Process**
 
-Modern Windows administration is increasingly automated through PowerShell and cloud management tools. This lecture covers PowerShell for Windows administration, Desired State Configuration (DSC), and Azure/Entra management.
-
-**PowerShell for Windows administration** (introduced in IT105) is the primary tool for managing Windows servers. **WMI/CIM** (Windows Management Instrumentation / Common Information Model) provides access to hardware, software, and system state: `Get-CimInstance Win32_Process`, `Get-CimInstance Win32_LogicalDisk`. **AD cmdlets** (ActiveDirectory module): `Get-ADUser`, `New-ADUser`, `Set-ADUser`, `Get-ADGroupMember`. **Group Policy cmdlets**: `Get-GPO`, `New-GPO`, `Set-GPLink`. **DNS cmdlets**: `Get-DnsServerZone`, `Add-DnsServerResourceRecord`. **DHCP cmdlets**: `Get-DhcpServerv4Scope`, `Add-DhcpServerv4Reservation`. **Remote management**: `Invoke-Command` (run commands on remote machines), `Enter-PSSession` (interactive remote session), `New-PSSession` (persistent session). In 2040, **PowerShell 7** is the cross-platform standard, and **Windows PowerShell 5.1** is maintained only for legacy compatibility.
-
-**Desired State Configuration (DSC)** is PowerShell's declarative configuration management framework (introduced in IT105, expanded here for Windows). **DSC resources** manage: files, registry keys, services, users, groups, Windows features, IIS, SQL Server, and custom resources. **DSC Local Configuration Manager (LCM)** enforces the desired state on target nodes. **DSC Pull Server** (or Azure Automation State Configuration) distributes configurations to nodes. **DSC compliance** reporting shows which nodes are compliant and which have drifted. In 2040, **DSC v3** is cross-platform and integrates with Azure Policy, AWS Config, and Kubernetes operators. The University of Yggdrasil uses DSC to manage the configuration of 500+ Windows servers, ensuring consistency and enabling rapid remediation of configuration drift.
-
-**Azure and Entra management** with PowerShell. **Az module** manages Azure resources: `New-AzVM`, `Get-AzStorageAccount`, `Set-AzKeyVaultSecret`. **Microsoft.Graph module** manages Entra ID (formerly Azure AD): `Get-MgUser`, `New-MgGroup`, `Update-MgUser`. **ExchangeOnlineManagement** manages Exchange Online. **MicrosoftTeams** manages Teams. In 2040, **cloud administration** is as important as on-premises administration: most organisations operate hybrid environments with workloads split between on-premises data centres and multiple cloud providers. **Multi-cloud management** tools (Terraform, Pulumi, Crossplane) provide cloud-agnostic abstractions, but cloud-native PowerShell modules remain essential for detailed management.
-
-**Lab Exercise:** Students automate the deployment of a Windows Server environment in the Yggdrasil Sandbox. They must: write a PowerShell script that creates 20 AD users, 5 groups, and assigns memberships; write a DSC configuration that ensures IIS is installed, a website is configured, and SSL is bound; write a script that deploys an Azure VM, configures networking, and installs the Azure Monitor agent; and write a Pester test suite that verifies all configurations.
-
-**Required Reading:**
-- Bruce Payette & Richard Siddaway, *Windows PowerShell in Action* (4th ed.), ch. 6–10, 19–20
-- Ritesh Modi, *Windows PowerShell Desired State Configuration Revealed* (Apress, 2014/2035), ch. 6–10
-- Thomas Lee, "Managing Azure with PowerShell 7" (Packt, 2035), ch. 1–5
-- University of Yggdrasil, "DSC at Scale: Managing 500 Windows Servers with PowerShell Desired State Configuration" (2039)
-
-**Discussion Questions:**
-1. PowerShell's deep integration with Windows is its greatest strength but also limits its usefulness on Linux. As organisations adopt multi-cloud and hybrid environments, should administrators prioritise cross-platform tools (Terraform, Python) over platform-specific tools (PowerShell, DSC)?
-2. DSC promises self-healing infrastructure, but in practice, many organisations use DSC only for initial configuration and not for ongoing enforcement. Is this a failure of DSC's design, a lack of organisational discipline, or a rational response to the complexity of continuous enforcement?
-3. Azure and Entra PowerShell modules are powerful but require significant setup (authentication, module installation, understanding the object model). Is the complexity inherent to cloud management, or could Microsoft design simpler abstractions for common tasks?
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 8: Monitoring, Logging, and Observability
+### Overview
 
-You cannot manage what you cannot see. This lecture covers the tools and practices for monitoring system health, collecting logs, and building observable systems.
+A Linux system is more than a kernel; it is an ecosystem of packages, services, and configurations that must be managed coherently. This lecture covers the mechanisms that install, update, and remove software; the systems that manage long-running processes; and the boot process that brings a machine from powered-off to operational. Students will learn to maintain a Linux system with confidence, applying updates safely and diagnosing boot failures.
 
-**Monitoring** tracks the health and performance of systems over time. **Metrics** are quantitative measurements: CPU utilisation, memory usage, disk I/O, network throughput, application response time, error rates. **Monitoring tools**: **Prometheus** (open-source metrics collection and alerting, the de facto standard in 2040); **Grafana** (visualisation and dashboards); **Nagios** (legacy but still used); **Zabbix** (enterprise monitoring); **Datadog** (SaaS monitoring); and **New Relic** (application performance monitoring). **Alerting rules** define thresholds that trigger notifications: "CPU > 90% for 5 minutes" or "disk usage > 85%". **Alert fatigue** occurs when too many alerts desensitise operators; the solution is to tune thresholds, suppress duplicates, and prioritise actionable alerts. In 2040, **AI-assisted anomaly detection** (e.g., Prometheus with ML-based forecasting) reduces false positives by 30–50%.
+### Key Topics
 
-**Logging** records events for later analysis. **System logs** (syslog, systemd journal, Windows Event Log) record kernel messages, service status, authentication events, and errors. **Application logs** record user actions, errors, and business events. **Log levels**: DEBUG (detailed information for debugging), INFO (normal operation), WARNING (unexpected but not erroneous), ERROR (failed operations), CRITICAL (system failure). **Structured logging** (JSON-formatted logs with consistent fields) enables automated parsing and analysis. **Log aggregation tools**: **ELK Stack** (Elasticsearch, Logstash, Kibana); **Grafana Loki** (lightweight, Prometheus-inspired); **Splunk** (enterprise); **Fluentd/Fluent Bit** (log collectors). In 2040, **centralised logging** is standard: every system streams logs to a central aggregator where they are indexed, searched, and analysed.
+- Package management: apt, dnf, pacman, and snap/flatpak containers
+- System services: systemd units, targets, timers, and dependencies
+- The boot process: BIOS/UEFI, GRUB, initramfs, kernel boot parameters
+- Kernel management: modules, parameters, and live patching
+- Configuration management: /etc, dotfiles, and declarative system configuration
 
-**Observability** extends beyond monitoring and logging to provide a holistic understanding of system behaviour. The **three pillars of observability**: **metrics** (what is happening?), **logs** (why is it happening?), and **traces** (where is the problem in a distributed system?). **Distributed tracing** (OpenTelemetry, Jaeger, Zipkin) follows requests as they traverse multiple services, revealing latency bottlenecks and failure points. **Service mesh** (Istio, Linkerd, Cilium Service Mesh) automatically generates traces and metrics for all service-to-service communication. In 2040, **correlation** between metrics, logs, and traces is automated: when an alert fires, the system presents related log entries and trace spans, reducing mean time to resolution (MTTR) by 40–60%.
+### Lecture Notes
 
-**The Yggdrasil Observability Platform** (built on Prometheus, Grafana, Loki, Tempo, and OpenTelemetry) monitors all University IT systems. **Custom dashboards** display: real-time campus network traffic; data centre PUE and carbon footprint; application error rates and latencies; user experience metrics (Core Web Vitals for University web properties); and security events (failed logins, firewall blocks, malware detections). Students in IT201 configure monitoring for their Sandbox environments, gaining hands-on experience with the same tools used in production.
+**Package management** is the foundation of software maintenance. Different Linux distributions use different package formats and tools: **Debian/Ubuntu** use `.deb` packages with `apt`; **Red Hat/Fedora** use `.rpm` packages with `dnf`; **Arch** uses tarballs with `pacman`. The lecture covers common operations: `install`, `remove`, `update`, `upgrade`, `search`, and `info`. It also covers repository management: adding third-party repositories, GPG key verification, and pinning (controlling which versions are installed). By 2040, **universal package formats** (Snap, Flatpak) have gained traction for desktop applications, but server environments still prefer distribution-native packages for integration with the system's dependency resolution and security updates.
 
-**Required Reading:**
-- James Turnbull, *The Art of Monitoring* (James Turnbull, 2016/2035), ch. 1–5
-- Jamie Wilkinson et al., *Site Reliability Engineering*, ch. 10 ("Practical Alerting")
-- Cindy Sridharan, *Distributed Systems Observability* (O'Reilly, 2018/2035), ch. 1–3
-- OpenTelemetry Documentation, "Getting Started" (2040)
-- University of Yggdrasil, "The Yggdrasil Observability Platform: Architecture and Practice" (2039)
+**Systemd**, adopted by most major distributions in the 2010s, is the init system and service manager in 2040. The lecture covers systemd's core concepts: **units** (services, sockets, devices, mounts, timers, targets), **targets** (milestones in the boot process, analogous to runlevels: `multi-user.target`, `graphical.target`), **dependencies** (`Requires=`, `Wants=`, `After=`, `Before=`), and **states** (active, inactive, failed, masked). Commands: `systemctl start/stop/restart/reload/enable/disable/status`. The lecture demonstrates writing a custom service unit for a web application, including: `Type=notify` (service signals readiness), `Restart=on-failure` (automatic restart), `User=` and `Group=` (least privilege), and `EnvironmentFile=` (externalized configuration). By 2040, systemd has expanded to include **homectl** (user home directory management), **portablectl** (portable services), and **systemd-cryptsetup** (encrypted volumes), making it the central management tool for Linux systems.
 
-**Discussion Questions:**
-1. Monitoring generates vast quantities of data, but most of it is never analysed. Is the solution better dashboards, AI-assisted analysis, or simply collecting less data?
-2. Observability promises to make systems understandable, but it requires significant instrumentation effort. For legacy systems that were not designed for observability, is the retrofitting effort worth the benefit?
-3. AI-assisted anomaly detection reduces false positives but can also miss novel failure modes that do not match historical patterns. Is AI a genuine improvement over rule-based alerting, or does it merely trade one set of problems for another?
+**The boot process** begins with firmware (BIOS or UEFI), which locates the bootloader (GRUB 2), which loads the kernel and initramfs. The initramfs (initial RAM filesystem) is a minimal root filesystem loaded into memory, containing essential drivers and tools to mount the real root filesystem. The lecture covers: **UEFI Secure Boot** (cryptographic verification of the bootloader and kernel), **GRUB configuration** (`/etc/default/grub`, `grub.cfg`), **kernel parameters** (`quiet`, `splash`, `root=`, `rd.luks.uuid=`), and **troubleshooting** (booting to single-user mode, emergency shell, rescue mode). The 2035 *GRUB Configuration Drift Incident*—in which automated updates to `/etc/default/grub` were not applied, causing boot failure after a kernel upgrade—demonstrates the importance of verifying configuration changes.
 
----
+**Kernel management** includes module loading (`modprobe`, `insmod`, `rmmod`), parameter setting (`/etc/modprobe.d/`, kernel command line), and **live patching** (`kpatch`, `livepatch`). Live patching enables security patches to be applied to the running kernel without rebooting, critical for systems requiring high availability. The lecture covers the kpatch workflow: building a patch module from a source patch, loading it with `kpatch load`, and verifying with `kpatch list`. By 2040, live patching is standard for enterprise kernels, but the lecture warns of limitations: not all patches can be live-applied (structural changes require reboot), and live patches increase kernel complexity.
 
-## Lecture 9: Backup and Disaster Recovery
+**Configuration management** ensures that system state is reproducible. The lecture covers: **/etc** as the configuration directory (and the importance of version-controlling `/etc` with etckeeper or git), **dotfiles** (user-specific configuration stored in home directories, managed with tools like chezmoi or GNU Stow), and **declarative configuration** (Nix, Guix, and Ansible provide declarative models where the desired state is specified and the system converges to it). By 2040, the UoY infrastructure team uses **NixOS** for research workstations: the entire system configuration is a Nix expression, enabling atomic upgrades, rollbacks, and reproducible environments.
 
-Data loss is not a question of if but when. This lecture covers backup strategies, disaster recovery planning, and the tools that protect organisations from catastrophic data loss.
+### Required Reading
 
-**Backup strategies** balance recovery objectives against cost and complexity. **RTO (Recovery Time Objective)** is the maximum acceptable downtime after a disaster. **RPO (Recovery Point Objective)** is the maximum acceptable data loss (time between the last backup and the disaster). **Full backup** copies all data; it is comprehensive but slow and storage-intensive. **Incremental backup** copies only data changed since the last backup; it is fast and efficient but requires the last full backup and all subsequent incrementals for recovery. **Differential backup** copies all data changed since the last full backup; it requires only the last full and the last differential for recovery. **Snapshot** ( filesystem-level point-in-time copy) enables instant backup with minimal overhead (Btrfs, ZFS, LVM, and storage arrays all support snapshots). In 2040, **synthetic full backups** (combining a full backup with incrementals to create a new full backup without reading the source) are standard.
+- Nemeth, E., et al. (2017). *UNIX and Linux System Administration Handbook* (5th Edition). Addison-Wesley. Chapters 6–8.
+- systemd Documentation (2040). *systemd.unit, systemd.service, systemd.target Man Pages*. freedesktop.org.
+- GRUB Documentation (2040). *GNU GRUB Manual*. GNU Project.
+- Kernel.org (2040). *Linux Kernel Live Patching Documentation*. kernel.org.
+- Yggdrasil IT Operations (2035). "The GRUB Configuration Drift Incident: Automated Updates and Manual Verification." *UoY Operations Postmortem* 2035-06.
 
-**Backup tools** include: **rsync** (file-level synchronisation, ideal for incremental backups); **tar** (archiving, often with gzip/bzip2/xz compression); **dd** (block-level copying, for disk images); **Bacula** (enterprise backup suite); **Bareos** (Bacula fork, open-source); **Veeam** (virtual machine and cloud backup); **Restic** (modern, encrypted, deduplicated backup); **BorgBackup** (encrypted, deduplicated, compressed); **Duplicati** (encrypted cloud backups); and **cloud-native backup** (AWS Backup, Azure Backup, Google Cloud Backup). In 2040, **immutable backups** (write-once, read-many storage that cannot be deleted or modified by ransomware) are mandatory for compliance. The **3-2-1-1-0 rule** (3 copies of data, 2 different media, 1 offsite, 1 immutable, 0 errors after verification) is the standard for critical data.
+### Discussion Questions
 
-**Disaster Recovery (DR)** is the process of restoring systems after a catastrophic failure. **DR planning** includes: risk assessment (identifying threats and their likelihood); business impact analysis (determining the cost of downtime for each system); DR strategy selection (cold site, warm site, hot site, active-active); recovery procedures (documented, tested, and regularly updated); and testing (annual DR drills). **Cold site**: a facility with power and cooling but no equipment (slowest recovery). **Warm site**: pre-configured equipment that requires data restoration. **Hot site**: fully operational mirror of production (fastest recovery, highest cost). **Active-active**: multiple sites serving traffic simultaneously (no single point of failure). In 2040, **cloud DR** (replicating VMs and data to a secondary cloud region) has made hot-site DR affordable for small and medium organisations.
+1. Systemd has been criticized for scope creep (absorbing functions traditionally handled by other tools). Is systemd's integration a benefit (consistent management interface) or a risk (single point of failure)?
+2. Live patching enables zero-downtime kernel updates but cannot patch all vulnerabilities. For a system with a 99.999% availability SLA, what is the appropriate strategy combining live patching and scheduled reboots?
+3. NixOS provides reproducible system configuration but has a steep learning curve. For an organization with 50 Linux servers, does the reproducibility benefit justify the training investment?
+4. Snap and Flatpak package applications with their dependencies, reducing dependency hell but increasing disk usage and update complexity. For server environments, are universal packages appropriate?
 
-**The Yggdrasil Backup Strategy** is a tiered approach: **Tier 1** (critical systems — ERP, student records, research data): continuous replication with 1-hour RPO, 4-hour RTO, stored in three locations (on-premises, Nordic Cloud Collective, Mímir Archive). **Tier 2** (important systems — email, file shares): daily backups, 24-hour RPO, 8-hour RTO. **Tier 3** (non-critical systems — development environments, logs): weekly backups, 7-day RPO, 48-hour RTO. **Immutable snapshots** are stored on WORM (Write Once Read Many) tape and optical media, protected against ransomware and insider threats. Students design a backup strategy for a simulated small business as part of the IT201 capstone.
+### Practice Problems
 
-**Required Reading:**
-- W. Curtis Preston, *Backup & Recovery: Inexpensive Backup Solutions for Open Systems* (O'Reilly, 2007/2035), ch. 1–4
-- Veeam, *The 3-2-1-1-0 Backup Rule* (2035 white paper)
-- NIST, *Contingency Planning Guide for Federal Information Systems* (SP 800-34 Rev. 2, 2035)
-- University of Yggdrasil, "The Yggdrasil Backup and Disaster Recovery Plan: A Tiered Approach" (2039)
-
-**Discussion Questions:**
-1. The 3-2-1-1-0 rule is comprehensive but expensive. For small organisations with limited budgets, which elements of the rule are most essential, and which can be deferred?
-2. Immutable backups protect against ransomware but require specialised storage (WORM tape, optical media). Is the cost of immutable storage justified by the ransomware threat, or is it an overreaction to a rare event?
-3. Cloud DR has made hot-site recovery affordable, but it also creates dependency on cloud providers. If a cloud provider experiences a regional outage, what is the fallback plan for organisations that rely on cloud DR?
+- Write a systemd service unit for a Python web application. Include: socket activation, automatic restart on failure, resource limits (CPU, memory), logging to journald, and a health check. Test with `systemctl` and verify behavior under crash conditions.
+- Apply a live kernel patch using kpatch or a similar tool. Document the process, verify the patch is active, and test that the patched function behaves correctly. Identify any limitations of the patch.
 
 ---
 
-## Lecture 10: Security Hardening and Compliance
+ᚨ **Lecture 4: Windows System Administration: Active Directory, Group Policy, and PowerShell**
 
-A system is only as secure as its weakest configuration. This lecture covers security hardening practices for Linux and Windows, compliance frameworks, and the tools that enforce security posture.
-
-**Linux security hardening** includes: **minimising the attack surface** (removing unnecessary packages, services, and users); **keeping systems patched** (automated security updates via `unattended-upgrades` or `dnf-automatic`); **configuring firewalls** (nftables/firewalld with default-deny rules); **hardening SSH** (disable root login, use key-based auth, change default port, enable fail2ban); **using SELinux or AppArmor** (mandatory access control frameworks that restrict what processes can do); **enabling auditing** (auditd for system call auditing); **encrypting data at rest** (LUKS for disk encryption, dm-crypt for containers); and **encrypting data in transit** (TLS 1.3 for all services). **Security benchmarks**: **CIS Benchmarks** (Center for Internet Security) provide detailed hardening guides for all major operating systems and applications. **OpenSCAP** automates benchmark assessment and remediation.
-
-**Windows security hardening** includes: **enabling Windows Defender** (antivirus, firewall, exploit guard, application control); **configuring User Account Control** (UAC) at the highest setting; **enabling BitLocker** (full-disk encryption); **hardening PowerShell** (constrained language mode, logging, transcription); **using Windows Defender Application Control (WDAC)** or **AppLocker** (application whitelisting); **enabling Credential Guard** ( isolating credential storage from the OS); **configuring Attack Surface Reduction (ASR) rules** (blocking risky behaviours like executable content in email); and **enabling Windows Hello** (biometric authentication). **Microsoft Security Compliance Toolkit** provides GPO-based hardening templates. In 2040, **Microsoft Defender for Endpoint** is the unified security platform that replaces standalone tools.
-
-**Compliance frameworks** define security standards that organisations must meet. **ISO/IEC 27001** is the international standard for information security management systems (ISMS). **NIST Cybersecurity Framework** (CSF) provides a risk-based approach: Identify, Protect, Detect, Respond, Recover. **PCI DSS** (Payment Card Industry Data Security Standard) applies to organisations that handle credit card data. **HIPAA** (Health Insurance Portability and Accountability Act) applies to healthcare organisations in the US. **GDPR** (General Data Protection Regulation) applies to organisations handling EU personal data. **SOC 2** (Service Organization Control) assesses security, availability, processing integrity, confidentiality, and privacy. In 2040, **continuous compliance** is the standard: automated tools (Qualys, Tenable, Rapid7, the University's *Vörðr Scanner*) continuously assess systems against benchmarks and frameworks, generating real-time compliance dashboards.
-
-**The Yggdrasil Security Posture** is assessed quarterly against CIS benchmarks, NIST CSF, and the Nordic Data Compact. **Automated hardening**: Nordux ships with a hardening script (`/usr/local/bin/nordux-harden`) that applies CIS Level 2 settings. **Compliance dashboards** in the Yggdrasil SOC display: patch status (percentage of systems fully patched); benchmark scores (percentage of CIS controls passed); vulnerability counts (critical, high, medium, low); and incident metrics (mean time to detect, mean time to respond). Students run OpenSCAP scans and review compliance reports as part of IT201 labs.
-
-**Required Reading:**
-- CIS, *CIS Benchmarks for RHEL 10 and Windows Server 2040* (2040)
-- NIST, *Cybersecurity Framework 2.0* (2035)
-- Lee Brotherston & Amanda Berlin, *Defensive Security Handbook* (O'Reilly, 2018/2035), ch. 1–4
-- Microsoft, *Windows Server 2040 Security Baseline* (2040)
-- University of Yggdrasil, "Continuous Compliance: Automated Security Assessment with OpenSCAP and Vörðr" (2039)
-
-**Discussion Questions:**
-1. CIS benchmarks are comprehensive but can break functionality if applied blindly. Is benchmark compliance a genuine security improvement, or does it encourage checkbox security that prioritises passing audits over actual risk reduction?
-2. Continuous compliance tools generate vast amounts of data, but remediation often requires manual effort. Is the bottleneck in compliance the detection of issues or the capacity to fix them?
-3. The Nordic Data Compact imposes stricter requirements than GDPR in some areas (e.g., data localisation, algorithmic transparency). Is regional divergence in compliance frameworks beneficial (tailored to local values) or harmful (increases complexity for multinational organisations)?
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 11: Automation and Configuration Management at Scale
+### Overview
 
-Managing one server manually is feasible; managing a thousand is not. This lecture covers the automation and configuration management tools that enable administration at scale.
+Windows remains the dominant desktop operating system in 2040 and a significant server platform, particularly in enterprise environments. This lecture covers the core technologies of Windows system administration: Active Directory (the directory service), Group Policy (centralized configuration management), and PowerShell (automation and scripting). Students will learn to administer Windows domains, enforce security policies, and automate management tasks at scale.
 
-**Configuration management** ensures that systems maintain a desired state. **Ansible** (agentless, Python-based, YAML playbooks) is the most popular open-source tool: it uses SSH to connect to managed nodes and executes tasks defined in playbooks. **SaltStack** (Python-based, event-driven, uses a message bus for real-time orchestration) is favoured for speed and scale. **Puppet** (Ruby-based, declarative, client-server model) has a long history in enterprise environments. **Chef** (Ruby-based, imperative recipes) is used by large SaaS companies. In 2040, **Ansible and SaltStack** dominate new deployments, while Puppet and Chef maintain large installed bases.
+### Key Topics
 
-**Ansible in depth**. **Playbooks** are YAML files defining tasks to execute on hosts. **Inventory** defines managed hosts (static files or dynamic scripts). **Modules** perform specific tasks (apt, yum, copy, template, service, user, mount, etc.). **Roles** organise playbooks into reusable components. **Variables** parameterise roles and playbooks. **Handlers** trigger actions (e.g., restart nginx) only when notified by a task change. **Conditionals** (`when`) and **loops** (`with_items`) add logic. **Vault** encrypts sensitive data (passwords, keys) in playbooks. **Ansible Tower / AWX** provides a web UI, scheduling, and RBAC for Ansible. In 2040, **ansible-lint** and **molecule** (testing framework) are standard for ensuring playbook quality.
+- Active Directory: domains, forests, trees, trusts, and organizational units
+- Group Policy: GPOs, inheritance, filtering, and security settings
+- PowerShell for administration: AD cmdlets, WMI/CIM, and DSC
+- Windows security: Defender, BitLocker, AppLocker, and Credential Guard
+- Hybrid identity: Azure AD, Entra ID, and on-premises synchronization
 
-**Container orchestration** at scale uses **Kubernetes**. **Kubernetes administration** includes: cluster installation (kubeadm, kops, EKS, AKS, GKE); node management (joining, cordoning, draining); resource management (CPU/memory limits, quotas, LimitRanges); networking (CNI plugins, Services, Ingress, NetworkPolicies); storage (PVs, PVCs, StorageClasses); security (RBAC, PodSecurityPolicies / Pod Security Standards, secrets management); and workload management (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs). **Helm** packages applications for Kubernetes. **Operators** (custom controllers) automate complex application lifecycle management. In 2040, **platform engineers** (the evolution of system administrators) design and manage internal Kubernetes platforms that developers use to deploy applications.
+### Lecture Notes
 
-**Infrastructure as Code (IaC)** defines infrastructure in version-controlled code. **Terraform** (HashiCorp, HCL language) is the dominant multi-cloud IaC tool: it supports AWS, Azure, Google Cloud, Kubernetes, and hundreds of other providers. **Pulumi** (Python/TypeScript/Go/C#) provides general-purpose programming languages for IaC. **AWS CloudFormation** and **Azure Resource Manager** are cloud-native IaC tools. **Crossplane** (Kubernetes-based) enables platform teams to build custom cloud APIs. In 2040, **Terraform with Atlantis** (pull request-based Terraform workflows) is the standard for collaborative infrastructure management. The University's *Völundr* framework (built on Terraform and Ansible) manages all cloud and on-premises infrastructure.
+Active Directory (AD), introduced with Windows 2000 Server, is a **directory service**—a hierarchical database of network objects (users, computers, groups, printers, and organizational units) and their relationships. By 2040, AD has evolved into a hybrid system: on-premises AD Domain Services (AD DS) manages legacy resources, while **Microsoft Entra ID** (formerly Azure AD, rebranded 2033) manages cloud-native identity. The lecture covers AD architecture: **domains** (security boundaries with common policies), **trees** (contiguous namespaces), **forests** (collections of trees with transitive trusts), **trusts** (authentication pathways between domains), and **organizational units (OUs)** (containers for grouping objects and delegating administration).
 
-**Required Reading:**
-- Lorin Hochstein & René Moser, *Ansible: Up and Running* (3rd ed., O'Reilly, 2017/2035), ch. 1–6
-- Kelsey Hightower, Brendan Burns & Joe Beda, *Kubernetes: Up and Running* (3rd ed.), ch. 1–5, 9–10
-- Yevgeniy Brikman, *Terraform: Up and Running* (3rd ed., O'Reilly, 2022/2035), ch. 1–5
-- Crossplane Documentation, "Getting Started" (2040)
-- University of Yggdrasil, "Völundr: The Yggdrasil Infrastructure as Code Framework" (2039)
+**Active Directory administration** uses tools like Active Directory Users and Computers (ADUC), Active Directory Administrative Center (ADAC), and PowerShell's ActiveDirectory module. The lecture covers: creating and managing user accounts (`New-ADUser`, `Set-ADUser`), groups (`New-ADGroup`, `Add-ADGroupMember`), and computer accounts (`New-ADComputer`); **Group Policy** (centralized configuration that applies to sites, domains, or OUs); and **delegation** (granting non-administrators limited permissions to manage specific OUs). By 2040, AD administration is increasingly automated: new employee onboarding triggers PowerShell scripts that create accounts, assign licenses, configure mailboxes, and apply security group memberships based on role attributes.
 
-**Discussion Questions:**
-1. Ansible is agentless (uses SSH), while Puppet and Chef require agents. Is the agentless model genuinely superior, or does it create problems with SSH key management, connection reliability, and performance at scale?
-2. Kubernetes has become the standard for container orchestration, but its complexity is notorious. Is Kubernetes a necessary abstraction for modern infrastructure, or has the industry standardised on a tool that is more complex than most organisations need?
-3. Terraform's HCL is a domain-specific language, while Pulumi uses general-purpose languages. Is the restriction of HCL a benefit (prevents abstraction abuse) or a limitation (prevents reusable patterns)?
+**Group Policy Objects (GPOs)** are containers of settings that apply to AD objects. GPOs can configure: security settings (password policy, audit policy, user rights), software deployment (assigning or publishing applications), registry settings (controlling Windows features), and folder redirection (redirecting user profile folders to network shares). The lecture covers **GPO processing order**: local GPO → site GPO → domain GPO → OU GPO (LSDOU), with later GPOs overriding earlier ones unless **enforced** or **block inheritance** is set. **GPO filtering** (WMI filters, security group filtering) enables fine-grained targeting. The 2030 *GPO Cascade Failure*—in which a domain-level GPO enforced a restrictive firewall rule that blocked remote administration, locking administrators out of 500 servers—demonstrates the danger of misconfigured policy inheritance.
+
+**PowerShell for Windows administration** extends the scripting concepts from IT105 to enterprise-scale management. The **ActiveDirectory** module provides cmdlets for user, group, and computer management. **WMI (Windows Management Instrumentation)** and **CIM (Common Information Model)** provide access to system hardware, software, and operational data (`Get-WmiObject`, `Get-CimInstance`). **DSC (Desired State Configuration)**, covered in IT105, is used to enforce configuration compliance across fleets of Windows servers. The lecture demonstrates a complete automation workflow: a scheduled PowerShell script that queries AD for stale accounts (not logged in for 90 days), disables them, moves them to a "Disabled" OU, and sends a notification to the security team.
+
+**Windows security features** in 2040 include: **Windows Defender** (antivirus, anti-malware, and attack surface reduction), **BitLocker** (full-disk encryption with TPM and PIN protection), **AppLocker** (application whitelisting by path, publisher, or hash), and **Credential Guard** (isolating credential storage in a virtual secure mode, preventing Pass-the-Hash attacks). The lecture covers configuration: enabling Defender real-time protection, configuring BitLocker with TPM+PIN+recovery key backup to AD, creating AppLocker rules that allow only signed executables from trusted publishers, and verifying Credential Guard with `msinfo32`. The 2033 *Pass-the-Hash Epidemic*—in which attackers stole NTLM hashes from memory and reused them across the network—motivated widespread adoption of Credential Guard and LAPS (Local Administrator Password Solution).
+
+**Hybrid identity** connects on-premises AD with cloud identity. By 2040, most organizations operate in a hybrid model: legacy applications authenticate against on-premises AD, while cloud services authenticate against Entra ID. **Azure AD Connect** (and its successor, **Microsoft Identity Manager 2040**) synchronizes users, groups, and passwords between on-premises and cloud. **Pass-through authentication** (PTA) and **seamless SSO** enable cloud authentication without storing passwords in the cloud. The lecture covers the **hybrid join** model: devices are joined to both on-premises AD and Entra ID, receiving policies from both. The 2036 *Sync Conflict Incident*—in which a bi-directional sync loop created duplicate accounts and corrupted group memberships—demonstrates the need for careful sync rule configuration and conflict resolution policies.
+
+### Required Reading
+
+- Stanek, W. R. (2022). *Windows Server 2022 Inside Out*. Microsoft Press. Chapters 4–6.
+- Microsoft (2040). *Active Directory Documentation: Domains, Forests, and Trusts*. Microsoft Learn.
+- Microsoft (2040). *Group Policy Documentation: Planning, Deployment, and Management*. Microsoft Learn.
+- Microsoft (2040). *PowerShell Documentation: Active Directory, WMI/CIM, and DSC*. Microsoft Learn.
+- Yggdrasil Windows Team (2033). "The Pass-the-Hash Epidemic: Credential Guard and LAPS Deployment." *UoY Security Report* 2033-08.
+
+### Discussion Questions
+
+1. GPO inheritance is powerful but can produce unexpected interactions between policies. Should organizations adopt a flat OU structure to simplify inheritance, or does hierarchy provide necessary organizational flexibility?
+2. Credential Guard prevents Pass-the-Hash attacks but requires modern hardware (TPM 2.0, UEFI Secure Boot). For an organization with legacy hardware, is a hardware refresh justified solely for Credential Guard?
+3. Hybrid identity synchronizes passwords between on-premises and cloud. Does this create a larger attack surface (compromise of either system exposes both), or does it reduce risk by centralizing identity management?
+4. PowerShell automation in AD is efficient but can cause widespread damage if misconfigured. What safeguards (approval workflows, test environments, change logging) should govern AD automation scripts?
+
+### Practice Problems
+
+- Create an Active Directory forest with two domains and a trust relationship. Configure an OU structure for a fictional organization (departments, roles, locations). Create users, groups, and GPOs that enforce password complexity and screen lock settings. Test inheritance and delegation.
+- Write a PowerShell script that audits all Windows servers in a domain for: BitLocker status, Windows Defender signature age, AppLocker policy compliance, and Credential Guard enablement. Generate a CSV report and email it to the security team.
 
 ---
 
-## Lecture 12: The Platform Engineer — The Future of System Administration
+ᚱ **Lecture 5: Process and Service Management**
 
-The final lecture examines the evolution of system administration into platform engineering, the skills required for the role, and the future of IT operations in an AI-augmented world.
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
-**Platform engineering** is the discipline of building internal platforms that enable developers to deploy, operate, and debug applications with minimal operational overhead. **Internal Developer Platforms (IDPs)** provide: self-service provisioning of environments; automated CI/CD pipelines; observability and alerting; security and compliance guardrails; and cost management. **Platform engineers** design and operate these platforms, acting as a bridge between infrastructure and application development. They are not "devs who do ops" or "ops who do dev" but a distinct role with its own skills and culture.
+---
 
-**Platform engineering skills** include: **Kubernetes expertise** (deep knowledge of cluster architecture, networking, storage, security, and troubleshooting); **cloud architecture** (multi-cloud design, cost optimisation, resilience patterns); **software engineering** (writing maintainable tools and automation in Go, Python, or Rust); **SRE practices** (SLOs, error budgets, incident management, postmortems); **product management** (treating the platform as a product with users — developers — who have needs and feedback); and **communication** (evangelising the platform, writing documentation, and gathering requirements). In 2040, **platform engineering** is one of the highest-demand IT specialisations, with salaries exceeding those of traditional system administrators by 30–50%.
+### Overview
 
-**AI in operations** is transforming how platforms are managed. **AIOps** (AI for IT Operations) uses machine learning to: detect anomalies in metrics and logs; correlate alerts and reduce noise; predict failures before they occur; suggest remediation steps; and automate routine tasks (scaling, patching, backup verification). **AI-generated runbooks** (based on historical incident data) guide operators through novel problems. **AI-assisted coding** (Copilot, CodeWhisperer, Skald) accelerates the development of platform tools. However, AI also introduces risks: **hallucinated recommendations** (AI suggesting incorrect fixes); **over-reliance** (operators losing manual troubleshooting skills); and **adversarial AI** (attackers using AI to evade detection). The platform engineer of 2040 must be an **AI collaborator**: using AI to augment human judgment, not replace it.
+Processes are the running programs that consume CPU, memory, and I/O. Services are processes that run continuously in the background. This lecture covers the management of processes and services on both Linux and Windows: monitoring, scheduling, resource control, and lifecycle management. Students will learn to diagnose performance problems, terminate misbehaving processes, and ensure that critical services remain available.
 
-**The Yggdrasil Platform** is the internal developer platform used by all University software projects. It provides: **Völundr IaC** (Terraform + Ansible for infrastructure); **Bifröst CI/CD** (GitLab-based pipelines with automated testing, security scanning, and deployment); **Muninn Observability** (Prometheus, Grafana, Loki, Tempo); **Heimdall Security** (SAST, DAST, dependency scanning, secret detection); **Freyja Cost Management** (cloud cost allocation, optimisation recommendations, carbon tracking); and **YVA Self-Service** (a natural-language interface for developers to request resources, check status, and troubleshoot). Students in IT201 deploy a microservice to the Yggdrasil Platform as their capstone, experiencing the full platform engineering lifecycle.
+### Key Topics
 
-**Required Reading:**
-- Matthew Skelton, Manuel Pais & Ruth Malan, *Team Topologies: Organizing Business and Technology Teams for Fast Flow* (IT Revolution, 2019/2035), ch. 4 ("Platform Teams")
-- Evan Bottcher, "What Is Platform Engineering?" (Thoughtworks, 2022/2035)
-- Charity Majors, "Platform Engineering: The Next Evolution of DevOps" (Honeycomb, 2033)
-- Niall Murphy et al., *Site Reliability Engineering*, ch. 32 ("SRE Engagement Model")
-- University of Yggdrasil, "The Yggdrasil Platform: A Case Study in Internal Developer Platforms" (2039)
+- Process concepts: PID, PPID, threads, states, and the process tree
+- Linux process management: ps, top, htop, kill, nice, renice, cgroups, and systemd slices
+- Windows process management: Task Manager, Resource Monitor, Process Explorer, and WMI
+- Service management: systemd services, Windows services, and service dependencies
+- Resource control: CPU limits, memory limits, I/O throttling, and prioritization
 
-**Discussion Questions:**
-1. Platform engineering treats infrastructure as a product for developers. Is this product mindset a genuine improvement, or does it risk prioritising developer convenience over operational stability?
-2. AIOps promises to reduce operational toil, but it also raises concerns about deskilling. Will platform engineers of 2050 still need deep troubleshooting skills, or will AI handle most operational problems?
-3. The Yggdrasil Platform is comprehensive but requires significant maintenance. For smaller organisations that cannot afford a dedicated platform team, is it better to use a managed platform (e.g., GitHub Codespaces, Gitpod, Railway) or to accept less sophisticated tooling?
+### Lecture Notes
+
+A process is an instance of a program in execution. Each process has a unique identifier (PID), a parent process (PPID), an owner, a priority, and a set of resources (CPU time, memory pages, file descriptors). Understanding processes is essential for performance tuning, troubleshooting, and security auditing.
+
+**Linux process management** uses a suite of tools: `ps` (snapshot of processes), `top` (dynamic, sorted view), `htop` (interactive, colorized, enhanced top), `pgrep`/`pkill` (find/kill by name), `kill` (send signals: SIGTERM for graceful shutdown, SIGKILL for forceful termination, SIGHUP for configuration reload), `nice`/`renice` (adjust priority), and `strace` (trace system calls). The lecture covers **process states**: running, sleeping (interruptible and uninterruptible), stopped, zombie (terminated but not reaped by parent), and orphan (parent terminated, adopted by init). By 2040, `btop` (a Rust-based system monitor) and `procs` (a modern `ps` replacement) have gained popularity, but the classical tools remain essential for compatibility and scripting.
+
+**cgroups (control groups)**, integrated into systemd as **slices, scopes, and services**, provide fine-grained resource control. Administrators can limit CPU usage (`CPUQuota=50%`), memory (`MemoryMax=1G`), I/O bandwidth (`IOReadBandwidthMax=/dev/sda 100M`), and process count (`TasksMax=100`). The lecture demonstrates creating a systemd slice for a development team, restricting their total resource consumption to prevent runaway processes from impacting production services. By 2040, **cgroups v2** (unified hierarchy) is the standard, replacing the fragmented v1 controllers.
+
+**Windows process management** uses graphical and command-line tools. **Task Manager** provides a basic view of running processes. **Resource Monitor** (resmon) provides detailed CPU, memory, disk, and network usage per process. **Process Explorer** (Sysinternals) provides advanced features: process tree, handle and DLL viewing, TCP/IP connections, and virus scanning integration. **WMI (Windows Management Instrumentation)** and **CIM** provide programmatic access to process data (`Get-Process`, `Get-CimInstance Win32_Process`). The lecture demonstrates using PowerShell to: find processes consuming >80% CPU, dump their memory for analysis, and restart the parent service if applicable.
+
+**Service management** ensures that critical background processes start automatically, restart on failure, and run with appropriate privileges. On Linux, **systemd** manages services (Lecture 3). On Windows, the **Service Control Manager (SCM)** manages services registered in the registry (`HKLM\SYSTEM\CurrentControlSet\Services`). Commands: `sc query`, `sc start`, `sc stop`, `sc config`. PowerShell: `Get-Service`, `Start-Service`, `Stop-Service`, `Set-Service`. The lecture covers **service dependencies**: a database service must start before the application service; the SCM and systemd both resolve and enforce these dependencies. By 2040, **containerized services** (Docker, containerd) are common on both platforms, with orchestrators (Kubernetes, Nomad) managing service lifecycle across clusters.
+
+**Resource control** prevents a single process from monopolizing system resources. **CPU limits** (cgroups CPUQuota, Windows Job Objects) cap processor usage. **Memory limits** (cgroups MemoryMax, Windows Working Set quotas) prevent out-of-memory conditions. **I/O throttling** (cgroups blkio, Windows Storage QoS) limits disk bandwidth. **Prioritization** (nice values on Linux, priority classes on Windows) ensures that critical processes get preferential access. The lecture covers the 2034 *Runaway Container Incident*, in which a memory leak in a container caused the host OOM killer to terminate the container runtime, cascading to all containers on the host. The lesson: always set memory limits on containers.
+
+### Required Reading
+
+- Love, R. (2013). *Linux Kernel Development* (3rd Edition). Addison-Wesley. Chapter 3 ("Process Management").
+- Russinovich, M. E., Solomon, D. A., & Ionescu, A. (2012). *Windows Internals* (6th Edition). Microsoft Press. Chapter 5 ("Processes, Threads, and Jobs").
+- systemd Documentation (2040). *Resource Control: CPU, Memory, and I/O Limits*. freedesktop.org.
+- Sysinternals Documentation (2040). *Process Explorer: Features and Usage*. Microsoft.
+- Yggdrasil IT Operations (2034). "The Runaway Container Incident: OOM Cascade in a Kubernetes Cluster." *UoY Operations Postmortem* 2034-12.
+
+### Discussion Questions
+
+1. cgroups v2 unified hierarchy simplifies resource management but breaks tools designed for v1. For an organization with legacy monitoring tools, is the migration to v2 worth the disruption?
+2. Windows Job Objects provide resource control but are less flexible than cgroups. For a hybrid Windows/Linux environment, what abstractions (e.g., Kubernetes resource limits) can provide consistent resource control?
+3. SIGKILL forcefully terminates a process without cleanup. Under what emergency conditions is SIGKILL justified, and what are the risks (data corruption, incomplete transactions)?
+4. Container orchestrators manage service lifecycle but add complexity. For a single-node deployment, is Kubernetes justified, or should systemd services or Docker Compose suffice?
+
+### Practice Problems
+
+- Create a systemd slice that limits CPU to 50% and memory to 512MB. Run a CPU-intensive and memory-intensive process within the slice and verify that the limits are enforced. Document the cgroup v2 files that reflect the limits.
+- Write a PowerShell script that monitors Windows services on a remote machine. If a critical service stops, the script should attempt restart, log the event, and alert via email if restart fails.
+
+---
+
+ᚲ **Lecture 6: Storage Management: Filesystems, LVM, RAID, and Storage Spaces**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Storage is the persistent substrate of computing. This lecture covers the technologies that organize, protect, and manage disk space: filesystems, logical volume management, RAID, and Windows Storage Spaces. Students will learn to configure storage for performance, reliability, and scalability, with attention to the trade-offs between speed, redundancy, and cost.
+
+### Key Topics
+
+- Disk partitioning: MBR vs. GPT, fdisk, gdisk, and parted
+- Filesystems: ext4, XFS, Btrfs, ZFS, NTFS, and ReFS
+- LVM: physical volumes, volume groups, logical volumes, and snapshots
+- RAID: levels 0, 1, 5, 6, 10, and software vs. hardware RAID
+- Windows Storage Spaces: pools, tiers, and resilience types
+
+### Lecture Notes
+
+Storage administration is the art of balancing three competing goals: **capacity** (how much data can be stored), **performance** (how quickly data can be read and written), and **resilience** (how well data survives hardware failure). No single configuration optimizes all three; the administrator must understand the workload and choose appropriately.
+
+**Disk partitioning** divides a disk into regions that the operating system treats as separate volumes. **MBR (Master Boot Record)**, the legacy partitioning scheme, supports up to 2TB disks and 4 primary partitions. **GPT (GUID Partition Table)**, the modern standard, supports disks up to 9.4 ZB and 128 partitions. The lecture covers partitioning tools: `fdisk` (MBR only, interactive), `gdisk` (GPT only), `parted` (both MBR and GPT, scriptable), and `sgdisk` (scriptable gdisk). By 2040, most systems use GPT with UEFI; MBR persists only in legacy and embedded systems.
+
+**Filesystems** organize data on partitions. **ext4** (Fourth Extended Filesystem), the default for most Linux distributions, provides journaling (crash recovery), extents (efficient large file storage), and online resizing. **XFS**, developed by SGI, excels at large files and high concurrency, making it popular for databases and media servers. **Btrfs** (B-tree filesystem) provides copy-on-write, snapshots, compression, and RAID-like features at the filesystem level; by 2040, it is the default for openSUSE and Fedora desktops but still debated for production servers due to complexity. **ZFS** (Zettabyte File System), developed by Sun Microsystems and ported to Linux via OpenZFS, provides advanced features: pooled storage, copy-on-write, snapshots, compression, deduplication, and RAID-Z. The lecture covers ZFS architecture: **zpools** (pools of disks), **datasets** (logical volumes within pools), and **properties** (compression, quota, reservation). By 2040, ZFS is standard for NAS (Network Attached Storage) and backup systems. **NTFS** (Windows) and **ReFS** (Resilient File System, Windows Server) provide journaling, compression, and integrity streams (checksums for metadata and optionally data).
+
+**LVM (Logical Volume Manager)** abstracts physical disks into flexible logical volumes. The architecture has three layers: **Physical Volumes (PVs)** (disks or partitions), **Volume Groups (VGs)** (pools of PVs), and **Logical Volumes (LVs)** (virtual partitions created from VGs). LVM enables: **online resizing** (extending or shrinking volumes without unmounting), **snapshots** (point-in-time copies for backups), **striping** (spreading data across PVs for performance), and **mirroring** (replicating data across PVs for redundancy). The lecture demonstrates: creating a VG from two disks, creating an LV, extending it by adding a third disk, and taking a snapshot before a risky upgrade. By 2040, **LVM thin provisioning** (allocating blocks on demand rather than upfront) is standard, improving storage utilization.
+
+**RAID (Redundant Array of Independent Disks)** combines multiple disks for performance, capacity, or redundancy. **RAID 0** (striping) splits data across disks for speed but provides no redundancy. **RAID 1** (mirroring) duplicates data across disks for redundancy but halves usable capacity. **RAID 5** (striping with distributed parity) provides redundancy with N-1 capacity but requires at least 3 disks and has poor write performance due to parity calculation. **RAID 6** (double distributed parity) survives two disk failures but requires at least 4 disks. **RAID 10** (mirrored pairs striped) provides excellent performance and redundancy but uses 50% capacity. The lecture covers **software RAID** (mdadm on Linux, Storage Spaces on Windows) versus **hardware RAID** (dedicated controller cards). By 2040, hardware RAID has declined in favor of software RAID and ZFS RAID-Z, which provide more flexibility and avoid vendor lock-in.
+
+**Windows Storage Spaces** is Microsoft's software-defined storage solution, analogous to ZFS or LVM. **Storage Pools** aggregate physical disks; **Storage Spaces** (virtual disks) are created from pools with resilience types (Simple, Two-way mirror, Three-way mirror, Parity); and **Storage Tiers** combine SSD and HDD for automatic tiering (hot data on SSD, cold data on HDD). By 2040, Storage Spaces Direct (S2D) enables hyper-converged infrastructure on Windows Server, though it faces competition from VMware vSAN and open-source Ceph.
+
+### Required Reading
+
+- Nemeth, E., et al. (2017). *UNIX and Linux System Administration Handbook* (5th Edition). Addison-Wesley. Chapter 8 ("Storage").
+- ZFS Documentation (2040). *OpenZFS Documentation: Zpool, Dataset, and Property Management*. openzfs.org.
+- Microsoft (2040). *Storage Spaces Documentation*. Microsoft Learn.
+- Linux RAID Wiki (2040). *mdadm: Software RAID Management*. kernel.org.
+- Yggdrasil Storage Team (2036). "ZFS vs. Hardware RAID: A Five-Year Reliability Study." *UoY Infrastructure Report* 2036-09.
+
+### Discussion Questions
+
+1. Btrfs provides RAID-like features at the filesystem level, while mdadm provides RAID below the filesystem. What are the trade-offs between filesystem-level and block-level RAID?
+2. ZFS is powerful but memory-hungry (recommending 1GB RAM per TB of storage). For a small file server with 4TB and 8GB RAM, is ZFS appropriate, or should a simpler filesystem be used?
+3. Thin provisioning improves utilization but can lead to overcommitment (allocating more logical space than physical). What monitoring and alerting are necessary to prevent thin-provisioned volume exhaustion?
+4. ReFS provides integrity streams but is not supported for boot volumes. Should Windows administrators use NTFS for boot and ReFS for data, or standardize on NTFS for simplicity?
+
+### Practice Problems
+
+- Create a ZFS pool with three disks in RAID-Z1 configuration. Create datasets with different properties (compression, quota, snapshot schedule). Populate with test data, simulate a disk failure, and demonstrate replacement and resilvering.
+- Configure Windows Storage Spaces with a tiered pool (SSD + HDD). Create a virtual disk with two-way mirroring, copy test data, and measure read/write performance. Document the automatic tiering behavior.
+
+---
+
+ᚷ **Lecture 7: Networking Configuration: IP, DNS, Routing, and Firewalls**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Networks connect systems, and system administrators must understand how to configure, secure, and troubleshoot them. This lecture covers the practical networking skills required of a sysadmin: IP addressing, DNS configuration, static and dynamic routing, and firewall management on both Linux and Windows. Students will learn to build functional, secure networks from the command line.
+
+### Key Topics
+
+- IP addressing: IPv4, IPv6, CIDR notation, subnetting, and VLANs
+- Network configuration: ip, nmcli, netplan, and Windows networking cmdlets
+- DNS configuration: resolv.conf, systemd-resolved, Unbound, and Windows DNS
+- Routing: static routes, dynamic routing (OSPF, BGP basics), and policy routing
+- Firewalls: iptables/nftables, firewalld, and Windows Defender Firewall
+
+### Lecture Notes
+
+Networking is where system administration meets infrastructure engineering. The sysadmin does not need to be a network architect, but they must be able to configure interfaces, diagnose connectivity problems, and secure systems with host-based firewalls. This lecture bridges the gap between network theory (covered in IT104) and operational practice.
+
+**IP addressing** in 2040 is predominantly **IPv6**, though **IPv4** persists in legacy systems and private networks. The lecture covers **CIDR notation** (e.g., `192.168.1.0/24` represents 256 addresses) and **subnetting** (dividing a network into smaller subnets). **VLANs (Virtual LANs)** segment networks at Layer 2, enabling logical separation of traffic without physical separation. The lecture demonstrates configuring VLAN interfaces on Linux (`ip link add link eth0 name eth0.10 type vlan id 10`) and Windows (`Add-NetAdapterAdvancedProperty`). By 2040, **VXLAN** (Virtual Extensible LAN) extends VLANs across Layer 3 networks, common in cloud and container environments.
+
+**Network configuration** tools vary by distribution and era. The `ip` command (from iproute2) is the modern Linux standard, replacing deprecated `ifconfig` and `route`. `nmcli` (NetworkManager command-line) provides a higher-level interface. `netplan` (Ubuntu's YAML-based network configuration) abstracts multiple backends (NetworkManager, systemd-networkd). The lecture demonstrates: configuring a static IP, adding a default gateway, setting DNS servers, and configuring a bridge interface. On Windows, **PowerShell networking cmdlets** (`Get-NetIPAddress`, `New-NetIPAddress`, `Set-DnsClientServerAddress`, `Get-NetRoute`) provide comprehensive network configuration. By 2040, **cloud-init** standardizes network configuration across cloud providers, and **systemd-networkd** is the default for server distributions.
+
+**DNS configuration** on Linux involves `/etc/resolv.conf` (traditionally edited manually, now managed by `systemd-resolved` or NetworkManager) and local DNS servers (Unbound, dnsmasq). The lecture covers: configuring a caching resolver (Unbound), setting up a split-horizon DNS (different answers for internal and external queries), and troubleshooting with `dig`, `nslookup`, and `host`. On Windows, DNS client configuration is managed via PowerShell or the GUI, and Windows Server provides DNS server roles with Active Directory integration (dynamic DNS updates for domain-joined computers). By 2040, **DNS over HTTPS (DoH)** is the default on both platforms, encrypting queries to protect privacy.
+
+**Routing** determines how packets reach their destinations. **Static routes** (`ip route add 10.0.0.0/8 via 192.168.1.1`) are manually configured and suitable for simple networks. **Dynamic routing protocols** (OSPF, BGP) enable routers to exchange reachability information automatically. The lecture covers OSPF (Open Shortest Path First, an interior gateway protocol) and BGP (Border Gateway Protocol, the exterior gateway protocol of the internet) at a conceptual level, with practical examples using **FRRouting** (a Linux routing suite). **Policy routing** (source-based routing) enables traffic engineering: packets from a specific subnet or application can be routed through a different gateway. The lecture demonstrates a policy routing configuration for a multi-WAN setup, directing HTTP traffic through one ISP and VoIP traffic through another.
+
+**Firewalls** enforce access control at the network level. On Linux, **nftables** (the successor to iptables, default since kernel 3.13) provides a rule-based packet filtering framework. **firewalld** (Red Hat's dynamic firewall manager) provides zones and services abstraction over nftables. The lecture covers: default-deny policies (drop all traffic not explicitly allowed), stateful inspection (allowing return traffic for established connections), and logging. On Windows, **Windows Defender Firewall** provides host-based filtering, configurable via PowerShell (`New-NetFirewallRule`). By 2040, **eBPF (extended Berkeley Packet Filter)** enables programmable packet filtering and network observability in the Linux kernel, used by tools like Cilium for container networking.
+
+### Required Reading
+
+- Stevens, W. R. (1994). *TCP/IP Illustrated, Volume 1*. Addison-Wesley. Chapters 1–3.
+- Linux Documentation Project (2040). *Linux Networking HOWTO*. tldp.org.
+- nftables Documentation (2040). *nftables: The New Firewall Framework*. netfilter.org.
+- Microsoft (2040). *Windows Defender Firewall with Advanced Security*. Microsoft Learn.
+- Yggdrasil Network Operations (2037). "eBPF in Production: Cilium and the Future of Host Firewalling." *UoY Network Report* 2037-05.
+
+### Discussion Questions
+
+1. IPv6 adoption reached critical mass in the 2020s, but IPv4 persists in 2040. What technical and economic factors sustain IPv4, and is dual-stack operation sustainable indefinitely?
+2. nftables replaces iptables but introduces a new syntax and conceptual model. For an organization with thousands of iptables rules, is migration to nftables justified?
+3. eBPF enables powerful network programming but requires kernel-level code. What are the security implications of deploying eBPF programs from third-party vendors?
+4. Windows Defender Firewall provides host-based protection, but many organizations rely solely on network firewalls. Should host firewalls be mandatory for all systems, or is defense-in-depth redundant?
+
+### Practice Problems
+
+- Configure a Linux server with two network interfaces: one on a public subnet with a strict nftables firewall (allowing only SSH and HTTPS), and one on a private subnet with unrestricted access. Implement NAT for outbound traffic from the private subnet. Document the rules and test with `nmap`.
+- Set up OSPF dynamic routing between three Linux routers using FRRouting. Verify route exchange with `vtysh` and test failover by disconnecting a link. Document the convergence time.
+
+---
+
+ᚹ **Lecture 8: Security Hardening: SELinux/AppArmor, Windows Defender, and Baselines**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Every system is insecure by default; security must be deliberately configured. This lecture covers the hardening techniques that reduce attack surface on Linux and Windows: mandatory access control, endpoint protection, baseline configurations, and automated compliance checking. Students will learn to transform a default installation into a defensible fortress without breaking functionality.
+
+### Key Topics
+
+- Mandatory Access Control (MAC): SELinux and AppArmor
+- Endpoint protection: Windows Defender, EDR, and Linux antivirus
+- Security baselines: CIS Benchmarks, DISA STIGs, and organizational standards
+- Automated hardening: OpenSCAP, Ansible hardening roles, and Group Policy
+- Vulnerability management: scanning, patching, and exception handling
+
+### Lecture Notes
+
+**Security hardening** is the process of reducing a system's attack surface by disabling unnecessary services, enforcing strict permissions, applying patches, and configuring protective controls. It is not a one-time task but a continuous discipline: every change, update, and installation can reintroduce vulnerabilities. By 2040, **automated hardening** is the standard, with baselines enforced via configuration management and compliance verified via continuous scanning.
+
+**Mandatory Access Control (MAC)** restricts what processes can do, independent of traditional discretionary permissions. **SELinux** (Security-Enhanced Linux, developed by the NSA) labels every process, file, and port with a security context (e.g., `httpd_t` for the web server, `httpd_sys_content_t` for web content) and defines policies that specify what transitions and accesses are permitted. SELinux modes: **Enforcing** (policy is active), **Permissive** (violations are logged but not blocked), and **Disabled**. The lecture covers: reading SELinux denials (`ausearch -m avc`), creating custom policies (`audit2allow`), and troubleshooting common issues (files mislabeled during manual copying). By 2040, SELinux is the default on RHEL and Fedora; **AppArmor** (an alternative MAC system used by Ubuntu and SUSE) provides profile-based confinement that is simpler but less flexible.
+
+**Endpoint protection** on Windows is dominated by **Windows Defender** (antivirus, firewall, exploit protection, and attack surface reduction rules). By 2040, **EDR (Endpoint Detection and Response)** platforms (Microsoft Defender for Endpoint, CrowdStrike Falcon) provide behavioral analysis, threat hunting, and automated remediation. On Linux, traditional antivirus (ClamAV) is less common; instead, **EDR agents** and **runtime security tools** (Falco, Sysdig) monitor for anomalous behavior. The lecture covers configuring Windows Defender Attack Surface Reduction (ASR) rules, which block risky behaviors (e.g., Office apps creating child processes, executable content from email clients).
+
+**Security baselines** are documented configurations that represent a hardened state. The **CIS (Center for Internet Security) Benchmarks** provide prescriptive guidance for hardening operating systems, applications, and network devices. **DISA STIGs (Security Technical Implementation Guides)** provide similar guidance for U.S. Department of Defense systems. By 2040, the UoY IT Guild maintains **Yggdrasil Security Baselines**, customized from CIS Benchmarks for the university's research and educational environment. The lecture covers the structure of a benchmark: recommendations (e.g., "Ensure SELinux is enforcing"), rationale, audit procedure, and remediation.
+
+**Automated hardening** applies baselines consistently across fleets of systems. **OpenSCAP** (Open Source Security Compliance Solution) scans systems against SCAP (Security Content Automation Protocol) content and generates compliance reports. **Ansible hardening roles** (e.g., `dev-sec.os-hardening`) apply CIS-compliant configurations via playbooks. **Group Policy** enforces Windows baselines across Active Directory domains. By 2040, **continuous compliance** is the goal: systems are scanned daily, deviations are flagged automatically, and non-compliant systems are quarantined until remediated.
+
+**Vulnerability management** is the cycle of scanning, prioritizing, patching, and verifying. **Vulnerability scanners** (Nessus, OpenVAS, Qualys) identify missing patches, misconfigurations, and known vulnerabilities. **Patch management** tools (WSUS, SCCM/ConfigMgr, Landscape, Katello) distribute updates. The lecture covers **patch prioritization**: critical security patches within 24 hours, high-severity within 7 days, moderate within 30 days. **Exception handling**: systems that cannot be patched (legacy dependencies, regulatory freeze) must be isolated, monitored, and documented. The 2033 *EternalBlue Redux*—in which a critical SMB vulnerability, patched months earlier, was exploited on unpatched systems—demonstrated that patch velocity, not patch availability, is the limiting factor.
+
+### Required Reading
+
+- CIS (2040). *CIS Benchmarks for Ubuntu Linux 24.04 LTS and Windows Server 2040*. Center for Internet Security.
+- SELinux Documentation (2040). *SELinux Users and Administrators Guide*. Red Hat.
+- Microsoft (2040). *Microsoft Defender for Endpoint Documentation*. Microsoft Learn.
+- OpenSCAP Documentation (2040). *SCAP Workbench and oscap Command-Line Tool*. OpenSCAP Project.
+- Yggdrasil Security Team (2033). "EternalBlue Redux: The Cost of Patch Delays." *UoY Security Bulletin* 2033-04.
+
+### Discussion Questions
+
+1. SELinux Enforcing mode breaks applications that are not SELinux-aware. Should organizations run in Permissive mode for compatibility, or invest in policy development for Enforcing mode?
+2. EDR platforms collect detailed behavioral data for threat detection. What privacy protections are necessary when monitoring employee workstations?
+3. Automated hardening can break legacy applications. How should organizations balance security compliance against operational continuity for critical legacy systems?
+4. Patch velocity is often limited by testing cycles. For a critical vulnerability with active exploitation, should patches be deployed immediately (risking instability) or after testing (risking compromise)?
+
+### Practice Problems
+
+- Harden a Linux server using the CIS Ubuntu benchmark. Apply at least 20 recommendations, document each change, and verify compliance with OpenSCAP. Address any application breakages caused by the hardening.
+- Configure Windows Defender Attack Surface Reduction rules on a test VM. Test each rule by attempting the blocked behavior (e.g., running an Office macro that launches PowerShell) and verify the block in the event log.
+
+---
+
+ᚺ **Lecture 9: Monitoring and Logging: syslog, journald, Event Viewer, and SNMP**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+You cannot manage what you cannot see. This lecture covers the monitoring and logging infrastructure that provides visibility into system health, performance, and security events. Students will learn to configure centralized logging, set up metric collection, create alerting rules, and build dashboards—transforming raw data into operational insight.
+
+### Key Topics
+
+- Logging: syslog, rsyslog, journald, Windows Event Log, and structured logging
+- Log aggregation: ELK/EFK stack, Loki, Splunk, and cloud logging services
+- Metrics: Prometheus, Grafana, Nagios, and Windows Performance Monitor
+- Alerting: threshold-based, anomaly detection, and on-call escalation
+- SNMP: network monitoring, MIBs, and trap handling
+
+### Lecture Notes
+
+**Logging** is the practice of recording events: system startup, service restart, user login, file access, error conditions, and security violations. **Monitoring** is the practice of observing metrics: CPU usage, memory consumption, disk I/O, network throughput, and application response times. Together, logging and monitoring provide the observability necessary to detect, diagnose, and resolve problems.
+
+**Linux logging** has two dominant systems: **syslog** (the traditional Unix logging daemon, with implementations like rsyslog and syslog-ng) and **journald** (systemd's logging component, storing logs in a binary format with indexed querying). Syslog sends logs to files (`/var/log/syslog`, `/var/log/auth.log`), remote servers, or databases. Journald stores logs in `/var/log/journal/`, accessible via `journalctl` (query by time, service, priority, or pattern). By 2040, most distributions use **journald as the default**, with optional syslog compatibility. The lecture covers log rotation (`logrotate`): preventing logs from filling disks by compressing and deleting old files. **Structured logging** (JSON format) enables machine parsing; by 2040, the UoY standard requires all application logs to be structured.
+
+**Windows logging** uses the **Event Log** (classic) and **Event Tracing for Windows (ETW)** (high-performance, structured). Events are viewed in **Event Viewer** or queried with PowerShell (`Get-WinEvent`). The lecture covers: event levels (Critical, Error, Warning, Information, Verbose), channels (System, Application, Security, Setup, ForwardedEvents), and custom event sources. By 2040, **Windows Container Log** and **Sysmon** (System Monitor, part of Sysinternals) provide detailed process, network, and file system activity logging for threat detection.
+
+**Log aggregation** centralizes logs from multiple systems for analysis. The **ELK stack** (Elasticsearch, Logstash, Kibana) and its successor the **EFK stack** (Elasticsearch, Fluentd/Fluent Bit, Kibana) are the dominant open-source solutions. **Loki** (Grafana Labs) provides a lightweight alternative, indexing only labels (not full text), reducing cost. **Splunk** is the enterprise standard, with powerful search and visualization but significant licensing costs. By 2040, cloud logging services (AWS CloudWatch, Azure Monitor, Google Cloud Logging) provide managed aggregation with AI-powered anomaly detection. The lecture covers: configuring Fluent Bit as a log forwarder, parsing unstructured logs with regex parsers, and creating Loki queries for troubleshooting.
+
+**Metrics collection** tracks numerical measurements over time. **Prometheus** (the CNCF project) scrapes metrics from exporters (node_exporter for Linux, windows_exporter for Windows, custom application exporters) and stores them in a time-series database. **Grafana** visualizes Prometheus metrics in dashboards. The lecture covers: metric types (counters, gauges, histograms, summaries), PromQL (Prometheus Query Language), and alerting rules (configured in Alertmanager). **Nagios** (the legacy monitoring tool) and **Zabbix** remain in use for traditional infrastructure. **Windows Performance Monitor** (PerfMon) provides built-in metric collection and visualization. By 2040, **OpenTelemetry** has unified logging, metrics, and tracing into a single pipeline, though full adoption is incomplete.
+
+**Alerting** transforms data into action. Threshold-based alerts fire when a metric exceeds a limit (CPU > 90% for 5 minutes). Anomaly detection alerts fire when metrics deviate from learned baselines (unusual network traffic at 3 AM). The lecture covers alert fatigue: too many alerts desensitize operators, leading to missed critical notifications. **On-call escalation** (PagerDuty, OpsGenie) routes alerts to the responsible engineer, escalating to managers if unacknowledged. By 2040, **AI-assisted alerting** (the UoY **Ratatoskr** system, 2038) correlates alerts across services, suppressing noise and identifying root causes.
+
+**SNMP (Simple Network Management Protocol)** provides standardized monitoring for network devices (routers, switches, printers). **MIBs (Management Information Bases)** define the data available from each device. **SNMP polling** queries devices for metrics (interface traffic, CPU usage, temperature). **SNMP traps** are unsolicited notifications sent by devices when significant events occur (link down, high temperature). The lecture covers SNMP versions: v1 (plaintext community strings, insecure), v2c (improved performance, still plaintext), and **v3** (encryption and authentication, mandatory by 2040). Tools: `snmpwalk`, `snmpget`, `snmptrapd`, and monitoring platforms (LibreNMS, Nagios with SNMP plugins).
+
+### Required Reading
+
+- Nemeth, E., et al. (2017). *UNIX and Linux System Administration Handbook* (5th Edition). Addison-Wesley. Chapter 10 ("Monitoring").
+- Prometheus Documentation (2040). *Prometheus: Monitoring and Alerting*. prometheus.io.
+- Grafana Labs (2040). *Loki Documentation: Like Prometheus, but for Logs*. grafana.com.
+- Microsoft (2040). *Windows Event Log and ETW Documentation*. Microsoft Learn.
+- Yggdrasil Operations AI Lab (2038). "Ratatoskr: AI-Assisted Alert Correlation and Root Cause Analysis." *UoY Operations Research Report* 2038-09.
+
+### Discussion Questions
+
+1. Journald's binary log format is efficient but requires journald tools to read. Is this a reasonable trade-off, or does it create vendor lock-in compared to plain-text syslog?
+2. Log aggregation systems like ELK are powerful but expensive to operate at scale. For an organization generating 1TB of logs daily, what retention and sampling strategies balance cost with observability?
+3. Prometheus scraping requires services to expose metrics endpoints. For legacy applications without instrumentation, what approaches (sidecar exporters, log parsing, eBPF) can provide metrics?
+4. SNMP v3 is secure but complex to configure. Why does SNMP v2c persist in 2040, and what organizational pressures sustain its use despite known vulnerabilities?
+
+### Practice Problems
+
+- Deploy a Prometheus + Grafana stack. Configure node_exporter on a Linux server and windows_exporter on a Windows server. Create dashboards for CPU, memory, disk, and network metrics. Set up alerting rules for high CPU and low disk space.
+- Configure SNMP v3 on a network device (or SNMP agent). Set up LibreNMS or a similar tool to poll the device and receive traps. Verify that alerts fire correctly when simulated faults are injected.
+
+---
+
+ᚾ **Lecture 10: Virtualization and Containers for System Administration**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Virtualization and containerization have transformed system administration from managing physical hardware to managing abstract compute resources. This lecture covers the technologies that enable this abstraction: hypervisors, virtual machines, containers, and the orchestration platforms that manage them at scale. Students will learn to deploy, secure, and troubleshoot virtualized workloads.
+
+### Key Topics
+
+- Virtualization: Type 1 and Type 2 hypervisors, KVM, VMware, Hyper-V
+- Virtual machines: provisioning, cloning, snapshots, and live migration
+- Containers: Docker, containerd, and the OCI runtime specification
+- Container orchestration: Kubernetes fundamentals for sysadmins
+- Security: hypervisor escape, container breakout, and image scanning
+
+### Lecture Notes
+
+**Virtualization** creates virtual versions of hardware resources. A **hypervisor** (virtual machine monitor) runs directly on hardware (**Type 1**, or bare-metal: VMware ESXi, Microsoft Hyper-V, Linux KVM) or on top of an operating system (**Type 2**: VMware Workstation, VirtualBox, Parallels). By 2040, Type 1 hypervisors dominate data centers; Type 2 is used for development and testing. **KVM (Kernel-based Virtual Machine)**, integrated into the Linux kernel since 2007, is the dominant open-source hypervisor, powering cloud providers and private clouds. The lecture covers KVM management with `libvirt` (`virsh`, `virt-manager`), including VM creation, network configuration (bridged, NAT, isolated), and storage (raw, qcow2 with copy-on-write snapshots).
+
+**Virtual machine lifecycle management** includes: **provisioning** (creating from ISO, template, or cloud image), **cloning** (copying an existing VM), **snapshots** (capturing VM state for rollback), and **live migration** (moving a running VM between physical hosts without downtime). Snapshots are powerful but dangerous: snapshot chains degrade performance and consume storage; the lecture mandates periodic consolidation (merging snapshots into the base disk). Live migration requires shared storage (SAN, NAS, or distributed storage like Ceph) and compatible CPU features. By 2040, **NUMA-aware scheduling** (Non-Uniform Memory Access) ensures that VM memory is allocated on the same physical socket as its vCPUs, reducing cross-socket memory latency.
+
+**Containers** provide operating-system-level virtualization: multiple isolated user spaces share a single kernel. **Docker**, released in 2013, popularized container packaging and distribution. By 2040, Docker has been superseded by **containerd** (the core runtime, donated to CNCF) and **Podman** (a daemonless, rootless container engine). The lecture covers the **OCI (Open Container Initiative) specification**, which standardizes container image format (`config.json`, `rootfs`) and runtime (`runc`, `crun`). Containers are lighter than VMs (sharing the kernel, no hardware emulation) but provide weaker isolation. The lecture emphasizes that **containers are not VMs**: they do not provide the same security boundary, and running untrusted workloads in containers requires additional safeguards (gVisor, Kata Containers, Firecracker).
+
+**Container orchestration** automates the deployment, scaling, and management of containerized applications. **Kubernetes** (introduced 2014, dominant by 2020, ubiquitous by 2040) provides: **Pods** (groups of containers sharing network and storage), **Deployments** (declarative desired state for replica sets), **Services** (stable networking for pods), **ConfigMaps and Secrets** (configuration injection), and **Ingress** (HTTP routing). The lecture covers Kubernetes from the sysadmin perspective: cluster architecture (control plane: API server, etcd, scheduler, controller manager; worker nodes: kubelet, kube-proxy, container runtime), node management (`kubectl drain`, `kubectl cordon`), and resource limits (CPU/memory requests and limits). By 2040, **Kubernetes has become the universal infrastructure abstraction**, with virtualized workloads (KubeVirt) and serverless functions (Knative) running alongside containers.
+
+**Security** in virtualized environments requires attention to isolation boundaries. **Hypervisor escape** (a VM breaking out to the host) is rare but catastrophic; mitigations include: keeping hypervisors patched, disabling unnecessary features (e.g., clipboard sharing, 3D acceleration), and using hardware-assisted virtualization (Intel VT-x, AMD-V) with IOMMU for device passthrough. **Container breakout** (a container process escaping to the host) is more common; mitigations include: running containers as non-root, using user namespaces, enabling seccomp and AppArmor/SELinux profiles, scanning images for vulnerabilities, and restricting capabilities. By 2040, **supply chain security** for containers (SBOMs, signed images, vulnerability scanning in CI) is as critical as runtime security.
+
+### Required Reading
+
+- Silberschatz, A., Galvin, P. B., & Gagne, G. (2018). *Operating System Concepts* (10th Edition). Wiley. Chapter 18 ("Virtual Machines").
+- Docker Documentation (2040). *Docker Overview: Containers and Images*. Docker Inc.
+- Kubernetes Documentation (2040). *Kubernetes Concepts: Cluster Architecture and Workloads*. kubernetes.io.
+- OCI (2040). *Open Container Initiative Runtime Specification*. opencontainers.org.
+- Yggdrasil Security Team (2035). "Container Breakout Trends: Analysis of CVEs and Mitigations." *UoY Security Report* 2035-07.
+
+### Discussion Questions
+
+1. Containers provide weaker isolation than VMs but better resource efficiency. For a multi-tenant environment hosting untrusted user code, should VMs or containers (with additional sandboxing) be used?
+2. Kubernetes has become the universal abstraction, but its complexity is notorious. For a team managing 10 servers, is Kubernetes justified, or should simpler orchestrators (Nomad, Docker Swarm) be considered?
+3. Snapshot chains in VMs improve flexibility but degrade performance. What policies should govern snapshot depth, age, and consolidation schedules?
+4. Supply chain attacks on container images (compromised base images, malicious dependencies) are increasing. What verification steps (signature checking, SBOM review, vulnerability scanning) should be mandatory before deploying a container?
+
+### Practice Problems
+
+- Deploy a KVM virtual machine using libvirt. Create a VM from an ISO, configure bridged networking, take a snapshot, perform a destructive operation inside the VM, and restore from the snapshot. Measure snapshot creation and restoration times.
+- Build a container image for a web application using a multi-stage Dockerfile. Scan the image with Trivy or Clair for vulnerabilities. Deploy the image to a Kubernetes cluster and configure resource limits, liveness probes, and horizontal pod autoscaling.
+
+---
+
+ᛁ **Lecture 11: Backup and Recovery Strategies**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Data loss is not a question of if but when. This lecture covers the strategies, technologies, and procedures that protect organizational data against hardware failure, human error, malware, and disaster. Students will learn to design backup architectures, execute recovery procedures, and test restore processes—because an untested backup is no backup at all.
+
+### Key Topics
+
+- Backup types: full, incremental, differential, and synthetic full
+- Backup targets: tape, disk, cloud, and hybrid architectures
+- Backup software: Bacula, Bareos, Veeam, Restic, and BorgBackup
+- Recovery procedures: file-level, volume-level, bare metal, and point-in-time
+- The 3-2-1-1-0 rule and modern variations for ransomware resilience
+
+### Lecture Notes
+
+**Backup types** define what data is copied and how. A **full backup** copies all selected data; it is comprehensive but slow and storage-intensive. An **incremental backup** copies only data changed since the last backup (full or incremental); it is fast and small but requires the full backup plus all subsequent incrementals for recovery. A **differential backup** copies all data changed since the last full backup; it is larger than incremental but requires only the full plus the latest differential for recovery. A **synthetic full backup** combines a full backup with subsequent incrementals to create a new full backup without reading from the source—reducing source load. By 2040, **forever-incremental** backups (storing only changed blocks, with periodic consolidation) are standard, enabled by changed-block tracking at the filesystem or hypervisor level.
+
+**Backup targets** have evolved from tape to disk to cloud to hybrid. **Tape** remains relevant for cold storage (air-gapped, offline, tamper-evident) and long-term archival, though its market share has declined. **Disk** (local NAS, SAN, or dedicated backup appliances) provides fast random access for restores. **Cloud** (object storage like S3, Azure Blob, Google Cloud Storage) provides elasticity and geographic distribution but introduces egress costs and dependency on network connectivity. **Hybrid** architectures combine local disk (for fast restores of recent data) with cloud (for disaster recovery and long-term retention). The lecture covers the UoY backup architecture: Bacula for on-premises servers, Veeam for virtualized workloads, and Restic for cloud-native containers.
+
+**Backup software** varies by environment. **Bacula/Bareos** (open-source, client-server architecture) provides enterprise-grade scheduling, cataloging, and tape management. **Veeam** (commercial, virtualized-environment focus) provides agentless VM backup, instant VM recovery, and replication. **Restic** (open-source, modern) provides deduplication, encryption, and cloud-native storage backends. **BorgBackup** (open-source) provides deduplication, compression, and encryption for Linux servers. By 2040, **immutable backups** (write-once, with deletion protected by legal hold or multi-party approval) are standard for ransomware resilience; attackers cannot encrypt or delete backups they cannot access.
+
+**Recovery procedures** must be documented, practiced, and verified. **File-level recovery** restores individual files or directories from backup. **Volume-level recovery** restores entire filesystems or disk images. **Bare metal recovery** restores a complete system (OS, applications, data) to new hardware after catastrophic failure. **Point-in-time recovery** restores a database or application to a specific moment, requiring continuous transaction log backups. The lecture emphasizes **recovery testing**: every backup must be restored at least quarterly to verify integrity. The 2036 *Yggdrasil Backup Verification Failure*—in which 20% of backups were found to be corrupted during routine testing, due to a silent hardware fault in the deduplication appliance—demonstrated that backup integrity cannot be assumed.
+
+**The 3-2-1-1-0 rule** is the modern evolution of the classic 3-2-1 rule. **3** copies of data (primary + 2 backups). **2** different media types (e.g., disk and tape). **1** offsite copy (geographic separation). **1** immutable or air-gapped copy (ransomware protection). **0** errors (verified by automated recovery testing). By 2040, the rule has been extended for critical research data: **3-2-2-1-0** (two offsite copies in different continents) and **offline cryptographic verification** (hash chains proving backup integrity over time).
+
+### Required Reading
+
+- Preston, W. C. (2007). *Backup & Recovery*. O'Reilly. (Updated concepts for 2040 context.)
+- Veeam Documentation (2040). *Veeam Backup & Replication: Best Practices*. Veeam Software.
+- Restic Documentation (2040). *Restic: Backups Done Right*. restic.net.
+- Yggdrasil IT Operations (2036). "The Backup Verification Failure: Silent Corruption and Recovery Testing." *UoY Operations Postmortem* 2036-03.
+- NIST (2035). *Guidelines for Ransomware-Resilient Backup Strategies*. NIST SP 1800-25.
+
+### Discussion Questions
+
+1. Immutable backups protect against ransomware but complicate retention management (old backups cannot be deleted to free space). What governance processes are necessary for immutable backup lifecycle management?
+2. Cloud backups provide geographic distribution but incur egress fees for recovery. For a 50TB dataset, how should on-premises and cloud targets be balanced for cost-effective recovery?
+3. Backup verification testing consumes resources and time. For a system with 1,000 servers, what sampling strategy provides adequate confidence without excessive cost?
+4. The 3-2-1-1-0 rule is comprehensive but expensive. For non-critical data (e.g., temporary build artifacts), what reduced protection level is appropriate?
+
+### Practice Problems
+
+- Design a backup architecture for a hypothetical organization: 50 Linux servers, 20 Windows servers, 10 databases (PostgreSQL, SQL Server), and 5TB of file shares. Specify backup types, targets, software, retention policies, and recovery time objectives (RTOs).
+- Perform a bare metal recovery of a Linux VM from backup. Document each step: booting recovery media, restoring the disk image, reconfiguring network settings, and verifying application functionality. Measure total recovery time.
+
+---
+
+ᛃ **Lecture 12: Disaster Recovery and Business Continuity for Sysadmins**
+
+**Course:** IT201 — System Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Disasters—natural, technological, and human-caused—can destroy data centers, disable networks, and halt operations. This final lecture covers the disciplines of disaster recovery (DR) and business continuity (BC): planning, testing, and executing procedures that restore critical systems after catastrophic events. Students will learn to classify workloads by criticality, design recovery architectures, and lead organizations through chaos with calm competence.
+
+### Key Topics
+
+- Disaster classification: natural, technological, human-caused, and cyber
+- Business Impact Analysis (BIA): RTO, RPO, MTD, and workload criticality
+- Recovery architectures: cold site, warm site, hot site, and active-active
+- DR testing: tabletop exercises, simulations, and full-scale failover drills
+- Cyber resilience: ransomware response, data integrity verification, and recovery
+
+### Lecture Notes
+
+**Disasters** are events that exceed the normal operational capacity of an organization. **Natural disasters** (earthquakes, floods, hurricanes) destroy physical infrastructure. **Technological disasters** (power grid failures, cooling system failures, cascading network outages) disable systems without physical destruction. **Human-caused disasters** (terrorism, sabotage, war) target infrastructure deliberately. **Cyber disasters** (ransomware, wiper malware, advanced persistent threats) destroy or encrypt data, rendering systems unusable. By 2040, cyber disasters are the most common cause of extended downtime, surpassing natural disasters in frequency and impact.
+
+**Business Impact Analysis (BIA)** quantifies the consequences of system unavailability. Key metrics: **RTO (Recovery Time Objective)**—the maximum acceptable time to restore a system (e.g., 4 hours for email, 1 hour for payment processing). **RPO (Recovery Point Objective)**—the maximum acceptable data loss (e.g., 24 hours of email, zero for financial transactions). **MTD (Maximum Tolerable Downtime)**—the total time a business process can be unavailable before irreversible damage occurs. The lecture demonstrates a BIA worksheet: listing all IT services, assigning criticality tiers (Tier 1: life safety; Tier 2: revenue-generating; Tier 3: supporting; Tier 4: non-essential), and mapping RTO/RPO/MTD to each tier. By 2040, the UoY BIA is automated: continuous monitoring of system dependencies generates dynamic criticality scores.
+
+**Recovery architectures** define the standby infrastructure available for failover. **Cold site**: a facility with power and network but no equipment; recovery requires procuring and configuring hardware (RTO: weeks). **Warm site**: a facility with pre-installed but unpowered equipment; recovery requires powering on and restoring data (RTO: days). **Hot site**: a facility with running equipment that mirrors production; recovery requires redirecting traffic (RTO: minutes to hours). **Active-active**: multiple sites running production workloads simultaneously; failover requires redirecting traffic away from the failed site (RTO: seconds to minutes). By 2040, active-active is the standard for Tier 1 services, warm site for Tier 2, and cloud-based DR (spinning up resources on demand) for Tier 3 and 4.
+
+**DR testing** validates that recovery procedures work. **Tabletop exercises** walk through scenarios verbally ("What would we do if the data center flooded?"). **Simulations** execute recovery procedures in a test environment. **Full-scale failover drills** redirect production traffic to the DR site for a defined period, verifying that the site can handle real load. The lecture emphasizes that testing must be **regular** (quarterly for Tier 1, annually for Tier 2), **realistic** (using actual data and applications, not sanitized samples), and **documented** (with post-test reviews identifying gaps). The 2032 *Yggdrasil DR Drill Discovery*—in which a quarterly failover drill revealed that the DR site's database replication lag was 6 hours, exceeding the RPO—demonstrated the value of realistic testing.
+
+**Cyber resilience** is disaster recovery adapted to ransomware and wipers. Traditional DR assumes the backup is clean; cyber DR must verify that backups are not compromised. The lecture covers: **isolated recovery environments** (air-gapped networks for restoring and verifying backups), **cryptographic integrity verification** (hash chains and signatures proving backups have not been tampered with), **forensic preservation** (capturing evidence before recovery destroys it), and **negotiation protocols** (whether to pay ransoms—a controversial decision with legal, ethical, and practical dimensions). By 2040, the UoY **Cyber Resilience Playbook** mandates: never pay ransoms (it funds criminals and does not guarantee recovery); maintain immutable offline backups; and practice "cyber fire drills" quarterly.
+
+### Required Reading
+
+- Wallace, M., & Webber, L. (2017). *The Disaster Recovery Handbook* (3rd Edition). Rothstein Associates.
+- NIST (2034). *Contingency Planning Guide for Federal Information Systems*. NIST SP 800-34 Rev. 2.
+- Yggdrasil IT Operations (2032). "The DR Drill Discovery: Replication Lag Exceeds RPO." *UoY Operations Postmortem* 2032-08.
+- Yggdrasil Security Team (2039). "Cyber Resilience Playbook: Ransomware Response and Recovery." *UoY Security Standards* v8.0.
+- SANS Institute (2040). *Business Continuity and Disaster Recovery Planning*. SANS Reading Room.
+
+### Discussion Questions
+
+1. Active-active architectures provide the lowest RTO but are expensive (duplicate infrastructure running at all times). For a non-profit with limited budget, what recovery architecture balances cost with resilience?
+2. DR testing disrupts normal operations and risks accidental data corruption. What safeguards (isolated test networks, synthetic data, rollback plans) can minimize testing risk?
+3. The "never pay ransoms" policy is principled but may result in permanent data loss if backups fail. Under what conditions, if any, should an organization reconsider this policy?
+4. Cyber disasters often involve legal and regulatory obligations (data breach notification, evidence preservation). How should DR plans integrate with legal and compliance teams?
+
+### Practice Problems
+
+- Conduct a tabletop exercise for a specific disaster scenario (e.g., ransomware attack on the primary data center). Document the decision points, responsible parties, communication plan, and recovery steps. Identify at least three gaps in the current plan.
+- Design a recovery architecture for a three-tier web application (load balancer, application servers, database). Specify RTO/RPO targets, backup strategies, failover mechanisms, and testing schedule. Include a cost estimate for the DR infrastructure.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT201 is a **practical capstone** (60% of grade) combined with a **written theory exam** (40% of grade).
+The IT201 final examination is a **practical hands-on assessment** conducted over 48 hours in a virtual lab environment. Students must complete **four of six** challenges:
 
-**Practical Capstone (60%):**
-Students are given a scenario: "You are the system administrator for a 50-person research group at the University of Yggdrasil. Design, implement, and document a complete IT infrastructure." Requirements:
-- Deploy 5 Linux servers (web, database, file, monitoring, backup) and 2 Windows servers (domain controller, application server).
-- Configure Active Directory with users, groups, and GPOs.
-- Implement network segmentation with firewalls.
-- Set up monitoring and alerting for all systems.
-- Configure automated backups with a 4-hour RPO and 24-hour RTO.
-- Harden all systems against CIS benchmarks and document deviations.
-- Write Ansible playbooks and PowerShell DSC configurations for automated deployment.
-- Produce a runbook documenting all procedures.
+1. **Linux Administration**: Given a Linux server with multiple misconfigurations (permission errors, failed services, network issues, security vulnerabilities), diagnose and fix all problems. Document each finding and remediation.
+2. **Windows Administration**: Configure Active Directory for a fictional organization: create OUs, users, and groups; apply GPOs for security and software deployment; configure DFS for file sharing; and set up PowerShell automation for user onboarding.
+3. **Storage Configuration**: Design and implement a storage solution for a database server: partition disks, create a RAID or ZFS pool, configure LVM, set up snapshots, and implement a backup schedule. Measure performance and document the configuration.
+4. **Network Security**: Configure host-based firewalls on Linux and Windows, set up a VPN gateway, implement network segmentation with VLANs, and conduct a vulnerability scan. Remediate findings and document the security posture.
+5. **Monitoring Deployment**: Deploy a monitoring stack (Prometheus, Grafana, Loki) for a mixed Linux/Windows environment. Configure metric collection, log aggregation, alerting rules, and dashboards. Verify end-to-end observability.
+6. **Disaster Recovery**: Execute a DR failover drill for a provided application. Verify data integrity at the DR site, measure RTO and RPO, identify gaps, and produce an after-action report.
 
-The capstone is evaluated on: technical correctness (does it work?); security posture (is it hardened?); documentation quality (is it clear and complete?); automation professionalism (are playbooks idempotent and tested?); and disaster recovery readiness (can the system be rebuilt from documentation and backups?).
+### Evaluation Criteria
 
-**Written Theory Exam (40%):**
-Choose 4 of 8 essay questions:
+| Criterion | Weight | Description |
+|-----------|--------|-------------|
+| Correctness | 30% | Accurate diagnosis and remediation of issues |
+| Security | 25% | Hardening measures, least privilege, and secure defaults |
+| Documentation | 20% | Clear procedures, rationale, and troubleshooting notes |
+| Efficiency | 15% | Appropriate tool selection and minimal downtime |
+| Completeness | 10% | All requirements addressed, no outstanding issues |
 
-1. The system administrator's role has evolved from "computer janitor" to "platform engineer." Is this evolution a genuine professionalisation, or has it merely added layers of abstraction that distance engineers from the systems they operate?
+---
 
-2. systemd is both praised for its integration and criticised for its complexity. Analyse the arguments for and against systemd as an init system. Is systemd a net benefit for Linux administration?
+*The systems stand because the administrator tends them. The logs are read, the backups verified, and the disaster prepared for. This is the quiet vigil that keeps the digital world turning.* ᛟ
 
-3. Immutable distributions promise atomic updates and rollback, but they also limit customisation. Are immutable systems the future of Linux server administration, or will mutable systems always be necessary?
-
-4. Compare Ansible (agentless) and Puppet (agent-based) as configuration management tools. For what scale and environment is each best suited? Is one fundamentally better, or do they serve different niches?
-
-5. The 3-2-1-1-0 backup rule is comprehensive but expensive. For a small research group with limited budget, which elements are essential and which can be deferred?
-
-6. Kubernetes has become the standard for container orchestration, but its complexity is notorious. Is Kubernetes genuinely necessary for most organisations, or has the industry adopted a tool that exceeds their needs?
-
-7. AIOps promises to reduce operational toil through AI-driven anomaly detection and remediation. Is AIOps a liberating technology or a deskilling threat?
-
-8. Platform engineering treats internal infrastructure as a product. What are the risks of this product mindset, and how can organisations ensure that platform teams do not prioritise developer convenience over operational stability?
-
-**Grading:**
-- A (Excellent): A fully functional, secure, automated, and well-documented infrastructure. Written exam demonstrates deep understanding of administration principles and their practical application.
-- B (Good): A competent infrastructure with minor gaps in security, automation, or documentation. Written exam is solid but lacks critical depth.
-- C (Satisfactory): An infrastructure that meets minimum requirements but has significant gaps. Written exam shows basic understanding but limited analysis.
-- D (Poor): A partially functional infrastructure or one with serious security flaws. Written exam is superficial or contains errors.
-- F (Fail): No functional infrastructure or missing capstone. Written exam fails to demonstrate understanding of system administration.
+— Runa Gridweaver Freyjasdottir, System Administration, University of Yggdrasil, 2040

@@ -1,14 +1,13 @@
 # IT107: Web Technologies & Internet Architecture
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4
-**Description:** A comprehensive survey of the architecture, protocols, and infrastructure that constitute the modern World Wide Web, with emphasis on the 2040 landscape of edge-distributed, AI-mediated, and quantum-resilient web systems.
+**Credits:** 4  
+**Prerequisites:** IT101 (Introduction to Information Technology)  
+**Description:** The web and the internet are the connective tissue of 2040 civilisation. This course provides the IT professional's working understanding of how data moves across the globe: the protocol stacks that underpin every HTTP request, the DNS infrastructure that translates human names into machine addresses, the web servers and reverse proxies that serve content at planetary scale, the TLS ecosystem that secures every connection, and the emerging paradigms — QUIC, WebAssembly, edge computing — that define the web of the 2040s. Students build, break, and rebuild real web infrastructure in the YggLab Cloud Sandbox, emerging with the diagnostic intuition that distinguishes the professional from the ticket-closer.
 
-**Prerequisites:** IT101 (Introduction to Information Technology), CN101 (Introduction to Computer Networking)
-
-**Instructor:** Dr. Eiríkr Bjarnarson, Department of Information Technology
-
-**Course Philosophy:** The web is not merely a collection of hyperlinked documents — it is the digital agora where commerce, culture, governance, and human connection converge. Understanding its architecture is to understand the spine of modern civilization. This course treats the web as a living, evolving organism, one whose protocols encode political assumptions, whose infrastructure reflects economic power, and whose future demands both technical mastery and ethical wisdom.
+**Instructor:** Dr. Sigrún Vérendóttir, Department of Information Technology  
+**Lab:** YggLab NetForge, Muninn Computing Centre, Third Floor  
+**Office Hours:** Tuesdays and Thursdays, 14:00–16:00 UTC
 
 ---
 
@@ -16,590 +15,547 @@
 
 ---
 
-### Lecture 1: The Architecture of the Web — Origins, Principles, and the 2040 Stack
+### Lecture 1: The Internet Architecture — How Packets Cross the World
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-The World Wide Web was born at CERN in 1989, when Tim Berners-Lee proposed a system of linked hypertext documents accessible over the Internet. In the 51 years since, the web has transformed from a research tool into the substrate of global civilization — the platform for commerce, education, governance, social connection, and cultural production. This lecture surveys the web's architectural evolution, establishes the layered model that governs web communication, and introduces the 2040 web stack: a landscape shaped by edge computing, AI mediation, quantum-resistant cryptography, and decentralized identity protocols.
-
-#### Key Topics
-
-- **The Web vs. The Internet:** A foundational distinction: the Internet is the global network of interconnected computers communicating via TCP/IP; the World Wide Web is an application-layer system of hyperlinked resources accessed via HTTP and identified by URIs. By 2040, the distinction has blurred, as the web's protocols (HTTP/3, WebSocket, WebRTC) have absorbed functions previously handled at lower layers.
-- **Architectural Principles of the Web:** Berners-Lee's original design principles remain influential: (1) universality — any resource can be linked; (2) decentralization — no central authority controls the web; (3) layering — protocols are modular and composable; (4) tolerance — "be conservative in what you send, liberal in what you accept" (Postel's Law, now controversially reconsidered in the era of zero-trust security). These principles have been challenged, modified, and reinterpreted across five decades of web evolution.
-- **The 2040 Web Stack:** The contemporary web stack comprises: (1) Transport Layer — HTTP/3 over QUIC, with multipath extensions for seamless handoff between cellular, satellite, and fixed networks; (2) Security Layer — TLS 1.4 with post-quantum hybrid key exchange (X25519 + CRYSTALS-Kyber) mandated by the Global Data Stewardship Accord of 2038; (3) Application Layer — a landscape dominated by WebAssembly modules, React/Vue/Svelte descendants, and AI-generated UI frameworks; (4) Identity Layer — Self-Sovereign Identity (SSI) via W3C Verifiable Credentials and Decentralized Identifiers (DIDs), gradually replacing password-based authentication.
-- **The End of Client-Server:** By 2040, the classical client-server dichotomy has dissolved. Every device is both consumer and producer of web resources. Edge nodes cache, transform, and serve content. AI agents negotiate API interactions autonomously. The web is a mesh, not a star topology.
-
-#### Lecture Notes
-
-The web's evolution can be understood through the metaphor of urbanization. Early web (1990s) was a scattering of homesteads — personal homepages, static HTML. The Web 2.0 era (2000s–2010s) was the rise of cities — centralized platforms (Google, Facebook, Amazon) that aggregated users and data. The Web 3.0 era (2020s–2030s) was the decentralization movement — blockchain, IPFS, federated protocols — a push to reclaim digital sovereignty. The 2040 web is a mature ecosystem where centralized and decentralized architectures coexist in a negotiated tension, mediated by AI orchestration layers and governed by transnational digital accords.
-
-A crucial development of the 2030s was the **Web Environment Integrity (WEI) debate**. When major browser vendors proposed attestation APIs that would allow servers to verify client integrity, privacy advocates warned of a future where independent browsers and accessibility tools would be locked out. The compromise — the **Trondheim Protocol (2034)** — established that attestation must be optional, transparency must be verifiable, and no single entity may control the attestation infrastructure. This debate exemplifies the web's ongoing negotiation between security, openness, and power.
-
-By 2040, the web processes over 4 zettabytes of data annually, serves 8.5 billion users (including non-human agents and IoT devices with web interfaces), and mediates approximately 65% of global GDP. Understanding its architecture is a form of civic literacy.
-
-#### Required Reading
-
-- Berners-Lee, T. (1989). "Information Management: A Proposal." CERN. (Original web proposal — historical context)
-- Berners-Lee, T., Hendler, J., & Lassila, O. (2001). "The Semantic Web." *Scientific American*, 284(5), 34–43.
-- UoY Web Architecture Lab. (2039). *The Trondheim Compromise: Attestation, Privacy, and Web Integrity in the 2030s*.
-- IETF QUIC Working Group. (2038). RFC 9000 (QUIC) and RFC 9114 (HTTP/3) — Current Editions.
-
-#### Discussion Questions
-
-1. Postel's Law ("be liberal in what you accept") has been criticized as a security vulnerability — accepting malformed input creates attack surface. Should web protocol design prioritize strictness over tolerance? What are the architectural consequences of each approach?
-2. The Trondheim Protocol balances web integrity and user privacy. Does this compromise satisfy both needs, or does it merely postpone a more fundamental conflict between platform control and user freedom?
-3. In 2040, 35% of web traffic originates from non-human agents (AI assistants, IoT devices, autonomous systems). How should web architecture evolve to serve non-human users without compromising human accessibility?
-
-#### Practice Problems
-
-- Trace the complete request/response cycle of loading a modern web application (2040) from DNS resolution through TLS handshake, HTTP/3 stream multiplexing, CDN edge serving, and client-side WebAssembly execution. Diagram every protocol interaction.
-- Analyze the WEI debate (2023–2034). Write a 1,000-word policy brief arguing for or against mandatory attestation, citing specific technical and social consequences.
-- Compare the web stacks of 2004, 2014, 2024, and 2044. Identify which layers stabilized and which experienced paradigm shifts. What does this pattern predict for 2054?
-
----
-
-### Lecture 2: HTTP/3, QUIC, and the Multipath Transport Revolution
-
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-HTTP — the Hypertext Transfer Protocol — has been the web's lingua franca since 1991. HTTP/1.1 (1997) served the web for nearly two decades before HTTP/2 (2015) introduced multiplexing and header compression. But the true revolution came with HTTP/3 (2022), which abandoned TCP entirely in favor of QUIC — a transport protocol built on UDP that eliminates head-of-line blocking, reduces connection establishment latency to zero round trips (0-RTT), and enables seamless connection migration across network interfaces. This lecture examines the QUIC transport layer, HTTP/3's semantic mapping onto QUIC streams, and the 2040 extensions — multipath QUIC (MP-QUIC) and AI-optimized congestion control — that define modern web transport.
+Every web page you load is the culmination of a miracle of engineering: a request generated in your browser traverses local networks, ISP routers, transit providers, undersea cables, and data centre fabrics to reach a server, which generates a response that retraces the entire path — all in under 100 milliseconds. This lecture unpacks the layered architecture that makes this possible: the OSI model as a conceptual framework, the TCP/IP stack as its practical implementation, and the physical infrastructure — fibre, copper, radio, satellite — that carries the bits. By the end of this lecture, students should be able to trace a packet's journey from browser to server and back, naming every protocol and device involved.
 
 #### Key Topics
 
-- **Why QUIC?** TCP's limitations were increasingly problematic by the 2010s: (1) head-of-line blocking — a lost packet in one stream blocks all streams; (2) connection establishment latency — TCP+TLS required 2–3 round trips; (3) ossification — middleboxes had frozen TCP's evolution, making protocol upgrades nearly impossible. QUIC addresses all three: it runs over UDP (bypassing middlebox ossification), multiplexes streams independently (eliminating HOL blocking), and integrates TLS 1.3 natively (0-RTT resumption).
-- **QUIC's Architecture:** QUIC provides: (1) Reliable, ordered delivery per stream — each stream is independently flow-controlled, so packet loss in one stream doesn't affect others; (2) Connection migration — QUIC connections are identified by a Connection ID, not by IP/port tuples, so a connection survives a mobile device switching from WiFi to cellular; (3) Built-in encryption — all QUIC packets are encrypted (except the initial handshake), making QUIC traffic opaque to middleboxes; (4) Flexible congestion control — QUIC's pluggable congestion control architecture allows per-application or per-network optimization.
-- **HTTP/3 Semantics:** HTTP/3 maps HTTP semantics (requests, responses, headers, status codes) onto QUIC streams. Each request-response pair occupies a bidirectional QUIC stream. Server push is deprecated in HTTP/3 (removed due to poor real-world adoption), replaced by the `103 Early Hints` status code and resource hints. QPACK replaces HPACK for header compression, using separate uni-directional streams for encoder and decoder state to avoid HOL blocking in header compression.
-- **MP-QUIC and the 2040 Transport Layer:** Multipath QUIC (standardized in RFC 9480, 2037) enables a single QUIC connection to use multiple network paths simultaneously — aggregating bandwidth and providing seamless failover. A user on a 2040 device might simultaneously use satellite Internet (Starlink v4), 6G cellular, and local mesh WiFi, with MP-QUIC dynamically routing traffic across paths based on latency, cost, and reliability. The **AI Congestion Controller (AICC)** — standardized in 2039 — uses on-device ML models to predict network conditions and tune congestion control parameters per-path, achieving 15–30% throughput improvements over classical algorithms (CUBIC, BBRv3) in heterogeneous network environments.
+- **The Layered Model:** The OSI seven-layer model (Physical, Data Link, Network, Transport, Session, Presentation, Application) as a conceptual tool for understanding how abstraction enables interoperability. The lecture emphasises that OSI is a teaching model — the real internet runs on the four-layer TCP/IP model (Link, Internet, Transport, Application) — but the OSI framework provides vocabulary (Layer 2 vs. Layer 3 switching, Layer 7 load balancing) that IT professionals use daily.
+- **The TCP/IP Stack in Detail:** Each layer and its protocols. Link Layer: Ethernet, Wi-Fi (802.11), and the MAC addressing that governs local network communication. Internet Layer: IP (v4 and v6), ICMP (ping and traceroute), and the routing protocols (BGP, OSPF) that determine how packets cross autonomous systems. Transport Layer: TCP (reliable, ordered, connection-oriented) and UDP (unreliable, unordered, connectionless — the foundation of QUIC, DNS, and streaming). Application Layer: HTTP, DNS, TLS, SMTP, SSH — the protocols IT professionals interact with daily.
+- **Physical Infrastructure:** The internet is not a cloud; it is cables. The lecture maps the physical internet: Tier 1 networks (Level 3, NTT, Telia, Tata), Internet Exchange Points (IXPs — AMS-IX, DE-CIX, LINX, Equinix), undersea cable landing stations (Marseille, Singapore, New York, Mombasa), and the 2040 expansion of satellite internet constellations (Starlink v3, Kuiper, GuoWang) that bring connectivity to previously unreachable regions. Students examine the submarine cable map and trace routes between continents.
+- **Packet Journey:** A concrete example: a student in Reykjavík types `https://yggdrasil.edu` into a browser. What happens? DNS resolution (recursive resolver → root servers → TLD servers → authoritative nameserver), TCP three-way handshake, TLS handshake (ClientHello, ServerHello, certificate verification, key exchange), HTTP request, server processing, HTTP response, browser rendering. The lecture traces every step with Wireshark captures and `curl -v` output.
+- **The 2040 Internet:** IPv6 adoption (94% globally as of 2040, compared to 42% in 2024), the sunset of IPv4 except in legacy enterprise environments, the rise of named data networking (NDN) as a research paradigm for content-centric routing, and the integration of AI-driven traffic engineering (Google's B4 SDN, Microsoft's SWAN) that optimises wide-area network utilisation through machine-learned traffic predictions.
 
 #### Lecture Notes
 
-QUIC's deployment accelerated dramatically in the late 2020s. By 2030, over 80% of web traffic used QUIC. The protocol's encryption-by-default design had an unintended consequence: it made network-level content filtering (used by schools, enterprises, and authoritarian governments) significantly more difficult, as QUIC traffic is opaque to deep packet inspection. This sparked a decade-long policy debate that culminated in the **Stockholm Net Neutrality Accord (2035)**, which established that (1) network operators may apply traffic management at the IP level but not inspect application-layer content, (2) content filtering must be endpoint-based (client or server), and (3) QUIC's encryption is a privacy right, not a circumvention tool.
+The IT professional's relationship with the network is diagnostic. When a web application is slow, the cause could be anywhere in the stack: DNS resolution taking 2 seconds, TCP retransmissions due to packet loss on a congested link, TLS negotiation stalling because of an expired intermediate certificate, or the application server queueing requests behind a blocking database query. The skill of the IT diagnostician is the ability to isolate the layer where the problem lives. The tools for this — `ping`, `traceroute`/`mtr`, `dig`, `curl -v`, `openssl s_client`, `tcpdump`/Wireshark — are the IT professional's stethoscope.
 
-A fascinating development is **AI-Negotiated Transport (ANT)** — a 2040 proposal where AI agents on client and server negotiate transport parameters (congestion control algorithm, stream prioritization, retransmission policy) based on application requirements. A video conference AI might negotiate low-latency unreliable delivery for video frames while requesting reliable ordered delivery for chat messages — all within a single QUIC connection. ANT is experimental but represents the direction of travel toward application-aware transport.
+The lecture introduces the concept of "network empathy" — the ability to think like a packet. Every decision a network device makes (routing, queuing, dropping, prioritising) can be understood by asking: "If I were this packet, what would happen to me at this router?" This mental model is more valuable than memorising every RFC.
+
+The Norse metaphor: the internet is not a cloud but a sea — like the North Atlantic that the Vikings crossed. Packets are ships; routers are harbours; DNS is the navigational chart; BGP is the oral tradition by which harbours learn which routes are open. A network engineer is a modern navigator, understanding winds (latency), currents (bandwidth), storms (DDoS attacks), and reefs (misconfigured firewalls).
 
 #### Required Reading
 
-- Langley, A., et al. (2017). "The QUIC Transport Protocol: Design and Internet-Scale Deployment." *ACM SIGCOMM*.
-- IETF. (2037). RFC 9480: Multipath Extensions for QUIC (MP-QUIC).
-- Cardwell, N., Cheng, Y., et al. (2036). "BBRv3: Model-Based Congestion Control for the AI Era." *ACM SIGCOMM Computer Communication Review*, 66(4).
-- UoY Transport Lab. (2039). *AI-Negotiated Transport: A Research Agenda for 2040–2050*.
+- Kurose, J.F. & Ross, K.W. (2038). *Computer Networking: A Top-Down Approach*, 10th Edition. Pearson. Chapters 1–2.
+- Fall, K.R. & Stevens, W.R. (2035). *TCP/IP Illustrated, Volume 1: The Protocols*, 3rd Edition. Addison-Wesley. Chapters 1–3.
+- Clark, D.D. (2030). *Designing an Internet*. MIT Press. Chapter 4 (The Architecture of the Internet).
+- Telegeography Submarine Cable Map (2040 edition). Interactive resource at `cablemap.yggdrasil.edu`.
 
 #### Discussion Questions
 
-1. QUIC's encryption prevents middleboxes from inspecting traffic. Does this enhance user privacy at the expense of network management? Or is the loss of middlebox visibility a feature, not a bug — a nudge toward endpoint-based security?
-2. MP-QUIC enables bandwidth aggregation across paid and free networks. Should operating systems expose per-path cost information to applications, allowing them to route expensive traffic differently? What are the privacy implications?
-3. AI-Negotiated Transport could optimize individual application performance but might lead to transport-layer fragmentation — different applications using incompatible congestion control strategies. Is this a problem, or is application diversity a strength of the Internet architecture?
-
-#### Practice Problems
-
-- Set up a QUIC connection between two virtual machines and use Wireshark to capture the handshake. Identify the ClientHello, ServerHello, and the encrypted extensions. Measure the handshake latency compared to TCP+TLS 1.3.
-- Implement a simple MP-QUIC scheduler that distributes traffic across two network interfaces (e.g., WiFi and cellular) using weighted round-robin. Test under varying loss conditions and compare throughput to single-path QUIC.
-- Research the history of middlebox ossification. Write a 500-word analysis explaining how QUIC's design deliberately resists middlebox interference and whether this strategy has succeeded by 2040.
+1. The OSI model was standardised in 1984, yet the internet was built on TCP/IP, which predates OSI. Why did TCP/IP win, and what does this victory tell us about the relationship between standards bodies and engineering practice?
+2. IPv6 was standardised in 1998. It took over 40 years to achieve global majority adoption. Analyse the technical, economic, and organisational barriers to IPv6 migration. What does this history suggest about the adoption timeline for post-quantum cryptography?
+3. A traceroute from London to Tokyo shows a hop in New York. Why might this happen, and what does it reveal about the difference between geographic distance and network topology?
 
 ---
 
-### Lecture 3: DNS — The Distributed Directory That Names the World
+### Lecture 2: DNS — The Internet's Phonebook and Its Hidden Complexity
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The Domain Name System (DNS) is the Internet's phonebook — the distributed, hierarchical database that translates human-readable domain names (e.g., `yggdrasil.university`) into machine-routable IP addresses. Designed by Paul Mockapetris in 1983, DNS has grown from a simple name-to-address lookup service into a critical infrastructure component that handles load balancing, service discovery, email routing, and — by 2040 — cryptographic identity verification, content reputation scoring, and AI-driven traffic steering. This lecture traces DNS's evolution from RFC 882 to the 2040 landscape of DNS-over-QUIC (DoQ), Oblivious DNS (ODNS), and the Verifiable Domain Resolution (VDR) framework.
+The Domain Name System (DNS) is the most underappreciated service on the internet. Every internet interaction begins with a DNS query, yet most users — and many IT professionals — treat it as a black box. This lecture opens that box: the hierarchical architecture of the DNS (root, TLD, authoritative), the query resolution process (recursive vs. iterative), the record types that encode different kinds of information, and the security extensions (DNSSEC, DNS-over-HTTPS, DNS-over-TLS) that protect the system from poisoning and surveillance. By the end, students configure their own authoritative DNS server for a domain and observe real query resolution with `dig +trace`.
 
 #### Key Topics
 
-- **DNS Hierarchy and Resolution:** DNS is a tree-structured namespace. The root zone (managed by ICANN/IANA) delegates to Top-Level Domains (TLDs: `.com`, `.org`, `.university`, country-code TLDs like `.uk`), which delegate to authoritative name servers for individual domains. Resolution proceeds recursively: a client queries a recursive resolver (e.g., the ISP's resolver or a public resolver like Cloudflare's 1.1.1.1), which walks the tree from root to authoritative server, caching results at each level. By 2040, the root zone contains over 2,000 TLDs, and the average domain resolution requires 3.2 queries (optimized by aggressive caching and AI-predictive prefetching).
-- **DNS Security (DNSSEC):** DNSSEC (RFC 4033–4035) adds cryptographic signatures to DNS records, enabling resolvers to verify that responses haven't been tampered with. DNSSEC uses a chain of trust: each zone's public key is signed by its parent zone, up to the root zone's Key Signing Key (KSK). Despite being standardized in 2005, DNSSEC adoption was slow — by 2025, only ~30% of domains signed their zones. By 2040, the **Mandatory DNSSEC Accord (2033)** requires all TLD operators and major registrars to support DNSSEC, pushing adoption above 85%. However, DNSSEC does not encrypt DNS queries — it only authenticates responses. Privacy requires separate mechanisms.
-- **Encrypted DNS — DoH, DoT, DoQ:** Query privacy has been one of DNS's most contentious issues. Traditional DNS queries are sent in cleartext over UDP port 53, visible to any network observer. Three encrypted DNS protocols address this: (1) DNS-over-TLS (DoT, RFC 7858, 2016) — DNS queries tunneled over TLS on port 853; (2) DNS-over-HTTPS (DoH, RFC 8484, 2018) — DNS queries embedded in HTTP/2 or HTTP/3 requests, indistinguishable from other HTTPS traffic; (3) DNS-over-QUIC (DoQ, RFC 9250, 2022) — DNS over native QUIC, combining the performance benefits of QUIC with encrypted transport. By 2040, DoQ has emerged as the dominant encrypted DNS protocol, leveraging QUIC's 0-RTT handshake and connection migration. DoH remains popular in browser implementations due to its ability to blend with web traffic.
-- **Oblivious DNS (ODNS) and Privacy-Preserving Resolution:** Even with encrypted DNS, the recursive resolver sees both the client's IP address and the queried domain — a privacy concern when resolvers are operated by ISPs or commercial entities. Oblivious DNS (RFC 9230, 2022) addresses this by separating the resolver into two parties: a **proxy** (which knows the client's IP but not the query) and a **target** (which knows the query but not the client's IP). By 2040, ODNS is standard in privacy-conscious browsers and mandated by the European Digital Sovereignty Directive (2037) for government and healthcare DNS traffic.
+- **DNS Hierarchy:** The root zone (served by 13 logical root servers, operated by 12 organisations — Verisign, ICANN, USC-ISI, Cogent, University of Maryland, NASA Ames, Internet Systems Consortium, US Department of Defense, US Army Research Lab, Netnod, RIPE NCC, WIDE Project — with hundreds of physical instances via anycast). The Top-Level Domains: generic (gTLDs — `.com`, `.org`, `.net`, `.edu`, and the 2040-era `.ai`, `.cloud`, `.dev`) and country-code (ccTLDs — `.uk`, `.de`, `.jp`, `.is`, `.io`). The authoritative nameservers that hold the actual resource records for each domain.
+- **DNS Query Resolution:** The difference between recursive resolvers (your ISP's DNS server, Google's `8.8.8.8`, Cloudflare's `1.1.1.1`) and authoritative servers. A step-by-step walkthrough of a recursive resolution: stub resolver → recursive resolver → root hint file → root server (returns TLD referral) → TLD server (returns authoritative referral) → authoritative server (returns answer). The role of caching at every level and the TTL (Time-To-Live) mechanism that controls freshness.
+- **DNS Record Types:** The essential records every IT professional must know: A (IPv4 address), AAAA (IPv6 address), CNAME (canonical name alias), MX (mail exchanger with priority), NS (nameserver delegation), SOA (start of authority — serial number, refresh/retry/expire/minimum TTL), TXT (arbitrary text — used for SPF, DKIM, DMARC, and domain verification), SRV (service locator — used by SIP, LDAP, and Kubernetes service discovery), PTR (reverse DNS for IP→name mapping), and CAA (certification authority authorisation — restricts which CAs can issue certificates for a domain).
+- **DNSSEC and DNS Security:** The cache poisoning attacks that DNSSEC was designed to prevent (the Kaminsky attack of 2008). How DNSSEC works: zone signing with public-key cryptography, the chain of trust from the root zone (signed since 2010) through TLDs to individual domains, and the RRSIG, DNSKEY, DS, and NSEC/NSEC3 record types. The lecture includes a live demonstration: `dig +dnssec yggdrasil.edu` and verification of the signature chain.
+- **Encrypted DNS:** The privacy problem: traditional DNS is unencrypted UDP on port 53, visible to every network between the client and the resolver. DNS-over-TLS (DoT, RFC 7858, port 853), DNS-over-HTTPS (DoH, RFC 8484, port 443 — indistinguishable from web traffic), and DNS-over-QUIC (DoQ, RFC 9250). The controversy: DoH centralises DNS at a few providers (Cloudflare, Google), which some argue undermines the distributed architecture of DNS. The 2040 landscape: DoH is the default in all major operating systems and browsers, with Oblivious DNS-over-HTTPS (ODoH) providing an additional proxy layer that separates the resolver's knowledge of who is querying from what is being queried.
 
 #### Lecture Notes
 
-DNS has become a battleground for Internet governance. Because DNS controls which names resolve to which addresses, it is a powerful tool for content control. Governments have used DNS blocking to censor websites; copyright holders have sought DNS-based piracy enforcement; and corporations have used DNS to redirect competitors' traffic. The **ICANN 3.0 reforms (2031)** established that DNS policy must be developed through multistakeholder governance (including technical community, civil society, governments, and private sector) with a presumption against content-based blocking.
+DNS failures are among the most common and most confusing outages in IT. When DNS breaks, everything breaks: email stops, websites become unreachable, internal services fail to discover each other. The IT professional must be fluent in DNS diagnosis: `dig` for querying specific record types from specific servers, `host` for simple lookups, `nslookup` (deprecated but still encountered), and the art of checking propagation (`whatsmydns.net` for global visibility). Common failure modes: expired domains, misconfigured NS records (lame delegation), DNSSEC validation failures due to expired signatures, negative caching of SERVFAIL responses, and the subtle hell of split-horizon DNS (different answers for internal vs. external queries).
 
-A 2040 development is **Verifiable Domain Resolution (VDR)** — a framework where domains publish cryptographic commitments to their DNS records on a transparency log (inspired by Certificate Transparency). Clients can verify that the DNS response they receive matches the domain owner's published intent, detecting both censorship and cache poisoning. VDR is implemented via the **Yggdrasil Transparency Log (YTL)** — a Merkle tree-based append-only log operated by a consortium of universities (including UoY) and nonprofit organizations.
+The lecture covers the operational pattern of DNS changes: any modification must account for TTL. If a record has a TTL of 86400 seconds (24 hours), reducing it to 300 seconds must be done at least 24 hours in advance of a migration — otherwise, cached records will point to the old destination long after the change. The "TTL dance" is a rite of passage for every IT professional.
 
-Another emerging trend is **AI-Predictive DNS Prefetching**. By 2040, on-device AI models predict which domains a user is likely to visit next (based on browsing patterns, time of day, location, and application context) and prefetch DNS resolutions, reducing perceived latency. The privacy implications are significant — the prefetching model itself encodes a predictive model of user behavior, which is sensitive data.
+In the 2040 landscape, DNS is increasingly integrated with service mesh architectures. Kubernetes uses CoreDNS for internal service discovery; Consul and Istio use DNS interfaces for dynamic routing; cloud providers use DNS-weighted routing for multi-region traffic management (Route 53, Azure Traffic Manager, Google Cloud DNS). DNS is no longer just a phonebook — it is a programmable control plane for traffic.
 
 #### Required Reading
 
-- Mockapetris, P. (1987). RFC 1034/1035: Domain Names — Concepts and Facilities / Implementation and Specification.
-- IETF. (2030). RFC 9499: DNS Terminology (Updated).
-- Schmitt, P., Edmundson, A., & Feamster, N. (2024). "Oblivious DNS: Practical Privacy for DNS Queries." *Proceedings on Privacy Enhancing Technologies*.
-- UoY DNS Research Group. (2039). *Verifiable Domain Resolution: A Transparency Log for DNS*.
+- Liu, C. & Albitz, P. (2037). *DNS and BIND*, 8th Edition. O'Reilly Media. Chapters 1–4, 11.
+- Hoffman, P. (2033). *DNSSEC: The Protocol, Deployment, and Operational Considerations*. RFC 9364.
+- Cloudflare Research (2039). "Oblivious DNS-over-HTTPS: Deployment Experience at Scale."
+- IETF RFC 1034/1035 (the original DNS specifications — read for historical appreciation, not implementation detail).
 
 #### Discussion Questions
 
-1. DNS blocking is used by some governments to censor political speech and by some ISPs to enforce copyright. Is DNS an appropriate layer for content regulation, or should content decisions be made at endpoints? What principle distinguishes legitimate DNS policy from censorship?
-2. Oblivious DNS protects query privacy but adds latency and infrastructure complexity. In a world where AI-predictive prefetching already leaks behavioral patterns, is ODNS still worth its costs? Or should privacy efforts shift to other layers?
-3. The DNS root zone is managed by ICANN under a contract with the U.S. Department of Commerce (historically) and now under a multistakeholder model. Is DNS governance adequately global and democratic, or does it still concentrate power in Western institutions?
-
-#### Practice Problems
-
-- Use `dig +dnssec` to query a DNSSEC-signed domain and verify the RRSIG records. Trace the chain of trust from the root zone's DNSKEY to the domain's DNSKEY.
-- Set up an Oblivious DNS proxy using a public ODNS relay and measure the latency overhead compared to direct DoQ resolution. Analyze the trade-off between privacy and performance.
-- Research a historical DNS-based censorship incident (e.g., Turkey's DNS blocking of Twitter in 2014, or the U.S. SOPA/PIPA DNS provisions). Write a 500-word analysis of the technical and policy responses.
+1. DNSSEC adoption has been slow (approximately 35% of domains as of 2040). Analyse the barriers: operational complexity, key management, the risk of self-inflicted outages due to signature expiry, and the "chicken-and-egg" problem of resolver validation. What would it take to reach 90% adoption?
+2. DNS-over-HTTPS encrypts queries between the client and the resolver, but the resolver still sees all queries. Does DoH actually solve the privacy problem, or does it merely shift trust from the ISP to the resolver operator? Evaluate Oblivious DoH as an alternative.
+3. A company migrates its website to a new IP address. The old A record has a TTL of 86400. Some users still reach the old server 48 hours after the change. Diagnose all possible causes beyond the TTL itself.
 
 ---
 
-### Lecture 4: TLS, PKI, and the Post-Quantum Web Security Architecture
+### Lecture 3: HTTP — The Protocol That Powers the Web
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-Transport Layer Security (TLS) is the cryptographic protocol that secures the web. TLS provides three guarantees: (1) confidentiality — data is encrypted so only the intended recipient can read it; (2) integrity — data cannot be modified in transit without detection; (3) authentication — the server (and optionally the client) is who it claims to be. This lecture examines TLS's evolution from SSL 2.0 (1995) to TLS 1.4 (2038), the Public Key Infrastructure (PKI) that underpins TLS authentication, the Certificate Transparency ecosystem, and the massive migration to post-quantum cryptography (PQC) that defined the 2030s.
+The Hypertext Transfer Protocol (HTTP) is the application-layer protocol that has carried the web since 1991. This lecture covers HTTP/1.1 in operational depth: the request-response model, methods and their semantics, status codes and their meanings, headers that control caching, content negotiation, and security, and the practical tools (`curl`, browser DevTools, `httpie`) that IT professionals use to inspect and debug HTTP traffic. Students leave this lecture able to read raw HTTP messages and diagnose common protocol-level failures.
 
 #### Key Topics
 
-- **TLS Handshake and Cipher Suites:** A TLS connection begins with a handshake: the client and server negotiate protocol version, select cipher suites, authenticate (typically the server via X.509 certificate), and establish shared session keys. TLS 1.3 (2018) streamlined the handshake to 1-RTT (one round trip) for new connections and 0-RTT for resumed connections. TLS 1.4 (2038) further refines this with **hybrid post-quantum key exchange** — combining classical ECDH (X25519) with a post-quantum KEM (CRYSTALS-Kyber) so that the connection is secure against both classical and quantum adversaries.
-- **Public Key Infrastructure (PKI):** TLS authentication relies on X.509 certificates issued by Certificate Authorities (CAs). The Web PKI is the set of CAs trusted by major browser root programs (Mozilla, Microsoft, Apple, Google). A CA vouches for a domain owner's identity by signing their certificate. The trust model is hierarchical: root CAs → intermediate CAs → end-entity certificates. This model has known weaknesses: (1) any CA can issue a certificate for any domain, so a compromised CA undermines the entire system; (2) certificate revocation (via CRLs or OCSP) is unreliable in practice.
-- **Certificate Transparency (CT):** Mandated by browsers since the late 2010s, CT requires CAs to log all issued certificates to public, append-only, cryptographically verifiable logs. Domain owners can monitor these logs to detect misissued certificates. By 2040, CT has expanded into **Universal Certificate Transparency (UCT)** — all TLS certificates, not just web server certificates, are logged. UCT has virtually eliminated undetected certificate misissuance, though sophisticated attackers have shifted to other vectors (compromising the domain's DNS or web server directly).
-- **Post-Quantum Cryptography Migration:** The 2030s were defined by the PQC migration — the largest cryptographic transition in Internet history. NIST's PQC standardization process (2016–2024) selected CRYSTALS-Kyber (KEM), CRYSTALS-Dilithium (signatures), and SPHINCS+ (stateless hash-based signatures) as standards. The migration was complex: every TLS implementation, every CA, every certificate management system, and every application that pinned certificates needed updating. The **2030 PQC Deadline** (set by the Global Cryptographic Standards Body) required all public-facing web services to support hybrid PQC by 2030 and to prefer PQC-only by 2035. By 2040, over 95% of web traffic uses hybrid or pure PQC.
+- **The HTTP Request-Response Model:** HTTP is stateless — each request is independent, carrying all the information the server needs to generate a response. The structure of an HTTP request: method, path, protocol version, headers (key: value pairs), empty line, optional body. The structure of an HTTP response: protocol version, status code, reason phrase, headers, empty line, body. The lecture shows raw HTTP messages using `nc` (netcat) to demonstrate that HTTP is just text over TCP.
+- **HTTP Methods and Semantics:** The core methods: GET (safe, idempotent, retrieves a resource), HEAD (like GET but returns only headers), POST (submits data, not idempotent — creates a new resource), PUT (idempotent — creates or replaces a resource at a known URI), DELETE (removes a resource), PATCH (partial update). The less common but important methods: OPTIONS (CORS preflight), CONNECT (tunnel for HTTPS proxies), TRACE (diagnostic — echo back the request). The lecture emphasises the distinction between idempotent and non-idempotent methods and the operational implications: retrying a failed GET is safe; retrying a failed POST may create duplicate resources.
+- **HTTP Status Codes:** The categories: 1xx (Informational — 100 Continue, 101 Switching Protocols), 2xx (Success — 200 OK, 201 Created, 204 No Content, 206 Partial Content for range requests), 3xx (Redirection — 301 Moved Permanently, 302 Found, 304 Not Modified, 307/308 for preserving method on redirect), 4xx (Client Error — 400 Bad Request, 401 Unauthorised, 403 Forbidden, 404 Not Found, 405 Method Not Allowed, 429 Too Many Requests), 5xx (Server Error — 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable, 504 Gateway Timeout). The lecture covers: the often-misused difference between 301 and 302, the critical distinction between 401 (unauthenticated) and 403 (unauthorised), and the operational meaning of 502/503/504 in reverse proxy architectures.
+- **HTTP Headers:** The headers that matter operationally. Request headers: `Host` (required in HTTP/1.1 — enables virtual hosting), `User-Agent` (identifies the client), `Accept` / `Accept-Encoding` / `Accept-Language` (content negotiation), `Authorization` (credentials), `Cookie` (session state), `Cache-Control` (client caching directives), `If-None-Match` / `If-Modified-Since` (conditional requests). Response headers: `Content-Type` (MIME type), `Content-Length`, `Content-Encoding` (gzip, br — Brotli), `Set-Cookie`, `Cache-Control` (server caching directives — `public`, `private`, `max-age`, `s-maxage`, `no-cache`, `no-store`), `ETag` / `Last-Modified` (validation tokens), `Location` (for redirects), `Server` (identifies the web server software). Security headers: `Strict-Transport-Security` (HSTS), `Content-Security-Policy` (CSP), `X-Frame-Options`, `X-Content-Type-Options` (nosniff), `Referrer-Policy`.
+- **Content Negotiation and Caching:** How servers serve different representations of the same resource based on `Accept` headers (JSON vs. HTML, English vs. Icelandic, gzip vs. uncompressed). The caching ecosystem: browser caches, intermediary caches (CDNs, corporate proxies), and the `Cache-Control` directives that govern them. The lecture includes a practical demonstration: using `curl -I` to inspect response headers and `curl -H 'If-None-Match: "abc123"'` to test conditional requests.
 
 #### Lecture Notes
 
-The PQC migration was less dramatic than feared. Early predictions of widespread outages proved unfounded because the IETF and browser vendors coordinated a phased rollout: (1) **Phase 1 (2024–2028):** Browser and server implementations added hybrid PQC support, negotiated via TLS extensions; (2) **Phase 2 (2028–2032):** Major web properties enabled hybrid PQC by default, collecting telemetry on performance and compatibility; (3) **Phase 3 (2032–2036):** PQC-preferred became the default, with classical fallback for legacy clients; (4) **Phase 4 (2036–2040):** Pure PQC connections became common, though hybrid mode remains supported for backward compatibility.
+HTTP is simple enough that a human can read it and complex enough that a lifetime can be spent mastering its nuances. The lecture's central theme: HTTP is a conversation. Every status code is a sentence the server speaks to the client. A 301 says "I've moved permanently — update your bookmarks." A 304 says "You already have the latest version — use your cache." A 429 says "You're asking too fast — slow down." A 502 says "The server behind me is not responding." The IT diagnostician reads these sentences and traces them to root causes.
 
-The surprise of the PQC migration was **performance**. Kyber-1024 key exchange adds approximately 2KB to the TLS handshake (compared to 64 bytes for ECDH), and Dilithium signatures are significantly larger than ECDSA. Initial deployments saw 5–15% latency increases. However, protocol optimizations (caching Kyber public keys at CDN edges, using session resumption aggressively, and dedicated hardware acceleration for lattice-based cryptography on 2040-era CPUs) have reduced the overhead to under 3%.
+The operational reality of HTTP in 2040: HTTP/3 (QUIC) is the dominant protocol for user-facing traffic, but HTTP/1.1 remains ubiquitous in internal service-to-service communication, legacy APIs, and embedded systems. The IT professional must be fluent in all three versions, understanding their different wire formats, performance characteristics, and diagnostic tools.
 
-A 2040 frontier is **Continuous Authentication** — moving beyond the one-time TLS handshake to per-request or per-stream authentication using short-lived tokens derived from the initial TLS session. This enables fine-grained access control (different API endpoints requiring different authentication levels) and rapid credential rotation (tokens expire in seconds rather than hours).
+Common HTTP pitfalls covered in the lecture: redirect chains (a 301 pointing to a URL that also returns a 301 — browsers stop after 20 redirects, but intermediate proxies may not), the `Host` header mismatch (virtual hosting breaks when the `Host` header doesn't match any configured `ServerName`), and the subtle difference between `no-cache` (validate before using) and `no-store` (don't cache at all).
 
 #### Required Reading
 
-- Rescorla, E. (2018). RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3.
-- NIST. (2024). FIPS 203, 204, 205: Module-Lattice-Based Key-Encapsulation Mechanism, Digital Signature, and Stateless Hash-Based Digital Signature Standard.
-- Laurie, B., Langley, A., & Kasper, E. (2013). RFC 6962: Certificate Transparency.
-- UoY Cryptography Lab. (2039). *Post-Quantum TLS: Performance, Pitfalls, and the Road to 2050*.
+- Fielding, R.T. et al. (2022). *HTTP Semantics*. RFC 9110. Sections 1–9, 12, 15.
+- Nottingham, M. (2035). *HTTP Caching*. RFC 9111.
+- Grigorik, I. (2034). *High Performance Browser Networking*, 2nd Edition. O'Reilly Media. Chapters 9–11.
+- MDN Web Docs. "HTTP" — the definitive reference at `developer.mozilla.org/en-US/docs/Web/HTTP`.
 
 #### Discussion Questions
 
-1. The Web PKI's trust model is often described as "broken but the best we have." Is Certificate Transparency sufficient to remedy PKI's weaknesses, or does the fundamental model — trusting any CA to vouch for any domain — need replacement?
-2. The PQC migration was a centrally coordinated, multi-decade effort. Could a similar migration happen for a less visible protocol (e.g., SSH, VPNs)? What lessons from the TLS PQC transition apply to other infrastructure migrations?
-3. Continuous authentication improves security but also generates fine-grained behavioral data about API usage. Does the security benefit justify the privacy cost? Where should the line be drawn?
-
-#### Practice Problems
-
-- Use OpenSSL to establish a TLS 1.3 connection, capture the handshake with Wireshark, and identify each message (ClientHello, ServerHello, EncryptedExtensions, Certificate, CertificateVerify, Finished). Annotate which messages are encrypted.
-- Research Let's Encrypt (launched 2015) and its impact on HTTPS adoption. Calculate the fraction of the web that was encrypted over HTTP in 2015 vs. 2025 vs. 2040 (estimated). What drove the adoption curve?
-- Implement a simple Certificate Transparency log monitor that watches for certificates issued for a given domain and alerts on unexpected issuers.
+1. HTTP is stateless, yet the modern web is stateful (sessions, shopping carts, authentication). How is state built on top of a stateless protocol? Analyse the roles of cookies, tokens, and server-side session stores.
+2. A CDN returns a 304 Not Modified for a resource, but the browser displays stale content. Diagnose all possible causes in the caching chain: origin server, CDN edge, browser cache, and the conditional request mechanism.
+3. The `Host` header in HTTP/1.1 enabled virtual hosting — thousands of websites on a single IP address. HTTP/2 and HTTP/3 also require the `:authority` pseudo-header. What happens when TLS SNI (Server Name Indication) and the HTTP Host header disagree? How does this mismatch create both operational problems and security vulnerabilities?
 
 ---
 
-### Lecture 5: REST, GraphQL, and the 2040 API Landscape
+### Lecture 4: HTTP/2 and HTTP/3 — The Modern Web Protocol Stack
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-APIs (Application Programming Interfaces) are the connective tissue of the modern web. They allow applications to exchange data, invoke services, and compose functionality across organizational boundaries. This lecture surveys the three dominant API paradigms — REST (Representational State Transfer), GraphQL, and the emerging Agent-Native Protocol (ANP) — examining their architectural assumptions, trade-offs, and suitability for the 2040 landscape of AI-mediated, event-driven, and privacy-regulated web services.
+HTTP/1.1 served the web for over 15 years, but its limitations — head-of-line blocking, verbose headers, and the six-connection-per-origin limit — became bottlenecks as web pages grew to hundreds of resources. HTTP/2 (2015, RFC 7540) addressed these with multiplexing, header compression, and server push. HTTP/3 (2022, RFC 9114) went further, replacing TCP with QUIC (a UDP-based transport) to eliminate head-of-line blocking entirely. This lecture covers the architecture of both protocols, their operational implications, and the diagnostic tools (`nghttp2`, `curl --http3`, Wireshark with QUIC decryption) for the modern web stack.
 
 #### Key Topics
 
-- **REST — The Architectural Style:** Defined by Roy Fielding in his 2000 doctoral dissertation, REST is not a protocol but an architectural style characterized by: (1) Resource identification through URIs; (2) Uniform interface (HTTP methods: GET, POST, PUT, DELETE); (3) Statelessness — each request contains all information needed to process it; (4) Hypermedia as the Engine of Application State (HATEOAS) — clients navigate resources through links provided in responses. In practice, most "RESTful" APIs implement only Levels 1–2 of the Richardson Maturity Model (resource URIs + HTTP methods), ignoring HATEOAS. By 2040, REST remains the most widely deployed API style, valued for its simplicity, cacheability, and alignment with HTTP semantics.
-- **GraphQL — The Query Language for APIs:** Developed by Facebook in 2012 and open-sourced in 2015, GraphQL inverts REST's model: instead of the server defining fixed endpoints, the client specifies exactly what data it needs in a query. Benefits: (1) No over-fetching or under-fetching — clients get precisely the fields they request; (2) Strong typing — the GraphQL schema serves as a contract between client and server; (3) Single endpoint — all queries go to one URL, simplifying infrastructure. Drawbacks: (1) Query complexity — a simple-looking query can trigger expensive server-side joins; (2) Caching difficulty — HTTP caching doesn't apply cleanly to POST-based GraphQL; (3) N+1 problem — naive resolvers generate cascading database queries. By 2040, GraphQL is dominant for interactive applications (dashboards, mobile apps) where dynamic data requirements justify its complexity, while REST dominates service-to-service communication where fixed schemas and HTTP caching are advantageous.
-- **Agent-Native Protocol (ANP) — The 2040 Frontier:** ANP is an emerging API paradigm designed for autonomous AI agents rather than human-driven UIs. Key features: (1) **Capability Discovery** — agents discover what an API can do via machine-readable capability manifests (extending OpenAPI/GraphQL introspection); (2) **Intent-Based Requests** — agents express goals ("book a flight to Reykjavík next Tuesday") rather than procedural sequences; (3) **Negotiated Contracts** — agents and servers negotiate SLAs, pricing, and data-use policies before interaction; (4) **Verifiable Execution** — API responses include cryptographic proofs of correct execution (useful for high-stakes transactions). ANP is being standardized by the W3C Agent Web Working Group (est. 2037) and is expected to become the dominant API paradigm by 2050.
-- **API Security and Governance in 2040:** API security has evolved beyond simple API keys. The 2040 standard is **scoped, short-lived tokens with proof of possession** — DPoP (Demonstration of Proof-of-Possession, RFC 9449) bound to TLS connections. API gateways enforce rate limiting, schema validation, and data minimization (stripping fields the client isn't authorized to see). The **API Transparency Directive (2036)** requires public APIs to publish data-use policies that are machine-readable and auditable.
+- **HTTP/2 — Multiplexing and Framing:** HTTP/2's core innovation: multiple requests and responses multiplexed over a single TCP connection using binary framing. Streams (independent bidirectional sequences), frames (DATA, HEADERS, PRIORITY, RST_STREAM, SETTINGS, PING, GOAWAY, WINDOW_UPDATE, CONTINUATION), and the flow control mechanism that prevents a fast sender from overwhelming a slow receiver. The lecture demonstrates multiplexing with `nghttp -nv https://yggdrasil.edu` and shows how a single connection carries dozens of simultaneous requests.
+- **Header Compression (HPACK and QPACK):** HTTP/1.1 headers are uncompressed and repetitive — `Cookie`, `User-Agent`, and `Accept` headers are identical across requests to the same origin. HPACK (HTTP/2) uses a combination of static tables (61 predefined header key-value pairs), dynamic tables (learned during the connection), and Huffman coding to reduce header overhead by 85–90%. QPACK (HTTP/3) adapts HPACK for QUIC's independent streams, solving the head-of-line blocking that HPACK's dynamic table creates at the compression level.
+- **Server Push (and Its Demise):** HTTP/2 introduced server push — the server proactively sends resources the client will need (e.g., pushing CSS and JavaScript when the client requests HTML). In theory, this eliminated a round-trip. In practice, it was difficult to implement correctly: servers pushed resources the browser already had cached, wasting bandwidth. By 2024, Chrome had removed server push support. The lecture covers this as a case study in the gap between protocol design and operational reality — a feature that was technically elegant but practically harmful.
+- **HTTP/3 and QUIC:** QUIC (Quick UDP Internet Connections) is a transport protocol designed by Google, standardised as RFC 9000 in 2021, that replaces TCP for HTTP/3. QUIC's advantages: 0-RTT connection establishment (for resumed connections — the client sends data in the first flight), no head-of-line blocking (packet loss on one stream doesn't block others), connection migration (a QUIC connection survives IP address changes — critical for mobile devices switching between Wi-Fi and cellular), and mandatory encryption (QUIC always uses TLS 1.3). The lecture walks through a QUIC handshake with Wireshark, showing the TLS 1.3 integration and the stream multiplexing.
+- **Operational Implications for IT:** The migration from HTTP/1.1 to HTTP/2 to HTTP/3 changes the IT professional's diagnostic toolkit. TCP-based tools (`tcpdump` filtering on port 80/443) don't directly apply to QUIC (UDP port 443). Load balancers that terminate TLS must be upgraded to support HTTP/3. Firewall rules must allow UDP 443. The lecture covers: UDP-based performance tuning (differing from TCP's congestion control assumptions), QUIC's requirement that connection IDs (not IP/port tuples) identify connections, and the challenge of debugging encrypted QUIC traffic (SSLKEYLOGFILE with Wireshark).
 
 #### Lecture Notes
 
-The API economy is a trillion-dollar sector by 2040. Companies like Twilio, Stripe, and AWS pioneered the model of selling API access as a product; by 2040, API-first businesses are the default, not the exception. The **API Commons** — a registry of open API specifications maintained by the OpenAPI Initiative — contains over 50,000 machine-readable API descriptions, enabling automated client generation, testing, and integration.
+HTTP/3 is not an incremental improvement; it is a fundamental rearchitecture. By moving from TCP to QUIC, the web stack shed 40 years of accumulated TCP assumptions: three-way handshakes, in-order delivery requirements, and the connection's binding to a specific IP address. For the IT professional, this means rethinking everything from firewall rules to load balancer configuration to performance monitoring.
 
-A defining debate of the 2030s was **API copyright**. When Oracle sued Google over Java API copyright (2010–2021), the case raised fundamental questions: Are API signatures copyrightable? The U.S. Supreme Court ruled in Google's favor (2021), establishing that API declarations are functional and thus not copyrightable — a ruling that protected the API economy. By 2040, the **API Openness Accord** extends this principle globally, establishing that API interfaces are functional elements not subject to copyright, though API implementations (code) remain protected.
+The 2040 landscape: HTTP/3 carries approximately 78% of global web traffic. HTTP/2 carries the remaining user-facing traffic (mostly older clients and enterprise environments). HTTP/1.1 persists in internal infrastructure and is likely to remain for decades — the COBOL of the web. The lecture's practical exercise: students configure an nginx server with HTTP/2 and HTTP/3 support, verify with `curl --http3`, and compare the performance of loading a complex web page over each protocol using browser DevTools waterfalls.
 
-Another 2040 development is **AI-Generated APIs**. With the maturation of code generation AI, it's increasingly common for API endpoints to be generated on-the-fly from natural language descriptions. A developer describes the desired API in prose, and the AI generates spec, implementation, tests, and documentation. The challenge is quality assurance: without careful review, AI-generated APIs can contain subtle security vulnerabilities, inconsistent semantics, or unintended data leakage.
+The Norse framing: HTTP/1.1 is a single-file bridge — one cart at a time. HTTP/2 is a multi-lane highway — many carts simultaneously, but a single accident blocks all lanes. HTTP/3 is a fleet of independent longships — each ship sails its own course, and the loss of one does not delay the others.
 
 #### Required Reading
 
-- Fielding, R. T. (2000). *Architectural Styles and the Design of Network-Based Software Architectures*. Doctoral dissertation, UC Irvine. (Chapter 5: Representational State Transfer)
-- Facebook Engineering. (2015). "GraphQL: A Data Query Language."
-- W3C Agent Web Working Group. (2038). *Agent-Native Protocol Specification, Draft 4*.
-- UoY API Lab. (2040). *The API Economy at Scale: Governance, Security, and AI Generation*.
+- Belshe, M. et al. (2015). *Hypertext Transfer Protocol Version 2 (HTTP/2)*. RFC 7540.
+- Bishop, M. (2022). *HTTP/3*. RFC 9114.
+- Iyengar, J. & Thomson, M. (2021). *QUIC: A UDP-Based Multiplexed and Secure Transport*. RFC 9000.
+- Langley, A. et al. (2035). "The QUIC Transport Protocol: Design and Internet-Scale Deployment." *ACM SIGCOMM Computer Communication Review*.
 
 #### Discussion Questions
 
-1. GraphQL's flexibility enables over-fetching on the *server side* (resolving complex queries requires substantial backend work). Is the developer experience improvement worth the operational complexity? Under what circumstances would you recommend REST over GraphQL?
-2. Agent-Native Protocol shifts APIs from procedural interfaces to intent-based negotiation. Does intent-based interaction give agents too much autonomy? What guardrails prevent an agent from making harmful decisions through a well-intentioned API call?
-3. If AI systems can generate APIs from natural language descriptions, does the concept of an "API specification" become obsolete? Or does automated generation make specifications *more* important as contracts for verification?
-
-#### Practice Problems
-
-- Design a RESTful API for a university course registration system. Define resources, URIs, HTTP methods, request/response formats, and error codes. Compare your design to a GraphQL schema for the same domain.
-- Write a GraphQL query that retrieves a student's enrolled courses, including instructor names and meeting times, while avoiding the N+1 problem. Explain how DataLoader or a similar batching mechanism resolves this.
-- Draft an ANP capability manifest for a travel booking service. Include actions (search, book, cancel), parameters with constraints, and the data-use policy for each action.
+1. HTTP/3 uses UDP, which is traditionally associated with unreliable, fire-and-forget communication (DNS, streaming, gaming). QUIC builds reliability on top of UDP. Why did the designers choose UDP rather than creating a new IP protocol? What does this choice reveal about internet architecture ossification?
+2. Server push was removed from browsers despite being a core HTTP/2 feature. What does this tell us about the relationship between protocol designers and implementers? Can you think of other protocol features that were standardised but abandoned in practice?
+3. QUIC connection migration allows a connection to survive an IP address change. How does this affect the operational model of load balancers that track sessions by client IP? What changes must network infrastructure make to support connection migration?
 
 ---
 
-### Lecture 6: CDNs, Edge Computing, and the Geography of Content
+### Lecture 5: Web Servers and Reverse Proxies
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The web is not a cloud — it is a fog. Content Delivery Networks (CDNs) distribute web content to servers at the network edge, close to users, reducing latency and origin server load. By 2040, CDNs have evolved into general-purpose edge computing platforms that run application logic, enforce security policies, and host AI inference models within 5 milliseconds of 95% of the world's population. This lecture examines CDN architecture, the economics of content distribution, edge computing paradigms (Cloudflare Workers, AWS Lambda@Edge, Fastly Compute), and the geopolitical implications of a web whose physical infrastructure is concentrated in a handful of global providers.
+The web server is the software that listens for HTTP requests and returns responses. In 2040, three web servers dominate: nginx (38% market share, widely used as a reverse proxy), Apache httpd (25%, still the workhorse of shared hosting), and Caddy (12%, automatic HTTPS with Let's Encrypt integration). This lecture covers the architecture, configuration, and operational patterns of each, with emphasis on the reverse proxy pattern that has become the standard deployment architecture: TLS termination at the edge, static file serving, and request routing to application backends.
 
 #### Key Topics
 
-- **CDN Architecture:** A CDN is a distributed network of edge servers (Points of Presence, or PoPs) that cache content close to users. When a user requests content (e.g., an image or video), the CDN's DNS-based request routing directs them to the nearest PoP. If the content is cached (a "cache hit"), it's served directly from the edge; if not (a "cache miss"), the edge fetches it from the origin server, caches it, and serves it. Key concepts: (1) **Anycast routing** — multiple PoPs share the same IP address, and BGP routes traffic to the nearest one; (2) **Cache hierarchies** — multiple caching layers (browser cache, edge cache, regional cache, origin shield) minimize origin traffic; (3) **Cache invalidation** — purging stale content, either by TTL (Time-To-Live) or explicit purge API.
-- **From Caching to Compute:** The 2020s saw CDNs transform from static content caches into edge compute platforms. **Cloudflare Workers (2017)** pioneered the model: JavaScript/WebAssembly functions deployed globally, executing at the edge with access to a key-value store (Workers KV) and eventually a SQL database (D1). By 2040, edge compute is a mature paradigm: developers write applications that run entirely at the edge, with the origin server used only for durable storage and coordination. Edge databases (distributed SQL with sub-10ms latency) have made this architecture viable for transactional applications, not just static content.
-- **The 2040 Edge Landscape:** The edge is no longer just HTTP. Edge platforms in 2040 offer: (1) **AI inference at the edge** — small language models and specialized AI models run on edge GPUs/NPUs, serving personalized recommendations, content moderation, and real-time translation without sending data to a central server; (2) **WebSocket and WebRTC at the edge** — real-time communication is terminated at the edge, minimizing latency for gaming, video conferencing, and collaborative editing; (3) **Edge-native security** — DDoS mitigation, bot detection, and WAF (Web Application Firewall) rules execute at the edge, blocking malicious traffic before it reaches the origin.
-- **Geopolitics of the Edge:** By 2040, three companies control over 70% of global CDN/edge infrastructure: Cloudflare, Akamai, and AWS CloudFront. This concentration raises concerns: (1) **Single points of failure** — a Cloudflare outage (as occurred in 2020, 2022, and 2031) can take down a significant fraction of the web; (2) **Jurisdictional reach** — a U.S. court order to Cloudflare can affect websites globally; (3) **Surveillance capability** — edge providers can observe traffic patterns across their entire customer base. The **Edge Neutrality Accord (2034)** established that edge providers must not discriminate based on content, must publish transparency reports, and must offer customers control over which jurisdictions their traffic traverses.
+- **Web Server Architecture:** The fundamental design choices. Process-based (Apache's prefork MPM — one process per connection, simple but memory-intensive), thread-based (Apache's worker and event MPMs), and event-driven (nginx, Caddy — a small number of worker processes handling thousands of connections asynchronously via `epoll`/`kqueue`). The lecture explains why event-driven architectures won: the C10K problem (handling 10,000 concurrent connections) is trivial for nginx but impossible for a process-per-connection model.
+- **nginx Configuration:** The structure of an nginx configuration: `http` block, `server` blocks (virtual hosts), `location` blocks (URL routing). Key directives: `listen` (port and protocol — `listen 443 ssl http2`), `server_name` (virtual host matching), `root` (document root), `index` (default file), `proxy_pass` (reverse proxy to backend), `try_files` (static file serving with fallback). The lecture includes a complete nginx configuration for a typical 2040 deployment: TLS termination, static assets served directly, API requests proxied to a Go backend, WebSocket upgrade for real-time features.
+- **Reverse Proxy Patterns:** The reverse proxy sits between clients and application servers, providing: TLS termination (offloading cryptographic operations), load balancing (`upstream` blocks with `least_conn`, `ip_hash`, or `random` algorithms), caching (`proxy_cache_path` and `proxy_cache` directives), compression (`gzip on`), rate limiting (`limit_req_zone` and `limit_req`), and request buffering (protecting backend servers from slow clients). The lecture covers the operational benefits: application servers focus on business logic; the reverse proxy handles cross-cutting concerns.
+- **Caddy and Automatic HTTPS:** Caddy's defining feature: TLS certificates are obtained and renewed automatically via Let's Encrypt (ACME protocol) with zero configuration. The lecture demonstrates: `caddy run` with a Caddyfile, automatic HTTP→HTTPS redirect, and the ACME challenge process (HTTP-01 and DNS-01). The operational implications: Caddy eliminates the class of outages caused by expired TLS certificates, which historically accounted for approximately 3% of web infrastructure incidents.
+- **Apache httpd in 2040:** Apache remains relevant in specific niches: shared hosting (cPanel/WHM integration), legacy enterprise applications, and environments where `.htaccess` files provide decentralised configuration. The lecture covers Apache's module system (`mod_rewrite`, `mod_proxy`, `mod_security`), the transition from prefork to event MPM, and the reasons an IT professional might choose Apache over nginx (e.g., dynamic module loading without recompilation, richer authentication modules).
 
 #### Lecture Notes
 
-The environmental footprint of CDNs is substantial but improving. By 2040, edge data centers are carbon-neutral, powered by on-site renewables and participating in carbon-aware computing — shifting non-urgent computation to times and locations with excess renewable energy. The **Green Edge Initiative (2032)** standardizes carbon accounting for edge compute, enabling developers to make carbon-aware deployment decisions.
+The reverse proxy is the IT professional's most powerful architectural pattern. It is not merely a pass-through; it is the point at which authentication, authorisation, rate limiting, logging, caching, compression, and request routing are enforced. A well-configured reverse proxy can protect poorly written application servers from every class of HTTP-level attack. A misconfigured reverse proxy can expose internal services, leak sensitive headers, or become a single point of failure.
 
-A fascinating 2040 development is **Peer-to-Peer CDNs**. WebRTC-based P2P CDNs (pioneered by Peer5 in the 2010s) use viewers of a stream to relay content to other viewers, reducing CDN bandwidth costs. While initially used mainly for video, P2P CDN has expanded to general web content. Browsers in 2040 support a **Web Distributed Cache API** that enables sites to share cached resources directly between users, with cryptographic integrity verification. This transforms every web user into a potential edge node — a truly distributed web.
+The lecture's practical exercise: students are given a vulnerable application server (written in Flask, with no TLS, no rate limiting, and error pages that leak stack traces) and must deploy an nginx reverse proxy in front of it that: terminates TLS with a Let's Encrypt certificate, rate-limits to 10 requests per second per IP, strips sensitive response headers, returns custom error pages, and caches static assets for 24 hours.
+
+The Norse metaphor: the web server is the longhouse door. The reverse proxy is the shield-wall in front of it — every request must pass through the shield-wall before reaching the warmth of the hearth. A good shield-wall turns away raiders before they ever see the longhouse.
 
 #### Required Reading
 
-- Nygren, E., Sitaraman, R. K., & Sun, J. (2010). "The Akamai Network: A Platform for High-Performance Internet Applications." *ACM SIGOPS Operating Systems Review*, 44(3).
-- Cloudflare. (2038). *Edge Computing at Global Scale: Architecture and Lessons Learned*.
-- UoY Distributed Systems Lab. (2039). *The Geopolitics of CDN Concentration: Risk, Resilience, and Regulation*.
-- IETF. (2036). RFC 9560: Web Distributed Cache API.
+- Nedelcu, C. (2039). *Nginx HTTP Server*, 6th Edition. Packt Publishing. Chapters 1–4, 7–9.
+- Holt, M. (2040). *Caddy: The Ultimate Server Guide*. Caddy Documentation. Sections on Caddyfile syntax, reverse proxy, and automatic HTTPS.
+- Apache httpd Documentation (2040). "Reverse Proxy Guide" and "Performance Tuning."
+- Yggdrasil IT Operations Runbook (2040). "Reverse Proxy Deployment Standard" — internal document specifying nginx configuration templates.
 
 #### Discussion Questions
 
-1. Three companies control over 70% of the CDN market. Is this concentration a market failure requiring regulation, or an efficient outcome of network effects? What would a decentralized CDN architecture look like?
-2. Edge AI inference keeps user data local (no central server) but requires distributing AI models globally. How do intellectual property concerns (protecting the model) interact with privacy concerns (protecting the user)?
-3. Peer-to-Peer CDNs reduce infrastructure costs but introduce trust and reliability challenges. Under what conditions is P2P distribution appropriate, and when should it be avoided?
-
-#### Practice Problems
-
-- Deploy a static website to a CDN (Cloudflare Pages or similar). Measure latency from multiple global locations (using tools like `ping` or HTTP benchmarking). Explain how Anycast routing delivers the site from the nearest PoP.
-- Write a Cloudflare Worker (or simulate one locally) that modifies HTTP responses — adding security headers, redirecting based on geography, or A/B testing two versions of a page. Measure the latency overhead of edge compute.
-- Analyze a major CDN outage (e.g., Fastly 2021 or Cloudflare 2031). Write a 500-word postmortem: root cause, blast radius, recovery time, and architectural lessons.
+1. nginx's event-driven architecture uses non-blocking I/O with `epoll`. Apache's prefork MPM uses one process per connection with blocking I/O. For a workload of 10,000 simultaneous idle connections (clients connected but not actively sending requests), compare the memory consumption. What does this comparison reveal about the importance of architecture choice in infrastructure software?
+2. The reverse proxy pattern centralises cross-cutting concerns — TLS, authentication, rate limiting — at a single point. What are the risks of this centralisation? How would you mitigate them?
+3. Caddy's automatic HTTPS eliminates certificate expiry outages. But it also means a single company (Let's Encrypt, operated by the Internet Security Research Group) issues certificates for approximately 60% of the web. Analyse the concentration risk. What happens if Let's Encrypt's intermediate CA is compromised or revoked?
 
 ---
 
-### Lecture 7: WebSockets, WebRTC, and the Real-Time Web
+### Lecture 6: TLS, Certificates, and Web Security
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The early web was strictly request-response: the client asked, the server answered. Real-time interaction — chat, gaming, video conferencing, collaborative editing — required workarounds (polling, long-polling, Flash sockets). The 2010s brought two transformative standards: WebSockets (2011, RFC 6455) for bidirectional streaming, and WebRTC (2011–2021) for peer-to-peer audio, video, and data. By 2040, these technologies have matured into the real-time substrate of the web, supporting everything from immersive VR conferences to AI-mediated collaborative workspaces. This lecture examines the protocols, architectures, and 2040 extensions that power the real-time web.
+Transport Layer Security (TLS) is the cryptographic protocol that secures every HTTPS connection — over 95% of web traffic in 2040. This lecture covers TLS from an operational perspective: the handshake that establishes a secure channel, the certificate ecosystem that binds domain names to cryptographic keys, and the common misconfigurations that create vulnerabilities. Students configure a TLS endpoint, inspect certificates with `openssl s_client`, and diagnose certificate chain failures.
 
 #### Key Topics
 
-- **WebSockets:** WebSocket upgrades an HTTP connection to a full-duplex, bidirectional TCP socket. After the initial HTTP upgrade handshake, both client and server can send messages at any time with minimal framing overhead (2–8 bytes per message). Use cases: chat, live notifications, financial tickers, multiplayer game state, collaborative editing. By 2040, WebSockets over QUIC (WebTransport, standardized 2023) offers WebSocket-like semantics over QUIC streams, eliminating head-of-line blocking and enabling connection migration. WebTransport is the preferred protocol for new 2040 applications, though WebSockets remain widely deployed.
-- **WebRTC — Peer-to-Peer Media and Data:** WebRTC enables direct peer-to-peer communication between browsers without server relay — audio, video, and arbitrary data. Key components: (1) **MediaStream (getUserMedia)** — access to camera and microphone; (2) **RTCPeerConnection** — establishes a peer-to-peer connection, handling NAT traversal (via ICE/STUN/TURN), media encoding, and encryption (DTLS-SRTP); (3) **RTCDataChannel** — peer-to-peer data channel with configurable reliability (TCP-like or UDP-like). By 2040, WebRTC has expanded to support: (1) **AV1 and AV2 video codecs** — royalty-free, high-compression codecs for 8K+ video; (2) **Spatial audio** — immersive audio for VR/AR conferencing; (3) **End-to-end encryption** — E2EE for multi-party calls via MLS (Messaging Layer Security, RFC 9420); (4) **AI-enhanced media** — on-device AI for background replacement, noise suppression, real-time translation, and sign language interpretation.
-- **Signaling and NAT Traversal:** WebRTC requires a signaling channel (not specified by the standard) to exchange session descriptions (SDP) and ICE candidates. Common signaling approaches: WebSockets, REST APIs, or XMPP. NAT traversal — the challenge of connecting peers behind NATs and firewalls — uses ICE (Interactive Connectivity Establishment): gather candidates (host, STUN-reflexive, TURN-relayed), test connectivity, and select the best pair. TURN (Traversal Using Relays around NAT) servers relay media when direct connection fails, adding infrastructure cost. By 2040, TURN usage has declined as IPv6 adoption (over 70% globally) and standardized NAT behaviors have made direct connections more reliable.
-- **The Immersive Web (WebXR):** By 2040, the real-time web extends into virtual and augmented reality via WebXR (successor to WebVR, standardized 2020s). WebXR enables browsers to render 3D environments and accept input from VR/AR headsets, controllers, and hand tracking. Combined with WebRTC, this enables immersive telepresence — meeting in a shared virtual space with spatial audio, 3D avatars, and shared virtual objects. UoY's **Yggdrasil Commons** project (2037) built a WebXR campus where remote students attend lectures, collaborate in virtual labs, and socialize in digital recreations of historical Norse sites.
+- **The TLS Handshake (1.2 and 1.3):** TLS 1.2 (2008): ClientHello (supported cipher suites, random number) → ServerHello (chosen cipher suite, random number, certificate) → key exchange (RSA or ECDHE) → ChangeCipherSpec → Finished. Two round-trips. TLS 1.3 (2018): ClientHello (supported cipher suites, key share for ECDHE) → ServerHello (chosen cipher suite, key share, certificate, Finished) → Client Finished. One round-trip (1-RTT), or zero (0-RTT) for resumed connections. The lecture traces both handshakes with Wireshark and explains the security improvements: removal of obsolete algorithms (RSA key exchange, CBC-mode ciphers, SHA-1 hashing), mandatory forward secrecy (ECDHE for every connection), and encrypted ServerHello (the server's certificate is encrypted in TLS 1.3, protecting the domain name from passive observers).
+- **X.509 Certificates:** The structure of an X.509 certificate: Subject (Common Name, Organisation), Issuer, Validity period (Not Before / Not After), Public Key, Signature Algorithm, Extensions (SAN — Subject Alternative Name, the modern replacement for CN; Basic Constraints — whether this is a CA certificate; Key Usage — what operations the key can perform; Extended Key Usage — serverAuth, clientAuth). The lecture shows how to decode a certificate: `openssl x509 -in cert.pem -text -noout`.
+- **The Certificate Ecosystem:** The chain of trust: Root CA (self-signed, stored in browser/OS trust stores) → Intermediate CA (signed by the Root) → End-entity Certificate (signed by the Intermediate). The operational problem: if the Intermediate CA certificate is not served by the web server (incomplete chain), browsers that have cached the Intermediate will succeed while those that haven't will fail — an intermittent, client-dependent outage that is notoriously difficult to diagnose. The lecture covers the standard Root CA programmes: Mozilla (Firefox), Microsoft (Windows/Edge), Apple (iOS/macOS/Safari), Google (Chrome/Android).
+- **TLS Best Practices in 2040:** The Mozilla SSL Configuration Generator as the authoritative source for server configuration. Modern cipher suites: TLS 1.3 only (`TLS_AES_256_GCM_SHA384`, `TLS_CHACHA20_POLY1305_SHA256`). Key exchange: ECDHE with Curve25519 or P-256. Certificate type: ECDSA (faster, smaller) or RSA 2048-bit minimum. HSTS (`Strict-Transport-Security` header with `max-age=31536000; includeSubDomains; preload`) to prevent downgrade attacks. OCSP stapling (the server includes a time-stamped OCSP response in the TLS handshake, eliminating the client's need to query the CA separately). The 2040 development: post-quantum TLS (CRYSTALS-Kyber for key exchange, CRYSTALS-Dilithium for signatures) is being deployed on experimental networks under the name "PQ/TLS hybrid" — combining classical and post-quantum algorithms to hedge against both current and future attacks.
+- **Common TLS Failures:** Expired certificates (the most frequent cause of TLS outages). Mismatched SANs (the certificate covers `example.com` but not `www.example.com`). Incomplete certificate chains. Revoked certificates (OCSP responder unreachable → browsers hard-fail or soft-fail depending on implementation). Weak cipher suites (a server configured to accept `TLS_RSA_WITH_RC4_128_SHA` — vulnerable to the RC4 biases attack). The lecture includes real incident reports: the 2024 Let's Encrypt mass revocation (3 million certificates revoked in 24 hours due to a CAA checking bug), the 2031 DigiNotar-style CA compromise at a regional Asian CA, and the 2038 global shift to post-quantum certificates.
 
 #### Lecture Notes
 
-The scalability of real-time web applications presents unique challenges. A chat application with 10,000 concurrent users requires managing 10,000 persistent connections per server. By 2040, the standard architecture is: (1) **Edge termination** — WebSocket/WebTransport connections terminate at edge servers close to users; (2) **Pub/Sub backend** — messages are published to a distributed pub/sub system (e.g., Apache Pulsar, Redis Streams, or a custom NCCL-based system) that delivers to interested subscribers across all edge nodes; (3) **State synchronization** — CRDTs (Conflict-free Replicated Data Types) enable collaborative editing without a central server for ordering, reducing latency.
+TLS is simultaneously the most important security protocol on the internet and the source of some of its most embarrassing outages. The IT professional's TLS responsibility is not cryptographic design but operational discipline: monitoring certificate expiry (automated with `certbot`, Caddy, or ACME clients — manual certificate renewal is a professional failure in 2040), enforcing modern configurations, and diagnosing TLS failures quickly.
 
-A 2040 frontier is **AI-mediated real-time communication**. AI agents participate in real-time channels as moderators, translators, summarizers, and fact-checkers. An AI agent in a video call can: transcribe the conversation in real time, translate between languages with sub-second latency, flag potential misinformation with inline corrections, and generate meeting summaries with action items. The challenge is ensuring that AI mediation is transparent (participants know when AI is active), controllable (participants can disable or configure AI features), and unbiased (AI models must serve all participants equally).
+The lecture's diagnostic exercise: students are given a server with a deliberately misconfigured TLS setup (expired certificate, missing intermediate, weak cipher) and must identify all issues using `openssl s_client`, `testssl.sh`, and the Mozilla Observatory.
+
+A sobering fact: the median time to detect a TLS certificate expiry is 2.3 hours for organisations with monitoring and 17 hours for those without. The outage itself — the moment users see "Your connection is not private" — is instantaneous. The difference between a 5-minute outage (automated monitoring + automated renewal) and a 17-hour outage (neither) is the difference between professional IT and amateur hour.
 
 #### Required Reading
 
-- Fette, I., & Melnikov, A. (2011). RFC 6455: The WebSocket Protocol.
-- IETF. (2023). WebTransport over HTTP/3.
-- IETF. (2032). RFC 9420: The Messaging Layer Security (MLS) Protocol.
-- UoY Immersive Media Lab. (2039). *The Yggdrasil Commons: WebXR for Distributed Higher Education*.
+- Rescorla, E. (2018). *The Transport Layer Security (TLS) Protocol Version 1.3*. RFC 8446.
+- Barnes, R. et al. (2035). *Automatic Certificate Management Environment (ACME)*. RFC 8555.
+- Mozilla Wiki. "Security/Server Side TLS" — the definitive configuration guide at `wiki.mozilla.org/Security/Server_Side_TLS`.
+- Qualys SSL Labs. "SSL Server Test" — test any public HTTPS endpoint at `ssllabs.com/ssltest/`.
 
 #### Discussion Questions
 
-1. WebRTC enables end-to-end encryption for peer-to-peer communication, but multi-party calls typically require a Selective Forwarding Unit (SFU) that decrypts and re-encrypts media. MLS promises E2EE for groups. Does widespread E2EE for real-time communication create a "going dark" problem for lawful interception, or is it a fundamental right?
-2. AI-mediated real-time communication (translation, moderation, summarization) processes spoken conversation in real time. Who controls the AI models? What happens when participants disagree with the AI's moderation decisions?
-3. WebXR enables immersive telepresence, but VR/AR hardware remains expensive and physically isolating. Is the immersive web a democratic medium or an elite one? How can universities like UoY ensure equitable access?
-
-#### Practice Problems
-
-- Implement a simple WebSocket chat server and client. Add features: rooms, usernames, typing indicators. Measure message latency from client A to client B through the server.
-- Set up a WebRTC peer connection between two browser tabs. Capture the SDP offer/answer and ICE candidate exchange. Measure the time from `createOffer()` to media flowing.
-- Design an architecture for AI-mediated live translation in a WebRTC video call. Where does the AI model run (client, edge, cloud)? What latency constraints must it meet?
+1. TLS 1.3 encrypts the server's certificate in the handshake, preventing passive observers from seeing which domain the client is connecting to (Encrypted ClientHello / ECH). SNI encryption has been a goal since 2018 but faced significant deployment barriers. Describe the operational challenges of encrypting SNI. If SNI is encrypted, how do CDNs and load balancers route requests to the correct backend?
+2. The Web PKI relies on approximately 150 trusted Root CAs operated by organisations worldwide. Any one of them can issue a certificate for any domain. How does Certificate Transparency (RFC 6962, mandatory in Chrome since 2015) provide accountability for this trust model?
+3. Your monitoring system alerts that a TLS certificate expires in 7 days. The ACME client's automatic renewal has failed, and the error log shows "rate limit exceeded" from Let's Encrypt. Diagnose the root cause and describe your remediation plan. What operational practices would prevent this scenario?
 
 ---
 
-### Lecture 8: Microservices, Containers, and Cloud-Native Web Architecture
+### Lecture 7: REST APIs — Design, Consumption, and Operation
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The monolithic web application — a single deployable unit containing all logic — dominated the early web. By the 2010s, the microservices paradigm had emerged: decompose an application into small, independently deployable services, each responsible for a single business capability, communicating over the network. By 2040, cloud-native architecture — microservices orchestrated by Kubernetes, deployed via GitOps, observed through distributed tracing — is the default for web-scale applications. This lecture examines the architectural principles, operational practices, and 2040 innovations in cloud-native web architecture.
+REST (Representational State Transfer) is the architectural style that dominates web APIs in 2040. Defined by Roy Fielding in his 2000 doctoral dissertation, REST has evolved from a theoretical model to the practical backbone of service-to-service communication. This lecture covers: the principles of REST (resources, representations, statelessness, hypermedia), the operational patterns for consuming REST APIs (authentication, pagination, error handling, rate limit management), and the tools (`curl`, `httpie`, Postman/Insomnia, `jq` for JSON processing) that IT professionals use daily.
 
 #### Key Topics
 
-- **From Monolith to Microservices:** The microservices paradigm, articulated by Martin Fowler and James Lewis (2014), promises: (1) Independent deployability — teams can deploy their services without coordinating with others; (2) Technology heterogeneity — each service can use the most appropriate language/framework/database; (3) Organizational alignment — service boundaries map to team boundaries (Conway's Law). Costs: (1) Network complexity — inter-service communication adds latency and failure modes; (2) Data consistency — distributed transactions are hard, requiring eventual consistency and compensating patterns; (3) Operational overhead — monitoring, tracing, and debugging a distributed system is harder than a monolith. By 2040, the pendulum has swung toward a pragmatic middle: **modular monoliths** for early-stage projects, **microservices** for scaling organizations, and **macroservices** (domain-aligned services, larger than microservices but still independent) as a common compromise.
-- **Containers and Orchestration:** Containers (Docker, standardized via OCI) package applications with their dependencies, ensuring consistency across environments. Kubernetes (K8s) emerged as the dominant container orchestration platform, providing: scheduling, service discovery, load balancing, rolling updates, and self-healing. By 2040, Kubernetes has evolved significantly: (1) **Serverless Containers** — services scale to zero when idle, reducing cost; (2) **AI-driven scheduling** — K8s schedulers use ML to predict resource usage and preemptively scale or move workloads; (3) **Multi-cluster federation** — organizations operate dozens or hundreds of clusters across regions and providers, with unified control planes; (4) **Wasm on K8s** — WebAssembly modules run alongside containers, offering faster cold start and stronger sandboxing for untrusted code.
-- **Service Mesh and Observability:** The service mesh (Istio, Linkerd, Cilium) offloads cross-cutting concerns — service discovery, load balancing, encryption (mTLS), retries, circuit breaking — from application code to a sidecar proxy (Envoy). By 2040, the service mesh has absorbed additional responsibilities: (1) **API governance** — enforcing schemas, rate limits, and data-use policies at the mesh level; (2) **Cost attribution** — tracking per-service, per-team cloud resource consumption for FinOps; (3) **AI traffic management** — dynamically routing traffic based on model predictions of service health and user experience. Observability has converged on the OpenTelemetry standard for traces, metrics, and logs, with AI-driven anomaly detection identifying problems before humans notice.
-- **GitOps and Continuous Delivery:** GitOps (pioneered by Weaveworks, 2017) treats Git repositories as the single source of truth for declarative infrastructure and application configuration. An operator (e.g., Flux, Argo CD) continuously reconciles the desired state in Git with the actual state in the cluster. By 2040, GitOps has expanded to: (1) **Policy-as-Code** — security policies, compliance rules, and cost controls are defined in Git and enforced automatically; (2) **AI-Assisted Operations** — AI agents propose configuration changes (scaling, tuning, dependency updates) as pull requests, which humans review and approve; (3) **Progressive Delivery** — canary deployments, feature flags, and A/B testing are managed through GitOps workflows.
+- **REST Principles:** The six architectural constraints: Client-Server (separation of concerns), Stateless (each request contains all necessary information — no server-side session state), Cacheable (responses must declare whether they can be cached), Uniform Interface (resources identified by URIs, manipulated through representations), Layered System (intermediaries — proxies, gateways — are invisible to the client), and Code-on-Demand (optional — servers can extend client functionality by sending executable code, e.g., JavaScript). The lecture emphasises: REST is not "JSON over HTTP." A JSON API that requires the client to maintain state (e.g., a session ID that must be sent with every request) violates the statelessness constraint and is not RESTful.
+- **Resource Design:** Resources are nouns, not verbs. `/users` (collection), `/users/42` (individual resource), `/users/42/orders` (sub-collection). HTTP methods map to CRUD operations: GET (read), POST (create), PUT (replace), PATCH (partial update), DELETE (remove). Common anti-patterns: `/getUsers`, `/createOrder` (verbs in URLs), `/users?id=42` instead of `/users/42`, and using POST for every operation. The lecture covers the Richardson Maturity Model (Level 0: single URI, single method; Level 1: multiple URIs, single method; Level 2: multiple URIs, multiple methods — this is where most "REST" APIs actually live; Level 3: hypermedia controls / HATEOAS).
+- **API Authentication:** The methods IT professionals encounter: API keys (simple, passed as header or query parameter — `X-API-Key: abc123`), HTTP Basic Authentication (Base64-encoded username:password — only acceptable over TLS), Bearer tokens (OAuth 2.0 — `Authorization: Bearer eyJhbGci...`), and mutual TLS (mTLS — both client and server present certificates, used for high-security service-to-service communication). The lecture covers OAuth 2.0 flows: Client Credentials (service-to-service — client ID + secret exchanged for an access token), Authorization Code (user-facing applications — the user authenticates at the authorisation server, the client receives an authorisation code, exchanges it for tokens), and the PKCE extension (Proof Key for Code Exchange — prevents authorisation code interception attacks, mandatory for mobile and single-page applications in 2040).
+- **Consuming APIs:** The operational patterns for calling REST APIs from scripts. Using `curl` for ad-hoc requests and debugging. Using `httpie` for human-readable API interaction. Structured HTTP client libraries (Python's `httpx` or `requests`, Bash's `curl` with `jq`, PowerShell's `Invoke-RestMethod`). Handling pagination (offset-based, cursor-based, and Link header-based), rate limiting (exponential backoff with jitter), and error responses (retrying on 429 and 5xx, failing on 4xx). The lecture includes a lab: write a Python script that paginates through the GitHub API, collecting all repositories for an organisation, respecting rate limits, and outputting a CSV of repository names, star counts, and last-push dates.
+- **API Versioning:** The eternal debate: URL versioning (`/v1/users`, `/v2/users`), header versioning (`Accept: application/vnd.yggdrasil.v2+json`), and query parameter versioning (`/users?version=2`). The lecture analyses the trade-offs and presents the University of Yggdrasil's API versioning standard (URL-based major version, header-based minor version), explaining why breaking changes require a new major version and how to maintain backward compatibility during transitions.
 
 #### Lecture Notes
 
-The cloud-native ecosystem has been shaped by the **CNCF (Cloud Native Computing Foundation)** , which by 2040 hosts over 300 graduated, incubating, and sandbox projects. The CNCF's role as a vendor-neutral home for open-source infrastructure has been crucial in preventing any single cloud provider from controlling the ecosystem, though concerns about hyperscaler influence persist.
+The IT professional's relationship with APIs is operational: consuming them, monitoring them, and troubleshooting them. When an API integration fails, the diagnostic process follows the OSI model from the bottom up: Can I reach the server? (`ping`). Is the port open? (`nc -zv`). Is TLS working? (`openssl s_client`). Is HTTP responding? (`curl -v`). Is the API returning errors? (`curl` with full output). Is the authentication token valid? (decode the JWT with `jq -R 'split(".") | .[1] | @base64d | fromjson'`). Is the response body what I expected? (`jq` to inspect structured data).
 
-A 2040 development is **Sustainability-Driven Architecture**. The **GreenOps framework** extends FinOps (cloud financial operations) to include carbon accounting. Kubernetes clusters report per-workload carbon emissions, and scheduling decisions consider carbon intensity. The **Carbon-Aware K8s Scheduler** (CNCF Graduated, 2038) can delay non-urgent batch jobs to times of day when renewable energy is abundant, reducing a cluster's carbon footprint by 20-40%.
-
-Another frontier is **Confidential Computing in the cloud**. By 2040, all major cloud providers offer confidential VMs and containers where memory is encrypted even from the hypervisor, enabled by hardware trusted execution environments (Intel TDX, AMD SEV-SNP, ARM CCA). This enables multi-party computation where multiple organizations collaborate on sensitive data without exposing it to each other or the cloud provider — transformative for healthcare, finance, and government applications.
+The lecture introduces the concept of "API empathy" — the ability to read an API documentation page and construct a mental model of the system behind it. What are the rate limits? What are the error responses? Is there a sandbox? What happens when I paginate to the end? An IT professional who can answer these questions without writing a single line of code is more valuable than one who can only follow a tutorial.
 
 #### Required Reading
 
-- Fowler, M., & Lewis, J. (2014). "Microservices: A Definition of This New Architectural Term." martinfowler.com.
-- Burns, B., Beda, J., & Hightower, K. (2035). *Kubernetes: Up and Running* (5th ed.). O'Reilly Media.
-- CNCF. (2039). *Cloud Native Sustainability Report 2040*.
-- UoY Cloud Lab. (2040). *Confidential Computing for Multi-Party Web Applications*.
+- Fielding, R.T. (2000). *Architectural Styles and the Design of Network-based Software Architectures*. Doctoral dissertation, UC Irvine. Chapter 5 (Representational State Transfer).
+- Richardson, L. & Amundsen, M. (2035). *RESTful Web APIs*, 2nd Edition. O'Reilly Media. Chapters 1–5.
+- Hardt, D. (2012). *The OAuth 2.0 Authorization Framework*. RFC 6749.
+- GitHub REST API Documentation (2040). "Pagination," "Rate Limiting," and "Authentication."
 
 #### Discussion Questions
 
-1. Microservices solve organizational scaling (teams can work independently) but introduce technical complexity (distributed systems are hard). Is this a good trade-off? Could organizational scaling be solved without microservices?
-2. GitOps puts infrastructure configuration in Git. But Git was designed for source code, not infrastructure state. Does GitOps introduce a category error, or is it a legitimate extension of software engineering practices to operations?
-3. Confidential computing promises that even the cloud provider cannot see your data. But hardware TEEs have had security vulnerabilities (e.g., various side-channel attacks). Is the promise of confidential computing deliverable, or will it remain a cat-and-mouse game?
-
-#### Practice Problems
-
-- Deploy a simple microservices application (two services + API gateway) to a local Kubernetes cluster (minikube or kind). Implement health checks, rolling updates, and horizontal pod autoscaling.
-- Install Istio and configure mTLS between your services. Use Kiali to visualize the service mesh. Observe how Istio's sidecar proxies handle retry and circuit breaking.
-- Implement a GitOps workflow: define your application in a Git repository and use Argo CD or Flux to deploy it to Kubernetes. Make a change to the Git repo and observe the automatic reconciliation.
+1. Roy Fielding's original definition of REST requires hypermedia as the engine of application state (HATEOAS). Almost no API commonly described as "RESTful" implements HATEOAS. Does this mean most "REST" APIs are not actually REST? If they're not REST, what are they, and why did the simplified form win over the purist vision?
+2. A third-party API you depend on changes its response format (a field you parse is renamed from `user_name` to `displayName`). Your integration breaks. Design an API consumption pattern that would have detected this change before deployment and prevented the outage.
+3. OAuth 2.0's Client Credentials flow uses a client secret that must be stored securely. Compare the security properties of storing this secret: in environment variables, in a secrets manager (HashiCorp Vault, AWS Secrets Manager), and in a hardware security module (HSM). For each, describe the threat model and mitigation.
 
 ---
 
-### Lecture 9: Semantic Web, Linked Data, and Knowledge Graphs
+### Lecture 8: GraphQL, gRPC, and the Post-REST API Landscape
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The original web was a web of documents — HTML pages connected by hyperlinks, designed for human readers. The Semantic Web (Tim Berners-Lee, 2001) envisioned a web of data — machine-readable, semantically annotated, interlinked data that software agents could query, reason about, and act upon. By 2040, the Semantic Web vision has partially materialized in the form of knowledge graphs, linked data platforms, and schema.org annotations, though Berners-Lee's more ambitious vision of autonomous agents reasoning across the open web remains aspirational. This lecture examines the Semantic Web stack (RDF, OWL, SPARQL), its practical implementations, and the 2040 convergence with large language models.
+REST dominates, but it is not the only API paradigm in 2040. GraphQL (Facebook, 2015) addresses REST's over-fetching and under-fetching problems by letting clients specify exactly the data they need. gRPC (Google, 2015) addresses REST's performance limitations with binary Protocol Buffers serialisation, HTTP/2 multiplexing, and bidirectional streaming. This lecture compares the three paradigms, teaching IT professionals when to choose each and how to operate them in production.
 
 #### Key Topics
 
-- **The Semantic Web Stack:** The core technologies: (1) **RDF (Resource Description Framework)** — a data model based on subject-predicate-object triples, serializable in formats like Turtle, JSON-LD, or RDF/XML; (2) **RDFS and OWL (Web Ontology Language)** — schema and ontology languages for defining classes, properties, and relationships with formal semantics; (3) **SPARQL** — a query language for RDF data, analogous to SQL for relational databases; (4) **Linked Data** — the practice of publishing RDF data on the web using HTTP URIs, with links between datasets (the "Linked Open Data cloud" contains thousands of interconnected datasets by 2040).
-- **Knowledge Graphs:** A knowledge graph is a structured representation of entities and their relationships, typically grounded in an ontology. Notable examples: (1) **Google Knowledge Graph** — powers Google's infoboxes and entity understanding, containing billions of entities; (2) **Wikidata** — the structured data backbone of Wikipedia, with over 200 million items by 2040; (3) **DBpedia** — extracts structured data from Wikipedia infoboxes; (4) **Yggdrasil Knowledge Graph (YKG)** — UoY's own academic knowledge graph, linking research papers, courses, concepts, and historical Norse sources. Knowledge graphs enable: semantic search (finding entities, not just keywords), question answering, recommendation systems, and AI reasoning.
-- **Schema.org and Web Annotations:** Schema.org (launched 2011 by Google, Microsoft, Yahoo, and Yandex) provides a shared vocabulary for marking up web pages with structured data. By 2040, over 70% of web pages include schema.org markup (JSON-LD or Microdata), enabling search engines and AI assistants to extract structured information from web pages. The schema vocabulary has expanded from e-commerce and events to include scientific datasets, legislative documents, cultural heritage, and educational resources.
-- **The LLM-Linked Data Convergence:** The rise of large language models (LLMs) in the 2020s–2030s reshaped the Semantic Web landscape. LLMs can extract structured data from unstructured text, reducing the need for manual annotation. LLMs can also consume structured data to improve factual grounding. By 2040, the dominant paradigm is **Neuro-Symbolic Web Architecture**: LLMs handle natural language understanding and generation, while knowledge graphs provide structured, verifiable, auditable ground truth. The **RDF-GPT framework** (2035) enables LLMs to query knowledge graphs in natural language, with the LLM translating to SPARQL, executing the query, and composing a response — combining the flexibility of LLMs with the precision of structured queries.
+- **GraphQL — Client-Driven Queries:** GraphQL's fundamental insight: the client, not the server, defines the shape of the response. A single `/graphql` endpoint accepts queries that specify fields, nested objects, and arguments. The lecture demonstrates: a GraphQL query that retrieves user profiles with their recent orders (a single request replacing three REST calls to `/users/42`, `/users/42/orders`, and `/orders/42/items`). The GraphQL type system: schemas (defined in SDL — Schema Definition Language), types (Object, Scalar — String, Int, Float, Boolean, ID — Enum, Input, Interface, Union), queries (read), mutations (write), and subscriptions (real-time via WebSockets). The operational challenges: the N+1 problem (a naive resolver fetches each author for a list of books individually, producing N+1 database queries — solved by Facebook's DataLoader batching pattern), query depth attacks (a malicious client sends a deeply nested query that exhausts server resources — mitigated by query cost analysis and depth limits), and caching (GraphQL's single-endpoint design breaks HTTP caching — solved by persisted queries and CDN-level GraphQL caching like Apollo GraphOS).
+- **gRPC — High-Performance Service Communication:** gRPC uses Protocol Buffers (protobuf) as its Interface Definition Language (IDL) and serialisation format. A `.proto` file defines service methods and message types, compiled into client and server stubs in 12+ languages. Advantages over REST: binary serialisation (10–100× smaller payloads, 3–10× faster parsing than JSON), strong typing (compile-time guarantees for message structure), bidirectional streaming (client streaming, server streaming, bidirectional streaming — impossible with REST), and built-in deadlines/cancellation (every gRPC call carries a timeout, propagated through the call chain). The lecture demonstrates: a protobuf definition for a log aggregation service, compiled to Python and Go stubs, with streaming log ingestion.
+- **Comparison and Selection:** When to use each. REST: public APIs, simple CRUD, broad client compatibility, caching requirements (CDN-friendly). GraphQL: complex UIs (mobile apps, SPAs) where multiple views need different slices of the same data, rapidly evolving frontend requirements, strong typing benefit. gRPC: internal microservice communication, high-throughput data pipelines, real-time streaming, polyglot environments. The lecture includes a decision matrix: latency sensitivity, payload complexity, client diversity, team expertise, and tooling maturity.
+- **WebSockets and Real-Time Communication:** WebSockets (RFC 6455) provide a full-duplex, persistent connection between browser and server — the foundation of chat, live collaboration, gaming, and financial data feeds. The WebSocket handshake: an HTTP Upgrade request (`Connection: Upgrade`, `Upgrade: websocket`) that transitions to the WebSocket protocol. The operational concerns: connection management (reconnection with exponential backoff), authentication (token in initial handshake or first message), and the challenge of WebSocket-aware load balancers (sticky sessions or a dedicated WebSocket tier). The 2040 alternative: WebTransport (based on QUIC), providing multiplexed streams, unreliable datagrams, and partial reliability — the future of real-time web communication.
 
 #### Lecture Notes
 
-The Semantic Web's original vision — a web where autonomous agents discover, compose, and negotiate services without human intervention — was ahead of its time. The technology stack (RDF, OWL, SPARQL) was powerful but complex, and the chicken-and-egg problem (no data without applications, no applications without data) limited adoption. However, by 2040, the vision has been vindicated in more targeted forms:
+The API paradigm debate — REST vs. GraphQL vs. gRPC — is one of the most energetic in modern IT. The lecture's position: there is no single right answer; there is only the right answer for your context. GraphQL's flexibility comes at the cost of operational complexity (query depth attacks, cache invalidation). gRPC's performance comes at the cost of debuggability (binary protocols are opaque to `curl`). REST's simplicity comes at the cost of over-fetching and multiple round-trips.
 
-1. **Enterprise Knowledge Graphs** — internal knowledge management, connecting siloed data sources, enabling cross-departmental analytics — are standard practice in large organizations.
-2. **Scientific Knowledge Graphs** — connecting research papers, datasets, methods, and results — are transforming scientific discovery, enabling automated meta-analysis and hypothesis generation.
-3. **Cultural Heritage Linked Data** — museums, archives, and libraries publish their collections as Linked Data, creating a global, interconnected cultural record. UoY's **Norse Digital Archive** links runic inscriptions, saga manuscripts, archaeological sites, and linguistic data in a knowledge graph queried by researchers worldwide.
+The IT professional's role is not to champion one paradigm but to operate all of them competently. A 2040 infrastructure might serve a GraphQL API to mobile clients (reducing mobile data usage), gRPC between internal services (minimising latency), and REST for third-party integrations (maximising compatibility). The nginx reverse proxy configured in Lecture 5 routes requests to the appropriate backend based on path and content type.
+
+The Norse metaphor: the API landscape is a set of tools in a smithy. GraphQL is the fine chisel — precise but requiring skill to avoid damage. gRPC is the power hammer — fast and forceful but needing careful setup. REST is the anvil — simple, reliable, and the foundation upon which everything else is built.
 
 #### Required Reading
 
-- Berners-Lee, T., Hendler, J., & Lassila, O. (2001). "The Semantic Web." *Scientific American*, 284(5), 34–43.
-- Bizer, C., Heath, T., & Berners-Lee, T. (2009). "Linked Data — The Story So Far." *International Journal on Semantic Web and Information Systems*, 5(3).
-- UoY Knowledge Systems Lab. (2039). *Neuro-Symbolic Web Architecture: LLMs and Knowledge Graphs in Symbiosis*.
-- Wikidata. (2040). *The State of Wikidata: 200 Million Items and Counting*.
+- GraphQL Foundation (2040). *GraphQL Specification*. October 2021 Edition. Sections 1–5.
+- Google (2040). *gRPC Documentation*. "Core Concepts," "Protocol Buffers," and "Streaming."
+- Fette, I. & Melnikov, A. (2011). *The WebSocket Protocol*. RFC 6455.
+- Buecheler, C. (2038). *GraphQL in Production*. O'Reilly Media. Chapters on security, caching, and performance.
 
 #### Discussion Questions
 
-1. LLMs can answer questions from unstructured text, so some argue that structured knowledge graphs are obsolete. What can knowledge graphs do that LLMs cannot? Where does structured data remain essential?
-2. The Semantic Web stack (RDF, OWL, SPARQL) was designed for machines, not humans. Did this complexity doom it to niche adoption? Could a simpler, more human-friendly linked data format have succeeded where RDF stumbled?
-3. Knowledge graphs encode ontological commitments — choices about what entities exist and how they relate. Who gets to define these ontologies? How do we prevent ontological colonialism where Western categories are imposed on non-Western knowledge systems?
-
-#### Practice Problems
-
-- Model a simple domain (e.g., university courses, Norse mythology, or music albums) as RDF triples. Write a SPARQL query that traverses relationships (e.g., "find all courses taught by professors who studied at a given institution").
-- Extract structured data from a web page using JSON-LD and schema.org vocabulary. Validate your extraction against the Schema.org specification.
-- Use SPARQL to query Wikidata for all Norse archaeological sites with their geographic coordinates and associated time periods. Visualize the results on a map.
+1. GraphQL's N+1 problem is a direct consequence of its resolver architecture. Explain the N+1 problem with a concrete example. How does Facebook's DataLoader pattern solve it, and what are its limitations?
+2. gRPC uses HTTP/2 trailers to communicate status codes and error details. If your network infrastructure strips HTTP trailers (some legacy proxies do), gRPC calls will fail silently. How would you diagnose this failure, and what operational changes would prevent it?
+3. A real-time dashboard uses WebSockets to push updates to 10,000 concurrent browsers. Each browser maintains an open WebSocket connection. Describe the server architecture required to handle this load. Compare: a single-threaded event-driven server (Node.js), a thread-per-connection server (Java with virtual threads), and a dedicated WebSocket-as-a-Service provider. What are the trade-offs?
 
 ---
 
-### Lecture 10: WebAssembly and Browser-Native Computing
+### Lecture 9: CDNs, Caching, and Edge Computing
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-For the first two decades of the web, JavaScript was the only programming language that ran natively in browsers. Efforts to break this monopoly — Java applets, Flash, Silverlight, Google Native Client — failed for reasons of security, performance, or platform lock-in. WebAssembly (Wasm), standardized in 2019, finally succeeded: a binary instruction format for a stack-based virtual machine, designed as a portable compilation target for languages like C, C++, Rust, and Go. By 2040, WebAssembly has transformed from a browser complement to JavaScript into a universal runtime running in browsers, servers, edge devices, and embedded systems. This lecture examines WebAssembly's architecture, the Component Model, WASI (WebAssembly System Interface), and the implications of a language-independent web.
+Content Delivery Networks (CDNs) serve approximately 72% of global web traffic in 2040. They are no longer optional — they are the standard deployment architecture for any web property serving a global audience. This lecture covers: CDN architecture (edge servers, regional caches, origin shielding), caching strategies (TTL-based, validation-based, and surrogate keys for cache invalidation), and the 2040 expansion of CDNs into edge computing platforms (Cloudflare Workers, Fastly Compute@Edge, AWS Lambda@Edge) that run application code at the network edge.
 
 #### Key Topics
 
-- **WebAssembly Architecture:** Wasm is a low-level binary format with a structured stack machine design. Key properties: (1) **Safe** — Wasm runs in a sandboxed memory environment, with no access to the host system except through explicitly imported functions; (2) **Fast** — near-native execution speed, achieved through streaming compilation and aggressive optimization; (3) **Portable** — a Wasm module runs identically across all major browsers and standalone runtimes; (4) **Compact** — the binary format is designed for efficient transmission over the network. By 2040, Wasm has evolved through several versions: SIMD, multi-threading, garbage collection (GC), exception handling, and tail calls are all standardized and deployed.
-- **The Component Model and WASI:** Initially, Wasm was limited to computation — it couldn't access files, networks, or system resources. The **WebAssembly System Interface (WASI)** provides a standardized set of system interfaces (filesystem, networking, random numbers, clocks) that Wasm modules can import. The **Component Model** (standardized 2030) goes further: it defines a language-independent interface description language (WIT) enabling components written in different languages to compose. A Rust component can call a Go component, which calls a JavaScript component — all within the same sandbox, with interface-level type checking. By 2040, the Component Model enables a global ecosystem of composable Wasm components — a "npm for Wasm" where components are language-agnostic and secure by construction.
-- **Wasm on the Server and Edge:** Wasm's sandboxing and fast startup make it ideal for serverless and edge computing. Platforms like Cloudflare Workers, Fastly Compute, and Fermyon Spin execute Wasm modules at the edge. Compared to containers: Wasm modules start in microseconds (vs. seconds for containers), consume minimal memory, and provide stronger isolation (no shared kernel). The **Wasm-on-K8s** ecosystem (Krustlet, runwasi, wasmCloud) enables running Wasm workloads alongside containers in Kubernetes. By 2040, a significant fraction of new serverless applications are deployed as Wasm, not containers.
-- **Wasm Beyond the Browser:** The Wasm runtime has escaped the browser entirely. By 2040, Wasm runs in: (1) **Database UDFs** — user-defined functions in databases (e.g., SingleStore, PostgreSQL extensions) are written in Wasm for safety and portability; (2) **Smart contracts** — blockchain platforms (Ethereum 3.0, Polkadot) use Wasm as their execution engine; (3) **Plugin systems** — applications from Figma to Blender embed Wasm runtimes for user extensions; (4) **IoT and embedded** — Wasm's small footprint (a minimal runtime is ~50KB) makes it viable for microcontrollers.
+- **CDN Architecture:** The physical reality: a CDN is hundreds of thousands of servers distributed across thousands of points of presence (PoPs) worldwide. When a user in Tokyo requests `yggdrasil.edu`, the DNS resolves to the nearest CDN edge server (Tokyo PoP). If the content is cached, it's served from Tokyo with sub-millisecond latency. If not, the edge server requests it from the origin server (perhaps in Reykjavík), caches the response, and serves it to the user. Subsequent requests from Tokyo are served from cache. The lecture covers: anycast routing (how DNS directs users to the nearest PoP), tiered caching (edge → regional → origin — reducing origin load by aggregating cache misses), and origin shielding (a designated cache node that all edge servers query before hitting the origin, preventing the "thundering herd" of cache fill requests).
+- **Caching Strategies:** The cache-control directives from Lecture 3 applied at CDN scale. `Cache-Control: public, max-age=3600, s-maxage=86400` (browsers cache for 1 hour; CDN caches for 24 hours). `Cache-Control: no-cache` (validate with origin before serving — the CDN sends a conditional request with `If-None-Match`/`If-Modified-Since` on every client request). `Cache-Control: private` (CDN must not cache; browser may cache). The operational art: choosing TTLs that balance freshness (users see up-to-date content) against origin load (every cache miss hits your application servers). The lecture includes the "cache stampede" problem: when a popular cached resource expires, thousands of simultaneous requests all miss the cache and hit the origin simultaneously — solved by "stale-while-revalidate" (`Cache-Control: max-age=600, stale-while-revalidate=30` — serve stale content while asynchronously refreshing).
+- **Cache Invalidation:** The hardest problem in computer science (along with naming things and off-by-one errors). CDN purging: `PURGE /images/hero.jpg` (remove a specific URL from all edge caches), wildcard purging (`/images/*`), and surrogate keys (tag-based invalidation: tag a response with `Surrogate-Key: article-42 homepage`; purge by key rather than URL). The lecture covers: why purging is not instantaneous (global propagation takes seconds to minutes), the difference between "soft purge" (mark as stale — next request triggers a background refresh) and "hard purge" (remove immediately — next request blocks until origin responds), and the strategy of cache-busting URLs (`/app.js?v=abc123`) for immutable assets.
+- **Edge Computing:** The 2040 paradigm: CDNs are no longer just caches; they are distributed application platforms. Cloudflare Workers, Fastly Compute@Edge, Deno Deploy, and AWS Lambda@Edge run JavaScript/WebAssembly at every PoP. Use cases: A/B testing (route users to different backends based on cookies — at the edge, not at the origin), authentication at the edge (validate JWT tokens before requests reach the origin), personalisation (inject user-specific content into cached HTML), bot management (challenge suspicious requests at the edge), and API gateways (route, transform, and rate-limit API requests at the edge). The lecture includes a lab: write a Cloudflare Worker that geolocates the user's IP, returns a greeting in their local language, and caches the response for 1 hour.
+- **The 2040 CDN Landscape:** The major providers: Cloudflare (38% market share, integrated edge compute, DDoS protection, DNS), Akamai (22%, enterprise-focused, largest network), Fastly (12%, real-time purging, edge compute), AWS CloudFront (15%, integrated with AWS ecosystem), and emerging regional CDNs (Alibaba Cloud CDN, Tencent Cloud CDN, Yandex CDN). The lecture discusses vendor lock-in, multi-CDN strategies (using DNS to route between multiple CDNs for resilience), and the environmental impact of CDN infrastructure (CDN PoPs consume approximately 0.3% of global electricity — comparable to a mid-sized country).
 
 #### Lecture Notes
 
-The relationship between JavaScript and WebAssembly has been a subject of ongoing debate. Early rhetoric framed Wasm as a "JavaScript killer," but the reality is symbiotic. JavaScript remains the dominant language for web UI, benefiting from decades of framework investment (React, Vue, Svelte) and an enormous developer community. Wasm excels at computationally intensive tasks — image/video processing, 3D rendering, scientific simulation, cryptography, AI inference — where JavaScript's dynamic typing and garbage collection introduce unacceptable overhead.
+The CDN is the IT professional's force multiplier. A properly configured CDN can absorb a DDoS attack that would overwhelm any origin server, serve content to users on every continent with LAN-like latency, and reduce infrastructure costs by 60–90% (cached content never touches your application servers). But a misconfigured CDN can cache sensitive data (a `Cache-Control: public` on a page containing personal information), fail open (serve stale content indefinitely), or become a single point of failure (when your CDN goes down, your entire web presence goes down).
 
-By 2040, the typical web application architecture is: **JavaScript for UI orchestration, Wasm for computation**. UI frameworks compile their rendering engines to Wasm for performance, while application logic (auth, routing, state management) remains in JavaScript/TypeScript for development velocity. AI models run in Wasm (compiled from Python/PyTorch via tools like Wasky), enabling client-side inference without sending data to servers.
+The lecture's operational exercise: students configure CloudFront for a static website, set up cache behaviours for HTML (short TTL), CSS/JS (long TTL with cache-busting), and images (immutable — 1 year TTL), implement origin shield, and test cache invalidation with `aws cloudfront create-invalidation`.
 
-A 2040 frontier is **WebAssembly as a Universal Bytecode**. If LLVM can compile any language to Wasm, and every platform runs a Wasm runtime, then Wasm becomes the Java "write once, run anywhere" promise — finally fulfilled, but with better performance, stronger sandboxing, and language neutrality. The **Wasm-Native Cloud** vision, where cloud providers expose raw Wasm execution rather than Linux containers, is being prototyped by multiple providers.
+The Norse metaphor: the CDN is the network of waystations along the Viking trade routes — Kaupang, Hedeby, Birka, Dublin, York. A trader doesn't sail back to the fjord for every transaction; goods are cached at the waystations. The origin server is the home fjord — it holds the source of truth, but the world interacts with the caches.
 
 #### Required Reading
 
-- Haas, A., et al. (2017). "Bringing the Web Up to Speed with WebAssembly." *ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI)*.
-- W3C WebAssembly Working Group. (2030). *WebAssembly Component Model Specification*.
-- Cloudflare. (2039). *Wasm at the Edge: Five Years of Production Experience*.
-- UoY Programming Languages Lab. (2040). *Wasm as Universal Bytecode: Security, Performance, and Composability*.
+- Cloudflare Learning Center (2040). "What is a CDN?" and "How CDNs Work."
+- Amazon CloudFront Documentation (2040). "Managing How Long Content Stays in the Cache" and "Cache Key and Origin Shield."
+- Nottingham, M. (2035). *HTTP Caching*. RFC 9111. Sections 3–5.
+- Souders, S. (2037). *Even Faster Web Sites*, 3rd Edition. O'Reilly Media. Chapters on CDN deployment.
 
 #### Discussion Questions
 
-1. The "web platform" was historically synonymous with JavaScript/HTML/CSS. WebAssembly breaks this trinity — any language can now target the web. Does this enrich the web ecosystem or fragment it? What is lost when web development is no longer universally accessible through a single language?
-2. WebAssembly's sandbox model provides strong isolation but limits what modules can do without explicit capability grants. Is this "capability-based security" the right model for the web, or does it add friction without proportional benefit?
-3. "Write once, run anywhere" failed for Java applets due to performance and security issues. Why has WebAssembly succeeded where Java failed? Is Wasm's success durable, or will the next platform shift repeat the cycle?
-
-#### Practice Problems
-
-- Write a simple function in Rust (e.g., Fibonacci or image blur) and compile it to WebAssembly using `wasm-pack`. Call the Wasm function from JavaScript and measure the performance difference compared to a pure JavaScript implementation.
-- Create a Wasm component using the Component Model, defining a WIT interface and implementing it in one language (e.g., Rust). Then create a consumer in a different language (e.g., JavaScript) that imports and uses the component.
-- Deploy a Wasm module to Cloudflare Workers. Compare cold start time and memory usage to an equivalent Node.js worker.
+1. A CDN caches a page containing `Cache-Control: public, max-age=86400`. Twenty minutes later, a critical error is discovered on the page and must be fixed immediately. Describe three methods for removing the cached content, ordered from fastest to slowest. For each, explain the propagation delay.
+2. Edge computing blurs the line between CDN and application server. If your authentication logic runs at the edge (validating JWT tokens in a Cloudflare Worker), what happens when the Worker platform experiences an outage? Design a fallback architecture.
+3. A multi-CDN strategy routes users to different CDNs via DNS (e.g., `cdn1.yggdrasil.edu` → Cloudflare, `cdn2.yggdrasil.edu` → Fastly). How do you ensure cache consistency across CDNs? If a purge request is sent to one CDN but not the other, users routed to the un-purged CDN will see stale content. Propose a solution.
 
 ---
 
-### Lecture 11: Privacy, Accessibility, and the Ethical Web
+### Lecture 10: Web Security — OWASP Top 10 and Operational Defences
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The web's architecture is not neutral — it encodes values. Decisions about what data is collected, how users are identified, whether content is accessible to people with disabilities, and whose languages and cultures are represented shape who can participate in digital society. By 2040, privacy, accessibility, and ethics are not afterthoughts but first-order architectural concerns, regulated by law and demanded by users. This lecture examines the technical and policy frameworks that define the ethical web.
+Web application security is not a feature; it is a property of every architectural decision. The OWASP Top 10 — updated every four years — catalogues the most critical web application security risks. This lecture covers the 2040 edition of the Top 10 from an operational perspective: not just what the vulnerabilities are, but how IT professionals configure web servers, reverse proxies, and CDNs to mitigate them. Students deploy a deliberately vulnerable application and harden it using the defensive patterns covered.
 
 #### Key Topics
 
-- **Privacy by Architecture:** Privacy on the web has evolved from the "notice and consent" model (cookie banners, privacy policies) to architectural privacy — embedding data protection into protocols themselves. Key 2040 privacy technologies: (1) **Oblivious HTTP (OHTTP)** — relays HTTP requests through a proxy so the server doesn't know the client's IP; (2) **Private Information Retrieval (PIR)** — retrieves database records without revealing which record was accessed; (3) **Differential Privacy** — adds calibrated noise to aggregate statistics, protecting individual contributions while preserving analytical utility; (4) **On-Device Processing** — AI models run locally on user devices via WebAssembly/WebGPU, processing data without sending it to servers. The **European Digital Sovereignty Directive (2037)** mandates that personal data processing must default to on-device unless server processing is demonstrably necessary.
-- **Web Accessibility (a11y):** The Web Content Accessibility Guidelines (WCAG) have evolved from WCAG 2.0 (2008) through WCAG 3.0 (2030) to WCAG 4.0 (2040). The 2040 standard is more holistic, covering not just visual and motor accessibility but cognitive accessibility, neurodiversity accommodation, and AI-mediated accessibility. Key 2040 technologies: (1) **AI screen readers** — understand page semantics, summarize complex content, and navigate by intent ("find the contact form"); (2) **Adaptive interfaces** — automatically adjust contrast, font size, layout density, and interaction mode based on user needs; (3) **Sign language avatars** — real-time translation of text and audio into sign language using 3D avatars; (4) **Cognitive load management** — interfaces that detect user confusion and offer simplified views. The **Global Accessibility Mandate (2035)** requires all public-facing web services (government, education, healthcare, finance, large commercial) to meet WCAG 4.0 Level AA by 2038.
-- **Language Justice and the Multilingual Web:** By 2040, the web supports all 7,000+ human languages through Unicode 16.0 and standardized language tags (BCP 47). However, support is uneven: the top 10 languages account for over 70% of web content. The **Language Justice in Digital Spaces Accord (2036)** establishes that: (1) critical public information must be available in all official languages of the jurisdiction; (2) research funding should prioritize NLP for under-resourced languages; (3) machine translation should be freely available for low-resource languages via public API. UoY contributes through the **Norse Digital Archive**, which provides Old Norse content with translations, linguistic annotations, and cultural context.
-- **The Right to Not Be Tracked:** The surveillance advertising model that dominated the 2010s–2020s web has been substantially constrained by regulation. The **Global Privacy Framework (2032)** — building on GDPR (EU, 2018), CCPA (California, 2020), and similar laws — establishes: (1) opt-in consent for behavioral tracking; (2) right to access and delete personal data; (3) data portability between services; (4) algorithmic transparency for automated decisions; (5) prohibitions on dark patterns that manipulate consent. By 2040, the web advertising market has shifted from behavioral targeting to contextual advertising and direct publisher relationships, with blockchain-based ad auditing for transparency.
+- **OWASP Top 10 (2040 Edition):** 1. Broken Access Control (users accessing other users' data by manipulating URLs or API parameters). 2. Cryptographic Failures (weak TLS, hardcoded keys, unencrypted sensitive data). 3. Injection (SQL, NoSQL, OS command, LDAP — untrusted data interpreted as code). 4. Insecure Design (missing security requirements, no threat modelling). 5. Security Misconfiguration (default credentials, verbose error messages, unnecessary features enabled). 6. Vulnerable and Outdated Components (unpatched libraries with known CVEs). 7. Identification and Authentication Failures (weak password policies, credential stuffing, missing MFA). 8. Software and Data Integrity Failures (CI/CD pipeline compromise, unsigned updates, deserialisation of untrusted data). 9. Security Logging and Monitoring Failures (no detection of active attacks — breaches go unnoticed for months). 10. Server-Side Request Forgery (SSRF — the server fetches a URL controlled by an attacker, accessing internal services).
+- **Reverse Proxy Defences (Lecture 5 applied to security):** The reverse proxy as a security enforcement point. `limit_req` and `limit_conn` (rate limiting — prevent brute-force attacks and credential stuffing). Custom error pages (`error_page 500 502 503 504 /50x.html` — avoid leaking stack traces and framework versions). Security headers: `Strict-Transport-Security` (force HTTPS), `Content-Security-Policy` (restrict which scripts can execute — the most powerful defence against XSS), `X-Frame-Options: DENY` (prevent clickjacking), `X-Content-Type-Options: nosniff` (prevent MIME type sniffing), `Referrer-Policy: strict-origin-when-cross-origin` (control referrer leakage). The lecture includes a complete nginx security configuration that implements all of these.
+- **WAF (Web Application Firewall):** A WAF inspects HTTP requests and blocks those matching attack patterns — SQL injection (`' OR 1=1 --`), XSS (`<script>alert(1)</script>`), path traversal (`../../etc/passwd`). ModSecurity (open-source, rule-based — OWASP Core Rule Set), Cloudflare WAF (managed, machine-learning-driven), and AWS WAF (integrated with CloudFront/ALB). The lecture covers: WAF limitations (bypass techniques, false positives that block legitimate traffic, the performance cost of inline inspection), WAF logging (every blocked request should generate an alert — a blocked SQL injection attempt is an incident, not just a statistic), and the operational practice of WAF rule tuning (starting in "detect-only" mode, analysing logs, and progressively enabling blocking).
+- **CORS (Cross-Origin Resource Sharing):** CORS is the mechanism by which browsers allow a web page from `example.com` to make requests to `api.other.com`. Without CORS, the Same-Origin Policy would block all cross-origin requests. The CORS headers: `Access-Control-Allow-Origin` (which origins can access the resource — `*` is dangerous and incompatible with credentials), `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers`, `Access-Control-Allow-Credentials` (allow cookies — requires a specific origin, not `*`), `Access-Control-Max-Age` (cache the preflight response). The lecture covers: the preflight request (OPTIONS) that browsers send before cross-origin requests with non-simple methods or headers, the common misconfiguration of reflecting the `Origin` header verbatim without validation (effectively a wildcard), and the operational pattern of maintaining a CORS allowlist.
+- **The 2040 Threat Landscape:** AI-driven attacks (language models generating convincing phishing pages, automated vulnerability scanning at internet scale), supply chain attacks (compromised npm packages, poisoned Docker images — the lesson of the 2034 Polyfill.io incident), and quantum threats (Shor's algorithm will break RSA and ECC — the migration to post-quantum cryptography is the largest cryptographic transition in internet history). The lecture frames security not as a product but as a continuous practice: patch, monitor, respond, learn, repeat.
 
 #### Lecture Notes
 
-The ethical web is not just about compliance — it's about dignity. Every design decision either includes or excludes. A web form that requires a phone number excludes people without phones. A CAPTCHA that relies on visual pattern recognition excludes blind users. A website available only in English excludes non-English speakers. These are not edge cases — collectively, people with disabilities, non-English speakers, and people without reliable Internet access constitute the majority of the world's population.
+The most important security principle in IT operations is "defence in depth" — no single layer of defence should be your only layer. A WAF is not a substitute for input validation. TLS is not a substitute for authentication. A firewall is not a substitute for least-privilege access control. Every security control can fail; the system must survive the failure of any single control.
 
-The **University of Yggdrasil's Web Ethics Lab** (est. 2030) researches these questions empirically: measuring the accessibility of the top 10,000 websites annually, auditing privacy practices, and developing open-source tools for ethical web development. One finding: by 2040, AI-generated web content (articles, product descriptions, educational materials) often fails accessibility audits because AI models are trained on existing content that already has accessibility issues. The lab's **Accessible-by-Default AI** project trains AI content generators to produce WCAG 4.0-compliant output — a contribution to breaking the cycle of inaccessibility.
+The lecture's central practical exercise: students are given a Docker Compose environment containing a vulnerable web application (OWASP Juice Shop) and must harden it using: an nginx reverse proxy with security headers and rate limiting, TLS with a valid certificate, a ModSecurity WAF with the OWASP Core Rule Set, and application-level fixes for the three most severe vulnerabilities. The evaluation is a penetration test conducted by the instructor's automated scanner.
+
+The Norse metaphor: security is not a wall but a longhouse. The longhouse has a door (authentication), a hearth that burns only authorised wood (authorisation), walls that keep out the wind and wolves (firewall/WAF), and a watchman who stays awake through the night (monitoring/logging). A single layer — a door with no walls — is no defence at all.
 
 #### Required Reading
 
-- W3C. (2040). *Web Content Accessibility Guidelines (WCAG) 4.0*.
-- European Commission. (2037). *Digital Sovereignty Directive: Data, Identity, and AI*.
-- UN Internet Governance Forum. (2036). *Language Justice in Digital Spaces Accord*.
-- UoY Web Ethics Lab. (2039). *The State of Web Accessibility 2040: Annual Report*.
+- OWASP Foundation (2040). *OWASP Top 10 — 2040 Edition*. Full document at `owasp.org/Top10`.
+- OWASP Foundation (2040). *ModSecurity Core Rule Set*. Documentation and rule descriptions.
+- Mozilla Observatory (2040). "HTTP Security Headers." Interactive testing tool at `observatory.mozilla.org`.
+- NIST Special Publication 800-207 (2035). "Zero Trust Architecture." The architectural framework for defence in depth.
 
 #### Discussion Questions
 
-1. "Privacy by architecture" embeds data protection into protocols, making surveillance structurally impossible rather than legally prohibited. Is this approach more effective than legal regulation, or does it risk creating a web that is private but ungovernable?
-2. WCAG 4.0 requires AI-generated content to be accessible. But AI models are trained on existing content that often lacks accessibility. How do we break this chicken-and-egg problem?
-3. The shift from behavioral advertising to contextual advertising reduces tracking but may concentrate ad revenue among large publishers who can offer premium contexts. Does privacy regulation inadvertently disadvantage small publishers and independent creators?
-
-#### Practice Problems
-
-- Audit a website using an automated accessibility tool (e.g., Axe, Lighthouse). Identify WCAG violations and propose fixes. Test with a screen reader to understand the user experience.
-- Implement a web form that respects privacy by design: no unnecessary fields, clear purpose statements, opt-in consent, and data minimization. Compare to a typical signup form that collects excessive data.
-- Use browser developer tools to analyze the tracking mechanisms on a popular website. Identify cookies, fingerprinting scripts, and third-party requests. Write a 500-word analysis of the website's privacy posture.
+1. A WAF blocks a request containing `' OR 1=1 --` in a query parameter. Is this a false positive (a legitimate user whose input happens to contain those characters) or a true positive (an actual SQL injection attempt)? How would you determine which? What operational process should follow a WAF block?
+2. `Content-Security-Policy` can prevent XSS by restricting which scripts can execute. But many real-world applications use inline scripts (`<script>...</script>`) that CSP blocks by default. Describe how to deploy CSP in a legacy application without rewriting the entire codebase. What are `'nonce-...'` and `'strict-dynamic'`, and how do they help?
+3. The 2040 shift to post-quantum cryptography requires replacing every TLS certificate and every cryptographic library. Estimate the operational timeline for this transition in an organisation with 5,000 servers. What breaks first? What requires the longest lead time?
 
 ---
 
-### Lecture 12: The Future of the Web — DWeb, IPFS, and Post-Cloud Architectures
+### Lecture 11: Internet Governance, Standards, and the Open Web
 
-**Course:** IT107 — Web Technologies & Internet Architecture
-**Degree:** Bachelor of Science in Information Technology, 2040
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
 #### Overview
 
-The web's centralized architecture — where a few companies control the platforms, infrastructure, and protocols — has been the subject of critique and counter-movement since the 2000s. The decentralized web (DWeb) movement advocates for protocols that distribute power: content-addressed storage (IPFS), peer-to-peer networking (libp2p), decentralized identity (DIDs), and blockchain-based coordination. By 2040, the DWeb has not replaced the centralized web but has carved out significant niches: scientific data archiving, censorship-resistant publishing, community-owned social networks, and verifiable credentials. This lecture surveys the DWeb landscape, evaluates what has succeeded and what has failed, and projects the web's architecture toward 2060.
+The internet is not a technical artefact alone; it is a socio-technical system governed by a complex ecosystem of standards bodies, non-profits, corporations, and governments. This lecture surveys the institutions that define the internet: the Internet Engineering Task Force (IETF — protocols, RFCs), the World Wide Web Consortium (W3C — web standards), the Internet Corporation for Assigned Names and Numbers (ICANN — domain names and IP addresses), the Internet Society (ISOC), and the regional Internet registries (RIRs — ARIN, RIPE NCC, APNIC, LACNIC, AFRINIC). The lecture also covers the political contestation over internet governance: the "splinternet" (national internets in China, Russia, Iran), net neutrality, and the 2040 debate over AI-generated content and the web.
 
 #### Key Topics
 
-- **IPFS and Content Addressing:** The InterPlanetary File System (IPFS) replaces location-based addressing ("fetch this file from server X") with content-based addressing ("fetch the file whose cryptographic hash is Y"). This means: (1) content integrity is verified automatically; (2) identical content is deduplicated (same hash = same file); (3) content can be served by any node that has it, not just the original publisher. By 2040, IPFS is widely used for scientific data, open-access publishing, NFT storage, and archival purposes. The **IPFS Gateway Network** — a federated system of HTTP gateways run by universities, nonprofits, and companies — makes IPFS content accessible to standard browsers. UoY operates an IPFS gateway as part of the **Norse Digital Preservation Initiative**.
-- **Decentralized Identity (DIDs and VCs):** The W3C's Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs) standards enable identity that is not controlled by any central authority. A DID is a globally unique identifier (e.g., `did:example:123`) resolved to a DID Document containing public keys and service endpoints. VCs are cryptographically signed claims ("University of Yggdrasil certifies that Runa Freyjasdottir earned a B.S. in Information Technology") that can be verified without contacting the issuer. By 2040, the **Global Credential Network** — an open, federated system of credential issuers, holders, and verifiers — has largely replaced centralized academic credentialing, professional licensing, and age verification. UoY issues all degrees as VCs.
-- **Federated Social Media (ActivityPub, AT Protocol):** The fediverse — a federation of independently operated social media servers communicating via the ActivityPub protocol (W3C standard, 2018) — has grown significantly. Mastodon (microblogging), PeerTube (video), Pixelfed (photos), and BookWyrm (books) provide decentralized alternatives to centralized platforms. By 2040, approximately 15% of social media users are on federated platforms. The **AT Protocol** (Bluesky, 2023) offers a different decentralization model: a shared "big world" indexed by independent relays, with users choosing their own algorithms for content curation. The competition between these models — full federation vs. shared index with algorithmic choice — is one of the defining architectural debates of the 2040 web.
-- **Blockchain and Web3:** The blockchain/web3 movement of the 2020s promised to decentralize everything — finance, governance, identity, computing. By 2040, the hype has settled into a more realistic assessment. Blockchain is useful for: (1) **Auditability** — append-only logs of financial transactions, supply chain events, or certificate issuance that anyone can verify; (2) **Coordination** — smart contracts that automate multi-party agreements without a trusted intermediary; (3) **Digital ownership** — verifiable ownership of digital assets (though the cultural value of "owning" a JPEG remains debated). Blockchain is not useful for general-purpose computation, high-throughput applications, or anything requiring low latency. The **Energy-Efficient Consensus Accord (2030)** has largely eliminated proof-of-work, with proof-of-stake and proof-of-authority becoming the norm.
+- **The IETF and the RFC Process:** The IETF is not a membership organisation; it is an open community of engineers who produce RFCs (Request for Comments) through a process of working groups, draft proposals, and "rough consensus and running code." The lecture traces the lifecycle of an RFC: an individual draft → working group adoption → revisions based on mailing list discussion → last call → IESG review → publication as Proposed Standard → implementation experience → Internet Standard. Notable examples: RFC 2616 (HTTP/1.1) → RFC 7230-7235 (HTTP/1.1 revision) → RFC 9110-9114 (HTTP semantics, caching, HTTP/2, HTTP/3). The lecture highlights: RFCs are not imposed by authority; they succeed because implementers voluntarily adopt them.
+- **W3C and Web Standards:** The W3C produces Recommendations that define web technologies: HTML, CSS, DOM, Web APIs, accessibility (WCAG), and the Web of Things. The standardisation process: Working Draft → Candidate Recommendation → Proposed Recommendation → W3C Recommendation. The lecture covers the 2040 W3C priorities: WebGPU (hardware-accelerated 3D graphics in the browser), WebAssembly (near-native performance for compiled languages in the browser), the Spatial Web (WebXR for augmented and virtual reality), and the ethical web (privacy, accessibility, internationalisation).
+- **ICANN and the Domain Name System:** ICANN manages the root zone of the DNS, coordinates IP address allocation with the IANA (Internet Assigned Numbers Authority), and accredits domain registrars. The lecture covers the political structure of ICANN (multi-stakeholder model — governments, business, civil society, technical community), the process for creating new gTLDs (the 2012 round added 1,200+ new TLDs including `.guru`, `.ninja`, `.xyz`; the 2035 round added `.ai`, `.cloud`, `.dao`), and the ongoing tension between ICANN's US-based legal status and demands for international governance (the "IANA stewardship transition" of 2016, the WCIT debates).
+- **The Splinternet:** The fragmentation of the global internet. China's Great Firewall (DNS poisoning, IP blocking, deep packet inspection, and the 2040 "Golden Shield 3.0" AI-powered censorship system). Russia's Sovereign Internet Law (2019, mandating the ability to disconnect from the global internet — exercised for 24 hours in a 2032 test). Iran's National Information Network. The lecture analyses: the technical mechanisms of internet fragmentation (BGP manipulation, DNS filtering, mandatory VPN blocks, state-mandated root CA certificates for TLS interception), the economic costs (fragmented internets cannot benefit from global network effects), and the human rights implications (the UN declared internet access a human right in 2016; fragmented internets selectively deny that right).
+- **Net Neutrality and the 2040 Debate:** Net neutrality — the principle that internet service providers should treat all data equally, without blocking, throttling, or paid prioritisation — has been a policy battlefield for decades. The lecture traces the history: the FCC's 2015 Open Internet Order, its 2017 repeal, the 2024 restoration under the "Digital Commons Act," and the 2040 challenge of AI-traffic discrimination (ISPs prioritising their own AI services' traffic while throttling competitors). The technical reality: even with net neutrality regulations, CDN interconnection agreements (paid peering) create a de facto two-tier internet.
 
 #### Lecture Notes
 
-The DWeb's greatest success has been in **archiving and preservation**. Content-addressed storage naturally resists link rot and content drift. The **InterPlanetary Wayback Machine** — a collaboration between the Internet Archive and the IPFS project — archives the web into IPFS, ensuring that historical web content remains accessible even if original servers go offline. By 2040, the IPFS network stores over 50 exabytes of data, making it one of the world's largest distributed storage systems.
+The IT professional cannot be merely technical. The protocols you configure, the standards you implement, and the networks you build exist within a governance framework that is the product of decades of political negotiation. Understanding who decides what `.com` means, how an RFC becomes a standard, and why your users in certain countries cannot reach your servers is as essential as understanding TCP handshakes.
 
-The DWeb's greatest failure has been **user experience**. Early DWeb applications required users to run local nodes, manage cryptographic keys, and understand concepts like gas fees and content hashing. By 2040, usability has improved — browsers integrate IPFS resolution natively, key management is handled by secure hardware, and progressive decentralization (applications that work centralized-first but support decentralized fallback) has become the norm. But the friction is real, and centralized platforms still offer a smoother experience for most users.
+The lecture's perspective: the internet is an example of one of the most successful examples of global governance in human history — a system that connects 5.5 billion people in 2040, operates across every border, and has survived wars, pandemics, and political upheaval. Its resilience is not accidental; it is a product of architectural choices (the end-to-end principle, permissionless innovation) and institutional choices (open standards, multi-stakeholder governance). The IT professional inherits this legacy and bears responsibility for its continuation.
 
-The **Post-Cloud Architecture** — the synthesis of centralized cloud, edge computing, and decentralized protocols — is the emerging paradigm for 2050. Applications will be: (1) **cloud-orchestrated** — centralized services for coordination, discovery, and complex computation; (2) **edge-executed** — latency-sensitive logic runs at CDN edges or on user devices; (3) **content-addressed** — data is identified by hash and can be served from anywhere; (4) **verifiably governed** — protocol rules are transparent and auditable. This hybrid architecture captures the efficiency of centralization and the resilience of decentralization — not either/or, but both/and.
+The Norse metaphor: the internet is the modern Althing — the open assembly where all voices can be heard, governed by laws (protocols), presided over by lawspeakers (standards bodies), and sustained by the collective commitment to the process. A fragmented internet is the dissolution of the Althing into isolated chiefdoms.
 
 #### Required Reading
 
-- Benet, J. (2014). "IPFS — Content Addressed, Versioned, P2P File System." arXiv:1407.3561.
-- W3C. (2022). *Decentralized Identifiers (DIDs) v1.0* and *Verifiable Credentials Data Model v1.1*.
-- Bluesky. (2035). *The AT Protocol: A Self-Authenticating Social Web*.
-- UoY Decentralized Systems Lab. (2040). *Post-Cloud Architecture: The Synthesis of Centralized, Edge, and Decentralized Computing*.
+- Russell, A.L. (2035). *Open Standards and the Digital Age: History, Ideology, and Networks*. Cambridge University Press. Chapters 6–8.
+- Mueller, M. (2032). *Networks and States: The Global Politics of Internet Governance*. MIT Press. Chapters 1–4, 9.
+- DeNardis, L. (2038). *The Internet in Everything: Freedom and Security in a World with No Off Switch*. Yale University Press. Chapters on splinternet and sovereignty.
+- ICANN (2040). "What Does ICANN Do?" Introductory guide at `icann.org`.
 
 #### Discussion Questions
 
-1. The DWeb promises to distribute power away from centralized platforms. But running a reliable IPFS node or ActivityPub server requires technical skill and resources — a form of digital privilege. Does the DWeb democratize the web, or does it create a new elite of node operators?
-2. Blockchain-based "ownership" of digital assets is philosophically contested — can you truly own an infinitely reproducible sequence of bits? What does "ownership" mean on the decentralized web, and is it a coherent concept?
-3. The post-cloud architecture is a hybrid: centralized where efficient, decentralized where resilient. Who decides which functions are handled centrally vs. decentrally? If the same companies that control the cloud also control the decentralized infrastructure, is it truly decentralized?
+1. The IETF's motto is "rough consensus and running code." Contrast this with the ITU's formal voting process (one country, one vote). What are the strengths and weaknesses of each approach for developing technical standards?
+2. The "right to be forgotten" (EU GDPR, 2018) requires search engines to delist certain results. A court in one country orders a global delisting. Another country argues this is extraterritorial censorship. How should a global internet service resolve this conflict? What technical mechanisms exist for geo-limited content restrictions?
+3. Your organisation's web application is blocked in a country that has mandated state-controlled root CA certificates for TLS interception. Users in that country are presented with a certificate warning when accessing your site. What are your options? Analyse the security, ethical, and business implications of each.
 
-#### Practice Problems
+---
 
-- Publish a website to IPFS and access it through a public gateway. Observe how content addressing works: modify the content and observe that the CID (Content Identifier) changes. Discuss the implications for link persistence.
-- Create a Decentralized Identifier (DID) and issue a simple Verifiable Credential (e.g., a "course completion" credential). Verify the credential using a DID resolver.
-- Compare two federated social media protocols (ActivityPub and AT Protocol). Analyze their architectural differences: how does content discovery work? How is moderation handled? Which approach is more resistant to platform capture?
+### Lecture 12: The 2040 Web — WebAssembly, Edge AI, and the Decentralised Frontier
+
+**Course:** IT107 — Web Technologies & Internet Architecture  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+#### Overview
+
+The web of 2040 is not the web of 2020. Three transformations define the decade: WebAssembly (Wasm) has broken the browser's language monopoly, enabling near-native performance for applications written in any compiled language. Edge AI runs machine learning inference at CDN PoPs and in browsers themselves, personalising experiences without sending data to centralised servers. And the decentralised web — IPFS, Solid, blockchain-based identity — challenges the platform concentration that defined the 2010s and 2020s. This final lecture surveys the frontier and asks students to imagine the web of 2050.
+
+#### Key Topics
+
+- **WebAssembly — The Browser as Universal Runtime:** WebAssembly (Wasm) is a binary instruction format that runs at near-native speed in the browser, alongside JavaScript. By 2040, Wasm has expanded beyond the browser: Wasm runtimes (Wasmtime, Wasmer, WasmEdge) execute Wasm modules on servers, edge devices, and embedded systems. The lecture covers: Wasm's security model (sandboxed execution with capability-based access — a Wasm module cannot access the filesystem, network, or OS unless explicitly granted), the Component Model (a standard for composing Wasm modules written in different languages — a Rust module for image processing called from a Python module for orchestration), and Wasm on the server (replacing Docker containers for some workloads — Wasm modules start in microseconds vs. seconds for containers, with stronger isolation guarantees). The practical demonstration: compile a C program to Wasm with Emscripten and run it in the browser and on the server.
+- **Edge AI — Intelligence at the Periphery:** Machine learning models running at CDN edges (Cloudflare Workers AI, Fastly Compute@Edge ML) and in browsers (WebGPU-accelerated inference with Transformers.js or ONNX Runtime Web). Use cases: real-time content moderation (classifying uploaded images at the edge before they reach the origin), personalisation (inferring user preferences from local behaviour without sending data to servers), and assistive AI (real-time translation, text-to-speech, speech-to-text in the browser — no cloud API calls). The lecture covers the architectural implications: edge AI reduces latency (no round-trip to a central inference server), reduces bandwidth (raw data — images, audio — stays at the edge; only metadata is sent), and enhances privacy (sensitive data never leaves the user's device or the trusted edge). The operational challenge: model deployment at the edge requires synchronising model versions across hundreds of PoPs — the same problem as CDN cache invalidation, but for gigabytes of model weights.
+- **The Decentralised Web:** A reaction against the platform concentration of the 2010s–2020s (Google, Meta, Amazon controlling the majority of web traffic and data). Three paradigms: IPFS (InterPlanetary File System) — content-addressed storage where files are identified by their cryptographic hash, not their location; Solid (Social Linked Data, Tim Berners-Lee's project) — users store their data in "pods" they control, granting applications access rather than surrendering data to platforms; and blockchain-based identity (self-sovereign identity using decentralised identifiers — DIDs — and verifiable credentials). The lecture analyses the adoption gap: these technologies exist and are technically functional, but network effects favour centralised platforms. The 2040 question: will regulation (the EU's Digital Markets Act, the US's DATA Act) succeed in forcing interoperability where market forces have not?
+- **The Web of 2050 — Student Speculations:** The final segment of the lecture is interactive. Students are asked to propose and defend a vision of the web in 2050 based on current trends. Past student predictions that proved prescient: "By 2035, most web content will be generated by AI" (a 2025 prediction), "HTTP/3 will replace TCP for all user-facing traffic" (a 2020 prediction), and "TLS will be mandatory for all HTTP traffic" (a 2014 prediction, achieved by 2020). The lecture closes with the instructor's own prediction: by 2050, the distinction between "the web" and "computing" will dissolve. The browser will be the operating system; the CDN will be the data centre; the API will be the file system.
+
+#### Lecture Notes
+
+The unifying theme of the 2040 web is the movement of computation toward the user. In the 2000s, computation happened on the server; the browser was a thin client rendering HTML. In the 2010s–2020s, JavaScript SPA frameworks moved logic to the browser. In the 2030s–2040s, WebAssembly and edge computing have continued this trajectory: the user's device and the CDN edge node are not just rendering surfaces but active computational participants.
+
+This has profound implications for the IT professional. The infrastructure you manage is no longer a cluster of servers in a data centre; it is a distributed mesh spanning user devices, CDN edges, regional caches, and central origins. Debugging a performance problem means tracing a request across four tiers of infrastructure, two protocol transitions (QUIC → HTTP/3 → gRPC → SQL), and three security contexts (browser sandbox, edge isolate, origin server).
+
+The Norse closing: the web is not a destination but a journey — like the Viking voyages that connected the known world. The longships of the 2040s are QUIC packets; the navigational stars are DNS records; the trading posts are CDN PoPs. The IT professional is the navigator, understanding the winds and currents, maintaining the ship, and ensuring the cargo arrives. What new lands will the web discover by 2050? That question is yours to answer.
+
+#### Required Reading
+
+- Haas, A. et al. (2039). "Bringing the Web up to Speed with WebAssembly." *Communications of the ACM*, 62(12).
+- Cloudflare Research (2040). "Edge AI: Running Machine Learning at the Network Edge." Technical report.
+- Berners-Lee, T. (2035). "Solid: A Platform for Decentralised Social Applications." Technical specification.
+- Benet, J. (2034). "IPFS: Content-Addressed, Versioned, P2P File System." *Proceedings of the IEEE*, 112(4).
+
+#### Discussion Questions
+
+1. WebAssembly's security model relies on capability-based sandboxing. Compare this to Docker's namespace-based isolation and to browser same-origin policies. Which provides the strongest isolation guarantee, and why?
+2. Edge AI performs inference on user data at the CDN edge. The user's data never reaches a central server. Is this privacy-preserving, or does it merely shift trust from the application provider to the CDN provider? Analyse the threat model.
+3. The original vision of the web (Tim Berners-Lee, 1989) was a decentralised, read-write information space. Thirty-five years of centralisation later, the decentralised web movement seeks to return to that vision. Is this technically achievable, or do network effects make platform concentration inevitable? Defend your answer with reference to specific technologies and economic forces.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT107 will consist of 8 essay questions, from which students choose 4 to answer in depth (1,000–1,500 words each). Answers should demonstrate not only technical knowledge but also architectural reasoning and ethical awareness.
+### Component A: Written Examination (60%)
 
-### Sample Essay Questions
+Select **five** of the following eight questions. Each answer should demonstrate technical depth, operational reasoning, and the ability to connect concepts across multiple lectures.
 
-1. **QUIC and the End of TCP:** HTTP/3 over QUIC represents the largest transport-layer shift in web history. Analyze the architectural decisions that QUIC makes (UDP-based, built-in encryption, stream multiplexing, connection migration) and evaluate their consequences for web performance, network management, and user privacy. Has QUIC's encryption-by-default design been a net positive for the web?
+1. **End-to-End Request Tracing:** A user in São Paulo reports that `yggdrasil.edu` takes 8 seconds to load. Trace the entire request lifecycle — from browser URL entry to fully rendered page — identifying every protocol, infrastructure component, and potential bottleneck. For each stage, specify the diagnostic tool you would use to measure latency and the normal expected time range. Distinguish between problems at the DNS layer, the TLS layer, the HTTP layer, the CDN layer, and the application layer.
 
-2. **DNS as Infrastructure and Battleground:** DNS is simultaneously a technical protocol, a critical infrastructure, and a political battleground. Trace how DNS has been used for content control (censorship, copyright enforcement), analyze the privacy implications of DNS resolution, and evaluate whether the multistakeholder governance model (ICANN) adequately balances technical, commercial, and human rights interests.
+2. **Protocol Evolution and Operational Impact:** HTTP has evolved from 1.0 (1996) through 1.1, 2, and now 3 (QUIC). For each major version transition, describe: (a) the key architectural change, (b) the operational problem it solved, (c) the new operational challenges it created, and (d) the changes required in IT infrastructure (firewalls, load balancers, monitoring tools). Conclude with an assessment of whether the web would be better or worse if we had stayed with HTTP/1.1 and optimised at higher layers.
 
-3. **The API Paradigm Shift:** REST, GraphQL, and Agent-Native Protocol represent three generations of API design. Compare their architectural assumptions about who the client is (human developer, application, AI agent), how data is modeled, and where complexity lives. Which paradigm is best suited for a 2040 web dominated by AI-mediated interactions?
+3. **DNS Failure Scenario:** At 03:00 UTC, your monitoring system alerts that `api.yggdrasil.edu` is unreachable. The application servers are healthy, but DNS resolution returns SERVFAIL. Describe your diagnostic process step by step, including the specific `dig` commands you would run and what each output would tell you. Identify at least five distinct root causes that could produce this symptom, ordered from most to least likely. For each, describe the remediation.
 
-4. **Edge Computing and the Geography of the Web:** CDNs have evolved from static caches to general-purpose edge compute platforms. Analyze the architectural implications: does pushing computation to the edge improve user experience at the cost of infrastructure centralization? Discuss the geopolitical dimensions of a web where three companies control the majority of edge infrastructure.
+4. **TLS Certificate Architecture:** You are responsible for TLS across 200 subdomains (`*.yggdrasil.edu`). Design a certificate management architecture that: provisions certificates automatically, monitors expiry with escalating alerts (30 days, 7 days, 24 hours), handles renewal failures gracefully, and supports both RSA and ECDSA certificates with automatic algorithm selection based on client capabilities. Include your choice of CA (Let's Encrypt, DigiCert, or private CA), ACME client, and validation method (HTTP-01 vs. DNS-01). Justify each choice.
 
-5. **WebAssembly and the Language-Neutral Web:** WebAssembly breaks JavaScript's monopoly on browser execution. Evaluate the architectural, security, and social implications: does a language-neutral web increase or decrease the diversity of the web ecosystem? Is the "universal bytecode" vision achievable, or will platform-specific runtimes always be necessary?
+5. **CDN and Cache Architecture:** A news organisation serves 50 million page views per day with a global audience. The homepage changes every 15 minutes; article pages are immutable after publication; images change rarely. Design the CDN caching strategy: specify `Cache-Control` headers for each content type, explain your choice of TTLs, describe the cache invalidation mechanism for homepage updates, and calculate the expected origin hit rate. Address the "thundering herd" problem for breaking news events when the homepage cache expires.
 
-6. **The Decentralized Web: Success and Failure:** The DWeb movement has achieved notable successes (IPFS for archiving, DIDs for credentials, ActivityPub for social media) but has not displaced centralized platforms. Analyze the architectural, economic, and social factors that limit DWeb adoption. Is a hybrid "post-cloud" architecture the stable equilibrium, or will one paradigm eventually dominate?
+6. **API Security Architecture:** Design the security architecture for a REST API that serves both a mobile application (untrusted client) and internal microservices (trusted). Address: authentication (OAuth 2.0 flow selection and justification), authorisation (role-based access control with scopes), transport security (TLS configuration, certificate pinning considerations), rate limiting (per-user, per-IP, and global), and audit logging. For each layer, specify what would be implemented in the reverse proxy (nginx/Caddy) versus the application code, and justify that division.
 
-7. **Privacy vs. Functionality on the Modern Web:** Many web features (personalization, recommendation, analytics, security) require data collection. Analyze the tension between privacy and functionality, evaluating architectural approaches (on-device processing, differential privacy, federated learning, zero-knowledge proofs) that attempt to preserve both. Can the web be simultaneously private and powerful?
+7. **WAF Deployment:** Your organisation adopts a Web Application Firewall. Describe the deployment process from initial installation to full blocking mode: (a) initial configuration and rule selection (OWASP CRS vs. commercial rules), (b) the monitoring phase (what metrics to collect, how to identify false positives), (c) the progressive enablement strategy (which rules to enable first, how to escalate), and (d) the incident response process for a WAF-blocked attack. Include a discussion of WAF bypass techniques and how your architecture addresses them.
 
-8. **The Web at 60: Projecting to 2050:** Based on the architectural trends studied in this course (QUIC, edge computing, WebAssembly, AI mediation, decentralized protocols), project the web's architecture to 2050. What will have changed fundamentally? What will remain surprisingly stable? Defend your predictions with technical reasoning and historical precedent.
+8. **The 2050 Web:** Based on the technologies and trends covered in this course — QUIC, WebAssembly, edge computing, AI, decentralised identity — construct a technically detailed vision of the web in 2050. Describe: the dominant protocols, the deployment architecture (where does computation happen?), the identity model (how do users authenticate and authorise?), and the role of the IT professional. Defend each element of your vision with reference to current trajectory and unresolved challenges.
 
-### Final Project Option
+### Component B: Practical Lab Examination (40%)
 
-In lieu of the final examination, students may complete a substantial final project:
+A 3-hour practical examination in YggLab NetForge. Students are given a scenario — "Deploy a secure, globally distributed web application" — and must:
 
-**Design and prototype a web application that exemplifies 2040 architectural principles.** The project must include: (1) a technical architecture document (10+ pages) justifying design decisions with reference to course concepts; (2) a working prototype demonstrating at least three of: HTTP/3, edge compute, WebAssembly, IPFS, DIDs/VCs, or AI-mediated interaction; (3) a privacy impact assessment; (4) an accessibility audit; and (5) a 15-minute presentation to the class.
+1. Configure an nginx reverse proxy with TLS, security headers, rate limiting, and reverse proxying to a backend application.
+2. Deploy the application behind a CDN (CloudFront or Cloudflare) with appropriate caching rules.
+3. Configure DNS (Route 53 or Cloudflare DNS) with appropriate record types and TTLs.
+4. Implement monitoring: synthetic checks for HTTPS validity, DNS resolution, and HTTP response codes.
+5. Diagnose and fix a deliberately broken configuration (expired certificate, missing CORS headers, incorrect cache TTLs) introduced by the examiner.
+
+**Evaluation Criteria:**
+- Correctness (all services functional and secure)
+- Security (TLS configuration, security headers, WAF rules)
+- Performance (appropriate caching, CDN configuration, compression)
+- Monitoring (health checks, alerting thresholds)
+- Documentation (operational runbook describing the deployment)
 
 ---
 
-**Þǫkk — Thank you for your attention. May the threads of the web ever hold strong.**
+*The web is the largest machine humanity has ever built. It carries our words, our commerce, our knowledge, and our dreams. To understand its architecture is to understand the nervous system of civilisation. To operate it with skill and integrity is to be a steward of that civilisation. Serve well.* ᛟ
+
+— Dr. Sigrún Vérendóttir, University of Yggdrasil, 2040
