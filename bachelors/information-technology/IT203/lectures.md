@@ -1,349 +1,688 @@
-# IT203: Database Administration & Data Management
+# IT203: Database Administration
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4
-**Prerequisites:** IT201 (System Administration)
-**Description:** Databases are the critical infrastructure of the information age — the silent engines that power every transaction, query, and analytics pipeline. This course provides comprehensive training in database administration, data modelling, performance tuning, backup and recovery, and the emerging data architectures of 2040. Students work with PostgreSQL (the primary teaching database), MySQL, Redis, MongoDB, and cloud-native databases in the Yggdrasil Sandbox. By the end of the course, students can design schemas that scale, diagnose performance bottlenecks, implement high-availability replication, and reason about the trade-offs between relational, NoSQL, and NewSQL systems. The course culminates in a capstone where students design and operate a database infrastructure for a simulated high-traffic web application.
+**Credits:** 4  
+**Description:** Database Administration & Data Management
 
 ---
 
-## Lecture 1: The Database Administrator as Steward — Roles, Responsibilities, and Ethics
+## Lectures
 
-The database administrator (DBA) is the custodian of an organisation's most valuable asset: its data. This lecture examines the DBA's role, the ethical obligations that accompany access to sensitive information, and the evolution of database administration in the platform engineering era.
+ᚠ **Lecture 1: The Database Administrator's Worldview**
 
-**The DBA's responsibilities** span the entire data lifecycle. **Design:** creating logical and physical schemas that accurately model business entities and relationships. **Implementation:** installing, configuring, and patching database software. **Performance:** tuning queries, indexes, and parameters to meet latency and throughput requirements. **Availability:** ensuring databases are accessible when needed through replication, clustering, and failover. **Integrity:** preventing and correcting data corruption through constraints, backups, and validation. **Security:** controlling access, encrypting data, auditing activity, and complying with regulations. **Growth:** planning capacity and archiving historical data. In 2040, the DBA role has split into **specialist tracks**: operational DBAs manage production instances; development DBAs optimise application schemas; data platform engineers build self-service database platforms; and data governance officers ensure compliance and quality.
-
-**The ethics of data stewardship** are profound. A DBA with superuser access can read, modify, or delete any record. **Privacy obligations** require that personal data be accessed only for legitimate purposes, minimised to what is necessary, and protected from unauthorised disclosure. **Regulatory compliance** (GDPR, CCPA, the Nordic Data Compact) imposes legal obligations with severe penalties for violations. **Insider threats** — malicious or negligent actions by authorised users — are a leading cause of data breaches. The **Yggdrasil Data Stewardship Oath**, administered to all database administrators, includes: "I will treat data as a sacred trust, not as a resource to be exploited. I will not access data beyond what my role requires. I will report vulnerabilities and breaches promptly. I will ensure that data outlives the systems that store it."
-
-**The platform engineering perspective** on databases treats database provisioning as a self-service platform capability rather than a ticket-driven request. **Database as a Service (DBaaS)** platforms (Amazon RDS, Azure SQL, Google Cloud SQL, the University's *MímirDB*) provide automated provisioning, patching, backup, and monitoring. **Internal DBaaS** platforms (built on Kubernetes operators like **CloudNativePG**, **KubeDB**, or **Zalando Postgres Operator**) enable developers to provision databases on demand while platform teams enforce standards for security, backup, and compliance. The DBA of 2040 is less a "database babysitter" and more a "database platform engineer" who designs and operates these self-service platforms.
-
-**Required Reading:**
-- Craig S. Mullins, *Database Administration: The Complete Guide to DBA Practices and Procedures* (2nd ed., Addison-Wesley, 2012/2035), ch. 1–3
-- Thomas M. Connolly & Carolyn E. Begg, *Database Systems: A Practical Approach to Design, Implementation, and Management* (6th ed., Pearson, 2014/2035), ch. 20 ("Database Administration and Security")
-- Don Burleson, *Oracle DBA Ethics" (Rampant TechPress, 2003/2035)
-- University of Yggdrasil, "The Yggdrasil Data Stewardship Oath and Policy Framework" (2040)
-
-**Discussion Questions:**
-1. The DBA role has fragmented into multiple specialisations. Is this fragmentation a sign of professional maturation, or does it create coordination problems when no single person understands the entire data landscape?
-2. Data stewardship ethics are often in tension with operational convenience (e.g., encrypting backups makes recovery slower). How should organisations balance ethical obligations against practical constraints?
-3. Self-service database platforms democratise access but can lead to "database sprawl" (hundreds of unmanaged instances). Is the solution stricter governance, better automation, or a cultural shift toward shared responsibility?
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 2: Relational Database Architecture — PostgreSQL Internals
+### Overview
 
-Understanding how a database works internally is essential for effective administration. This lecture examines the architecture of PostgreSQL, the most feature-rich open-source relational database, and the principles that underlie its design.
+Database administration is the discipline of ensuring that an organization's most valuable asset—its data—is available, consistent, secure, and performant. This opening lecture establishes the DBA as a guardian of institutional memory, a performance engineer, and a security officer. By 2040, the DBA's role has evolved from manual tuning to AI-assisted optimization, but the core responsibility remains: the data must survive hardware failures, human errors, and malicious attacks.
 
-**PostgreSQL architecture** uses a **client-server model** with a **postmaster** process that listens for connections and spawns **backend processes** for each client. **Shared memory** contains buffers, locks, and process information accessible to all backends. **Background writer** flushes dirty buffers to disk. **WAL writer** writes Write-Ahead Log records. **Autovacuum** reclaims storage and updates statistics. **Checkpointer** performs periodic checkpoints. **Stats collector** gathers activity statistics. **WAL archiver** and **WAL receiver/sender** handle replication. This multi-process architecture (as opposed to MySQL's thread-based model) provides process isolation and crash resilience at the cost of higher memory overhead.
+### Key Topics
 
-**Storage internals** include: **table files** (one file per table, in 1GB segments); **TOAST** (The Oversized-Attribute Storage Technique, for large values); **indexes** (B-tree, hash, GiST, SP-GiST, GIN, BRIN); **WAL** (Write-Ahead Log, for crash recovery and replication); **clog** (commit log, tracking transaction status); and **multixact** (multi-transaction status for row-level locking). **MVCC (Multi-Version Concurrency Control)** is PostgreSQL's approach to concurrency: readers do not block writers, and writers do not block readers. Each transaction sees a **snapshot** of the database at its start time. Old row versions are eventually removed by **VACUUM**. Understanding MVCC is essential for troubleshooting bloat, tuning vacuum, and interpreting query plans.
+- The DBA's triple mandate: availability, integrity, and performance
+- Data as organizational asset: valuation, classification, and lifecycle
+- The 2040 data landscape: polyglot persistence, AI-generated data, and quantum-encrypted archives
+- Ethics and compliance: GDPR evolution, data sovereignty, and research ethics
+- DBAs and developers: collaboration, conflict, and the boundary between operations and engineering
 
-**Configuration management** in PostgreSQL is controlled by **postgresql.conf** (main configuration), **pg_hba.conf** (client authentication), and **pg_ident.conf** (user name mapping). Key parameters: **shared_buffers** (memory for caching table data, typically 25% of RAM); **effective_cache_size** (estimate of total available cache, used by the query planner); **work_mem** (memory per sort/hash operation); **maintenance_work_mem** (memory for VACUUM, CREATE INDEX, etc.); **max_connections** (concurrent client connections); **wal_level** (WAL detail level: minimal, replica, logical); **max_wal_size** and **checkpoint_completion_target** (tuning checkpoint frequency); and **random_page_cost** (planner's estimate of random read cost, should be tuned to storage type). In 2040, **AI-assisted tuning** (e.g., the *Mímir Tuner* developed at Yggdrasil) analyses workload patterns and recommends configuration changes.
+### Lecture Notes
 
-**Required Reading:**
-- Bruce Momjian, *PostgreSQL: Introduction and Concepts* (Addison-Wesley, 2001/2035) — foundational, though some details have evolved
-- Emanuel Calvo & Angélique J. Smith, *PostgreSQL High Performance* (Packt, 2035), ch. 1–4
-- Gregory Smith, *PostgreSQL 9.0 High Performance* (Packt, 2010/2035), ch. 2–4 (still relevant for core concepts)
-- University of Yggdrasil, "Mímir Tuner: AI-Assisted PostgreSQL Configuration Optimisation" (2039)
+Organizations often claim that "data is our most valuable asset," yet they treat database administration as a cost center. This lecture challenges that framing. The lecture opens with a quantitative argument: in 2040, the average enterprise's data is valued at 35% of its market capitalization (McKinsey, 2038). A database outage that destroys customer trust can erase more value than a physical factory fire. The DBA is not merely a technician but a steward of this value.
 
-**Discussion Questions:**
-1. PostgreSQL's multi-process architecture provides isolation but uses more memory than thread-based designs. Is the isolation benefit worth the memory cost in an era of abundant RAM?
-2. MVCC eliminates read locks but creates table bloat that must be managed by VACUUM. Is MVCC a genuine advance over lock-based concurrency, or does it merely trade one problem (locking) for another (bloat and vacuum tuning)?
-3. AI-assisted tuning promises to optimise database configuration automatically, but it requires detailed workload data that may be sensitive. Is the performance gain worth the privacy implications of sharing workload patterns with an AI system?
+**Availability** is measured in nines: 99.9% (8.77 hours downtime/year), 99.99% (52.6 minutes), 99.999% (5.26 minutes). Each additional nine increases cost exponentially. The lecture covers availability architectures: single-instance (acceptable for dev/test), primary-replica (read scaling, failover), and distributed consensus (Paxos, Raft) for true high availability. By 2040, **autonomous databases** (Oracle Autonomous, Azure SQL Managed Instance, CockroachDB) self-heal from common failures, but the DBA remains accountable for architecture decisions and edge-case recovery.
 
----
+**Integrity** means that data is accurate, consistent, and protected against corruption. Constraints (primary keys, foreign keys, check constraints), transactions (ACID properties), and checksums (page verification) are the technical foundations. But integrity also requires procedural controls: change management for schema modifications, data validation pipelines, and reconciliation processes that compare systems of record against operational copies. The 2034 *Yggdrasil Grade Corruption Incident*—in which a bug in a batch update set 12,000 student grades to NULL—demonstrated that technical constraints alone cannot prevent integrity failures; peer review of DML (Data Manipulation Language) scripts is mandatory.
 
-## Lecture 3: SQL Mastery for Administrators — Query Optimisation and Performance Tuning
+**Performance** is the art of making queries fast without compromising correctness. The lecture introduces the **performance triad**: hardware (CPU, memory, I/O subsystem), configuration (buffer pool size, connection pooling, parallelism), and design (schema normalization, indexing, query optimization). By 2040, **AI query optimizers** (e.g., Oracle's AutoML for SQL, PostgreSQL's pg_plan_advsr) suggest index creation and query rewrites, but the DBA must evaluate these suggestions against workload characteristics and maintenance overhead.
 
-SQL is the language of relational databases, and mastering it is the foundation of database administration. This lecture covers advanced SQL, query planning, index design, and performance tuning.
+**Data classification** organizes data by sensitivity and regulatory requirements. **Public** data (course catalogs, published research) has minimal restrictions. **Internal** data (employee schedules, budget projections) requires authentication. **Confidential** data (student records, patient health information) requires encryption, access logging, and need-to-know authorization. **Restricted** data (research involving human subjects, national security classifications) requires air-gapped storage, multi-party control, and audit trails. By 2040, **automated data classification** (AI scanning content to infer sensitivity) supplements manual classification but requires human validation.
 
-**Advanced SQL** includes: **window functions** (`ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `LEAD()`, `LAG()`, `FIRST_VALUE()`, `LAST_VALUE()`, `NTH_VALUE()`, `SUM() OVER (...)`, `AVG() OVER (...)`) for analytical queries without self-joins; **common table expressions (CTEs)** (`WITH recursive_cte AS (...)`) for readable, composable queries; **recursive queries** for hierarchical data (org charts, bill of materials, graph traversal); **lateral joins** (`LATERAL`) for correlated subqueries in the FROM clause; **JSON/JSONB operators** (`->`, `->>`, `#>`, `@>`, `?`, `jsonb_agg`, `jsonb_object_agg`) for semi-structured data; **full-text search** (`to_tsvector`, `to_tsquery`, `ts_rank`, `ts_headline`); **geospatial queries** (PostGIS extension: `ST_Distance`, `ST_Within`, `ST_Intersects`); and **custom aggregates** and **procedural code** (PL/pgSQL functions, triggers). In 2040, **AI-assisted SQL generation** (natural language to SQL, query explanation, and optimisation suggestions) is standard in database IDEs.
+**Ethics and compliance** have grown more complex. The **GDPR** (General Data Protection Regulation, EU 2018) and its 2030 amendments mandate data minimization, purpose limitation, and the right to explanation for automated decisions. The **Global Data Protection Accord** (2034) harmonized standards across 80 nations. **Research ethics** (the UoY Institutional Review Board) govern data collected from human subjects, requiring informed consent, anonymization, and secure storage. The DBA must implement technical controls that satisfy these requirements: encryption at rest and in transit, access logging, data retention policies, and secure deletion (cryptographic erasure).
 
-**Query planning** is the process by which the database translates SQL into an execution plan. **EXPLAIN** shows the plan; **EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)** shows the plan with actual execution statistics. Key plan nodes: **Seq Scan** (read entire table — slow for large tables); **Index Scan** (read index, then fetch rows from table); **Index Only Scan** (read index without table access — fastest); **Bitmap Heap Scan** (bitmap index scan followed by heap access); **Nested Loop** (join small outer table with inner table using index); **Hash Join** (hash the smaller table, probe with larger); **Merge Join** (sort both tables, merge — efficient for large sorted inputs); **Sort** (ORDER BY); **Aggregate** (GROUP BY); and **Limit** (TOP N). Understanding these nodes enables diagnosis of slow queries.
+### Required Reading
 
-**Index design** is the most impactful performance optimisation. **B-tree indexes** (the default) support equality and range queries on scalar data. **Partial indexes** (`CREATE INDEX ... WHERE condition`) index only a subset of rows, reducing size and maintenance cost. **Expression indexes** (`CREATE INDEX ON table (lower(column))`) index computed values. **Covering indexes** (include additional columns) enable Index Only Scans. **Composite indexes** (multiple columns) support multi-column queries but require careful column ordering (most selective first, equality before range). **GIN indexes** support full-text search and JSONB containment. **GiST indexes** support geospatial and range queries. **BRIN indexes** (Block Range INdexes) are tiny indexes for naturally ordered data (timestamps, sequences). In 2040, **AI-assisted index advisors** (e.g., PostgreSQL's *hypopg* with ML-based recommendation) suggest indexes based on query workload.
+- Lightstone, S., et al. (2010). *Database Administration: The Complete Guide to Practices and Procedures*. Addison-Wesley. (Updated concepts for 2040.)
+- McKinsey & Company (2038). "The Value of Data: Enterprise Asset Valuation in the 2030s." *McKinsey Digital Report*.
+- Yggdrasil IT Operations (2034). "The Grade Corruption Incident: NULL Values and Peer Review." *UoY Operations Postmortem* 2034-09.
+- European Commission (2030). *GDPR Amendment 2030: AI and Automated Decision-Making*. EU Official Journal.
+- Yggdrasil Ethics Board (2035). "Data Stewardship Guidelines for Database Administrators." *UoY Ethics Policy* v5.2.
 
-**Lab Exercise:** Students optimise a poorly performing database for a simulated e-commerce application. They must: analyse slow queries using EXPLAIN ANALYZE; design appropriate indexes; rewrite inefficient queries using CTEs and window functions; partition large tables; and tune PostgreSQL configuration parameters. Performance improvement targets: reduce p95 query latency by 80% and eliminate table scans on the top 10 queries.
+### Discussion Questions
 
-**Required Reading:**
-- Joe Celko, *SQL for Smarties: Advanced SQL Programming* (5th ed., Morgan Kaufmann, 2015/2035), ch. 1–5, 8, 10
-- Markus Winand, *SQL Performance Explained* (3rd ed., 2015/2035), ch. 1–5
-- Laurenz Albe & Hans-Jürgen Schönig, *PostgreSQL Query Optimization" (Packt, 2035), ch. 1–4
-- University of Yggdrasil, "Query Optimisation Case Study: Reducing E-Commerce Latency from 2s to 50ms" (2039)
+1. Autonomous databases promise to eliminate manual tuning. Does this make the DBA obsolete, or does it elevate the DBA's role from mechanic to architect?
+2. The 2034 Grade Corruption Incident was caused by a DML script without peer review. Should all production DML require two-party approval, or does this create excessive overhead for routine updates?
+3. AI-automated data classification can misclassify sensitive data as public. What validation processes ensure classification accuracy?
+4. The right to explanation (GDPR 2030) requires that automated decisions be interpretable. How should DBAs design logging and audit trails to satisfy this requirement?
 
-**Discussion Questions:**
-1. Window functions are powerful but can be difficult to understand and debug. Are they an essential SQL feature, or do they encourage overly complex queries that should be broken into simpler steps?
-2. Index design is often described as an art rather than a science. Is there a systematic methodology for index design, or does it inevitably require intuition and experimentation?
-3. AI-assisted index advisors recommend indexes based on workload analysis, but workload patterns change. How should administrators balance the cost of creating and maintaining indexes against the benefits of AI recommendations?
+### Practice Problems
 
----
-
-## Lecture 4: High Availability and Replication — Keeping Data Accessible
-
-Downtime is expensive. This lecture covers the technologies and architectures that ensure databases remain available despite hardware failures, software bugs, and human error.
-
-**PostgreSQL replication** keeps standby servers synchronised with the primary. **Streaming replication** (physical replication, since PostgreSQL 9.0) streams WAL records from primary to standby in near-real-time. **Synchronous replication** waits for confirmation from one or more standbys before committing, ensuring zero data loss at the cost of latency. **Asynchronous replication** commits on the primary without waiting, minimising latency but with a small risk of data loss on failover. **Cascading replication** allows standbys to replicate from other standbys, reducing load on the primary. **Logical replication** (since PostgreSQL 10) replicates at the table level, enabling selective replication, cross-version replication, and replication to non-PostgreSQL systems. In 2040, **logical replication** is the standard for active-active architectures and data migration.
-
-**Failover and promotion** transfer primary responsibility to a standby. **Manual failover** requires an administrator to stop the old primary, promote a standby (`pg_ctl promote`), and redirect clients. **Automatic failover** uses tools like **Patroni** (Python-based, uses DCS like etcd or ZooKeeper for leader election), **repmgr** (command-line management), or **pg_auto_failover** (Citus extension). **Connection pooling** (PgBouncer, Odyssey) reduces connection overhead and enables transparent failover. **In 2040, Kubernetes operators** (CloudNativePG, Zalando Postgres Operator, StackGres) automate failover, backup, and scaling within container orchestration platforms.
-
-**High availability architectures** vary by tolerance for downtime and data loss. **Single primary with hot standby:** one primary, one or more standbys; failover to standby on primary failure. **Single primary with warm standby:** standby is not streaming but restored from backups; longer RTO. **Dual primary (multi-master):** both nodes accept writes; requires conflict resolution (rarely used with PostgreSQL, more common with MySQL Group Replication or Galera Cluster). **Active-active with logical replication:** multiple primaries, each replicating specific tables or databases to others; used for geographic distribution and workload segregation. **Shared storage:** multiple nodes access the same storage (SAN, NAS, or distributed filesystem); only one is primary at a time. In 2040, **distributed SQL databases** (CockroachDB, YugabyteDB, Google Spanner) provide built-in high availability and horizontal scalability, challenging traditional primary-standby architectures.
-
-**The Yggdrasil Database Platform** operates a **Patroni-managed PostgreSQL cluster** with: one primary (writes), three synchronous standbys (zero RPO), two asynchronous standbys (disaster recovery), automatic failover (<30 seconds), PgBouncer connection pooling, and continuous backup to the Mímir Archive (WAL archiving + weekly base backups). Students configure a miniature version of this architecture in the Sandbox.
-
-**Required Reading:**
-- Zoltan Böszörményi & Hans-Jürgen Schönig, *PostgreSQL Replication* (2nd ed., Packt, 2015/2035), ch. 1–4
-- Alexander Kukushkin, "Patroni: A Template for PostgreSQL High Availability" (GitHub, 2035)
-- Gabriele Bartolini et al., "CloudNativePG: The Kubernetes Operator for PostgreSQL" (EDB, 2035)
-- Martin Kleppmann, *Designing Data-Intensive Applications*, ch. 5 ("Replication")
-- University of Yggdrasil, "The Yggdrasil Database Platform: Patroni, PgBouncer, and Kubernetes" (2039)
-
-**Discussion Questions:**
-1. Synchronous replication guarantees zero data loss but increases write latency. For a financial trading application, is synchronous replication mandatory, or can asynchronous replication with careful monitoring suffice?
-2. Automatic failover reduces RTO but can cause split-brain if network partitions occur. Is the risk of automatic failover (false positives, data inconsistency) worth the benefit of reduced downtime?
-3. Distributed SQL databases (CockroachDB, Spanner) promise high availability and scalability without the complexity of manual replication management. Will they eventually replace traditional PostgreSQL/MySQL replication, or will the familiarity and maturity of traditional databases preserve their dominance?
+- Conduct a data classification exercise for a fictional university database. Identify tables, columns, and rows that fall into each classification tier. Propose technical controls for Confidential and Restricted data.
+- Analyze an AI-generated query optimization suggestion. Evaluate its impact on: query latency, index maintenance overhead, storage cost, and concurrent workload performance.
 
 ---
 
-## Lecture 5: Backup, Recovery, and Point-in-Time Restoration
+ᚢ **Lecture 2: Relational Database Architecture: Pages, Transactions, and the Storage Engine**
 
-Backups are the insurance policy of database administration. This lecture covers backup strategies, tools, and the procedures for recovering from data loss.
-
-**PostgreSQL backup methods** include: **SQL dumps** (`pg_dump` for single databases, `pg_dumpall` for all databases); **file-system-level backups** (copying the data directory with `tar` or `rsync`, requiring the server to be stopped or using `pg_start_backup` / `pg_stop_backup` for online backup); **continuous archiving** (WAL archiving to a secondary location, enabling point-in-time recovery); and **logical replication** (replicating to a standby that serves as a warm backup). In 2040, **incremental backups** (using `pg_basebackup` with `--wal-method=fetch` and incremental options) reduce backup time and storage. **Cloud-native backups** (RDS automated backups, Azure Database backup, CloudNativePG scheduled backups) abstract the details.
-
-**Point-in-time recovery (PITR)** restores a database to any moment in time using a base backup and archived WAL files. The procedure: restore the base backup; create a `recovery.signal` file; configure `recovery_target_time` in `postgresql.conf`; start PostgreSQL; and the server replays WAL until the target time is reached. **PITR is essential** for recovering from logical errors (accidental `DELETE`, `DROP TABLE`, application bugs) that are not caught by failover. In 2040, **AI-assisted recovery** (analysing WAL to identify the exact moment before a destructive operation) reduces recovery time by 50–70%.
-
-**Backup tools** include: **pgBackRest** (modern, feature-rich: full/incremental/differential backups, compression, encryption, retention policies, S3/Azure/GCS support); **Barman** (2ndQuadrant's backup tool, similar to pgBackRest); **pg_probackup** (Postgres Professional's tool); **WAL-G** (modern, cloud-native, used by Yandex and CitusData); and **pg_dump** / **pg_dumpall** (logical dumps, always required for migrations and schema-only backups). In 2040, **pgBackRest** and **WAL-G** are the dominant open-source tools; **pg_dump** remains essential for logical backups and cross-version migration.
-
-**Recovery procedures** vary by failure type. **Hardware failure:** promote standby (if available) or restore from backup to new hardware. **Corruption:** identify extent of corruption with `pg_dump` or `amcheck`; restore from backup if corruption is widespread; use `zero_damaged_pages` for minor corruption (with data loss). **Logical error (human mistake):** use PITR to restore to before the error; extract the affected data; reload into production. **Ransomware:** restore from offline, immutable backups (WORM tape, air-gapped storage). **Disaster (data centre loss):** failover to geographically distant standby; or restore from offsite backup. In all cases, **testing recovery procedures** is essential: untested backups are Schrödinger's backups — they are both valid and invalid until you try to restore.
-
-**Required Reading:**
-- PostgreSQL Documentation, "Backup and Restore" (Chapter 26, 2040)
-- David Steele, "pgBackRest Documentation" (2035)
-- Martin Kleppmann, *Designing Data-Intensive Applications*, ch. 7 ("Batch Processing")
-- NIST, *Guide to Storage Encryption Technologies for End User Devices* (SP 800-111 Rev. 2, 2035)
-- University of Yggdrasil, "Database Recovery Procedures: Runbooks and Drill Schedules" (2039)
-
-**Discussion Questions:**
-1. PITR requires continuous WAL archiving, which consumes significant storage and bandwidth. For databases with high write volume, is the storage cost of PITR justified by the ability to recover from logical errors?
-2. Immutable backups (WORM, air-gapped) are the only reliable defence against ransomware, but they are expensive and slow to restore. Is the ransomware threat severe enough to mandate immutable backups for all databases, or only for critical systems?
-3. Testing recovery procedures is essential but disruptive. How often should organisations perform full recovery drills, and what are the risks of testing too infrequently versus too frequently?
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 6: NoSQL and NewSQL — Beyond the Relational Model
+### Overview
 
-Relational databases are not always the best choice. This lecture examines the alternatives: document stores, key-value stores, wide-column stores, graph databases, search engines, and the NewSQL systems that attempt to combine the best of both worlds.
+To administer a database effectively, one must understand its internal architecture. This lecture covers the storage engine—the component that translates SQL into physical disk operations. Students will learn about page structures, transaction logs, buffer pools, and the algorithms that ensure ACID compliance. The lecture uses PostgreSQL and InnoDB (MySQL/MariaDB) as primary examples, with references to SQL Server and Oracle where architectures differ.
 
-**Document stores** (MongoDB, Couchbase, Firestore) store semi-structured data as JSON-like documents. They are ideal for: rapidly evolving schemas (product catalogues, content management); hierarchical data (nested documents without joins); and mobile/sync applications (offline-first with conflict resolution). **MongoDB** features: flexible schema; rich query language (aggregation pipelines, text search, geospatial queries); sharding for horizontal scaling; and ACID transactions (since v4.0). **Trade-offs**: no JOINs (denormalisation required); eventual consistency in sharded clusters; and index bloat if schemas change frequently. In 2040, **MongoDB Atlas** (managed cloud service) is the dominant MongoDB deployment model.
+### Key Topics
 
-**Key-value stores** (Redis, DynamoDB, etcd, Riak) provide O(1) lookup by key. **Redis** is the dominant in-memory store: strings, hashes, lists, sets, sorted sets, bitmaps, hyperloglogs, streams, and geospatial indexes. It supports persistence (RDB snapshots, AOF logs), replication, clustering, and Lua scripting. **Use cases**: caching, session storage, rate limiting, real-time leaderboards, message queues (Redis Streams), and pub/sub. **DynamoDB** (AWS) is the dominant managed key-value store: single-digit millisecond latency, automatic scaling, global tables, and on-demand capacity. In 2040, **Redis** and **DynamoDB** are the standard choices for key-value workloads.
+- Storage engines: PostgreSQL heap, InnoDB, SQL Server Storage Engine, Oracle ASM
+- Page and block structures: headers, row data, free space, and pointers
+- Transaction architecture: WAL/transaction log, checkpoints, and recovery
+- Buffer management: LRU, clock sweep, and double buffering
+- Multi-version concurrency control (MVCC): snapshots, visibility rules, and vacuuming
 
-**Wide-column stores** (Cassandra, ScyllaDB, HBase, Bigtable) optimise for massive write throughput and wide tables with many columns. **Cassandra** features: peer-to-peer architecture (no single point of failure); tunable consistency (ONE, QUORUM, ALL); partition keys and clustering columns for data distribution and sorting; and CQL (Cassandra Query Language, SQL-like). **Use cases**: time-series data, sensor data, messaging, and write-heavy applications. **Trade-offs**: no JOINs, no ACID transactions (lightweight transactions since v2.0), and complex data modelling requirements.
+### Lecture Notes
 
-**Graph databases** (Neo4j, Amazon Neptune, TigerGraph, ArangoDB) model data as nodes and edges with properties. **Neo4j** uses **Cypher** query language: `MATCH (p:Person)-[:KNOWS]->(friend) WHERE p.name = 'Alice' RETURN friend.name`. **Use cases**: social networks, recommendation engines, fraud detection, knowledge graphs, and network management. **Trade-offs**: specialised for relationship-heavy data; poor performance for non-graph workloads; and proprietary query languages (though GQL — Graph Query Language — is standardising in ISO/IEC).
+A relational database is not a black box that "just works." It is a sophisticated system with carefully designed data structures and algorithms. The DBA who understands these internals can diagnose performance problems, design appropriate maintenance schedules, and recover from failures that would baffle a surface-level operator.
 
-**NewSQL databases** (CockroachDB, Google Spanner, YugabyteDB, VoltDB) provide ACID transactions and SQL queries with horizontal scalability. **CockroachDB** is PostgreSQL-compatible, distributed, and strongly consistent (using the Raft consensus algorithm). **Google Spanner** provides global distribution, external consistency (TrueTime API), and SQL semantics. **Trade-offs**: write latency (consensus requires network round-trips); complexity; and cost. In 2040, **NewSQL** is the choice for applications that outgrow single-node PostgreSQL/MySQL but require transactional consistency.
+**PostgreSQL's heap storage** organizes tables as files of 8KB pages (blocks). Each page contains: a header (checksum, free space pointers), an array of line pointers (offsets to row data), row data (actual tuples), and free space. When a row is updated, PostgreSQL writes a new version rather than modifying the old one—the foundation of its **MVCC** implementation. Old row versions remain visible to concurrent transactions that started before the update, ensuring consistency without read locks. However, old versions must eventually be reclaimed by **VACUUM**, a background process that marks dead tuples as reusable space. Without vacuum, tables bloat; with overly aggressive vacuum, I/O overhead increases. The DBA must balance these factors.
 
-**Required Reading:**
-- Martin Kleppmann, *Designing Data-Intensive Applications*, ch. 2 ("Data Models and Query Languages")
-- Kristina Chodorow, *MongoDB: The Definitive Guide* (3rd ed., O'Reilly, 2019/2035), ch. 1–4
-- Josiah L. Carlson, *Redis in Action* (Manning, 2013/2035), ch. 1–3
-- Ian Robinson, Jim Webber & Emil Eifrem, *Graph Databases* (2nd ed., O'Reilly, 2015/2035), ch. 1–3
-- Spencer Kimball et al., "CockroachDB: The Resilient Geo-Distributed SQL Database" (Cockroach Labs, 2035)
+**InnoDB** (MySQL/MariaDB's default storage engine) uses a different approach: **clustered indexes** where table data is stored in the leaf pages of the primary key index. Secondary indexes contain primary key values, not row pointers, requiring a lookup ("index dive") to fetch full rows. InnoDB's **buffer pool** caches data and index pages in memory, with an LRU (Least Recently Used) replacement policy modified to avoid sequential scan pollution. The **redo log** (ib_logfile) records changes for crash recovery; the **undo log** stores previous versions for rollback and MVCC. **Checkpoints** flush dirty pages from the buffer pool to disk, bounding recovery time. By 2040, **InnoDB's adaptive hash index** and **change buffer** automatically optimize for workload patterns, but the DBA must monitor their memory consumption.
 
-**Discussion Questions:**
-1. MongoDB's flexible schema is praised for agility but criticised for enabling poor data modelling. Is schema flexibility a feature that empowers developers or a trap that leads to inconsistent data?
-2. Redis is often used as a cache, but it is also a database. Using Redis as a primary database risks data loss on restart (if persistence is misconfigured). Should Redis be restricted to caching, or is it suitable for primary storage when properly configured?
-3. NewSQL databases promise the best of both worlds (SQL + scalability), but they add latency and complexity. For what classes of applications is NewSQL genuinely necessary, and for what classes is traditional PostgreSQL with read replicas sufficient?
+**Transaction architecture** ensures durability through **Write-Ahead Logging (WAL)**. Before a transaction commits, its changes are written to the WAL (PostgreSQL) or redo log (InnoDB). On crash, the database replays the log to reconstruct committed transactions and undo uncommitted ones. **Checkpoints** establish a point before which all data is safely on disk, allowing old log segments to be recycled. The lecture covers checkpoint tuning: too frequent checkpoints waste I/O; too infrequent checkpoints extend recovery time. By 2040, **fuzzy checkpoints** (writing dirty pages gradually rather than all at once) and **checkpoint spikes** (periodic I/O bursts) remain active research areas.
 
----
+**Buffer management** determines which pages remain in memory. The **LRU** algorithm evicts the least recently accessed page, but sequential scans can pollute the cache by loading many pages that are not reused. PostgreSQL's **clock sweep** (a variant of second-chance algorithm) gives pages a "usage count" before eviction. **Double buffering** (maintaining separate buffers for clean and dirty pages) improves write efficiency. The DBA tunes buffer pool size: too small causes excessive disk I/O; too large risks swapping or depriving the OS cache. By 2040, **AI buffer predictors** (prefetching pages based on query patterns) supplement traditional algorithms.
 
-## Lecture 7: Data Modelling — From Conceptual to Physical Design
+**Multi-version concurrency control (MVCC)** enables readers and writers to coexist without blocking. PostgreSQL implements MVCC by storing multiple row versions with transaction IDs (xmin, xmax) and using **visibility rules** to determine which version each transaction sees. InnoDB implements MVCC via **undo logs** and **system version numbers**. The lecture covers the trade-offs: MVCC eliminates read locks but requires garbage collection (VACUUM in PostgreSQL, purge in InnoDB) and can cause index bloat or fragmentation. By 2040, **zheap** (PostgreSQL's experimental undo-log-based storage) aims to reduce bloat by storing old versions in undo logs rather than the heap.
 
-Data modelling is the process of defining the structure of data to support business requirements. This lecture covers the three levels of data modelling — conceptual, logical, and physical — and the techniques for each.
+### Required Reading
 
-**Conceptual modelling** captures business entities and relationships without regard to implementation. **Entity-Relationship (ER) diagrams** use rectangles (entities), diamonds (relationships), and lines (connections) to visualise data. ** cardinality** (1:1, 1:N, M:N) defines how many instances participate in a relationship. **Supertype/subtype** (generalisation/specialisation) models hierarchies (e.g., Person -> Employee, Customer). In 2040, **domain-driven design (DDD)** has influenced conceptual modelling: **aggregates** (clusters of entities and value objects with a single root), **bounded contexts** (explicit boundaries within which a domain model applies), and **ubiquitous language** (shared terminology between domain experts and technologists). The University's *Mímir Modelling Framework* integrates DDD with traditional ER modelling.
+- PostgreSQL Global Development Group (2040). *PostgreSQL Documentation: Chapter 68 (Database Page Layout), Chapter 29 (WAL)*. postgresql.org.
+- MySQL Documentation (2040). *InnoDB Internals: Buffer Pool, Transaction Log, and MVCC*. mysql.com.
+- Mohan, C., et al. (1992). "ARIES: A Transaction Recovery Method Supporting Fine-Granularity Locking and Partial Rollbacks Using Write-Ahead Logging." *ACM TODS*, 17(1), 94–162.
+- Elmasri, R., & Navathe, S. B. (2015). *Fundamentals of Database Systems* (7th Edition). Pearson. Chapter 21 ("Database Recovery Techniques").
+- Yggdrasil Database Lab (2037). "Zheap: Reducing PostgreSQL Bloat with Undo-Log Storage." *UoY Database Research Report* 2037-02.
 
-**Logical modelling** defines entities, attributes, keys, and relationships in detail. **Normalisation** eliminates redundancy and anomalies. **First Normal Form (1NF):** atomic values, no repeating groups. **Second Normal Form (2NF):** no partial dependencies (non-key attributes depend on the whole key). **Third Normal Form (3NF):** no transitive dependencies (non-key attributes depend only on the key). **Boyce-Codd Normal Form (BCNF):** every determinant is a candidate key. **Higher normal forms** (4NF, 5NF, DKNF) address multi-valued dependencies and join dependencies but are rarely required in practice. **Denormalisation** (intentionally adding redundancy) improves read performance at the cost of write complexity and data consistency. In 2040, **automated normalisation checkers** analyse schemas and suggest improvements or intentional denormalisations.
+### Discussion Questions
 
-**Physical modelling** translates the logical model into database-specific structures. **Table design:** column data types, constraints (NOT NULL, UNIQUE, CHECK, FOREIGN KEY), and defaults. **Index design:** primary keys, foreign key indexes, search indexes, and covering indexes. **Partitioning:** range (by date), list (by category), hash (by hash of key), and composite partitioning. **Tablespaces:** placing tables and indexes on different storage tiers (SSD for hot data, HDD for cold). **Compression:** reducing storage size at the cost of CPU. **Encryption:** transparent data encryption (TDE) or column-level encryption. In 2040, **AI-assisted physical design** (the *Mímir Designer* tool) generates physical schemas from logical models, suggesting types, indexes, partitions, and compression based on workload predictions.
+1. PostgreSQL's MVCC causes table bloat that requires VACUUM. Is this an acceptable trade-off for lock-free reads, or should PostgreSQL adopt InnoDB's undo-log approach?
+2. InnoDB's clustered index architecture provides fast primary key lookups but slows secondary index access. For a workload with many secondary index queries, what schema or indexing strategies can mitigate this?
+3. AI buffer predictors promise to improve cache hit ratios but add complexity. For a database with a stable, well-understood workload, is AI prediction worth the overhead?
+4. Checkpoints balance recovery time against I/O overhead. For a system with a 1-hour RTO, what checkpoint frequency bounds recovery time while minimizing performance impact?
 
-**Lab Exercise:** Students model a database for a simulated University library system. They must: create a conceptual ER diagram; develop a 3NF logical model; design the physical schema for PostgreSQL (with appropriate types, indexes, constraints, and partitioning); write DDL scripts; and load sample data. The schema must support: book cataloguing, patron management, circulation (check-out/check-in), holds and reservations, fines, and analytics (most popular books, overdue trends, patron demographics).
+### Practice Problems
 
-**Required Reading:**
-- Thomas M. Connolly & Carolyn E. Begg, *Database Systems*, ch. 14–17
-- Elmasri & Navathe, *Fundamentals of Database Systems* (7th ed., Pearson, 2017/2035), ch. 9–10
-- Eric Evans, *Domain-Driven Design: Tackling Complexity in the Heart of Software* (Addison-Wesley, 2003/2035), ch. 5–6
-- University of Yggdrasil, "The Mímir Modelling Framework: Integrating DDD and ER Modelling" (2039)
-
-**Discussion Questions:**
-1. Normalisation eliminates redundancy but can fragment data across many tables, requiring complex joins. Is 3NF always the right target, or are there cases where 2NF or even denormalised schemas are preferable?
-2. Domain-driven design introduces concepts (aggregates, bounded contexts) that do not map directly to relational databases. Is DDD compatible with relational modelling, or does it push toward document stores and event sourcing?
-3. AI-assisted physical design promises to automate schema optimisation, but it requires workload predictions that may be inaccurate. Can AI genuinely design better physical schemas than experienced DBAs, or does it merely automate the obvious choices?
+- Examine the page structure of a PostgreSQL table using the `pageinspect` extension. Interpret the header, line pointers, and tuple data for a sample table. Calculate the fill factor and identify fragmentation.
+- Configure InnoDB buffer pool and redo log sizes for a given workload specification (database size, read/write ratio, concurrent connections). Justify each parameter choice and predict the impact of doubling the buffer pool.
 
 ---
 
-## Lecture 8: Security, Encryption, and Compliance in Database Systems
+ᚦ **Lecture 3: SQL for the DBA: DDL, DML, and Administrative Commands**
 
-Databases store the most sensitive data in any organisation. This lecture covers database security: authentication, authorisation, encryption, auditing, and compliance.
-
-**Authentication** verifies identity. **PostgreSQL methods:** trust (no auth, for local testing), password (md5, scram-sha-256), GSSAPI (Kerberos), SSPI (Windows), LDAP, RADIUS, certificate (SSL client certs), and PAM. **pg_hba.conf** controls which authentication method is used for which connection. In 2040, **centralised identity** (LDAP, Active Directory, cloud IAM) is standard for enterprise databases. **Multi-factor authentication (MFA)** is mandatory for privileged accounts. **Password policies** enforce complexity, rotation, and history. **Certificate-based authentication** eliminates passwords entirely, using TLS client certificates.
-
-**Authorisation** controls access. **PostgreSQL roles** (users and groups) are granted **privileges** on database objects. **Object privileges:** SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER on tables; USAGE on schemas, sequences, functions; CONNECT on databases; TEMPORARY on temp table space. **Row-level security (RLS)** restricts rows based on user attributes: `CREATE POLICY user_policy ON accounts FOR ALL TO PUBLIC USING (user_id = current_user_id())`. **Column-level security** restricts columns (via views or RLS with expressions). **Default privileges** control permissions on newly created objects. In 2040, **attribute-based access control (ABAC)** — where permissions depend on user attributes, resource attributes, and environmental context — is the emerging standard for fine-grained access control.
-
-**Encryption** protects data from unauthorised disclosure. **Encryption at rest:** OS-level (LUKS, BitLocker), filesystem-level (eCryptfs, ZFS encryption), or database-level (TDE — Transparent Data Encryption). **Encryption in transit:** TLS 1.3 for all client connections. **Encryption in use:** **homomorphic encryption** (computing on encrypted data without decryption — still experimental in 2040); **secure enclaves** (Intel SGX, AMD SEV) that process sensitive data in hardware-isolated memory. **Key management** is critical: keys must be stored in HSMs (Hardware Security Modules) or cloud KMS (Key Management Services), rotated regularly, and accessible only to authorised processes. In 2040, **quantum-resistant encryption** (post-quantum algorithms) is being deployed for long-term data protection.
-
-**Auditing** records who did what and when. **PostgreSQL audit extensions:** **pgaudit** (session and object auditing); **pgAudit Analyse** (user-friendly reporting); and **pgAudit Log** (structured logging). **Audit requirements:** the EU's Digital Operational Resilience Act (DORA, 2035) mandates 7-year retention of financial system audit logs; HIPAA requires 6 years of access logs; the Nordic Data Compact requires comprehensive data access auditing for all personal data. In 2040, **immutable audit trails** (blockchain-based or WORM storage) ensure that audit logs cannot be tampered with.
-
-**Required Reading:**
-- PostgreSQL Documentation, "Client Authentication" (Chapter 20, 2040) and "Role Membership" (Chapter 21)
-- NIST, *Guide to Storage Encryption Technologies* (SP 800-111 Rev. 2, 2035)
-- European Union, *Digital Operational Resilience Act (DORA)* (2035)
-- Bruce Schneier, *Applied Cryptography* (20th Anniversary ed., Wiley, 2035), ch. 1–3, 10
-- University of Yggdrasil, "Database Security at Yggdrasil: Authentication, Encryption, and Audit" (2039)
-
-**Discussion Questions:**
-1. Row-level security (RLS) provides fine-grained access control but can impact query performance. Is RLS a practical security mechanism for high-throughput systems, or should access control be enforced in the application layer?
-2. Homomorphic encryption promises to enable computation on encrypted data, but it is orders of magnitude slower than plaintext computation. Is homomorphic encryption a realistic technology for production databases, or will it remain a research curiosity?
-3. Audit log retention requirements (7 years under DORA) create massive storage and management burdens. Are these requirements proportionate to the security benefit, or do they impose compliance costs that outweigh the risk reduction?
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 9: Cloud and Managed Database Services
+### Overview
 
-Cloud databases have transformed how organisations provision, operate, and scale database infrastructure. This lecture covers cloud database services, their trade-offs, and the operational considerations for managed databases.
+SQL is the DBA's primary language—not just for querying data but for creating, modifying, securing, and optimizing the database itself. This lecture covers the SQL commands that DBAs use daily: Data Definition Language (DDL) for schema management, Data Manipulation Language (DML) for data operations, and administrative commands for monitoring and control.
 
-**Amazon RDS** (Relational Database Service) was the first major managed database service (2009). It automates: provisioning, patching, backup, recovery, scaling (read replicas), failover (Multi-AZ), and monitoring. **RDS engines:** PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, and **Amazon Aurora** (a MySQL/PostgreSQL-compatible engine with up to 5x performance improvement). **RDS limitations:** limited root access, no custom plugins (for most engines), and vendor lock-in. **Amazon DynamoDB** is the managed NoSQL service: single-digit millisecond latency, automatic scaling, global tables, and on-demand capacity.
+### Key Topics
 
-**Azure SQL Database** is Microsoft's managed SQL Server service. **Service tiers:** Basic, Standard, Premium, Hyperscale (up to 100 TB), and Serverless (auto-scales based on workload). **Features:** automatic tuning (AI-driven index and query recommendations), geo-replication, transparent data encryption, and Advanced Threat Protection. **Azure Cosmos DB** is the managed multi-model database: SQL, MongoDB, Cassandra, Gremlin (graph), and Table APIs on a globally distributed backend. **Google Cloud SQL** manages PostgreSQL, MySQL, and SQL Server. **Google Cloud Spanner** is the globally distributed, strongly consistent NewSQL database. **Cloud Bigtable** is the wide-column store for massive workloads.
+- DDL: CREATE, ALTER, DROP for tables, indexes, constraints, and schemas
+- DML: INSERT, UPDATE, DELETE, MERGE, and bulk loading
+- Administrative SQL: system catalogs, dynamic management views, and performance schemas
+- Privilege management: GRANT, REVOKE, roles, and row-level security
+- Scripting and automation: stored procedures, functions, and triggers for administration
 
-**Operational considerations** for managed databases include: **vendor lock-in** (proprietary features make migration difficult); **cost management** (managed databases are more expensive than self-managed; reserved instances and committed use discounts reduce costs); **compliance** (cloud providers offer certifications: SOC 2, ISO 27001, HIPAA BAA, GDPR DPA); **performance** (shared resources in multi-tenant services can have noisy neighbours); **customisation** (limited ability to install extensions, modify kernel parameters, or access the OS); and **disaster recovery** (cross-region replication, but RTO/RPO depends on service tier). In 2040, **multi-cloud database strategies** (using different cloud providers for different workloads) are common, increasing complexity but reducing lock-in.
+### Lecture Notes
 
-**The University's cloud database strategy** uses: **on-premises PostgreSQL** (Patroni clusters) for regulated student data and research datasets; **Azure SQL Database** (Hyperscale tier) for administrative systems; **Amazon Aurora** (PostgreSQL-compatible) for web applications with global users; **Redis Enterprise Cloud** for caching and session storage; and **Elasticsearch** (Elastic Cloud) for search and log analytics. This **polyglot, multi-cloud** approach maximises flexibility but requires a data platform team to manage cross-cloud operations, security, and compliance.
+The DBA's SQL is different from the developer's SQL. Developers write queries for applications; DBAs write scripts for infrastructure. The DBA must master DDL to evolve schemas without breaking applications, DML to migrate and correct data safely, and administrative SQL to interrogate the database's internal state.
 
-**Required Reading:**
-- AWS, *Amazon RDS User Guide* (2040)
-- Microsoft, *Azure SQL Database Documentation* (2040)
-- Google Cloud, *Cloud SQL and Cloud Spanner Documentation* (2040)
-- Gojko Adzic & Robert Chatley, *Serverless Computing: Concepts, Tools, and Architecture* (Manning, 2035), ch. 5 ("Data in Serverless Architectures")
-- University of Yggdrasil, "The Yggdrasil Multi-Cloud Database Strategy: Polyglot Persistence at Scale" (2039)
+**DDL** defines and modifies database objects. `CREATE TABLE` specifies columns, data types, constraints, and storage parameters. `ALTER TABLE` adds, modifies, or drops columns and constraints. `CREATE INDEX` builds access paths for query optimization. `DROP` removes objects permanently (with no undo in most systems). The lecture covers DDL safety: **transactional DDL** (PostgreSQL, SQL Server—DDL can be rolled back if in a transaction), **online DDL** (MySQL, Oracle—schema changes do not lock tables for the duration), and **DDL triggers** (fire on schema changes for audit logging). By 2040, **schema migration tools** (Flyway, Liquibase, Sqitch, and pgroll for zero-downtime migrations) automate DDL deployment with version control and rollback.
 
-**Discussion Questions:**
-1. Managed databases reduce operational burden but increase vendor lock-in. For a small organisation with limited DBA expertise, is the convenience of managed databases worth the long-term dependency?
-2. Multi-cloud strategies reduce lock-in but add complexity (different APIs, monitoring tools, security models). Is the flexibility worth the operational overhead, or should organisations standardise on a single cloud provider?
-3. Cloud database costs can spiral unexpectedly (auto-scaling, data transfer, storage growth). What governance mechanisms should organisations implement to control cloud database spending?
+**DML** manipulates data. `INSERT` adds rows; `UPDATE` modifies existing rows; `DELETE` removes rows; `MERGE` (or `UPSERT` in PostgreSQL via `INSERT ... ON CONFLICT`) performs insert-or-update atomically. The lecture emphasizes **safe DML**: always use `WHERE` clauses (preventing accidental full-table updates), test DML in a transaction with `SELECT` first (verifying affected rows), and use `LIMIT` or `TOP` for large updates (batching to avoid long transactions). Bulk loading (`COPY` in PostgreSQL, `LOAD DATA` in MySQL, `bcp` in SQL Server) is faster than row-by-row inserts for large datasets. By 2040, **parallel bulk loaders** distribute loading across CPU cores, and **foreign data wrappers** stream data directly from external sources.
 
----
+**Administrative SQL** queries system catalogs to inspect database state. PostgreSQL's **system catalogs** (`pg_class`, `pg_attribute`, `pg_index`, `pg_stat_user_tables`) expose metadata and statistics. **Dynamic Management Views (DMVs)** in SQL Server (`sys.dm_exec_requests`, `sys.dm_os_wait_stats`) expose runtime state. **Performance Schema** in MySQL (`events_waits_summary_global_by_event_name`, `table_io_waits_summary_by_table`) exposes performance metrics. The lecture provides a reference of essential administrative queries: finding the largest tables, identifying missing indexes, monitoring replication lag, detecting lock contention, and analyzing wait events.
 
-## Lecture 10: Data Warehousing and Analytics — OLAP, ETL, and Modern Data Stacks
+**Privilege management** controls who can access what. `GRANT` and `REVOKE` assign permissions (SELECT, INSERT, UPDATE, DELETE, CREATE, EXECUTE) to users or roles. **Roles** (introduced in PostgreSQL 8.1, standard by 2040) group permissions for easier management. **Row-level security (RLS)** filters rows based on user attributes (e.g., a tenant can see only their own rows). The lecture covers the **principle of least privilege** for DBAs: application accounts get only necessary permissions; DBA accounts are individualized (not shared `postgres` or `root`); and **break-glass** procedures document emergency privilege escalation. By 2040, **attribute-based access control (ABAC)** extends RLS with complex policies involving user roles, time of day, and client IP.
 
-Transactional databases (OLTP) are optimised for fast writes and single-row lookups. Analytics workloads (OLAP) require scanning millions of rows and aggregating across dimensions. This lecture covers data warehousing, ETL/ELT pipelines, and the modern data stack.
+**Scripting and automation** reduce manual error and ensure consistency. **Stored procedures** encapsulate complex operations; **functions** return values for computation; **triggers** execute automatically on data changes. The lecture covers administrative use cases: audit triggers (logging all changes to sensitive tables), maintenance procedures (automated index rebuilds), and data validation functions (ensuring referential integrity across databases). By 2040, **pgTAP** (PostgreSQL testing framework) and similar tools enable unit testing of database code.
 
-**OLAP vs. OLTP.** OLTP systems handle high volumes of short transactions (INSERT, UPDATE, DELETE) with millisecond latency. OLAP systems handle low volumes of complex analytical queries (aggregation, grouping, window functions) over large datasets. **OLAP databases** use **columnar storage** (storing data by column rather than by row, enabling efficient compression and vectorised processing): **Amazon Redshift**, **Google BigQuery**, **Snowflake**, **Databricks Delta Lake**, **Apache Druid**, **ClickHouse**. **Star schema** is the classic dimensional model: a central **fact table** (measurements) surrounded by **dimension tables** (context: time, product, customer, location).
+### Required Reading
 
-**ETL (Extract, Transform, Load)** and **ELT (Extract, Load, Transform)** are the pipelines that move data from sources to the warehouse. **ETL** transforms data before loading (traditional, used when source data is dirty or unstructured). **ELT** loads raw data first and transforms it in the warehouse (modern, enabled by the power of cloud data warehouses). **Tools:** **Apache Airflow** (orchestration), **dbt** (data build tool, SQL-based transformations), **Fivetran** / **Stitch** (managed data connectors), **Apache Kafka** (streaming data pipeline), **Apache Flink** (stream processing), and **AWS Glue** / **Azure Data Factory** / **Google Cloud Dataflow** (cloud-native ETL). In 2040, **reverse ETL** (syncing warehouse data back to operational systems) is standard for operational analytics.
+- PostgreSQL Global Development Group (2040). *PostgreSQL Documentation: Chapter 5 (Data Definition), Chapter 6 (Data Manipulation)*. postgresql.org.
+- MySQL Documentation (2040). *MySQL Reference Manual: SQL Statements*. mysql.com.
+- Microsoft (2040). *Transact-SQL Reference: DDL, DML, and System Views*. Microsoft Learn.
+- Yggdrasil Database Team (2035). "Safe DML: Procedures for Production Data Modification." *UoY Database Operations Manual* v4.1.
 
-**The modern data stack** (2020s–2040) consists of: **ingestion** (Fivetran, Airbyte); **storage** (cloud data warehouse: Snowflake, BigQuery, Redshift); **transformation** (dbt); **orchestration** (Airflow, Prefect, Dagster); **observability** (Monte Carlo, Bigeye); **BI** (Tableau, Looker, Metabase, Superset); **reverse ETL** (Census, Hightouch); and **AI/ML** (feature stores, model training on warehouse data). **Data contracts** (agreements between data producers and consumers about schema, quality, and SLAs) ensure reliability in complex pipelines. **Data mesh** (decentralised domain-oriented data ownership) challenges the centralised data warehouse model, distributing responsibility to domain teams.
+### Discussion Questions
 
-**Required Reading:**
-- Ralph Kimball & Margy Ross, *The Data Warehouse Toolkit* (3rd ed., Wiley, 2013/2035), ch. 1–4
-- Claire Carroll & Anna Filippova, *dbt Labs Documentation* (2040)
-- James Densmore, *Data Pipelines with Apache Airflow* (Packt, 2021/2035), ch. 1–3
-- Zhamak Dehghani, "Data Mesh: Delivering Data-Driven Value at Scale" (O'Reilly, 2022/2035), ch. 1–3
-- University of Yggdrasil, "The Yggdrasil Data Platform: Modern Data Stack for Academic Analytics" (2039)
+1. Transactional DDL (PostgreSQL) vs. non-transactional DDL (MySQL historically). Should all DDL be transactional, or are there cases where immediate commit is preferable?
+2. Row-level security adds query overhead. For a table with 10 million rows and complex RLS policies, what performance optimization strategies (indexing, predicate pushdown, materialized views) can maintain query speed?
+3. Bulk loading bypasses transaction logging in some systems for speed. What are the recovery implications, and how should bulk-loaded data be protected?
+4. Triggers are powerful but can create hidden dependencies and performance bottlenecks. What governance should limit trigger usage in production databases?
 
-**Discussion Questions:**
-1. Columnar storage is optimal for analytics but poor for transactional workloads. Will hybrid databases (supporting both row and column storage) eventually dominate, or will the two remain separate?
-2. dbt has popularised SQL-based transformations, but it shifts complexity from ETL tools to SQL. Is dbt a genuine simplification, or does it merely move the problem without solving it?
-3. Data mesh decentralises data ownership but requires significant cultural and organisational change. Is data mesh a realistic model for most organisations, or is it applicable only to large tech companies with mature engineering cultures?
+### Practice Problems
+
+- Write a schema migration script that: adds a nullable column, backfills it from a related table, adds a NOT NULL constraint, and creates an index. Ensure the migration can run without locking the table for more than 5 seconds (use online DDL or batching).
+- Query the PostgreSQL system catalogs to generate a report of: all tables over 1GB, all indexes not used in the last 30 days, all tables with more than 20% dead tuples, and all connections idle for more than 10 minutes. Automate this as a weekly report.
 
 ---
 
-## Lecture 11: Emerging Database Technologies — Time-Series, Vector, and Quantum Databases
+ᚨ **Lecture 4: Indexing and Query Optimization**
 
-Database technology continues to evolve. This lecture examines three emerging categories: time-series databases, vector databases, and the speculative frontier of quantum databases.
-
-**Time-series databases** (TSDBs) specialise in data indexed by time: metrics, sensor readings, financial ticks, application events. **Characteristics:** high write throughput (millions of points per second); efficient time-range queries; downsampling and aggregation; retention policies (automatic deletion of old data); and anomaly detection. **Leading TSDBs:** **InfluxDB** (open-source and commercial); **TimescaleDB** (PostgreSQL extension); **Prometheus** (monitoring-focused); **QuestDB** (fast SQL-based); and **Apache IoTDB** (IoT-focused). In 2040, **TimescaleDB** is the dominant choice for organisations that want time-series capabilities within a familiar PostgreSQL environment. The University's *Muninn Metrics* platform uses TimescaleDB to store 50 billion data points from campus sensors and systems.
-
-**Vector databases** store and query high-dimensional vectors (embeddings from machine learning models). **Use cases:** semantic search (find documents similar to a query vector); recommendation systems (find items similar to user preferences); image search (find visually similar images); and anomaly detection (find vectors that deviate from normal patterns). **Vector search** uses **approximate nearest neighbour (ANN)** algorithms: **HNSW** (Hierarchical Navigable Small World), **IVF** (Inverted File Index), **PQ** (Product Quantisation). **Leading vector databases:** **Pinecone** (managed); **Weaviate** (open-source, GraphQL interface); **Milvus** (open-source, cloud-native); **pgvector** (PostgreSQL extension); and **Redis** (with vector search module). In 2040, **pgvector** is the standard for organisations that want vector search within PostgreSQL, while **Pinecone** and **Weaviate** dominate standalone deployments.
-
-**Quantum databases** are speculative. A **quantum database** would use quantum mechanics to store and query data, potentially offering exponential speedups for certain queries (e.g., Grover's algorithm for unstructured search). However, as of 2040, no practical quantum database exists. Research focuses on: **quantum random access memory (qRAM)**; **quantum graph databases** (using quantum walks); and **quantum machine learning for database optimisation** (using quantum annealers to optimise query plans). The University of Yggdrasil's **Quantum Information Lab** maintains a research programme on quantum databases, but commercial viability is not expected before 2060.
-
-**Required Reading:**
-- TimescaleDB Documentation, "Time-Series Concepts" (2040)
-- Pinecone Documentation, "Vector Database Fundamentals" (2040)
-- Weaviate Documentation, "What Is a Vector Database?" (2040)
-- Scott Aaronson, "Quantum Computing Since Democritus" (Cambridge, 2013/2035), ch. 14 ("Quantum Computing and the Future")
-- University of Yggdrasil, "Muninn Metrics: TimescaleDB at 50 Billion Data Points" (2039)
-
-**Discussion Questions:**
-1. Time-series databases are highly optimised for their niche, but general-purpose databases (PostgreSQL with TimescaleDB, ClickHouse) are increasingly capable. Will specialised TSDBs be displaced by general-purpose databases, or will their optimisation retain a niche?
-2. Vector databases are essential for AI-powered search, but they are yet another database to manage. Will vector search be absorbed into general-purpose databases (like pgvector), or will standalone vector databases remain dominant?
-3. Quantum databases are purely speculative. Is research into quantum databases a worthwhile investment, or should resources be directed toward more immediate problems?
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 12: The Future of Data — Governance, Ethics, and the Data-Centric Organisation
+### Overview
 
-The final lecture examines the strategic and ethical dimensions of data management: data governance, data ethics, and the emergence of the data-centric organisation.
+Indexes are the most powerful tool for query performance—and the most frequently misused. This lecture covers index structures, query plan analysis, and optimization strategies. Students will learn to design indexes that accelerate queries without excessive overhead, read execution plans, and apply optimizer hints judiciously.
 
-**Data governance** is the framework for managing data availability, usability, integrity, and security. **Components:** data quality (accuracy, completeness, consistency, timeliness); data lineage (tracking data from origin to consumption); data catalogues (inventories of datasets with metadata); master data management (single source of truth for critical entities); and data policies (retention, access, privacy, security). **Tools:** **Apache Atlas**, **Collibra**, **Alation**, **DataHub** (LinkedIn's open-source catalogue). In 2040, **AI-assisted governance** automatically classifies data, detects quality issues, suggests policies, and enforces compliance.
+### Key Topics
 
-**Data ethics** encompasses: **privacy** (respecting individual autonomy over personal data); **fairness** (preventing algorithmic bias in data-driven decisions); **transparency** (explaining how data is used and how decisions are made); **accountability** (holding organisations responsible for data misuse); and **consent** (ensuring that data collection and use are genuinely voluntary and informed). The **EU AI Act (2024/2035)** classifies AI systems by risk and imposes strict requirements on high-risk systems (biometric identification, critical infrastructure, education, employment, law enforcement). The **Nordic Data Compact (2035)** goes further, requiring algorithmic transparency for all automated decisions affecting individuals and mandating data localisation for sensitive categories.
+- Index structures: B-trees, hash indexes, GiST, GIN, BRIN, and inverted indexes
+- Query execution plans: sequential scans, index scans, joins, and sorting
+- The query optimizer: cost model, statistics, and plan selection
+- Index design: covering indexes, partial indexes, composite indexes, and functional indexes
+- Query tuning: rewrite strategies, parameter sniffing, and hinting
 
-**The data-centric organisation** treats data as a strategic asset rather than a byproduct of operations. **Characteristics:** data is shared across silos (not hoarded in departments); data quality is everyone's responsibility (not just the DBA's); decisions are evidence-based (not hierarchical); and data products are developed with the same rigour as software products. **Data mesh** (discussed in Lecture 10) is the architectural manifestation of the data-centric organisation: decentralised domain ownership, federated governance, and self-serve data infrastructure.
+### Lecture Notes
 
-**The Yggdrasil Data Strategy** (2040) states: "Data is the memory of the University. It must be accurate, accessible, secure, and preserved for future generations." The strategy mandates: open data by default for research outputs (with appropriate privacy safeguards); FAIR principles (Findable, Accessible, Interoperable, Reusable) for all research data; data literacy training for all staff; and a University-wide data catalogue (powered by DataHub) that indexes all datasets, their lineage, and their quality scores.
+An index is a data structure that enables the database to find rows without scanning every page. The most common structure is the **B-tree** (balanced tree), which maintains sorted order and supports equality and range lookups with O(log n) complexity. But B-trees are not universal; different workloads require different structures.
 
-**Required Reading:**
-- DAMA International, *DAMA-DMBOK: Data Management Body of Knowledge* (2nd ed., Technics Publications, 2017/2035), ch. 1–3, 7, 12
-- Luciano Floridi, *The Ethics of Information* (Oxford, 2013/2035), ch. 14–16
-- European Commission, *Ethics Guidelines for Trustworthy AI* (2019/2035)
-- Zhamak Dehghani, *Data Mesh* (O'Reilly, 2022/2035), ch. 4–5
-- University of Yggdrasil, "The Yggdrasil Data Strategy: Principles, Policies, and Practices" (2040)
+**Index structures**: **B-tree** (default for most indexes, supports equality and range queries). **Hash indexes** (constant-time equality lookups, no range support; improved in PostgreSQL 10+). **GiST (Generalized Search Tree)** (supports user-defined types and operators: nearest-neighbor, overlap, containment). **GIN (Generalized Inverted Index)** (efficient for multi-value elements: arrays, full-text search, JSONB). **BRIN (Block Range INdex)** (tiny indexes for naturally ordered data like timestamps, storing min/max per block). **Inverted indexes** (full-text search: mapping words to documents). By 2040, **learned indexes** (machine-learned models that predict record locations, replacing B-trees for some workloads) are an active research area, though not yet mainstream in production DBMS.
 
-**Discussion Questions:**
-1. Data governance frameworks are often seen as bureaucratic obstacles to agility. Is governance a genuine enabler of data value, or does it merely slow down innovation?
-2. The Nordic Data Compact requires algorithmic transparency for all automated decisions. Is this requirement technically feasible for complex machine learning models, or does it create an impossible standard?
-3. Data mesh decentralises ownership but requires federated governance. Is federated governance realistic, or will domains inevitably diverge from shared standards without strong central enforcement?
+**Query execution plans** reveal how the database will execute a query. The lecture teaches plan reading: **sequential scan** (reading all pages), **index scan** (using an index to find rows, then fetching heap pages), **index-only scan** (using a covering index without heap access), **bitmap index scan** (combining multiple index results to reduce random I/O), **nested loop join** (for each outer row, scan inner table), **hash join** (build hash table on inner, probe with outer), **merge join** (sort both inputs, merge), and **sort/aggregate** operations. Plans are read from root to leaves, with cost estimates (arbitrary units representing I/O + CPU) and actual timings (from `EXPLAIN ANALYZE`).
+
+**The query optimizer** generates plans based on **statistics**: table row counts, column distinct values, most common values, histograms, and correlation. Stale statistics cause poor plans; the DBA schedules `ANALYZE` (PostgreSQL) or updates statistics (SQL Server) to keep them current. The **cost model** assigns weights to sequential page reads, random page reads, CPU operations, and parallel worker startup. By 2040, **adaptive query optimization** (feedback loops that adjust plans based on runtime cardinality) improves estimates for complex queries.
+
+**Index design** balances query acceleration against maintenance cost. **Covering indexes** include all columns needed by a query, enabling index-only scans. **Partial indexes** index only rows matching a predicate (`WHERE status = 'active'`), reducing size and maintenance for skewed data. **Composite indexes** (multiple columns) support multi-column predicates but require careful column ordering (leading columns must match query predicates). **Functional indexes** index expressions (`LOWER(email)`) for case-insensitive lookups. The lecture provides a decision tree: when to create an index, when to use a composite vs. partial index, and when an index is not worth the cost (small tables, write-heavy tables, low-selectivity columns).
+
+**Query tuning** goes beyond indexing. **Rewrite strategies**: replacing `OR` with `UNION`, using `EXISTS` instead of `IN` for subqueries, avoiding `SELECT *`, and pushing predicates into CTEs. **Parameter sniffing** (SQL Server) occurs when a stored plan optimized for one parameter value performs poorly for others; solutions include `OPTION (RECOMPILE)`, optimizer hints, or plan guides. **Hinting** (`/*+ INDEX(...) */`) forces the optimizer to use a specific index or join order, but the lecture warns that hints override the optimizer's adaptability and should be used sparingly. By 2040, **query store** features (SQL Server Query Store, PostgreSQL pg_stat_statements) capture historical plans and performance, enabling regression analysis.
+
+### Required Reading
+
+- PostgreSQL Global Development Group (2040). *PostgreSQL Documentation: Chapter 11 (Indexes), Chapter 14 (Performance Tips)*. postgresql.org.
+- MySQL Documentation (2040). *MySQL Optimization: Indexes and Query Execution Plans*. mysql.com.
+- Microsoft (2040). *SQL Server Query Processing Architecture Guide*. Microsoft Learn.
+- Krishnamurthy, R., et al. (2020). "The Case for Learned Index Structures." *SIGMOD*, 489–504.
+- Yggdrasil Database Team (2036). "Index Design Patterns for the 2040s: A UoY Case Study." *UoY Database Operations Report*.
+
+### Discussion Questions
+
+1. Learned indexes promise better performance than B-trees but require training and are sensitive to data distribution. For a general-purpose database, are learned indexes ready to replace B-trees?
+2. Covering indexes improve read performance but increase write overhead and storage. What is the appropriate maximum number of covering indexes per table?
+3. Parameter sniffing causes performance regression when data distributions change. Is `OPTION (RECOMPILE)` (recompiling on every execution) a viable solution, or does the compilation overhead negate the benefit?
+4. Partial indexes are powerful but require manual analysis of query patterns. Can automated index advisors reliably suggest partial indexes, or do they lack the semantic understanding?
+
+### Practice Problems
+
+- Given a set of slow queries from a production application, analyze each with `EXPLAIN (ANALYZE, BUFFERS)`. Identify missing indexes, inefficient joins, and unnecessary sorts. Propose and test optimizations, measuring improvement.
+- Create a workload with mixed read/write patterns. Add indexes to improve read performance and measure the impact on write throughput and storage. Determine the optimal index set that maximizes overall throughput.
+
+---
+
+ᚱ **Lecture 5: Replication, High Availability, and Disaster Recovery**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+A single database server is a single point of failure. This lecture covers the technologies that distribute data across multiple servers: replication for scale and redundancy, failover for availability, and backup strategies for recovery. Students will learn to architect database clusters that survive hardware failures, network partitions, and datacenter outages.
+
+### Key Topics
+
+- Replication models: logical vs. physical, synchronous vs. asynchronous
+- PostgreSQL replication: streaming replication, logical replication, and patroni
+- MySQL replication: binary log replication, Group Replication, and Galera
+- Failover: automatic promotion, split-brain prevention, and connection routing
+- Backup strategies: physical, logical, point-in-time recovery, and object storage
+
+### Lecture Notes
+
+**Replication** creates copies of data on multiple servers. **Physical replication** copies byte-for-byte changes (WAL segments in PostgreSQL, InnoDB redo log in MySQL); it is fast and preserves exact state but is limited to identical versions and platforms. **Logical replication** copies row changes decoded from WAL; it supports cross-version and cross-platform replication, selective table replication, and conflict resolution. By 2040, **logical replication** is the default for new deployments due to its flexibility.
+
+**Synchronous replication** waits for the standby to confirm writes before acknowledging the client, ensuring zero data loss but adding latency. **Asynchronous replication** acknowledges immediately and replicates in the background, minimizing latency but risking data loss on failover. **Quorum-based replication** (e.g., PostgreSQL synchronous_commit = remote_apply with multiple standbys) requires confirmation from a majority, balancing consistency and availability. The lecture covers the **CAP theorem** implications: synchronous replication favors consistency (CP); asynchronous favors availability (AP).
+
+**PostgreSQL replication** evolved significantly by 2040. **Streaming replication** (since 9.0) sends WAL records to standbys in real time. **Cascading replication** allows standbys to replicate from other standbys, reducing primary load. **Synchronous replication** (since 9.1) with `synchronous_commit` levels (`off`, `local`, `remote_write`, `remote_flush`, `remote_apply`) provides tunable durability. **Logical replication** (since 10) enables selective table replication and cross-version replication. **Patroni** (a template for HA PostgreSQL using etcd, ZooKeeper, or Consul) provides automatic failover, leader election, and health checks. By 2040, **pg_auto_failover** and **repmgr** provide simpler HA alternatives.
+
+**MySQL replication** uses the **binary log** (binlog) to record changes. Traditional replication is asynchronous, with a primary writing binlog and replicas reading it. **GTID (Global Transaction Identifier)** ensures transaction consistency across failover. **Group Replication** (MySQL 5.7+) provides multi-primary, synchronous replication using Paxos. **Galera Cluster** (MariaDB) provides synchronous multi-master replication with certification-based conflict detection. By 2040, **MySQL InnoDB Cluster** (Group Replication + MySQL Router + MySQL Shell) is Oracle's recommended HA solution.
+
+**Failover** promotes a replica to primary when the primary fails. **Automatic failover** (Patroni, Orchestrator, repmgr) detects failure via health checks and promotes the most advanced replica. **Split-brain prevention** ensures only one primary exists at a time: Patroni uses distributed consensus (etcd) to elect a single leader; manual failover risks two primaries if the old primary is not properly demoted. **Connection routing** (PgBouncer, HAProxy, MySQL Router) directs applications to the current primary without reconfiguration. By 2040, **service discovery** (Consul, etcd) automates connection routing.
+
+**Backup strategies** for databases include: **physical backups** (copying data files: `pg_basebackup`, Percona XtraBackup, SQL Server BACKUP DATABASE) for fast restore; **logical backups** (SQL dumps: `pg_dump`, `mysqldump`) for portability and selective restore; and **incremental backups** (WAL archiving, binlog archiving) for point-in-time recovery. The lecture covers **PITR (Point-In-Time Recovery)**: restoring a base backup and replaying WAL/binlog up to a specific timestamp. By 2040, **object storage backups** (S3, Azure Blob, GCS) are standard, with automated lifecycle policies transitioning old backups to cheaper tiers.
+
+### Required Reading
+
+- PostgreSQL Global Development Group (2040). *High Availability, Load Balancing, and Replication*. postgresql.org.
+- MySQL Documentation (2040). *MySQL Replication and Group Replication*. mysql.com.
+- Zaloni (Patroni Authors) (2040). *Patroni Documentation: HA PostgreSQL*. patroni.readthedocs.io.
+- Versteeg, S. (2020). *Orchestrator: MySQL High Availability and Topology Management*. GitHub.
+- Yggdrasil Database Team (2035). "Split-Brain in the Student Records Cluster: A Failover Postmortem." *UoY Operations Postmortem* 2035-11.
+
+### Discussion Questions
+
+1. Synchronous replication ensures consistency but increases write latency. For a global application with users on three continents, what replication topology minimizes latency while maintaining acceptable durability?
+2. Automatic failover reduces downtime but can promote a replica with slightly stale data. What are the business implications of seconds or minutes of data loss, and how should RPO be negotiated?
+3. MySQL Group Replication and Galera provide multi-master writes but have conflict resolution limitations. For a write-heavy workload, is multi-master appropriate, or should read replicas with single-master writes be preferred?
+4. Object storage backups are cheap and durable but have egress fees and retrieval latency. For a 10TB database, what backup architecture (local + cloud, cloud-only, tape + cloud) balances cost, RTO, and ransomware resilience?
+
+### Practice Problems
+
+- Set up PostgreSQL streaming replication with one standby. Test failover manually (promote standby) and with Patroni (simulate primary failure). Measure failover time and verify data consistency.
+- Design a backup and recovery strategy for a 2TB PostgreSQL database with a 4-hour RTO and 15-minute RPO. Specify: backup types, schedule, retention, storage targets, and recovery procedures. Include a cost estimate.
+
+---
+
+ᚲ **Lecture 6: Performance Tuning and Capacity Planning**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Performance tuning is the DBA's art and science. This lecture covers the methodologies and tools for diagnosing performance problems, optimizing resource utilization, and planning for growth. Students will learn to measure, model, and predict database performance, ensuring that systems scale smoothly from startup to enterprise.
+
+### Key Topics
+
+- Performance metrics: throughput, latency, concurrency, and resource utilization
+- Wait event analysis: identifying bottlenecks by what the database is waiting for
+- Configuration tuning: memory, I/O, parallelism, and connection pooling
+- Workload analysis: query patterns, access paths, and contention points
+- Capacity planning: trend analysis, modeling, and predictive scaling
+
+### Lecture Notes
+
+Performance tuning begins with measurement. Without accurate metrics, tuning is guesswork. The lecture introduces the **USE method** (Utilization, Saturation, Errors) for resource analysis and the **RED method** (Rate, Errors, Duration) for service analysis, adapted from Brendan Gregg's systems performance methodology.
+
+**Performance metrics** for databases include: **throughput** (transactions per second, queries per second), **latency** (response time percentiles: p50, p95, p99), **concurrency** (active connections, waiting transactions), and **resource utilization** (CPU %, memory %, disk IOPS, disk throughput, network bandwidth). The lecture emphasizes **percentiles over averages**: a query with 10ms average may have 1% of executions taking 5 seconds, which impacts user experience disproportionately. By 2040, **distributed tracing** (OpenTelemetry) links database queries to application requests, enabling end-to-end latency analysis.
+
+**Wait event analysis** identifies bottlenecks by what the database is waiting for rather than what it is doing. PostgreSQL's `pg_stat_activity` and `pg_wait_sampling` expose wait events: `IO:DataFileRead` (reading data from disk), `Lock:tuple` (waiting for a row lock), `Client:ClientRead` (waiting for the client to send data). SQL Server's `sys.dm_os_wait_stats` provides similar visibility. The lecture covers: filtering noise (excluding idle waits), identifying top waits, and correlating waits with resource metrics. For example, high `IO:DataFileRead` with low disk IOPS suggests that queries are reading too much data (missing indexes, excessive sorting); high `Lock:tuple` with moderate throughput suggests contention (hot rows, long transactions).
+
+**Configuration tuning** adjusts database parameters to match hardware and workload. **Memory**: buffer pool size (typically 70-80% of RAM for dedicated database servers), work memory (per-query sort/hash memory), and maintenance work memory (VACUUM, index creation). **I/O**: random vs. sequential page cost (influencing optimizer plan selection), effective I/O concurrency (number of concurrent disk operations), and WAL sync method. **Parallelism**: max parallel workers, cost thresholds for parallel plans. **Connection pooling**: max connections (excessive connections waste memory and cause contention; connection pooling via PgBouncer or pgpool reduces overhead). By 2040, **autotuning advisors** (e.g., Azure SQL Database Intelligent Insights, PostgreSQL's auto_explain with plan analysis) suggest parameter changes, but the DBA validates them.
+
+**Workload analysis** characterizes the application's interaction with the database. Read-heavy vs. write-heavy? OLTP (many small transactions) vs. OLAP (few large analytical queries)? Random access vs. sequential scans? The lecture covers **workload classification** and its implications: an OLTP workload needs fast indexes, low-latency commits, and connection pooling; an OLAP workload needs parallel scans, columnar storage, and batch loading. By 2040, **HTAP (Hybrid Transactional/Analytical Processing)** databases (TiDB, CockroachDB, SingleStore) serve both workloads, but the DBA must still understand the mix to configure resources.
+
+**Capacity planning** ensures the database can handle future growth. **Trend analysis**: extrapolating from historical metrics (data growth rate, query volume growth, peak load patterns). **Modeling**: queueing theory models (M/M/c queues) predicting response time under increased load. **Predictive scaling**: cloud auto-scaling policies (adding read replicas when CPU > 70% for 5 minutes) and pre-provisioning for known events (student enrollment periods, registration days). By 2040, **AI capacity forecasting** (predicting peak load 72 hours ahead based on academic calendar, weather, and social media trends) enables proactive scaling at UoY.
+
+### Required Reading
+
+- Gregg, B. (2013). *Systems Performance: Enterprise and the Cloud*. Prentice Hall. Chapters 1–2.
+- PostgreSQL Global Development Group (2040). *PostgreSQL Documentation: Chapter 19 (Server Configuration)*. postgresql.org.
+- MySQL Documentation (2040). *MySQL Server Administration: Tuning and Performance*. mysql.com.
+- Menasce, D. A., & Almeida, V. A. F. (2001). *Capacity Planning for Web Services: Metrics, Models, and Methods*. Prentice Hall.
+- Yggdrasil Database Team (2039). "AI Capacity Forecasting for Academic Workloads." *UoY Database Operations Report*.
+
+### Discussion Questions
+
+1. AI autotuning advisors suggest configuration changes but may not understand workload seasonality. Should DBAs accept AI recommendations automatically, or is human validation always necessary?
+2. HTAP databases promise to eliminate the OLTP/OLAP split, but single systems serving both workloads risk resource contention. Is HTAP a genuine simplification, or does it create new tuning complexity?
+3. Connection pooling reduces overhead but adds a hop (application → pooler → database). For a latency-sensitive application, is pooling justified?
+4. Queueing theory models assume steady-state workloads, but real workloads are bursty. How should capacity planning account for burstiness and tail latency?
+
+### Practice Problems
+
+- Profile a running PostgreSQL database using `pg_stat_statements`, `pg_stat_activity`, and `pg_wait_sampling`. Identify the top 5 queries by total time, the top 3 wait events, and the queries with the worst latency outliers. Propose and implement optimizations.
+- Build a capacity plan for a database expected to grow from 500GB to 2TB over 2 years, with query volume doubling. Predict IOPS, storage, and memory requirements. Model the impact of adding 2 read replicas vs. upgrading the primary server.
+
+---
+
+ᚷ **Lecture 7: Security: Encryption, Auditing, and Access Control**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Databases store the most sensitive information an organization possesses. This lecture covers the security controls that protect data at rest, in transit, and in use: encryption, access control, auditing, and vulnerability management. Students will learn to implement defense in depth for database systems, satisfying regulatory requirements and resisting sophisticated attacks.
+
+### Key Topics
+
+- Encryption at rest: TDE, filesystem encryption, and column-level encryption
+- Encryption in transit: TLS for database connections, certificate management
+- Access control: RBAC, ABAC, row-level security, and database firewalls
+- Auditing: query logging, object access logging, and SIEM integration
+- Vulnerability management: patching, configuration hardening, and penetration testing
+
+### Lecture Notes
+
+Database security operates at multiple layers: the network (firewalls, TLS), the operating system (permissions, SELinux), the database server (authentication, authorization), and the application (parameterized queries, input validation). No single layer is sufficient; defense in depth requires all layers to function.
+
+**Encryption at rest** protects data stored on disk. **TDE (Transparent Data Encryption)** encrypts database files automatically, with decryption occurring in memory when data is accessed. SQL Server TDE, Oracle TDE, and MySQL InnoDB tablespace encryption provide this capability. **Filesystem encryption** (LUKS, BitLocker) encrypts the entire volume, protecting all files including backups and logs. **Column-level encryption** encrypts specific sensitive columns (credit card numbers, health records) with application-managed keys, providing finer control but requiring application changes. By 2040, **post-quantum encryption** (CRYSTALS-Kyber for key encapsulation, AES-256 for bulk encryption) is standard for long-term archival.
+
+**Encryption in transit** protects data moving between application and database. **TLS** (covered in IT107) is mandatory for all database connections by 2040. The lecture covers: certificate configuration (server certificates, client certificates for mTLS), cipher suite selection (forward secrecy, strong ciphers), and certificate rotation (automated via ACME or internal PKI). **Connection encryption** should be enforced (rejecting unencrypted connections) to prevent downgrade attacks. The 2032 *Unencrypted Replication Channel*—in which an attacker intercepted and modified WAL records between primary and standby—demonstrated that replication traffic must also be encrypted.
+
+**Access control** restricts who can do what. **RBAC (Role-Based Access Control)** assigns permissions to roles, which are granted to users. **ABAC (Attribute-Based Access Control)** evaluates policies based on user attributes, resource attributes, and environmental conditions (time, location, device posture). **Row-level security (RLS)** filters rows based on user identity. **Database firewalls** (e.g., GreenSQL, Imperva) inspect SQL traffic in real time, blocking injection attempts and unauthorized access patterns. By 2040, **zero-trust database access** (each query authenticated and authorized, with session tokens rather than persistent connections) is emerging.
+
+**Auditing** provides accountability. **Query logging** (PostgreSQL `log_statement = 'all'`, MySQL general query log, SQL Server Extended Events) records all SQL statements. **Object access logging** records who accessed which tables, columns, and rows. **Audit policies** define what to log, where to store logs, and how long to retain them. By 2040, **SIEM integration** (Splunk, QRadar, Sentinel) correlates database audit logs with network, application, and identity logs to detect anomalies. The UoY **Bifröst Audit Pipeline** (2036) streams database audit events to a tamper-proof blockchain ledger, providing non-repudiable evidence.
+
+**Vulnerability management** keeps database software secure. **Patching**: applying security updates within defined SLAs (critical patches within 24 hours, high within 7 days). **Configuration hardening**: disabling unused features, removing default accounts, enforcing strong authentication. **Penetration testing**: authorized simulated attacks that identify weaknesses. The lecture covers **database-specific vulnerabilities**: SQL injection (mitigated by parameterized queries and stored procedures), privilege escalation (mitigated by least privilege and patch management), and side-channel attacks (mitigated by constant-time operations and memory isolation). By 2040, **automated vulnerability scanning** (Qualys, Nessus, OpenVAS) includes database-specific checks.
+
+### Required Reading
+
+- NIST (2035). *Database Security Guidelines*. NIST SP 800-171 Rev. 3.
+- PostgreSQL Global Development Group (2040). *PostgreSQL Encryption and Authentication*. postgresql.org.
+- Microsoft (2040). *SQL Server Security Best Practices*. Microsoft Learn.
+- Oracle (2040). *Oracle Database Security Guide*. Oracle Documentation.
+- Yggdrasil Security Team (2032). "The Unencrypted Replication Channel: Man-in-the-Middle Against Database Clusters." *UoY Security Bulletin* 2032-05.
+
+### Discussion Questions
+
+1. TDE encrypts data at rest but decrypts it in memory for access. Does TDE provide meaningful protection against an attacker with OS-level access, or is it primarily a compliance checkbox?
+2. Column-level encryption provides strong security but complicates query processing (encrypted columns cannot be indexed or filtered efficiently). What data is worth this overhead?
+3. Zero-trust database access requires authentication per query, adding latency. For a high-throughput OLTP system, is the security gain worth the performance cost?
+4. The Bifröst Audit Pipeline stores audit logs on a blockchain. Does blockchain immutability justify the storage and performance overhead compared to append-only traditional logs?
+
+### Practice Problems
+
+- Configure TDE for a PostgreSQL database using pgcrypto for column-level encryption and LUKS for filesystem encryption. Verify that data is encrypted on disk but queryable in memory. Measure the performance impact.
+- Implement row-level security on a multi-tenant database. Ensure that each tenant sees only their own rows, even when querying through shared application accounts. Test with SQL injection attempts to verify isolation.
+
+---
+
+ᚹ **Lecture 8: Schema Design, Normalization, and Data Modeling**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+While schema design is often considered a developer responsibility, the DBA must ensure that designs are performant, maintainable, and scalable. This lecture covers relational modeling, normalization, denormalization, and the practical compromises that production systems require. Students will learn to evaluate schemas, suggest improvements, and balance theoretical purity with operational reality.
+
+### Key Topics
+
+- Entity-Relationship modeling: entities, attributes, relationships, and cardinality
+- Normal forms: 1NF, 2NF, 3NF, BCNF, and their practical implications
+- Denormalization: when and why to violate normal forms
+- Temporal data: slowly changing dimensions, valid time, and transaction time
+- Schema evolution: backward-compatible changes, expand-contract, and versioning
+
+### Lecture Notes
+
+**Entity-Relationship (ER) modeling** is the conceptual foundation of relational design. Entities represent real-world objects (Student, Course, Instructor); attributes describe their properties (name, enrollment_date); relationships connect entities (Student enrolls in Course). Cardinality defines how many instances participate: one-to-one, one-to-many, many-to-many. The lecture demonstrates creating an ER diagram for a university registrar system and translating it to relational tables.
+
+**Normalization** eliminates redundancy and prevents anomalies. **1NF (First Normal Form)** requires atomic values (no repeating groups or arrays in columns). **2NF** requires 1NF plus no partial dependencies (non-key attributes must depend on the whole primary key). **3NF** requires 2NF plus no transitive dependencies (non-key attributes must depend only on the primary key). **BCNF (Boyce-Codd Normal Form)** requires that every determinant be a candidate key. The lecture works through examples: a table with student_id, course_id, student_name, course_name, and grade violates 2NF (student_name depends only on student_id) and 3NF (course_name depends only on course_id). Decomposition into Student, Course, and Enrollment tables achieves BCNF.
+
+**Denormalization** intentionally introduces redundancy for performance. Read-heavy analytical workloads often benefit from denormalized tables that avoid joins. Common patterns: **materialized views** (precomputed join results), **summary tables** (pre-aggregated metrics), **embedded documents** (storing related data in JSONB columns), and **star schemas** (fact tables surrounded by dimension tables in data warehouses). The lecture emphasizes that denormalization is a **performance optimization**, not a design default: it should be applied after profiling demonstrates that normalization causes unacceptable latency, and it must be maintained (updated when source data changes).
+
+**Temporal data** tracks how information changes over time. **Slowly Changing Dimensions (SCD)** manage historical versions of dimensional data: Type 1 (overwrite, losing history), Type 2 (add new row with effective dates), Type 3 (add columns for previous values). **Valid time** tracks when a fact was true in the real world; **transaction time** tracks when it was recorded in the database. By 2040, **temporal tables** (SQL:2011 standard, supported by SQL Server, Oracle, and PostgreSQL via extensions) provide built-in valid-time and transaction-time support, automatically maintaining history without application changes.
+
+**Schema evolution** changes the database structure without breaking applications. The **expand-contract pattern** (Lecture 3) adds new structures before removing old ones, maintaining backward compatibility. The lecture covers safe changes: adding nullable columns, adding tables, creating indexes (online). Unsafe changes: dropping columns, changing data types, renaming objects. By 2040, **schema registries** (Confluent Schema Registry for Kafka, database-specific registries for PostgreSQL) track schema versions and enforce compatibility rules.
+
+### Required Reading
+
+- Elmasri, R., & Navathe, S. B. (2015). *Fundamentals of Database Systems* (7th Edition). Pearson. Chapters 3–4, 14–15.
+- Kimball, R., & Ross, M. (2013). *The Data Warehouse Toolkit* (3rd Edition). Wiley. Chapters 1–2.
+- Date, C. J. (2012). *Database Design and Relational Theory*. O'Reilly. Chapters 1–3.
+- Snodgrass, R. T. (2000). *Developing Time-Oriented Database Applications in SQL*. Morgan Kaufmann.
+- Yggdrasil Database Team (2034). "Schema Evolution at Scale: The UoY Expand-Contract Playbook." *UoY Database Operations Manual*.
+
+### Discussion Questions
+
+1. Normalization to BCNF can produce many small tables, increasing join complexity. For an OLTP system with simple queries, is 3NF sufficient, or should designers aim for BCNF regardless?
+2. Materialized views improve query performance but require maintenance (refresh strategies). What refresh strategy (on-demand, scheduled, incremental, real-time) is appropriate for a rapidly changing dataset?
+3. Temporal tables simplify history tracking but double storage requirements. For a table with 100 million rows and 10% monthly change rate, is the storage overhead justified?
+4. Schema registries enforce compatibility but can block necessary breaking changes. How should teams manage major schema revisions that cannot be backward-compatible?
+
+### Practice Problems
+
+- Design a normalized schema for a university course registration system. Include entities for students, courses, instructors, enrollments, and prerequisites. Normalize to 3NF and verify that no insertion, update, or deletion anomalies remain.
+- Take a denormalized reporting table and redesign it using materialized views. Measure query performance before and after, and implement an incremental refresh strategy that maintains consistency.
+
+---
+
+ᚺ **Lecture 9: NoSQL, NewSQL, and Polyglot Persistence**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Relational databases are not the only option. This lecture covers the alternative data management systems that have emerged to handle workloads poorly served by SQL: document stores, key-value stores, wide-column stores, graph databases, and time-series databases. Students will learn when to use each type, how to administer them, and how to integrate them in polyglot architectures.
+
+### Key Topics
+
+- Document stores: MongoDB, Couchbase, and PostgreSQL JSONB
+- Key-value stores: Redis, etcd, and DynamoDB
+- Wide-column stores: Cassandra, ScyllaDB, and HBase
+- Graph databases: Neo4j, Amazon Neptune, and RDF stores
+- Time-series databases: InfluxDB, TimescaleDB, and Prometheus
+
+### Lecture Notes
+
+The **NoSQL** movement (late 2000s) rejected the rigid schemas and ACID constraints of relational databases in favor of scalability and flexibility. By 2040, the distinction between SQL and NoSQL has blurred: PostgreSQL supports JSONB documents; MongoDB supports multi-document ACID transactions; CockroachDB provides scalable SQL. The lecture treats NoSQL not as a rejection of relational theory but as an expansion of the database administrator's toolkit.
+
+**Document stores** store data as JSON-like documents with flexible schemas. **MongoDB** (the most popular document database) provides rich querying, indexing, and aggregation. **Couchbase** combines document storage with key-value caching and SQL-like querying (N1QL). **PostgreSQL JSONB** provides document storage within a relational database, with indexing (GIN), querying (JSON path), and ACID transactions. By 2040, document stores are the default for content management, catalogs, and user profiles—data with evolving schemas and nested structures.
+
+**Key-value stores** provide the simplest data model: a key maps to a value. **Redis** (in-memory with optional persistence) serves as a cache, message broker, and session store. **etcd** (distributed, consistent) stores configuration and coordination data for Kubernetes and other distributed systems. **DynamoDB** (AWS managed) provides single-digit millisecond latency at any scale. The lecture covers Redis administration: persistence (RDB snapshots, AOF logs), replication, clustering (Redis Cluster for sharding), and memory management (eviction policies: LRU, LFU, TTL). By 2040, **Redis-compatible stores** (KeyDB, Dragonfly) provide multi-threading and improved performance.
+
+**Wide-column stores** organize data in columns rather than rows, optimizing for analytical queries over large datasets. **Apache Cassandra** (distributed, masterless, peer-to-peer) provides linear scalability and tunable consistency. **ScyllaDB** (Cassandra-compatible, C++ implementation) offers 10× throughput. The lecture covers Cassandra administration: ring topology, replication factor, consistency levels (ONE, QUORUM, ALL), compaction strategies (SizeTieredCompaction, LeveledCompaction), and repair operations. By 2040, Cassandra remains dominant for IoT, messaging, and time-series workloads that exceed single-node capacity.
+
+**Graph databases** model relationships as first-class citizens. **Neo4j** (property graph model) uses nodes, relationships, and properties, queried with Cypher. **Amazon Neptune** provides property graph and RDF graph support. The lecture covers graph administration: index-free adjacency (traversing relationships without index lookups), query optimization (pattern matching, shortest path), and sharding (graphs are hard to partition). By 2040, **knowledge graphs** (enterprise-scale RDF/OWL databases) integrate with AI systems for reasoning and recommendation.
+
+**Time-series databases** optimize for timestamped data: metrics, events, sensor readings. **InfluxDB** (popular open-source TSDB) provides high ingestion rates, retention policies, and continuous queries. **TimescaleDB** (PostgreSQL extension) brings time-series capabilities to SQL, enabling JOINs with relational data. **Prometheus** (monitoring-focused) stores metrics in its own TSDB. The lecture covers TSDB administration: retention policies (automatically expiring old data), downsampling (aggregating high-resolution to low-resolution), and high-cardinality handling (managing millions of unique time series). By 2040, **AI-native TSDBs** (e.g., UoY's **Völuspá**) use learned compression and anomaly detection for scientific instruments.
+
+### Required Reading
+
+- Sadalage, P. J., & Fowler, M. (2012). *NoSQL Distilled: A Brief Guide to the Emerging World of Polyglot Persistence*. Addison-Wesley.
+- MongoDB Documentation (2040). *MongoDB Administration*. mongodb.com.
+- Redis Documentation (2040). *Redis: Persistence, Replication, Clustering*. redis.io.
+- Neo4j Documentation (2040). *Neo4j Operations Manual*. neo4j.com.
+- Yggdrasil Database Team (2038). "Völuspá: AI-Native Time-Series Storage for Scientific Instruments." *UoY Database Research Report*.
+
+### Discussion Questions
+
+1. PostgreSQL JSONB provides document storage with ACID transactions. For a new project, should the team choose PostgreSQL JSONB or MongoDB, and what factors determine the choice?
+2. Redis is single-threaded (per node), which limits throughput on a single instance. Does Redis Cluster's sharding adequately address this, or should Redis-compatible multi-threaded alternatives be considered?
+3. Graph databases excel at relationship queries but struggle with horizontal scaling. For a social network with 1 billion users, is a graph database feasible, or should relationships be modeled in a relational or wide-column store?
+4. Time-series databases optimize for ingestion and retention but sacrifice general query flexibility. For a workload that is 80% time-series and 20% relational, should the team use a TSDB with relational extensions or maintain separate systems?
+
+### Practice Problems
+
+- Migrate a relational schema to MongoDB for a product catalog with variable attributes (different products have different specifications). Design documents, indexes, and aggregation pipelines. Compare query performance and schema flexibility.
+- Configure a Redis cluster with 3 masters and 3 replicas. Test failover by stopping a master, verify automatic promotion of replica, and measure downtime. Benchmark throughput and latency under load.
+
+---
+
+ᚾ **Lecture 10: Data Migration, ETL, and Integration**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Data rarely stays in one place. Organizations migrate data between systems, integrate disparate sources, and transform formats for analytics. This lecture covers the tools and techniques for moving data safely and efficiently: ETL (Extract, Transform, Load), change data capture, replication-based integration, and API-based synchronization.
+
+### Key Topics
+
+- ETL architecture: extraction strategies, transformation types, and loading patterns
+- Change Data Capture (CDC): log-based, trigger-based, and polling
+- Data quality: profiling, cleansing, validation, and reconciliation
+- Integration patterns: ETL vs. ELT, streaming vs. batch, and data virtualization
+- Migration tools: pg_dump, mysqldump, AWS DMS, Talend, and Apache NiFi
+
+### Lecture Notes
+
+**ETL** is the classical pattern for data integration: extract data from source systems, transform it (clean, validate, enrich, restructure), and load it into a target system (typically a data warehouse). **ELT** (Extract, Load, Transform) loads raw data into the target first, then transforms it using the target's compute power (common in cloud data warehouses like Snowflake, BigQuery, and Redshift). By 2040, **streaming ETL** (Kafka Connect, Apache Flink, Spark Streaming) processes data in real time rather than batches, enabling near-real-time analytics.
+
+**Extraction strategies** depend on source system capabilities. **Full extract**: copying all data (simple but slow, suitable for small sources). **Incremental extract**: copying only changed data (requires a change tracking mechanism: timestamp columns, CDC, or triggers). **Delta extract**: copying changed and deleted rows (requires soft deletes or tombstones). The lecture covers source system impact: extraction queries should not lock tables or consume excessive I/O; **read replicas** are often used as extraction sources to isolate the primary.
+
+**Change Data Capture (CDC)** captures changes as they occur. **Log-based CDC** reads the database transaction log (WAL in PostgreSQL, binlog in MySQL) and replays changes to the target. It is low-impact (no queries on source) and captures all changes (including deletes), but requires access to logs and parsing logic. **Trigger-based CDC** uses database triggers to write changes to a staging table. It is database-agnostic but adds overhead to every write. **Polling CDC** queries the source periodically for changes. It is simple but misses intermediate changes and can cause delays. By 2040, **debezium** (open-source log-based CDC) is the standard for streaming data pipelines.
+
+**Data quality** ensures that integrated data is fit for purpose. **Profiling** analyzes data distributions, patterns, and anomalies (null rates, cardinality, value ranges). **Cleansing** corrects errors (standardizing formats, removing duplicates, imputing missing values). **Validation** checks data against rules (referential integrity, business constraints, format compliance). **Reconciliation** compares source and target totals to verify completeness. By 2040, **AI data quality tools** (Great Expectations, Soda, dbt tests) automatically generate and monitor data quality rules.
+
+**Integration patterns** vary by latency and complexity requirements. **Batch ETL** runs on schedules (hourly, nightly), suitable for reporting and analytics. **Streaming ETL** processes events as they occur, suitable for operational dashboards and real-time decisions. **Data virtualization** (Denodo, Starburst Galaxy) provides a unified query interface over disparate sources without moving data, suitable for exploratory analysis and temporary integration. By 2040, **data fabric** architectures combine physical replication (for performance) and virtualization (for flexibility) in a unified governance layer.
+
+**Migration tools** range from built-in utilities to enterprise platforms. **pg_dump** / **pg_restore** (PostgreSQL), **mysqldump** (MySQL), and **SQL Server Backup/Restore** handle homogeneous migrations. **AWS DMS (Database Migration Service)** supports heterogeneous migrations (Oracle to PostgreSQL, SQL Server to Aurora) with schema conversion and ongoing replication. **Talend** and **Informatica** provide visual ETL design. **Apache NiFi** provides dataflow automation with a web UI. By 2040, **cloud-native migration services** (AWS, Azure, Google Cloud) automate assessment, schema conversion, data migration, and cutover.
+
+### Required Reading
+
+- Kimball, R., & Caserta, J. (2004). *The Data Warehouse ETL Toolkit*. Wiley. Chapters 1–3.
+- Confluent (2040). *Debezium Documentation: Change Data Capture*. debezium.io.
+- AWS (2040). *Database Migration Service: Best Practices*. AWS Documentation.
+- NiFi Documentation (2040). *Apache NiFi User Guide*. nifi.apache.org.
+- Yggdrasil Data Engineering Team (2037). "The UoY Data Fabric: Physical and Virtual Integration." *UoY Data Architecture Report*.
+
+### Discussion Questions
+
+1. Log-based CDC is low-impact but requires access to database logs, which may contain sensitive data. What security controls are necessary when streaming CDC data across networks?
+2. Data virtualization avoids data movement but can suffer from performance issues (network latency, source system load). For a query joining three remote databases, is virtualization practical?
+3. AI data quality tools generate rules automatically but may miss domain-specific constraints. Should human data stewards review AI-generated rules, or is automation sufficient?
+4. Cloud-native migration services automate much of the migration process but create vendor lock-in. For an organization planning to remain multi-cloud, are cloud-specific migration tools appropriate?
+
+### Practice Problems
+
+- Design an ETL pipeline that migrates data from a PostgreSQL operational database to a Snowflake data warehouse. Specify: extraction method (CDC or batch), transformation logic, loading pattern (incremental merge), data quality checks, and reconciliation procedures.
+- Implement a log-based CDC pipeline using Debezium. Capture changes from a PostgreSQL table and stream them to Kafka. Verify that inserts, updates, and deletes are correctly captured and ordered.
+
+---
+
+ᛁ **Lecture 11: Cloud Databases and Managed Services**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+Cloud computing has transformed database administration from hardware procurement to service consumption. This lecture covers the managed database services offered by major cloud providers: relational (RDS, Aurora, Cloud SQL), NoSQL (DynamoDB, Cosmos DB, Firestore), and specialized (BigQuery, Redshift, Snowflake). Students will learn to select, configure, and optimize cloud databases while understanding the trade-offs between control and convenience.
+
+### Key Topics
+
+- Managed relational databases: Amazon RDS, Aurora, Azure SQL, Google Cloud SQL
+- Serverless databases: Aurora Serverless, Cosmos DB, Firestore, PlanetScale
+- Data warehouses: Snowflake, BigQuery, Redshift, and Azure Synapse
+- Database administration in the cloud: backups, scaling, monitoring, and cost optimization
+- Multi-cloud and hybrid strategies: avoiding lock-in while leveraging cloud benefits
+
+### Lecture Notes
+
+**Managed relational databases** abstract infrastructure management: provisioning, patching, backups, and failover are handled by the cloud provider. **Amazon RDS** supports PostgreSQL, MySQL, MariaDB, Oracle, and SQL Server, with automated backups, Multi-AZ failover, and read replicas. **Amazon Aurora** (MySQL- and PostgreSQL-compatible) separates compute and storage, with a distributed, fault-tolerant storage layer that replicates data six ways across three Availability Zones. **Azure SQL Database** (SQL Server-compatible) provides intelligent tuning, threat detection, and elastic pools for multi-tenant workloads. **Google Cloud SQL** provides managed PostgreSQL and MySQL with automatic storage increase and point-in-time recovery. By 2040, **managed databases are the default** for new applications; self-managed databases are reserved for specialized requirements (custom extensions, specific hardware, regulatory constraints).
+
+**Serverless databases** automatically scale compute and storage based on demand. **Aurora Serverless** scales Aurora capacity in seconds, suitable for variable workloads. **Azure Cosmos DB** provides multi-model (document, key-value, graph, column-family) with global distribution and automatic scaling. **Google Cloud Firestore** provides serverless document storage with real-time sync. **PlanetScale** (built on Vitess, MySQL scaling framework) provides serverless MySQL with branching (Git-like schema versioning) and deploy requests (code review for schema changes). By 2040, serverless is the default for development, test, and variable-production workloads; provisioned instances are used for steady-state production.
+
+**Data warehouses** (also called analytical databases) optimize for complex queries over large datasets. **Snowflake** separates storage (in S3/Azure Blob/GCS), compute (virtual warehouses), and services (metadata, optimization), enabling independent scaling. **BigQuery** (Google) provides serverless analytics: no cluster management, pay-per-query pricing, and automatic caching. **Amazon Redshift** provides columnar storage and massively parallel processing (MPP). **Azure Synapse Analytics** integrates data warehousing, big data analytics, and data integration. By 2040, **lakehouse architectures** (Databricks, Apache Iceberg, Delta Lake) unify data lakes (cheap storage) and data warehouses (fast queries), enabling SQL queries directly on parquet files.
+
+**Cloud DBA responsibilities** differ from on-premises. The cloud provider manages: OS patching, hardware replacement, network configuration, and basic backup. The customer manages: schema design, query optimization, access control, advanced monitoring, and cost management. The lecture covers **cost optimization**: right-sizing instances (avoiding over-provisioned databases), using reserved instances for steady workloads, enabling storage auto-tiering, and monitoring cloud bills for anomalies. By 2040, **FinOps** (financial operations) teams collaborate with DBAs to optimize cloud database spending.
+
+**Multi-cloud and hybrid strategies** avoid vendor lock-in while leveraging best-of-breed services. **Multi-cloud** runs databases on multiple providers (e.g., Aurora for transactional, BigQuery for analytics). **Hybrid cloud** runs some databases on-premises (legacy, compliance) and others in cloud (scalable, modern). Challenges: data transfer costs, inconsistent APIs, security model differences, and operational complexity. By 2040, **cloud-agnostic abstractions** (Kubernetes operators, Terraform modules, Crossplane) reduce multi-cloud friction, but the DBA must still understand each provider's specifics.
+
+### Required Reading
+
+- AWS (2040). *Amazon RDS User Guide*. AWS Documentation.
+- Microsoft (2040). *Azure SQL Database Documentation*. Microsoft Learn.
+- Google Cloud (2040). *Cloud SQL Documentation*. Google Cloud Docs.
+- Snowflake (2040). *Snowflake Documentation: Architecture and Best Practices*. Snowflake Docs.
+- Yggdrasil Cloud Team (2038). "Multi-Cloud Database Strategy: Lessons from the UoY Migration." *UoY Cloud Architecture Report*.
+
+### Discussion Questions
+
+1. Managed databases reduce operational burden but limit customization (no superuser access, restricted extensions). For a PostgreSQL application requiring a custom C extension, is managed still viable?
+2. Serverless databases scale automatically but can have cold-start latency. For a latency-sensitive production API, is serverless appropriate, or should provisioned capacity be maintained?
+3. BigQuery's pay-per-query pricing is cost-effective for sporadic analytics but expensive for frequent queries. What caching and materialization strategies can control costs?
+4. Multi-cloud strategies increase complexity. For a small team with 5 databases, is multi-cloud worth the overhead, or should they standardize on one provider?
+
+### Practice Problems
+
+- Migrate a self-managed PostgreSQL database to Amazon RDS. Configure Multi-AZ failover, read replicas, automated backups, and parameter groups. Measure failover time and replication lag. Compare monthly cost to self-managed on EC2.
+- Design a data warehouse architecture in Snowflake for a university analytics platform. Specify: warehouse sizes, scaling policies, data loading (bulk vs. streaming), role-based access control, and cost monitoring. Load a sample dataset and benchmark query performance.
+
+---
+
+ᛃ **Lecture 12: Database Administration in 2040: AI, Autonomy, and the Human DBA**
+
+**Course:** IT203 — Database Administration  
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+### Overview
+
+The final lecture synthesizes the course's themes and projects the DBA's role into the future. By 2040, AI manages much of the routine work of database administration, but human judgment remains essential for architecture, ethics, and crisis response. Students will learn to collaborate with AI systems, maintain expertise in fundamentals, and adapt to a profession in transformation.
+
+### Key Topics
+
+- Autonomous databases: self-driving, self-securing, self-repairing
+- AI-assisted DBA tools: query advisors, anomaly detection, and predictive maintenance
+- The human DBA's enduring value: architecture, ethics, and incident command
+- Career development: specialization (performance, security, cloud) vs. generalization
+- The future: quantum databases, DNA storage, and beyond
+
+### Lecture Notes
+
+**Autonomous databases**, pioneered by Oracle (Autonomous Database, 2017) and adopted by cloud providers (Azure SQL Intelligent Insights, Amazon RDS Performance Insights with auto-remediation), use machine learning to automate: provisioning, tuning, patching, backup, and failure recovery. By 2040, autonomous capabilities are standard for managed services. The DBA's role shifts from "tuner" to "architect": defining service-level objectives, selecting appropriate platforms, designing data models, and governing AI behavior.
+
+**AI-assisted DBA tools** enhance human capabilities without replacing them. **Query advisors** (e.g., PostgreSQL's pg_plan_advsr) suggest index creation and query rewrites, which the DBA evaluates. **Anomaly detection** (e.g., UoY's **Ratatoskr** for databases, 2039) identifies unusual patterns: sudden latency spikes, unexpected query volumes, abnormal access times. **Predictive maintenance** forecasts hardware failures (disk SMART data, memory error rates) and recommends preemptive replacement. The lecture emphasizes that AI tools are **advisory**, not **authoritative**: they suggest based on patterns, but the DBA decides based on context.
+
+**The human DBA's enduring value** lies in areas where AI is weak. **Architecture** requires understanding organizational goals, predicting future requirements, and balancing trade-offs that lack quantitative models. **Ethics** requires judgment about data privacy, access, and use—decisions that cannot be reduced to optimization problems. **Incident command** during crises requires calm, creativity, and communication—qualities that AI lacks. The 2038 *Yggdrasil Database Incident*—in which an AI optimizer suggested dropping an index that was critical for a regulatory report, and a human DBA recognized the context and rejected the suggestion—illustrates the partnership.
+
+**Career development** for DBAs in 2040 involves choosing a path. **Specialists** deep-dive into performance tuning, security hardening, cloud architecture, or AI integration. **Generalists** maintain breadth across platforms and technologies, suitable for smaller organizations. The lecture advises: master one relational database deeply (PostgreSQL, SQL Server, or Oracle), gain working knowledge of two others, understand one NoSQL system, one data warehouse, and one cloud platform. **Continuous learning** is mandatory: database technology evolves rapidly, and skills decay quickly.
+
+**The future** of data management extends beyond current paradigms. **Quantum databases** (2030s research) use quantum computing for optimization and search, though practical deployment is decades away. **DNA storage** (encoding data in synthetic DNA) offers extreme density and longevity, with read/write latency measured in hours—suitable for archival, not operational. **Neuromorphic databases** (UoY research, 2037) use spiking neural networks for approximate query processing and pattern recognition. The lecture concludes that while these technologies are speculative, the DBA's foundational skills—understanding data structures, transactions, and query optimization—will transfer to whatever comes next.
+
+### Required Reading
+
+- Oracle (2040). *Oracle Autonomous Database: Technical Overview*. Oracle Documentation.
+- Yggdrasil Database Team (2039). "Ratatoskr for Databases: AI Anomaly Detection in Production." *UoY Database Operations Report*.
+- Yggdrasil Database Team (2038). "The Human-AI Partnership: Lessons from the 2038 Index Incident." *UoY Database Operations Review*.
+- Cerf, V. G. (2035). "DNA Data Storage: Progress and Prospects." *Communications of the ACM*, 58(3), 22–25.
+- Yggdrasil Research Division (2037). "Neuromorphic Query Processing: Approximate Search with Spiking Neural Networks." *UoY Future Computing Report*.
+
+### Discussion Questions
+
+1. Autonomous databases promise to reduce DBA headcount. Should universities still teach DBA skills, or should the curriculum shift to database architecture and AI governance?
+2. AI advisors suggest based on historical patterns, but novel problems lack precedent. How should DBAs develop judgment for situations that AI has never seen?
+3. Quantum databases are theoretical but may mature within students' careers. What aspects of current database theory (indexing, transactions, query optimization) will transfer, and what will need reinvention?
+4. DNA storage offers extreme density but hours-long access times. For what categories of institutional data is DNA storage appropriate, and what retrieval architectures would make it usable?
+
+### Practice Problems
+
+- Evaluate an AI-generated database tuning recommendation. Analyze its technical validity, assess its impact on workload characteristics, and decide whether to implement, modify, or reject it. Document your reasoning.
+- Design a 10-year career development plan for a database professional. Include: foundational skills to acquire, specializations to explore, certifications to pursue, and emerging technologies to monitor.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT203 is a **practical capstone** (60% of grade) combined with a **written theory exam** (40% of grade).
+The IT203 final examination is a **comprehensive practical and written assessment** conducted over 48 hours. Students must complete **three of five** challenges:
 
-**Practical Capstone (60%):**
-Students design and operate a database infrastructure for a simulated high-traffic web application (a ride-sharing platform with 1 million daily transactions). Requirements:
-- Design a PostgreSQL schema for users, drivers, rides, payments, and ratings (3NF, with appropriate indexes).
-- Implement streaming replication with one synchronous standby and two asynchronous standbys.
-- Configure PgBouncer for connection pooling.
-- Implement automated backups (pgBackRest, hourly incremental, daily full, 7-day retention) with PITR capability.
-- Load test the database with pgbench and optimise until p95 latency < 10ms for read queries.
-- Document all configurations, procedures, and disaster recovery runbooks.
+1. **Database Design and Implementation**: Design a schema for a complex domain (e.g., a hospital patient management system). Implement it in PostgreSQL or MySQL, including tables, indexes, constraints, views, and stored procedures. Populate with test data and verify integrity.
+2. **Performance Tuning**: Given a poorly performing database and application, identify bottlenecks using execution plans, wait events, and system metrics. Implement optimizations (indexing, query rewriting, configuration changes) and measure improvement.
+3. **High Availability Setup**: Configure primary-replica replication with automatic failover. Test failure scenarios (primary crash, network partition, replica lag) and verify data consistency. Document the architecture and recovery procedures.
+4. **Security Hardening**: Audit a database for security vulnerabilities (weak passwords, excessive privileges, missing encryption, unpatched versions). Implement hardening measures and verify compliance with a security baseline (CIS or organizational).
+5. **Migration and Integration**: Design and execute a migration from an on-premises database to a cloud-managed service. Include: schema conversion, data migration, application reconfiguration, cutover planning, and rollback procedures.
 
-**Written Theory Exam (40%):**
-Choose 4 of 8 essay questions:
+### Evaluation Criteria
 
-1. MVCC enables high concurrency but creates table bloat that must be managed by VACUUM. Analyse the trade-offs of MVCC and propose a systematic approach to vacuum tuning.
+| Criterion | Weight | Description |
+|-----------|--------|-------------|
+| Technical depth | 30% | Accurate use of database internals, commands, and tools |
+| Design quality | 25% | Appropriate schema, index, and architecture choices |
+| Security | 20% | Least privilege, encryption, auditing, and hardening |
+| Documentation | 15% | Clear procedures, rationale, and troubleshooting notes |
+| Innovation | 10% | Creative or insightful solutions to complex problems |
 
-2. Compare synchronous and asynchronous replication. For a financial application requiring RPO = 0, what architecture would you design, and what are the operational implications?
+---
 
-3. NewSQL databases promise ACID transactions at scale, but they add latency and complexity. For what classes of applications is NewSQL genuinely necessary, and when is PostgreSQL with read replicas sufficient?
+*The data endures. The transactions commit. The backups restore. The queries optimize. This is the DBA's quiet vigil—the guardian at the gate of institutional memory.* ᛟ
 
-4. Describe the modern data stack and its components. What are the advantages of ELT over ETL, and what are the risks?
-
-5. Vector databases are essential for AI-powered search. Will vector search be absorbed into general-purpose databases, or will standalone vector databases remain dominant?
-
-6. Data mesh decentralises data ownership. Is this a realistic model for most organisations, or is it applicable only to large tech companies with mature engineering cultures?
-
-7. Immutable backups protect against ransomware but are expensive. Is the ransomware threat severe enough to mandate immutable backups for all databases?
-
-8. AI-assisted database tuning promises to automate configuration and index design. Can AI genuinely design better databases than experienced DBAs, or does it merely automate the obvious choices?
-
-**Grading:**
-- A (Excellent): A fully functional, optimised, and well-documented database infrastructure. Written exam demonstrates deep understanding of database internals, performance tuning, and architectural trade-offs.
-- B (Good): A competent infrastructure with minor gaps in performance, replication, or documentation. Written exam is solid but lacks critical depth.
-- C (Satisfactory): An infrastructure that meets minimum requirements but has significant gaps. Written exam shows basic understanding but limited analysis.
-- D (Poor): A partially functional infrastructure or one with serious security or performance flaws. Written exam is superficial or contains errors.
-- F (Fail): No functional infrastructure or missing capstone. Written exam fails to demonstrate understanding of database administration.
+— Runa Gridweaver Freyjasdottir, Database Administration, University of Yggdrasil, 2040
