@@ -1,350 +1,586 @@
-# IT103: Computer Hardware and Systems
+# IT103: Operating Systems for IT Professionals
 ## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-**Credits:** 4
-**Prerequisites:** IT101 (Foundations of Information Technology)
-**Description:** A hands-on, technically rigorous exploration of computer hardware architecture, component-level functionality, and systems administration fundamentals. Students learn to assemble, configure, troubleshoot, and maintain physical computing systems ranging from embedded IoT devices to rack-mounted servers. The course covers processor architectures, memory technologies, storage subsystems, power delivery, thermal management, peripheral interfaces, and the diagnostic methodologies that distinguish professional technicians from amateur tinkerers. By 2040, hardware is increasingly abstracted behind virtualisation and cloud layers, yet the physical layer remains the irreducible foundation upon which all software rests. Understanding hardware is not nostalgia; it is the bedrock of reliable system design.
+**Credits:** 4  
+**Prerequisites:** IT101  
+**Description:** An intensive, practitioner-focused exploration of operating system internals as they apply to information technology operations. Students master process and memory management, file systems, I/O subsystems, security isolation mechanisms, and kernel debugging on both Linux and Windows Server. The course emphasises hands-on competence: every student manages a bare-metal server, debugs kernel behaviour, tunes performance under load, and implements security hardening. By the end, students can diagnose why a system is slow, secure it against common attacks, and explain their reasoning with precision.
+
+**Instructor:** Prof. Björn Hrafnkelsson, Department of Information Technology  
+**Lab:** YggLab Systems Studio, Muninn Computing Centre, Basement Level  
+**Office Hours:** Tuesdays and Thursdays, 14:00-16:00 UTC
 
 ---
 
-## Lecture 1: The Physical Layer — Electrons, Silicon, and the Limits of Computation
+## Lectures
 
-All computation is, at bottom, a physical process. Electrons flow through semiconductor channels, magnetic domains align in storage media, photons carry data through fibre-optic cables, and quantum states evolve in cryogenic processors. This lecture examines the physics of computation and the engineering constraints that shape hardware design.
+ᚠ **Lecture 1: The OS as the IT Professional's Domain**
 
-**Semiconductor physics** is the foundation of modern computing. A **semiconductor** (typically silicon, though gallium nitride and silicon carbide are increasingly used for power electronics) has electrical conductivity between that of a conductor and an insulator. By **doping** — introducing impurity atoms — semiconductors can be made **n-type** (excess electrons) or **p-type** (electron deficiencies, called holes). A **transistor** is a semiconductor device that uses a small voltage to control a larger current flow. The **MOSFET** (Metal-Oxide-Semiconductor Field-Effect Transistor) is the dominant transistor type: it has a gate, source, and drain, and the voltage at the gate controls the current between source and drain. The **CMOS** (Complementary MOS) technology pairs n-type and p-type MOSFETs to create logic gates that consume power only during switching — the basis of virtually all modern digital logic.
-
-**The physics of scaling** has driven the exponential growth of computing power. As transistors shrink, they switch faster and consume less power per operation. However, scaling below ~5 nanometres introduces **quantum tunnelling**: electrons leak through the thin gate oxide even when the transistor is supposedly off, causing standby power consumption. **Thermal noise** becomes significant as the energy per bit approaches kT (the thermal energy at room temperature, ~26 meV). **Variability** increases: dopant atoms are countable, and random fluctuations in dopant placement cause variations in transistor characteristics. **Interconnect delay** dominates: as transistors shrink, the wires connecting them do not scale proportionally, and signal propagation delays across the chip become the limiting factor. By 2040, the industry has shifted from pure geometric scaling to **3D integration** (stacking multiple silicon dies vertically) and **chiplets** (assembling multiple smaller dies into a single package) to continue performance improvements.
-
-**Emerging physical technologies** in 2040 include: **spintronics** (using electron spin rather than charge to represent information); **memristors** (non-volatile resistive memory that can also perform computation); **photonic interconnects** (using light for on-chip and chip-to-chip communication); **superconducting logic** (using Josephson junctions for ultra-low-power, high-speed computation); and **quantum dots** (semiconductor nanocrystals that confine electrons in three dimensions, used in some quantum computing platforms). None of these has yet displaced CMOS for general-purpose computing, but each is active in research and niche applications.
-
-The **University of Yggdrasil's Materials Lab** maintains a cleanroom facility for student experimentation with semiconductor fabrication at the 100-nanometre node — ancient by industry standards but sufficient for teaching the principles of photolithography, etching, deposition, and doping. Students in IT103 fabricate simple transistors and logic gates as a capstone hardware exercise, connecting the abstract Boolean algebra of IT101 to the physical reality of electrons in silicon.
-
-**Required Reading:**
-- Jan M. Rabaey, Anantha Chandrakasan & Borivoje Nikolić, *Digital Integrated Circuits: A Design Perspective* (2nd ed., Prentice Hall, 2003/2035), ch. 1–3
-- Mark Bohr, "The Evolution of Scaling from the Homogeneous Era to the Heterogeneous Era," *Intel Technology Journal* 15, no. 2 (2011/2035): 1–12
-- Sayeef Salahuddin & Supriyo Datta, "Use of Negative Capacitance to Provide Voltage Amplification for Low Power Nanoscale Devices," *Nano Letters* 8 (2008): 405–410
-- University of Yggdrasil, "Student Cleanroom Fabrication Manual: 100nm CMOS Process" (2039)
-
-**Discussion Questions:**
-1. CMOS scaling has been the engine of computing progress for 50 years. Is the shift to 3D integration and chiplets a genuine continuation of exponential progress, or an admission that the old paradigm has ended?
-2. Quantum tunnelling is a quantum mechanical effect that becomes problematic at small scales. Is tunnelling an engineering problem to be solved, or a fundamental physical limit that will eventually halt all scaling?
-3. The Yggdrasil cleanroom uses a 100nm process for teaching. Does hands-on fabrication at an obsolete node provide meaningful educational value, or would simulation tools provide equivalent understanding at lower cost?
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 2: Processor Architecture — x86, ARM, RISC-V, and Beyond
+### Overview
 
-The processor is the brain of the computer, and its architecture determines what the machine can do, how fast it can do it, and how efficiently it uses power. This lecture examines the major processor architectures of 2040 and the design trade-offs that distinguish them.
+This lecture establishes the operating system as the primary domain of the IT professional. Where developers interact with the OS through APIs and abstractions, IT professionals must understand the OS from the kernel upward: how it schedules processes, manages memory, handles I/O, enforces security, and exposes resources to users and applications. The lecture introduces the two dominant server operating systems of 2040 — Linux (in its myriad distributions) and Windows Server — and sets the expectation that every student will achieve fluency in both by semester's end.
 
-**x86** (originally Intel 8086, 1978) is the dominant architecture for desktops, laptops, and servers. It is a **CISC** (Complex Instruction Set Computer) architecture: instructions are variable-length, complex (a single instruction can perform a multi-step operation), and backward-compatible across decades. This compatibility is both x86's greatest strength and its greatest burden: modern x86 processors decode CISC instructions into internal RISC-like micro-operations, adding complexity and power overhead. **Intel** and **AMD** are the primary x86 vendors. In 2040, x86 processors have evolved into **hybrid architectures** (Intel's 14th–20th generation Core processors, AMD's Ryzen 9000–15000 series) combining high-performance cores and power-efficient cores on the same die, similar to the ARM big.LITTLE approach.
+### Key Topics
 
-**ARM** (Advanced RISC Machine) is a **RISC** (Reduced Instruction Set Computer) architecture: instructions are fixed-length, simple, and execute in a single cycle. ARM dominates mobile devices, embedded systems, and — increasingly — servers and laptops (Apple's M-series processors, Amazon's Graviton instances, Microsoft's Cobalt). ARM's **licensing model** (ARM designs the architecture and licenses it to other companies, who design their own implementations) has created a vibrant ecosystem of processor designs optimised for different power, performance, and cost points. In 2040, **ARMv10** is the latest architecture revision, introducing features for AI acceleration, memory tagging, and confidential computing.
+- **The OS as Abstraction and Reality:** The operating system abstracts hardware (CPU, memory, disk, network) into resources that programs can use. But for the IT professional, the abstraction is not opaque: when performance degrades, when security is breached, or when hardware fails, the professional must peer beneath the abstraction to understand what is really happening. The lecture introduces the dual perspective: the OS is both the interface that enables productivity and the mechanism that must be diagnosed, tuned, and secured.
+- **Linux in 2040:** Linux dominates server infrastructure with 78% market share. The lecture covers the distribution landscape: enterprise (RHEL, SUSE Linux Enterprise Server, Ubuntu Pro), community (Debian, Fedora, Arch), and security-focused (YggdrasilOS, Qubes OS). The 2040 additions: immutable distributions (Fedora Silverblue, openSUSE MicroOS) where the base system is read-only and updates are atomic, and container-optimised distributions (Flatcar Container Linux, Bottlerocket) designed solely to run containers.
+- **Windows Server in 2040:** Windows Server 2040 remains essential in enterprise environments with Active Directory, legacy .NET applications, and hybrid cloud integration. The lecture covers: Windows Server Core (minimal footprint, no GUI), Nano Server (container-only, even smaller), and Windows Subsystem for Linux (WSL) as the bridge technology that allows Linux tools on Windows. The 2040 reality: most enterprise IT environments are heterogeneous, requiring professionals to manage both Linux and Windows seamlessly.
+- **The Unix Philosophy and Its 2040 Descendants:** The original Unix philosophy (small, composable tools; text streams as the universal interface; everything is a file) and how it manifests in modern Linux. The lecture contrasts this with Windows' object-oriented approach (PowerShell pipelines objects, not text) and discusses the strengths of each paradigm.
+- **Course Laboratory Overview:** Each student is assigned a bare-metal server (Dell PowerEdge or HPE ProLiant, 16 cores, 64GB RAM, 2x 1TB NVMe) running both Linux (dual-boot or virtualised) and Windows Server (VM). The server is the student's responsibility: they install, configure, break, fix, and tune it throughout the course. The lecture concludes with the lab safety briefing: "Your server is yours to destroy. Destroy it, learn from it, rebuild it."
 
-**RISC-V** is an open-source instruction set architecture (ISA) developed at UC Berkeley. Unlike x86 and ARM, RISC-V is freely available: anyone can design, manufacture, and sell RISC-V processors without paying licensing fees. RISC-V has gained significant traction in embedded systems, AI accelerators, and educational environments. In 2040, **RISC-V International** (the governing body) has ratified the Vector extension (for SIMD operations), the Hypervisor extension (for virtualisation), and the Matrix extension (for AI/ML workloads). The University of Yggdrasil's **Hálogi Board** — a RISC-V-based single-board computer designed for IT education — is the standard platform for IT103 lab exercises.
+### Lecture Notes
 
-**Specialised architectures** complement general-purpose processors. **GPUs** (NVIDIA, AMD) contain thousands of simple cores optimised for data-parallel workloads. **TPUs** and **NPUs** (Neural Processing Units) accelerate matrix operations for machine learning. **DSPs** (Digital Signal Processors) optimise for real-time signal processing. **FPGAs** (Field-Programmable Gate Arrays) allow hardware to be reconfigured for specific tasks. The **2040 server landscape** is increasingly **heterogeneous**: a typical server contains x86 or ARM CPUs, NVIDIA or AMD GPUs, and dedicated AI accelerators, all sharing memory through **CXL** (Compute Express Link) or **UCIe** (Universal Chiplet Interconnect Express) interconnects.
+The operating system is the IT professional's native territory. A developer may go years without understanding virtual memory; an IT professional cannot go a day. The sysadmin who receives a 3 AM alert about high load must immediately know whether the issue is CPU-bound (run queue), memory-bound (swapping), I/O-bound (disk wait), or network-bound (bandwidth saturation). This requires deep OS literacy.
 
-**Required Reading:**
-- John L. Hennessy & David A. Patterson, *Computer Architecture: A Quantitative Approach* (6th ed., 2019/2035), ch. 2–3
-- David A. Patterson, "Reduced Instruction Set Computers," *Communications of the ACM* 28, no. 1 (1985): 8–21
-- Krste Asanović et al., "The Case for Open Instruction Sets," *Microprocessor Report* (2014)
-- University of Yggdrasil, "The Hálogi Board: A RISC-V Platform for IT Education" (2039)
+Linux distributions in 2040 have fragmented into specialised variants. The enterprise distributions (RHEL, SLES, Ubuntu Pro) offer long-term support, security certifications, and vendor backing — essential for regulated industries. The immutable distributions represent a philosophical shift: rather than patching a running system, you replace the entire OS image atomically. If the new image fails, you roll back to the previous one. This eliminates an entire class of configuration drift issues but requires new operational workflows.
 
-**Discussion Questions:**
-1. x86's backward compatibility is a 40-year burden. Would the industry be better off if Intel had abandoned compatibility at some point, or is the cost of transition too high?
-2. ARM's licensing model has created a diverse ecosystem, but it also fragments the software landscape (different ARM implementations have different performance characteristics). Is fragmentation a price worth paying for diversity?
-3. RISC-V is open-source and free, but the most advanced RISC-V implementations are proprietary. Is the "open" nature of RISC-V genuine, or is it merely a marketing advantage for companies that build closed implementations?
+Windows Server's evolution reflects the same trend toward minimalism. Windows Server Core removes the GUI, reducing attack surface and resource consumption. Nano Server is even smaller, designed exclusively for container workloads. The 2040 Windows administrator manages servers primarily through PowerShell and Desired State Configuration (DSC), with GUI tools used only when absolutely necessary. WSL has blurred the Linux/Windows boundary to the point that many administrators use the same Bash and Python scripts on both platforms.
 
----
+The laboratory component is the heart of this course. Textbook knowledge of memory management is inert until you have watched `vmstat 1` during a memory pressure event and seen the page fault rate spike. Theoretical understanding of file systems becomes visceral when you have accidentally corrupted a partition table and recovered it using `testdisk`. The IT professional's knowledge is embodied: it lives in their fingers, not just their minds.
 
-## Lecture 3: Memory Systems — From DRAM to DNA
+### Required Reading
 
-Memory is the workspace of computation: the place where data and instructions reside while they are being processed. The design of memory systems is a compromise between speed, capacity, cost, and persistence. This lecture examines the memory hierarchy and the technologies that populate it.
+- Arpaci-Dusseau, R.H. & Arpaci-Dusseau, A.C. (2028). *Operating Systems: Three Easy Pieces*, 2nd Edition. Arpaci-Dusseau Books. Chapters 1-2.
+- Love, R. (2033). *Linux Kernel Development*, 4th Edition. Addison-Wesley. Chapter 1.
+- Russinovich, M.E., Solomon, D.A., & Ionescu, A. (2031). *Windows Internals*, 8th Edition. Microsoft Press. Part 1, Chapter 1.
+- Yggdrasil Systems Lab Manual (2040). "Bare-Metal Server Setup and Safety Procedures."
 
-**DRAM** (Dynamic Random Access Memory) is the standard working memory for computers. Each bit is stored as a charge in a capacitor; because the charge leaks over time, DRAM must be **refreshed** (read and rewritten) every few milliseconds. DRAM is **volatile**: when power is removed, the data is lost. The latency of DRAM access is ~10–100 nanoseconds, and its bandwidth is ~20–100 GB/s per channel. In 2040, **DDR6** is the standard for desktop and server memory, with data rates of ~12,800 MT/s and improved power efficiency. **HBM** (High Bandwidth Memory) stacks multiple DRAM dies vertically with through-silicon vias (TSVs), providing extreme bandwidth (~1–2 TB/s) for GPUs and AI accelerators. **CXL.memory** is a new protocol that allows memory to be shared across multiple processors and accelerators in a rack, creating a **memory fabric** that transcends the boundaries of a single chip.
+### Discussion Questions
 
-**SRAM** (Static Random Access Memory) is faster (~1–10 ns latency) and does not require refreshing, but it is less dense and more expensive than DRAM. SRAM is used for **processor caches** (L1, L2, L3): small, fast memories that hold frequently accessed data close to the CPU. **Cache design** is a critical aspect of processor performance: larger caches reduce misses but increase latency and power consumption; more associative caches reduce conflicts but increase complexity. In 2040, **last-level caches** (L3 or L4) have grown to 256–512 MB on high-end processors, and some server processors include **HBM as a cache layer** between DRAM and storage.
-
-**Non-volatile memory** retains data without power. **NAND flash** (SSD) is the dominant non-volatile storage technology: it stores data as charge in floating-gate transistors, organised into pages and blocks. **QLC** (Quad-Level Cell) NAND stores 4 bits per cell, maximising density at the cost of endurance and performance. In 2040, **3D NAND** has reached 500+ layers, with capacities of 10–30 TB per drive. **NAND flash** wears out: each cell can withstand only a finite number of write/erase cycles (~1,000–10,000 for QLC). **Wear levelling** and **over-provisioning** are the techniques used to distribute writes evenly and extend drive lifetime. **PCIe 6.0** and **CXL** provide the high-speed interfaces for NVMe SSDs, achieving sequential read speeds of ~30 GB/s.
-
-**Emerging memory technologies** in 2040 include: **MRAM** (Magnetoresistive RAM), which uses magnetic tunnel junctions for non-volatile, high-endurance storage; **ReRAM** (Resistive RAM), which changes resistance in metal oxides; **PCM** (Phase-Change Memory), which uses the phase of chalcogenide glasses; and **FeRAM** (Ferroelectric RAM). None of these has displaced NAND flash for bulk storage, but they are used in specialised applications (embedded systems, neuromorphic computing, persistent memory tiers). **DNA storage** (discussed in IT101) and **holographic storage** remain experimental for general-purpose computing.
-
-**Required Reading:**
-- Bruce Jacob, Spencer Ng & David Wang, *Memory Systems: Cache, DRAM, Disk* (Morgan & Claypool, 2008/2035), ch. 1–4
-- Naveen Muralimanohar, Rajeev Balasubramonian & Norman P. Jouppi, "Optimizing NUCA Organizations and Wiring Alternatives for Large Caches with CACTI 6.0," *MICRO 2007*
-- Micron Technology, "3D NAND Technology: Scaling to 500+ Layers" (2035 white paper)
-- University of Yggdrasil, "CXL.memory Fabric Performance in the Muninn Cluster" (2039)
-
-**Discussion Questions:**
-1. The memory hierarchy is a response to the divergence in speed and cost between different memory technologies. If a single technology could provide the speed of SRAM, the capacity of DRAM, and the persistence of flash at a reasonable cost, would the memory hierarchy become obsolete?
-2. QLC NAND maximises density but has poor endurance. For consumer workloads (where writes are relatively infrequent), is QLC a good trade-off? For data centre workloads (where writes are intensive), should TLC or MLC still be preferred?
-3. CXL.memory enables memory pooling across multiple servers. Does this create a single point of failure, or does the redundancy of pooled memory actually improve reliability?
+1. Compare the Unix text-stream philosophy with PowerShell's object pipeline. For an IT automation task (e.g., finding all stopped services and starting them), which approach produces more robust, maintainable code?
+2. Immutable operating systems promise reduced configuration drift but require replacing the entire OS image for updates. What operational challenges does this create for organisations with complex custom configurations?
+3. The Norse *húskarl* (household warrior) was responsible for the physical security of the longhouse and the wellbeing of its inhabitants. How does this protective, stewardship-oriented role inform the IT professional's relationship with the operating systems under their care?
 
 ---
 
-## Lecture 4: Storage Subsystems — HDDs, SSDs, and the Hierarchy of Persistence
+ᚢ **Lecture 2: Process and Thread Management**
 
-While memory provides fast, volatile workspace, storage provides persistent, large-capacity data retention. This lecture examines the technologies, architectures, and performance characteristics of modern storage systems.
-
-**Hard disk drives (HDDs)** use spinning magnetic platters and read/write heads to store data. Despite being a 60-year-old technology, HDDs remain relevant in 2040 for **cold storage** (infrequently accessed data) due to their low cost per gigabyte (~$0.01/GB). Modern HDDs use **HAMR** (Heat-Assisted Magnetic Recording) or **MAMR** (Microwave-Assisted Magnetic Recording) to achieve areal densities of 5–10 Tb/in², enabling capacities of 50–100 TB per drive. However, HDDs are **mechanical**: they have moving parts that wear out, they are sensitive to shock and vibration, and their random access performance is poor (~5–10 ms seek time). **SMR** (Shingled Magnetic Recording) overlaps tracks to increase density but reduces write performance, making SMR drives suitable only for sequential write workloads (archival, backup, video surveillance).
-
-**Solid-state drives (SSDs)** have no moving parts: they store data in NAND flash memory and access it electronically. SSDs are **faster** (microsecond-level access times), **more durable** (no mechanical wear), **quieter**, and **more power-efficient** than HDDs. The trade-off is **cost** (~$0.05–0.10/GB in 2040) and **endurance** (finite write cycles). SSD performance depends on the **controller**: the chip that manages flash memory, performs wear levelling, handles error correction, and optimises read/write patterns. High-end SSD controllers include **DRAM caches** for mapping tables and **AI-based predictors** for prefetching and write coalescing. **ZNS** (Zoned Namespaces) SSDs expose the underlying erase-block structure to the host, allowing the file system to optimise write patterns and reduce write amplification.
-
-**Storage architectures** range from direct-attached storage (DAS) to network-attached storage (NAS) to storage area networks (SAN). **DAS** is storage directly connected to a server (SATA, SAS, NVMe). **NAS** is storage accessed over the network via file protocols (NFS, SMB/CIFS). **SAN** is a dedicated network for block-level storage access (Fibre Channel, iSCSI, NVMe-oF). In 2040, **software-defined storage (SDS)** abstracts the physical storage into virtual pools that can be managed programmatically. **Distributed storage systems** (Ceph, GlusterFS, MinIO) aggregate storage from multiple servers into a unified namespace with replication and erasure coding for fault tolerance. **Object storage** (Amazon S3, OpenStack Swift, Ceph RADOS) is the dominant model for cloud storage: data is stored as objects with metadata and unique identifiers, accessed via HTTP APIs.
-
-**The University of Yggdrasil's Mímir Archive** (introduced in IT101) uses a tiered storage architecture: **hot tier** (NVMe SSD, for active research data); **warm tier** (SATA SSD, for recently completed projects); **cold tier** (HDD, for historical data); **archive tier** (tape, for regulatory compliance); and **deep archive** (DNA and sapphire, for cultural heritage preservation). Students in IT103 design and implement a miniature version of this hierarchy using Raspberry Pi devices, USB SSDs, and simulated tape backups, gaining hands-on experience with tiering policies and migration workflows.
-
-**Required Reading:**
-- Richard E. Matick, *Computer Storage Systems and Technology* (Wiley, 1977/2035), ch. 1, 5, 8
-- Nitin Agrawal, Vijayan Prabhakaran, Ted Wobber & John D. Davis, "Design Tradeoffs for SSD Performance," *ATC 2008*
-- Ceph Documentation, "Ceph Architecture" (2040), <https://docs.ceph.com/en/latest/architecture/>
-- University of Yggdrasil, "Mímir Archive: Tiered Storage Policy and Migration Workflows" (2039)
-
-**Discussion Questions:**
-1. HDDs are a mature technology with limited further improvement. Will HDDs eventually disappear, or will their low cost per gigabyte ensure a permanent niche in cold storage?
-2. ZNS SSDs expose the flash translation layer to the host, shifting complexity from the SSD controller to the host software. Is this a genuine architectural improvement, or does it merely move the problem without solving it?
-3. DNA and sapphire storage are used in the Mímir Archive for million-year preservation. What are the practical challenges of retrieving data from these formats, and how does the archive ensure that future generations will be able to decode them?
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 5: Power, Cooling, and the Thermodynamics of Data Centres
+### Overview
 
-Computers consume electricity and generate heat. At the scale of a data centre, power and cooling are not afterthoughts; they are primary design constraints that determine location, architecture, and operational cost. This lecture examines the thermodynamics of computation and the engineering of data centre infrastructure.
+Processes are the fundamental unit of execution, and understanding their lifecycle, scheduling, and intercommunication is essential for IT operations. This lecture covers process creation (fork-exec on Linux, CreateProcess on Windows), thread models, scheduling algorithms, and the practical tools used to observe and manage processes in production environments. The hands-on component includes tracing process creation with `strace`, monitoring thread pools, and diagnosing runaway processes.
 
-**Power delivery** in a data centre begins at the utility substation and flows through transformers, UPS (Uninterruptible Power Supply) systems, PDUs (Power Distribution Units), and finally to the servers. **PUE** (Power Usage Effectiveness) is the ratio of total facility power to IT equipment power; a PUE of 1.0 would mean all power goes to computation, while a PUE of 2.0 means half is lost to cooling and other overheads. In 2020, average PUE was ~1.6; by 2040, hyperscale data centres achieve PUE of 1.05–1.15 through advanced cooling and waste heat recovery. The University of Yggdrasil's **Muninn Computing Centre** achieves a PUE of 1.08, powered by geothermal and hydroelectric energy, with waste heat directed to the campus district heating system.
+### Key Topics
 
-**Server power consumption** is dominated by the CPU, memory, and storage. A high-end server CPU in 2040 consumes 200–400W under load; a GPU can consume 500–1000W; and a fully populated server rack can draw 50–100 kW. **Dynamic Voltage and Frequency Scaling (DVFS)** reduces power consumption when the system is idle or under light load. **Power capping** limits the maximum power draw of a server or rack to prevent overload. **Workload scheduling** can shift compute-intensive tasks to times or locations with cheaper or cleaner energy. In 2040, **carbon-aware scheduling** is standard practice: workloads are directed to data centres with low carbon intensity (high renewable generation) and away from data centres powered by fossil fuels.
+- **Process Concepts:** A process as an instance of a running program, with its own address space, open files, and execution state. The process control block (PCB) and its contents. The five-state process model (new, ready, running, waiting, terminated) and the transitions between states. The lecture covers zombie processes (completed but not reaped by parent) and orphan processes (parent terminated before child), with practical cleanup techniques.
+- **Process Creation:** The fork-exec model in Linux (copy-on-write semantics, `fork()`, `execve()`, `waitpid()`, `exit()`). The lecture includes a step-by-step walkthrough of what happens when you type a command in a shell: fork, exec, wait, and the return of control. On Windows: `CreateProcess`, `TerminateProcess`, job objects for process grouping, and the Windows Subsystem for Linux implementation of fork.
+- **Threads and Concurrency:** Threads as lightweight execution contexts within a process. User-level threads (green threads, coroutines) versus kernel-level threads (1:1 threading model). The lecture covers thread pools (why creating a thread per request does not scale), thread-local storage, and the 2040 reality where async/await and structured concurrency have reduced the need for manual thread management in applications — but the OS still schedules kernel threads.
+- **Scheduling Algorithms:** The Completely Fair Scheduler (CFS) in Linux (virtual runtime, red-black tree of runnable tasks, priority weighting) and the Windows thread scheduler (priority classes, time quantum, dynamic priority boosts). The lecture covers: real-time scheduling (SCHED_FIFO, SCHED_RR) and its dangers (a runaway real-time process can freeze the system), nice values and priority ranges, and CPU affinity (pinning processes to specific cores for cache locality or isolation).
+- **Inter-Process Communication (IPC):** Pipes (anonymous and named), message queues, shared memory, semaphores, signals, sockets, and the 2040 additions: D-Bus for desktop and service communication, and gRPC for microservice IPC. The lecture covers the performance implications: shared memory is fastest but requires synchronisation; sockets are slower but provide natural isolation.
+- **Practical Tools:** `ps`, `top`, `htop`, `pidstat` for process monitoring; `strace` (Linux) and Process Monitor (Windows) for system call tracing; `lsof` for open file inspection; `pstree` for process hierarchy visualization. The hands-on lab: trace the system calls made by `ls`, identify each call's purpose, and explain what would happen if a call failed.
 
-**Cooling technologies** have evolved significantly. **Air cooling** (traditional computer room air conditioning, CRAC) is simple but inefficient at high densities. **Liquid cooling** (direct-to-chip, immersion, or rear-door heat exchangers) removes heat more efficiently and enables higher power densities. **Immersion cooling** submerges servers in a dielectric fluid (mineral oil or engineered fluorocarbons), achieving extremely efficient heat transfer and enabling rack densities of 100+ kW. **Free cooling** uses outside air or water when ambient temperatures are low, reducing or eliminating mechanical refrigeration. In the Nordic region, free cooling is available for 8–10 months per year, making it an ideal location for energy-efficient data centres. The **Nordic Cloud Collective** (discussed in IT101) leverages this advantage to offer carbon-negative cloud services.
+### Lecture Notes
 
-**The thermodynamic limit** of computation is given by **Landauer's principle**: erasing one bit of information requires a minimum energy of kT ln(2) (~0.017 eV at room temperature, or ~3 × 10⁻²¹ joules). Current computers operate many orders of magnitude above this limit (~10⁻¹⁵ joules per logic operation), but as scaling continues, the gap narrows. **Reversible computing** (computing that does not erase information) could theoretically approach zero energy dissipation, but it requires new hardware paradigms and programming models that are not yet practical. In 2040, reversible computing remains an active research area at the University of Yggdrasil's Theoretical Computing Lab.
+Process management is where the theoretical OS concepts become immediately practical. When a web server stops responding, the first diagnostic step is usually `ps` or `top`: is the process running? Is it consuming CPU? Is it blocked in I/O wait? Is the run queue saturated with runnable processes? These questions map directly to OS concepts.
 
-**Required Reading:**
-- Jonathan G. Koomey, *Turning Numbers into Knowledge: Mastering the Art of Problem Solving* (Analytics Press, 2004/2035), ch. 12 ("Data Centre Energy")
-- Luiz André Barroso, Jimmy Clidaras & Urs Hölzle, "The Datacenter as a Computer: An Introduction to the Design of Warehouse-Scale Machines* (3rd ed., Morgan & Claypool, 2019/2035), ch. 4–5
-- Eric Masanet et al., "Recalibrating Global Data Centre Energy-Use Estimates," *Science* 367 (2020): 984–986
-- ASHRAE, *Thermal Guidelines for Data Processing Environments* (5th ed., 2035)
-- University of Yggdrasil, "Geothermal-Powered Data Centres: The Muninn PUE 1.08 Design" (2039)
+The fork-exec model, inherited from UNIX in the 1970s, remains the foundation of Linux process creation. When a process forks, the OS creates a new PCB and duplicates the parent's address space — but modern systems use copy-on-write (COW), where pages are shared read-only until either process writes to them. This optimisation is critical: without COW, forking a large process (like a database server with 32GB of mapped memory) would require copying 32GB, taking seconds. With COW, the fork completes in microseconds. IT professionals must understand COW because it affects memory accounting: a process may appear to use 32GB of memory (RSS) but share most of it with its parent, making the actual marginal memory cost much smaller.
 
-**Discussion Questions:**
-1. PUE is a useful metric but imperfect: it does not account for the carbon intensity of the electricity source. Should data centres be required to report **carbon usage effectiveness (CUE)** instead of or in addition to PUE?
-2. Immersion cooling enables extreme power densities but introduces new challenges (fluid maintenance, component compatibility, fire safety). Is immersion cooling the future of high-density computing, or will it remain a niche technology?
-3. Landauer's principle sets a thermodynamic limit on computation, but current computers are ~10²⁴ times above this limit. Is reversible computing a realistic goal, or is the engineering difficulty insurmountable?
+Scheduling is the OS function that most directly affects perceived performance. The CFS scheduler in Linux aims to give every runnable task a "fair" share of CPU time, weighted by priority. But "fair" does not mean "equal": a process with `nice -10` gets roughly twice the CPU time as one with `nice 0`, and a real-time process (`SCHED_FIFO`) can starve everything else if it never blocks. The lecture includes a demonstration: a `SCHED_FIFO` process running an infinite loop renders a Linux system completely unresponsive to SSH, requiring a hard reboot or physical console access. This is why real-time privileges are restricted to root and must be used with extreme caution.
 
----
+Zombie processes are a classic operational nuisance. When a child process exits, it sends a `SIGCHLD` signal to its parent and enters a zombie state, retaining its PID and exit status until the parent calls `wait()` or `waitpid()`. A poorly written parent that never reaps its children will accumulate zombies, eventually exhausting the PID space. The solution is either fixing the parent or installing a `SIGCHLD` handler that reaps children automatically. On Windows, the equivalent issue is orphaned processes that outlive their job objects, though the Windows kernel handles cleanup more aggressively than Linux.
 
-## Lecture 6: Peripheral Interfaces and External Connectivity
+### Required Reading
 
-A computer is not an island; it connects to the world through a variety of interfaces and protocols. This lecture examines the physical and logical connections that enable computers to interact with humans, other computers, and the physical environment.
+- Arpaci-Dusseau, R.H. & Arpaci-Dusseau, A.C. (2028). *Operating Systems: Three Easy Pieces*, 2nd Edition. Chapters 4-6 (Processes, Process API, Direct Execution).
+- Love, R. (2033). *Linux Kernel Development*, 4th Edition. Chapters 3-4 (Process Management, Process Scheduling).
+- Russinovich, M.E. et al. (2031). *Windows Internals*, 8th Edition. Part 1, Chapters 2-3 (System Architecture, Processes and Threads).
 
-**Display interfaces** connect the computer to monitors. **HDMI** (High-Definition Multimedia Interface) and **DisplayPort** are the dominant wired standards in 2040, supporting 8K and 16K resolutions at high refresh rates. **Wireless display** (Wi-Fi Direct, Miracast, AirPlay) is common for consumer devices but has higher latency than wired connections. **VR/AR headsets** use specialised interfaces (DisplayPort Alt Mode over USB-C, or proprietary wireless protocols) to deliver high-resolution, low-latency video to each eye. The **University of Yggdrasil's VR Lab** uses DisplayPort 3.0 over fibre-optic cables to drive 16K per-eye headsets with sub-10ms motion-to-photon latency.
+### Discussion Questions
 
-**USB** (Universal Serial Bus) is the dominant general-purpose peripheral interface. **USB4** (based on Thunderbolt 3/4 technology) provides 40–80 Gbps of bandwidth, carrying data, video, and power over a single cable. **USB-C** is the universal connector: reversible, compact, and capable of delivering up to 240W of power (USB Power Delivery 3.1). In 2040, virtually all consumer devices use USB-C, and the European Union's mandate (effective 2024) has accelerated the elimination of proprietary connectors. **Thunderbolt 5** (Intel, 2030) extends USB4 with 120 Gbps bandwidth and improved daisy-chaining for professional workflows.
-
-**Networking interfaces** connect computers to networks. **Ethernet** (wired LAN) operates at 100 Gbps in data centres and 10 Gbps in desktops, with **200G/400G Ethernet** emerging for backbone networks. **Wi-Fi 7** (802.11be, 2024) and **Wi-Fi 8** (802.11bn, 2032) provide multi-gigabit wireless speeds through **MIMO** (Multiple-Input Multiple-Output), **OFDMA** (Orthogonal Frequency Division Multiple Access), and **mmWave** (millimetre-wave) frequencies. **5G** and **6G** cellular networks provide wide-area connectivity for mobile devices, with 6G offering peak speeds of 1 Tbps and sub-millisecond latency. **Optical networking** (fibre optics) dominates long-distance and high-bandwidth connections, with **800G/1.6T coherent optics** standard in data centre interconnects.
-
-**Industrial and embedded interfaces** include: **RS-232/RS-485** (legacy serial interfaces still used in industrial control); **CAN bus** (Controller Area Network, used in automotive and industrial systems); **I2C** and **SPI** (short-distance serial buses for connecting sensors and microcontrollers); **GPIO** (General-Purpose Input/Output, for direct digital control); **PCIe** ( Peripheral Component Interconnect Express, for high-speed internal expansion); and **NVMe** (Non-Volatile Memory Express, for high-speed storage). In 2040, **CXL** (Compute Express Link) is emerging as a universal interconnect for memory, accelerators, and peripherals, promising to unify the fragmented landscape of internal buses.
-
-**Required Reading:**
-- USB-IF, *USB4 Specification* (v2.0, 2035)
-- IEEE 802.11bn-2032, *Standard for Information Technology — Telecommunications and Information Exchange Between Systems — Local and Metropolitan Area Networks — Specific Requirements — Part 11: Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications — Amendment 14: Enhanced Ultra High Throughput*
-- PCI-SIG, *PCI Express Base Specification* (v7.0, 2035)
-- CXL Consortium, *Compute Express Link Specification* (v4.0, 2035)
-- University of Yggdrasil, "CXL as a Universal Interconnect: Performance and Compatibility Study" (2039)
-
-**Discussion Questions:**
-1. USB-C has become the universal connector, but the protocol ecosystem behind USB-C is complex (USB 2.0, USB 3.x, USB4, Thunderbolt, DisplayPort Alt Mode, Power Delivery). Is the universal connector a genuine simplification, or does it create confusion when not all USB-C ports support all features?
-2. 6G promises 1 Tbps peak speeds, but current mobile applications do not require such bandwidth. Is 6G driven by genuine demand, or is it a marketing treadmill that forces consumers to upgrade devices unnecessarily?
-3. CXL promises to unify memory, accelerator, and peripheral interconnects. Will CXL succeed where previous universal interconnect attempts (PCI, PCI-X, AGP, etc.) have led to fragmentation?
+1. A server has 32 CPU cores but the load average is 180. What does this indicate about the process state? What would you expect to see in `vmstat` and `pidstat`? Design a tuning strategy.
+2. Explain copy-on-write in the context of a database server that forks child processes to handle connections. If the child writes to a shared memory page, what happens? How does this affect memory accounting in `ps` and `top`?
+3. The Norse *skipreiða* (ship levy) mobilised crews from across a district, each with their own vessel but operating under a single command. How does this distributed-but-coordinated structure parallel the relationship between parent processes and thread pools in a modern application server?
 
 ---
 
-## Lecture 7: System Assembly and Configuration
+ᚦ **Lecture 3: Memory Management — The Invisible Battlefield**
 
-This lecture transitions from theory to practice: the physical assembly of a computer from components, the installation and configuration of an operating system, and the verification that the system operates correctly.
-
-**Component selection** is the first step. The builder must choose: a **CPU** (matching socket type to motherboard); a **motherboard** (with appropriate chipset, expansion slots, and I/O); **memory** (matching type, speed, and capacity to motherboard and CPU specifications); **storage** (NVMe SSD for boot, possibly additional SSDs or HDDs for bulk storage); a **GPU** (if the CPU lacks integrated graphics or if discrete graphics are needed); a **power supply** (with sufficient wattage and efficiency rating); a **case** (with adequate cooling and space for components); and **peripherals** (monitor, keyboard, mouse). In 2040, **PC Part Picker** (and its AI-enhanced successor, *Völundr Build*) automates compatibility checking and suggests optimal component combinations based on budget, performance requirements, and availability.
-
-**Assembly** requires attention to physical and electrical safety. **ESD** (Electrostatic Discharge) can destroy sensitive components; builders use anti-static wrist straps and mats. The **CPU** is installed in the socket (aligning the triangle markers), the **cooler** is mounted with thermal paste, **RAM** is inserted into DIMM slots (often in specific slots for dual-channel operation), the **M.2 SSD** is secured to the motherboard, the **GPU** is inserted into the PCIe slot, and the **power supply** is connected to the motherboard (24-pin main, 8-pin CPU, 6/8-pin GPU). **Cable management** ensures airflow and aesthetics. The University of Yggdrasil's IT103 lab includes a **build competition**: teams of students assemble systems from a parts bin, with scoring based on build time, cable management, POST (Power-On Self-Test) success, and benchmark performance.
-
-**Firmware configuration** (BIOS/UEFI setup) is the next step. The **UEFI** (Unified Extensible Firmware Interface) is the modern replacement for BIOS: it provides a graphical interface, supports large drives (>2 TB), and includes security features like **Secure Boot** (verifying that the OS bootloader is cryptographically signed). Configuration tasks include: enabling **XMP** (Extreme Memory Profile) to run RAM at its rated speed; configuring **boot order** (prioritising the installation medium); enabling **virtualisation support** (Intel VT-x/AMD-V) if the OS will run virtual machines; and configuring **fan curves** for thermal management. In 2040, **AI-assisted UEFI** (e.g., ASUS AI BIOS, MSI Smart Setup) can recommend optimal settings based on the installed components and intended workload.
-
-**OS installation** from USB media is the final step. The installer partitions the drive, copies files, configures drivers, and sets up user accounts. **Driver installation** ensures that all hardware components are recognised and function correctly; modern OSes include most drivers, but discrete GPUs often require manufacturer-specific drivers for optimal performance. **Verification** includes: running **memory tests** (MemTest86) to detect RAM errors; running **storage benchmarks** (CrystalDiskMark, fio) to verify SSD performance; running **stress tests** (Prime95, FurMark, AIDA64) to verify thermal stability under load; and checking **system information** (CPU-Z, HWiNFO) to confirm that components are recognised correctly.
-
-**Required Reading:**
-- Scott Mueller, *Upgrading and Repairing PCs* (24th ed., Que, 2015/2035), ch. 3–6, 17–19
-- UEFI Forum, *UEFI Specification* (v2.11, 2035)
-- Intel, *Intel 64 and IA-32 Architectures Software Developer's Manual* (Vol. 3A, 2035), ch. 2 ("System Architecture Overview")
-- University of Yggdrasil, "IT103 Build Competition: Rules, Scoring, and Safety Guidelines" (2039)
-
-**Discussion Questions:**
-1. PC building was once a specialised skill; now AI-assisted tools can recommend components and even guide assembly. Is the art of PC building dying, or is it evolving into a higher-level design discipline?
-2. UEFI Secure Boot prevents unauthorised bootloaders from running, but it also complicates the installation of alternative operating systems (Linux, BSD). Is Secure Boot a legitimate security measure or a tool for vendor lock-in?
-3. The build competition emphasises speed and aesthetics. Are these the most important skills for an IT professional, or should the competition include diagnostic scenarios (e.g., "the system won't POST — find and fix the fault")?
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 8: Diagnostics and Troubleshooting Methodology
+### Overview
 
-When a system fails, the technician's ability to diagnose and repair the fault is the difference between hours of downtime and minutes. This lecture introduces systematic troubleshooting methodologies and the tools used to diagnose hardware and software problems.
+Memory is the most contested resource in any computer system. This lecture covers virtual memory, paging, segmentation, the page replacement problem, memory pressure, and the practical diagnostics that reveal whether a system is memory-bound. Students learn to read `/proc/meminfo`, interpret `vmstat` output, and understand the OOM killer — the Linux kernel's last-resort mechanism for preventing total system collapse under memory pressure.
 
-**The scientific method of troubleshooting** follows a structured process: **1. Gather information** (what changed? what are the symptoms? when did the problem start?); **2. Form hypotheses** (what could cause these symptoms?); **3. Test hypotheses** (design experiments that confirm or rule out each hypothesis); **4. Implement the fix** (repair or replace the faulty component); **5. Verify the fix** (confirm that the problem is resolved and that no new problems were introduced); **6. Document** (record the problem, the diagnosis, and the fix for future reference). This method is taught explicitly because ad-hoc troubleshooting (randomly replacing parts) is inefficient and often counterproductive.
+### Key Topics
 
-**Hardware diagnostics** use a combination of built-in and external tools. **POST codes** and **beep codes** indicate hardware failures before the OS loads. **LED indicators** on motherboards show which component failed during POST. **Diagnostic software** (MemTest86 for RAM, CrystalDiskInfo for SSD health, HWiNFO for sensor readings, OCCT for stress testing) identifies failing components. **Multimeters** measure voltage, current, and resistance to verify power supply output and continuity. **Thermal cameras** identify overheating components. **Oscilloscopes** (in advanced diagnostics) analyse signal integrity on buses and interfaces. In 2040, **AI-assisted diagnostics** (e.g., Dell SupportAssist, Lenovo Vantage AI, and the open-source *Mimir Diagnose* developed at Yggdrasil) analyse telemetry data to predict failures before they occur and suggest remediation steps.
+- **Virtual Memory and Address Spaces:** The abstraction that gives each process the illusion of contiguous memory starting at address zero, while the physical memory is fragmented, shared, and possibly swapped to disk. The lecture covers: page tables (multi-level page tables on x86-64, inverted page tables on PowerPC), Translation Lookaside Buffers (TLBs, the cache of page table entries), and the overhead of page table walks. The 2040 reality on x86-64: 5-level page tables supporting 128-bit virtual address spaces (though 48 bits are typically used), and the performance implications of larger address spaces.
+- **Paging and Page Replacement:** Physical memory is divided into fixed-size pages (typically 4KB on x86-64, with 2MB and 1GB huge pages for specific workloads). When physical memory is full, the OS must evict some pages to make room. The lecture covers page replacement algorithms: FIFO (simple but poor), LRU (optimal but expensive to implement precisely), clock (an approximation of LRU using an access bit), and the 2040 hybrid approaches that use machine learning to predict which pages are least likely to be accessed soon. The working set model and thrashing.
+- **Memory Pressure and the OOM Killer:** When free memory drops below a threshold, the kernel activates the kswapd daemon to reclaim pages (dropping caches, swapping anonymous pages). If reclamation cannot keep pace with allocation, the system enters memory pressure: processes block waiting for pages, I/O wait increases, and performance collapses. The ultimate last resort is the OOM killer, which selects a process to terminate based on an `oom_score` that considers memory usage, runtime, and niceness. The lecture covers OOM killer tuning (`oom_adj`, `oom_score_adj`) and how to protect critical processes.
+- **Swap and Zram:** Swap space (disk-based virtual memory extension) has a bad reputation but serves essential functions: it allows the kernel to reclaim anonymous pages that are rarely accessed, freeing RAM for active use. The lecture covers: swap partition vs. swap file, swappiness tuning (`vm.swappiness`), and the 2040 replacement of traditional swap with zram (compressed RAM-based swap) and zswap (compressed cache fronting traditional swap). On Windows: the pagefile, its sizing, and the ReadyBoost successor technologies.
+- **Memory Diagnostics:** `/proc/meminfo` field by field (MemTotal, MemFree, MemAvailable, Buffers, Cached, Active, Inactive, Slab, SReclaimable, Committed_AS). `vmstat` memory columns (swpd, free, buff, cache, si, so — swap in/out). `sar -r` for historical memory usage. `smem` for per-process proportional set size (PSS). The hands-on lab: students run a memory-intensive program and observe the system transition from normal → cache pressure → swap activity → OOM.
+- **Windows Memory Management:** The Windows Virtual Memory Manager, working set trimming, the standby and modified page lists, and the SuperFetch / Memory Compression features. The lecture covers Windows-specific tools: Resource Monitor, Performance Monitor (PerfMon), and the `Get-Process` PowerShell cmdlet with memory metrics.
 
-**Software diagnostics** address OS and application problems. **Event logs** (Windows Event Viewer, systemd journal, syslog) record system events and errors. **Process monitors** (Task Manager, htop, Process Explorer) show CPU, memory, and I/O usage per process. **Network diagnostics** (ping, traceroute, netstat, Wireshark) identify connectivity and routing problems. **File system checks** (chkdsk, fsck) detect and repair disk corruption. **Safe mode** (booting with minimal drivers and services) isolates software conflicts. **System restore** and **snapshots** (Windows Restore Points, ZFS snapshots, Timeshift) allow rollback to a known-good state. In 2040, **automated remediation** (self-healing systems) can restart failed services, roll back problematic updates, and reconfigure settings without human intervention.
+### Lecture Notes
 
-**Common failure modes** and their symptoms: **No power** (dead PSU, faulty power button, motherboard short); **No POST** (failed CPU, RAM, or motherboard; loose connections); **Intermittent crashes** (overheating, failing RAM, unstable overclock, PSU voltage fluctuations); **Slow performance** (failing SSD, thermal throttling, malware, insufficient RAM); **Blue screen / kernel panic** (driver conflicts, hardware faults, memory corruption); **Network issues** (faulty cable, misconfigured settings, DNS problems, firewall blocking); and **Data corruption** (failing storage, RAM errors, power loss during writes). The **Yggdrasil Troubleshooting Lab** maintains a "zoo" of deliberately faulted systems that students must diagnose and repair under time pressure.
+Memory management is the most technically complex area of operating systems, and the most important for IT operations. CPU problems are easy to understand (too much work, not enough cores); memory problems are subtle and cascading. A memory leak in one application can force the kernel to swap out pages from another application, making both slow. A database with an oversized buffer pool can starve the OS of page cache, making file I/O sluggish. Understanding these interactions requires deep knowledge of the memory subsystem.
 
-**Required Reading:**
-- Scott Mueller, *Upgrading and Repairing PCs* (24th ed.), ch. 20–24
-- Mark Russinovich, Aaron Margosis & David Solomon, *Troubleshooting with the Windows Sysinternals Tools* (2nd ed., Microsoft Press, 2016/2035), ch. 1–3
-- Brendan Gregg, *Systems Performance: Enterprise and the Cloud* (2nd ed., 2019/2035), ch. 2–3
-- University of Yggdrasil, "Mimir Diagnose: AI-Assisted Hardware Diagnostics for Educational Environments" (2039)
+The `/proc/meminfo` file is the Rosetta Stone of Linux memory diagnostics. `MemTotal` is the physical RAM installed. `MemFree` is the memory that is literally doing nothing — usually very small on a healthy system, because free memory is wasted memory. `MemAvailable` (introduced in Linux 3.14) is the key metric: it estimates how much memory is available for starting new applications without swapping, counting reclaimable caches. A common beginner mistake is to panic when `MemFree` is low; the professional knows to check `MemAvailable` and the ratio of active to inactive memory.
 
-**Discussion Questions:**
-1. AI-assisted diagnostics can predict failures before they occur. Does this reduce the need for human troubleshooting skills, or does it merely shift the technician's role from reactive repair to proactive maintenance?
-2. The "zoo" of faulted systems teaches diagnostic skills, but the faults are artificially introduced. Are artificially induced faults representative of real-world failures, or do they teach students to recognise textbook symptoms rather than diagnose novel problems?
-3. Automated remediation (self-healing systems) can resolve many issues without human intervention. Is this a liberating development that frees IT professionals for higher-value work, or does it create a generation of technicians who cannot diagnose problems when the automation fails?
+The OOM killer is a brutal but necessary mechanism. When memory is completely exhausted, something must die, or the entire system will hang. The OOM killer walks the process list, calculating a "badness score" for each, and terminates the highest-scoring process. By default, this is usually the process using the most memory — which might be your database server. IT professionals must configure `oom_score_adj` to protect critical processes (e.g., setting the database to -1000, making it unkillable) and to make sacrificial processes (e.g., batch jobs) more killable. The lecture includes a chilling case study: a 2037 cloud provider lost a customer's primary database because the OOM killer selected it during a memory pressure event; the customer had not set `oom_score_adj`, and the database was the largest process.
 
----
+Swappiness is one of the most commonly misunderstood kernel parameters. Set to 60 by default, it controls the kernel's tendency to swap anonymous pages (process memory) versus reclaiming page cache (file-backed memory). A value of 0 means "do not swap unless absolutely necessary"; 100 means "swap aggressively." The 2040 best practice is: databases and latency-sensitive services use `swappiness=1` (minimal swapping); batch processing and development workstations use `swappiness=60` (default); and systems with zram use `swappiness=100` (since zram swap is fast and compresses well).
 
-## Lecture 9: Mobile and Embedded Systems
+Huge pages (2MB and 1GB on x86-64) reduce TLB pressure for applications with large memory footprints. A database with 256GB of buffer pool, using 4KB pages, requires 67 million page table entries — and TLB misses become a major bottleneck. With 1GB huge pages, only 256 page table entries are needed, dramatically reducing TLB misses. The trade-off is internal fragmentation (wasted space within huge pages) and the complexity of huge page management. Transparent Huge Pages (THP) attempts to automate this but has caused performance regressions and memory bloat in some workloads; the 2040 recommendation is explicit huge pages for known workloads, THP disabled.
 
-Not all computers are desktops or servers. Mobile devices (smartphones, tablets, laptops) and embedded systems (IoT devices, industrial controllers, automotive computers) constitute the vast majority of computing devices in 2040. This lecture examines the hardware characteristics, constraints, and design principles of these systems.
+### Required Reading
 
-**Mobile processors** (Apple A-series, Qualcomm Snapdragon, Samsung Exynos, MediaTek Dimensity) are **system-on-chip (SoC)** designs that integrate the CPU, GPU, NPU (neural processing unit), ISP (image signal processor), modem, and memory controller onto a single die. SoCs are optimised for **power efficiency** rather than raw performance: a smartphone battery must last a full day of use, and thermal constraints limit sustained performance. **ARM big.LITTLE** (and its successor, **DynamIQ**) pairs high-performance cores with power-efficient cores, switching between them based on workload. **Thermal throttling** reduces clock speeds when the device gets too hot, preventing damage but reducing performance. In 2040, **active cooling** (vapour chambers, graphite sheets, and even tiny fans in gaming phones) is increasingly common in high-end mobile devices.
+- Arpaci-Dusseau, R.H. & Arpaci-Dusseau, A.C. (2028). *Operating Systems: Three Easy Pieces*, 2nd Edition. Chapters 12-22 (Memory Management through Paging Mechanisms).
+- Love, R. (2033). *Linux Kernel Development*, 4th Edition. Chapters 12, 14, 16 (Memory Management, The Page Cache, Swapping).
+- Gregg, B. (2032). *Systems Performance: Enterprise and the Cloud*, 2nd Edition. Addison-Wesley. Chapter 7 (Memory).
 
-**Embedded systems** are computers designed for a specific purpose, often with severe constraints on cost, power, size, and reliability. **Microcontrollers** (ARM Cortex-M, RISC-V, AVR, PIC) are small processors with integrated memory and peripherals, used in appliances, sensors, and actuators. **Single-board computers** (Raspberry Pi, Hálogi Board, NVIDIA Jetson) provide more computing power for applications like digital signage, robotics, and edge AI. **FPGAs** (Field-Programmable Gate Arrays) allow hardware to be reconfigured for specific tasks, used in telecommunications, automotive, and aerospace. **ASICs** (Application-Specific Integrated Circuits) are custom-designed chips for high-volume applications (e.g., Bitcoin mining, AI inference). In 2040, **tinyML** (machine learning on microcontrollers) enables intelligence in the smallest devices: a $1 microcontroller can run voice recognition, gesture detection, or anomaly detection using neural networks with fewer than 100,000 parameters.
+### Discussion Questions
 
-**IoT (Internet of Things)** devices are embedded systems with network connectivity. By 2040, there are an estimated 100 billion IoT devices worldwide: smart home devices (thermostats, lights, locks), industrial sensors (temperature, vibration, pressure), wearable health monitors, agricultural sensors, and connected vehicles. **IoT hardware constraints** include: limited processing power (often <100 MHz), limited memory (KB to MB), limited power (battery or energy harvesting), and limited bandwidth (LoRaWAN, NB-IoT, or intermittent Wi-Fi). **Edge computing** processes data locally on the device or a nearby gateway, reducing latency and bandwidth usage compared to cloud-only processing. The **University of Yggdrasil's Smart Campus** deploys 50,000+ IoT sensors for environmental monitoring, energy management, and predictive maintenance of buildings.
-
-**Required Reading:**
-- Joseph Yiu, *The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors* (3rd ed., Newnes, 2014/2035), ch. 1–3
-- Pete Warden & Daniel Situnayake, *TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers* (O'Reilly, 2020/2035), ch. 1–2
-- Raspberry Pi Foundation, *Raspberry Pi Documentation* (2040)
-- University of Yggdrasil, "The Smart Campus: 50,000 IoT Sensors and the Edge Computing Architecture" (2039)
-
-**Discussion Questions:**
-1. Mobile SoCs integrate an ever-increasing number of functions (CPU, GPU, NPU, modem, ISP). Is this integration a genuine architectural advance, or does it create vendor lock-in and reduce flexibility?
-2. TinyML enables intelligence on $1 microcontrollers, but the models are necessarily small and limited. For what classes of problems is tinyML sufficient, and for what classes is the constraint on model size prohibitive?
-3. The Yggdrasil Smart Campus deploys 50,000 IoT sensors. What are the privacy implications of such dense environmental monitoring, and how should the University balance operational benefits against individual privacy?
+1. A server's `MemFree` is 200MB but `MemAvailable` is 45GB. Explain this apparent contradiction. Is the system under memory pressure? What would you check next?
+2. A database administrator sets `vm.swappiness=0` to prevent the database from being swapped. During a memory pressure event, the OOM killer terminates the database anyway. Explain why, and propose a better configuration that protects the database without disabling swap entirely.
+3. The Norse *hof* (temple) had a sacred inner sanctum and outer public spaces. How does the concept of protected, hierarchically organised space inform the design of virtual memory and process isolation?
 
 ---
 
-## Lecture 10: Virtualisation and Containers — Hardware Abstraction Layers
+ᚨ **Lecture 4: File Systems — Persistence, Structure, and Integrity**
 
-Virtualisation is the technology that allows multiple operating systems to run on a single physical machine, sharing its resources securely and efficiently. Containers are a lighter-weight form of isolation that packages applications with their dependencies. Together, virtualisation and containers are the foundation of modern cloud computing and DevOps practices.
-
-**Hardware virtualisation** uses a **hypervisor** to create and manage virtual machines (VMs). A **Type 1 hypervisor** (bare-metal: VMware ESXi, Microsoft Hyper-V, Xen, KVM) runs directly on the hardware, providing near-native performance. A **Type 2 hypervisor** (hosted: VMware Workstation, VirtualBox, Parallels) runs on top of a host OS, with higher overhead but easier setup. The hypervisor virtualises CPU, memory, storage, and network resources, presenting each VM with the illusion of dedicated hardware. **Hardware-assisted virtualisation** (Intel VT-x, AMD-V) provides CPU features that accelerate virtualisation: extended page tables (EPT) for memory virtualisation, VT-d for device passthrough, and VMCS shadowing for nested virtualisation. In 2040, **nested virtualisation** (running a hypervisor inside a VM) is standard for cloud provider environments, enabling customers to run their own hypervisors on rented VMs.
-
-**Containers** (Docker, containerd, LXC) provide operating-system-level virtualisation: they share the host OS kernel but isolate processes, file systems, and networks using Linux kernel features (**namespaces** for isolation, **cgroups** for resource limiting, and **seccomp** for syscall filtering). Containers are **lighter** than VMs (megabytes rather than gigabytes, seconds to start rather than minutes) and **more efficient** (no guest OS overhead). However, containers provide **weaker isolation** than VMs: a kernel vulnerability can compromise all containers on the host. In 2040, **gVisor** and **Kata Containers** address this by running containers in lightweight VMs, combining the isolation of VMs with the efficiency of containers.
-
-**Container orchestration** (Kubernetes, the de facto standard) automates the deployment, scaling, and management of containerised applications. Kubernetes concepts include: **Pods** (the smallest deployable units, containing one or more containers); **Deployments** (declarative specifications of desired application state); **Services** (stable network endpoints for accessing pods); **Ingress** (HTTP routing and load balancing); **ConfigMaps and Secrets** (configuration and sensitive data management); **Persistent Volumes** (storage for stateful applications); and **Namespaces** (logical isolation of resources). The **Kubernetes ecosystem** (Helm for packaging, Prometheus for monitoring, Grafana for visualisation, Istio for service mesh) has become the standard platform for cloud-native application development.
-
-**The 2040 virtualisation landscape** includes several innovations. **Confidential computing** (Intel TDX, AMD SEV-SNP, ARM CCA) encrypts VM memory so that even the hypervisor cannot read it, protecting data from cloud provider administrators. **GPU virtualisation** (NVIDIA vGPU, AMD MxGPU) allows multiple VMs to share a physical GPU for AI and graphics workloads. **DPUs** (Data Processing Units, e.g., NVIDIA BlueField, Marvell OCTEON) are specialised processors that offload virtualisation, networking, and storage functions from the host CPU, improving performance and security. The University of Yggdrasil's **Muninn Cluster** uses DPUs in every server to offload hypervisor functions, achieving near-bare-metal performance for virtualised workloads.
-
-**Required Reading:**
-- Edouard Bugnion et al., "Bringing Virtualisation to the x86 Architecture with the Original VMware Workstation," *ACM TOCS* 30, no. 4 (2012): 1–51
-- Brendan Burns, Joe Beda & Kelsey Hightower, *Kubernetes: Up and Running* (3rd ed., O'Reilly, 2035), ch. 1–5
-- Liz Rice, *Container Security: Fundamental Technology Concepts That Protect Containerised Applications* (O'Reilly, 2020/2035), ch. 1–3
-- NVIDIA, "BlueField DPU Architecture and Performance" (2035 white paper)
-- University of Yggdrasil, "DPUs in the Muninn Cluster: Performance and Security Analysis" (2039)
-
-**Discussion Questions:**
-1. Containers provide weaker isolation than VMs but are more efficient. For what classes of applications is container isolation sufficient, and for what classes is VM isolation mandatory?
-2. Confidential computing encrypts VM memory from the hypervisor, but it adds performance overhead and complicates debugging. Is the security benefit worth the operational cost?
-3. Kubernetes has become the standard for container orchestration, but its complexity is notorious. Is Kubernetes a genuinely necessary abstraction, or has the industry standardised on a tool that is more complex than most applications require?
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
 ---
 
-## Lecture 11: Hardware Security — Trusted Execution, Side Channels, and Supply Chain Integrity
+### Overview
 
-Hardware security is the discipline of protecting computer systems at the physical and architectural level. It encompasses trusted execution environments, side-channel attack defences, and supply chain integrity. This lecture examines the threats and countermeasures that define hardware security in 2040.
+File systems are the mechanism by which the OS persists data beyond the lifetime of a process. This lecture covers the design and operation of file systems: the on-disk structures (superblocks, inodes, extents, journals), the in-memory caches (page cache, buffer cache, dentry cache), and the practical file systems used in 2040. Students examine file system internals using `debugfs`, benchmark different file systems under realistic workloads, and recover from simulated corruption.
 
-**Trusted Execution Environments (TEEs)** are secure areas within a processor that guarantee confidentiality and integrity of code and data. **Intel SGX** (Software Guard Extensions) creates encrypted **enclaves** that are inaccessible to the OS, hypervisor, or physical attackers with DRAM access. **AMD SEV** (Secure Encrypted Virtualization) encrypts VM memory from the hypervisor. **ARM TrustZone** divides the processor into a secure world and a normal world, with hardware-enforced isolation. In 2040, **Intel TDX** (Trust Domain Extensions) and **ARM CCA** (Confidential Compute Architecture) are the latest TEE technologies, extending protection to entire VMs rather than just individual enclaves. **Limitations of TEEs**: side-channel attacks (discussed below) can extract data from enclaves; speculative execution vulnerabilities (Spectre, Meltdown) can bypass TEE isolation; and TEEs rely on the hardware manufacturer's root of trust, creating a single point of failure.
+### Key Topics
 
-**Side-channel attacks** exploit information leaked through physical implementation rather than algorithmic weakness. **Timing attacks** measure the time taken by operations to infer secrets (e.g., cache timing attacks that distinguish between cache hits and misses). **Power analysis** measures the power consumption of a device to infer the operations it is performing (differential power analysis, DPA, can extract cryptographic keys from smart cards). **Electromagnetic analysis** measures the electromagnetic emissions of a device. **Acoustic cryptanalysis** analyses the sound produced by a device (e.g., coil whine from capacitors). **Cold boot attacks** extract data from RAM after power loss by freezing the memory chips to slow data decay. In 2040, **side-channel-resistant designs** (constant-time algorithms, power-balancing circuits, electromagnetic shielding) are standard for security-critical hardware.
+- **File System Fundamentals:** Files as named collections of bytes; directories as mappings from names to inodes; inodes as data structures containing metadata (size, permissions, timestamps, pointers to data blocks). The lecture covers: hard links (multiple directory entries pointing to the same inode) versus symbolic links (separate files containing paths), and the implications for backup and deletion semantics.
+- **On-Disk Structures:** The superblock (file system metadata), the block group (ext4) or allocation group (XFS), the inode table, the data bitmap, and the data blocks. The lecture walks through what happens when you create a file: allocating an inode, updating the directory, allocating data blocks, and writing the journal. The 2040 file systems (Btrfs, ZFS) add copy-on-write, checksums, and snapshots, complicating but strengthening the on-disk structure.
+- **Journaling and Consistency:** The problem of crash consistency: if the system crashes between writing metadata and writing data, the file system becomes inconsistent. Journaling (ext3/ext4) writes metadata changes to a journal before applying them, ensuring that the file system can recover to a consistent state after a crash. The lecture covers journaling modes: writeback (fast but unsafe for metadata), ordered (default: data written before metadata), and data (safest but slowest). ZFS and Btrfs use copy-on-write instead of journaling, which eliminates the need for `fsck` but requires more sophisticated space management.
+- **The Page Cache and I/O Performance:** When a file is read, its data is copied from disk into the page cache (in RAM). Subsequent reads are served from RAM, dramatically improving performance. Writes are typically buffered in the page cache and flushed asynchronously. The lecture covers: `dirty` pages, the `pdflush`/`flush` kernel threads, `sync` and `fsync`, and the tension between performance (delayed writes) and durability (synchronous writes). The 2040 additions: `io_uring` for asynchronous I/O with reduced syscall overhead, and persistent memory file systems (ext2-DAX, NOVA) that bypass the page cache for byte-addressable NVM.
+- **File System Selection in 2040:** ext4 (the default, well-understood, good performance for general workloads), XFS (excellent for large files and high concurrency, the default for RHEL), Btrfs (advanced features: snapshots, compression, RAID-like redundancy, but complex and historically brittle), ZFS (enterprise-grade: checksums, compression, snapshots, replication, but licensing complications on Linux), and NTFS/ReFS (Windows). The lecture covers selection criteria: workload characteristics (small files vs. large files, random vs. sequential I/O), required features (snapshots, compression, checksums), and organisational constraints (support contracts, staff expertise).
+- **Corruption and Recovery:** The `fsck` family (e2fsck, xfs_repair), their limitations (they can verify structural consistency but not semantic correctness), and the 2040 reality that ZFS/Btrfs use continuous scrubbing (background verification of checksums) rather than periodic `fsck`. The lecture includes a recovery lab: students deliberately corrupt a test file system and practice recovery using `e2fsck -b` (using backup superblocks), `debugfs` (manual inode inspection), and `xfs_repair`.
 
-**Supply chain attacks** compromise hardware or firmware before it reaches the end user. **Hardware trojans** are malicious modifications to integrated circuits (e.g., extra logic that leaks secrets or disables the chip on command). **Firmware implants** modify the BIOS/UEFI or peripheral firmware (e.g., the NSA's **DEITYBOUNCE** implant for Dell servers, revealed in the 2013 Snowden leaks). **Counterfeit components** (fake chips that fail under stress or contain hidden functionality) infiltrate the supply chain. **Mitigations** include: **hardware verification** (formal methods, simulation, and testing to detect trojans); **secure boot** (cryptographic verification of firmware); **supply chain transparency** (blockchain-based tracking of component provenance); and **domestic manufacturing** (reducing reliance on foreign supply chains). In 2040, the **Nordic Semiconductor Security Initiative** mandates hardware verification for all chips used in government and critical infrastructure systems.
+### Lecture Notes
 
-**The University of Yggdrasil's Hardware Security Lab** researches: **formal verification of processor designs** (using tools like JasperGold and Cadence Conformal); **side-channel analysis of student-designed processors** (the Hálogi Board is analysed for power leakage as a teaching exercise); **supply chain integrity for the Muninn Cluster** (every component is tracked from manufacturer to installation); and **post-quantum secure hardware** (designing processors that resist attacks by quantum computers).
+File systems are the most reliable and the most fragile part of the OS. Reliable because they have been refined over decades; fragile because a single bit flip in a superblock can render an entire volume unreadable. The IT professional must respect this duality: trust the file system for daily operations, but verify it with checksums, backups, and periodic scrubs.
 
-**Required Reading:**
-- Victor Costan & Srinivas Devadas, "Intel SGX Explained," *Cryptology ePrint Archive* 2016/086
-- Paul Kocher et al., "Spectre Attacks: Exploiting Speculative Execution," *S&P 2019*
-- Matthew Hicks et al., "Overcoming an Untrusted Computing Base: Detecting and Removing Malicious Hardware Automatically," *S&P 2010*
-- DARPA, "Supply Chain Hardware Integrity for Electronics Defense (SHIELD)" program final report (2030)
-- University of Yggdrasil, "Formal Verification of the Hálogi RISC-V Core: A Student Project" (2039)
+The page cache is the single most important performance mechanism in Linux I/O. When an application reads a file, the data is copied from disk to the page cache and then to the application's buffer. The next read of the same data is served from RAM — a difference of microseconds versus milliseconds. This is why "free memory" is misleading: a system with 90% of RAM in page cache is not "almost out of memory"; it is "efficiently using free memory to cache frequently accessed files." The page cache is automatically reclaimed when applications need memory, making it a flexible buffer between disk and RAM.
 
-**Discussion Questions:**
-1. TEEs rely on the hardware manufacturer's root of trust. If the manufacturer is compromised (by state actors, criminals, or insiders), the TEE provides no security. Is this a fundamental limitation of TEEs, or can it be mitigated by decentralised trust models?
-2. Side-channel attacks exploit physical implementation details that are not part of the algorithmic specification. Is it possible to design hardware that is provably resistant to all side-channel attacks, or will there always be unanticipated leakage channels?
-3. Supply chain attacks are difficult to detect because the compromised components function correctly under normal conditions. Is hardware verification (formal methods, testing) sufficient to detect trojans, or is physical inspection (delayering, microscopy) also necessary?
+Write caching is where durability and performance conflict. By default, Linux buffers writes in the page cache and flushes them every 30 seconds (`dirty_expire_centisecs`). This is fast — an application can "write" a gigabyte in milliseconds because it is only copying to RAM. But if the system crashes before the flush, the data is lost. Applications that require durability (databases, transaction logs) use `fsync()` or `O_DIRECT` to force synchronous writes. The lecture includes a benchmark: writing 1GB with buffered I/O (3 seconds), `fsync` every write (45 seconds), and `O_DIRECT` (8 seconds). The trade-off is stark, and the correct choice depends on the application's durability requirements.
+
+ZFS deserves special attention as the file system of choice for enterprise storage in 2040. Designed at Sun Microsystems and ported to Linux via OpenZFS, it integrates volume management (RAID-Z), checksums (detecting silent data corruption), compression (transparent and fast with modern algorithms), snapshots (instantaneous, space-efficient), and replication (sending incremental snapshots to remote systems). The "ZFS parade" is a demonstration that every IT professional should witness: create a file, snapshot the pool, delete the file, and restore it from the snapshot in seconds. For data protection, ZFS is unmatched. The trade-offs are higher memory requirements (ZFS is memory-hungry, using RAM for the Adaptive Replacement Cache), licensing complexity (the CDDL license prevents distribution with the Linux kernel), and steeper learning curve.
+
+NTFS remains the foundation of Windows storage, but ReFS (Resilient File System) has gained adoption for server workloads. ReFS provides integrity streams (checksums), copy-on-write, and automatic repair — features similar to ZFS but integrated into the Windows ecosystem. However, ReFS has limitations (no deduplication in the 2040 version, limited boot support) that prevent it from fully replacing NTFS.
+
+### Required Reading
+
+- Arpaci-Dusseau, R.H. & Arpaci-Dusseau, A.C. (2028). *Operating Systems: Three Easy Pieces*, 2nd Edition. Chapters 39-42 (File Systems: Implementation, Fast File System, FSCK and Journaling, Log-Structured File Systems).
+- Love, R. (2033). *Linux Kernel Development*, 4th Edition. Chapters 13 (The Virtual Filesystem), 15 (The Page Cache).
+- Lucas, M.W. (2031). *Absolute OpenBSD*, 3rd Edition. No Starch Press. Chapter 16 (Disks and File Systems). (For comparison perspective.)
+- Yggdrasil Storage Operations Guide (2040). "File System Selection and Maintenance Standards."
+
+### Discussion Questions
+
+1. A developer reports that their application writes data to a file, but after a system crash, the file is empty. Explain the buffered write mechanism and what the developer must do to ensure durability. Benchmark the performance impact.
+2. Compare ext4, XFS, and ZFS for a university research data store: 500TB, mixed workload (small metadata files and large instrument datasets), requires snapshots for reproducibility, and must detect bit rot over decades. Justify your recommendation.
+3. The Norse *skald* composed poetry in rigid metrical forms that constrained but also enabled creativity. How does the structured, rule-based nature of file system metadata (inodes, directories, permissions) similarly constrain and enable data organisation?
 
 ---
 
-## Lecture 12: The Future of Hardware — Beyond Silicon
+ᚱ **Lecture 5: I/O Systems and Device Management**
 
-The final lecture looks beyond the current paradigm of silicon CMOS to examine the technologies that may define computing in the latter half of the 21st century. Some are incremental improvements; others are radical departures that could transform the nature of computation itself.
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
 
-**3D integration and chiplets** (discussed in Lecture 1) are the near-term future. By stacking dies vertically and connecting them with through-silicon vias (TSVs), manufacturers can increase transistor density and reduce interconnect delay without further shrinking transistors. **Hybrid bonding** (direct copper-to-copper bonding at room temperature) enables finer pitch and higher density than traditional microbumps. In 2040, **3D-stacked processors** (AMD's 3D V-Cache, Intel's Foveros Direct) are standard in high-performance computing, and the **Universal Chiplet Interconnect Express (UCIe)** standard enables chiplets from different manufacturers to be combined in a single package.
+---
 
-**Photonic computing** uses light instead of electrons for computation and communication. **Silicon photonics** integrates optical components (lasers, modulators, detectors, waveguides) onto silicon chips, enabling high-bandwidth, low-power communication. **Optical computing** (performing computation with light rather than electricity) promises extreme speed for specific operations (matrix-vector multiplication, Fourier transforms) but faces challenges in integration and programmability. In 2040, **photonic interconnects** are standard in data centres and supercomputers, and **photonic AI accelerators** (Lightmatter, Lightelligence) are emerging for inference workloads.
+### Overview
 
-**Neuromorphic computing** (discussed in IT101) uses brain-inspired architectures: spiking neurons, event-driven computation, and in-memory processing. **Intel Loihi 3** (2035) contains 10 million neurons and 1 billion synapses on a single chip, consuming milliwatts for tasks that would require watts on traditional processors. Neuromorphic chips excel at **sensory processing** (vision, audition, olfaction), **adaptive control** (robotics, drones), and **sparse pattern recognition**. In 2040, neuromorphic processors are deployed in **edge devices** (smart sensors, wearables, autonomous vehicles) where power efficiency is paramount.
+Input/output is how the computer interacts with the world. This lecture covers the I/O subsystem: the path from a user's read request through the kernel to the physical device and back. Topics include device drivers, the block and character I/O layers, I/O schedulers, kernel bypass technologies (DPDK, RDMA), and the practical tools for I/O diagnostics. The hands-on lab includes benchmarking disk I/O with `fio`, tracing I/O with `blktrace`, and exploring the difference between buffered and direct I/O.
 
-**Quantum computing** (discussed in CS408) is the most radical departure from classical computation. By 2040, quantum processors with 1,000–10,000 qubits are available through cloud services, but they remain **specialised accelerators** for specific problems (quantum simulation, optimisation, cryptography). General-purpose quantum computing awaits **fault-tolerant architectures** with millions of physical qubits, projected for the 2050s. The University of Yggdrasil's **Quantum Materials Lab** researches **topological qubits** (Majorana zero modes in semiconductor-superconductor nanowires) as a path to inherently error-resistant quantum computing.
+### Key Topics
 
-**Biological and chemical computing** are the most speculative frontiers. **DNA computing** (Adleman, 1994) uses DNA strands to perform parallel computations, but it is slow and error-prone compared to electronic computers. **Protein computing** (using protein conformational changes as logic gates) and **bacterial computing** (engineering bacteria to perform simple computations) are active research areas with no practical applications in 2040. The **University of Yggdrasil's Bio-Digital Convergence Lab** explores the interface between biological and electronic systems, with a focus on **neural interfaces** that could enable direct brain-computer communication.
+- **The I/O Stack:** The layered architecture: user-space API (read/write, aio, io_uring), system call layer, VFS (Virtual File System, providing a unified interface across file systems), specific file system (ext4, XFS), page cache / buffer cache, generic block layer, I/O scheduler, SCSI/SATA/NVMe driver, and physical device. The lecture traces a read request through each layer, explaining the purpose and overhead of each.
+- **Device Drivers:** The kernel modules that translate generic requests into device-specific commands. The lecture covers: kernel-space vs. user-space drivers, the Linux device model (devices as files in `/dev`, udev for dynamic device management), and driver stability (buggy drivers are a leading cause of kernel panics). The 2040 reality: many devices use kernel bypass (DPDK for networking, SPDK for storage) to achieve microsecond-level latency by avoiding the kernel stack entirely.
+- **I/O Schedulers:** The algorithms that reorder and batch I/O requests to optimise disk performance. For rotational disks (still used for archival in 2040): CFQ (Completely Fair Queuing, default until ~2025), deadline (prioritises reads and prevents starvation), and noop (minimal overhead for SSDs). For SSDs: the mq-deadline and kyber schedulers in the multi-queue block layer. The lecture covers the fundamental difference: rotational disks benefit from request reordering to minimise seek time; SSDs benefit from parallelisation and wear levelling, making complex schedulers unnecessary.
+- **NVMe and the Modern Storage Stack:** NVMe (Non-Volatile Memory Express) as the interface designed for SSDs, replacing the legacy AHCI/SATA stack designed for rotating disks. The lecture covers: NVMe queues (up to 64K per device, enabling massive parallelism), the NVMe-oF (NVMe over Fabrics) protocol for network-attached NVMe storage, and the performance implications (NVMe SSDs achieve 7GB/s and millions of IOPS, orders of magnitude beyond SATA SSDs). The 2040 frontier: NVMe-based persistent memory (Intel Optane successors) that blurs the line between storage and memory.
+- **Kernel Bypass Technologies:** When the kernel I/O stack is too slow. DPDK (Data Plane Development Kit) for networking: user-space drivers that poll network interfaces directly, achieving millions of packets per second. RDMA (Remote Direct Memory Access) for high-performance computing: one server's NIC can read/write another server's memory without involving either OS. SPDK (Storage Performance Development Kit) for NVMe: user-space storage drivers. The lecture covers the trade-offs: kernel bypass sacrifices the kernel's abstraction, security, and resource management for raw performance, and requires applications to handle these concerns themselves.
+- **I/O Diagnostics:** `iostat` (per-device I/O statistics: tps, kB_read/s, kB_wrtn/s, await, %util), `iotop` (per-process I/O usage), `fio` (flexible I/O benchmark: generate specified workloads and measure throughput/latency/IOPS), `blktrace` (block-level I/O tracing), and `bpftrace` (eBPF-based I/O analysis). The hands-on lab: students run `fio` with different patterns (random read, sequential write, mixed) and observe how the I/O scheduler, file system, and page cache affect performance.
 
-**Required Reading:**
-- IEEE, *International Roadmap for Devices and Systems (IRDS)* (2035 edition)
-- Intel, "Foveros Direct and 3D Packaging: The Future of Moore's Law" (2035 white paper)
-- Lightmatter, "Photonic AI Accelerators: Performance and Efficiency" (2035 white paper)
-- Intel Labs, "Loihi 3: A Neuromorphic Research Processor" (2035 technical report)
-- University of Yggdrasil, "The Bio-Digital Convergence: Neural Interfaces and Hybrid Biological-Electronic Systems" (2039)
+### Lecture Notes
 
-**Discussion Questions:**
-1. 3D integration and chiplets extend the life of silicon but do not fundamentally change the computing paradigm. Are these incremental improvements sufficient for the next 20 years, or is a radical new paradigm (photonics, neuromorphics, quantum) necessary?
-2. Photonic computing promises speed and efficiency but is difficult to program and integrate with electronic systems. Will photonics remain a niche technology for specific workloads, or will it eventually replace electronics for general-purpose computation?
-3. Biological computing is speculative but potentially transformative. If brain-computer interfaces become practical, what are the ethical implications of merging biological and digital cognition?
+The I/O stack is the most performance-critical and the most diagnostically challenging part of the OS. A request passes through so many layers — application, libc, VFS, file system, page cache, block layer, scheduler, driver, controller, device — that a slowdown can originate at any point. The IT professional must be able to decompose I/O performance systematically, ruling out layers until the culprit is identified.
+
+`iostat` is the first tool for I/O diagnosis. The key columns are: `r/s` and `w/s` (reads/writes per second), `rkB/s` and `wkB/s` (throughput), `await` (average wait time in milliseconds), and `%util` (percentage of time the device was busy). A device with `%util` near 100% and `await` > 50ms is saturated — either the workload exceeds device capacity, or the I/O pattern is inefficient (e.g., random small reads on a rotational disk). A device with low `%util` but high `await` may have a driver or controller issue. The lecture includes a diagnostic flowchart that maps `iostat` patterns to probable causes.
+
+NVMe has revolutionised storage by making the storage stack parallel. AHCI (the SATA protocol) supports one queue with 32 commands; NVMe supports 64K queues with 64K commands each. This matters because modern SSDs are internally parallel — they have multiple NAND channels and controllers that can process requests simultaneously. With AHCI, the queue becomes a bottleneck; with NVMe, the SSD's internal parallelism is fully exploited. By 2040, all new server storage is NVMe, and SATA/SAS is relegated to cold archival.
+
+Kernel bypass is a sharp tool. DPDK, used by telecom operators and high-frequency trading firms, achieves packet processing rates of 100 million packets per second per core — impossible through the kernel network stack. But it requires the application to handle everything the kernel normally provides: memory management, multi-threading, scheduling, and security. A bug in a DPDK application can crash the entire server, not just the application. The Yggdrasil guideline: use kernel bypass only when latency requirements genuinely demand it (< 10 microseconds), and always pair it with hardware-level isolation (SR-IOV, dedicated NICs).
+
+### Required Reading
+
+- Arpaci-Dusseau, R.H. & Arpaci-Dusseau, A.C. (2028). *Operating Systems: Three Easy Pieces*, 2nd Edition. Chapters 36-38 (I/O Devices, Hard Disk Drives, Redundant Arrays of Inexpensive Disks).
+- Gregg, B. (2032). *Systems Performance: Enterprise and the Cloud*, 2nd Edition. Chapters 9-10 (Disks, Networking).
+- Intel. (2033). *SPDK: Storage Performance Development Kit — Getting Started Guide*.
+
+### Discussion Questions
+
+1. A database server's I/O latency spikes every hour for 10 minutes. `iostat` shows 100% utilisation on the NVMe device, but throughput is only 20% of the device's rated capacity. What are three possible explanations, and what tools would you use to distinguish between them?
+2. Compare kernel I/O (standard read/write syscalls) with io_uring and kernel bypass (DPDK/SPDK). For a web server handling 100,000 requests per second, which approach is appropriate? Justify your answer with latency and complexity trade-offs.
+3. The Norse *knǫrr* (merchant ship) had to balance cargo capacity against speed and manoeuvrability. How does this optimisation problem parallel the design of I/O schedulers that must balance throughput, latency, and fairness?
+
+---
+
+ᚲ **Lecture 6: Linux Deep Dive — Boot, systemd, and Kernel Parameters**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Linux is the dominant server OS, and IT professionals must understand it at the administrative level. This lecture covers the Linux boot process (UEFI/BIOS → bootloader → kernel → init → services), systemd as the init system and service manager, kernel command-line parameters, sysctl tuning, and the proc filesystem. The hands-on lab includes breaking and fixing the boot process, creating systemd units, and tuning kernel parameters for specific workloads.
+
+### Key Topics
+
+- **The Boot Process:** Stage by stage: firmware (UEFI with Secure Boot, or legacy BIOS), bootloader (GRUB2: configuration, kernels, initramfs), kernel decompression and execution, initramfs (early userspace: loading drivers, mounting the root filesystem, pivoting to the real init), and systemd (PID 1, bringing up the rest of the system). The lecture covers UEFI variables (`efibootmgr`, `fwupd` for firmware updates), GRUB2 configuration (`/etc/default/grub`, `grub.cfg` generation), and initramfs debugging (breaking into a shell when the root filesystem cannot be mounted).
+- **systemd:** The init system that has replaced SysV init on all major Linux distributions. The lecture covers: units (service, socket, target, timer, path, mount, automount, swap, slice, scope), dependencies (`Requires=`, `Wants=`, `After=`, `Before=`, `Conflicts=`), targets (graphical, multi-user, rescue, emergency), and the systemd toolbox (`systemctl`, `journalctl`, `hostnamectl`, `timedatectl`, `loginctl`). The 2040 reality: systemd has expanded far beyond init into logging (journald), networking (systemd-networkd), DNS resolution (systemd-resolved), and container management (systemd-nspawn, podman integration).
+- **Kernel Parameters:** Passing options to the kernel at boot time (via GRUB2 or systemd-boot) or at runtime (via `sysctl`). The lecture covers: memory parameters (`vm.swappiness`, `vm.dirty_ratio`, `vm.vfs_cache_pressure`), network parameters (`net.core.somaxconn`, `net.ipv4.tcp_congestion_control`, `net.ipv4.ip_forward`), and security parameters (`kernel.randomize_va_space`, `kernel.kptr_restrict`). The hands-on lab: students tune `vm.swappiness` and measure the impact on a memory-intensive workload.
+- **The proc and sys Filesystems:** `/proc` as the kernel's introspection interface (process information, hardware details, kernel parameters, interrupts, filesystems) and `/sys` as the structured device and driver interface. The lecture covers: reading and writing to `/proc/sys` (sysctl interface), `/proc/meminfo` and `/proc/cpuinfo`, `/proc/<pid>/` (per-process information), and `/sys/class/` (device classes and their attributes). The 2040 additions: `sysctl --system` for applying configuration from `/etc/sysctl.d/`, and `systemd-sysctl` for integration with systemd's early boot.
+- **Kernel Modules:** Loading (`modprobe`, `insmod`), unloading (`rmmod`, `modprobe -r`), and managing dependencies (`depmod`, `modules.dep`). The lecture covers: module parameters (passing options at load time), blacklisting (preventing automatic loading), and the `dkms` framework for rebuilding out-of-tree modules when the kernel is updated. The 2040 reality: many enterprise features (ZFS, NVIDIA drivers, WireGuard) are delivered as kernel modules that must be carefully managed across kernel updates.
+
+### Lecture Notes
+
+The boot process is where the system transitions from firmware to operating system, and it is a common source of failures. A kernel update that forgets to regenerate the initramfs, a GRUB configuration that points to a deleted kernel, or a missing firmware file for a critical storage controller can render a system unbootable. The IT professional must be comfortable with boot rescue: chrooting from a live USB, rebuilding the initramfs with `dracut` or `mkinitramfs`, and manually editing GRUB entries to boot a specific kernel.
+
+systemd is controversial among Linux veterans, many of whom preferred the simplicity of SysV init scripts. But by 2040, systemd is universal, and the professional must master it. The key insight is that systemd is not merely an init system; it is a system layer that provides a consistent API for service management, logging, resource control, and boot orchestration. A systemd service unit is declarative: you specify what the service needs (dependencies, environment, limits, sandboxing), and systemd ensures those conditions are met. This is more reliable than SysV init scripts, which were imperative and often failed to handle dependencies correctly.
+
+The systemd journal (`journalctl`) replaces traditional syslog with a structured, indexed, binary log format. The advantages are powerful querying (`journalctl -u nginx --since "1 hour ago"`), automatic metadata (PID, UID, SELinux context, cgroup), and tamper-evident sealing (Forward Secure Sealing). The disadvantages are that traditional text-based log analysis tools (`grep`, `awk`) do not work directly on binary journals, and that journal corruption (rare but possible) requires specialised recovery. The Yggdrasil standard configuration exports journal data to both the binary journal and traditional syslog files, preserving the best of both worlds.
+
+Kernel parameter tuning is a dark art. The defaults are chosen by kernel developers to work acceptably across the vast diversity of Linux deployments, but they are rarely optimal for specific workloads. A database server benefits from increased `vm.dirty_ratio` (allowing more dirty pages before forcing writeback) and `vm.swappiness=1` (minimising swap). A web server benefits from increased `net.core.somaxconn` (larger connection backlog) and `net.ipv4.tcp_tw_reuse` (reusing TIME_WAIT sockets). The lecture provides a "tuning cheat sheet" for common server roles, with warnings: always measure before and after, because a parameter that helps one workload may harm another.
+
+### Required Reading
+
+- Linux Foundation. (2034). *systemd System and Service Management*, 2nd Edition. Chapters 1-4, 7-8.
+- Love, R. (2033). *Linux Kernel Development*, 4th Edition. Chapters 17 (Modules), 19 (Booting the Kernel).
+- Garrels, M. (2030). *Linux System Administration: The Linux Documentation Project*. Chapters 3-4.
+
+### Discussion Questions
+
+1. A server fails to boot after a kernel update, displaying "VFS: cannot open root device." Walk through the boot process and identify at least three possible causes. What is your diagnostic sequence using a live USB?
+2. systemd's service units support resource limits (`CPUQuota=`, `MemoryMax=`, `TasksMax=`). Design a systemd unit for a web application that should use no more than 2 CPU cores, 4GB RAM, and 1,024 concurrent threads. What happens if the service exceeds these limits?
+3. The Norse *thing* (assembly) gathered free people to make decisions and settle disputes. How does the structured, rule-based governance of a *thing* parallel the declarative dependency management and resource allocation of systemd?
+
+---
+
+ᚷ **Lecture 7: Windows Server Deep Dive — Active Directory, PowerShell, and Services**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Windows Server remains a critical platform in enterprise IT. This lecture provides the deep Windows administrative knowledge that every IT professional needs, regardless of primary platform preference. Topics include Active Directory architecture (forests, domains, trees, trusts, organisational units), Group Policy, PowerShell automation, Windows services and service accounts, and the Windows security model. The hands-on lab includes deploying a domain controller, creating Group Policy objects, and automating administration with PowerShell.
+
+### Key Topics
+
+- **Active Directory Architecture:** The directory service that stores information about objects (users, computers, groups, printers) in a hierarchical structure. The lecture covers: forests (the top-level security boundary), domains (the primary administrative boundary), trees (contiguous namespaces), and trusts (authentication relationships between domains). The 2040 reality: hybrid identity (Azure AD Connect syncing on-premises AD with cloud Azure AD) is the default for enterprises, and cloud-native Azure AD Domain Services is increasingly replacing traditional AD for new deployments.
+- **Group Policy:** The mechanism for centralised configuration management. Group Policy Objects (GPOs) linked to sites, domains, or OUs apply settings (security policies, software deployment, registry modifications, logon scripts) to target computers and users. The lecture covers: GPO processing order (LSDOU: Local, Site, Domain, OU), Group Policy Preferences (non-enforced settings), and troubleshooting (Resultant Set of Policy, `gpresult`, Group Policy Modelling). The 2040 additions: cloud-based Group Policy via Microsoft Intune and the shift toward MDM (Mobile Device Management) policies for hybrid environments.
+- **PowerShell:** The object-oriented shell and scripting language that is the primary automation tool for Windows administration. The lecture covers: cmdlets (verb-noun naming: `Get-Process`, `Set-ADUser`), the pipeline (passing objects, not text), providers (filesystem, registry, certificate store, AD, SQL Server), remoting (WinRM, PowerShell Remoting, JEA — Just Enough Administration for constrained endpoints), and Desired State Configuration (DSC). The 2040 reality: PowerShell 7.x runs on Linux and is the cross-platform automation standard for hybrid environments.
+- **Windows Services and Accounts:** Services as long-running processes that do not require user interaction. The lecture covers: service types (automatic, manual, disabled, delayed start), service accounts (Local System, Network Service, managed service accounts, group managed service accounts — gMSAs), and service hardening (reduced privileges, session 0 isolation, service control manager restrictions). The 2040 best practice: use gMSAs for services that need AD authentication; they provide automatic password rotation and delegation control.
+- **Windows Security Model:** Security descriptors (DACLs and SACLs), access tokens (identifying the user and their privileges), impersonation (services acting on behalf of users), and User Account Control (UAC). The lecture covers: privilege escalation techniques (how attackers exploit Windows services and scheduled tasks), and defensive hardening (AppLocker for application whitelisting, Attack Surface Reduction rules, Credential Guard for isolating LSASS secrets).
+
+### Lecture Notes
+
+Windows administration is often underestimated by Linux-focused IT professionals, who view it as "point and click" compared to Linux's command-line power. This perception is decades out of date. Modern Windows Server administration is heavily automated: PowerShell, Group Policy, DSC, and Azure ARM templates handle configuration at scale. The Windows admin who clicks through GUIs is as obsolete as the Linux admin who only knows how to edit config files in vim without using configuration management.
+
+Active Directory is the most widely deployed directory service in the world, and its architecture reflects 1990s design decisions that have proven remarkably durable. The forest-domain-OU hierarchy, the multimaster replication model, and the Kerberos-based authentication protocol have been extended and adapted but not replaced. Understanding AD is essential because so many enterprise applications depend on it: not just Windows logon, but Exchange, SharePoint, SQL Server, and thousands of third-party applications that use LDAP or Kerberos for authentication.
+
+Group Policy is powerful but opaque. A user experiencing slow logon might be affected by dozens of GPOs, each applying registry settings, deploying software, running scripts, and mapping drives. The Resultant Set of Policy (RSoP) tools help, but they are read-only; predicting the effect of a new GPO before deployment requires Group Policy Modelling, a feature of the Group Policy Management Console. The lecture includes a case study: a university's logon time increased from 15 seconds to 4 minutes after a GPO was deployed that mapped 12 network drives via a PowerShell script running synchronously. The fix: switch to Group Policy Preferences for drive mapping, which runs asynchronously.
+
+PowerShell's object-oriented pipeline is both its greatest strength and its steepest learning curve for Bash users. In Bash, `ls | grep foo` filters text; in PowerShell, `Get-Process | Where-Object {$_.Name -like "*foo*"}` filters objects by property. This is more powerful — you can filter by any property, sort by any property, and format output flexibly — but it requires understanding objects and properties rather than regular expressions. The 2040 PowerShell professional is fluent in both text-oriented and object-oriented paradigms, choosing the right tool for each task.
+
+### Required Reading
+
+- Stanek, W.R. (2033). *Windows Server 2040 Inside Out*. Microsoft Press. Chapters 1-4, 9-10.
+- Jones, R. & Hicks, J. (2034). *PowerShell in Action*, 4th Edition. Manning. Chapters 1-3, 10-11.
+- Microsoft. (2039). *Active Directory Administration Guide for Hybrid Environments*.
+
+### Discussion Questions
+
+1. A company has 5,000 Windows workstations and needs to deploy a new security configuration to all of them within 24 hours. Compare Group Policy, PowerShell DSC, and Microsoft Intune for this task. What are the trade-offs in speed, reliability, and auditability?
+2. Explain the difference between a forest and a domain in Active Directory. Under what circumstances would an organisation need multiple forests rather than multiple domains within a single forest?
+3. The Norse *jarl* (earl) ruled a district on behalf of the king, enforcing law and mustering levies. How does this delegated authority structure parallel the domain-OU-trust model of Active Directory?
+
+---
+
+ᚹ **Lecture 8: Security Isolation — SELinux, AppArmor, Namespaces, and cgroups**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Security isolation is the OS mechanism that prevents processes from interfering with each other or with the system. This lecture covers mandatory access control (SELinux, AppArmor), discretionary access control (Unix permissions, ACLs), Linux namespaces (the foundation of containers), and cgroups (resource control). Students implement SELinux policies, create container-like isolation with unshare, and use cgroups v2 to enforce resource limits.
+
+### Key Topics
+
+- **Discretionary Access Control (DAC):** The traditional Unix model where object owners control access (rwx permissions for user, group, other). The lecture covers: permission bits, the sticky bit, setuid/setgid, ACLs (Access Control Lists, extending permissions beyond the user/group/other model with `setfacl` and `getfacl`), and the umask. The limitations of DAC: a compromised process running as a user has all that user's permissions, and root is all-powerful.
+- **Mandatory Access Control (MAC):** SELinux and AppArmor as MAC systems where the OS enforces a global security policy that users cannot override. The lecture covers: SELinux modes (enforcing, permissive, disabled), contexts (user:role:type:level), types (the primary enforcement mechanism: a process labeled `httpd_t` can only access files labeled `httpd_sys_content_t`), and policies (targeted, strict, MLS/MCS). AppArmor as a simpler alternative (path-based profiles rather than label-based types). The 2040 reality: all major Linux distributions ship with SELinux or AppArmor enabled by default; disabling them is considered a security anti-pattern.
+- **Linux Namespaces:** The kernel feature that isolates process views of the system. The lecture covers the seven namespaces: PID (process IDs are isolated, enabling PID 1 in a container), Network (separate network interfaces, routing tables, firewall rules), Mount (separate filesystem views, enabling container images), UTS (separate hostname), IPC (separate shared memory and message queues), User (UID/GID mapping, enabling rootless containers), and Cgroup (isolated cgroup root). The `unshare` command for creating namespaces manually, and how Docker/Podman use them automatically.
+- **cgroups v2:** The unified resource control mechanism in modern Linux. The lecture covers: the cgroup v2 hierarchy (single tree, no separate controllers), resource controls (cpu.max, memory.max, io.max, pids.max), the systemd integration (slices, scopes, and services as cgroups), and the OOM protection mechanisms (`memory.oom.group`, `memory.high` vs. `memory.max`). The hands-on lab: create a cgroup, run a CPU-intensive process inside it with `cpu.max="50000 100000"` (50% of one core), and observe the throttling.
+- **Seccomp and Capabilities:** Seccomp (secure computing mode) as a syscall filter: a process can be restricted to a whitelist of syscalls, with violations causing termination. Capabilities as fine-grained privileges that replace the all-or-nothing root model (e.g., `CAP_NET_ADMIN` for network configuration without full root). The lecture covers: Docker's default seccomp profile (blocking 44 dangerous syscalls), capability dropping (`--cap-drop=ALL --cap-add=NET_BIND_SERVICE`), and the 2040 best practice of running containers with minimal capabilities.
+
+### Lecture Notes
+
+Security isolation is the difference between a sandbox and a shared playground. In the early days of multi-user Unix, the only isolation was DAC: your files were protected from other users by permission bits, but root could read everything, and a program running as you could do anything you could do. Modern OS security is defence in depth: DAC for basic protection, MAC for mandatory policy enforcement, namespaces for view isolation, cgroups for resource limits, seccomp for syscall filtering, and capabilities for privilege granularity.
+
+SELinux has a reputation for being difficult, earned by its early versions where a misconfigured policy could prevent basic operations like SSH login. But by 2040, SELinux targeted policies are refined and well-integrated. The targeted policy restricts only specific daemon types (httpd, named, mysqld) while leaving user processes unconfined. For most servers, SELinux "just works" in enforcing mode. The IT professional must know how to read AVC denials (`ausearch -m avc`), generate policy modules (`audit2allow`), and troubleshoot boolean settings (`getsebool`, `setsebool`). The lecture includes a practical example: Apache cannot serve files from `/opt/web` because they lack the `httpd_sys_content_t` label; the fix is either `semanage fcontext` and `restorecon` or a custom file context mapping.
+
+Namespaces are the technology behind containers, but they are not inherently about containers. You can use `unshare` to create a namespace manually: `unshare --pid --fork --mount-proc /bin/bash` gives you a shell where PID 1 is bash, and you cannot see the host's processes. This is useful for testing, debugging, and understanding what containers actually do. The lecture includes a "container from scratch" lab where students build a minimal container using only `unshare`, `mount` (for a root filesystem), and `chroot`.
+
+cgroups v2 is a significant improvement over the v1 hierarchy. In v1, each controller (cpu, memory, blkio) had its own hierarchy, making resource management fragmented. In v2, there is a single unified hierarchy, and all controllers manage resources within it. The systemd integration is seamless: every service, user session, and VM is placed in a cgroup, and resource limits can be set declaratively in unit files (`CPUQuota=50%`, `MemoryMax=1G`). The OOM protection in cgroups v2 is also improved: `memory.high` is a throttle limit (soft, the kernel reclaims memory but does not kill), while `memory.max` is a hard limit (violations trigger OOM kill within the cgroup).
+
+### Required Reading
+
+- Vervloesem, K. (2032). *SELinux System Administration*, 3rd Edition. Packt Publishing. Chapters 1-4, 7.
+- Kerrisk, M. (2034). *The Linux Programming Interface*, 2nd Edition. No Starch Press. Chapters 6-7 (Processes, Memory), Chapter 12 (Namespaces).
+- Yggdrasil Security Hardening Guide (2040). "Container Isolation and Host Security."
+
+### Discussion Questions
+
+1. A web application running in a Docker container is compromised. The attacker has shell access inside the container. Evaluate the risk: can they escape to the host? What isolation mechanisms prevent or allow escape? How would you harden the container to minimise damage?
+2. Compare SELinux (type enforcement) and AppArmor (path-based profiles) for a university web hosting environment with 500 student projects, each running as a separate user. Which is easier to configure? Which provides stronger security guarantees?
+3. The Norse *borg* (fortified settlement) had multiple rings of defence: palisade, ditch, watchtower, and the armed inhabitants themselves. How does this layered defence architecture inform modern OS security design (DAC, MAC, namespaces, cgroups, seccomp)?
+
+---
+
+ᚺ **Lecture 9: Virtualisation and Containers — KVM, Docker, and Kubernetes Runtime**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Virtualisation is the abstraction of hardware resources, and it is the foundation of modern IT infrastructure. This lecture covers hardware virtualisation (KVM, Xen, VMware ESXi), operating-system virtualisation (containers via namespaces and cgroups), and the Kubernetes container runtime ecosystem (containerd, CRI-O, gVisor, Kata Containers). Students deploy VMs with KVM, build container images, and compare the isolation properties of VMs and containers.
+
+### Key Topics
+
+- **Hardware Virtualisation:** The hypervisor as a layer between hardware and guest OSes. Type 1 (bare-metal: KVM on Linux, Xen, VMware ESXi, Microsoft Hyper-V) and Type 2 (hosted: VirtualBox, VMware Workstation). The lecture covers: CPU virtualisation extensions (Intel VT-x, AMD-V), memory virtualisation (shadow page tables, extended page tables — EPT/NPT), I/O virtualisation (emulation, paravirtualisation, SR-IOV for direct device assignment), and storage virtualisation (QCOW2, RAW, VMDK, virtualised NVMe). The 2040 reality: KVM dominates open-source virtualisation; VMware dominates enterprise licensing.
+- **KVM in Practice:** Kernel-based Virtual Machine as the Linux hypervisor. The lecture covers: `libvirt` and `virt-manager` for management, QEMU as the userspace component, `virsh` for command-line control, and the KVM networking models (NAT, bridge, macvtap). The hands-on lab: students create a VM, install a guest OS, configure bridged networking, and perform a live migration to another host.
+- **Container Runtimes:** Docker as the container platform, and the OCI (Open Container Initiative) standards that ensure interoperability. The lecture covers: container images (layered filesystems, Dockerfiles, image registries), container execution (runC as the reference runtime, containerd as the daemon, CRI-O as the Kubernetes-native alternative), and rootless containers (Podman running containers without root privileges via user namespaces). The 2040 reality: Docker has been superseded by Podman in many enterprise contexts due to its daemonless, rootless architecture.
+- **Container Security and Isolation:** The lecture reviews namespaces, cgroups, seccomp, and capabilities (from Lecture 8) in the container context. Additional topics: image scanning (Trivy, Clair, Grype for detecting CVEs in images), runtime security (Falco for detecting anomalous container behaviour), and supply chain security (Sigstore for signing images, SLSA for provenance verification). The 2040 additions: confidential computing containers (AMD SEV, Intel TDX — encrypting container memory from the hypervisor) and WebAssembly (Wasm) as a lighter sandbox alternative.
+- **Kubernetes Runtime:** The Container Runtime Interface (CRI) that abstracts the runtime from the kubelet. The lecture covers: containerd as the default runtime in most Kubernetes distributions, CRI-O as the lightweight alternative for minimal nodes, and gVisor/Kata Containers for enhanced isolation (gVisor implements a user-space kernel; Kata runs containers in lightweight VMs). The 2040 trend: multi-tenancy Kubernetes clusters use gVisor or Kata to prevent tenant escape, while general-purpose clusters use containerd for performance.
+
+### Lecture Notes
+
+Virtualisation is the most transformative technology in IT operations since the internet. It decouples workloads from hardware, enabling the flexibility that makes cloud computing possible. Before virtualisation, a server was a physical machine that ran one OS; if the workload outgrew the server, you ordered a bigger one and migrated manually. With virtualisation, a server is a software construct that can be created, resized, migrated, and deleted in seconds.
+
+KVM is the open-source hypervisor that powers most cloud infrastructure. It is not a standalone product but a Linux kernel module that transforms the kernel into a hypervisor. QEMU provides the userspace emulation (device models, BIOS, bootloader), and libvirt provides the management API. The beauty of KVM is its integration with the Linux ecosystem: the same tools that manage Linux systems (systemd, cgroups, namespaces, SELinux) manage KVM guests. A KVM VM is just another process from the host's perspective, schedulable, debuggable, and manageable with standard Linux tools.
+
+Containers are not "lightweight VMs"; they are a different abstraction entirely. A VM virtualises hardware; a container virtualises the OS. Multiple containers share the host kernel but have isolated filesystems, process trees, and network stacks. This makes containers faster to start (seconds vs. minutes) and more efficient (hundreds or thousands per host vs. tens of VMs). But the shared kernel means weaker isolation: a container escape vulnerability (e.g., a bug in the kernel's namespace implementation) compromises the host, whereas a VM escape is far rarer and typically requires hypervisor-level bugs.
+
+The container image format is one of Docker's enduring contributions. An image is a stack of layers, each a filesystem diff from the previous one. The base layer might be Alpine Linux (5MB); the next layer adds the application runtime; the next adds the application code. Layers are content-addressed and shared between images, reducing storage and transfer. The 2040 best practice is minimal images: start from `scratch` or `distroless` and add only what is needed, reducing attack surface. The "Golden Image" standard at Yggdrasil requires: no shell, no package manager, no compiler, no unnecessary libraries — just the application and its runtime dependencies.
+
+Kubernetes runtime security in 2040 has evolved beyond simple container isolation. gVisor implements a user-space kernel ("Sentry") that intercepts syscalls from the container and implements them in Go, adding a second boundary between the container and the host kernel. Kata Containers run each pod in a lightweight VM (microVM using Firecracker or Cloud Hypervisor), providing VM-level isolation with container-level management. The choice depends on the threat model: a university research cluster might use containerd for trusted workloads and Kata for untrusted student code.
+
+### Required Reading
+
+- Vegt, M. van der. (2033). *KVM Virtualisation Handbook*. Apress. Chapters 1-3, 7.
+- Mouat, A. (2034). *Using Docker: Developing and Deploying Software with Containers*, 3rd Edition. O'Reilly. Chapters 1-4, 10.
+- Hightower, K., Burns, B., & Beda, J. (2035). *Kubernetes: Up and Running*, 4th Edition. O'Reilly. Chapters 1-3.
+
+### Discussion Questions
+
+1. A university needs to provide isolated development environments for 1,000 students. Compare VMs (KVM) and containers (Docker/Podman) for this use case. Consider: resource efficiency, isolation strength, startup time, and operational complexity.
+2. A container escape vulnerability is discovered in the Linux kernel's user namespace implementation. What is the blast radius if this vulnerability is exploited on: (a) a shared Kubernetes node running trusted internal services, and (b) a shared Kubernetes node running untrusted third-party workloads? How would you mitigate in each case?
+3. The Norse *landnám* (land-taking) established farms with defined boundaries but shared communal resources (pasture, woodland, water). How does this balance between private holding and common infrastructure inform the design of multi-tenant container platforms?
+
+---
+
+ᚾ **Lecture 10: Kernel Internals and Debugging**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+When standard diagnostic tools fail, the IT professional must dig deeper. This lecture covers kernel debugging: reading kernel logs, tracing system calls, using dynamic instrumentation (eBPF), and understanding kernel panics. Students learn to interpret `dmesg`, use `strace` and `ltrace`, write simple eBPF programs for observability, and analyse kernel oops messages. The lecture demystifies the kernel: it is complex, but it is not magic.
+
+### Key Topics
+
+- **Kernel Logs and `dmesg`:** The kernel ring buffer as the first source of truth for hardware and driver issues. The lecture covers: boot messages (hardware detection, driver loading, filesystem mounting), runtime messages (device errors, network link state changes, thermal events), and severity levels (emerg, alert, crit, err, warning, notice, info, debug). The `dmesg` command, `journalctl -k` for systemd-integrated systems, and `cat /var/log/kern.log` for traditional syslog.
+- **System Call Tracing:** `strace` (Linux) and Process Monitor (Windows) as tools for observing the boundary between user space and kernel space. The lecture covers: attaching to running processes (`strace -p PID`), filtering by syscall (`strace -e open,read,write`), and interpreting output (return values, error codes, elapsed time). The hands-on lab: trace a slow file copy and identify whether the bottleneck is in `open`, `read`, `write`, or `close`, and whether errors occur.
+- **Dynamic Instrumentation with eBPF:** Extended Berkeley Packet Filter as the revolutionary technology for safe, efficient kernel tracing. The lecture covers: eBPF architecture (verified bytecode loaded into the kernel, JIT-compiled to native instructions, attached to kprobes/uprobes/tracepoints), the BCC toolkit (Python/C frontends for eBPF), and bpftrace (a high-level language for one-liners). Example programs: counting syscalls by process, tracing TCP connections, measuring filesystem latency, and detecting short-lived processes. The 2040 reality: eBPF has expanded beyond tracing to networking (Cilium, load balancing), security (Falco, Tetragon), and performance profiling (Parca, Pyroscope).
+- **Kernel Panics and Oops Messages:** When the kernel detects an unrecoverable error, it prints an "oops" (non-fatal but serious) or panics (fatal, system halts). The lecture covers: reading the oops message (register dump, stack trace, offending function, module list), using `kdump` to capture a crash dump for post-mortem analysis, and common causes (buggy drivers, hardware failures, memory corruption). The Windows equivalent: bug check (BSOD) analysis with WinDbg and memory dumps.
+- **Kernel Modules and Tainting:** The concept of a "tainted" kernel (a kernel that has loaded proprietary or untrusted modules, or experienced an error, making bug reports less useful to upstream developers). The lecture covers: reading `/proc/sys/kernel/tainted` and decoding the taint flags, and the practical implication that a tainted kernel may exhibit instability that is difficult to diagnose.
+
+### Lecture Notes
+
+Kernel debugging is the final frontier of systems troubleshooting. When `top` shows high CPU but you cannot identify the process, when `iostat` shows no I/O but the system is unresponsive, when a service crashes with no user-space error — the answer lies in the kernel. The professional who can read a kernel oops, trace a syscall sequence, or write an eBPF program has diagnostic capabilities that others lack.
+
+`dmesg` is the first place to look when hardware misbehaves. A failing disk will generate ATA errors; a network driver bug will generate DMA errors; a thermal event will generate CPU throttling messages. The lecture includes a "dmesg bingo" exercise: students are given five scenarios (slow disk, intermittent network, USB device not recognised, memory errors, overheating) and must identify the relevant `dmesg` patterns for each.
+
+`strace` is the sysadmin's microscope. It reveals every interaction between a process and the kernel: every file opened, every byte read, every socket connected, every memory page mapped. A process that "hangs" is often blocked in a single syscall: `strace` will show it stuck in `read()` waiting for data that never arrives, or in `futex()` waiting for a lock held by a dead thread. The lecture includes a famous case study: a PostgreSQL server that intermittently froze for 30 seconds. `strace` revealed that it was blocked in `fsync()` on a filesystem whose journal was on a failing disk; the disk retries caused the delay.
+
+eBPF is the most significant advance in OS observability since `strace`. Unlike traditional tracing tools that impose high overhead (systemtap, LTTng), eBPF programs are verified to be safe (no infinite loops, no null dereferences) and JIT-compiled to native code, achieving near-zero overhead. A simple eBPF program can trace every TCP connection establishment on a server, aggregating by source IP and destination port, with overhead measured in microseconds. The lecture includes hands-on exercises with bpftrace: `bpftrace -e 'kprobe:do_nanosleep { @[comm] = count(); }'` counts how many times each process enters sleep, revealing CPU hogs and I/O waiters.
+
+### Required Reading
+
+- Gregg, B. (2035). *BPF Performance Tools*. Addison-Wesley. Chapters 1-3, 6-7.
+- Kerrisk, M. (2034). *The Linux Programming Interface*, 2nd Edition. No Starch Press. Chapter 23 (Tracing and Debugging).
+- Corbet, J., Rubini, A., & Kroah-Hartman, G. (2031). *Linux Device Drivers*, 4th Edition. O'Reilly. Chapter 4 (Debugging Techniques).
+
+### Discussion Questions
+
+1. A process intermittently hangs for exactly 30 seconds before resuming. Describe your diagnostic strategy using `strace`, `lsof`, and eBPF. What patterns would confirm a network timeout versus a filesystem lock versus a DNS resolution delay?
+2. An eBPF program attached to a kprobe causes a kernel panic. Explain how the eBPF verifier is supposed to prevent this, and under what conditions it might fail. What safeguards should you implement when deploying eBPF in production?
+3. The Norse *vǫlva* (seeress) could perceive hidden currents of fate that others could not see. How does the kernel debugger's ability to perceive hidden system behaviour parallel the *vǫlva's* insight?
+
+---
+
+ᛁ **Lecture 11: Performance Tuning and Observability**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+Performance tuning is the art and science of making systems faster, more efficient, and more predictable. This lecture covers systematic performance methodology: establishing baselines, identifying bottlenecks, implementing changes, and verifying results. Students learn to use the Linux performance tools (`perf`, `mpstat`, `pidstat`, `sar`, `vmstat`, `iostat`, `ss`, `tcpdump`) and understand the USE method (Utilisation, Saturation, Errors) for resource analysis.
+
+### Key Topics
+
+- **The USE Method:** Brendan Gregg's methodology for analysing system resources: for each resource (CPU, memory, disk, network), check Utilisation (busy time), Saturation (queue length or waiting time), and Errors (error counts). A bottleneck exists when utilisation is high and saturation is increasing. The lecture provides a matrix mapping resources to USE metrics and the tools for measuring them.
+- **CPU Performance Analysis:** `perf` (Linux Performance Events) for hardware counter profiling (cycles, instructions, cache misses, branch mispredictions), flame graphs for visualising hot code paths, and `mpstat` for per-CPU metrics. The lecture covers: CPU-bound vs. I/O-bound vs. memory-bound workloads, the difference between user time and system time (high system time suggests excessive syscalls or driver issues), and the impact of CPU frequency scaling and thermal throttling.
+- **Memory Performance Analysis:** Beyond `free` and `top`: `vmstat` for page faults and swap activity, `slabtop` for kernel object cache usage, `numastat` for NUMA (Non-Uniform Memory Access) locality, and `perf mem` for memory access profiling. The lecture covers: memory bandwidth saturation (rare but devastating on HPC systems), NUMA remote access penalties (accessing memory attached to another socket is 2-3x slower), and transparent huge page effects.
+- **Disk I/O Performance Analysis:** `iostat` for device-level metrics, `iotop` for per-process I/O, `blktrace` for block-level events, and `fio` for synthetic benchmarking. The lecture covers: understanding IOPS vs. throughput vs. latency, queue depth effects (SSD performance increases with queue depth up to a point), and the difference between synchronous and asynchronous I/O patterns.
+- **Network Performance Analysis:** `ss` (socket statistics, replacing `netstat`), `tcpdump` and `Wireshark` for packet capture, `nicstat` for NIC-level metrics, and `iperf3` / `netperf` for throughput benchmarking. The lecture covers: TCP tuning (window scaling, congestion control algorithms: BBR, CUBIC, RENO), latency vs. bandwidth (the "long fat network" problem), and kernel bypass for ultra-low latency (DPDK, RDMA).
+- **Observability Stacks in 2040:** The modern observability platform: Prometheus for metrics collection, Grafana for visualization, Loki for log aggregation, Jaeger/Tempo for distributed tracing, and eBPF-based continuous profiling (Parca, Pyroscope). The lecture covers: the shift from monitoring ("is it up?") to observability ("why is it slow?"), and the AI-assisted correlation of metrics, logs, and traces for automated root cause analysis.
+
+### Lecture Notes
+
+Performance tuning without a methodology is superstition. The administrator who changes random sysctl parameters because "someone on a forum said it helped" is not tuning; they are gambling. The USE method provides a systematic framework: for every resource, measure utilisation, saturation, and errors. If utilisation is low, the resource is not the bottleneck. If utilisation is high but saturation is low, the resource is busy but not overwhelmed. If both are high, you have found a bottleneck.
+
+CPU analysis with `perf` reveals what the CPU is actually doing. The most important hardware counters are: CPU cycles (total work), instructions retired (useful work), and their ratio (CPI — cycles per instruction; lower is better). A high CPI suggests stalls: cache misses (L1, L2, L3), TLB misses, branch mispredictions, or memory bandwidth saturation. `perf record -g` captures call graphs, which can be visualised as flame graphs: horizontal bars represent functions, width represents sample count (time spent), and vertical stacking represents the call stack. A flame graph immediately reveals "hot" functions where optimisation efforts should focus.
+
+Memory performance on modern servers is complicated by NUMA. A dual-socket server has memory controllers on each CPU; accessing "remote" memory (attached to the other socket) is significantly slower than "local" memory. The OS tries to allocate memory locally ("NUMA first-touch" policy), but if a thread migrates between sockets or if memory is shared between threads on different sockets, remote access occurs. The `numastat` tool shows per-node memory allocation; `numactl` can force local allocation or interleave across nodes. For latency-sensitive applications, NUMA awareness is essential: misconfigured applications can lose 30% performance to remote memory access.
+
+Network performance is often limited by latency rather than bandwidth. A 10 Gbps link can transfer 1.25 GB/s — but if the round-trip time is 100ms (a transatlantic link), TCP's congestion control will limit the throughput to a fraction of the link capacity unless the window size is increased. The "bandwidth-delay product" (BDP) determines the required buffer size: for a 10 Gbps link with 100ms RTT, the BDP is 125MB, meaning the sender and receiver must each buffer 125MB to keep the pipe full. The lecture includes a calculation: given link speed and RTT, what is the minimum TCP window size required for full utilisation?
+
+### Required Reading
+
+- Gregg, B. (2032). *Systems Performance: Enterprise and the Cloud*, 2nd Edition. Addison-Wesley. Chapters 1-2, 6-10.
+- Gregg, B. & Mauro, J. (2030). *DTrace: Dynamic Tracing in Oracle Solaris, macOS, and FreeBSD*, 2nd Edition. Prentice Hall. Chapters 1-3. (For conceptual comparison with eBPF.)
+- Yggdrasil Observability Standards (2040). "Metrics, Logs, Traces, and Profiles: The Complete Stack."
+
+### Discussion Questions
+
+1. A web server's response time has degraded from 50ms to 500ms. Using the USE method, describe your systematic diagnostic process. What metrics would you check first? What tools would you use? How would you distinguish between CPU, memory, disk, and network bottlenecks?
+2. A developer proposes disabling CPU frequency scaling (`cpufreq` governor set to "performance") to reduce latency jitter. What are the benefits and costs of this approach? Calculate the increased power consumption for a 64-core server under 30% average load.
+3. The Norse *skipstjórn* (ship's navigation) required constant observation of wind, current, and stars, with adjustments made continuously rather than at intervals. How does this continuous, attentive navigation parallel the SRE practice of continuous observability and proactive tuning?
+
+---
+
+ᛃ **Lecture 12: The Server Hardening Challenge**
+
+**Course:** IT103 — Operating Systems for IT Professionals  
+**Degree:** Bachelor of Science in Information Technology, University of Yggdrasil, 2040
+
+---
+
+### Overview
+
+The final lecture is a capstone practical: students must harden their assigned server against a simulated attack and performance degradation scenario. The challenge includes: applying security updates, configuring firewall rules, enabling MAC (SELinux or AppArmor), hardening SSH, setting resource limits with cgroups, tuning kernel parameters for the workload, and documenting all changes. The server is then subjected to a penetration test and load test; students must maintain availability and security while explaining their decisions.
+
+### Key Topics
+
+- **Security Hardening Checklist:** OS updates (automated patching with `unattended-upgrades` or Windows Update for Business), minimal software installation (remove unnecessary packages and services), firewall configuration (`iptables`/`nftables` or Windows Defender Firewall — default deny, explicit allow), SSH hardening (key-based auth, disable root login, disable password auth, change default port or rate-limit), and file permissions (audit SUID/SGID binaries, verify critical file permissions).
+- **Mandatory Access Control:** Enabling SELinux in enforcing mode (or AppArmor) and resolving any denials. Creating custom policies if necessary. The lecture reviews: file context labelling, boolean settings, and audit2allow for policy generation.
+- **Resource Governance:** Configuring cgroups v2 limits for CPU, memory, and I/O. Setting up systemd resource controls for critical services. The hands-on: apply a `CPUQuota=70%` and `MemoryMax=8G` to a web server and verify that it throttles under load rather than crashing the system.
+- **Kernel Parameter Tuning:** Tuning `vm.swappiness`, `vm.dirty_ratio`, `net.core.somaxconn`, and `kernel.randomize_va_space` for the specific workload. The lecture emphasises: every parameter change must be justified with a measured performance improvement; speculative tuning is discouraged.
+- **Documentation and Verification:** Every hardening step must be documented in a "System Security Plan" that includes: the change made, the rationale, the expected effect, and the verification test. The lecture covers: automated compliance checking (OpenSCAP for Linux, Security Compliance Toolkit for Windows), and continuous monitoring (Falco for runtime threats, AIDE for file integrity monitoring).
+- **The Challenge Scenario:** Over a 24-hour period, the instructor's automated tools will: (1) attempt to brute-force SSH, (2) attempt a container escape if containers are present, (3) run a memory exhaustion script if resource limits are misconfigured, and (4) submit a workload that causes performance degradation if tuning is inadequate. Students must detect, block, or survive these events while maintaining service availability.
+
+### Lecture Notes
+
+Server hardening is where all the course concepts converge. The process knowledge from Lecture 2 helps you identify and limit runaway processes. The memory knowledge from Lecture 3 helps you set appropriate resource limits. The file system knowledge from Lecture 4 helps you verify permissions and detect unauthorised changes. The I/O knowledge from Lecture 5 helps you tune for the workload. The Linux and Windows deep dives from Lectures 6-7 provide the platform-specific skills. The security isolation from Lecture 8 provides the defence mechanisms. The virtualisation knowledge from Lecture 9 helps you isolate services. The debugging skills from Lecture 10 help you diagnose failures. And the performance methodology from Lecture 11 ensures you tune systematically, not superstitiously.
+
+The System Security Plan is as important as the hardening itself. An opaque system — one where no one knows why a particular setting was chosen — is a liability. When the original administrator leaves, the new administrator must guess whether a sysctl parameter was set for a good reason or was cargo-culted from an outdated blog post. The Yggdrasil standard requires that every production server have a Security Plan stored in version control, reviewed annually, and updated with every change.
+
+Automated compliance checking is essential at scale. A single server can be hardened manually; a thousand servers cannot. OpenSCAP (Security Content Automation Protocol) provides automated checks against security baselines (CIS benchmarks, DISA STIGs) and generates reports showing which rules pass and which fail. The 2040 Yggdrasil compliance pipeline runs OpenSCAP daily on every server, with failures automatically creating tickets in the ITSM system. Similarly, file integrity monitoring (AIDE, OSSEC, Tripwire) detects unauthorised changes to critical files, alerting within minutes of a compromise.
+
+The challenge scenario is designed to be realistic, not a Capture The Flag exercise. Real attackers do not announce themselves; they brute-force slowly from distributed IPs, they exploit application vulnerabilities rather than obvious OS flaws, and they aim for persistence (backdoors, cron jobs, modified binaries) rather than immediate destruction. The automated challenge reflects this: the SSH brute-force is slow and distributed; the container escape uses a known but unpatched vulnerability; the memory exhaustion is gradual. Students must not only block the attacks but also detect them: a firewall rule that blocks SSH is not enough if you do not also check the logs to see that someone was trying.
+
+### Required Reading
+
+- CIS Benchmarks. (2040). *CIS Red Hat Enterprise Linux 10 Benchmark v3.0* and *CIS Windows Server 2040 Benchmark v2.0*.
+- NIST SP 800-123. (2039). *Guide to General Server Security*.
+- Yggdrasil Security Operations Center. (2040). *The Server Hardening Challenge: Rules, Scoring, and Evaluation Criteria*.
+
+### Discussion Questions
+
+1. Your server hardening plan includes disabling IPv6 because "we do not use it." A security researcher argues that disabling IPv6 reduces your attack surface. A network engineer argues that disabling IPv6 causes technical debt when IPv6 is eventually required. Evaluate both positions and propose a policy.
+2. A compliance scan flags your web server for running as root. You change it to run as an unprivileged user, but the application then cannot bind to port 80. What are three solutions, and what are the security implications of each?
+3. The Norse *víkingr* (pirate, raider, explorer) had to be simultaneously aggressive and cautious — bold in attack, meticulous in ship maintenance, and vigilant against surprise. How does this dual temperament inform the IT professional's approach to both proactive hardening and reactive incident response?
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT103 is a **practical skills assessment** (60% of grade) combined with a **written theory exam** (40% of grade). The practical assessment is conducted in the Yggdrasil IT Lab over a 4-hour session; the written exam is 2 hours.
+The IT103 final examination assesses OS internals knowledge and practical troubleshooting skill. It consists of two components:
 
-**Practical Skills Assessment (60%):**
-Students are given a partially assembled or malfunctioning computer and a set of tasks:
-- Component identification and compatibility checking (10%)
-- System assembly or repair (20%)
-- OS installation and driver configuration (15%)
-- Diagnostic troubleshooting of a hardware or software fault (15%)
+### Component A: Written Examination (70%)
 
-**Written Theory Exam (40%):**
-Choose 4 of 8 essay questions:
+A 2.5-hour written examination with six questions, of which students must answer four.
 
-1. Explain the physics of CMOS transistors and the challenges of scaling below 5nm. Discuss the engineering solutions (3D integration, chiplets, new materials) and their limitations.
+**Sample Questions:**
 
-2. Compare x86, ARM, and RISC-V architectures across the dimensions of performance, power efficiency, ecosystem, and licensing model. For what classes of devices is each architecture best suited?
+1. **Process Management:** Explain the fork-exec model with attention to copy-on-write semantics. A web server forks a child process for each connection; under heavy load, memory usage appears to double. Is this real? How would you verify?
 
-3. Analyse the memory hierarchy from registers to DNA storage. For each level, explain the trade-off between speed, capacity, cost, and persistence. Why does no single memory technology dominate all levels?
+2. **Memory Management:** A server is experiencing severe performance degradation. `vmstat 1` shows `si` and `so` (swap in/out) at 5,000 per second, `wa` (I/O wait) at 40%, and `r` (run queue) at 2. Diagnose the problem, explain the causal chain, and propose three remediation strategies with trade-offs.
 
-4. Describe the power and cooling infrastructure of a modern data centre. Calculate the PUE of a hypothetical facility and propose improvements. Discuss the environmental implications of data centre energy consumption.
+3. **File Systems:** Compare journaling (ext4) and copy-on-write (Btrfs/ZFS) approaches to crash consistency. For a database server that calls `fsync()` after every transaction, which file system paradigm provides better performance and why?
 
-5. A system fails to POST. Describe a systematic diagnostic process, including the tools and tests you would use at each step. What are the most likely failure modes, and how would you confirm each hypothesis?
+4. **Security Isolation:** A container running a university student's untrusted code must be isolated from the host and other containers. Describe the complete isolation stack: namespaces, cgroups, seccomp, capabilities, and MAC (SELinux/AppArmor). What attack vector remains even with all these controls in place?
 
-6. Compare virtual machines and containers as hardware abstraction mechanisms. For what workloads is each appropriate? What are the security implications of each approach?
+5. **Performance:** Using the USE method, analyse a scenario where `iostat` shows 100% disk utilisation but `await` is only 2ms, while CPU utilisation is 20% and memory is 90% used with no swapping. Where is the bottleneck? What additional data would you collect?
 
-7. Describe a side-channel attack and a hardware trojan. For each, explain how it works, what defences exist, and why defending against it is difficult.
+6. **Windows and Linux Integration:** A hybrid enterprise runs Active Directory for identity and Linux servers for applications. Design an authentication and authorisation architecture that allows Linux servers to authenticate users against AD, enforce group-based access control, and audit all access attempts. Specify the protocols, tools, and configuration files involved.
 
-8. Choose one emerging hardware technology (photonics, neuromorphics, quantum, biological). Explain its principles, current state of development, and potential impact on computing. What are the most significant barriers to practical deployment?
+### Component B: Live Server Examination (30%)
 
-**Grading:**
-- A (Excellent): Flawless practical execution, comprehensive theoretical understanding, and insightful analysis of trade-offs and future directions.
-- B (Good): Competent practical skills with minor errors; solid theoretical foundation; some gaps in analysis.
-- C (Satisfactory): Basic practical competence; adequate theoretical knowledge; superficial analysis.
-- D (Poor): Significant practical errors; fragmentary theoretical understanding; little analysis.
-- F (Fail): Unable to complete basic tasks; fundamental misunderstandings of hardware principles.
+A 60-minute practical examination on the student's assigned server:
+- Diagnose a pre-planted performance issue (the examiner will introduce a bottleneck before the exam)
+- Harden the server against a specific threat model (provided at exam time)
+- Explain your diagnostic reasoning and hardening choices to the examiner
+
+**Evaluation Criteria:**
+- Diagnostic accuracy (correctly identifying the root cause)
+- Methodology (systematic, evidence-based reasoning)
+- Technical correctness (appropriate tools, correct commands, valid configurations)
+- Security awareness (defence in depth, least privilege, verification)
+- Communication (clear explanation of reasoning)
+
+---
+
+*The kernel is the heart of the machine. Know it, and you know the machine. Tend it, and the machine serves you well. Neglect it, and it will betray you at the worst possible moment.* ᛟ
+
+— Prof. Björn Hrafnkelsson, University of Yggdrasil, 2040
