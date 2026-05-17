@@ -9,7 +9,7 @@
 
 ## Lectures
 
-ᚠ **Lecture 1: The Capstone Vision — What Makes a Great Project**
+## Lecture 1: The Capstone Vision — What Makes a Great Project
 
 ### 1.1 Overview
 
@@ -31,7 +31,7 @@ What distinguishes a great capstone from a mediocre one? This lecture establishe
 
 ---
 
-ᚢ **Lecture 2: Requirements Discovery — Understanding What to Build**
+## Lecture 2: Requirements Discovery — Understanding What to Build
 
 ### 2.1 Overview
 
@@ -53,7 +53,7 @@ The most common cause of project failure is building the wrong thing. This lectu
 
 ---
 
-ᚦ **Lecture 3: Architecture Design — From Requirements to Blueprint**
+## Lecture 3: Architecture Design — From Requirements to Blueprint
 
 ### 3.1 Overview
 
@@ -76,7 +76,7 @@ Architecture transforms requirements into a technical blueprint. This lecture co
 
 ---
 
-ᚨ **Lecture 4: Technology Selection and Justification**
+## Lecture 4: Technology Selection and Justification
 
 ### 4.1 Overview
 
@@ -100,7 +100,7 @@ Choosing the right technology is a core IT competency. This lecture covers techn
 
 ---
 
-ᚱ **Lecture 5: Project Planning — Turning Design into Action**
+## Lecture 5: Project Planning — Turning Design into Action
 
 ### 5.1 Overview
 
@@ -124,7 +124,7 @@ A great design means nothing without execution. This lecture covers project plan
 
 ---
 
-ᚲ **Lecture 6: Risk Management — Anticipating and Mitigating Failure**
+## Lecture 6: Risk Management — Anticipating and Mitigating Failure
 
 ### 6.1 Overview
 
@@ -148,7 +148,7 @@ Every project faces uncertainty. This lecture covers risk management: identifica
 
 ---
 
-ᚷ **Lecture 7: Implementation Foundations — Setting Up for Success**
+## Lecture 7: Implementation Foundations — Setting Up for Success
 
 ### 7.1 Overview
 
@@ -172,7 +172,7 @@ Before writing code, you need the right foundations. This lecture covers impleme
 
 ---
 
-ᚹ **Lecture 8: Implementation Core — Building the Solution**
+## Lecture 8: Implementation Core — Building the Solution
 
 ### 8.1 Overview
 
@@ -198,7 +198,7 @@ This lecture covers the heart of implementation: writing code, configuring infra
 
 ---
 
-ᚺ **Lecture 9: Testing and Quality Assurance — Building Confidence**
+## Lecture 9: Testing and Quality Assurance — Building Confidence
 
 ### 9.1 Overview
 
@@ -223,7 +223,7 @@ Testing is not a phase — it is a continuous activity. This lecture covers test
 
 ---
 
-ᚾ **Lecture 10: Deployment and Release Management — Getting It to Users**
+## Lecture 10: Deployment and Release Management — Getting It to Users
 
 ### 10.1 Overview
 
@@ -249,7 +249,7 @@ Building the right thing is only half the battle — getting it to users reliabl
 
 ---
 
-ᛁ **Lecture 11: Documentation and Knowledge Transfer — Making It Last**
+## Lecture 11: Documentation and Knowledge Transfer — Making It Last
 
 ### 11.1 Overview
 
@@ -275,7 +275,7 @@ If it's not documented, it didn't happen. This lecture covers documentation stra
 
 ---
 
-ᛃ **Lecture 12: Presentation and Reflection — Telling Your Story**
+## Lecture 12: Presentation and Reflection — Telling Your Story
 
 ### 12.1 Overview
 
