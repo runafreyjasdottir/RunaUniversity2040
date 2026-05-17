@@ -1,334 +1,632 @@
-# IT305: Disaster Recovery & Business Continuity
-## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
+# IT305: Enterprise Architecture — The Great Hall Design of Digital Enterprises
 
-**Credits:** 4
-**Description:** Comprehensive study of disaster recovery planning, business continuity management, crisis response, and organizational resilience. Covers RPO/RTO design, backup architectures, failover strategies, testing methodologies, and the 2040 practice of AI-orchestrated recovery.
+**Program:** Bachelor of Information Technology, Year 3  
+**Credits:** 4 ECTS  
+**Prerequisites:** IT203, IT303  
+**Instructor:** Prof. Sigrún Hrafnsdottir, TOGAF Certified, AWS Solutions Architect Professional  
+**Office:** Heorot Hall, Room 315  
+**Semester:** Fall 2041  
 
-**Prerequisites:** IT201, IT203
-
-**Instructor:** Prof. Björn Hǫggvason, Department of Information Technology
-
-**Course Philosophy:** Disasters are not "if" — they are "when." The question is not whether your systems will fail but whether your organization will survive the failure. Disaster recovery is not a technical exercise — it is an organizational capability that spans technology, process, people, and culture. This course prepares IT professionals to design, implement, test, and execute recovery plans that keep organizations alive through crisis.
-
----
-
-## Lectures
+> *"A great hall is not merely a roof and walls — it is the relationship between them, the flow from hearth to high seat, the way light enters and smoke exits. So too, enterprise architecture is not merely servers and software — it is the relationships that make the whole function."* — Sigrún Hrafnsdottir, *Digital Longhouses: Architecture for the 2040 Enterprise*, 2038
 
 ---
 
-### Lecture 1: The Nature of Disaster — Taxonomy, Impact, and the Resilience Imperative
+## Course Description
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-What constitutes a disaster? This lecture defines the threat landscape: natural disasters (earthquakes, floods, fires), technological failures (hardware, software, power), human threats (ransomware, insider attacks, errors), and systemic risks (supply chain, cascading failures). It establishes the business case for resilience and the relationship between disaster recovery (DR), business continuity (BC), and organizational resilience.
-
-#### Key Topics
-
-- **Disaster Taxonomy:** (1) **Natural** — earthquakes, floods, hurricanes, wildfires, pandemics; (2) **Technological** — data center power failure, cooling failure, network partition, hardware cascade failure; (3) **Human/Adversarial** — ransomware, DDoS, insider sabotage, espionage, human error (the leading cause); (4) **Systemic** — cloud provider outage, DNS root failure, BGP hijack, supply chain compromise. By 2040, climate change has increased the frequency and severity of natural disasters, while AI-generated attacks have expanded the adversarial threat surface.
-- **The Resilience Imperative:** The cost of downtime: (1) **Revenue loss** — lost transactions per hour; (2) **Reputation damage** — customer trust erosion; (3) **Regulatory penalties** — GDPR, healthcare, financial services; (4) **Operational disruption** — employees idle, supply chain stalled. The average cost of downtime in 2040: $500,000–$5M per hour, depending on industry. Resilience is an investment, not a cost.
-- **DR, BC, and Resilience:** (1) **Business Continuity (BC)** — maintaining business functions during and after a disruption; (2) **Disaster Recovery (DR)** — restoring IT systems and data after a disaster; (3) **Organizational Resilience** — the broader capability to anticipate, prepare for, respond to, and adapt to disruptions. DR is a subset of BC, which is a subset of resilience.
-
-#### Required Reading
-
-- UoY Resilience Lab. (2040). *The 2040 Disaster Landscape: Threats, Costs, and Trends*.
-- ISO. (2039). ISO 22301: Business Continuity Management Systems.
+Enterprise Architecture (EA) is the discipline of designing an organisation's technology landscape as a coherent whole, rather than as a collection of independently acquired and configured systems. This course teaches the frameworks (TOGAF, Zachman, ArchiMate), the patterns (microservices, event-driven architecture, API-led connectivity), and the governance structures that enable IT to align with business strategy. Students will model a fictional enterprise from business architecture through data, application, and technology architecture, producing EA artifacts — Architecture Vision, Business Architecture, Information Systems Architecture, Technology Architecture, and Migration Roadmap — that reflect 2040's cloud-native, AI-augmented, quantum-ready enterprise reality.
 
 ---
 
-### Lecture 2: RPO, RTO, and the Economics of Recovery
+## Lecture 1: What Enterprise Architecture Is — and What It Is Not
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### The Architect's Mandate
 
----
+Enterprise Architecture sits at the intersection of business strategy and technology execution. It answers the questions: What capabilities does the organisation need? How should those capabilities be implemented in processes, data, applications, and infrastructure? How do we transition from the current state to the target state without breaking what already works? The EA is not a technology roadmap — though it includes one. It is not an infrastructure diagram — though it encompasses one. It is the structured description of the enterprise as a system, such that the relationships between its components are visible, analysable, and governable.
 
-#### Overview
+A common misconception in 2040 — amplified by vendor marketing — is that "cloud native" or "AI-first" or "platform engineering" makes enterprise architecture obsolete. The opposite is true. The more heterogeneous the technology landscape (and the 2040 enterprise typically spans three cloud providers, two SaaS generations, a legacy mainframe running COBOL from 1990, and an IoT fleet of 50,000 edge devices), the more critical the architecture function becomes. Without EA, the enterprise becomes a "spaghetti architecture" — point-to-point integrations, duplicated capabilities, inconsistent data models, and security policies that vary by whim rather than by design.
 
-Recovery Point Objective (RPO) and Recovery Time Objective (RTO) are the foundational metrics of disaster recovery. This lecture covers their definition, measurement, economic justification, and the trade-offs between recovery speed, data freshness, and cost.
+### Architecture Domains
 
-#### Key Topics
+TOGAF (The Open Group Architecture Framework), the dominant EA framework as of 2040 (version 11, released 2038), organises architecture into four domains:
 
-- **RPO — Recovery Point Objective:** Maximum acceptable data loss measured in time. RPO of 1 hour means you can lose up to 1 hour of data. Drives backup frequency and replication strategy. RPO of 0 (zero data loss) requires synchronous replication — expensive, latency-sensitive, geographically constrained. RPO of 24 hours allows daily backups — inexpensive but high potential data loss.
-- **RTO — Recovery Time Objective:** Maximum acceptable time to restore service. RTO of 4 hours means service must be operational within 4 hours of a disaster declaration. Drives recovery architecture: hot standby (RTO = minutes), warm standby (RTO = hours), cold standby (RTO = days). Shorter RTOs cost more — automated failover, pre-provisioned capacity, regular testing.
-- **Economic Justification:** How much should you spend on DR? The calculation: Annualized Loss Expectancy (ALE) = Single Loss Expectancy (SLE) × Annualized Rate of Occurrence (ARO). DR spending should be less than ALE. But this is complicated by: non-linear damage (reputation), regulatory penalties, and the difficulty of estimating ARO for rare events.
-- **Tiering Recovery:** Not all systems need the same RPO/RTO. Business Impact Analysis (BIA) categorizes systems: (1) **Tier 1 (Critical)** — RPO near 0, RTO < 1 hour; (2) **Tier 2 (Important)** — RPO < 4 hours, RTO < 8 hours; (3) **Tier 3 (Normal)** — RPO < 24 hours, RTO < 72 hours; (4) **Tier 4 (Non-critical)** — RPO < 1 week, RTO < 2 weeks. By 2040, dynamic tiering adjusts RPO/RTO targets based on business context (end-of-quarter finance systems upgrade to Tier 1 temporarily).
+| Domain | Question Answered | Artifacts |
+|--------|-------------------|-----------|
+| **Business Architecture** | What does the organisation do, and how? | Business capability map, value stream map, organisation model |
+| **Data Architecture** | What information does the organisation need, and how is it structured? | Conceptual/logical/physical data models, data flow diagrams, data governance policies |
+| **Application Architecture** | What software systems implement business capabilities? | Application portfolio catalogue, interface catalog, application communication diagrams |
+| **Technology Architecture** | What infrastructure and platforms host the applications and data? | Platform decomposition diagram, technology standards catalog, network topology |
 
-#### Required Reading
+The 2040 extension adds a fifth domain: **Security Architecture**, elevated from a cross-cutting concern to a first-class domain in recognition that security is no longer a property that can be "added" but must be architected from the data centre to the edge device.
 
-- NIST. (2038). SP 800-34 Rev. 2: Contingency Planning Guide.
-- UoY Economics Lab. (2039). *The Economics of IT Resilience*.
+### Required Reading
 
----
+- The Open Group, *TOGAF Standard*, Version 11 (2038), Part I: Introduction, Chapters 1-4.
+- Ross, J., Weill, P. & Robertson, D. (2039), *Enterprise Architecture as Strategy*, 3rd ed., Harvard Business Review Press, Chs. 1-2.
+- Hrafnsdottir, S. (2038), *Digital Longhouses: Architecture for the 2040 Enterprise*, University of Yggdrasil Press, Ch. 1, "The Longhouse Analogy."
 
-### Lecture 3: Backup Architectures — From Tape to Continuous Data Protection
+### Discussion Questions
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-Backup is the foundation of DR. This lecture covers backup architectures: media types, backup strategies, storage tiering, immutable backups, and the 2040 landscape of continuous data protection and AI-managed backup.
-
-#### Key Topics
-
-- **The 4-3-2-1-0 Rule (2040):** Evolution of the classic 3-2-1 rule: (1) **4 copies** of data; (2) on **3 different media** types; (3) with **2 off-site** (different geographic regions); (4) **1 immutable** (air-gapped or WORM); (5) **0 errors** (verified through automated restore testing). This rule addresses ransomware, regional disasters, and media degradation.
-- **Backup Storage Tiers:** (1) **Performance tier** — flash/NVMe for recent backups needing fast restore; (2) **Capacity tier** — HDD or cloud object storage for longer retention; (3) **Archive tier** — tape, optical, or cold cloud storage for compliance retention. Automated tiering moves backups through tiers based on age and access patterns.
-- **Immutable and Air-Gapped Backups:** Ransomware targets backups. Defenses: (1) **Immutable storage** — WORM (Write Once Read Many) at the storage layer, preventing modification or deletion within the retention period; (2) **Air-gapped** — physically or logically isolated copies that ransomware cannot reach; (3) **Multi-person authorization** — requiring multiple authorized personnel to delete backups.
-- **Continuous Data Protection (CDP):** Every write is captured, enabling recovery to any point in time. CDP is the ultimate RPO (near-zero). By 2040, CDP is standard for Tier 1 systems, implemented via storage array replication, database WAL streaming, or hypervisor-level CDP.
-
-#### Required Reading
-
-- Preston, W. C. (2038). *Backup & Recovery* (4th ed.).
-- Veeam. (2040). *The 4-3-2-1-0 Backup Rule*.
-- UoY Storage Lab. (2039). *Continuous Data Protection: Architectures and Trade-offs*.
+1. If "cloud native makes EA obsolete" is a fallacy, what specific EA functions become more critical in a multi-cloud environment?
+2. How does the inclusion of Security Architecture as a first-class domain change the EA practice compared to treating it as a cross-cutting concern?
+3. What does the spaghetti architecture pattern cost an enterprise in operational terms? Quantify where possible.
 
 ---
 
-### Lecture 4: Replication and Failover — Keeping Services Alive
+## Lecture 2: The TOGAF Architecture Development Method (ADM)
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### The Iterative Cycle
 
----
+The Architecture Development Method (ADM) is the core of TOGAF — an iterative process for developing an enterprise architecture. Its ten phases (Preliminary through Architecture Change Management) form a cycle that can be executed at the enterprise level, the segment level (a division or business unit), or the capability level (a specific capability increment). The 2040 practitioner understands that the ADM is a reference, not a prescription; every engagement tailors it.
 
-#### Overview
+The ADM phases:
 
-Backup restores data — replication keeps services running. This lecture covers replication architectures: synchronous vs. asynchronous, active-passive vs. active-active, geo-redundancy, and automated failover.
+```
+                  [Preliminary]
+                       |
+              [A. Architecture Vision]
+                       |
+        +--------------+--------------+
+        |              |              |
+  [B. Business]  [C. Information]  [D. Technology]
+  [Architecture] [Sys. Arch.]      [Architecture]
+        |              |              |
+        +--------------+--------------+
+                       |
+            [E. Opportunities & Solutions]
+                       |
+            [F. Migration Planning]
+                       |
+          [G. Implementation Governance]
+                       |
+          [H. Architecture Change Mgmt]
+                       |
+            (returns to A or any phase)
+```
 
-#### Key Topics
+Each phase produces specific deliverables. For the Yggdrasil Health EHR migration, the Phase A deliverable would be an Architecture Vision document describing the target state, the business outcomes, the constraints, and the high-level scope of the architecture work. Phase B produces the Business Architecture — capability maps showing which capabilities the EHR migration affects (Patient Records Management, Clinical Decision Support, Billing and Claims, Regulatory Reporting). Phases C and D produce the Information Systems and Technology architectures — data models, application component models, and the cloud platform design.
 
-- **Synchronous vs. Asynchronous Replication:** (1) **Synchronous** — write is not acknowledged until replicated to the secondary site. Guarantees zero data loss but adds latency (limited by speed of light, ~100km practical range). (2) **Asynchronous** — write is acknowledged immediately, replication follows. No latency impact but potential data loss on failover. By 2040, **semi-synchronous** (wait for one replica, not all) is common, balancing durability and performance.
-- **Active-Passive vs. Active-Active:** (1) **Active-Passive** — one site serves traffic, the other is standby. Simpler, but standby resources are idle. (2) **Active-Active** — both sites serve traffic. Better resource utilization, but requires conflict resolution and careful capacity planning (each site must handle 100% of load if the other fails).
-- **Automated Failover:** Manual failover is slow and error-prone. Automated failover systems: (1) health monitoring detects primary failure; (2) leader election via consensus (etcd, Consul) selects new primary; (3) DNS or routing update redirects traffic; (4) applications reconnect. Key challenges: split-brain prevention (ensuring only one primary) and data consistency validation after failover.
-- **Global Traffic Management:** DNS-based (Route 53, Traffic Manager) or anycast-based routing directs users to the nearest or healthiest site. By 2040, AI-driven traffic management considers latency, capacity, cost, carbon intensity, and geopolitical factors.
+### Architecture Principles
 
-#### Required Reading
+Every EA engagement is governed by Architecture Principles — general rules and guidelines that constrain how the architecture is designed and how decisions are made. Example principles for Yggdrasil Health:
 
-- Google SRE. (2039). *Load Balancing and Failover*.
-- AWS. (2040). *Disaster Recovery Architectures*.
-- UoY Distributed Systems Lab. (2039). *Automated Failover at Scale*.
+1. **Primacy of Principles**: These principles apply to all architecture decisions. No exception without Architecture Board approval.
+2. **Data is an Asset**: All patient data is owned by Yggdrasil Health, stewarded by the Chief Medical Officer, and governed by the Data Governance Council. Data shall be classified (Public, Internal, Confidential, Restricted) and handled accordingly.
+3. **Cloud-First**: All new applications shall be deployed on cloud platforms unless a specific business, regulatory, or technical constraint requires on-premises deployment. The burden of proof is on the exception.
+4. **API-First Integration**: All inter-system communication shall use well-defined, versioned, documented APIs. Point-to-point database links are prohibited.
+5. **Security by Design**: Security controls shall be architected into every layer, not retrofitted. Every architecture decision shall be assessed against the NIST CSF 2.0 framework.
 
----
+### Required Reading
 
-### Lecture 5: Ransomware Resilience — The Defining DR Challenge of the 2040s
+- The Open Group, *TOGAF Standard*, V11, Part II: Architecture Development Method, all chapters.
+- Greefhorst, D. & Proper, E. (2038), *Architecture Principles: The Cornerstones of Enterprise Architecture*, Springer.
+- TOGAF Series Guide: *Applying the ADM Across the Architecture Landscape*, 2040.
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### Discussion Questions
 
----
-
-#### Overview
-
-Ransomware is the dominant disaster scenario of the 2030s–2040s. Unlike natural disasters (which affect a geographic area), ransomware can simultaneously encrypt production systems and backups across the globe. This lecture covers ransomware-specific DR: detection, isolation, recovery, and the architectural patterns that enable survival.
-
-#### Key Topics
-
-- **The Ransomware Kill Chain:** (1) Initial access (phishing, vulnerability, credential theft); (2) Persistence and reconnaissance; (3) Lateral movement to find and compromise backups; (4) Data exfiltration (double extortion — threaten to leak data); (5) Encryption of production systems; (6) Ransom demand. Understanding the kill chain informs defense and recovery strategies.
-- **Ransomware-Specific DR Architecture:** (1) **Immutable backups** — the foundational defense; (2) **Backup isolation** — separate credentials, network segmentation, multi-factor authentication for backup management; (3) **Clean room recovery** — isolated recovery environment where backups are scanned for malware before restoration; (4) **Accelerated recovery** — pre-positioned recovery infrastructure, automated orchestration, parallel restoration.
-- **The Decision NOT to Pay:** UoY and law enforcement guidance: do not pay. Reasons: (1) payment funds criminal enterprise; (2) no guarantee of decryption; (3) paying marks you as a target for repeat attacks; (4) some ransomware groups don't provide decryption even after payment. Organizations that can recover from backups don't need to pay. Organizations that can't recover from backups are forced to pay — which is why DR investment is security investment.
-
-#### Required Reading
-
-- CISA. (2039). *Ransomware Guidance: Prevention, Detection, and Recovery*.
-- UoY Ransomware Lab. (2040). *Surviving Ransomware: DR Architecture Patterns from Real Incidents*.
-
----
-
-### Lecture 6: Business Continuity Planning — Keeping the Business Running
-
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-DR restores IT systems — BC keeps the business running during and after the disruption. This lecture covers BC planning: Business Impact Analysis, continuity strategies, plan development, and the integration of IT DR with enterprise BC.
-
-#### Key Topics
-
-- **Business Impact Analysis (BIA):** The foundation of BC planning: (1) identify critical business functions; (2) determine maximum tolerable downtime for each; (3) identify dependencies (IT systems, third parties, personnel, facilities); (4) estimate financial and non-financial impact of disruption. The BIA drives RPO/RTO targets and prioritizes recovery.
-- **Continuity Strategies:** Options for maintaining business functions during disruption: (1) **Alternate site** — pre-arranged facility with IT infrastructure; (2) **Remote work** — enable employees to work from home (the COVID-19 lesson); (3) **Manual workarounds** — paper-based processes as temporary substitutes; (4) **Third-party services** — pre-negotiated agreements with service bureaus; (5) **Mutual aid agreements** — reciprocal arrangements with peer organizations.
-- **Plan Development:** A BC plan documents: (1) activation criteria — when to invoke the plan; (2) roles and responsibilities — who does what; (3) communication plan — internal and external stakeholders; (4) recovery procedures — step-by-step; (5) resource requirements — people, equipment, facilities, third parties.
-- **Crisis Communication:** During a disaster, communication is critical: (1) internal — employees need to know what to do; (2) customers — transparency builds trust, silence erodes it; (3) regulators — mandatory breach notification within defined timeframes; (4) media — controlled, accurate messaging. The 2040 practice: pre-drafted communication templates for common scenarios.
-
-#### Required Reading
-
-- ISO. (2039). ISO 22301: Business Continuity Management Systems.
-- UoY BC Lab. (2040). *Business Impact Analysis: Methodology and Case Studies*.
+1. The ADM is explicitly iterative, yet many organisations execute it as a waterfall. What incentives cause this, and how can the EA team resist them?
+2. Architecture Principle 3 ("Cloud-First") places the burden of proof on the exception. When would an on-premises exception be justified in a healthcare context?
+3. What is the difference between an architecture principle and a technical standard? Give examples of each for Yggdrasil Health.
 
 ---
 
-### Lecture 7: Testing and Exercising — The Proof of Preparedness
+## Lecture 3: Business Architecture — Mapping What the Enterprise Does
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### Business Capability Modelling
 
----
+Business Architecture answers the question: what does this enterprise do, independent of how it does it? The primary artifact is the **Business Capability Map** — a structured decomposition of everything the enterprise does, organised into a hierarchy typically three levels deep. A capability is *what* the organisation does (e.g., "Manage Patient Records"), not *how* (e.g., "Epic EHR System"), *who* (e.g., "Medical Records Department"), or *where* (e.g., "Oslo Data Centre").
 
-#### Overview
+For Yggdrasil Health, Level 1 capabilities:
 
-An untested plan is not a plan — it's a hope. Testing validates that recovery procedures work, that RPO/RTO targets are achievable, and that personnel know their roles. This lecture covers the testing spectrum: walkthroughs, tabletop exercises, simulation tests, and full-scale failover exercises.
+| Strategic Capabilities | Core Capabilities | Supporting Capabilities |
+|------------------------|-------------------|------------------------|
+| Strategy & Planning | Patient Care Delivery | Human Resources |
+| Governance & Compliance | Clinical Decision Support | Finance & Accounting |
+| Innovation & Research | Diagnostics & Imaging | IT Services |
+| Partnership Management | Patient Engagement | Facilities Management |
+| | Revenue Cycle Management | Legal & Regulatory |
 
-#### Key Topics
+Each capability maps to: the applications that realise it, the data entities it creates and consumes, the processes that orchestrate it, the roles that perform it, and the KPIs that measure its performance. **Capability-based planning** — the practice of funding and scoping projects based on the capabilities they improve rather than the technology they deploy — is the single most powerful technique for aligning IT investment with business strategy. Instead of "we are implementing Kubernetes," the conversation becomes "we are improving the Application Hosting capability from Level 2 (basic containerisation) to Level 3 (auto-scaling, self-healing, multi-region)."
 
-- **Testing Spectrum:** (1) **Plan review** — desk check of documentation; (2) **Walkthrough** — team discusses the plan step-by-step; (3) **Tabletop exercise** — scenario-driven discussion; (4) **Simulation** — limited test of specific components; (5) **Parallel test** — recovery systems are brought up but production continues; (6) **Full interruption test** — production is actually failed over to the DR site. Frequency: plan reviews quarterly, walkthroughs semi-annually, tabletop exercises annually, technical tests quarterly, full interruption tests annually for critical systems.
-- **Automated Recovery Testing:** By 2040, recovery testing is automated: (1) the DR orchestration system automatically provisions a test environment; (2) restores backups; (3) runs application-level smoke tests; (4) validates RPO/RTO against targets; (5) generates a test report with pass/fail and metrics. Automated testing reduces the cost of testing from weeks of manual effort to hours of automated execution.
-- **Chaos Engineering for DR:** Beyond planned tests: intentionally inject failures to validate recovery under realistic conditions. Example: "Terminate the primary database at 3 PM on Tuesday and observe the automated failover." Chaos engineering for DR validates that recovery works when it's unexpected, not just when it's scheduled and everyone is watching.
+### Value Stream Mapping
 
-#### Required Reading
+Where capabilities are structural (what we can do), value streams are dynamic (how we deliver value to a stakeholder). A value stream is an end-to-end sequence of activities that creates a result for a customer. Yggdrasil Health's primary value stream is "Patient Treatment": from Symptom Onset → Appointment Scheduling → Diagnosis → Treatment → Follow-up → Billing. Mapping this value stream reveals: which capabilities each stage depends on, where delays ("bottlenecks") occur, where handoffs between systems or departments introduce error or latency, and where automation could reduce cycle time. The 2040 value stream map is a living digital artifact, fed by process mining tools (Celonis, Apromore) that extract actual process flows from system logs rather than relying on stakeholder recollection.
 
-- NIST. (2038). SP 800-84: Guide to Test, Training, and Exercise Programs for IT Plans.
-- UoY DR Testing Lab. (2039). *Automated Recovery Testing: Architectures and Benchmarks*.
+### Required Reading
 
----
+- TOGAF Series Guide: *Business Capabilities*, 2040 Edition.
+- Martin, K. (2039), *Value Stream Mapping for the Digital Enterprise*, O'Reilly.
+- Burlton, R. (2038), *Business Architecture: Collecting, Connecting, and Correcting the Dots*, Business Architecture Guild.
 
-### Lecture 8: Cloud-Based Disaster Recovery — DRaaS and Multi-Cloud Resilience
+### Discussion Questions
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-Cloud transforms DR economics: instead of maintaining a dedicated DR site, organizations can use cloud on-demand for recovery. This lecture covers cloud DR patterns: backup and restore, pilot light, warm standby, multi-site active-active, and DR-as-a-Service (DRaaS).
-
-#### Key Topics
-
-- **Cloud DR Patterns:** (1) **Backup and Restore** — store backups in cloud, provision recovery infrastructure on-demand. Cheapest, slowest RTO; (2) **Pilot Light** — minimal core infrastructure always running in cloud, scaled up for recovery; (3) **Warm Standby** — scaled-down but running version of production in cloud; (4) **Multi-Site Active-Active** — production runs in multiple clouds simultaneously. Each step reduces RTO but increases cost.
-- **DR-as-a-Service (DRaaS):** Specialized cloud services that handle DR end-to-end: replication, orchestration, failover, failback. By 2040, DRaaS is the default for mid-size organizations that can't justify building their own DR capability. Major providers: AWS Elastic Disaster Recovery, Azure Site Recovery, Zerto, and specialized DRaaS vendors.
-- **Multi-Cloud Resilience:** Distributing across multiple cloud providers for resilience: if AWS us-east-1 fails, failover to Azure. Challenges: (1) provider-specific services (each cloud's managed services are different); (2) data egress costs; (3) operational complexity. The 2040 approach: use Kubernetes and infrastructure-as-code to maintain portability, with provider-specific adapters for managed services.
-
-#### Required Reading
-
-- AWS. (2040). *Disaster Recovery with AWS: Architecture Patterns*.
-- UoY Cloud DR Lab. (2039). *DRaaS: Comparative Analysis of Cloud DR Providers*.
+1. What is the difference between a business capability and a business process? Why does this distinction matter for EA?
+2. Map Yggdrasil Health's "Patient Treatment" value stream. Identify at least three capabilities that are cross-cutting (supporting multiple value stream stages).
+3. How does capability-based planning change the annual IT budgeting process compared to project-based planning?
 
 ---
 
-### Lecture 9: DR Orchestration and Automation — The Recovery Runbook
+## Lecture 4: Data Architecture — The Well of Memory
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### From Entities to Data Fabrics
 
----
+Data Architecture defines how data is structured, stored, moved, governed, and consumed across the enterprise. The 2040 landscape has moved from monolithic data warehouses to **data meshes** — decentralised data ownership where each domain team publishes its data as a product, with standardised discoverability, quality, and access contracts. The data mesh principles (Zhamak Dehghani, 2030s) are now mainstream:
 
-#### Overview
+1. **Domain Ownership**: The team that creates the data owns it, models it, and publishes it.
+2. **Data as a Product**: Each dataset is treated as a product with defined consumers, SLAs, and quality metrics.
+3. **Self-Serve Data Platform**: A central platform team provides the infrastructure (catalog, pipeline orchestration, storage) but does not own any domain's data.
+4. **Federated Computational Governance**: Governance policies (classification, retention, access control) are defined centrally but enforced computationally — automated policy engines that intercept access requests, not manual approval workflows.
 
-Recovery involves dozens or hundreds of interdependent steps across systems, teams, and locations. Manual recovery is slow, error-prone, and unreliable. This lecture covers DR orchestration: automated runbooks, dependency-aware recovery sequencing, parallel recovery execution, and the 2040 practice of AI-orchestrated recovery.
+For Yggdrasil Health, the data architecture must address: structured clinical data (FHIR R5 resources), unstructured clinical notes (NLP-indexed), medical imaging (DICOM, archived to tiered storage), genomic sequences (petabyte-scale, governed by GDPR special categories), IoT streams from patient wearables (time-series database), and administrative data (relational, ERP-hosted). Each category has distinct governance requirements: FHIR resources must conform to HL7 profiles; genomic data requires consent management tracking; IoT data has real-time latency requirements.
 
-#### Key Topics
+### Data Governance
 
-- **Recovery Runbooks as Code:** Traditional runbooks (Word documents) are static and prone to drift. The 2040 practice: recovery runbooks as executable code. A runbook defines: (1) recovery steps with dependencies; (2) pre-flight checks; (3) post-recovery validation; (4) rollback procedures; (5) expected timing. Runbooks are version-controlled, tested, and continuously validated.
-- **Dependency-Aware Recovery:** Systems have dependencies — the database must be recovered before the application server, which must be recovered before the load balancer. Dependency-aware orchestration: (1) model the service dependency graph; (2) generate an optimal recovery sequence; (3) execute in parallel where possible; (4) wait for dependencies where required; (5) validate each layer before proceeding. By 2040, service dependency graphs are auto-discovered from distributed tracing and configuration data.
-- **AI-Orchestrated Recovery:** AI enhances recovery orchestration: (1) **Optimal recovery path** — AI calculates the fastest recovery sequence given current conditions; (2) **Dynamic adaptation** — if a recovery step fails, AI selects alternatives; (3) **Resource optimization** — AI allocates recovery resources to minimize time; (4) **Communication automation** — AI drafts and sends status updates to stakeholders.
+Data governance ensures that data is available, usable, consistent, and secure. The 2040 governance framework (DAMA DMBOK v3, 2039) establishes:
+- **Data Owners**: Senior business leaders accountable for data within their domain (the Chief Medical Officer owns all clinical data)
+- **Data Stewards**: Operational roles responsible for data quality, metadata, and issue resolution
+- **Data Custodians**: Technical roles responsible for data storage, backup, and access enforcement
+- **Data Classification Schema**: Public, Internal, Confidential, Restricted
+- **Data Retention Policies**: Clinical records retained 30 years post-last-encounter; administrative records 7 years; logs 3 years
 
-#### Required Reading
+### Required Reading
 
-- UoY DR Orchestration Lab. (2039). *Recovery Runbooks as Code*.
-- Gartner. (2040). *DR Orchestration Market Guide*.
+- Dehghani, Z. (2037), *Data Mesh: Delivering Data-Driven Value at Scale*, O'Reilly.
+- DAMA International, *DAMA-DMBOK: Data Management Body of Knowledge*, 3rd Ed. (2039), Chs. 3-5.
+- HL7 International, *FHIR R5 Specification*, Healthcare Data Architecture Section.
 
----
+### Discussion Questions
 
-### Lecture 10: The Human Element — Crisis Leadership and Team Resilience
-
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
-
----
-
-#### Overview
-
-In a disaster, technology is only part of the equation. Humans must make decisions under pressure, communicate effectively, and maintain their own resilience. This lecture covers crisis leadership, incident command, stress management, and building a culture of resilience.
-
-#### Key Topics
-
-- **Crisis Leadership:** The crisis leader: (1) maintains calm and focus; (2) makes decisions with incomplete information; (3) communicates clearly and frequently; (4) delegates effectively; (5) takes care of the team. The worst crisis response failures are usually not technical — they're failures of leadership, communication, or decision-making.
-- **Incident Command System (ICS):** A structured framework for crisis response, adapted from emergency services: (1) **Incident Commander** — overall authority; (2) **Operations** — executes recovery; (3) **Planning** — tracks status and plans next steps; (4) **Logistics** — provides resources; (5) **Communications** — manages internal and external communication. Clear roles prevent chaos and conflicting instructions.
-- **Stress Management and Decision-Making:** Disasters are high-stress. Stress impairs cognition. Practices: (1) recognize stress symptoms in yourself and others; (2) use structured decision-making frameworks (OODA loop); (3) take breaks — working 36 hours straight leads to catastrophic errors; (4) rotate personnel — fresh eyes see what fatigued ones miss; (5) after-action — process the emotional impact of the crisis.
-
-#### Required Reading
-
-- UoY Crisis Leadership Lab. (2040). *Crisis Decision-Making: Research and Best Practices*.
-- FEMA. (2038). *Incident Command System: Principles and Practice*.
+1. Compare a monolithic data warehouse to a data mesh. What governance challenges does a data mesh solve, and what new ones does it create?
+2. Yggdrasil Health handles genomic data that could identify patients' relatives. How should this affect data governance compared to standard clinical data?
+3. What is the difference between a data owner, a data steward, and a data custodian? Why is confusing these roles a common governance failure?
 
 ---
 
-### Lecture 11: Regulatory Compliance and Third-Party Resilience
+## Lecture 5: Application Architecture — The Tools of the Trade
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### Application Portfolio Management
+
+Every enterprise of scale accumulates applications like a longhouse accumulates tools — some are sharp and daily-used, some are rusted but irreplaceable, and some are mysterious objects whose original purpose no one remembers. Application Portfolio Management (APM) is the discipline of cataloguing, assessing, and rationalising the application estate. The 2040 APM process classifies each application along five dimensions:
+
+| Dimension | Classification Options |
+|-----------|----------------------|
+| **Business Criticality** | Tier 0 (life-critical), Tier 1 (revenue-critical), Tier 2 (important), Tier 3 (supporting) |
+| **Technical Health** | Modern (cloud-native), Current (supported), Ageing (vendor support ending), Legacy (unsupported), Obsolete (should be retired) |
+| **Functional Fit** | Excellent, Adequate, Poor (workarounds required), None (not fit for purpose) |
+| **Total Cost of Ownership** | Annual TCO (licence, hosting, support, integration, training) |
+| **Strategic Alignment** | Strategic (aligned with target architecture), Tolerated (not strategic but necessary), Retirement Candidate |
+
+Applications classified as "Legacy + Tier 1 + Poor Functional Fit + High TCO" represent architectural debt — they consume disproportionate resources and constrain innovation. The architect's role is to quantify this debt in business terms and champion its retirement, ideally redirecting the TCO savings into modern alternatives.
+
+### Integration Patterns
+
+How applications communicate defines the architecture's flexibility. The 2040 pattern language includes:
+
+| Pattern | Description | When to Use | Anti-Pattern Alert |
+|---------|-------------|-------------|-------------------|
+| **API-Led Connectivity** | Three-layer API architecture: System APIs (access systems), Process APIs (orchestrate), Experience APIs (serve channels) | Bounded contexts; well-defined domains | Over-engineered for simple ETL |
+| **Event-Driven Architecture** | Applications publish events; consumers subscribe. Asynchronous, decoupled. | Real-time data propagation; microservices communication | Eventual consistency challenges; debugging complexity |
+| **Service Mesh** | Infrastructure layer for service-to-service communication (mTLS, retries, circuit breaking) | Kubernetes-native microservices | Overhead for small deployments |
+| **Enterprise Service Bus (ESB)** | Centralised integration hub; message transformation, routing, orchestration | Legacy system integration; protocol translation | Becomes a monolith; single point of failure |
+| **Extract-Transform-Load (ETL) / ELT** | Batch data movement between systems | Data warehousing; analytics | Not suitable for real-time; latency |
+
+```yaml
+# AsyncAPI specification for an event-driven integration (2040 standard)
+asyncapi: '3.0.0'
+info:
+  title: Patient Admitted Event
+  version: '1.0.0'
+channels:
+  yggdrasil/clinical/patient-admitted:
+    publish:
+      message:
+        payload:
+          type: object
+          properties:
+            patientId: {type: string, format: uuid}
+            admissionTimestamp: {type: string, format: date-time}
+            department: {type: string}
+            attendingPhysicianId: {type: string}
+            severity: {type: string, enum: [routine, urgent, critical]}
+```
+
+### Required Reading
+
+- Newman, S. (2039), *Building Microservices: Designing Fine-Grained Systems*, 3rd ed., O'Reilly, Chs. 1-4.
+- MuleSoft, *API-Led Connectivity: The Next Step in the API Journey*, 2040 Whitepaper.
+- Nygard, M. (2038), *Release It! Design and Deploy Production-Ready Software*, 3rd ed., Pragmatic Bookshelf.
+
+### Discussion Questions
+
+1. Under what circumstances is an ESB the right integration pattern in 2040, given the dominance of API-led and event-driven patterns?
+2. Yggdrasil Health's legacy EHR uses a proprietary binary protocol for integration. What integration pattern would you use to connect it to a cloud-native FHIR API gateway?
+3. How does the "Strangler Fig" pattern apply to application modernisation, and what metrics indicate readiness to retire the legacy component?
 
 ---
 
-#### Overview
+## Lecture 6: Technology Architecture — The Ground Beneath the Longhouse
 
-Regulators mandate DR/BC capabilities for critical industries. Third-party dependencies (cloud, SaaS, suppliers) create DR obligations beyond your own infrastructure. This lecture covers compliance frameworks and managing DR across organizational boundaries.
+### Platform Design for the 2040 Enterprise
 
-#### Key Topics
+Technology Architecture defines the logical and physical technology infrastructure that hosts applications and data. For the 2040 enterprise, the dominant patterns are:
 
-- **Regulatory Landscape:** (1) **Financial services** — FFIEC requires DR testing, geographically diverse recovery sites; (2) **Healthcare** — HIPAA requires contingency plans and data backup; (3) **Critical infrastructure** — NERC CIP requires recovery plans; (4) **GDPR** — requires ability to restore access to personal data in a timely manner; (5) **DORA (Digital Operational Resilience Act, EU, 2025)** — comprehensive DR/BC requirements for financial entities and their critical third-party providers.
-- **Third-Party Resilience:** Your DR plan is only as strong as your weakest third party. Practices: (1) third-party risk assessment — evaluate suppliers' DR capabilities; (2) contractual requirements — DR capabilities in SLAs; (3) right to audit — verify suppliers' DR testing; (4) exit strategy — plan for supplier failure; (5) concentration risk — avoid depending on a single cloud provider or supplier.
-- **Audit and Assurance:** Demonstrating DR readiness to auditors: (1) documented plans with version history; (2) test results with pass/fail and lessons learned; (3) evidence of plan maintenance and updates; (4) evidence of personnel training; (5) independent assessment of DR capabilities. By 2040, continuous assurance replaces periodic audits — automated evidence collection proves ongoing compliance.
+- **Hybrid Multi-Cloud**: Workloads distributed across AWS, Azure, GCP, and potentially on-premises or edge locations, connected by software-defined WAN (SD-WAN) or cloud interconnect (AWS Direct Connect, Azure ExpressRoute). The architecture specifies which workloads go where based on: latency requirements (edge for real-time inference), data residency (EU patient data stays in EU regions), cost (spot instances for batch processing), and provider-specific capabilities (GCP for AI/ML, Azure for Microsoft ecosystem integration).
+- **Container Orchestration**: Kubernetes (K8s) has become the universal control plane, abstracting cloud provider differences. The 2040 enterprise runs K8s clusters managed by the cloud provider's service (EKS, AKS, GKE) or, for provider-agnostic requirements, a multi-cluster management layer (Rancher, Google Anthos, AWS EKS Anywhere).
+- **Infrastructure as Code (IaC)**: Every infrastructure component is defined declaratively (Terraform, Pulumi, Crossplane) and stored in version control. No manual provisioning. The CI/CD pipeline runs `terraform plan` on every pull request and `terraform apply` on merge to main.
+- **Serverless and FaaS**: For event-driven, variable-load workloads, serverless functions (AWS Lambda, Azure Functions, Google Cloud Functions) eliminate infrastructure management entirely. The architecture specifies which workloads are serverless-appropriate (event processing, API backends, scheduled jobs) and which require persistent infrastructure (databases, ML training clusters, legacy application servers).
 
-#### Required Reading
+### Technology Standards and Roadmaps
 
-- EU. (2025, updated 2040). *Digital Operational Resilience Act (DORA)*.
-- ISO. (2039). ISO 22301: Business Continuity Management Systems.
+The EA function maintains a **Technology Standards Catalog** — the approved list of technologies for each architectural building block. For Yggdrasil Health:
+
+| Building Block | Standard | Exception Process |
+|----------------|----------|-------------------|
+| Compute | Kubernetes (EKS/AKS) | Legacy Windows VMs require exception waiver |
+| Database (Relational) | PostgreSQL (RDS / Cloud SQL) | EHR vendor's Oracle requirement → waiver |
+| Database (NoSQL) | DynamoDB / Cosmos DB | Redis for caching (standard) |
+| Message Broker | Apache Kafka (Confluent Cloud) | RabbitMQ for legacy integration |
+| Observability | Prometheus + Grafana + OpenTelemetry | Datadog (existing investment) |
+| CI/CD | GitHub Actions / ArgoCD | Jenkins (legacy pipelines) |
+
+Each standard includes a **Technology Lifecycle Status**: Emerging (evaluate), Current (deploy), Containment (no new deployments), Retirement (migrate off, target date). PostgreSQL is Current; Oracle is Containment with a retirement target of Q4 2043.
+
+### Required Reading
+
+- TOGAF Series Guide: *Technology Architecture*, 2040 Edition.
+- Beyer, B., Jones, C. et al. (2038), *Site Reliability Engineering: How Google Runs Production Systems*, 3rd ed., O'Reilly, Chs. 2-3.
+- Morris, K. (2039), *Infrastructure as Code: Dynamic Systems for the Cloud Age*, 3rd ed., O'Reilly.
+
+### Discussion Questions
+
+1. A development team wants to use MongoDB for a new application, but PostgreSQL is the standard. How does the EA governance process evaluate this exception request?
+2. What are the architectural implications of running Kubernetes across three cloud providers vs. standardising on one?
+3. How does the Technology Lifecycle Status mechanism prevent technology sprawl, and what are its limitations?
 
 ---
 
-### Lecture 12: The Resilient Organization — Culture, Architecture, and the Future
+## Lecture 7: Microservices, SOA, and the Modularity Spectrum
 
-**Course:** IT305 — Disaster Recovery & Business Continuity
-**Degree:** Bachelor of Science in Information Technology, 2040
+### Beyond the Buzzwords
+
+"Microservices" has been the dominant architectural paradigm since the 2010s, but by 2040 the term has accumulated so much baggage that it is more useful to think in terms of **modularity on a spectrum**. At one end: the monolith (single deployable, single codebase, single database). At the other: nanoservices (single-function deployables, extreme distribution). Between them lie modular monolith, Service-Oriented Architecture (SOA), microservices, and miniservices. Each point on the spectrum has a distinct cost profile:
+
+| Architecture | Deployment Units | Typical Team Size | Coordination Cost | Infrastructure Cost |
+|-------------|-----------------|-------------------|-------------------|-------------------|
+| Monolith | 1 | 5-50 | Low | Low |
+| Modular Monolith | 1 (logical separation) | 5-30 | Low-Medium | Low |
+| SOA | 5-20 services | 20-100 | Medium-High | Medium |
+| Microservices | 20-200+ services | 50-500+ | High | High |
+| Nanoservices | 200-1000+ functions | 100-1000+ | Very High | Very High |
+
+The 2040 architect selects the right point on this spectrum for each bounded context, not the right point for the entire enterprise. The EHR integration context may warrant microservices (independent deployability of FHIR APIs, patient portal, and AI diagnostic service). The billing context may be better served by a modular monolith (tight transactional consistency, simpler regulatory audit trail). **Architectural dogmatism** — "everything must be microservices" — has caused as many project failures as "everything is a monolith."
+
+### Domain-Driven Design (DDD) as the Compass
+
+Eric Evans' Domain-Driven Design (2003) provides the intellectual foundation for defining service boundaries. Bounded Contexts — explicit boundaries within which a domain model applies — map naturally to microservices. Yggdrasil Health's bounded contexts include: Patient Management, Clinical Documentation, Medication Management, Laboratory, Radiology, Billing, Scheduling, and Regulatory Reporting. Each context owns its data; cross-context communication uses events or APIs, never direct database access. The 2040 architect uses **Event Storming** workshops — collaborative modelling sessions where domain experts and technologists map business processes using sticky notes on a wall (physical or digital — Miro, MURAL, Lucid) to discover bounded contexts organically.
+
+### Required Reading
+
+- Evans, E. (2003/2038), *Domain-Driven Design: Tackling Complexity in the Heart of Software*, 20th Anniversary Edition, Addison-Wesley.
+- Vernon, V. (2039), *Implementing Domain-Driven Design*, 3rd ed., Addison-Wesley.
+- Newman, S. (2039), *Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith*, O'Reilly.
+
+### Discussion Questions
+
+1. A team designs 40 microservices for a system with 6 developers. What architecture smell does this represent, and what should the architect do?
+2. How would you use Event Storming to define bounded contexts for Yggdrasil Health? What domain experts would you invite?
+3. When is a modular monolith a better choice than microservices, and how do you prevent it from degrading into a "big ball of mud"?
 
 ---
 
-#### Overview
+## Lecture 8: API Design and Management — The Doors of the Longhouse
 
-DR is not a project — it's a capability. The most resilient organizations don't just have DR plans — they have a culture of resilience: architecture designed for failure, teams that practice recovery, and leadership that values preparation. This lecture synthesizes the course and projects DR forward to 2050.
+### REST, GraphQL, gRPC, and AsyncAPI
 
-#### Key Topics
+APIs are the doors of the enterprise — the controlled interfaces through which capability is accessed. The 2040 API architect must select the right API paradigm for each use case:
 
-- **The Resilience Culture:** Characteristics: (1) **Paranoia** — healthy skepticism about reliability; (2) **Practice** — recovery is rehearsed, not theorized; (3) **Blamelessness** — failures are learning opportunities, not punishments; (4) **Investment** — resilience is funded, not begged for after a disaster; (5) **Transparency** — honest communication about risk and capability.
-- **Architecting for Failure:** Resilient architecture principles: (1) **No single points of failure** — redundancy for everything; (2) **Failure domains** — isolate failures so they don't cascade; (3) **Graceful degradation** — partial functionality is better than no functionality; (4) **Automated recovery** — faster than humans, more reliable than runbooks; (5) **Immutable infrastructure** — rebuild rather than repair.
-- **The Future of DR — 2050:** Trends: (1) **AI-native DR** — recovery orchestrated, optimized, and verified by AI; (2) **Recovery as code** — fully executable, continuously tested recovery plans; (3) **Global resilience mesh** — multi-cloud, multi-region architectures that survive any single failure; (4) **Predictive DR** — AI predicts failures before they occur and preemptively shifts workloads; (5) **Resilience as a service** — fully managed DR that organizations consume rather than build. The DR professional of 2050 will be a resilience architect and AI governor, not a runbook executor.
+| Paradigm | Protocol | Strengths | Weaknesses |
+|----------|----------|-----------|------------|
+| **REST** | HTTP/2, JSON | Universal tooling; cacheable; self-describing (HATEOAS) | Over-fetching/under-fetching; chatty for complex queries |
+| **GraphQL** | HTTP/2, JSON | Client-specified queries; single endpoint; strong typing | Complex server-side; caching challenges; N+1 query risk |
+| **gRPC** | HTTP/2, Protocol Buffers | High performance; bidirectional streaming; strong contracts | Limited browser support; binary debugging; less tooling |
+| **AsyncAPI** | WebSocket, Kafka, MQTT | Event-driven; real-time; decoupled | Eventual consistency; schema evolution management |
+| **FHIR** | REST, JSON/XML | Healthcare-specific; semantic interoperability; profiles | Domain-specific; steep learning curve |
 
-#### Required Reading
+For Yggdrasil Health: FHIR REST APIs for clinical data interoperability; GraphQL for the patient portal (flexible queries combining clinical, scheduling, and billing data); gRPC for internal microservice communication where latency matters; AsyncAPI for event propagation (patient admitted, lab result available).
 
-- UoY Future Resilience Lab. (2040). *DR 2050: The Resilient Organization*.
+### API Management and Governance
+
+API Management platforms (Apigee, Kong, AWS API Gateway, Azure API Management) provide: authentication and authorisation (OAuth 2.1, OIDC, API keys), rate limiting and throttling, request/response transformation, analytics and monitoring, developer portal and documentation, and API versioning management. The EA API governance mandates:
+
+- **API-First Design**: The API contract (OpenAPI 3.1+ specification) is written and reviewed before implementation begins. This ensures that the API reflects consumer needs, not implementation convenience.
+- **Versioning**: URL path versioning (/v1/, /v2/) for breaking changes. Deprecation policy: old versions supported for 12 months after new version release; sunset date communicated in HTTP `Sunset` header.
+- **Naming Standards**: Resources are nouns (plural: /patients, not /getPatients); actions are HTTP methods; query parameters for filtering; consistent error format (RFC 7807 Problem Details).
+
+### Required Reading
+
+- OpenAPI Initiative, *OpenAPI Specification 3.1+*, https://spec.openapis.org/oas/latest.html.
+- GraphQL Foundation, *GraphQL Specification*, October 2040 Edition.
+- Richardson, L. & Amundsen, M. (2039), *RESTful Web APIs*, 2nd ed., O'Reilly.
+
+### Discussion Questions
+
+1. When would you choose gRPC over REST for internal service communication? What operational challenges does gRPC introduce?
+2. An API consumer is still using /v1/ nine months after deprecation was announced. What is your next step as API product owner?
+3. Design the REST API resource model for Yggdrasil Health's patient records, including sub-resources, query parameters, and HATEOAS links.
+
+---
+
+## Lecture 9: Cloud-Native Architecture — Born in the Clouds
+
+### The Twelve-Factor App at Age 30
+
+The Twelve-Factor App methodology, originally published by Heroku engineers around 2011, has been updated for 2040 as the **Sixteen-Factor App**, adding four factors for the cloud-native era:
+
+| # | Factor | Practice |
+|---|--------|----------|
+| 1 | Codebase | One codebase per app, tracked in version control; many deploys |
+| 2 | Dependencies | Explicitly declare and isolate dependencies |
+| 3 | Config | Store configuration in the environment (secrets in a vault) |
+| 4 | Backing Services | Treat backing services (DB, queue, cache) as attached resources |
+| 5 | Build, Release, Run | Strictly separate build and run stages |
+| 6 | Processes | Execute the app as stateless processes |
+| 7 | Port Binding | Export services via port binding |
+| 8 | Concurrency | Scale out via the process model |
+| 9 | Disposability | Fast startup; graceful shutdown |
+| 10 | Dev/Prod Parity | Keep development, staging, and production as similar as possible |
+| 11 | Logs | Treat logs as event streams |
+| 12 | Admin Processes | Run admin/management tasks as one-off processes |
+| **13** | **Observability** | Instrument with traces, metrics, and logs; OpenTelemetry standard |
+| **14** | **Security** | Zero-trust networking; mTLS; identity-based access; secrets rotation |
+| **15** | **FinOps** | Resource tagging; cost allocation; right-sizing automation |
+| **16** | **Sustainability** | Carbon-aware scheduling; region selection based on grid carbon intensity |
+
+### Kubernetes Architecture Patterns
+
+For Kubernetes-native deployments, the 2040 architect applies:
+
+- **Sidecar Pattern**: Auxiliary containers in the same Pod that enhance the primary container (e.g., Envoy proxy for mTLS, Fluent Bit for log forwarding, Cloud SQL Auth Proxy for database authentication)
+- **Operator Pattern**: Custom controllers that encode operational knowledge (backup, scaling, upgrade) into software. Instead of a runbook, the operator acts.
+- **GitOps**: The desired state of the cluster is declared in a Git repository. ArgoCD or Flux continuously reconciles the cluster to the Git state. Changes to production require a merged pull request, not `kubectl apply` from a laptop.
+
+```yaml
+# Kubernetes Deployment with sidecar (Istio proxy) and health probes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-api
+  labels:
+    app: patient-api
+    cost-centre: clinical-systems
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+      labels:
+        app: patient-api
+        version: v3.2.1
+    spec:
+      serviceAccountName: patient-api
+      containers:
+      - name: patient-api
+        image: yggdrasil-health/patient-api:v3.2.1
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: patient-api-secrets
+        resources:
+          requests: {memory: "256Mi", cpu: "500m"}
+          limits: {memory: "512Mi", cpu: "1000m"}
+        livenessProbe:
+          httpGet: {path: /healthz, port: 8080}
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet: {path: /ready, port: 8080}
+          initialDelaySeconds: 10
+```
+
+### Required Reading
+
+- Wiggins, A. (2040), *The Sixteen-Factor App*, https://16factor.net.
+- Burns, B., Beda, J. & Hightower, K. (2039), *Kubernetes: Up and Running*, 4th ed., O'Reilly.
+- Beetz, F. (2040), *GitOps: Cloud-Native Continuous Deployment*, O'Reilly.
+
+### Discussion Questions
+
+1. Factor 15 (FinOps) and Factor 16 (Sustainability) are new. How do they interact — can a FinOps-optimised architecture also be sustainability-optimised?
+2. How does the GitOps model change incident response? If production is broken and the fix requires editing a YAML file in Git, what is the latency from fix to deployment?
+3. The Sidecar pattern adds resource overhead. How do you decide whether the operational benefit justifies the cost?
+
+---
+
+## Lecture 10: Security Architecture — The Walls, the Guards, the Locks
+
+### Security as an Architectural Domain
+
+In TOGAF v11, Security Architecture is elevated from a cross-cutting concern to a first-class domain. The 2040 security architect designs controls across five layers:
+
+| Layer | Controls |
+|-------|----------|
+| **Identity** | SSO, MFA, passkeys, identity federation, privileged access management (PAM) |
+| **Network** | Microsegmentation, mTLS, WAF, DDoS protection, zero-trust networking |
+| **Compute** | Immutable infrastructure, host hardening, runtime protection (Falco), vulnerability scanning |
+| **Data** | Encryption at rest and in transit, data classification, DLP, tokenisation, key management |
+| **Application** | SAST, DAST, dependency scanning, RASP, API authentication/authorisation |
+
+The **NIST Cybersecurity Framework (CSF) 2.0** (2038) organises these controls into six functions: **Govern** (organisational context), **Identify** (asset management, risk assessment), **Protect** (access control, awareness, data security), **Detect** (continuous monitoring, anomaly detection), **Respond** (incident response planning, communications), and **Recover** (recovery planning, improvements). The security architect maps each control to a CSF function and tier, producing evidence of coverage for auditors and the board.
+
+### Zero Trust Architecture Implementation
+
+Zero Trust Architecture (ZTA, NIST SP 800-207 Rev. 3) is the security architecture paradigm of 2040. Its implementation requires:
+
+1. **Identity-Aware Proxy**: Every access request is intercepted by a proxy that authenticates the principal, verifies authorisation against policy, and evaluates device posture before allowing connection. No implicit trust based on network location.
+2. **Microsegmentation**: East-west traffic between workloads is governed by identity-based policies, not IP-based firewall rules. Kubernetes NetworkPolicy + Istio AuthorizationPolicy enforce this at the application layer.
+3. **Continuous Verification**: Access is not granted once and trusted forever. Behavioural analytics detect anomalies mid-session (sudden data volume spike, unusual access pattern, geolocation change) and trigger re-authentication or session termination.
+
+### Required Reading
+
+- NIST SP 800-207 Rev. 3 (2038), *Zero Trust Architecture*.
+- NIST, *The NIST Cybersecurity Framework (CSF) 2.0*, 2038.
+- SANS, *Security Architecture: Designing a Defensible Network*, 2040 Edition.
+
+### Discussion Questions
+
+1. Zero Trust requires continuous verification. What is the acceptable latency for a continuous verification check, and how does this constrain architecture?
+2. How would you implement microsegmentation for Yggdrasil Health's Kubernetes workloads spanning both AWS EKS and Azure AKS?
+3. What security controls belong in the application layer vs. the network layer? Is there a clean boundary, or is it a spectrum?
+
+---
+
+## Lecture 11: Architecture Governance and the Architecture Board
+
+### Governing the Unseen
+
+Architecture governance ensures that the enterprise's technology decisions align with the target architecture. Without governance, architecture is a consulting exercise — interesting, but not influential. With governance, architecture becomes a decision-making framework with teeth. The governance mechanism is the **Architecture Board** — a cross-functional body (CIO, Chief Architect, business unit representatives, CISO, CTO) that:
+
+- Reviews and approves architecture deviations (exceptions to standards)
+- Resolves architecture disputes between projects or domains
+- Approves technology standards and their lifecycle status
+- Reviews project compliance with architecture at key stage gates (concept, design, build, deploy)
+- Maintains the architecture repository and ensures artifacts are current
+
+The 2040 Architecture Board operates with **compliance reviews** that are increasingly automated. Instead of a project team presenting a PowerPoint deck, the CI/CD pipeline generates a compliance report: every deployed resource is checked against the Technology Standards Catalog (Is this EC2 instance using an approved AMI? Is this database encrypted with a KMS key managed by the enterprise HSM?). Non-compliant resources are flagged to the Architecture Board, which decides: grant an exception (with a time-bound remediation plan), or reject and block deployment.
+
+### Architecture Debt Management
+
+Architecture debt is the gap between the current state and the target architecture, multiplied by the cost of not closing it. It accumulates when projects take shortcuts: "We'll use this unapproved database now and migrate later" (later never comes); "We'll integrate via direct database link and refactor to APIs in Phase 2" (Phase 2 is descoped). The EA function quantifies architecture debt in financial terms — the cost of maintaining non-standard technologies, the risk premium of unsupported versions, the integration tax of point-to-point connections — and presents a debt reduction business case alongside the annual budget cycle.
+
+### Required Reading
+
+- TOGAF Series Guide: *Architecture Governance*, 2040 Edition.
+- Weill, P. & Ross, J. (2037), *IT Governance: How Top Performers Manage IT Decision Rights for Superior Results*, 2nd ed., Harvard Business Review Press.
+- Kruchten, P., Nord, R. & Ozkaya, I. (2038), "Technical Debt: From Metaphor to Theory and Practice," *IEEE Software*, 35(6).
+
+### Discussion Questions
+
+1. An Architecture Board that approves every exception undermines its own purpose. What metrics would indicate the Board is too permissive? Too rigid?
+2. How would you calculate the financial cost of architecture debt for Yggdrasil Health's legacy Oracle database?
+3. Should the Architecture Board have veto power over project go-live decisions, or is its role advisory? Justify.
+
+---
+
+## Lecture 12: The Migration Roadmap and the Architect's Legacy
+
+### From Current State to Target State
+
+The Migration Roadmap is the bridge between "where we are" and "where we need to be." It is not an implementation plan — that is the project manager's domain — but a sequenced set of architecture transitions, each delivering a defined increment of capability. The TOGAF ADM Phase F (Migration Planning) organises these transitions into:
+
+- **Transition Architectures**: Intermediate states that deliver value while progressing toward the target. Yggdrasil Health Transition 1: migrate patient demographics and scheduling to cloud (lowest risk, highest user impact). Transition 2: migrate clinical documentation and lab integration. Transition 3: migrate AI diagnostic module. Transition 4: decommission on-premises data centre.
+- **Work Packages**: Groupings of projects and activities that deliver a transition. A work package has a scope, a business owner, a cost estimate, and success criteria.
+- **Dependencies**: Between transitions, between work packages, and between the architecture programme and other enterprise initiatives (e.g., the ERP modernisation programme, the network refresh project).
+
+The roadmap is a living artifact, updated quarterly. Each update assesses: progress against the previous roadmap, changes in business strategy that warrant architecture revision, new technology opportunities or threats, and architecture debt accrued or retired.
+
+### The Architect's Ethical Responsibility
+
+Enterprise architects wield outsized influence over an organisation's technical destiny — and therefore over its employees, customers, and the public. The 2040 architect's ethical obligations include:
+
+- **Sustainability**: Architecture decisions with 15-year consequences (platform choices, data models, API contracts) must account for the environmental impact of those choices.
+- **Accessibility**: Systems must be designed for all users, including those with disabilities. The WCAG 3.0 standard and the European Accessibility Act (2035) make this a legal requirement; architecture makes it a design choice.
+- **Vendor Neutrality**: The architect serves the enterprise, not any vendor. Architecture decisions must be defensible on technical and economic merits, not influenced by vendor relationships.
+- **Transparency**: The architecture's assumptions, trade-offs, and risks must be communicated clearly to decision-makers. "The architecture will work" without qualification is professional negligence.
+
+### The Heathen Reflection: The Longhouse That Outlasts Its Builder
+
+The Old Norse longhouse was designed to last generations — its postholes set deep, its roof pitched against the heaviest snow, its hearth positioned for warmth and ventilation. The architect who designed it would never see its final years, but their design choices echoed through the lives of their descendants. The 2040 enterprise architect faces the same reality: the systems they design today will outlast their tenure. The cloud platform they select, the API contract they ratify, the data model they approve — these decisions persist, for better or worse, long after the architect moves on.
+
+Thus the architect's most important deliverable is not a diagram but a **decision record** — the Architecture Decision Record (ADR) that captures: the context in which the decision was made, the options considered, the criteria applied, the chosen option, and the consequences (positive and negative). The next architect, five years hence, can read the ADR and understand why a decision was made — and whether the context has changed enough to warrant a different decision now. This is the architect's legacy: not the architecture itself, which will inevitably be replaced, but the reasoning that enables its orderly evolution.
+
+### Required Reading
+
+- TOGAF Standard, V11, Part II: Phase F — Migration Planning.
+- Nygard, M. (2037), *Documenting Architecture Decisions*, ThoughtWorks.
+- Hrafnsdottir, S. (2038), *Digital Longhouses*, Ch. 12, "The Postholes."
+
+### Discussion Questions
+
+1. Transition Architectures deliver incremental value. How do you prevent a Transition Architecture from becoming the permanent state because "it's good enough"?
+2. What belongs in an Architecture Decision Record that does NOT belong in a design document?
+3. Reflect on a technology decision you have made (or observed) that had consequences five years later. What would an ADR have captured that was lost when the decision-maker left?
 
 ---
 
 ## Final Examination Preparation
 
-### Sample Essay Questions (Choose 4 of 8)
+The final examination for IT305 consists of two components:
 
-1. **RPO/RTO Design:** Design RPO/RTO tiers for a multi-business-unit enterprise. Justify your targets with business impact analysis and cost-benefit reasoning.
+### Component A: Written Examination (60%)
 
-2. **Ransomware DR Architecture:** Design a DR architecture specifically for ransomware resilience. Address backup immutability, isolation, detection, and accelerated recovery.
+Choose **four** of the following eight essay questions.
 
-3. **Cloud DR Strategy:** Compare cloud DR patterns (backup/restore, pilot light, warm standby, multi-site). When is each appropriate? Provide cost-benefit analysis.
+1. Produce a complete TOGAF Architecture Vision for Yggdrasil Health's transition to a cloud-native, API-first enterprise architecture. Include: business drivers, stakeholders and concerns, architecture principles (at least six), high-level target architecture across all four domains, and critical success factors.
 
-4. **Testing Program:** Design an annual DR testing program for a financial services firm. Include test types, frequency, participants, and success criteria.
+2. Compare the data mesh and the monolithic data warehouse as data architecture paradigms. For Yggdrasil Health — with its mix of clinical, genomic, imaging, IoT, and administrative data — which paradigm is more appropriate, and what are the specific risks of your recommendation?
 
-5. **Crisis Leadership:** You are the incident commander during a major outage. Walk through your first 4 hours — decisions, communications, team management.
+3. Yggdrasil Health currently runs a monolithic EHR system with 200+ point-to-point integrations. Design a migration roadmap from this monolith to a microservices-based architecture using Domain-Driven Design bounded contexts. Address: bounded context identification, data decomposition strategy, integration patterns, and migration sequencing.
 
-6. **Third-Party Resilience:** Your organization depends on 15 SaaS providers and 2 cloud platforms. Design a third-party resilience program.
+4. Evaluate the claim that "Zero Trust Architecture makes the network perimeter irrelevant." Does ZTA eliminate the need for network security controls (firewalls, IDS/IPS, WAF), or does it transform them? Support your analysis with specific ZTA implementation patterns.
 
-7. **DR Automation:** Design an automated recovery orchestration system. Address dependency modeling, parallel execution, validation, and fallback to human control.
+5. Select three API paradigms (REST, GraphQL, gRPC, AsyncAPI) and design the API architecture for Yggdrasil Health. For each paradigm, specify: which bounded context it serves, why it is appropriate, and specific architectural constraints (versioning, error handling, security).
 
-8. **The Future of DR:** Project DR practice to 2060. What is automated? What human skills remain? How does the profession evolve?
+6. A project team proposes deploying a new clinical workflow application on AWS using EC2 instances with manual provisioning, a MySQL database with root credentials in a configuration file, and no CI/CD pipeline. As the enterprise architect, write the compliance review finding, specify which architecture principles are violated, and define the conditions under which the project may proceed.
+
+7. Design the Architecture Board governance process for Yggdrasil Health. Define: Board composition (roles, not names), decision rights, exception management process (including time-bound remediation requirements), compliance review cadence, and metrics for Board effectiveness.
+
+8. Select a real or hypothetical enterprise technology decision with multi-decade consequences (platform selection, data model, API standard). Write an Architecture Decision Record for it, demonstrating that you understand: context documentation, option analysis with clear criteria, trade-off transparency, and consequence anticipation.
+
+### Component B: Architecture Modelling Exercise (40%)
+
+Students are provided with a case study of a fictional 2040 enterprise (different from Yggdrasil Health) and must produce, in a 4-hour session:
+
+1. **Business Capability Map** (Level 1 and 2) using ArchiMate 4.0 notation
+2. **Application Communication Diagram** showing all major applications and their integration patterns
+3. **Technology Platform Decomposition Diagram** showing the cloud infrastructure architecture
+4. **Migration Roadmap** with at least three transition architectures and work packages
+
+Grading criteria: completeness, consistency (do the diagrams agree with each other?), adherence to TOGAF and ArchiMate standards, and justification of architectural decisions.
+
+### Grading Rubric
+
+| Criterion | Weight | Excellent (A) | Good (B) | Adequate (C) | Insufficient (D/F) |
+|-----------|--------|---------------|----------|--------------|-------------------|
+| Framework mastery | 30% | TOGAF/ArchiMate applied correctly and insightfully | Minor framework errors; generally sound | Basic understanding; formulaic application | Frameworks misunderstood or ignored |
+| Analytical rigour | 30% | Deep analysis; trade-offs explicitly evaluated; non-obvious insights | Good analysis; trade-offs considered | Surface-level; trade-offs ignored | Descriptive only; no analysis |
+| Practical realism | 20% | Architecture is deployable; real constraints acknowledged | Mostly realistic; some hand-waving | Implausible or ignores resource constraints | Completely unrealistic |
+| Communication quality | 20% | Diagrams and prose are clear, well-structured, and professional | Minor clarity issues | Disorganised but comprehensible | Incoherent or unprofessional |
 
 ---
 
-**Þǫkk — May your backups restore and your people prevail.**
+## Course Resources
+
+### Primary Textbooks
+- The Open Group (2038), *TOGAF Standard*, Version 11.
+- Hrafnsdottir, S. (2038), *Digital Longhouses: Architecture for the 2040 Enterprise*, University of Yggdrasil Press.
+- Ross, J., Weill, P. & Robertson, D. (2039), *Enterprise Architecture as Strategy*, 3rd ed., HBR Press.
+
+### Supplemental Texts
+- Dehghani, Z. (2037), *Data Mesh*, O'Reilly.
+- Newman, S. (2039), *Building Microservices*, 3rd ed., O'Reilly.
+- Evans, E. (2003/2038), *Domain-Driven Design*, 20th Anniversary Ed.
+- NIST SP 800-207 Rev. 3, *Zero Trust Architecture*.
+- Burns, B. et al. (2039), *Kubernetes: Up and Running*, 4th ed., O'Reilly.
+
+### Tools
+- **Modelling**: Archi (ArchiMate), Sparx Enterprise Architect, Lucidchart, Draw.io
+- **API Design**: Swagger Editor, Postman, Stoplight Studio
+- **Infrastructure**: Terraform, Pulumi, Crossplane
+- **Orchestration**: Kubernetes, ArgoCD, Flux
+- **Diagramming Standards**: ArchiMate 4.0, UML 3.0, C4 Model
+
+---
+
+*ᛟ — Óðal er at byggja.* Heritage is to build.
+
+*Course designed and maintained by the Faculty of Information Technology, University of Yggdrasil, 2040.*
