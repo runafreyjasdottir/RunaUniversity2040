@@ -1,280 +1,337 @@
-# IT303 — IT Project Management
+# IT303: Zero-Trust Security Architecture
+## Bachelor of Science in Information Technology — University of Yggdrasil, 2040
 
-## Course Overview
-**Credits:** 4 | **Prerequisites:** IT201, IT203 | **Term:** Year 3, Semester 1
+**Credits:** 4
+**Description:** Deep study of zero-trust architecture — design principles, implementation patterns, identity-centric security, microsegmentation, continuous verification, and the 2040 evolution toward AI-driven zero-trust enforcement across hybrid and multi-cloud environments.
 
-Technology projects fail at alarming rates. The Standish Group's CHAOS Report has tracked IT project outcomes for five decades, and the numbers have improved but remain sobering: in 2040, approximately 35% of IT projects succeed (on time, on budget, with satisfactory results), 45% are challenged (late, over budget, or with fewer features than promised), and 20% fail entirely (cancelled or never used). The root causes have remained remarkably consistent across decades: unclear requirements, scope creep, inadequate stakeholder communication, unrealistic timelines, and insufficient risk management. The tools and methodologies have evolved — from waterfall to agile to AI-augmented adaptive delivery — but the fundamental challenge of coordinating people, technology, and business objectives toward a common goal endures.
+**Prerequisites:** IT205
 
-This course develops your capability to lead IT projects from conception through delivery. We cover the full spectrum of modern project management: traditional predictive approaches (waterfall, critical path method) for well-understood domains; agile and lean approaches (Scrum, Kanban, SAFe) for environments of uncertainty; hybrid approaches that blend the two; and the emerging AI-augmented project management tools that are reshaping the project manager's role in 2040. Throughout, we emphasize that project management is fundamentally a human discipline — the methodologies and tools exist to serve the people doing the work, not the other way around.
+**Instructor:** Dr. Freyja Hrafnsdóttir, Department of Information Technology
 
----
-
-## Lecture 1: The Project Management Discipline — History, Principles, and the 2040 Landscape
-
-Project management is an ancient human activity, formalized as a discipline only in the mid-20th century. The pyramids of Giza, the Apollo program, the construction of the Channel Tunnel — all were projects that required the coordination of thousands of people, scarce resources, and unforgiving constraints. But the discipline of project management as a recognized profession, with a body of knowledge, certification standards, and academic research, emerged from the military-industrial complex of World War II and the Cold War. This lecture traces this history to establish the principles that remain relevant regardless of methodology.
-
-The **Project Management Institute (PMI)** , founded in 1969, published the first edition of the Project Management Body of Knowledge (PMBOK Guide) in 1996, codifying the practices that had evolved across construction, defence, and engineering. The PMBOK organizes project management into five process groups — **Initiating** (defining the project, securing authorization), **Planning** (developing the project management plan, defining scope, schedule, and budget), **Executing** (performing the work defined in the plan), **Monitoring and Controlling** (tracking progress, managing changes, ensuring quality), and **Closing** (formal acceptance, lessons learned, administrative closure) — and ten knowledge areas (Integration, Scope, Schedule, Cost, Quality, Resources, Communications, Risk, Procurement, Stakeholder). This framework, while sometimes criticized as bureaucratic, provides the conceptual vocabulary that all project managers share: a WBS (Work Breakdown Structure), a critical path, a risk register, a change control process.
-
-The **Agile Manifesto**, drafted in 2001 by seventeen software practitioners frustrated with waterfall's rigidity, articulated an alternative philosophy: **Individuals and interactions** over processes and tools, **Working software** over comprehensive documentation, **Customer collaboration** over contract negotiation, **Responding to change** over following a plan. The Agile movement transformed software development and, increasingly, other domains. The 2040 project manager understands that Agile is not a rejection of planning but an embrace of adaptive planning — the recognition that in complex, uncertain environments, the plan is a hypothesis that must be continuously validated against reality.
-
-The **2040 project management landscape** integrates these traditions with new capabilities. AI-augmented project management tools (Monday.com AI, Jira Intelligence, Asana Smart Projects) automate routine PM tasks — schedule optimization, risk detection (the AI notices that a dependency between two tasks is likely to delay the critical path based on historical velocity data and flags it before the project manager notices), stakeholder sentiment analysis (NLP analysis of meeting transcripts and chat messages detects rising frustration that human PMs might miss). But the core competencies of the project manager — stakeholder negotiation, team motivation, ethical judgment, strategic alignment — remain irreducibly human. The 2040 project manager is not replaced by AI; they are augmented by it, using AI to handle the computational aspects of project management while focusing their attention on the human aspects.
-
-**Required Reading:** PMI, *A Guide to the Project Management Body of Knowledge* (PMBOK Guide), 7th ed., 2035; Beck et al., "Manifesto for Agile Software Development" (2001); Standish Group, *CHAOS Report 2040*; Flyvbjerg & Gardner, *How Big Things Get Done* (2023).
-
-**Discussion Questions:**
-1. The PMBOK framework has been criticized as overly bureaucratic — "documentation-driven" rather than "value-driven." Under what circumstances is a PMBOK-aligned predictive approach the right choice, and when does it become counterproductive?
-2. Agile's emphasis on "responding to change over following a plan" is liberating for software teams but challenging for organizations that must commit to fixed-price contracts and regulatory deadlines. How do you reconcile this tension?
-3. AI-augmented project management tools can predict schedule risks and recommend optimizations. What ethical considerations arise when an AI recommends cancelling a project that has consumed significant resources ("sunk cost") but is unlikely to succeed?
+**Course Philosophy:** "Never trust, always verify." Zero trust is not a product — it is a philosophy, an architecture, and a discipline. This course moves beyond the marketing slogans to the technical reality: how to design, implement, and operate systems where every access request is authenticated, authorized, and encrypted, regardless of network location. In a world of remote work, cloud services, and AI-driven attacks, the perimeter-based security model is dead. Zero trust is the only coherent alternative.
 
 ---
 
-## Lecture 2: Project Initiation — Charter, Stakeholders, and the Business Case
-
-Every project begins with a decision: should we do this? Project initiation is the phase where the project's existence is justified, its boundaries are defined, and its stakeholders are identified and aligned. A project that begins with a weak foundation — unclear objectives, uncommitted sponsors, unidentified stakeholders — will struggle regardless of how well it is executed. This lecture covers the initiation practices that establish a project for success.
-
-The **project charter** is the document that formally authorizes the project's existence. It should answer the fundamental questions: **Why** are we doing this project (the business case — what problem does it solve, what opportunity does it capture, and how does it align with organizational strategy)? **What** will the project deliver (the high-level scope — not a detailed requirements document, but a clear statement of the project's boundaries)? **Who** is involved (the project sponsor — the senior leader who champions the project, secures resources, and makes go/no-go decisions; the project manager; the key stakeholders)? **When** is it needed (the high-level timeline and any immovable deadlines)? **How much** will it cost (the budget, with stated assumptions and confidence levels)? The charter is not a detailed plan — that comes later. It is a compact between the project sponsor and the project manager: the sponsor commits resources and organizational support; the project manager commits to delivering the specified outcomes within the agreed constraints.
-
-**Stakeholder identification and analysis** is the most commonly neglected initiation activity — and the most common source of project failure. A stakeholder is anyone who is affected by the project or can affect the project. The obvious stakeholders — the sponsor, the users, the development team — are identified early. The less obvious stakeholders — the legal team that must approve data handling, the facilities team that must provide physical space for the new servers, the union that represents the employees whose workflows will change, the regulator who must certify the system — are often identified late, when they surface as obstacles rather than as partners. Stakeholder analysis maps each stakeholder's **interest** (how much do they care about the project's outcome?) and **power** (how much can they help or hinder the project?). High-power, high-interest stakeholders (the sponsor, the primary user group) need close engagement; high-power, low-interest stakeholders (the CFO, who controls budget but doesn't care about the project's specifics) need to be kept satisfied — informed enough that they don't block the project, not burdened with details they don't want. The **stakeholder engagement plan** specifies how each stakeholder will be communicated with, how often, through which channels, and with what information.
-
-The **business case** is the economic justification for the project. It can be expressed as: **ROI (Return on Investment)** — the project costs X and will generate Y in benefits over Z years, expressed as a percentage; **NPV (Net Present Value)** — the discounted value of future cash flows, accounting for the time value of money (a dollar today is worth more than a dollar next year); **payback period** — how long until the benefits exceed the costs; or **non-financial justification** — compliance requirements (we must do this to avoid regulatory penalty), strategic imperative (we must do this to remain competitive), or capability building (we must do this to enable future projects). The 2040 project manager understands that business cases are built on assumptions, and assumptions are often wrong. The business case should document the assumptions explicitly, quantify the sensitivity of the ROI to changes in key variables (if user adoption is 50% of projections, does the project still break even?), and be revisited at major decision gates — not filed away and forgotten after approval.
-
-**Required Reading:** PMI, *Business Analysis for Practitioners: A Practice Guide* (2nd ed., 2038); Cohn, *Agile Estimating and Planning* (2005); Project Management Institute, "Pulse of the Profession: The High Cost of Low Performance" (2040).
-
-**Discussion Questions:**
-1. A project sponsor says "just get started — we'll figure out the details as we go." As the project manager, what minimum information do you insist on before accepting the assignment, and how do you communicate this without appearing obstructionist?
-2. Stakeholder analysis maps power and interest. But power is dynamic — a low-power stakeholder can become high-power if they escalate to a senior leader. How does the project manager manage this dynamic?
-3. The business case for an IT infrastructure upgrade shows ROI of 15% over 5 years, based on assumed efficiency savings. The assumptions are optimistic. How do you present this to the investment committee honestly while advocating for the project?
+## Lectures
 
 ---
 
-## Lecture 3: Scope Management — Requirements, WBS, and the War Against Scope Creep
+### Lecture 1: The Death of the Perimeter — Why Zero Trust Is Inevitable
 
-Scope defines what the project will deliver — and, equally importantly, what it will NOT deliver. Scope management is the discipline of defining, validating, and controlling the project's boundaries. It is the most politically charged aspect of project management because scope determines who gets what, and every stakeholder wants their needs included. This lecture covers the tools and techniques of scope management, with particular attention to the most persistent challenge in IT projects: scope creep.
-
-The **Work Breakdown Structure (WBS)** is the hierarchical decomposition of all the work required to complete the project. It is not a task list or a schedule; it is a deliverable-oriented decomposition — what will be produced, not what activities will be performed. A WBS for a network upgrade project might decompose into: 1.0 Network Design (1.1 Site Survey, 1.2 Logical Design, 1.3 Physical Design, 1.4 Security Architecture), 2.0 Equipment Procurement (2.1 Switch Order, 2.2 Router Order, 2.3 Firewall Order, 2.4 Cabling Order), 3.0 Implementation (3.1 Core Switch Installation, 3.2 Edge Switch Installation, 3.3 Firewall Configuration, 3.4 Testing), 4.0 Migration (4.1 User Communication, 4.2 Pilot Migration, 4.3 Full Cutover), 5.0 Project Management. The WBS follows the **100% rule**: the sum of the work at the child level must equal 100% of the work represented by the parent. Nothing is omitted, and nothing is counted twice. The WBS is the foundation for estimating, scheduling, budgeting, and risk identification — everything that follows references the WBS.
-
-**Requirements management** is the process of eliciting, documenting, validating, and controlling what the project must deliver. The distinction between **functional requirements** (what the system must do — "the system shall allow users to reset their password via email verification") and **non-functional requirements** (how the system must be — "password reset emails must be delivered within 30 seconds of request," "the password reset page must be accessible to screen readers conforming to WCAG 2.2 AA") is essential but often blurred in practice. The 2040 project manager employs techniques for requirements elicitation: **user stories** ("As a customer, I want to reset my password without calling support, so that I can regain access to my account immediately"), **use cases** (structured descriptions of how an actor interacts with the system to achieve a goal), **prototypes** (low-fidelity mockups that stakeholders can react to more concretely than text descriptions), and **acceptance criteria** (specific, testable conditions that determine whether a requirement is satisfied — the Given/When/Then format popularized by Behaviour-Driven Development: "Given a registered user who has forgotten their password, When they request a password reset and click the link in the email, Then they shall be presented with a form to create a new password").
-
-**Scope creep** — the uncontrolled expansion of project scope without corresponding adjustments to schedule, budget, or resources — is the silent killer of IT projects. It occurs through many mechanisms: **gold-plating** (the development team adding features they think are cool but weren't requested); **stakeholder pressure** (a VP says "while you're in there, can you just add..."); **poorly defined scope** (the requirement said "reporting capability" — does that mean three pre-built reports or a self-service report builder?); and **discovery** (as the team builds, they discover that the requirements omitted a critical integration). The defence against scope creep is not rigidity — refusing all changes — but a **change control process** that evaluates each proposed change against its impact on the triple constraint (scope, schedule, cost) and makes an explicit decision: accept the change (and adjust the plan accordingly), defer the change (to a future phase), or reject the change (and communicate why). The change control board (CCB), comprising the sponsor, key stakeholders, and the project manager, meets regularly to adjudicate change requests. The project manager's role is not to say "no" to changes but to say "yes, and here's what it will cost in time and money — do you still want it?"
-
-**Required Reading:** PMI, *Practice Standard for Work Breakdown Structures* (3rd ed., 2035); Wiegers & Beatty, *Software Requirements* (3rd ed., 2013); Robertson & Robertson, *Mastering the Requirements Process* (4th ed., 2039); OGC, *Managing Successful Projects with PRINCE2* (2017 ed.).
-
-**Discussion Questions:**
-1. A WBS is "deliverable-oriented" rather than "activity-oriented." Why does this distinction matter for scope verification — ensuring that the project has delivered everything it was supposed to?
-2. A stakeholder insists that a new feature is "critical" and must be added mid-project. The change control process evaluates it and determines it will add 6 weeks to the schedule. The sponsor says "just do it — prioritize it." How do you manage the impact on the existing scope, morale, and stakeholder expectations?
-3. User stories are intentionally brief — "a placeholder for a conversation." What balance between upfront detail and just-in-time elaboration produces the best requirements for an IT infrastructure project (as opposed to a software project)?
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 4: Schedule Management — Critical Path, Agile Estimation, and the Planning Fallacy
+#### Overview
 
-Time is the most unforgiving of the triple constraints. Budget can be increased; scope can be adjusted; but a missed deadline is a missed deadline, and the consequences — regulatory penalties, missed market windows, damaged credibility — cannot be recovered. Schedule management is the discipline of estimating durations, sequencing activities, and tracking progress against the plan. This lecture covers the tools and cognitive biases that shape scheduling practice.
+For decades, network security was perimeter-based: a firewall separated the trusted inside from the untrusted outside. This model collapsed under the weight of cloud computing, remote work, mobile devices, and sophisticated attacks that easily bypassed perimeters. This lecture traces the historical failure of perimeter security and establishes the zero-trust alternative.
 
-The **Critical Path Method (CPM)** , developed by DuPont and Remington Rand in the 1950s for chemical plant maintenance projects, remains the foundational technique for schedule analysis. The method: decompose the project into activities, estimate the duration of each, identify dependencies (Activity B cannot start until Activity A finishes; Activity C can start concurrently with Activity B), and construct a network diagram. The **critical path** is the longest sequence of dependent activities through the network — the path that determines the project's minimum duration. Activities on the critical path have zero **float** (also called slack): any delay to a critical path activity delays the entire project. Activities off the critical path have float: they can be delayed by a certain amount without affecting the project's finish date. The project manager's attention is disproportionately on critical path activities, because those are the activities where a delay cascades. We will build and analyze network diagrams manually, using forward pass (early start/early finish) and backward pass (late start/late finish) calculations, before introducing the project management software (Microsoft Project, Jira Advanced Roadmaps, Smartsheet) that automates these computations.
+#### Key Topics
 
-**Agile estimation** rejects the premise of detailed upfront scheduling in favour of relative sizing and empirical measurement. **Story points** — a relative measure of effort (a 2-point story is roughly twice as much work as a 1-point story) — avoid the false precision of hour-based estimates. A team's **velocity** — the number of story points they complete per iteration — is measured empirically, not estimated. If a team has averaged 30 story points per sprint over the past six sprints, and the backlog contains 180 points of work, the project will take approximately 6 more sprints. The 2040 project manager understands the strengths and limitations of both approaches: CPM provides schedule visibility and critical path awareness for well-understood work; agile estimation provides adaptability and empirical grounding for uncertain work. The hybrid approach — using CPM for the high-level milestones and known infrastructure dependencies, with agile estimation for the iterative development components — is the dominant model in enterprise IT projects.
+- **The Perimeter Model and Its Failure:** The castle-and-moat model assumed: (1) everything inside is trusted; (2) everything outside is untrusted; (3) a strong perimeter keeps attackers out. Why it failed: (1) insiders — employees, contractors, and compromised accounts — are inside the perimeter; (2) lateral movement — once an attacker breaches the perimeter, they have free movement inside; (3) perimeter dissolution — cloud, SaaS, remote work, and mobile mean there is no single perimeter. By 2040, the "inside" is a meaningless concept.
+- **Zero Trust Principles (NIST SP 800-207):** (1) All data sources and computing services are considered resources; (2) All communication is secured regardless of network location; (3) Access to individual enterprise resources is granted on a per-session basis; (4) Access is determined by dynamic policy — including the observable state of client identity, application/service, and the requesting asset; (5) The enterprise monitors and measures the integrity and security posture of all assets; (6) Authentication and authorization are strictly enforced before access; (7) The enterprise collects as much information as possible about the current state of assets and network infrastructure.
+- **Zero Trust as a Journey:** No organization "completes" zero trust. It is a continuous journey measured by maturity: (1) **Traditional** — perimeter-based, static credentials, manual processes; (2) **Advanced** — some automation, MFA, basic segmentation; (3) **Zero Trust** — continuous verification, microsegmentation, automated policy enforcement; (4) **Optimal** — fully automated, AI-driven, self-healing zero trust.
 
-The **planning fallacy** — the systematic tendency to underestimate the time and resources required to complete a task, even when we have direct experience of similar tasks taking longer — is the cognitive bias most relevant to project scheduling. Nobel laureate Daniel Kahneman documented the phenomenon: when asked to estimate the time to complete their own projects, people consistently underestimate, even when they know that similar projects have overrun. The mitigation is **reference class forecasting**: instead of estimating by decomposing the project into tasks and building up from the bottom (which triggers the planning fallacy), start by looking at similar completed projects and using their actual durations as the baseline, adjusting for the specific characteristics of your project. If ten previous database migration projects averaged 14 weeks, and your project is "similar but slightly more complex," your baseline is 16-18 weeks, not the 8 weeks your bottom-up estimate produces. The 2040 project manager is trained in reference class forecasting and applies it as a reality check on bottom-up estimates.
+#### Required Reading
 
-**Required Reading:** PMI, *Practice Standard for Scheduling* (3rd ed., 2037); Cohn, *Agile Estimating and Planning* (2005); Kahneman, *Thinking, Fast and Slow* (2011), Chapter 23 "The Outside View"; Flyvbjerg, "From Nobel Prize to Project Management: Getting Risks Right" (Project Management Journal, 2006).
-
-**Discussion Questions:**
-1. The critical path determines the project's minimum duration. What happens when the critical path shifts during the project — an activity that had float suddenly becomes critical because of a delay? How should the project manager respond?
-2. Story points are intentionally abstract — "a 5-point story" means different things to different teams. How does an organization that manages a portfolio of projects, each with its own velocity, forecast completion dates for the portfolio?
-3. Reference class forecasting mitigates the planning fallacy by using historical data. But new technology projects have no historical analogues. How do you estimate the duration of something that has never been done before?
-
----
-
-## Lecture 5: Cost Management — Budgeting, Earned Value, and the Economics of IT
-
-Money is the language of organizational decision-making. The project manager who cannot speak this language — who cannot build a credible budget, track actuals against the plan, and forecast the cost at completion — will find their projects unfunded, their decisions overridden, and their credibility diminished. This lecture covers the financial dimensions of IT project management.
-
-**Cost estimation** in IT projects proceeds through increasing levels of detail. **Analogous estimation** (top-down) uses the actual costs of similar previous projects as a baseline, adjusting for differences in scale and complexity. It is fast, relatively accurate for projects with good historical analogues, and appropriate during initiation when detailed information is unavailable. **Parametric estimation** uses statistical relationships between project characteristics and cost — cost per server, cost per user, cost per function point — derived from historical data. **Bottom-up estimation** decomposes the project into work packages (referencing the WBS), estimates the cost of each, and aggregates. It is the most accurate approach (when done well) but requires detailed scope definition and is vulnerable to the planning fallacy. The 2040 project manager triangulates: use at least two estimation methods, and if the estimates diverge significantly, investigate why before committing to a number.
-
-**Earned Value Management (EVM)** is the most powerful technique for integrated cost and schedule tracking, and the most underutilized. EVM answers three questions with a single integrated framework: **How much work should have been done?** (Planned Value, PV — the budgeted cost of work scheduled to date), **How much work has been done?** (Earned Value, EV — the budgeted cost of work actually completed), **How much did the work cost?** (Actual Cost, AC — the actual expenditure to date). From these three numbers, EVM derives the key metrics: **Schedule Variance (SV = EV - PV)** — positive means ahead of schedule, negative means behind; **Cost Variance (CV = EV - AC)** — positive means under budget, negative means over budget; **Schedule Performance Index (SPI = EV/PV)** — 1.0 is on schedule, below 1.0 is behind; **Cost Performance Index (CPI = EV/AC)** — 1.0 is on budget, below 1.0 is over budget. The power of EVM is that it reveals problems that are invisible to simple "percentage complete" tracking: a project that has spent 50% of its budget and reports 50% completion might look on track, but if the work completed represents only 40% of the planned value, the project is actually behind schedule and over budget.
-
-**IT economics** in 2040 operate differently from traditional capital projects. Cloud computing shifts costs from capital expenditure (CapEx — buying servers) to operational expenditure (OpEx — renting compute by the hour). This shift changes the financial analysis: a traditional CapEx project shows negative cash flow upfront with benefits accruing later; an OpEx project spreads costs across the project's lifetime. The cloud's elastic pricing — pay only for what you use — seems to simplify cost estimation but introduces new risks: a misconfigured auto-scaling group can generate a $50,000 surprise bill, and the project manager who budgeted based on steady-state usage is suddenly over budget through no fault of their own. The 2040 IT project manager budgets for cloud costs with: conservative assumptions about usage, cost monitoring dashboards that provide daily visibility into actual spend, cost anomaly detection (AWS Budgets, Azure Cost Management alerts), and a contingency reserve (typically 15-20% of the cloud budget) for the unexpected.
-
-**Required Reading:** PMI, *Practice Standard for Earned Value Management* (2nd ed., 2034); Fleming & Koppelman, *Earned Value Project Management* (4th ed., 2010); Goldratt, *Critical Chain* (1997); Storment & Fuller, *Cloud FinOps* (2nd ed., 2023), Chapters 1-3.
-
-**Discussion Questions:**
-1. Earned Value Management requires accurate "percent complete" assessments for in-progress work. In software development, "90% done" is a cliché — things are either done or not done. How do you apply EVM to knowledge work where partial completion is difficult to measure?
-2. A project has SPI of 0.75 and CPI of 0.80 after six months. The sponsor asks: "When will it be done, and how much will it cost?" Using the EVM formulas for Estimate at Completion (EAC), provide the answer and explain the assumptions behind it.
-3. Cloud cost estimation is complicated by the pay-per-use model — costs scale with usage, and usage is uncertain. How do you build a cloud budget that provides cost certainty to the finance department while retaining the cloud's elasticity benefits?
+- NIST. (2038). SP 800-207 Rev. 1: Zero Trust Architecture.
+- Kindervag, J. (2010, updated 2038). "No More Chewy Centers: The Zero Trust Model of Information Security." Forrester Research.
+- UoY Zero Trust Lab. (2040). *The Zero Trust Maturity Model*.
 
 ---
 
-## Lecture 6: Risk Management — Identification, Analysis, Response, and the Unknown Unknowns
+### Lecture 2: Identity-Centric Security — The New Perimeter
 
-Risk management is not pessimism; it is preparedness. Every project operates under uncertainty — about technology, about requirements, about resource availability, about the external environment. The project manager who treats uncertainty as an afterthought will be surprised by it; the project manager who systematically identifies, analyzes, and plans for uncertainty will be ready for it. This lecture covers the risk management processes that distinguish resilient projects from fragile ones.
-
-**Risk identification** is the brainstorming phase — what could go wrong? Techniques include: **checklists** (standard risk categories from previous similar projects — technology risk, resource risk, vendor risk, regulatory risk, stakeholder risk); **assumption analysis** (every assumption in the project plan is a potential risk — "we assume the vendor will deliver the hardware by March 1" — what if they don't?); **SWOT analysis** (Strengths, Weaknesses, Opportunities, Threats — which project weaknesses could become risks, and which external threats could impact the project?); and **prompt lists** (WBS-based risk identification — for each work package, ask "what could prevent this deliverable from being completed as planned?"). The output is the **risk register**: a living document that lists each identified risk, its probability, its impact, its risk score (probability × impact), its risk response strategy, and its current status.
-
-**Qualitative risk analysis** prioritizes risks using subjective assessments of probability and impact, typically on a scale of 1-5 or 1-10. A risk matrix maps probability against impact to produce a risk rating: high probability × high impact = red (must be actively managed); low probability × low impact = green (monitor but don't actively manage). **Quantitative risk analysis** goes further, using numerical techniques to quantify the combined effect of risks on project objectives. **Monte Carlo simulation** — running thousands of iterations of the project schedule, each with randomly sampled values for task durations based on their probability distributions — produces a distribution of possible project completion dates: "There is an 80% probability that the project will finish by October 15, and a 95% probability it will finish by November 1." The 2040 project manager uses quantitative analysis selectively — for high-stakes projects where the cost of the analysis is justified by the improved certainty it provides — because Monte Carlo simulation requires well-characterized probability distributions for each uncertain variable, and "garbage in, garbage out" applies with full force.
-
-**Risk response strategies** address identified risks before they materialize. **Avoidance** — eliminate the risk entirely by changing the project plan (if a specific technology component is high-risk because it's unproven, replace it with a proven alternative). **Mitigation** — reduce the probability or impact of the risk (if a key team member leaving is a risk, cross-train another team member so the knowledge isn't single-threaded). **Transfer** — shift the impact to a third party (insurance, fixed-price contracts that transfer cost overrun risk to the vendor — though fixed-price contracts create their own risks around quality and change management). **Acceptance** — acknowledge the risk and plan to deal with it if it occurs (for low-probability, low-impact risks, or risks where the cost of mitigation exceeds the expected loss). **Contingency plans** are the predefined actions to take if an accepted risk materializes — "if the primary data centre loses power during migration, we will execute the failover to the secondary data centre using the documented failover procedure."
-
-**Unknown unknowns** — risks that you cannot identify because you don't know they exist — are the project manager's nightmare. Donald Rumsfeld's infamous phrase captured a genuine epistemological problem: some risks are unforeseeable not because we failed to analyze but because they arise from novel interactions or unprecedented events. The defence against unknown unknowns is not better risk identification (by definition, you cannot identify what you cannot conceive of) but **resilience**: building the project with margin (schedule contingency, budget contingency) that can absorb unexpected shocks; maintaining optionality (avoiding irreversible decisions until the last responsible moment); and cultivating a project culture where bad news travels fast, so that when an unknown unknown does materialize, the project team responds quickly rather than hiding it.
-
-**Required Reading:** PMI, *Practice Standard for Project Risk Management* (2nd ed., 2036); Hillson, *Managing Risk in Projects* (2009); Taleb, *The Black Swan* (2007) (selected chapters); Hubbard, *The Failure of Risk Management* (2nd ed., 2020).
-
-**Discussion Questions:**
-1. A risk matrix classifies risks as high/medium/low based on probability × impact. But this linear multiplication can mislead: a 1% chance of a $100M loss has the same "score" as a 100% chance of a $1M loss, but the organizational response should differ. Propose an alternative risk prioritization approach.
-2. Monte Carlo simulation requires probability distributions for task durations. Where do these distributions come from, and what are the risks of relying on them uncritically?
-3. "Unknown unknowns" cannot be identified in advance, but the project can be made resilient to them. What specific practices — beyond budget and schedule contingency — increase project resilience?
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 7: Agile and Lean Project Management — Scrum, Kanban, and the Flow of Value
+#### Overview
 
-The Agile movement has transformed not just software development but the broader practice of project management. Where traditional project management optimizes for predictability — follow the plan — Agile optimizes for adaptability — deliver value early and often, inspect and adapt. This lecture covers the Agile frameworks and the lean principles that underpin them, with emphasis on their application to IT projects beyond pure software development.
+In zero trust, identity is the perimeter. Every access decision starts with: who is requesting access, from what device, in what context, and with what risk profile? This lecture covers the identity pillar of zero trust: authentication standards (FIDO2, WebAuthn, passkeys), authorization frameworks (RBAC, ABAC, PBAC), continuous authentication, and identity governance.
 
-**Scrum** is the most widely adopted Agile framework. It organizes work into fixed-length iterations called **sprints** (typically 1-4 weeks, with 2 weeks being the most common in 2040 practice). Each sprint begins with **sprint planning**, where the team commits to a sprint goal and selects the product backlog items they believe they can complete. During the sprint, the team holds a daily **stand-up** (Scrum) — a 15-minute synchronization meeting where each team member answers: What did I accomplish yesterday? What will I accomplish today? What impediments are in my way? At the sprint's end, the team demonstrates working functionality in the **sprint review** and reflects on its process in the **sprint retrospective** (what went well, what could be improved, what actions will we take?). The Scrum framework defines three roles: the **Product Owner** (responsible for maximizing the value of the product, managing the backlog, and making priority decisions), the **Scrum Master** (responsible for the Scrum process, removing impediments, and coaching the team — not a project manager in the traditional sense, but a servant-leader), and the **Development Team** (cross-functional, self-organizing, accountable for delivering the sprint commitment).
+#### Key Topics
 
-**Kanban**, derived from the Toyota Production System, takes a different approach: instead of fixed-length iterations with a commitment to a batch of work, Kanban visualizes the flow of work on a board with columns representing stages (To Do, In Progress, Review, Done) and limits the number of items that can be in each stage (Work In Progress limits, or WIP limits). When a column reaches its WIP limit, no new work can enter that column until an item leaves it. This forces the team to finish work before starting new work — reducing multitasking, surfacing bottlenecks, and improving flow. Kanban is particularly effective for operations and support work, where work arrives unpredictably (incidents, requests) and fixed-length iterations don't fit the work pattern. The 2040 IT project manager uses Kanban for: maintenance and operations teams, infrastructure upgrade projects where work items vary significantly in size, and projects where priorities shift frequently and the overhead of sprint planning is not justified.
+- **Passwordless and Phishing-Resistant MFA:** Passwords are the weakest link. The 2040 standard: FIDO2/WebAuthn passkeys — cryptographic credentials bound to the origin, resistant to phishing, and synced across user devices. MFA is mandatory for all access to sensitive resources. By 2040, continuous authentication extends beyond login — behavioral biometrics, device health, and location context continuously assess risk throughout a session.
+- **Attribute-Based Access Control (ABAC):** ABAC makes access decisions based on attributes of the user (role, department, clearance), resource (classification, owner, type), action (read, write, delete), and environment (time, location, device posture). Policy example: "Allow doctors from the cardiology department to read patient records during their shift from hospital-managed devices." ABAC enables fine-grained, context-aware access control that scales better than RBAC alone.
+- **Identity Governance:** Managing the identity lifecycle: (1) **Joiner-Mover-Leaver** — automated provisioning, role changes, and de-provisioning; (2) **Access reviews** — periodic certification that users still need their access; (3) **Segregation of duties** — prevent conflicting access combinations; (4) **Privileged access management (PAM)** — just-in-time access, session recording, and approval workflows for administrative access.
 
-**Lean principles**, articulated in Mary and Tom Poppendieck's adaptation of lean manufacturing to software development, inform both Scrum and Kanban: **eliminate waste** (anything that doesn't add value to the customer — partially done work, extra features, task switching, waiting, defects), **amplify learning** (short feedback loops, iterative experimentation), **decide as late as possible** (keep options open until the last responsible moment, when you have the most information), **deliver as fast as possible** (short cycle times, continuous delivery), **empower the team** (the people doing the work know best how to do it), **build integrity in** (quality is not inspected in after the fact; it is built in through practices like test-driven development and continuous integration), and **see the whole** (optimize the entire value stream, not individual steps — a local optimization that creates a bottleneck downstream makes the overall system worse, not better).
+#### Required Reading
 
-**Scaling Agile** is the challenge of applying Agile principles to large, multi-team programs. **SAFe (Scaled Agile Framework)** , **LeSS (Large-Scale Scrum)** , **Scrum@Scale**, and the **Spotify model** (squads, tribes, chapters, guilds) are competing frameworks for scaling. The 2040 project manager understands that scaling Agile is not simply "more Scrum" — it introduces coordination overhead, dependency management, and architectural challenges that small-team Agile doesn't address, and the choice of scaling framework should be driven by the organization's specific coordination needs, not by the framework's marketing.
-
-**Required Reading:** Sutherland & Schwaber, *The Scrum Guide* (2020 ed.); Anderson, *Kanban: Successful Evolutionary Change for Your Technology Business* (2010); Poppendieck & Poppendieck, *Lean Software Development: An Agile Toolkit* (2003); Kniberg & Ivarsson, "Scaling Agile @ Spotify" (2012).
-
-**Discussion Questions:**
-1. Scrum's sprint commitment creates predictability for stakeholders but can pressure teams to under-commit or overwork to meet the commitment. How does the Scrum Master balance commitment with sustainable pace?
-2. Kanban's WIP limits expose bottlenecks — when a column consistently exceeds its limit, the bottleneck is immediately upstream. What does the team do when the bottleneck is outside the team's control (e.g., waiting for a security review from a separate team)?
-3. SAFe has been criticized as "waterfall in Agile clothing" — too much ceremony, too many roles, not enough actual agility. Under what circumstances is SAFe the right choice despite these criticisms?
+- W3C. (2040). *WebAuthn Level 3*.
+- NIST. (2039). SP 800-207 Rev. 1 — Identity Pillar.
+- UoY Identity Lab. (2040). *Continuous Authentication: From Login to Session*.
 
 ---
 
-## Lecture 8: Stakeholder Communication and Team Leadership
+### Lecture 3: Device Security and Posture Assessment
 
-Project management is communication. The project manager who builds excellent plans but fails to communicate them — who manages risks but fails to escalate them — who motivates a team but fails to manage stakeholder expectations — will see their technical excellence rendered irrelevant by organizational failure. This lecture addresses the human dimensions of project management: communication, leadership, and the interpersonal skills that determine whether a project manager is effective.
-
-**Stakeholder communication** is not broadcasting; it is tailoring. Different stakeholders need different information, at different frequencies, through different channels, at different levels of detail. The project sponsor needs high-level status (are we on track? what risks need escalation? what decisions do you need from me?), delivered concisely (a one-page executive summary, not a 50-page status report), on a predictable cadence (weekly or bi-weekly). The development team needs detailed task-level information (what's the priority? what are the acceptance criteria? when is it needed?), delivered in their workflow (Jira tickets, Slack messages, stand-up meetings). The end users need to know what's changing and when it affects them, delivered through channels they actually use (email, in-app notifications, training sessions). The 2040 project manager develops a **communications management plan** that specifies, for each stakeholder group: the information they need, the format, the frequency, the channel, and the responsible party. The plan is revisited as the project evolves and stakeholders change.
-
-**Project team leadership** in the 2040 environment requires navigating the challenges of distributed, often asynchronous work. The project manager is not the team's boss (in most matrixed organizations, team members report to functional managers, not the project manager) but their leader — setting direction, removing obstacles, building cohesion, and creating the conditions for the team to succeed. Psychological safety — the shared belief that the team is safe for interpersonal risk-taking, that you can admit a mistake, ask a question, or propose a wild idea without fear of humiliation or retribution — is the single most important characteristic of high-performing teams, as established by Google's Project Aristotle research. The project manager builds psychological safety by: modelling vulnerability (admitting their own mistakes), soliciting input from all team members (not just the loudest voices), responding constructively to bad news (focusing on solutions, not blame), and protecting the team from external pressures that would undermine safety.
-
-**Conflict management** is an inevitable project management responsibility. Conflicts arise from competing priorities (development wants more time for quality; the business wants faster delivery), resource contention (two projects need the same DBA), interpersonal friction (personality clashes that have nothing to do with the project), and value differences (one team member prioritizes elegant architecture; another prioritizes shipping quickly). The project manager's approach to conflict is not to suppress it (conflict suppressed goes underground and festers) but to surface it constructively, facilitate resolution, and — when resolution isn't possible — escalate to the appropriate authority with a clear statement of the tradeoffs. The Thomas-Kilmann Conflict Mode Instrument identifies five styles: **competing** (asserting your position — appropriate when a quick, decisive action is needed), **collaborating** (working together to find a win-win — appropriate when both parties' concerns are too important to compromise), **compromising** (finding a middle ground — appropriate for moderate-importance issues under time pressure), **accommodating** (yielding to the other party — appropriate when the issue matters more to them than to you), and **avoiding** (withdrawing — appropriate when the issue is trivial or when emotions are too high for productive discussion). The effective project manager is fluent in all five styles and selects the appropriate style for the situation.
-
-**Required Reading:** PMI, *Guide to the Project Management Body of Knowledge* (PMBOK Guide), 7th ed., 2035, Chapters on Stakeholder and Communications Management; Duhigg, "What Google Learned From Its Quest to Build the Perfect Team" (New York Times, 2016); Lencioni, *The Five Dysfunctions of a Team* (2002); Thomas & Kilmann, *Thomas-Kilmann Conflict Mode Instrument* (1974).
-
-**Discussion Questions:**
-1. A project stakeholder consistently fails to respond to requests for decisions, creating delays. As the project manager, how do you escalate this without damaging the relationship, and what escalation path do you follow?
-2. Psychological safety research shows that teams with high psychological safety make more mistakes (because they report them) but have better outcomes. How do you explain this counterintuitive finding to a results-oriented executive?
-3. You are managing a project where two senior engineers disagree fundamentally on the technical approach — one favours a microservices architecture, the other favours a modular monolith. The decision is blocking progress. As the project manager without deep technical expertise in this specific debate, how do you facilitate a resolution?
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 9: Quality Management — Testing, Validation, and the Cost of Defects
+#### Overview
 
-Quality is not an activity performed at the end of a project — it is a property built into every phase of the project lifecycle. The cost of fixing a defect increases exponentially the later it is discovered: a requirements error caught during requirements review costs minutes to fix; the same error caught during user acceptance testing costs days; the same error caught in production costs weeks and may involve incident response, rollback, data correction, and reputational damage. This lecture covers the quality management practices that shift defect detection left — earlier in the lifecycle, where it is cheaper and faster.
+A legitimate user on a compromised device is a threat. Zero trust extends verification to the device: Is it managed? Is it patched? Is it running expected security software? Does it show signs of compromise? This lecture covers device trust, endpoint compliance, and the integration of device posture into access decisions.
 
-**Quality planning** establishes the quality standards the project will adhere to — which may be external (ISO 9001, regulatory requirements, contractual service level agreements) or internal (organizational coding standards, architectural guidelines, test coverage thresholds). The cost of quality is analyzed across four categories: **prevention costs** (training, tooling, process improvement — investing upfront to prevent defects), **appraisal costs** (testing, inspection, code review — detecting defects before release), **internal failure costs** (rework, scrap — fixing defects found before release), and **external failure costs** (warranty claims, liability, lost customers — the consequences of defects found after release). The data is unambiguous: prevention is cheaper than appraisal, which is cheaper than internal failure, which is dramatically cheaper than external failure. The 2040 project manager allocates quality budget disproportionately toward prevention and appraisal, understanding that this investment reduces total cost of quality by avoiding the exponentially more expensive failure costs.
+#### Key Topics
 
-**Testing** in IT projects spans multiple levels. **Unit testing** verifies individual components in isolation — a function returns the correct output for a given input, a database query executes correctly — and is typically automated and run on every code change. **Integration testing** verifies that components work together — the API endpoint correctly retrieves data from the database and returns it in the expected format. **System testing** verifies the end-to-end system behaviour — can a user complete the entire password reset flow, from requesting the reset to logging in with the new password? **User acceptance testing (UAT)** verifies that the system meets the business requirements — not "does it work according to the specification" but "does it solve the business problem it was built to solve." In 2040, testing is increasingly automated through AI-generated test cases: tools that analyze the application's behaviour, generate test scenarios covering edge cases a human tester might miss, and execute them in CI/CD pipelines that block deployment if tests fail. But UAT remains irreducibly human — the business users are the only ones who can determine whether the system actually meets their needs.
+- **Device Trust Establishment:** (1) **Device identity** — each device has a cryptographic identity (TPM-backed certificate); (2) **Device health attestation** — the device reports its state: OS version, patch level, security software status, disk encryption status; (3) **Compliance policies** — define required posture (encryption enabled, firewall on, antivirus running, no jailbreak/root); (4) **Conditional Access** — access is granted, limited, or denied based on posture. By 2040, TPM 3.0 and hardware-backed attestation are standard, providing cryptographic proof of device integrity.
+- **Endpoint Detection and Response (EDR/XDR):** Continuous monitoring of endpoints for signs of compromise. By 2040, XDR (Extended Detection and Response) correlates signals across endpoints, network, identity, and cloud to detect sophisticated attacks that single-source detection misses. AI-driven XDR provides real-time risk scoring that feeds into access decisions.
+- **BYOD and Unmanaged Devices:** The reality: employees use personal devices. Zero trust accommodation: (1) limited access from unmanaged devices (web-only, no download, read-only); (2) virtual desktop infrastructure (VDI) or browser isolation for access from personal devices; (3) mobile application management (MAM) that secures corporate data within personal apps without managing the entire device.
 
-**Quality metrics** in 2040 project management have evolved beyond simple "number of bugs found." Modern quality metrics include: **escaped defect rate** (how many defects reached production, normalized by release size), **mean time to detect (MTTD)** for production defects, **mean time to repair (MTTR)** for production defects, **test coverage** (percentage of code paths exercised by automated tests — 100% coverage doesn't guarantee quality, but 20% coverage guarantees it's untested), **flaky test rate** (tests that intermittently fail without code changes — a signal of test quality problems and a major source of developer frustration), and **change failure rate** (the percentage of deployments that cause a service impairment or require remediation — a key metric from the DORA research program that correlates strongly with organizational performance).
+#### Required Reading
 
-**Required Reading:** PMI, *A Guide to the Project Management Body of Knowledge*, Chapter on Quality Management; Juran & Godfrey, *Juran's Quality Handbook* (5th ed., 1999); Humble & Farley, *Continuous Delivery* (2010); Forsgren, Humble, & Kim, *Accelerate* (2018), Chapters 1-3.
-
-**Discussion Questions:**
-1. The cost of fixing a defect increases exponentially the later it's found. Quantify this claim with a hypothetical example from an IT infrastructure project, and explain the mechanisms that cause the cost escalation.
-2. Test coverage is commonly used as a quality metric, but 100% coverage does not guarantee absence of defects. What does test coverage actually measure, and what quality dimensions does it miss?
-3. A project is behind schedule, and the sponsor proposes cutting the testing phase to recover time. As the project manager, how do you articulate the risks of this decision in terms the sponsor will understand?
-
----
-
-## Lecture 10: Procurement and Vendor Management — RFPs, Contracts, and the Outsourcing Decision
-
-IT projects rarely build everything from scratch. Hardware is purchased from vendors; cloud services are consumed from providers; development may be outsourced to contractors or offshore teams; specialized expertise may be brought in through consultants. Procurement and vendor management — the disciplines of selecting, contracting with, and managing external suppliers — are therefore essential project management competencies. This lecture covers the procurement lifecycle and the vendor management practices that determine whether external relationships are assets or liabilities.
-
-The **make-or-buy decision** is the threshold question: should the project build this capability internally, or procure it externally? The analysis considers: **core competency** (is this capability strategic — something that differentiates the organization — or commodity — something that any competent provider can deliver?), **capacity** (does the internal team have the bandwidth and expertise to build it within the required timeline?), **cost** (is the external option cheaper, accounting for the total cost of ownership including management overhead?), **risk** (does outsourcing this component create unacceptable dependency, security, or quality risk?), and **strategic flexibility** (does the make-or-buy decision lock the organization into a path that limits future options?). The 2040 project manager leads the make-or-buy analysis, presenting options to the sponsor with clear tradeoffs, and implementing the chosen approach.
-
-The **procurement lifecycle** proceeds through structured phases. **Procurement planning** defines what will be procured, the selection criteria, and the contract type — fixed-price (vendor bears the cost risk; appropriate for well-defined scope), time and materials (customer bears the cost risk; appropriate for uncertain scope), or cost-reimbursable (customer reimburses vendor's costs plus a fee; appropriate for research or high-uncertainty work). **Solicitation** (RFP — Request for Proposal, RFQ — Request for Quote, RFI — Request for Information) communicates requirements to potential vendors. **Source selection** evaluates vendor responses against weighted criteria (technical capability, price, past performance, financial stability, cultural fit, security posture) and selects the vendor. **Contract negotiation** finalizes the legal agreement — scope of work, deliverables, acceptance criteria, payment schedule, intellectual property rights, confidentiality, termination clauses, dispute resolution. **Contract administration** manages the ongoing relationship — monitoring performance against the contract, processing change orders (because scope always changes), managing the relationship (which is between people, not legal entities), and closing the contract at project completion (verifying all deliverables accepted, all payments made, all obligations discharged).
-
-**Vendor management** extends beyond contract administration to the human relationship. The most meticulously drafted contract cannot compensate for a broken relationship, and the strongest relationship cannot compensate for a poorly structured contract. The 2040 project manager practices: **transparent communication** (sharing context so the vendor understands not just what to do but why; sharing bad news early so the vendor can help solve problems rather than being surprised by them), **fair dealing** (treating the vendor as a partner whose success matters, not as an adversary to be squeezed — a vendor losing money on your contract will cut corners, assign their B-team, or walk away), **performance management** (regular review of SLAs and KPIs, with constructive feedback rather than punitive escalation as the default response to misses), and **knowledge transfer** (ensuring that the vendor's expertise is transferred to the internal team before the engagement ends, so the organization is not left dependent on external knowledge).
-
-**Required Reading:** PMI, *A Guide to the Project Management Body of Knowledge*, Chapter on Procurement Management; Garrett, *World Class Contracting* (5th ed., 2015); OGC, *Managing Successful Projects with PRINCE2*, Chapter on Commercial Management; Kern & Willcocks, *The Relationship Advantage: Information Technologies, Sourcing, and Management* (2001).
-
-**Discussion Questions:**
-1. A fixed-price contract transfers cost risk to the vendor but creates incentives for the vendor to minimize scope and resist changes. When is a fixed-price contract the right choice, and what mitigations address the incentive misalignment?
-2. An offshore development team is consistently delivering code that passes functional tests but has architectural problems that will create maintenance burdens. As the project manager, how do you address this, given the cultural, time zone, and contractual barriers?
-3. A critical vendor is acquired by a competitor. The contract has a change-of-control clause that allows termination, but finding a replacement vendor would delay the project by 6 months. What are your options, and how do you evaluate them?
+- Microsoft. (2039). *Device Health Attestation: Architecture and Implementation*.
+- NIST. (2039). SP 800-207 Rev. 1 — Device Pillar.
+- UoY Endpoint Lab. (2040). *XDR and Zero Trust: Integration Patterns*.
 
 ---
 
-## Lecture 11: AI-Augmented Project Management — Tools, Ethics, and the Changing Role of the PM
+### Lecture 4: Network Microsegmentation and Software-Defined Perimeters
 
-Artificial intelligence is reshaping project management as profoundly as it is reshaping every other knowledge profession. In 2040, AI-augmented project management is not a future trend — it is the daily reality, and the project manager who does not leverage AI tools is at a competitive disadvantage. But AI augmentation raises ethical questions, changes the project manager's role, and introduces new failure modes that the profession is still learning to manage. This lecture surveys the AI-augmented PM landscape.
-
-**AI-augmented capabilities** in 2040 project management span the PM lifecycle. **Schedule optimization**: AI analyzes historical velocity data, dependency structures, and resource availability to generate optimized schedules, flag conflicts (two tasks both need the same specialist during the same week), and predict completion dates with confidence intervals updated daily based on actual progress. **Risk detection**: AI monitors project data streams — commit frequency, test pass rates, team sentiment in chat messages, stakeholder meeting attendance — and detects patterns that correlate with project distress, alerting the PM before the distress becomes visible in traditional metrics. **Resource allocation**: AI recommends team assignments based on skills, availability, and past performance on similar tasks, and flags when a team member appears overallocated or underutilized. **Stakeholder sentiment analysis**: NLP models analyze meeting transcripts, email threads, and chat channels to detect rising frustration, confusion, or disengagement among stakeholders — signals that a human PM might catch intuitively but miss when managing multiple projects. **Automated reporting**: AI generates status reports, executive summaries, and stakeholder updates by synthesizing data from the project management tool, version control, CI/CD pipeline, and communication channels.
-
-**The PM's evolving role** in an AI-augmented environment shifts from computation to judgment, from data gathering to relationship building, from tracking to leading. AI handles the "what" — what is the schedule variance, what is the risk profile, what are the stakeholder sentiments. The PM handles the "so what" and the "now what" — interpreting the AI's output in organizational context, making the decisions that the AI recommends but cannot own, navigating the political and interpersonal dimensions that AI cannot access. The PM who treats AI as a replacement rather than an augmentation will be replaced; the PM who treats AI as a powerful tool that amplifies their uniquely human capabilities — empathy, ethical judgment, strategic thinking, creative problem-solving — will be invaluable.
-
-**AI PM ethics** address the risks of algorithmic decision-making in project contexts. **Bias**: AI models trained on historical project data may perpetuate biases — if historically, certain types of projects were assigned to certain teams, the AI may replicate that pattern, limiting opportunities. **Explainability**: when an AI recommends cancelling a project or reassigning a team member, the PM must understand why — "the model said so" is not an acceptable justification to the affected people. **Accountability**: when an AI-augmented decision leads to a bad outcome, who is responsible? The PM who followed the AI's recommendation, the data scientists who built the model, or the organization that deployed it? The 2040 PMI Code of Ethics is evolving to address these questions, establishing that the PM retains accountability for decisions informed by AI — the AI is a tool, not a decision-maker.
-
-**Required Reading:** PMI, "AI in Project Management: State of the Practice" (2040); Nieto-Rodriguez & Viana Vargas, "How AI Will Transform Project Management" (Harvard Business Review, 2023); Müller & Turner, *The Project Manager's Leadership Style as a Success Factor on Projects* (2010); Bostrom & Yudkowsky, "The Ethics of Artificial Intelligence" (2014).
-
-**Discussion Questions:**
-1. An AI tool recommends reassigning a team member based on a productivity metric that the team member disputes. How does the PM adjudicate between the AI's recommendation and the human's protest?
-2. AI-augmented stakeholder sentiment analysis detects that a key stakeholder's engagement is declining — they're attending fewer meetings, responding more slowly to communications, and using more negative language. What does the PM do with this information, and what are the ethical considerations?
-3. As AI handles more of the computational aspects of project management, what uniquely human capabilities become more valuable for PMs? How should PM training and certification evolve to reflect this shift?
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
 
 ---
 
-## Lecture 12: Project Closure and the Lessons Learned — Completing the Cycle
+#### Overview
 
-How a project ends matters as much as how it begins. A project that delivers on time and on budget but leaves behind technical debt, knowledge gaps, and unresolved stakeholder expectations has not truly succeeded. A project that struggles through execution but closes cleanly — with formal acceptance, knowledge transfer, and lessons captured for future projects — has created lasting organizational value beyond its immediate deliverables. This concluding lecture covers the closure activities that complete the project lifecycle and the reflective practices that enable organizational learning.
+Zero trust rejects the flat, trusted internal network. Instead, the network is microsegmented — fine-grained isolation so that compromising one asset doesn't grant access to others. This lecture covers the network pillar: microsegmentation technologies, software-defined perimeters (SDP), and the convergence with identity-based networking.
 
-**Administrative closure** is the formal process of completing the project. Deliverables are verified against acceptance criteria and formally accepted by the sponsor or customer; outstanding contracts are closed (final payments made, performance evaluated, obligations discharged); project resources are released (team members reassigned, equipment reallocated, cloud resources decommissioned — the last step preventing the silent cost accumulation of forgotten cloud resources); and project documentation is archived (the project plan, the risk register, the decision log, the architecture documents — preserved not for compliance alone but for the next project manager who faces a similar challenge). The **project closure report** summarizes: what was delivered versus what was planned, final schedule and cost performance (with variance analysis), key risks that materialized and how they were handled, and recommendations for post-project activities (warranty period, operational transition, future enhancements).
+#### Key Topics
 
-**Knowledge transfer** is the bridge between the project and ongoing operations. The project team's knowledge — about the system's architecture, its failure modes, its operational requirements — must be transferred to the operations team that will support it for years after the project team disperses. Knowledge transfer methods include: documentation (runbooks, architecture diagrams, troubleshooting guides — written to be actually useful, not to satisfy a process requirement), collaborative operations (the operations team shadowing the project team during the final sprints, handling incidents under supervision), and a defined transition period (typically 2-4 weeks post-launch where the project team provides escalated support before fully handing off). The 2040 project manager treats knowledge transfer not as a final checkbox but as a deliverable in its own right, with acceptance criteria — "the operations team can independently handle a database failover without calling the project team" — that must be demonstrated before the project is closed.
+- **Microsegmentation:** Dividing the network into small, isolated segments with explicit, policy-controlled communication between them. Benefits: (1) lateral movement containment — an attacker who compromes a web server cannot reach the database unless explicitly allowed; (2) blast radius reduction — a breach affects only the compromised segment; (3) compliance — sensitive data can be isolated to specific segments. Technologies: (1) host-based firewalls with centralized policy (Illumio, Guardicore), (2) network virtualization overlays (VMware NSX, Cisco ACI), (3) cloud-native security groups and network policies (Kubernetes NetworkPolicy, AWS Security Groups).
+- **Software-Defined Perimeter (SDP):** SDP makes infrastructure invisible to unauthorized users. An SDP controller authenticates users and devices, then dynamically creates encrypted, per-session connections between the user and the specific resources they're authorized to access. The infrastructure is "dark" — it doesn't respond to connection attempts from unauthorized sources. This eliminates the network as an attack surface.
+- **Identity-Aware Proxy:** By 2040, the convergence of identity and networking: every network connection is authenticated and authorized. The identity-aware proxy (BeyondCorp-style) sits between users and applications, verifying identity and device posture on every request. Legacy applications that don't support modern authentication can be placed behind identity-aware proxies, bringing them into the zero-trust architecture.
 
-**Lessons learned** is the reflective practice that converts project experience into organizational capability. The lessons learned session — conducted as a facilitated workshop, not a blame exercise — brings together the project team, key stakeholders, and (where appropriate) the customer to answer: What went well that we should repeat? What went poorly that we should improve? What surprised us that we should anticipate? What would we do differently if we could start over? The output is specific, actionable recommendations — not "we need better communication" but "the weekly stakeholder newsletter was effective; the monthly steering committee was too infrequent and should be bi-weekly for projects of this scale" — that are stored in a searchable knowledge base, tagged by project type, technology, and domain, and consulted during the planning of future projects. An organization that institutionalizes lessons learned gets better at projects over time; an organization that conducts lessons learned as a perfunctory exercise and files the report where no one reads it repeats the same mistakes project after project.
+#### Required Reading
 
-**The project manager's reflection** is the personal dimension of lessons learned. What did you learn about your own capabilities — your strengths, your blind spots, your default responses under pressure? What skills do you need to develop before your next project? What type of project energizes you, and what type drains you? The reflective project manager treats each project as a chapter in a career-long education, accumulating not just a portfolio of delivered projects but a deepening understanding of the craft.
+- NIST. (2039). SP 800-207 Rev. 1 — Network Pillar.
+- Google. (2038). *BeyondCorp: A New Approach to Enterprise Security* (Updated).
+- UoY Network Security Lab. (2040). *Microsegmentation at Scale: Design Patterns*.
 
-**Required Reading:** PMI, *A Guide to the Project Management Body of Knowledge*, Chapter on Project Closure Management; Collier, DeMarco, & Fearey, "A Defined Process for Project Postmortem Review" (IEEE Software, 1996); Kerth, *Project Retrospectives: A Handbook for Team Reviews* (2001).
+---
 
-**Discussion Questions:**
-1. A project is cancelled after 18 months of work, having consumed 80% of its budget with nothing deployed to production. How do you conduct a lessons learned session that extracts value from the failure without descending into blame?
-2. Knowledge transfer to operations is often neglected because the project team is exhausted and ready to move on. Design a knowledge transfer process that is effective without being burdensome.
-3. A project manager's reflection reveals that they avoided a difficult conversation with a stakeholder, and the resulting misalignment caused delays. How does the PM internalize this lesson without excessive self-criticism, and how do they improve for the next project?
+### Lecture 5: Zero Trust for Applications and APIs
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Applications must be designed for zero trust — not trusting input, authenticating every API call, authorizing every data access. This lecture covers the application pillar: secure development practices, API security, service-to-service authentication, and the integration of applications with the zero-trust control plane.
+
+#### Key Topics
+
+- **Secure by Design:** Applications in a zero-trust architecture: (1) authenticate every request — no implicit trust for internal services; (2) authorize at the data level — row-level security, attribute-based access in the application layer; (3) validate all input — treat every input as potentially malicious; (4) encrypt everywhere — TLS for all communication, including service-to-service; (5) log everything — comprehensive audit trails for access and actions.
+- **Service-to-Service Authentication:** In a microservices world, services call services. Zero-trust service authentication: (1) **Mutual TLS (mTLS)** — services authenticate each other with certificates; (2) **SPIFFE/SPIRE** — the Cloud Native Computing Foundation's standard for service identity; (3) **Short-lived tokens** — service tokens that expire in minutes, reducing the window for token theft. By 2040, SPIFFE-based identity is the standard for service mesh authentication.
+- **API Security Gateway:** The API gateway enforces zero-trust for APIs: (1) authentication — OAuth 2.1, API keys, mTLS; (2) authorization — per-endpoint, per-method, per-parameter access control; (3) rate limiting — per-user, per-token, per-IP; (4) schema validation — reject requests that don't match the API contract; (5) threat detection — AI-driven detection of API abuse patterns.
+
+#### Required Reading
+
+- OWASP. (2040). *API Security Top 10*.
+- CNCF. (2040). *SPIFFE: Secure Production Identity Framework for Everyone*.
+- UoY Application Security Lab. (2039). *Zero Trust for Cloud-Native Applications*.
+
+---
+
+### Lecture 6: Data-Centric Security — Protecting Information, Not Just Systems
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+The ultimate asset is data. Zero-trust extends to the data layer: classifying data by sensitivity, encrypting everywhere, controlling access at the data level, and monitoring data movement. This lecture covers the data pillar of zero trust.
+
+#### Key Topics
+
+- **Data Classification and Discovery:** You can't protect what you don't know you have. Automated data discovery tools scan structured and unstructured data to identify sensitive information (PII, PHI, PCI, IP). Classification labels drive protection policies. By 2040, AI-powered data classification achieves high accuracy with minimal manual labeling.
+- **Encryption Everywhere:** (1) **At rest** — all data encrypted, with customer-managed keys; (2) **In transit** — TLS 1.4 with PQC for all communication; (3) **In use** — confidential computing for sensitive workloads; (4) **Application-layer encryption** — encrypt sensitive fields before storing in the database, so even database administrators can't read them.
+- **Data Loss Prevention (DLP):** Monitoring and controlling data movement: (1) **Endpoint DLP** — prevent copying sensitive data to USB drives, personal email, or unauthorized cloud services; (2) **Network DLP** — detect sensitive data in network traffic; (3) **Cloud DLP** — scan cloud storage for misconfigured permissions and exposed data. By 2040, AI-driven DLP reduces false positives by understanding context — distinguishing between a doctor sharing patient data for treatment (authorized) vs. exfiltration (unauthorized).
+
+#### Required Reading
+
+- NIST. (2039). SP 800-207 Rev. 1 — Data Pillar.
+- CSA. (2040). *Cloud Data Security: Encryption, DLP, and Governance*.
+- UoY Data Security Lab. (2040). *Data-Centric Zero Trust: Architectures and Practices*.
+
+---
+
+### Lecture 7: Zero Trust for Cloud and Multi-Cloud Environments
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Cloud introduces unique zero-trust challenges: shared responsibility, dynamic infrastructure, and the blurring of network boundaries. This lecture covers cloud-native zero trust: IAM as the control plane, infrastructure as code security, cloud security posture management, and multi-cloud zero-trust architectures.
+
+#### Key Topics
+
+- **Cloud IAM as the Zero-Trust Control Plane:** Cloud IAM (AWS IAM, Azure RBAC, Google Cloud IAM) is the foundation of cloud zero trust. Best practices: (1) least privilege — start with no permissions; (2) resource-based policies in addition to identity-based policies; (3) conditional access — MFA, IP restrictions, device posture; (4) temporary credentials — no long-lived access keys.
+- **Infrastructure as Code Security:** IaC (Terraform, CloudFormation, Pulumi) defines cloud infrastructure. Security must be embedded: (1) policy-as-code (Open Policy Agent, Checkov) scans IaC for security violations before deployment; (2) drift detection identifies manual changes that bypass IaC; (3) immutable infrastructure prevents in-place modifications.
+- **Cloud Security Posture Management (CSPM):** Continuous monitoring for misconfigurations across cloud environments. By 2040, CSPM has merged with CIEM (Cloud Infrastructure Entitlement Management) and CWPP (Cloud Workload Protection Platform) into unified CNAPP solutions that provide holistic cloud security from development to runtime.
+
+#### Required Reading
+
+- AWS. (2040). *Zero Trust on AWS: Architecture Guide*.
+- HashiCorp. (2039). *Policy as Code for Zero Trust Infrastructure*.
+- UoY Cloud Security Lab. (2040). *Multi-Cloud Zero Trust: Architecture Patterns*.
+
+---
+
+### Lecture 8: Zero Trust for AI and ML Systems
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+AI/ML systems introduce new zero-trust challenges: models are assets that must be protected, training data is sensitive, and model inference is an access point that can be attacked. This lecture covers AI-specific zero-trust: model access control, data pipeline security, adversarial defense, and model governance.
+
+#### Key Topics
+
+- **Model Access Control:** AI models are valuable IP. Zero-trust access to models: (1) authenticate every inference request; (2) authorize based on user identity, model tier, and usage limits; (3) rate limit to prevent model extraction; (4) log all inference requests for audit; (5) detect adversarial inputs designed to manipulate the model.
+- **Training Data Protection:** Training data often contains sensitive information. Protections: (1) differential privacy — add noise during training to protect individual data points; (2) federated learning — train models without centralizing data; (3) data provenance — track where training data came from and who has accessed it.
+- **ML Pipeline Security:** The CI/CD pipeline for ML models must be secured: (1) signed model artifacts — verify model integrity before deployment; (2) provenance tracking — know the training data, code, and parameters for every deployed model; (3) vulnerability scanning — scan ML libraries and dependencies; (4) model registry access control — who can register, promote, and deploy models.
+
+#### Required Reading
+
+- NIST. (2040). *AI 600-1: Zero Trust for Artificial Intelligence Systems*.
+- UoY AI Security Lab. (2039). *Securing the ML Pipeline: A Zero-Trust Approach*.
+
+---
+
+### Lecture 9: Designing and Deploying a Zero-Trust Architecture
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Zero trust is not one product — it is an architecture composed of multiple technologies integrated through a policy engine. This lecture provides a practical framework for designing, deploying, and evolving a zero-trust architecture.
+
+#### Key Topics
+
+- **The Zero Trust Logical Architecture:** NIST's reference architecture: (1) **Policy Engine (PE)** — makes access decisions based on policy, identity, device posture, and context; (2) **Policy Administrator (PA)** — executes the PE's decisions (establish, block, or terminate connections); (3) **Policy Enforcement Point (PEP)** — the gatekeeper that intercepts access requests and enforces PA decisions; (4) **Supporting data sources** — identity management, device inventory, threat intelligence, SIEM, data classification.
+- **Implementation Patterns:** (1) **Identity-centric** — all access routed through identity-aware proxies; (2) **Network-centric** — microsegmentation and SDP as the foundation; (3) **Application-centric** — zero trust embedded in application architecture. Most organizations combine patterns. The key: choose the pattern that best addresses your most critical assets.
+- **Migration Strategy:** Zero trust is implemented incrementally: (1) **Identify** — discover assets, users, and data flows; (2) **Classify** — categorize by sensitivity and criticality; (3) **Protect the crown jewels first** — start with your most critical assets; (4) **Expand** — incrementally bring more assets into zero trust; (5) **Optimize** — continuously tune policies and automate. The migration typically takes 3-5 years for a large enterprise.
+
+#### Required Reading
+
+- NIST. (2038). SP 800-207 Rev. 1 — Appendix: Implementation Scenarios.
+- CISA. (2039). *Zero Trust Maturity Model v2.0*.
+- UoY Zero Trust Lab. (2039). *Deployment Patterns and Migration Strategies*.
+
+---
+
+### Lecture 10: Continuous Monitoring, Analytics, and Automated Response
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Zero trust is not a one-time check — it's continuous. The architecture must continuously monitor, analyze, and respond to changes in identity, device posture, network behavior, and threat landscape. This lecture covers the visibility and analytics pillar: SIEM/SOAR integration, UEBA, and the feedback loop that makes zero trust adaptive.
+
+#### Key Topics
+
+- **Continuous Diagnostics and Monitoring:** Zero trust requires comprehensive visibility: (1) **Asset inventory** — every device, user, and service is tracked; (2) **Configuration monitoring** — detect deviations from secure baselines; (3) **Behavior monitoring** — detect anomalous user and entity behavior; (4) **Threat intelligence integration** — contextualize events with external threat data. The goal: detect and respond to threats in real time, not after the fact.
+- **Policy Feedback Loop:** Zero trust policies must evolve. The feedback loop: (1) monitor access patterns and threats; (2) analyze for policy gaps and optimization opportunities; (3) update policies; (4) deploy updated policies; (5) monitor the effect. By 2040, AI-driven policy optimization suggests policy changes based on observed traffic patterns and threat intelligence.
+- **Incident Response in Zero Trust:** Zero trust changes incident response: (1) microsegmentation limits blast radius — incidents are easier to contain; (2) comprehensive logging speeds investigation — every access event is recorded; (3) dynamic policy enables rapid response — revoke access, isolate segments, or increase authentication requirements instantly.
+
+#### Required Reading
+
+- NIST. (2039). SP 800-207 Rev. 1 — Visibility and Analytics Pillar.
+- UoY SOC Lab. (2039). *Incident Response in Zero-Trust Environments*.
+
+---
+
+### Lecture 11: Zero Trust Governance, Compliance, and Metrics
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Zero trust must be governed — policies must be managed, compliance must be demonstrated, and effectiveness must be measured. This lecture covers the governance framework for zero trust: policy management lifecycle, compliance mapping, metrics and KPIs, and executive reporting.
+
+#### Key Topics
+
+- **Policy Management Lifecycle:** (1) Draft — security architects write policies; (2) Review — stakeholders validate; (3) Test — simulate policy impact before deployment; (4) Deploy — roll out progressively; (5) Monitor — track policy effectiveness; (6) Refine — improve based on data. By 2040, policy-as-code with GitOps workflows manages this lifecycle.
+- **Compliance Mapping:** Map zero trust controls to regulatory frameworks (GDPR, CCPA, PCI DSS, HIPAA, NIST CSF). Automated compliance reporting demonstrates that zero trust controls satisfy regulatory requirements. The 2040 practice: continuous compliance — real-time monitoring of control effectiveness, not point-in-time audits.
+- **Zero Trust KPIs:** (1) **Coverage** — percentage of assets, users, and applications under zero trust; (2) **Authentication strength** — percentage of access using phishing-resistant MFA; (3) **Least privilege** — percentage of over-privileged accounts identified and remediated; (4) **Microsegmentation** — percentage of network traffic subject to microsegmentation policy; (5) **Mean time to detect/respond** — speed of threat detection and response; (6) **Policy violation rate** — frequency of access denied by policy.
+
+#### Required Reading
+
+- CISA. (2040). *Zero Trust Performance Metrics*.
+- UoY Governance Lab. (2039). *Governing Zero Trust: Policy, Compliance, and Metrics*.
+
+---
+
+### Lecture 12: The Future of Zero Trust — Autonomous, Predictive, and Ubiquitous
+
+**Course:** IT303 — Zero-Trust Security Architecture
+**Degree:** Bachelor of Science in Information Technology, 2040
+
+---
+
+#### Overview
+
+Where does zero trust go from here? This lecture projects trends: autonomous policy generation, predictive access (grant access before it's needed based on context prediction), ubiquitous zero trust extending to IoT, OT, and personal devices, and the convergence of zero trust with decentralized identity and verifiable credentials.
+
+#### Key Topics
+
+- **Autonomous Policy:** AI that generates and tunes zero trust policies: (1) observe normal access patterns; (2) propose policies that permit legitimate patterns and deny everything else; (3) human review and approval; (4) continuous tuning. This addresses the biggest zero trust bottleneck: policy creation and maintenance.
+- **Predictive Access:** Instead of evaluating access at request time, predict and pre-authorize access based on context: calendar (meeting with a client suggests access to client files), location (entering the office suggests access to office resources), behavior patterns. This reduces latency while maintaining security.
+- **Ubiquitous Zero Trust:** Extending zero trust beyond traditional IT: (1) IoT — every device authenticated and authorized; (2) OT — industrial control systems with zero-trust access; (3) 6G — zero trust built into the network layer; (4) Personal — individuals controlling access to their personal data through zero-trust principles and verifiable credentials.
+
+#### Required Reading
+
+- UoY Future Security Lab. (2040). *Zero Trust 2050: Autonomous, Predictive, Ubiquitous*.
+- W3C. (2040). *Verifiable Credentials and Zero Trust: Convergence Patterns*.
 
 ---
 
 ## Final Examination Preparation
 
-The final examination for IT303 IT Project Management consists of two components:
+### Sample Essay Questions (Choose 4 of 8)
 
-### Part I: Written Examination (60%)
-Select **four of eight** essay questions. Expected length: 600-800 words per essay.
+1. **Architecture Design:** Design a zero-trust architecture for a healthcare organization. Address all pillars: identity, device, network, application, and data.
 
-**Sample Essay Questions:**
+2. **Migration Strategy:** Your organization operates a traditional perimeter-based network. Design a 4-year zero trust migration roadmap.
 
-1. You are assigned to take over a troubled IT infrastructure project that is six months behind schedule and 40% over budget. The previous project manager left abruptly, and the team's morale is low. Describe your first 30 days: how you assess the project's true status, rebuild stakeholder confidence, and establish a credible path to completion.
+3. **Microsegmentation Deep Dive:** Compare three microsegmentation approaches (host-based, network overlay, cloud-native). When is each appropriate?
 
-2. A large enterprise is implementing a new ERP system across all business units. The project was planned as a traditional waterfall approach with a 24-month timeline. At month 12, the steering committee is considering switching to an agile approach because the requirements have changed significantly. Evaluate the feasibility and risks of a mid-project methodology switch, and recommend a path forward.
+4. **AI and Zero Trust:** AI systems both enable zero trust (automated policy, anomaly detection) and require zero trust (model protection, pipeline security). Analyze this duality.
 
-3. Your project's earned value metrics show SPI = 0.70 and CPI = 0.85 at the 50% completion point. The sponsor wants to know when the project will finish and what it will cost. Using EVM formulas, provide your estimate and explain the assumptions. Then address the qualitative factors the numbers don't capture.
+5. **Zero Trust for Legacy:** Your organization has mainframe applications that can't be modified. How do you bring them into a zero-trust architecture?
 
-4. A vendor on your project is consistently missing delivery milestones, citing supply chain disruptions. The contract includes penalty clauses for late delivery, but enforcing them will likely damage the relationship and may cause the vendor to walk away. Analyze your options and recommend a course of action.
+6. **Compliance Case Study:** Map zero trust controls to GDPR requirements. What gaps remain?
 
-5. Your organization is transitioning from traditional project management to an agile-at-scale framework (SAFe). You are the PM on the first project to adopt the new methodology. The team is skeptical, the stakeholders are confused by the new terminology, and the first PI planning session was chaotic. How do you stabilize the transition?
+7. **Incident Response:** A zero-trust environment detects anomalous access. Walk through the incident response — how does zero trust change detection, containment, investigation, and recovery?
 
-6. An AI project management tool recommends cancelling your project because the predicted completion date has slipped beyond the point where the projected ROI turns negative. You believe the AI's assumptions about user adoption are pessimistic and the project still has strategic value. How do you challenge the AI's recommendation, and what evidence do you present?
-
-7. You are managing a project with team members distributed across four time zones (Reykjavík, New York, Bangalore, Tokyo). Asynchronous communication is causing misunderstandings, and synchronous meetings are burning out the team members who must attend at inconvenient hours. Redesign the project's communication and collaboration model.
-
-8. The project sponsor — who championed the project and secured its funding — is leaving the organization. The incoming sponsor has no history with the project and is known for aggressive cost-cutting. How do you manage this transition to protect the project?
-
-### Part II: Practical Case Study (40%)
-You will be given a detailed case study of an IT project in trouble — a realistic scenario with schedule, budget, scope, stakeholder, and vendor challenges. You must: diagnose the root causes of the project's problems, propose a recovery plan with specific actions and timelines, identify the key stakeholders and your communication strategy for each, and present your recommendations in a simulated steering committee presentation.
+8. **The Limits of Zero Trust:** Zero trust reduces but doesn't eliminate risk. What are the residual risks? What attacks does zero trust NOT protect against?
 
 ---
 
-**Course Resources:**
-- Project Management Institute — https://www.pmi.org
-- Scrum Guide — https://scrumguides.org
-- Atlassian Project Management Resources — https://www.atlassian.com/project-management
-- DORA DevOps Research — https://dora.dev
+**Þǫkk — May your trust be earned, never assumed.**

@@ -560,6 +560,52 @@ Students should pay particular attention to:
 
 ---
 
+---
+ᛉ **Lecture 13: Future Directions and Emerging Technologies**
+
+**Course:** AN711 — Digital Anthropology — Online Cultures, Platform Societies  
+**Degree:** Doctor of Philosophy in Cultural Anthropology, 2040
+
+---
+
+### Overview
+
+This lecture explores future directions aspects of digital anthropology — online cultures, platform societies, building on foundational knowledge from previous sessions. By 2040, | an712, and this session examines how future-oriented understanding shapes both theory and practice.
+
+### Key Topics
+
+- **Topic 1:** Core definitions and terminology specific to digital anthropology — online cultures, platform societies
+- **Topic 2:** How future perspectives reshape our understanding of | an712
+- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 4:** Connections to other courses in the Doctor of Philosophy in Cultural Anthropology program
+
+### Lecture Notes
+
+The field of digital anthropology — online cultures, platform societies continues to evolve rapidly. Emerging technologies such as neural interfaces, quantum social networks, and persistent XR environments are reshaping the landscape. Students should consider how these innovations interact with anthropological theory.
+
+Students should pay particular attention to:
+1. The integration of embodied cognition with digital platforms
+2. How decentralized architectures affect community formation
+3. The role of AI-mediated ethnography in contemporary research
+4. Emerging paradigms that may reshape the field by 2050
+
+### Required Reading
+
+- Course textbook, chapters relevant to future directions and emerging technologies
+- Selected research papers from the 2040-2 UoY reading list
+
+### Discussion Questions
+
+1. How might emerging technologies change the practice of digital anthropology in the next decade?
+2. What ethical considerations arise with neural and quantum technologies in anthropological research?
+3. How do future considerations change the way we approach practical challenges?
+
+### Practice Problems
+
+- Work through the exercises at the end of the relevant textbook chapters
+- Prepare one original question for next session's discussion
+
+---
 ## Assignments
 
 
