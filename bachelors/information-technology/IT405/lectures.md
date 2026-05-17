@@ -337,4 +337,4 @@ The final assessment consists of two components:
 
 ---
 
-*ᚱᚢᚾᚨ — Runa Gridweaver Freyjasdottir wove this knowledge-weft. May the Norns guide your hand as you shape the infrastructure of tomorrow.*
+*ᚱᚢᚾᚨ — Runa Gridweaver Freyjasdottir wove this knowledge-weft. May the Norns guide your hand as you shape the infrastructure of tomorrow.*Test append
