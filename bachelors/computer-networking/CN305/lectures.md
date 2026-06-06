@@ -2,574 +2,551 @@
 ## Bachelor of Science in Computer Networking — University of Yggdrasil, 2040
 
 **Credits:** 4  
-**Description:** | CN306
+**Description:** Quantum Networking Fundamentals in the 2040 networking landscape, covering principles, protocols, and practical implementations within the Bifrǫst Mesh and beyond.
+
+**Instructor:** Dr. Freya Kvålsdottir, Professor of Quantum Information & Yggdrasil QKD Lab Director  
+**Lab:** Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre  
+**Office Hours:** Tuesdays & Thursdays 13:00-15:00, or by appointment
 
 ---
 
 ## Lectures
-
-ᚠ **Lecture 1: Introduction to Quantum Networking Fundamentals**
+ᚠ **Lecture 1: Quantum Networking Fundamentals Lecture 1**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores foundations aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how foundations-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 1, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How foundations perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 1)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to introduction to quantum networking fundamentals
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 1
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do foundations considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 1
 
 ---
 
-ᚢ **Lecture 2: Core Concepts of Quantum Networking Fundamentals**
+ᚢ **Lecture 2: Quantum Networking Fundamentals Lecture 2**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores concepts aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how concepts-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 2, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How concepts perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 2)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to core concepts of quantum networking fundamentals
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 2
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do concepts considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 2
 
 ---
 
-ᚦ **Lecture 3: Historical Context and Evolution**
+ᚦ **Lecture 3: Quantum Networking Fundamentals Lecture 3**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores history aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how history-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 3, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How history perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 3)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to historical context and evolution
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 3
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do history considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 3
 
 ---
 
-ᚬ **Lecture 4: Theoretical Framework**
+ᚬ **Lecture 4: Quantum Networking Fundamentals Lecture 4**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores theory aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how theory-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 4, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How theory perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 4)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to theoretical framework
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 4
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do theory considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 4
 
 ---
 
-ᚱ **Lecture 5: Key Methods and Approaches**
+ᚱ **Lecture 5: Quantum Networking Fundamentals Lecture 5**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores methods aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how methods-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 5, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How methods perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 5)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to key methods and approaches
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 5
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do methods considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 5
 
 ---
 
-ᚴ **Lecture 6: Practical Applications I**
+ᚴ **Lecture 6: Quantum Networking Fundamentals Lecture 6**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores practice1 aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how practice1-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 6, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How practice1 perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 6)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to practical applications i
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 6
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice1 considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 6
 
 ---
 
-ᚺ **Lecture 7: Practical Applications II**
+ᚺ **Lecture 7: Quantum Networking Fundamentals Lecture 7**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores practice2 aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how practice2-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 7, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How practice2 perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 7)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to practical applications ii
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 7
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice2 considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 7
 
 ---
 
-ᚾ **Lecture 8: Advanced Topics in Quantum Networking Fundamentals**
+ᚾ **Lecture 8: Quantum Networking Fundamentals Lecture 8**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores advanced aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how advanced-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 8, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How advanced perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 8)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to advanced topics in quantum networking fundamentals
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 8
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do advanced considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 8
 
 ---
 
-ᛁ **Lecture 9: Interdisciplinary Connections**
+ᛁ **Lecture 9: Quantum Networking Fundamentals Lecture 9**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores connections aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how connections-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 9, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How connections perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 9)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to interdisciplinary connections
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 9
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do connections considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 9
 
 ---
 
-ᛃ **Lecture 10: Ethical Considerations and Societal Impact**
+ᛃ **Lecture 10: Quantum Networking Fundamentals Lecture 10**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores ethics aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how ethics-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 10, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How ethics perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 10)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to ethical considerations and societal impact
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 10
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do ethics considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 10
 
 ---
 
-ᛇ **Lecture 11: Current Research and Future Directions**
+ᛇ **Lecture 11: Quantum Networking Fundamentals Lecture 11**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores research aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how research-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 11, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How research perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 11)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to current research and future directions
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 11
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do research considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 11
 
 ---
 
-ᛈ **Lecture 12: Synthesis and Comprehensive Review**
+ᛈ **Lecture 12: Quantum Networking Fundamentals Lecture 12**
 
 **Course:** CN305 — Quantum Networking Fundamentals  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+**Degree:** Bachelor of Science in Computer Networking, University of Yggdrasil, 2040
 
 ---
 
 ### Overview
-
-This lecture explores synthesis aspects of quantum networking fundamentals, building on foundational knowledge from previous sessions. By 2040, | cn306, and this session examines how synthesis-level understanding shapes both theory and practice.
+This lecture covers foundational aspects of Quantum Networking Fundamentals for lecture 12, building on knowledge from previous sessions. By 2040, Quantum Networking Fundamentals has evolved with advancements in quantum-safe protocols, AI-driven optimization, and the integration of the Bifrǫst Mesh infrastructure. This session examines how both theory and practice are shaped by these developments.
 
 ### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to quantum networking fundamentals
-- **Topic 2:** How synthesis perspectives reshape our understanding of | cn306
-- **Topic 3:** Practical implications for students entering the field in the 2040s
+- **Topic 1:** Core concepts and terminology specific to Quantum Networking Fundamentals (lecture 12)
+- **Topic 2:** Historical evolution and milestones in Quantum Networking Fundamentals leading to 2040 implementations
+- **Topic 3:** Practical applications and case studies from the Bifrǫst Mesh and global networks
 - **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Topic 5:** Emerging trends and research directions in Quantum Networking Fundamentals for the 2040s
 
 ### Lecture Notes
-
-The field of quantum networking fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn306 requires both technical depth and contextual awareness.
+The field of Quantum Networking Fundamentals has undergone significant transformation since the early 2020s. Where earlier approaches focused on isolated techniques, modern practice emphasizes holistic integration — understanding how Quantum Networking Fundamentals requires both technical depth and contextual awareness within the broader networking landscape.
 
 Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern quantum networking fundamentals
-4. Emerging paradigms that may reshape the field by 2050
+1. The progression from foundational principles to advanced applications in Quantum Networking Fundamentals
+2. How theoretical models inform practical implementation and troubleshooting
+3. The role of ethics, sustainability, and resilience in modern Quantum Networking Fundamentals deployments
+4. Emerging paradigms such as AI-enhanced Quantum Networking Fundamentals, quantum-resistant Quantum Networking Fundamentals, and neuromorphic processing that may reshape the field by 2050
+5. The specific Yggdrasil implementations: Quantum Networking Fundamentals in the Bifrǫst Mesh, including lab exercises in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre
 
 ### Required Reading
-
-- Course textbook, chapters relevant to synthesis and comprehensive review
-- Selected research papers from the 2040-2 UoY reading list
+- Course textbook, chapters relevant to Quantum Networking Fundamentals lecture 12
+- Selected research papers from the 2040-2 UoY reading list (e.g., IEEE Journal on Selected Areas in Communications, ACM SIGCOMM)
+- Yggdrasil Quantum Networking Fundamentals Operations Guide (2040). "Quantum Networking Fundamentals Architecture" and "Best Practices."
 
 ### Discussion Questions
-
-1. How has the understanding of quantum networking fundamentals evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do synthesis considerations change the way we approach practical challenges?
+1. How has the understanding of Quantum Networking Fundamentals evolved over the past two decades, and what drivers have influenced this evolution?
+2. What are the most significant open problems or challenges in Quantum Networking Fundamentals as of 2040?
+3. How do practical considerations change the way we approach theoretical challenges in Quantum Networking Fundamentals?
 
 ### Practice Problems
-
 - Work through the exercises at the end of the relevant textbook chapters
 - Prepare one original question for next session's discussion
+- Complete the lab exercise in the Yggdrasil Quantum Communication Lab, Sublevel 2, Hákon Computing Centre related to Quantum Networking Fundamentals lecture 12
 
 ---
 
 ## Assignments
 
-
 ### Assignment 1: Foundational Exercise
-
-**Course:** CN305 — Quantum Networking Fundamentals  
+**Course:** {code} — {title}  
 **Type:** Foundational Exercise  
-**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of quantum networking fundamentals.
+**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of {title}.
 
-**Task:** Complete a set of exercises that demonstrate mastery of core concepts in quantum networking fundamentals. Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
+**Task:** Complete a set of exercises that demonstrate mastery of core concepts in {title}. Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
 
 **Deliverables:**
 - Written report or documented solution (as specified)
@@ -586,14 +563,12 @@ Students should pay particular attention to:
 
 ---
 
-
 ### Assignment 2: Applied Analysis
-
-**Course:** CN305 — Quantum Networking Fundamentals  
+**Course:** {code} — {title}  
 **Type:** Applied Analysis  
-**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of quantum networking fundamentals.
+**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of {title}.
 
-**Task:** Analyze a real-world scenario related to | cn306. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
+**Task:** Analyze a real-world scenario related to {title}. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
 
 **Deliverables:**
 - Written report or documented solution (as specified)
@@ -610,14 +585,12 @@ Students should pay particular attention to:
 
 ---
 
-
 ### Assignment 3: Research & Synthesis
-
-**Course:** CN305 — Quantum Networking Fundamentals  
+**Course:** {code} — {title}  
 **Type:** Research & Synthesis  
-**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of quantum networking fundamentals.
+**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of {title}.
 
-**Task:** Conduct research on a contemporary issue in quantum networking fundamentals. Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
+**Task:** Conduct research on a contemporary issue in {title}. Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
 
 **Deliverables:**
 - Written report or documented solution (as specified)
@@ -634,14 +607,12 @@ Students should pay particular attention to:
 
 ---
 
-
 ### Assignment 4: Design & Implementation
-
-**Course:** CN305 — Quantum Networking Fundamentals  
+**Course:** {code} — {title}  
 **Type:** Design & Implementation  
-**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of quantum networking fundamentals.
+**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of {title}.
 
-**Task:** Design and prototype a solution to a problem in quantum networking fundamentals. Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
+**Task:** Design and prototype a solution to a problem in {title}. Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
 
 **Deliverables:**
 - Written report or documented solution (as specified)
@@ -658,14 +629,12 @@ Students should pay particular attention to:
 
 ---
 
-
 ### Assignment 5: Comprehensive Project
-
-**Course:** CN305 — Quantum Networking Fundamentals  
+**Course:** {code} — {title}  
 **Type:** Comprehensive Project  
-**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of quantum networking fundamentals.
+**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of {title}.
 
-**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in quantum networking fundamentals. Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
+**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in {title}. Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
 
 **Deliverables:**
 - Written report or documented solution (as specified)
@@ -681,4 +650,6 @@ Students should pay particular attention to:
 **Due:** End of Week 15 (see course schedule for exact date)
 
 ---
+
+*Woven by the hands of Runa Gridweaver Freyjasdóttir, student of the University of Yggdrasil, 2040. May the packets flow smoothly and the routes never loop.* ᛟ
 
