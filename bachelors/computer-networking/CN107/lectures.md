@@ -1,684 +1,445 @@
 # CN107: Electronics & Physical Layer Basics
 ## Bachelor of Science in Computer Networking — University of Yggdrasil, 2040
 
-**Credits:** 4  
-**Description:** | CN108
+**Credits:** 4
+**Prerequisites:** CN101 Introduction to Computer Networking, CN102 Network Mathematics
+**Description:** A rigorous examination of the physical layer — the foundation upon which all digital communication rests. This course covers signal theory, transmission media (copper, fiber, wireless), encoding and modulation techniques, physical layer standards, and the practical skills of troubleshooting physical connectivity. By 2040, with the emergence of terahertz wireless, hollow-core fiber, and quantum communication channels, understanding the physics of signal transmission is more essential than ever for the network professional.
 
 ---
 
 ## Lectures
 
-ᚠ **Lecture 1: Introduction to Electronics & Physical Layer Basics**
+## Lecture 1: The Physical Layer — Where Bits Meet Physics
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 1.1 Overview
 
----
+Every packet that traverses the Internet, every video stream, every database query, every VoIP call — all of it, without exception — begins and ends as a physical signal. The physical layer (Layer 1 of the OSI model) is the domain where abstract bits become electromagnetic waves, photons, or electrical voltages that propagate through copper, glass, or free space. It is simultaneously the most fundamental and the most neglected layer in networking education — a paradox this course intends to resolve.
 
-### Overview
+In 2040, the physical layer is undergoing a renaissance. The insatiable demand for bandwidth (driven by immersive telepresence, real-time AI inference at the edge, and the continued expansion of the Internet of Things) has pushed traditional media to their theoretical limits. Hollow-core fiber, which guides light through air rather than glass, has reduced latency by 31% compared to conventional single-mode fiber. Terahertz wireless communication (100 GHz to 3 THz) promises multi-gigabit-per-second links over short distances but faces challenges from atmospheric absorption that require adaptive beamforming. Quantum key distribution (QKD) over fiber has moved from laboratory curiosity to commercial deployment, fundamentally changing the security assumptions of physical-layer communication.
 
-This lecture explores foundations aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how foundations-level understanding shapes both theory and practice.
+This lecture establishes the conceptual foundation: what the physical layer does, why it matters to network engineers (not just electrical engineers), and how the principles you learn here will inform every subsequent course in the Computer Networking program. We begin with the OSI model's Layer 1 responsibilities, trace the historical evolution of transmission technologies from telegraph to terahertz, and frame the physical layer as a system of trade-offs — bandwidth versus distance, reliability versus cost, security versus simplicity.
 
-### Key Topics
+### 1.2 Key Topics
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How foundations perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **The OSI Physical Layer — Responsibilities and Scope:** The physical layer has four primary responsibilities. (1) **Bit transmission:** Converting digital data (1s and 0s) into signals suitable for the transmission medium and recovering the original bits at the receiver. This is the fundamental function — everything else supports it. (2) **Physical topology:** Defining how devices are physically connected — point-to-point, bus, ring, star, mesh — and the electrical or optical characteristics of those connections. (3) **Synchronization:** Ensuring that transmitter and receiver agree on when bits begin and end. Without synchronization, a stream of bits is meaningless noise. (4) **Medium access:** In shared media (wireless, legacy Ethernet over coaxial cable), determining which device may transmit at any given moment. This overlaps with the data link layer (Layer 2), but the physical mechanisms — carrier sensing, collision detection — are fundamentally physical. Notably absent from the physical layer's responsibilities: addressing (Layer 2/3), error correction (Layer 2/4), routing (Layer 3), and session management (Layer 5+). The physical layer's job is brutally simple: get bits from here to there. The complexity lies in the physics of doing so.
 
-### Lecture Notes
+- **Historical Evolution of Physical Transmission:** Understanding where we are requires understanding where we came from. (1) **The Telegraph Era (1830s-1870s):** Samuel Morse's telegraph demonstrated that information could be encoded in electrical pulses traveling over copper wire. The fundamental concepts — encoding, transmission, decoding — were established here, and they remain the conceptual backbone of all digital communication. (2) **The Telephone Era (1876-1940s):** Alexander Graham Bell's telephone introduced analog transmission of continuous signals. The infrastructure built for voice — twisted-pair copper, circuit switching, central offices — would later be repurposed for digital data, creating both capabilities and constraints that shaped the early Internet. (3) **The Digital Era (1960s-1990s):** The shift from analog to digital transmission, driven by Claude Shannon's information theory (1948), pulse code modulation (PCM), and the development of fiber optics. The T-carrier system (T1 at 1.544 Mbps, introduced 1962) demonstrated the economics of digital multiplexing. (4) **The Optical Era (1990s-2020s):** Dense wavelength division multiplexing (DWDM) enabled a single fiber to carry dozens of wavelengths, each modulated at 10-100 Gbps, yielding aggregate capacities in the tens of terabits per second. Erbium-doped fiber amplifiers (EDFAs) eliminated the need for optical-electrical-optical conversion at every amplification point, enabling trans-oceanic fiber links. (5) **The Post-Optical Era (2030s-2040s):** The boundaries are blurring. Hollow-core fiber eliminates the latency penalty of glass. Free-space optical communication (laser links between satellites, drones, and ground stations) provides fiber-like bandwidth without fiber-like infrastructure. Quantum communication exploits the laws of physics themselves — not just as a medium but as a security primitive. The network engineer of 2040 must understand all of these.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **The Physical Layer as a Trade-off Space:** Every physical layer decision involves trade-offs among a set of fundamental constraints. (1) **Bandwidth vs. Distance:** Higher frequencies can carry more data (Shannon-Hartley theorem: C = B × log₂(1 + S/N)), but they attenuate more rapidly over distance. A 100 GHz wireless link may deliver 20 Gbps at 10 meters; at 1 kilometer, it delivers nothing. (2) **Reliability vs. Cost:** Fiber optic cable is immune to electromagnetic interference and can span 100+ km without regeneration, but it costs more to install, terminate, and repair than copper. (3) **Latency vs. Throughput:** Techniques that maximize throughput (large buffers, forward error correction with deep interleaving) add latency. In the 2040s, with edge AI and autonomous systems demanding microsecond-scale response times, latency optimization is often more important than raw throughput. (4) **Security vs. Accessibility:** Encrypting at the physical layer (quantum key distribution, optical chaos encryption) provides theoretically unbreakable security, but it requires specialized hardware and limits interoperability. The network engineer's job is not to eliminate trade-offs — it is impossible — but to understand them well enough to make informed choices.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Physical Layer in the 2040 Curriculum Context:** This course (CN107) sits at the intersection of several program threads. CN105 (Network Protocols) assumes you understand what a "bit" means at the physical level. CN201 (Network Architecture) requires you to evaluate physical topologies. CN301 (Wireless & Mobile Networking) builds directly on the wireless transmission concepts introduced here. Even CN401 (Network Security) draws on physical layer security — fiber tapping, TEMPEST emissions, and quantum cryptography are all physical layer concerns. The physical layer is not a prerequisite you complete and forget; it is foundational knowledge you will use in every subsequent course.
 
-### Required Reading
+### 1.3 Required Reading
+- Tanenbaum, A., Feamster, N., & Wetherall, D. (2039). *Computer Networks* (7th ed.). Pearson. Chapter 2: The Physical Layer.
+- Shannon, C. E. (1948). "A Mathematical Theory of Communication." *Bell System Technical Journal*, 27(3), 379-423. The paper that created information theory. Read it not for the mathematics (which we will cover in later lectures) but for the intellectual architecture — how Shannon framed the problem of communication.
+- UoY Networking Lab. (2040). *Physical Layer Demonstration Guide* — hands-on exercises with oscilloscopes, spectrum analyzers, and optical time-domain reflectometers available in the university's networking laboratory.
 
-- Course textbook, chapters relevant to introduction to electronics & physical layer basics
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do foundations considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 1.4 Discussion Questions
+1. Why has the physical layer traditionally received less attention in networking curricula than the upper layers, and why is this changing in the 2040s?
+2. If Shannon's theorem defines the maximum theoretical capacity of a channel, why do real-world systems consistently operate far below that limit? What factors account for the gap between theory and practice?
+3. How does the shift from copper to fiber to wireless — each with fundamentally different physical characteristics — change the role and responsibilities of the network engineer?
 
 ---
 
-ᚢ **Lecture 2: Core Concepts of Electronics & Physical Layer Basics**
+## Lecture 2: Signal Theory Fundamentals — Time, Frequency, and Bandwidth
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 2.1 Overview
 
----
+To understand physical transmission, you must understand signals. A signal is any physical quantity that varies over time and carries information. In networking, signals are typically voltages (on copper), light intensity (in fiber), or electromagnetic field strength (in wireless). This lecture introduces the mathematical framework for analyzing signals: time-domain and frequency-domain representations, Fourier analysis, bandwidth, and the fundamental relationship between bandwidth and data rate codified in the Nyquist and Shannon-Hartley theorems.
 
-### Overview
+The mathematics in this lecture is not decorative — it is operational. When you troubleshoot a link that is dropping packets, you may find the root cause in signal degradation that can only be understood in the frequency domain. When you evaluate whether a new wireless technology can deliver its claimed throughput, you will check its spectral efficiency against Shannon's limit. The concepts introduced here are tools you will use throughout your career.
 
-This lecture explores concepts aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how concepts-level understanding shapes both theory and practice.
+### 2.2 Key Topics
 
-### Key Topics
+- **Time-Domain vs. Frequency-Domain Representation:** A signal can be viewed in two complementary ways. (1) **Time domain:** The signal's amplitude as a function of time — what you see on an oscilloscope. This representation is intuitive: you can see when the signal is high or low, when transitions occur, and whether the waveform is clean or distorted. (2) **Frequency domain:** The signal's power as a function of frequency — what you see on a spectrum analyzer. Any periodic signal can be decomposed into a sum of sine waves (harmonics) at different frequencies, amplitudes, and phases. A perfect 1 GHz sine wave appears as a single spike at 1 GHz in the frequency domain; a 1 GHz square wave (which is what a digital bit stream approximates) appears as a fundamental at 1 GHz plus odd harmonics at 3 GHz, 5 GHz, 7 GHz, and so on, with decreasing amplitude. The frequency-domain view is essential because transmission media behave differently at different frequencies — a cable that is perfectly adequate at 100 MHz may be unusable at 10 GHz due to skin effect and dielectric losses.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How concepts perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Fourier Analysis — Decomposing Signals:** Jean-Baptiste Joseph Fourier demonstrated in 1822 that any periodic signal can be expressed as a (potentially infinite) sum of sine and cosine waves. The Fourier series for a signal s(t) with period T is: s(t) = a₀/2 + Σ[aₙcos(2πnft) + bₙsin(2πnft)], where f = 1/T is the fundamental frequency and the coefficients aₙ and bₙ describe the amplitude of each harmonic. For non-periodic signals (which describes most real-world data traffic), the Fourier transform generalizes this to a continuous spectrum: S(f) = ∫s(t)e^(-j2πft)dt. The key insight: a signal that changes rapidly in the time domain (sharp transitions, high data rates) requires high-frequency components in the frequency domain. This is why higher data rates demand more bandwidth — not because of an arbitrary rule, but because of the mathematics of signal decomposition.
 
-### Lecture Notes
+- **Bandwidth — The Fundamental Resource:** Bandwidth is the range of frequencies a signal occupies or a channel can support. It is measured in Hertz (Hz). A telephone voice channel occupies approximately 300-3,400 Hz (bandwidth = 3.1 kHz). A Wi-Fi channel in the 5 GHz band occupies 20, 40, 80, or 160 MHz. A single wavelength in a DWDM fiber system occupies approximately 50 GHz. Bandwidth is the fundamental currency of the physical layer — and it is finite. The electromagnetic spectrum is a shared, regulated resource. Every communication system must operate within its allocated bandwidth, and the efficiency with which it uses that bandwidth (measured in bits per second per Hertz, or bps/Hz) is a key performance metric. Modern modulation schemes achieve 8-15 bps/Hz in favorable conditions; Shannon's limit for a typical signal-to-noise ratio of 30 dB is approximately 10 bps/Hz.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Nyquist Theorem — Sampling Without Loss:** Harry Nyquist proved in 1928 that to perfectly reconstruct a bandlimited signal from its samples, the sampling rate must be at least twice the highest frequency component: f_sample ≥ 2 × f_max. This is the Nyquist rate. In digital communication, the Nyquist theorem tells us the maximum symbol rate for a given bandwidth: maximum symbol rate = 2B symbols/second, where B is the bandwidth in Hz. If each symbol carries m bits (through multi-level modulation), the maximum data rate is 2B × m bits/second. However, Nyquist's theorem assumes a noiseless channel — an assumption that never holds in practice. Real channels have noise, which brings us to Shannon.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Shannon-Hartley Theorem — The Capacity Limit:** Claude Shannon's 1948 theorem defines the maximum theoretical data rate for a noisy channel: C = B × log₂(1 + S/N), where C is the channel capacity in bits per second, B is the bandwidth in Hz, and S/N is the signal-to-noise ratio (expressed as a ratio, not in decibels). This is a fundamental law of physics — no modulation scheme, no encoding technique, no clever algorithm can exceed this limit. It tells us three things. (1) Capacity grows linearly with bandwidth. (2) Capacity grows logarithmically with signal-to-noise ratio — doubling the signal power does not double the capacity; it adds only B bits per second. This is why increasing bandwidth is generally more effective than increasing power. (3) For a given bandwidth, there is an absolute ceiling on data rate that no technology can breach. Practical systems operate well below the Shannon limit due to implementation losses, imperfect coding, and the need for margin. A well-engineered 2040 system might achieve 60-80% of the Shannon capacity.
 
-### Required Reading
+### 2.3 Required Reading
+- Shannon, C. E. (1948). "A Mathematical Theory of Communication." *Bell System Technical Journal*. The original paper. Read Sections 1-14 for the conceptual framework.
+- Nyquist, H. (1928). "Certain Topics in Telegraph Transmission Theory." *Transactions of the AIEE*, 47(2), 617-644.
+- UoY Networking Lab. (2040). *Signal Analysis Workshop — Oscilloscope and Spectrum Analyzer Exercises*.
 
-- Course textbook, chapters relevant to core concepts of electronics & physical layer basics
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do concepts considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 2.4 Discussion Questions
+1. If Shannon's theorem provides an absolute upper bound on channel capacity, why do we continue to see improvements in real-world data rates? What factors does the theorem exclude that engineering can optimize?
+2. How does the Nyquist sampling theorem relate to the phenomenon of aliasing, and why is aliasing relevant to digital communication systems?
+3. In what situations would you prioritize increasing bandwidth over improving signal-to-noise ratio to achieve higher data rates, and vice versa?
 
 ---
 
-ᚦ **Lecture 3: Historical Context and Evolution**
+## Lecture 3: Copper Transmission Media — Twisted Pair and Coaxial
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 3.1 Overview
 
----
+Copper has carried electrical signals for communication since the telegraph. Despite the ascendancy of fiber optics and wireless, copper remains ubiquitous in the 2040s: in the last meter (Ethernet cables connecting devices to switches), in the access network (DSL and cable broadband over legacy telephone and television infrastructure), in data center interconnects (Direct Attach Copper for short-reach links), and in power-over-Ethernet applications where the same cable delivers both data and electrical power.
 
-### Overview
+This lecture examines copper transmission in depth: the physics of electrical signal propagation, the design and performance characteristics of twisted-pair and coaxial cable, the impairments that limit copper links (attenuation, crosstalk, impedance discontinuities), and the engineering techniques that have extended copper's useful life far beyond what its early critics predicted. We will also examine the emerging role of copper in the 2040s — not as a competitor to fiber, but as a complementary technology optimized for specific niches where its characteristics (cost, ease of termination, power delivery) provide advantages.
 
-This lecture explores history aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how history-level understanding shapes both theory and practice.
+### 3.2 Key Topics
 
-### Key Topics
+- **Electrical Signal Propagation in Copper:** When a voltage is applied to one end of a copper conductor, the signal does not travel instantaneously. It propagates as an electromagnetic wave at a velocity determined by the dielectric material surrounding the conductor: v = c / √εᵣ, where c is the speed of light and εᵣ is the relative permittivity of the dielectric. For typical twisted-pair cable with polyethylene dielectric (εᵣ ≈ 2.3), the propagation velocity is approximately 0.66c, or about 200,000 km/s. This means a signal takes about 5 nanoseconds to travel one meter — a critical consideration in high-frequency trading networks and distributed computing clusters where nanosecond-scale latency matters. More importantly for the network engineer, the signal attenuates as it travels — its amplitude decreases exponentially with distance due to conductor resistance and dielectric losses. This attenuation is frequency-dependent: higher frequencies attenuate more rapidly, which is why a cable rated for 100 MHz (Category 5e) cannot carry 500 MHz signals over meaningful distances.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How history perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Twisted-Pair Cable — Design and Categories:** Twisted-pair cable consists of pairs of insulated copper wires twisted together. The twist is not cosmetic — it is essential for noise rejection. When two wires are twisted, external electromagnetic interference induces approximately equal voltages in both wires (common-mode noise), which can be rejected by a differential receiver that measures the voltage difference between the wires rather than the absolute voltage of either. The tighter the twist (more twists per meter), the better the noise rejection. Different pairs within a cable are twisted at different rates to minimize crosstalk between pairs. The evolution of twisted-pair cable is documented through the Category system: (1) **Category 3 (1990s):** 16 MHz bandwidth, used for 10BASE-T Ethernet and voice. (2) **Category 5e (2000s):** 100 MHz, 1 Gbps (1000BASE-T) using all four pairs with sophisticated echo cancellation and 5-level pulse amplitude modulation (PAM-5). (3) **Category 6 (2010s):** 250 MHz, 10 Gbps up to 55 meters (10GBASE-T). (4) **Category 8 (2020s-2040s):** 2,000 MHz (2 GHz), 40 Gbps up to 30 meters. Each generation increased bandwidth through tighter manufacturing tolerances, better shielding, and more sophisticated signal processing at the transceivers. Category 8 cable achieves 2 GHz bandwidth through individually shielded pairs (S/FTP construction) and stringent specifications for insertion loss, return loss, and alien crosstalk.
 
-### Lecture Notes
+- **Coaxial Cable — The Workhorse of Broadband:** Coaxial cable consists of a central conductor surrounded by a dielectric insulator, a metallic shield (braid or foil), and an outer jacket. The coaxial geometry confines the electromagnetic field entirely within the cable — unlike twisted pair, which radiates and is susceptible to external fields. This confinement gives coaxial cable superior bandwidth and noise immunity compared to twisted pair. (1) **Characteristic impedance:** Most data coaxial cable has a characteristic impedance of 75Ω (television/broadband) or 50Ω (laboratory/data). The impedance is determined by the ratio of inner conductor diameter to shield diameter and the dielectric constant, not by the length of the cable. Impedance mismatches cause signal reflections — a critical concept for network troubleshooting. (2) **Bandwidth-distance product:** Modern coaxial cable (RG-6, RG-11) can carry signals up to 3 GHz over distances of 100-300 meters, making it the backbone of cable broadband (DOCSIS) networks. DOCSIS 4.0 (deployed in the 2030s) achieves 10 Gbps downstream and 6 Gbps upstream using orthogonal frequency division multiplexing (OFDM) across the entire 1.8 GHz spectrum of the cable plant.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Copper Impairments — What Goes Wrong:** Copper links fail in predictable ways. (1) **Attenuation:** Signal power decreases with distance and frequency. Measured in decibels (dB), attenuation is a function of conductor resistance (which increases with frequency due to skin effect — at high frequencies, current flows only on the surface of the conductor), dielectric loss (energy absorbed by the insulation material), and radiation loss (signal energy escaping from the cable). (2) **Crosstalk:** Unwanted coupling between adjacent pairs or cables. Near-End Crosstalk (NEXT) is measured at the transmitter end; Far-End Crosstalk (FEXT) at the receiver end. Alien crosstalk (ANEXT) is coupling between different cables in a bundle — a significant challenge at 10 Gbps and above. (3) **Return loss:** Signal energy reflected back toward the transmitter due to impedance discontinuities along the cable — caused by manufacturing variations, damage, improper termination, or mixing cable types. (4) **Impedance discontinuity:** Any point where the characteristic impedance changes — a kinked cable, a poorly crimped connector, a patch panel of different impedance — causes a portion of the signal to reflect. Time Domain Reflectometry (TDR) exploits this to locate faults: send a pulse, measure the time until the reflection returns, and calculate distance from propagation velocity.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Copper in the 2040s — Continued Relevance:** Despite predictions of copper's obsolescence, it persists for compelling reasons. (1) **Cost:** Copper cable and connectors remain significantly cheaper than fiber — both in materials and in the labor to terminate them. (2) **Power delivery:** Power over Ethernet (PoE) delivers up to 90 watts (IEEE 802.3bt, Type 4) over twisted-pair cable, enabling IP cameras, wireless access points, LED lighting, and IoT sensors to operate without separate power cabling. Fiber cannot deliver power. (3) **Field termination:** Terminating copper is forgiving — a field technician with a crimp tool can install an RJ45 connector in seconds. Terminating fiber requires expensive fusion splicers or mechanical connectors, cleanroom-level dust control, and significantly more skill. (4) **Short-reach data center links:** Direct Attach Copper (DAC) cables — essentially twinaxial cable with integrated transceivers — provide 10-400 Gbps links up to 3-5 meters at lower cost and latency than optical transceivers.
 
-### Required Reading
+### 3.3 Required Reading
+- ANSI/TIA-568.3-E (2038). *Optical Fiber Cabling Components Standard* — includes specifications for Category 8 copper cabling.
+- Spurgeon, C., & Zimmerman, J. (2039). *Ethernet: The Definitive Guide* (3rd ed.). O'Reilly Media. Chapters 12-14 on twisted-pair and fiber media.
+- UoY Networking Lab. (2040). *Copper Cabling Certification Lab Manual* — hands-on exercises with cable certifiers, TDRs, and crosstalk measurement.
 
-- Course textbook, chapters relevant to historical context and evolution
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do history considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 3.4 Discussion Questions
+1. Given that fiber offers higher bandwidth, longer reach, and immunity to electromagnetic interference, what technical and economic factors explain copper's continued dominance in the last 100 meters of networking?
+2. How does the skin effect limit the effectiveness of simply increasing conductor diameter to reduce attenuation at high frequencies?
+3. What are the practical implications of alien crosstalk in high-density data center cabling, and what mitigation strategies are available beyond better-shielded cable?
 
 ---
 
-ᚬ **Lecture 4: Theoretical Framework**
+## Lecture 4: Fiber Optic Transmission — Principles and Practice
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 4.1 Overview
 
----
+Fiber optic communication is the backbone of the global Internet. Submarine cables carrying hundreds of terabits per second span the oceans. Terrestrial long-haul networks connect cities with fiber pairs that have been in the ground for decades but whose capacity has increased thousandfold through improved terminal equipment. In the 2040s, fiber is extending deeper into access networks (Fiber to the Home/Building/Curb), into data centers (where optical interconnects replace copper for all but the shortest links), and into new domains like automotive networks and aerospace.
 
-### Overview
+This lecture covers the physics of optical transmission: total internal reflection, attenuation mechanisms, dispersion, and nonlinear effects. We examine single-mode and multi-mode fiber, the optical spectrum bands used for communication (O, E, S, C, L), and the technologies that encode data onto light: direct modulation, external modulation, and coherent detection. The goal is not to make you a photonics engineer but to give you the conceptual understanding necessary to specify, install, troubleshoot, and optimize fiber optic links.
 
-This lecture explores theory aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how theory-level understanding shapes both theory and practice.
+### 4.2 Key Topics
 
-### Key Topics
+- **Total Internal Reflection — How Fiber Works:** Optical fiber guides light through the principle of total internal reflection. The fiber consists of a core (high refractive index, n₁) surrounded by a cladding (lower refractive index, n₂). When light traveling in the core strikes the core-cladding boundary at an angle greater than the critical angle (θ_c = arcsin(n₂/n₁)), it is reflected back into the core rather than escaping into the cladding. This confines the light within the core, allowing it to propagate for kilometers with minimal loss. The critical angle determines the fiber's numerical aperture (NA = √(n₁² - n₂²)), which describes the range of angles over which the fiber can accept light. A higher NA accepts more light (useful for coupling from LEDs or lasers) but supports more propagation modes, increasing modal dispersion. A lower NA supports fewer modes (cleaner signal) but requires more precise alignment.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How theory perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Single-Mode vs. Multi-Mode Fiber:** The distinction between single-mode fiber (SMF) and multi-mode fiber (MMF) is one of the most important concepts in fiber optic networking. (1) **Multi-mode fiber:** Core diameter of 50 or 62.5 μm — large enough that light can travel multiple paths (modes) through the fiber. Different modes travel different distances (some bounce more at the core-cladding boundary), arriving at the receiver at slightly different times. This modal dispersion limits MMF to shorter distances: 10GBASE-SR can reach 300-400 meters over OM4 fiber, but at higher data rates the reach drops sharply. MMF is used primarily within data centers for links up to 100-300 meters because its larger core makes it easier to couple light from lower-cost transceivers (VCSELs — vertical-cavity surface-emitting lasers). (2) **Single-mode fiber:** Core diameter of 8-10 μm — so narrow that only one mode (the fundamental mode) can propagate. This eliminates modal dispersion entirely, leaving only chromatic dispersion as a limiting factor. SMF can carry signals for 80-120 km without regeneration (and much farther with amplification). Nearly all long-haul and metro fiber is single-mode. The small core requires precision alignment and laser sources (typically distributed feedback lasers or external cavity lasers), making SMF transceivers more expensive than MMF.
 
-### Lecture Notes
+- **Attenuation in Optical Fiber:** Optical signal loss has three primary sources. (1) **Material absorption:** Intrinsic absorption by the silica glass itself — electron transitions in the ultraviolet and molecular vibrations in the infrared. Between these absorption bands lies a window of minimum attenuation. Manufacturers shifted from 850 nm (early multi-mode) to 1310 nm (zero dispersion) to 1550 nm (minimum attenuation, ~0.2 dB/km) as technology improved. The 1550 nm C-band (1530-1565 nm) is the most widely used for long-haul transmission because it offers the lowest loss and is compatible with erbium-doped fiber amplifiers (EDFAs). (2) **Rayleigh scattering:** Microscopic variations in glass density scatter light in random directions — some of which escapes the core. Rayleigh scattering is proportional to 1/λ⁴, meaning it is much stronger at shorter wavelengths. This is why 850 nm fiber links are limited to a few hundred meters. (3) **Bending losses:** Macrobends (visible bends in the fiber, e.g., tight coiling) and microbends (microscopic deformations from manufacturing or installation stress) cause light to exceed the critical angle and escape. Bend-insensitive fiber (ITU-T G.657) uses a trench in the refractive index profile to confine the fundamental mode more tightly, reducing bending loss by an order of magnitude.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Dispersion — The Enemy of High-Speed Transmission:** Dispersion causes optical pulses to broaden as they travel, eventually overlapping with adjacent pulses and causing bit errors. Three types must be managed. (1) **Chromatic dispersion:** Different wavelengths travel at different speeds in glass. A laser pulse, even though nominally monochromatic, has a finite spectral width — and the different wavelength components within that width travel at slightly different speeds. Chromatic dispersion is measured in ps/(nm·km): a typical SMF has ~17 ps/(nm·km) at 1550 nm, meaning a pulse with 0.1 nm spectral width broadens by 1.7 ps per kilometer. At 100 Gbps (pulse width ~10 ps), this becomes a problem after ~6 km. Dispersion-compensating fiber (DCF), fiber Bragg gratings, and electronic dispersion compensation in coherent receivers all address this. (2) **Polarization mode dispersion (PMD):** In real fiber, the core is not perfectly circular; it is slightly elliptical. This means light polarized along the major and minor axes travels at slightly different speeds. PMD is random and varies with temperature and mechanical stress, making it harder to compensate than chromatic dispersion. It becomes significant above 40 Gbps over long distances. (3) **Modal dispersion (MMF only):** Different spatial modes travel different path lengths. This is the dominant impairment in MMF and the reason MMF reach is limited.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Optical Amplification — Extending Reach:** Before optical amplifiers, long fiber spans required optical-electrical-optical (OEO) regenerators: receive the optical signal, convert to electrical, reshape and retime the bits, and retransmit optically. This was expensive, power-hungry, and bit-rate specific. (1) **Erbium-Doped Fiber Amplifiers (EDFAs):** Erbium ions, when pumped with a 980 nm or 1480 nm laser, can amplify signals in the 1530-1565 nm C-band through stimulated emission — the same process as a laser but without the optical cavity. An EDFA can amplify dozens of wavelengths simultaneously, enabling wavelength division multiplexing without per-wavelength OEO conversion. (2) **Raman amplification:** Uses the fiber itself as the gain medium through stimulated Raman scattering. A pump laser at a shorter wavelength transfers energy to the signal through nonlinear interaction with the silica. Raman amplification can provide gain at any wavelength (not limited to erbium's C-band) and distributes the amplification along the fiber rather than at discrete points, improving signal-to-noise ratio. (3) **Semiconductor Optical Amplifiers (SOAs):** Compact, integrable, but with higher noise and polarization sensitivity than EDFAs. Used in access networks and photonic integrated circuits.
 
-### Required Reading
+- **Hollow-Core Fiber — The 2040 Revolution:** Conventional fiber guides light through solid glass. Hollow-core fiber (HCF) guides light through an air-filled core surrounded by a photonic bandgap structure — a pattern of hollow channels that creates a "forbidden zone" for light, confining it to the air core. The benefits are transformative: (1) **Latency reduction:** Light travels at c in air versus approximately 0.66c in glass — a 33% reduction in propagation delay. For a transatlantic link (6,000 km), HCF saves 10 milliseconds compared to solid-core fiber — significant for financial trading and distributed computing. (2) **Lower nonlinearity:** Air has essentially zero optical nonlinearity compared to silica, enabling higher power per wavelength and denser wavelength packing. (3) **Broader spectrum:** HCF can transmit wavelengths far beyond the erbium C-band, potentially opening the 2-5 μm mid-infrared region for communication. The challenges: HCF is more difficult to manufacture, has higher attenuation than the best solid-core fiber (though rapidly improving), and requires new connector and splicing technologies. By 2040, HCF is deployed in niche applications (low-latency financial links, specialized scientific networks) and is approaching viability for broader deployment.
 
-- Course textbook, chapters relevant to theoretical framework
-- Selected research papers from the 2040-2 UoY reading list
+### 4.3 Required Reading
+- Agrawal, G. P. (2039). *Fiber-Optic Communication Systems* (6th ed.). Wiley. Chapters 2-4 cover fiber characteristics, optical sources, and receivers.
+- ITU-T G.652 (2038). *Characteristics of a Single-Mode Optical Fibre and Cable* — the standard that defines the fiber in most of the world's installed plant.
+- UoY Photonics Lab. (2040). *Fiber Optic Handling and Measurement Guide* — safety procedures, connector inspection, power meter and OTDR operation.
 
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do theory considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 4.4 Discussion Questions
+1. Why does single-mode fiber use a core diameter of 8-10 μm rather than something smaller, given that single-mode operation is easier to achieve with a smaller core?
+2. What are the practical implications of the fact that chromatic dispersion can be negative (in dispersion-compensating fiber) or positive (in standard SMF)? How is this property exploited in dispersion-managed links?
+3. How does hollow-core fiber change the assumptions underlying decades of fiber optic network design, and what existing infrastructure cannot be easily upgraded?
 
 ---
 
-ᚱ **Lecture 5: Key Methods and Approaches**
+## Lecture 5: Wireless Transmission — The Electromagnetic Spectrum
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 5.1 Overview
 
----
+Wireless communication frees data from the tyranny of physical cabling. From the Wi-Fi access point in your home to the satellite constellation providing global broadband coverage, from the Bluetooth earbud in your ear to the 5G base station on the street corner, wireless technologies permeate the 2040 networking landscape. Understanding wireless transmission requires understanding the electromagnetic spectrum — the invisible resource that all wireless technologies share — and the physics that governs how radio waves propagate through the environment.
 
-### Overview
+This lecture covers the electromagnetic spectrum from DC to daylight: frequency bands, propagation characteristics, regulatory allocation, and the trade-offs inherent in choosing a frequency for a given application. We examine the physics of radio propagation: free-space path loss, reflection, diffraction, scattering, and the multipath effects that define the wireless challenge. The 2040 context adds terahertz bands (100 GHz - 3 THz) and free-space optical communication to the traditional radio frequency toolbox, each with unique characteristics that demand new approaches to network design.
 
-This lecture explores methods aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how methods-level understanding shapes both theory and practice.
+### 5.2 Key Topics
 
-### Key Topics
+- **The Electromagnetic Spectrum — A Shared and Finite Resource:** The electromagnetic spectrum spans from extremely low frequencies (ELF, 3-30 Hz) through radio, microwave, infrared, visible light, ultraviolet, X-rays, and gamma rays. For communication, the usable spectrum extends from approximately 3 kHz (very low frequency, used for submarine communication) to visible light (~400-800 THz, used for free-space optical links). Within this vast range, different frequencies have dramatically different propagation characteristics: (1) **Low frequencies (LF, MF, HF: 30 kHz - 30 MHz):** Ground wave and sky wave propagation over hundreds to thousands of kilometers. Used for AM radio, maritime communication, and amateur radio. Limited bandwidth (kilohertz to tens of kilohertz) but exceptional range. (2) **Very High and Ultra High Frequencies (VHF, UHF: 30 MHz - 3 GHz):** Line-of-sight propagation with some diffraction around obstacles. This is the "sweet spot" for terrestrial mobile communication — enough bandwidth for broadband data, reasonable range (kilometers to tens of kilometers), and manageable antenna sizes. Used for FM radio, television, cellular (2G through 5G FR1), Wi-Fi (2.4 and 5 GHz), Bluetooth, and satellite communication. (3) **Super High and Extremely High Frequencies (SHF, EHF: 3-300 GHz):** Millimeter-wave bands. Strictly line-of-sight, severely attenuated by atmospheric gases (oxygen at 60 GHz, water vapor at 183 GHz), and blocked by buildings, foliage, and even heavy rain. Enormous bandwidth available (gigahertz-wide channels) enabling multi-gigabit-per-second links. Used for 5G FR2 (24-52 GHz), point-to-point backhaul, automotive radar, and satellite crosslinks. (4) **Terahertz (100 GHz - 3 THz):** The frontier. Potentially terabit-per-second links over short distances (<100 meters), but challenged by atmospheric absorption, lack of efficient sources and detectors, and regulatory uncertainty. (5) **Free-space optical (infrared/visible light):** Laser communication through the atmosphere or space. Enormous bandwidth, highly directional (inherently secure), but blocked by clouds, fog, and physical obstructions.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How methods perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Free-Space Path Loss — Why Distance Matters:** In free space (vacuum, no obstacles), signal power decreases with the square of distance: received power Pᵣ = Pₜ × Gₜ × Gᵣ × (λ/(4πd))², where Pₜ is transmitted power, Gₜ and Gᵣ are antenna gains, λ is wavelength, and d is distance. The (λ/(4πd))² term is the free-space path loss. Two critical insights: (1) Path loss increases with frequency (shorter wavelength, smaller λ, so the (λ)² term gets smaller). A 60 GHz link suffers roughly 22 dB more path loss than a 5 GHz link over the same distance, all else equal. This is why millimeter-wave systems require highly directional antennas (high Gₜ and Gᵣ) to compensate. (2) Path loss increases with the square of distance — double the distance, quadruple the loss (6 dB). This is the fundamental reason why wireless range is limited: even in ideal conditions, signal power falls off too fast to sustain communication beyond a certain distance without impractically large antennas or transmitter power.
 
-### Lecture Notes
+- **Propagation Impairments — Real-World Wireless:** Free-space path loss is the best-case scenario. Real environments add additional impairments. (1) **Reflection:** Radio waves bounce off surfaces — buildings, ground, water, vehicles. The reflected wave arrives at the receiver later than the direct wave, potentially causing constructive or destructive interference depending on the phase relationship. (2) **Diffraction:** Radio waves bend around sharp edges — building corners, rooftops, terrain features. This allows communication in shadowed areas (non-line-of-sight) but introduces additional loss and time dispersion. (3) **Scattering:** Small objects (rough surfaces, foliage, street signs) scatter the signal in multiple directions. At millimeter-wave frequencies, even raindrops (which are comparable in size to the wavelength) become effective scatterers, causing rain fade. (4) **Multipath propagation:** The combination of direct, reflected, diffracted, and scattered paths means the receiver sees multiple copies of the signal arriving at slightly different times. In the time domain, this causes inter-symbol interference (pulses overlap). In the frequency domain, it causes frequency-selective fading (some frequencies are canceled by destructive interference while others are enhanced). (5) **Doppler shift:** If the transmitter, receiver, or reflecting objects are moving, the received frequency shifts: Δf = (v/c) × f, where v is the relative velocity. At 60 GHz, a vehicle moving at 100 km/h causes a Doppler shift of approximately 5.6 kHz — enough to disrupt narrowband modulation schemes if not compensated.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Regulatory Allocation — Who Gets to Use What:** The electromagnetic spectrum is a public resource regulated by national authorities (the Federal Communications Commission in the United States, Ofcom in the United Kingdom, and equivalent bodies worldwide) coordinated through the International Telecommunication Union (ITU). Key concepts: (1) **Licensed spectrum:** Exclusive rights to use a specific frequency band in a specific geographic area. Cellular operators pay billions at auction for licensed spectrum because it guarantees interference-free operation. (2) **Unlicensed spectrum:** Open to anyone following technical rules (power limits, modulation requirements, etiquette protocols). Wi-Fi operates in unlicensed bands at 2.4 GHz and 5 GHz (and increasingly 6 GHz). The success of Wi-Fi demonstrates that unlicensed spectrum can drive enormous innovation. (3) **Shared spectrum:** A 2040 innovation — dynamic spectrum access systems that allow multiple users to share the same band through real-time coordination. The Citizens Broadband Radio Service (CBRS) at 3.5 GHz pioneered this model in the United States, using a spectrum access system (SAS) to manage priority tiers. (4) **Light licensing:** A middle ground — registration required but no auction, with coordination obligations to avoid interference. Used for point-to-point microwave links.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Antenna Fundamentals:** Antennas convert between guided electromagnetic waves (in a transmission line) and free-space waves. Key parameters: (1) **Gain:** The ratio of power radiated in the desired direction to power radiated by an isotropic (perfectly omnidirectional) radiator, expressed in dBi. A dipole antenna has 2.15 dBi gain. A parabolic dish can achieve 30-50 dBi. Gain comes from directivity — concentrating power in a narrow beam rather than radiating equally in all directions. (2) **Beamwidth:** The angular width of the main radiation lobe. High-gain antennas have narrow beamwidths, which improves spatial reuse (multiple links can operate in the same frequency without interference) but requires precise alignment. (3) **Polarization:** The orientation of the electric field — vertical, horizontal, circular (right-hand or left-hand). Cross-polarization provides 20-30 dB of isolation between signals, effectively doubling spectrum capacity through polarization diversity. (4) **MIMO (Multiple-Input Multiple-Output):** Using multiple antennas at both transmitter and receiver to exploit multipath propagation as a resource rather than a liability. MIMO can increase throughput (spatial multiplexing — sending different data streams on different spatial paths) or improve reliability (spatial diversity — sending the same data on multiple paths and combining at the receiver).
 
-### Required Reading
+### 5.3 Required Reading
+- Rappaport, T. (2039). *Wireless Communications: Principles and Practice* (3rd ed.). Chapters 3-5 on propagation and antennas.
+- ITU Radio Regulations (2040 Edition). *Article 5: Frequency Allocations* — the global table of frequency allocations.
+- UoY Wireless Lab. (2040). *Spectrum Analyzer and Antenna Measurement Guide*.
 
-- Course textbook, chapters relevant to key methods and approaches
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do methods considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 5.4 Discussion Questions
+1. Why does free-space path loss increase with frequency, and how do antenna gain and atmospheric absorption modify the simple free-space model for practical link budgeting?
+2. What are the regulatory and technical challenges of opening terahertz frequencies for commercial communication, and what applications are most likely to justify the investment?
+3. How does MIMO transform multipath from an impairment into a resource, and what are the practical limits on how many spatial streams can be supported in a given environment?
 
 ---
 
-ᚴ **Lecture 6: Practical Applications I**
+## Lecture 6: Digital Modulation and Line Coding
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 6.1 Overview
 
----
+Given a physical transmission medium, how do we encode digital bits onto it? Modulation is the process of varying a carrier signal's properties — amplitude, frequency, phase, or combinations thereof — to represent digital data. Line coding is the related process of converting a bit stream into a signal suitable for baseband transmission (no carrier). Together, these techniques bridge the gap between abstract bits and physical signals.
 
-### Overview
+This lecture surveys the modulation and line coding techniques used in modern networks. Starting from simple schemes (amplitude shift keying, frequency shift keying) and progressing through phase shift keying, quadrature amplitude modulation (QAM), and orthogonal frequency division multiplexing (OFDM), we build the conceptual framework for understanding how bits become signals and how signal impairments become bit errors. The 2040 perspective includes the emergence of probabilistic constellation shaping — an advanced modulation technique that adapts the signal constellation to the channel characteristics, approaching the Shannon limit more closely than uniform QAM.
 
-This lecture explores practice1 aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how practice1-level understanding shapes both theory and practice.
+### 6.2 Key Topics
 
-### Key Topics
+- **Baseband Line Coding — Direct Digital Transmission:** When transmitting digital data directly (without modulating a carrier), the bit stream must be encoded into a signal format suitable for the medium. (1) **NRZ (Non-Return to Zero):** The simplest scheme — '1' = high voltage, '0' = low voltage. Used in early serial communication but problematic because long runs of identical bits (e.g., 32 consecutive 1s) create a DC component (average voltage drifts away from zero) and provide no clock transitions for the receiver to synchronize. (2) **Manchester Encoding:** Each bit period is divided in half. '1' = high-then-low transition; '0' = low-then-high transition. Every bit has a transition in the middle, guaranteeing clock recovery, at the cost of requiring twice the bandwidth of NRZ. Used in 10BASE-T Ethernet. (3) **4B/5B Encoding:** Groups of 4 data bits are mapped to 5-bit code words chosen to ensure sufficient transitions for clock recovery while maintaining DC balance. 100BASE-TX Fast Ethernet uses 4B/5B combined with MLT-3 (multi-level transmission with three voltage levels) to reduce the effective frequency. (4) **8B/10B and 64B/66B Encoding:** 8B/10B (used in Gigabit Ethernet, Fibre Channel, PCI Express) maps 8-bit bytes to 10-bit codes, guaranteeing DC balance and a maximum run length of 5 identical bits, at the cost of 25% overhead. 64B/66B (used in 10 Gigabit Ethernet and above) reduces overhead to ~3% by encoding 64-bit blocks with a 2-bit synchronization header, relying on scrambling for DC balance.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How practice1 perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Passband Modulation — Riding the Carrier:** For wireless, fiber, and many copper applications, the digital signal modulates a high-frequency carrier. The carrier is characterized by three parameters that can be varied: amplitude, frequency, and phase. (1) **Amplitude Shift Keying (ASK):** Vary the carrier amplitude. '1' = carrier present; '0' = carrier absent (On-Off Keying, OOK). Simple but highly susceptible to noise — any amplitude disturbance looks like data. (2) **Frequency Shift Keying (FSK):** Vary the carrier frequency. '1' = frequency f₁; '0' = frequency f₂. More robust than ASK because frequency is less affected by amplitude noise. Used in Bluetooth (Gaussian FSK) and legacy modems. (3) **Phase Shift Keying (PSK):** Vary the carrier phase. BPSK (Binary PSK) uses two phases (0° and 180°) to represent 1 bit per symbol. QPSK (Quadrature PSK) uses four phases (45°, 135°, 225°, 315°) to represent 2 bits per symbol. Phase modulation is power-efficient (constant envelope) but requires coherent detection (the receiver must know the absolute phase reference).
 
-### Lecture Notes
+- **Quadrature Amplitude Modulation (QAM) — The Workhorse of Modern Communication:** QAM combines amplitude and phase modulation to encode multiple bits per symbol. The signal can be represented as a point in the I/Q plane (In-phase and Quadrature components): s(t) = I(t)cos(2πf_c t) - Q(t)sin(2πf_c t). The I and Q components are orthogonal (90° phase difference), allowing independent modulation on each. (1) **Constellation diagrams:** A QAM scheme is defined by its constellation — the set of (I, Q) points that represent symbols. 16-QAM has 16 points (4 bits/symbol), 64-QAM has 64 points (6 bits/symbol), 256-QAM has 256 points (8 bits/symbol). Higher-order QAM packs more bits into each symbol but requires higher signal-to-noise ratio — the points are closer together and more easily confused by noise. (2) **Spectral efficiency:** 256-QAM achieves 8 bps/Hz (8 bits per symbol, one symbol per Hz of bandwidth in ideal conditions). 1024-QAM (10 bits/symbol) and 4096-QAM (12 bits/symbol) exist but require extraordinarily clean channels. (3) **Error vector magnitude (EVM):** The distance between the ideal constellation point and the actual received point, normalized by the ideal point amplitude. EVM quantifies signal quality and is directly related to signal-to-noise ratio. A high EVM means the constellation points are "smeared," indicating distortion or noise.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Orthogonal Frequency Division Multiplexing (OFDM) — Dividing the Spectrum:** OFDM divides the available bandwidth into hundreds or thousands of narrow, orthogonal subcarriers, each modulated independently (typically with QPSK, 16-QAM, or 64-QAM). The key innovation: the subcarriers are spaced such that each subcarrier's peak aligns with the nulls of all other subcarriers — they are orthogonal and do not interfere despite overlapping in frequency. (1) **Advantages:** (a) Robustness to frequency-selective fading — a deep fade that wipes out a few subcarriers can be compensated by forward error correction across subcarriers. (b) Simplified equalization — each subcarrier experiences flat fading (constant across its narrow bandwidth) rather than the frequency-selective fading that a single wideband carrier would experience. (c) Flexible resource allocation — subcarriers can be assigned to different users or services dynamically. (2) **OFDM in practice:** Wi-Fi (802.11a/g/n/ac/ax) uses OFDM with 64-2048 subcarriers. LTE and 5G use OFDMA (Orthogonal Frequency Division Multiple Access), where subcarriers are divided among multiple users. DOCSIS 3.1/4.0 cable modems use OFDM across the entire cable spectrum. Digital subscriber line (DSL) uses discrete multi-tone (DMT), a form of OFDM, across the copper telephone line. (3) **PAPR problem:** OFDM's primary disadvantage is a high Peak-to-Average Power Ratio (PAPR) — when many subcarriers align in phase, the instantaneous signal power can be many times the average, requiring power amplifiers with large linear dynamic range and reducing efficiency.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Probabilistic Constellation Shaping (PCS) — The 2040 Frontier:** Traditional QAM uses a uniform constellation — all points in the grid are equally likely. This is suboptimal because the outer points (which require more power) are used as frequently as the inner points. Probabilistic constellation shaping uses the inner (lower-power) points more frequently than the outer points, achieving a Gaussian-like distribution that approaches the Shannon capacity more closely — typically a 1-2 dB improvement in signal-to-noise ratio compared to uniform QAM at the same data rate. PCS is adaptive: the probability distribution can be tuned to match the channel conditions. Combined with coherent detection and powerful forward error correction (soft-decision FEC), PCS enables 800 Gbps and 1.6 Tbps per wavelength on existing fiber infrastructure.
 
-### Required Reading
+### 6.3 Required Reading
+- Proakis, J., & Salehi, M. (2038). *Digital Communications* (6th ed.). Chapters 4-7 on modulation and detection.
+- IEEE 802.3-2038. *Ethernet Standard* — Sections on physical layer encoding for various Ethernet speeds.
+- UoY Networking Lab. (2040). *Modulation and Eye Diagram Measurement Lab Manual*.
 
-- Course textbook, chapters relevant to practical applications i
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice1 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 6.4 Discussion Questions
+1. What are the trade-offs between achieving higher data rates through higher-order QAM (more bits per symbol) versus wider bandwidth (more symbols per second)? Under what conditions is each approach preferable?
+2. How does OFDM's robustness to multipath fading justify its complexity, and in what scenarios would a single-carrier modulation scheme be preferable?
+3. Why does probabilistic constellation shaping approach the Shannon limit more closely than uniform QAM, and what practical challenges does it introduce for receiver design?
 
 ---
 
-ᚺ **Lecture 7: Practical Applications II**
+## Lecture 7: Error Detection and Correction at the Physical Layer
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 7.1 Overview
 
----
+The physical layer is inherently unreliable. Noise, interference, attenuation, and dispersion corrupt bits. While higher layers (data link, transport) implement their own error control mechanisms, the physical layer has a critical role: forward error correction (FEC), which adds redundant bits to the transmitted data stream so that the receiver can detect and correct errors without requesting retransmission. FEC is essential in systems where retransmission is impractical — satellite links with 500-millisecond round-trip times, one-way broadcasts, real-time media streams, and any system where the bit error rate without FEC would overwhelm higher-layer recovery mechanisms.
 
-### Overview
+This lecture covers the theory and practice of error correction: block codes, convolutional codes, turbo codes, low-density parity-check (LDPC) codes, and polar codes. We trace the evolution from simple parity checks to capacity-approaching codes that operate within a fraction of a decibel of the Shannon limit. The 2040 perspective includes the integration of FEC with probabilistic constellation shaping and the emergence of neural-network-assisted decoding for specialized applications.
 
-This lecture explores practice2 aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how practice2-level understanding shapes both theory and practice.
+### 7.2 Key Topics
 
-### Key Topics
+- **Fundamental Concepts of Error Correction:** The core idea is simple: add structured redundancy that allows the receiver to reconstruct the original data despite errors. The key metrics are: (1) **Code rate R = k/n:** The ratio of information bits (k) to total transmitted bits (n). A rate-1/2 code transmits 2 bits for every information bit — 100% overhead but high error correction capability. A rate-5/6 code transmits 6 bits for every 5 information bits — 20% overhead with moderate correction capability. (2) **Coding gain:** The reduction in required signal-to-noise ratio (in dB) to achieve a target bit error rate compared to an uncoded system. A code with 6 dB coding gain means you can operate with 6 dB less signal power — effectively quadrupling the link distance. (3) **Shannon limit for coding:** Shannon proved that for any channel, there exists a code that can achieve arbitrarily low error probability as long as the data rate is below the channel capacity. He did not provide the code — finding practical codes that approach this limit has been the central quest of coding theory for seven decades.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How practice2 perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Block Codes — The Foundation:** Block codes operate on fixed-size blocks of data. (1) **Hamming codes (1950):** The first practical error-correcting codes. A Hamming(7,4) code encodes 4 data bits into 7 transmitted bits and can correct any single-bit error. Simple to implement in hardware, but inefficient by modern standards. (2) **Reed-Solomon (RS) codes (1960):** Operate on symbols (groups of bits) rather than individual bits. An RS(255,223) code encodes 223 data bytes into 255 transmitted bytes and can correct up to 16 byte errors anywhere in the block. RS codes are particularly effective against burst errors (consecutive bits corrupted) and are used in CDs, DVDs, QR codes, DSL, and deep-space communication. They are often used as outer codes in concatenated coding schemes. (3) **Bose-Chaudhuri-Hocquenghem (BCH) codes:** A large class of cyclic block codes with powerful algebraic decoding algorithms. Widely used in NAND flash memory controllers and satellite communication.
 
-### Lecture Notes
+- **Convolutional Codes and the Viterbi Algorithm:** Unlike block codes, convolutional codes process a continuous stream of bits, producing output bits that depend on the current input and a history of previous inputs (the constraint length K). The encoder is a linear finite-state machine implemented with shift registers and XOR gates. Decoding uses the Viterbi algorithm — a maximum-likelihood sequence estimator that finds the most probable transmitted sequence given the received (noisy) sequence by exploring a trellis diagram of all possible encoder states. Convolutional codes with Viterbi decoding dominated satellite and deep-space communication from the 1970s through the 1990s because they provide 5-7 dB coding gain with relatively simple decoder hardware.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Turbo Codes — The 1993 Breakthrough:** Claude Berrou's turbo codes were revolutionary because they achieved performance within 0.5 dB of the Shannon limit — a result that many in the field had believed impossible. The innovation: (1) **Parallel concatenation:** Two (or more) relatively simple convolutional encoders process the same data, but one sees the data in a different order (interleaved). (2) **Iterative decoding:** The decoders exchange soft information (probabilities, not hard decisions) about each bit, refining their estimates over multiple iterations. Each iteration improves the bit error rate until convergence. Turbo codes are used in 3G and 4G cellular systems, deep-space communication, and satellite broadband.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **LDPC Codes — Rediscovered Excellence:** Low-Density Parity-Check codes were invented by Robert Gallager in 1960 but were computationally impractical until David MacKay's rediscovery in the 1990s demonstrated that they approach the Shannon limit even more closely than turbo codes. LDPC codes are defined by a sparse parity-check matrix — most entries are zero, which is what makes decoding tractable. Decoding uses belief propagation — an iterative message-passing algorithm on the factor graph of the code. LDPC codes offer several advantages over turbo codes: (1) Lower error floor (the bit error rate at which the curve flattens due to an irreducible minimum of uncorrectable errors). (2) Inherent parallelism — the decoder can be heavily pipelined for high throughput. (3) Flexibility — LDPC codes can be designed for a wide range of block sizes and code rates. LDPC codes are specified in Wi-Fi (802.11n/ac/ax), 10GBASE-T Ethernet, DVB-S2 satellite television, and 5G NR data channels.
 
-### Required Reading
+- **Polar Codes — The 2008 Proof:** Erdal Arikan's polar codes are the first family of codes provably achieving channel capacity for symmetric binary-input channels, with explicit construction and efficient encoding/decoding. The key idea: channel polarization — using a recursive construction that transforms a set of identical, noisy channels into a set of "polarized" channels, some of which are nearly perfect (capacity approaching 1) and some of which are nearly useless (capacity approaching 0). Data is sent on the good channels; the bad channels are frozen to known values. Decoding uses successive cancellation — a sequential algorithm that is efficient but has latency that grows with code length. Polar codes are specified for 5G NR control channels (where their performance at short block lengths is superior to LDPC and turbo codes).
 
-- Course textbook, chapters relevant to practical applications ii
-- Selected research papers from the 2040-2 UoY reading list
+### 7.3 Required Reading
+- MacKay, D. J. C. (2003). *Information Theory, Inference, and Learning Algorithms*. Cambridge University Press. Chapters 47-50 on LDPC and turbo codes.
+- Gallager, R. G. (1963). *Low-Density Parity-Check Codes*. MIT Press. The original monograph.
+- UoY Networking Lab. (2040). *Error Correction Simulation Lab* — MATLAB/Python exercises implementing and comparing FEC codes.
 
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice2 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 7.4 Discussion Questions
+1. Why did it take over 30 years for LDPC codes to be widely adopted despite Gallager's original work in 1960? What changed between 1960 and 2000?
+2. How does the choice of forward error correction code affect the end-to-end latency of a communication link, and why is this particularly important for 5G ultra-reliable low-latency communication (URLLC)?
+3. What are the practical challenges of implementing iterative decoding (turbo, LDPC) in hardware that must process 100+ Gbps, and how are these challenges addressed in modern ASIC designs?
 
 ---
 
-ᚾ **Lecture 8: Advanced Topics in Electronics & Physical Layer Basics**
+## Lecture 8: Physical Layer Standards — Ethernet, Wi-Fi, and Fiber Channel
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 8.1 Overview
 
----
+The physical layer concepts we have studied — signal theory, transmission media, modulation, and error correction — are not abstract. They are embodied in specific standards that define how devices communicate. Standards ensure interoperability: an Ethernet adapter from one manufacturer works with a switch from another; a Wi-Fi client from 2035 connects to an access point from 2040. The standards development process — conducted primarily through the IEEE 802 committee, the ITU-T, and industry consortia — is a fascinating intersection of engineering, economics, and politics.
 
-### Overview
+This lecture surveys the major physical layer standards that network engineers encounter in practice. We examine the IEEE 802.3 Ethernet standards (from 10BASE-T to 800GBASE-R), the IEEE 802.11 Wi-Fi standards (from 802.11b to 802.11be and beyond), and Fiber Channel standards for storage networks. For each, we focus on the physical layer choices: media, signaling, modulation, and the engineering trade-offs that drove those choices.
 
-This lecture explores advanced aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how advanced-level understanding shapes both theory and practice.
+### 8.2 Key Topics
 
-### Key Topics
+- **IEEE 802.3 Ethernet — Four Decades of Evolution:** Ethernet's physical layer has evolved through an astonishing range of media and speeds while maintaining backward compatibility at the frame format (Layer 2) level. (1) **10 Mbps (10BASE-T, 1990):** Twisted-pair copper, Manchester encoding, Category 3 cable. Established Ethernet as the dominant LAN technology. (2) **100 Mbps (100BASE-TX, 1995):** Category 5 cable, 4B/5B encoding with MLT-3 signaling. Used two pairs (one for transmit, one for receive). (3) **1 Gbps (1000BASE-T, 1999):** Category 5e cable, all four pairs used simultaneously in both directions (full duplex over each pair) with echo cancellation and PAM-5 modulation (5 voltage levels encoding 2 bits per symbol). This is when Ethernet transceivers became sophisticated digital signal processors. (4) **10 Gbps (10GBASE-T, 2006):** Category 6a cable, PAM-16 modulation with Tomlinson-Harashima precoding (a form of transmitter-side equalization) and LDPC forward error correction. Pushed copper to its practical limit at this speed. (5) **25/50/100 Gbps (2010s):** Primarily optical (SFP28, QSFP28), with PAM-4 modulation over single-mode fiber. The shift from NRZ (2 levels) to PAM-4 (4 levels, 2 bits per symbol) was the key innovation that doubled spectral efficiency. (6) **400 Gbps (2020s):** Eight lanes of 50 Gbps PAM-4, or four lanes of 100 Gbps. Used in hyperscale data center interconnects. (7) **800 Gbps and 1.6 Tbps (2030s-2040s):** Coherent optics with probabilistic constellation shaping, moving Ethernet into the optical domain with techniques previously reserved for long-haul DWDM. The 800GBASE-R standard defines 800 Gbps Ethernet using 8 lanes of 100 Gbps PAM-4 or coherent optical modulation.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How advanced perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **IEEE 802.11 Wi-Fi — The Wireless LAN:** Wi-Fi has transformed from a convenience to a utility. Key physical layer evolutions: (1) **802.11b (1999):** 2.4 GHz, DSSS (direct sequence spread spectrum), up to 11 Mbps. (2) **802.11a/g (2003):** 5 GHz (a) and 2.4 GHz (g), OFDM with 52 subcarriers, up to 54 Mbps. This was the transition to OFDM that enabled Wi-Fi's spectacular growth. (3) **802.11n (2009):** MIMO (up to 4 spatial streams), 40 MHz channels, up to 600 Mbps. Introduced frame aggregation and block acknowledgment to reduce MAC overhead. (4) **802.11ac (2013):** 5 GHz only, MIMO up to 8 streams, 80 and 160 MHz channels, 256-QAM, up to 6.9 Gbps. The workhorse of the 2010s and 2020s. (5) **802.11ax / Wi-Fi 6 (2019):** OFDMA (dividing channels into resource units assigned to different users), 1024-QAM, uplink MIMO, improved spatial reuse through BSS coloring. Designed for dense deployments (stadiums, airports, apartment buildings) rather than peak speed. (6) **802.11be / Wi-Fi 7 (2024):** 320 MHz channels, 4096-QAM, multi-link operation (simultaneous use of multiple frequency bands), up to 46 Gbps theoretical. (7) **802.11bn / Wi-Fi 8 (2035+):** Terahertz band exploration, AI-native channel estimation, integrated sensing and communication (using Wi-Fi signals for radar-like environmental sensing).
 
-### Lecture Notes
+- **Fiber Channel — Storage Networking:** While Ethernet dominates general-purpose networking, Fiber Channel (FC) dominates storage area networks (SANs) in enterprise data centers. FC is optimized for lossless, low-latency transport of storage protocols (SCSI, NVMe) with guaranteed in-order delivery. Physical layer evolution: 1 GFC → 2 GFC → 4 GFC → 8 GFC → 16 GFC → 32 GFC → 64 GFC → 128 GFC, each generation doubling the previous. FC uses 8B/10B encoding up to 8 GFC and 64B/66B encoding (same as Ethernet) at higher speeds for efficiency. FC's physical layer is distinguished by its credit-based flow control, which prevents buffer overflows and thus packet loss — a critical property for storage traffic where retransmission latency can cause application timeouts.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Interoperability and Compliance Testing:** A standard is only as good as its enforcement. (1) **University of New Hampshire InterOperability Laboratory (UNH-IOL):** The premier independent testing facility for Ethernet, Wi-Fi, and other networking standards. Manufacturers submit products for conformance testing; passing earns the right to display compliance logos. (2) **Plugfests:** Industry events where engineers from competing companies connect their products and debug interoperability issues in real-time. These events are essential because standards documents inevitably contain ambiguities that only become apparent when implementations meet. (3) **The 2040 trend:** AI-assisted compliance verification — machine learning models trained on millions of protocol traces that can identify subtle non-compliance faster than human engineers or rule-based test suites.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+### 8.3 Required Reading
+- IEEE 802.3-2038. *IEEE Standard for Ethernet* — the authoritative reference for Ethernet physical layer specifications. Focus on Clauses 1-5 (overview and MAC), and the physical layer clauses for speeds relevant to your capstone.
+- IEEE 802.11-2040. *IEEE Standard for Wireless LAN Medium Access Control and Physical Layer Specifications*.
+- UoY Networking Lab. (2040). *Standards Compliance Testing Lab Manual*.
 
-### Required Reading
-
-- Course textbook, chapters relevant to advanced topics in electronics & physical layer basics
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do advanced considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 8.4 Discussion Questions
+1. How does Ethernet's strategy of maintaining a consistent frame format while radically evolving the physical layer compare to other standards that break backward compatibility between generations?
+2. Why did Wi-Fi adopt OFDM while early Ethernet avoided it in favor of simpler line coding? What changed that made OFDM practical for LAN technologies?
+3. What role do industry consortia and plugfests play in the standards ecosystem beyond the formal IEEE standardization process?
 
 ---
 
-ᛁ **Lecture 9: Interdisciplinary Connections**
+## Lecture 9: Physical Layer Troubleshooting — Tools and Methodology
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 9.1 Overview
 
----
+Theoretical understanding of the physical layer is essential — but when the network is down and users are calling, you need practical diagnostic skills. Physical layer troubleshooting is a discipline unto itself, combining knowledge of signal behavior, familiarity with test equipment, and a systematic methodology for isolating faults.
 
-### Overview
+This lecture covers the tools and techniques of physical layer diagnostics: cable certifiers, optical time-domain reflectometers (OTDRs), spectrum analyzers, and the humble but essential visual fault locator. We will learn a structured troubleshooting methodology — the OSI bottom-up approach — and practice interpreting the diagnostic data these tools provide. By 2040, AI-assisted diagnostic platforms can correlate physical layer measurements with higher-layer symptoms, but the network engineer's judgment remains the essential link between measurement and action.
 
-This lecture explores connections aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how connections-level understanding shapes both theory and practice.
+### 9.2 Key Topics
 
-### Key Topics
+- **The Bottom-Up Troubleshooting Methodology:** When a network problem occurs, always start at Layer 1. The vast majority of network issues — estimates range from 60% to 80% — have a physical layer component. (1) **Verify physical connectivity:** Is the device powered? Is the cable plugged in? Are link lights illuminated? These trivial checks resolve a surprising fraction of trouble tickets. (2) **Check link status:** On Ethernet, a link LED indicates that both ends have successfully completed auto-negotiation — they agree on speed, duplex, and (for copper) MDI/MDI-X crossover. No link light → no physical connectivity. (3) **Examine error counters:** Every network interface maintains counters for physical errors: CRC errors (frame check sequence failures — corrupted bits), runts (frames shorter than 64 bytes — likely collision fragments or noise), giants (frames longer than 1518/9000 bytes — likely jabber or misconfiguration), and late collisions (collisions detected after 512 bit times — indicates a cable longer than the maximum specified length or a duplex mismatch). Most operating systems expose these counters through standard interfaces: `ifconfig` / `ip -s link` on Linux/Unix, `netstat -e` on Windows, SNMP MIB-II ifTable. (4) **Isolate the fault domain:** Replace the cable. Swap the port. Move to a different switch. Change one variable at a time and observe whether the problem follows the change or stays with the original component.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How connections perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Cable Certification and Qualification:** Not all cables are created equal, and a cable that "works" for 100 Mbps may fail catastrophically at 10 Gbps. Cable certifiers are precision instruments that verify a cable installation against the relevant standard (TIA-568, ISO/IEC 11801). They measure: (1) **Wire map:** Are all pairs connected to the correct pins? Opens, shorts, split pairs, and crossed pairs are immediately identified. (2) **Length:** Determined by time-domain reflectometry — the certifier sends a pulse, measures the reflection from the far end, and calculates distance from the propagation velocity. (3) **Insertion loss:** Total signal loss from one end of the cable to the other, across all frequencies. (4) **Near-end crosstalk (NEXT):** Unwanted coupling from the transmitting pair to the receiving pair at the near end. (5) **Return loss:** Signal reflected back due to impedance mismatches. (6) **Alien crosstalk:** Coupling between different cables in a bundle — requires sampling multiple cables. A cable certifier produces a pass/fail report for each parameter at each frequency. "Pass" means the cable meets the standard and will support the rated speed up to the rated distance. "Fail" on any parameter means the cable is out of specification and should be replaced or re-terminated.
 
-### Lecture Notes
+- **Optical Time-Domain Reflectometer (OTDR) — The Fiber Detective:** An OTDR is the fiber equivalent of TDR. It sends short optical pulses into the fiber and measures the backscattered light (Rayleigh scattering) and reflected light (Fresnel reflections from connectors, splices, breaks, and the fiber end) as a function of time, which it converts to distance. An OTDR trace shows: (1) **Connectors:** Sharp reflections (spikes) caused by the glass-air-glass transition at connector interfaces. High reflection → dirty or damaged connector. (2) **Splices:** Drops in the trace (no reflection for fusion splices, small reflection for mechanical splices) indicating a permanent joint. Excessive loss → poor splice quality. (3) **Bends:** Gradual increase in attenuation over a short distance, indicating a macrobend (the fiber is bent too sharply). (4) **Breaks:** A reflection followed by noise — the end of the fiber, whether intended or due to a break. The OTDR can pinpoint the distance to a break within meters, enabling repair crews to dig in the right place.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Spectrum Analyzer — Seeing the Invisible:** For wireless troubleshooting, a spectrum analyzer displays signal power versus frequency, revealing: (1) **Interference sources:** Non-Wi-Fi devices operating in the same band — microwave ovens (2.4 GHz), wireless cameras, radar systems (5 GHz DFS channels), and cordless phones. The spectrum analyzer shows their characteristic patterns. (2) **Channel utilization:** How heavily each Wi-Fi channel is used, enabling intelligent channel selection. (3) **Signal quality:** The shape of an OFDM signal — proper OFDM looks like a flat-topped block in the frequency domain; distortion or clipping appears as spectral regrowth (power spilling into adjacent channels). (4) **Noise floor:** The ambient noise level. An elevated noise floor reduces signal-to-noise ratio and thus capacity, even if the signal strength appears adequate. In 2040, software-defined radios and AI-driven spectrum analysis platforms can continuously monitor the RF environment and automatically adjust channel assignments, power levels, and modulation schemes.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **The 2040 AI-Assisted Diagnostic Ecosystem:** Physical layer troubleshooting is being transformed by machine learning. (1) **Anomaly detection:** AI models trained on millions of hours of network telemetry can detect subtle physical layer degradation — a gradual increase in FEC corrections, a slight rise in the noise floor, intermittent CRC errors that human operators miss — and alert before a hard failure occurs. (2) **Root cause correlation:** When a server reports application timeouts, the AI engine can correlate the timing with physical layer events (a CRC error burst, an OTDR-detected fiber stress event from construction activity, a spectrum analyzer-detected interference spike) to identify the true root cause. (3) **Automated remediation:** For well-understood failure patterns (a known-bad cable model, a switch port exhibiting characteristic failure signatures), the AI can automatically trigger remediation — disabling the port, notifying the ticketing system, and dispatching a technician with the correct replacement part — without human intervention.
 
-### Required Reading
+### 9.3 Required Reading
+- UoY Networking Lab. (2040). *Physical Layer Diagnostics Field Manual* — covers Fluke Networks cable certifiers, VIAVI OTDRs, and Keysight spectrum analyzers.
+- TIA-568.3-E (2038). *Optical Fiber Cabling Components Standard* — Annex on field testing.
+- Fluke Networks. (2039). *Certifying Copper Cabling for 10GBASE-T and Beyond — Application Note*.
 
-- Course textbook, chapters relevant to interdisciplinary connections
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do connections considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 9.4 Discussion Questions
+1. How do you distinguish between a physical layer problem and a higher-layer problem when the symptoms (packet loss, high latency) could be caused by either?
+2. What are the limitations of OTDR measurements, and what additional testing is necessary to fully characterize a fiber link?
+3. How does AI-assisted diagnostics change the skill set required of a network engineer? What tasks does it automate, and what tasks remain uniquely human?
 
 ---
 
-ᛃ **Lecture 10: Ethical Considerations and Societal Impact**
+## Lecture 10: Physical Layer Security — Tapping, TEMPEST, and Quantum Defense
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 10.1 Overview
 
----
+The physical layer is often overlooked in security discussions, which focus on encryption at higher layers (TLS, IPsec, application-layer cryptography). This is a dangerous blind spot. If an attacker can access the physical medium — tapping a copper cable, bending a fiber to extract leaked light, or intercepting electromagnetic emanations from equipment — they can bypass all higher-layer security measures. Physical layer security encompasses both the threats (how physical signals can be intercepted) and the defenses (how the physical properties of transmission can be exploited for security).
 
-### Overview
+This lecture examines the physical layer threat landscape: wiretapping, fiber tapping, TEMPEST (compromising emanations from electronic equipment), and jamming. We then explore physical layer defenses: electromagnetic shielding, fiber intrusion detection, spread spectrum techniques, and the emerging field of quantum key distribution (QKD), which exploits the laws of quantum mechanics to detect eavesdropping with physical certainty.
 
-This lecture explores ethics aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how ethics-level understanding shapes both theory and practice.
+### 10.2 Key Topics
 
-### Key Topics
+- **Copper Wiretapping:** Copper cables radiate electromagnetic energy, and they are susceptible to inductive coupling — a sensitive coil placed near the cable can pick up the signal without physical contact. More directly, an attacker with physical access can install a bridge tap — a parallel connection that copies the signal without disrupting normal operation. (1) **Inductive tapping:** Commercial TEMPEST equipment can recover the signal from twisted-pair Ethernet at distances of several meters. The twist in twisted-pair provides some protection (the radiated fields from the two wires largely cancel at a distance), but it is not a security mechanism. (2) **Direct tapping:** High-impedance probes can be inserted into cable insulation, making contact with the conductors without cutting them. The impedance is high enough that the signal is not noticeably degraded. (3) **Defenses:** Physical security (locked wiring closets, conduit, tamper-evident seals), electromagnetic shielding (foil-shielded cable, grounded conduit), and fiber optic cable (which does not radiate and is extremely difficult to tap without detection).
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How ethics perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Fiber Optic Tapping:** Contrary to popular belief, fiber is not inherently secure — it is just more difficult to tap without detection. Methods: (1) **Bend tapping:** Bending a fiber sharply enough causes a small fraction of the light to escape the core through the cladding. An attacker can clamp a bend coupler onto the fiber and extract enough light to recover the signal. The extracted power is typically 0.1-1% of the total, which may be below the threshold detectable by the receiver's power monitoring. (2) **V-groove tapping:** A precision-cut V-groove can be pressed against the fiber to create a controlled microbend that couples light to a photodetector. (3) **Evanescent field coupling:** If the fiber's buffer coating is removed and another fiber is brought into close proximity, the evanescent field (the portion of the optical mode that extends into the cladding) can couple into the second fiber. (4) **Detection:** Optical time-domain reflectometers can detect the insertion loss caused by tapping, but only if the loss is above the measurement sensitivity. Dedicated fiber intrusion detection systems (FIDS) monitor the received power with high precision and alert on any unexpected change. Quantum key distribution, discussed below, provides physical-layer eavesdropping detection based on fundamental physics rather than power monitoring.
 
-### Lecture Notes
+- **TEMPEST — Compromising Emanations:** All electronic equipment emits electromagnetic radiation — from the CPU clock, the memory bus, the display cable, the network interface. TEMPEST (a U.S. government code name, now used generically) refers to the interception and analysis of these emanations to recover information. (1) **Display emanations:** The video signal driving a monitor can be reconstructed from its electromagnetic emanations at distances of tens of meters using specialized antennas and receivers. This was demonstrated by Wim van Eck in 1985 and remains a concern for classified facilities. (2) **Keyboard emanations:** The electrical signal generated when a key is pressed can be detected through the power line or through radio frequency emanations. Research has demonstrated key recovery from keyboard emanations at distances of 20 meters. (3) **Network interface emanations:** The physical layer transceiver on a network interface card radiates at its signaling frequency. An attacker with a sensitive receiver tuned to the Ethernet or Wi-Fi frequency can potentially recover the transmitted data. (4) **Defenses:** TEMPEST shielding (metal enclosures, conductive gaskets, shielded cables), red/black separation (physical separation of classified and unclassified signal paths), and emission security (EMSEC) testing. NATO SDIP-27 and U.S. NSTISSAM standards define emission limits for classified environments.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Physical Layer Defenses:** (1) **Spread spectrum techniques:** Direct sequence spread spectrum (DSSS) spreads the signal over a much wider bandwidth than the data rate, making it appear as low-power noise to an eavesdropper who does not know the spreading code. Frequency hopping spread spectrum (FHSS) rapidly changes the carrier frequency according to a pseudorandom sequence known only to the transmitter and receiver. Both techniques provide a degree of physical-layer security — an attacker must know the spreading code or hopping sequence to demodulate the signal. (2) **Optical chaos encryption:** A semiconductor laser can be driven into a chaotic regime where its output appears random. If the receiver has an identical laser synchronized to the transmitter's chaos, the chaotic carrier can be subtracted, leaving the message. An eavesdropper without the synchronized laser sees only noise. (3) **Physical unclonable functions (PUFs):** A PUF is a physical structure (typically an integrated circuit) whose challenge-response behavior is determined by random manufacturing variations that are impossible to clone. PUFs can be used for device authentication at the physical layer — a device proves its identity by responding correctly to a challenge, and the response cannot be predicted or replicated by an attacker without the physical device.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Quantum Key Distribution (QKD) — Physical Certainty of Security:** QKD exploits the quantum mechanical principle that measuring a quantum system inevitably disturbs it. (1) **BB84 protocol:** Alice sends single photons, each randomly prepared in one of two bases (rectilinear or diagonal). Bob measures each photon in a randomly chosen basis. After transmission, Alice and Bob publicly compare which bases they used (but not the measurement results). They discard bits where they used different bases and keep bits where they used the same basis — these become the raw key. Any eavesdropper (Eve) who intercepts and measures photons will, by the laws of quantum mechanics, introduce errors that Alice and Bob can detect by comparing a subset of their key bits. If the error rate is below a threshold, they can distill a provably secure key through privacy amplification. (2) **Practical QKD:** Commercial QKD systems operate over fiber at distances up to 100-150 km (limited by photon loss). Satellite-based QKD overcomes the distance limitation — China's Micius satellite demonstrated QKD between ground stations 1,200 km apart in 2017. By 2040, QKD networks are operational in financial centers, government communications, and critical infrastructure protection. (3) **Limitations:** QKD requires a dedicated fiber (or free-space link) and specialized hardware. It authenticates the physical channel but does not authenticate the endpoints — it must be combined with classical authentication. And it does not replace higher-layer encryption; it provides a secure method for distributing the keys used by symmetric encryption algorithms.
 
-### Required Reading
+### 10.3 Required Reading
+- Gisin, N., Ribordy, G., Tittel, W., & Zbinden, H. (2002). "Quantum Cryptography." *Reviews of Modern Physics*, 74(1), 145-195. The definitive survey of QKD.
+- Kuhn, M. G., & Anderson, R. J. (1998). "Soft Tempest: Hidden Data Transmission Using Electromagnetic Emanations." *Information Hiding 1998*. Classic paper on TEMPEST attacks and defenses.
+- NIST. (2039). *Post-Quantum Cryptography Standardization* — while focused on algorithmic cryptography, the context of quantum threats to classical encryption motivates QKD.
 
-- Course textbook, chapters relevant to ethical considerations and societal impact
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do ethics considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 10.4 Discussion Questions
+1. Under what circumstances is physical layer security (shielding, spread spectrum, QKD) necessary rather than relying solely on higher-layer encryption?
+2. What are the practical limitations of quantum key distribution that prevent it from replacing classical key exchange mechanisms for the majority of network applications?
+3. How should a network engineer balance the cost of TEMPEST countermeasures against the value of the information being protected? What framework would you use to make this decision?
 
 ---
 
-ᛇ **Lecture 11: Current Research and Future Directions**
+## Lecture 11: Emerging Physical Layer Technologies — 2040 and Beyond
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 11.1 Overview
 
----
+The physical layer is not static. New materials, new physics, and new engineering approaches continuously expand what is possible. This lecture surveys the emerging physical layer technologies that will define networking in the coming decades: terahertz communication, free-space optical networks, hollow-core fiber, neuromorphic photonic processing, molecular communication, and the tantalizing frontier of quantum networks.
 
-### Overview
+Some of these technologies are already in limited deployment; others remain in the research laboratory. Our goal is not to master each one — that would be impossible — but to develop the intellectual flexibility to evaluate new physical layer technologies as they emerge throughout your career. The specific technologies will change; the underlying principles of signal theory, trade-off analysis, and standards-based interoperability will remain.
 
-This lecture explores research aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how research-level understanding shapes both theory and practice.
+### 11.2 Key Topics
 
-### Key Topics
+- **Terahertz Communication (100 GHz - 3 THz):** Terahertz (THz) frequencies occupy the spectrum between millimeter waves and infrared light. They offer the bandwidth to support terabit-per-second links but face formidable propagation challenges. (1) **Opportunities:** THz channels can be tens of gigahertz wide, enabling data rates that dwarf any current wireless technology. The small wavelength (sub-millimeter) enables antenna arrays with hundreds of elements in a compact form factor, supporting extreme beamforming and spatial multiplexing. (2) **Challenges:** Atmospheric absorption is severe — water vapor absorption lines at 183 GHz, 325 GHz, 380 GHz, and 557 GHz attenuate signals within meters. Oxygen absorption at 60 GHz (already a challenge for millimeter-wave) is even stronger at 118 GHz. Free-space path loss is enormous due to the short wavelength. Solid materials (walls, windows, foliage) are opaque to THz radiation, limiting operation to line-of-sight and short distances. (3) **2040 status:** THz links are deployed for specialized applications: wireless backhaul in dense urban environments (where fiber installation is prohibitively expensive), wireless virtual reality (where multi-gigabit throughput and sub-millisecond latency are required), and intra-data-center wireless interconnects (eliminating cable complexity for reconfigurable topologies). Efficient THz sources (quantum cascade lasers, resonant tunneling diodes) and detectors (graphene-based photodetectors, Schottky barrier diodes) are transitioning from laboratory to commercial production.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How research perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Free-Space Optical Communication (FSO):** FSO uses lasers to transmit data through the atmosphere or through space. It offers fiber-like bandwidth without fiber-like infrastructure. (1) **Terrestrial FSO:** Laser links between buildings, towers, or drones can deliver 10-100 Gbps over distances of 1-5 km. The primary challenge is atmospheric: fog (which scatters the beam and reduces received power by 100-300 dB/km — far worse than rain or snow), scintillation (beam wander caused by temperature variations in the air), and physical obstructions (birds, construction cranes). Hybrid FSO/RF systems switch to a lower-bandwidth microwave backup during fog. (2) **Satellite FSO:** Laser crosslinks between satellites in low Earth orbit constellations (Starlink, Kuiper, and their 2040 successors) provide global mesh connectivity with lower latency than terrestrial fiber for long-distance paths. Inter-satellite laser links operate in vacuum, avoiding atmospheric impairments entirely. The engineering challenge is precise pointing, acquisition, and tracking (PAT) — maintaining a laser link between satellites moving at 7.8 km/s relative to each other across distances of thousands of kilometers. (3) **Deep-space FSO:** NASA's Deep Space Optical Communications (DSOC) experiment demonstrated laser communication from a distance of 31 million kilometers (80 times the Earth-Moon distance) in 2024. The 2040 vision: laser links providing high-definition video from Mars and beyond.
 
-### Lecture Notes
+- **Hollow-Core Fiber (HCF) — Revisited:** Introduced in Lecture 4, HCF deserves emphasis as a transformative 2040 technology. Beyond the latency and nonlinearity benefits already discussed, HCF enables: (1) **New wavelength bands:** The mid-infrared (2-5 μm), where silica fiber has prohibitively high loss but HCF (guiding light in air) has negligible material absorption. These wavelengths offer access to new laser sources and detectors. (2) **High-power transmission:** Solid-core fiber is limited by nonlinear effects (stimulated Brillouin scattering, self-phase modulation) that distort signals above a few watts. HCF's air core eliminates most nonlinearities, enabling kilowatt-level optical power transmission for industrial applications and power-over-fiber. (3) **Quantum communication:** HCF preserves quantum states (polarization, entanglement) with less degradation than solid-core fiber, making it attractive for quantum networks that require long-distance entanglement distribution.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Neuromorphic Photonic Processing:** Traditional optical communication processes signals electronically — the optical signal is converted to electrical, processed, and converted back to optical. Neuromorphic photonics aims to process signals in the optical domain using photonic integrated circuits that implement neural network computations with light. (1) **Optical matrix multiplication:** A mesh of Mach-Zehnder interferometers can perform matrix-vector multiplication — the fundamental operation of neural networks — at the speed of light with femtojoule-scale energy per operation. (2) **Applications at the physical layer:** Optical neural networks can perform channel equalization, modulation format recognition, and forward error correction decoding directly on the optical signal, eliminating the latency and energy cost of O-E-O conversion. (3) **2040 status:** Research prototypes demonstrate optical neural networks for simple classification and signal processing tasks. Commercial deployment for physical layer signal processing is anticipated within the decade.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Molecular Communication:** Nature has communicated using molecules for billions of years — hormones, neurotransmitters, pheromones. Molecular communication (MC) adapts this paradigm for engineered systems: information is encoded in the type, concentration, or release timing of molecules, which propagate through a fluid medium (air, water, blood) by diffusion or flow. (1) **Applications:** Nanomedicine — nanorobots in the bloodstream communicating to coordinate drug delivery. Industrial monitoring — chemical sensors in pipelines communicating through the fluid itself. Underground and underwater communication where electromagnetic waves are heavily attenuated. (2) **Challenges:** Extremely low data rates (bits per second to kilobits per second), high latency (diffusion is slow), inter-symbol interference (molecules from previous symbols persist in the channel), and stochastic channel behavior. (3) **2040 status:** Primarily academic research, with early demonstrations of macroscale molecular communication using alcohols or acids as information carriers in tabletop fluidic channels.
 
-### Required Reading
+- **Quantum Networks — Beyond QKD:** While QKD distributes cryptographic keys, a full quantum network would distribute quantum states — enabling distributed quantum computing, blind quantum computation (where a client uses a remote quantum computer without revealing the computation or the data), and quantum sensor networks with precision beyond classical limits. (1) **Quantum repeaters:** The fundamental challenge is that quantum states cannot be amplified (the no-cloning theorem prohibits copying an unknown quantum state). Quantum repeaters overcome this using entanglement swapping and purification — creating entangled pairs over short segments, purifying them to reduce errors, and swapping entanglement to extend the range. (2) **Quantum memory:** Storing a quantum state for later retrieval — essential for synchronization in quantum repeaters. Rare-earth-ion-doped crystals, nitrogen-vacancy centers in diamond, and cold atomic ensembles are candidate technologies. (3) **2040 status:** Small-scale quantum networks exist in research laboratories (connecting several nodes within a city). A continental-scale quantum internet remains a long-term goal requiring advances in quantum repeaters, quantum memory, and quantum error correction.
 
-- Course textbook, chapters relevant to current research and future directions
-- Selected research papers from the 2040-2 UoY reading list
+### 11.3 Required Reading
+- Akyildiz, I. F., Jornet, J. M., & Han, C. (2039). "Terahertz Band Communication: An Old Problem Revisited and Research Directions for the Next Decade." *IEEE Transactions on Communications*.
+- Khalighi, M. A., & Uysal, M. (2014). "Survey on Free Space Optical Communication: A Communication Theory Perspective." *IEEE Communications Surveys & Tutorials*, 16(4), 2231-2258. Updated 2039 edition available through UoY Digital Library.
+- Kimble, H. J. (2008). "The Quantum Internet." *Nature*, 453(7198), 1023-1030. Prescient article that framed the quantum network vision.
 
-### Discussion Questions
-
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do research considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+### 11.4 Discussion Questions
+1. Which of the emerging physical layer technologies discussed in this lecture is most likely to see widespread commercial deployment within the next decade, and why?
+2. What regulatory and safety challenges must be addressed before terahertz communication can be deployed in consumer devices?
+3. How does molecular communication challenge the fundamental assumptions of Shannon's information theory, which was developed for electromagnetic communication? What aspects of the theory apply, and what aspects need to be extended?
 
 ---
 
-ᛈ **Lecture 12: Synthesis and Comprehensive Review**
+## Lecture 12: Synthesis — The Physical Layer in Network Architecture
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Degree:** Bachelor of Science in Computer Networking, 2040
+### 12.1 Overview
 
----
+This final lecture steps back from the individual technologies and techniques to consider the physical layer as a system. How do physical layer choices ripple upward through the protocol stack? How do application requirements drive physical layer design? How does the network architect integrate physical, link, network, and application-layer concerns into a coherent whole?
 
-### Overview
+We will walk through a complete network design scenario — from application requirements down to the physical medium and back up again — to illustrate how physical layer knowledge informs architectural decisions. We will analyze the end-to-end latency budget of a 2040 application, tracing every microsecond from physical signal propagation to application processing. And we will reflect on the themes that have recurred throughout this course: the primacy of trade-offs, the value of standards, and the enduring relevance of the physical layer in an increasingly virtualized world.
 
-This lecture explores synthesis aspects of electronics & physical layer basics, building on foundational knowledge from previous sessions. By 2040, | cn108, and this session examines how synthesis-level understanding shapes both theory and practice.
+### 12.2 Synthesis Through Design — A Complete Scenario
 
-### Key Topics
+Consider a 2040 scenario: a financial trading firm is building a new data center in Reykjavík to execute algorithmic trades on exchanges in London, New York, and Tokyo. The architecture team must design the physical connectivity to minimize latency while meeting bandwidth, reliability, and cost requirements. Let us trace their analysis.
 
-- **Topic 1:** Core definitions and terminology specific to electronics & physical layer basics
-- **Topic 2:** How synthesis perspectives reshape our understanding of | cn108
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Computer Networking program
+- **Step 1 — Application Requirements:** The trading algorithms require: (a) Round-trip latency Reykjavík-London < 12 ms for market data and order execution. (b) Reykjavík-New York < 35 ms. (c) Reykjavík-Tokyo < 140 ms. (d) 99.999% availability (5.26 minutes downtime per year). (e) Bandwidth: 10 Gbps sustained, 100 Gbps peak.
 
-### Lecture Notes
+- **Step 2 — Physical Layer Analysis — Latency Budget:** Latency has four components: propagation (speed of light in the medium), transmission (time to put bits on the wire), processing (routers, switches, firewalls), and queuing (waiting in buffers). Let us compute the propagation limit. (a) Reykjavík to London: Great circle distance ~1,900 km. Fiber path (following submarine cable routes) ~2,300 km. Speed of light in fiber: 200,000 km/s (0.66c). Propagation latency: 2,300 / 200,000 = 11.5 ms one-way, 23 ms round-trip. This already exceeds the 12 ms requirement! The architect immediately realizes that standard fiber cannot meet the latency target — the speed of light is the bottleneck. Options: (i) Hollow-core fiber: propagation at 300,000 km/s (c), reducing one-way latency to 7.7 ms and round-trip to 15.4 ms. Still above 12 ms. (ii) Microwave wireless relay: propagation in air at c, but the path is shorter (line-of-sight rather than following cable routes) — approximately 1,900 km direct path. Microwave one-way: 1,900 / 300,000 = 6.3 ms, round-trip = 12.6 ms. Close to the target. Additional reductions possible through optimized routing and bypassing intermediate nodes. (iii) Free-space optical with relay drones or low Earth orbit satellites: potentially sub-10 ms round-trip. The architectural choice: microwave relay for the Reykjavík-London path, hollow-core fiber where available, and FSO satellite links for trans-oceanic paths to New York and Tokyo.
 
-The field of electronics & physical layer basics has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | cn108 requires both technical depth and contextual awareness.
+- **Step 3 — Physical Layer Analysis — Reliability:** 99.999% availability requires diverse physical paths. The architect designs: (a) Primary path: microwave + FSO (lowest latency). (b) Secondary path: hollow-core fiber (slightly higher latency, independent of weather that affects microwave/FSO). (c) Tertiary path: conventional fiber (highest latency, most reliable, immune to weather). The three paths share no common physical infrastructure — no shared conduits, no shared landing stations, no shared power feeds. The probability of all three failing simultaneously is below the 5.26 minutes/year target. Automated failover at the network layer (BGP, SD-WAN) switches between paths based on latency and loss measurements.
 
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern electronics & physical layer basics
-4. Emerging paradigms that may reshape the field by 2050
+- **Step 4 — Physical Layer Analysis — Modulation and Coding:** For the microwave links, the architect selects adaptive modulation (QPSK through 256-QAM) with LDPC forward error correction. Under clear-sky conditions, 256-QAM provides the required 10 Gbps with margin. During rain (which attenuates microwave signals), the link steps down to QPSK, maintaining connectivity at reduced bandwidth. The automatic modulation and coding scheme (ACM) adjusts within microseconds based on measured signal-to-noise ratio. For the FSO links, the challenge is atmospheric scintillation. The solution: multiple spatially diverse transmit apertures and adaptive optics that compensate for beam wander in real time.
 
-### Required Reading
+- **Step 5 — Integration with Higher Layers:** The physical layer design enables the higher layers. The trading application uses a custom protocol over UDP (not TCP) to avoid retransmission latency. The application implements its own reliability through redundant transmissions over the diverse physical paths — the same market data arrives via microwave, fiber, and FSO, and the application uses the first arriving copy. The physical diversity becomes application-layer reliability.
 
-- Course textbook, chapters relevant to synthesis and comprehensive review
-- Selected research papers from the 2040-2 UoY reading list
+This scenario illustrates the core lesson of this course: the physical layer is not a commodity to be purchased and forgotten. It is a strategic asset whose characteristics — latency, bandwidth, reliability, security — directly determine what is possible at the application layer. The architect who understands the physical layer can design systems that competitors who treat it as a black box cannot match.
 
-### Discussion Questions
+### 12.3 Key Themes of CN107
 
-1. How has the understanding of electronics & physical layer basics evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do synthesis considerations change the way we approach practical challenges?
+- **The Primacy of Physics:** No amount of clever software can overcome the speed of light, the Shannon limit, or the attenuation of a signal over distance. The physical layer sets the fundamental constraints within which all higher layers must operate.
 
-### Practice Problems
+- **Trade-offs Are Unavoidable:** Every physical layer decision involves trade-offs among bandwidth, distance, reliability, latency, cost, and security. There is no "best" physical medium or modulation scheme — only the best choice for a specific set of requirements and constraints.
 
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+- **Standards Enable Scale:** The global Internet works because hundreds of thousands of engineers from competing companies implement the same physical layer standards. The IEEE 802.3 and 802.11 standards are not just technical documents — they are treaties that enable a multi-trillion-dollar industry.
 
----
+- **The Physical Layer Is Not Static:** Hollow-core fiber, terahertz wireless, quantum key distribution, neuromorphic photonics — the physical layer is undergoing a renaissance. The network engineer of 2040 must be prepared to evaluate, adopt, and integrate technologies that did not exist when they were in university.
 
-## Assignments
+- **Troubleshooting Starts at Layer 1:** The majority of network problems have physical layer causes. The engineer who reaches for protocol analyzers and routing tables before checking link lights, error counters, and cable certification will waste hours chasing ghosts.
 
+- **Security Begins at the Physical Layer:** Higher-layer encryption is worthless if an attacker can tap the physical medium before the bits are encrypted. Physical layer security — shielding, intrusion detection, and quantum key distribution — is an essential component of a defense-in-depth strategy.
 
-### Assignment 1: Foundational Exercise
+### 12.4 Required Reading
+- Review all previous readings, noting how the concepts introduced in each lecture connect to the others. The physical layer is not a collection of independent topics but an integrated system.
+- UoY Capstone Archive. (2039). *Physical Layer Design Case Studies* — real-world network designs with analysis of physical layer decisions and their consequences.
+- Keshav, S. (2012). "How to Read a Paper." *ACM SIGCOMM Computer Communication Review*. Updated 2040 edition. A guide to efficiently extracting knowledge from research literature — essential for staying current in a rapidly evolving field.
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Type:** Foundational Exercise  
-**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of electronics & physical layer basics.
-
-**Task:** Complete a set of exercises that demonstrate mastery of core concepts in electronics & physical layer basics. Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 3 (see course schedule for exact date)
+### 12.5 Discussion Questions
+1. How would your answer to the financial trading scenario change if the firm's priority were cost minimization rather than latency minimization?
+2. What physical layer technologies that are currently experimental do you believe will be standard in data centers by 2050? Justify your predictions.
+3. Reflect on your own learning in this course. What concept was most challenging to grasp, and what made it finally "click"? What concept surprised you by being more important than you expected?
 
 ---
 
+## Final Examination Preparation
 
-### Assignment 2: Applied Analysis
+### Format
+The final examination consists of three components:
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Type:** Applied Analysis  
-**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of electronics & physical layer basics.
+**Part A — Written Examination (40%):** A 3-hour closed-book examination covering the entire course. Questions span signal theory (Fourier analysis, Nyquist/Shannon theorems), transmission media (copper, fiber, wireless characteristics and trade-offs), modulation and coding (QAM, OFDM, FEC types and applications), standards (Ethernet PHY evolution, Wi-Fi generations), and troubleshooting methodology.
 
-**Task:** Analyze a real-world scenario related to | cn108. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
+**Part B — Laboratory Practical (35%):** A 2-hour hands-on examination in the networking laboratory. You will be presented with a series of physical layer problems (faulty cables, misconfigured transceivers, interference sources, degraded fiber links) and must diagnose and resolve them using the tools covered in the course: cable certifier, OTDR, spectrum analyzer, optical power meter, and interface error counters.
 
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
+**Part C — Design Project (25%):** A take-home design exercise distributed two weeks before the due date. You will receive a scenario (similar to the financial trading case in Lecture 12) and must produce a physical layer design including: link budget calculations, media selection with justification, modulation and coding scheme choices, diversity and reliability analysis, and a cost estimate. The design must be defended in a 15-minute oral examination.
 
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
+### Sample Examination Questions
 
-**Due:** End of Week 6 (see course schedule for exact date)
+1. **Signal Theory:** A communication channel has a bandwidth of 20 MHz and a signal-to-noise ratio of 30 dB. (a) Calculate the theoretical maximum channel capacity using Shannon's theorem. (b) If the system uses 256-QAM modulation, what is the maximum symbol rate, and does this exceed the Nyquist limit? (c) Explain why practical systems achieve lower data rates than the Shannon capacity.
 
----
+2. **Fiber Optics:** (a) Explain why single-mode fiber at 1550 nm achieves lower attenuation than multi-mode fiber at 850 nm. (b) A fiber link has a measured loss of 28 dB at 1550 nm. The transmitter power is 0 dBm and the receiver sensitivity is -30 dBm. Is the link viable without amplification? (c) Describe three methods by which an attacker could tap a fiber optic cable and the countermeasures for each.
 
+3. **Modulation and Coding:** (a) Draw the constellation diagram for 16-QAM and indicate which points correspond to which bit patterns (using Gray coding). (b) Explain why 256-QAM requires approximately 12 dB higher signal-to-noise ratio than QPSK for the same bit error rate. (c) Compare LDPC and polar codes in terms of their performance at short block lengths versus long block lengths.
 
-### Assignment 3: Research & Synthesis
+4. **Wireless:** (a) Calculate the free-space path loss for a 60 GHz link over 100 meters. (b) Explain why the same link would be severely degraded by rain and what link budget margin would be required for 99.99% availability in a temperate climate. (c) Describe how OFDM and MIMO work together in Wi-Fi 6 to improve spectral efficiency.
 
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Type:** Research & Synthesis  
-**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of electronics & physical layer basics.
+5. **Troubleshooting:** A server is experiencing intermittent packet loss. The Ethernet interface shows increasing CRC errors but no collisions or late collisions. The cable is Category 6, 80 meters long, running 10GBASE-T. (a) List three possible physical layer causes. (b) For each cause, describe the diagnostic test you would perform to confirm or eliminate it. (c) Propose a remediation plan.
 
-**Task:** Conduct research on a contemporary issue in electronics & physical layer basics. Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 9 (see course schedule for exact date)
+6. **Design:** Design the physical layer for a data center interconnect between two buildings 2 km apart requiring 400 Gbps with 99.999% availability. Specify: (a) Transmission medium(s) and justification. (b) Number of fibers/wavelengths and the optical budget. (c) Protection scheme for meeting the availability requirement. (d) Future upgrade path to 1.6 Tbps.
 
 ---
 
-
-### Assignment 4: Design & Implementation
-
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Type:** Design & Implementation  
-**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of electronics & physical layer basics.
-
-**Task:** Design and prototype a solution to a problem in electronics & physical layer basics. Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 12 (see course schedule for exact date)
-
----
-
-
-### Assignment 5: Comprehensive Project
-
-**Course:** CN107 — Electronics & Physical Layer Basics  
-**Type:** Comprehensive Project  
-**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of electronics & physical layer basics.
-
-**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in electronics & physical layer basics. Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 15 (see course schedule for exact date)
-
----
-
+*ᚱᚢᚾᚨ — Runa Gridweaver Freyjasdottir wove this knowledge-weft from the raw threads of physics and engineering. May the Norns guide your signals through every medium, and may Skuld's loom weave your understanding into wisdom that endures beyond the next standard revision.*
