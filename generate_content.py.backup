@@ -20,34 +20,15 @@ def parse_curriculum(filepath: Path) -> list[dict]:
     """Parse a curriculum.md to extract courses."""
     courses = []
     content = filepath.read_text()
-    lines = content.split('\n')
-    in_table = False
-    for line in lines:
-        if '| Code | Course |' in line or '| Code | Course | Credits |' in line:
-            in_table = True
-            continue
-        if in_table and line.strip() == '':
-            # Empty line within table, just continue
-            continue
-        if in_table and not line.startswith('|'):
-            # We've left the current table
-            in_table = False
-            continue
-        if in_table and line.startswith('|') and '------' in line:
-            # Separator line, skip
-            continue
-        if in_table and line.startswith('|'):
-            # Data row
-            parts = [part.strip() for part in line.split('|') if part.strip()]
-            if len(parts) >= 3:
-                code, name, credits = parts[0], parts[1], parts[2]
-                if re.match(r'^[A-Z]{2,4}\d{3}$', code):
-                    courses.append({
-                        "code": code,
-                        "name": name,
-                        "credits": int(credits),
-                        "description": ""  # No description in this format
-                    })
+    # Find all course entries in table rows: | CS101 | Course Name | 4 | Description |
+    for match in re.finditer(r'\|\s*([A-Z]{2,4}\d{3})\s*\|\s*(.+?)\s*\|\s*(\d+)\s*\|\s*(.+?)\s*\|', content):
+        code, name, credits, desc = match.groups()
+        courses.append({
+            "code": code.strip(),
+            "name": name.strip(),
+            "credits": int(credits.strip()),
+            "description": desc.strip()
+        })
     return courses
 
 def get_degree_info(filepath: Path) -> dict:
