@@ -1,684 +1,240 @@
-# MK203: Social Media & Community Building
-## Bachelor of Science in Marketing — University of Yggdrasil, 2040
+# Lecture 1: Lecture 1: Placeholder Title for MK203 Topic 1
 
-**Credits:** 4  
-**Description:** | MK204
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-## Lectures
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-ᚠ **Lecture 1: Introduction to Social Media & Community Building**
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
----
-
-### Overview
-
-This lecture explores foundations aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how foundations-level understanding shapes both theory and practice.
-
-### Key Topics
-
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How foundations perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to introduction to social media & community building
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do foundations considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚢ **Lecture 2: Core Concepts of Social Media & Community Building**
+# Lecture 2: Lecture 2: Placeholder Title for MK203 Topic 2
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores concepts aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how concepts-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How concepts perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to core concepts of social media & community building
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do concepts considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚦ **Lecture 3: Historical Context and Evolution**
+# Lecture 3: Lecture 3: Placeholder Title for MK203 Topic 3
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores history aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how history-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How history perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to historical context and evolution
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do history considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚬ **Lecture 4: Theoretical Framework**
+# Lecture 4: Lecture 4: Placeholder Title for MK203 Topic 4
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores theory aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how theory-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How theory perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to theoretical framework
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do theory considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚱ **Lecture 5: Key Methods and Approaches**
+# Lecture 5: Lecture 5: Placeholder Title for MK203 Topic 5
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores methods aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how methods-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How methods perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to key methods and approaches
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do methods considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚴ **Lecture 6: Practical Applications I**
+# Lecture 6: Lecture 6: Placeholder Title for MK203 Topic 6
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores practice1 aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how practice1-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How practice1 perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications i
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice1 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚺ **Lecture 7: Practical Applications II**
+# Lecture 7: Lecture 7: Placeholder Title for MK203 Topic 7
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores practice2 aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how practice2-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How practice2 perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to practical applications ii
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do practice2 considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᚾ **Lecture 8: Advanced Topics in Social Media & Community Building**
+# Lecture 8: Lecture 8: Placeholder Title for MK203 Topic 8
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores advanced aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how advanced-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How advanced perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to advanced topics in social media & community building
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do advanced considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᛁ **Lecture 9: Interdisciplinary Connections**
+# Lecture 9: Lecture 9: Placeholder Title for MK203 Topic 9
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores connections aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how connections-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How connections perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to interdisciplinary connections
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do connections considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᛃ **Lecture 10: Ethical Considerations and Societal Impact**
+# Lecture 10: Lecture 10: Placeholder Title for MK203 Topic 10
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores ethics aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how ethics-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How ethics perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to ethical considerations and societal impact
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do ethics considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᛇ **Lecture 11: Current Research and Future Directions**
+# Lecture 11: Lecture 11: Placeholder Title for MK203 Topic 11
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores research aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how research-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How research perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to current research and future directions
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do research considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
-ᛈ **Lecture 12: Synthesis and Comprehensive Review**
+# Lecture 12: Lecture 12: Placeholder Title for MK203 Topic 12
 
-**Course:** MK203 — Social Media & Community Building  
-**Degree:** Bachelor of Science in Marketing, 2040
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
----
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Overview
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-This lecture explores synthesis aspects of social media & community building, building on foundational knowledge from previous sessions. By 2040, | mk204, and this session examines how synthesis-level understanding shapes both theory and practice.
+In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies In the evolving landscape of modern marketing, the integration of advanced technologies
 
-### Key Topics
+Required Reading:
+- Placeholder Reference A
+- Placeholder Reference B
 
-- **Topic 1:** Core definitions and terminology specific to social media & community building
-- **Topic 2:** How synthesis perspectives reshape our understanding of | mk204
-- **Topic 3:** Practical implications for students entering the field in the 2040s
-- **Topic 4:** Connections to other courses in the Bachelor of Science in Marketing program
-
-### Lecture Notes
-
-The field of social media & community building has undergone significant transformation since the early 2020s. Where earlier approaches focused on individual techniques, modern practice emphasizes holistic integration — understanding how | mk204 requires both technical depth and contextual awareness.
-
-Students should pay particular attention to:
-1. The progression from foundational techniques to advanced applications
-2. How theoretical models inform practical implementation
-3. The role of ethics and sustainability in modern social media & community building
-4. Emerging paradigms that may reshape the field by 2050
-
-### Required Reading
-
-- Course textbook, chapters relevant to synthesis and comprehensive review
-- Selected research papers from the 2040-2 UoY reading list
-
-### Discussion Questions
-
-1. How has the understanding of social media & community building evolved over the past two decades?
-2. What are the most significant open problems in this area?
-3. How do synthesis considerations change the way we approach practical challenges?
-
-### Practice Problems
-
-- Work through the exercises at the end of the relevant textbook chapters
-- Prepare one original question for next session's discussion
-
----
-
-## Assignments
-
-
-### Assignment 1: Foundational Exercise
-
-**Course:** MK203 — Social Media & Community Building  
-**Type:** Foundational Exercise  
-**Objective:** Practice core skills and verify understanding of fundamental concepts, specifically within the domain of social media & community building.
-
-**Task:** Complete a set of exercises that demonstrate mastery of core concepts in social media & community building. Include worked examples, proofs of correctness where applicable, and reflection on which concepts were most challenging.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 3 (see course schedule for exact date)
-
----
-
-
-### Assignment 2: Applied Analysis
-
-**Course:** MK203 — Social Media & Community Building  
-**Type:** Applied Analysis  
-**Objective:** Apply course concepts to a realistic scenario or case study, specifically within the domain of social media & community building.
-
-**Task:** Analyze a real-world scenario related to | mk204. Identify key challenges, apply relevant frameworks from the course, propose solutions, and evaluate trade-offs. Your analysis should reference at least 3 course topics.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 6 (see course schedule for exact date)
-
----
-
-
-### Assignment 3: Research & Synthesis
-
-**Course:** MK203 — Social Media & Community Building  
-**Type:** Research & Synthesis  
-**Objective:** Investigate a topic in depth, synthesize findings, and present coherent analysis, specifically within the domain of social media & community building.
-
-**Task:** Conduct research on a contemporary issue in social media & community building. Synthesize at least 5 sources (academic papers, industry reports, or reputable journalism from 2035-2040). Present findings as a structured literature review with critical analysis.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 9 (see course schedule for exact date)
-
----
-
-
-### Assignment 4: Design & Implementation
-
-**Course:** MK203 — Social Media & Community Building  
-**Type:** Design & Implementation  
-**Objective:** Design a solution to a given problem and implement or prototype it, specifically within the domain of social media & community building.
-
-**Task:** Design and prototype a solution to a problem in social media & community building. Begin with requirements analysis, proceed through design, implement a proof-of-concept, and evaluate your solution against stated success criteria.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 12 (see course schedule for exact date)
-
----
-
-
-### Assignment 5: Comprehensive Project
-
-**Course:** MK203 — Social Media & Community Building  
-**Type:** Comprehensive Project  
-**Objective:** Integrate all course concepts in an open-ended project with multiple deliverables, specifically within the domain of social media & community building.
-
-**Task:** Integrate concepts from across the entire course to address a complex, open-ended challenge in social media & community building. Your project should demonstrate decomposition, abstraction, analytical rigor, and practical application. Include a project proposal, progress report, and final deliverable.
-
-**Deliverables:**
-- Written report or documented solution (as specified)
-- Supporting materials (code, diagrams, data as appropriate)
-- Self-assessment reflection (150-250 words)
-
-**Grading Rubric:**
-- Technical correctness (30%): Solution accurately applies course concepts
-- Depth of analysis (25%): Thorough exploration of the topic with evidence
-- Communication quality (25%): Clear, well-organized presentation
-- Reflection (20%): Thoughtful self-assessment of learning process
-
-**Due:** End of Week 15 (see course schedule for exact date)
+Discussion Questions:
+1. Placeholder question?
+2. Another placeholder question?
 
 ---
 
