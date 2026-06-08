@@ -65,8 +65,11 @@ def generate_lecture_content(course: dict, lecture_num: int, degree_info: dict) 
     code = course["code"]
     name = course["name"]
     desc = course["description"]
+    # Provide a default description if none is given
+    if not desc:
+        desc = f"Administration and management of {name} in enterprise IT environments."
     rune = RUNE_HEADERS[(lecture_num - 1) % 12]
-    
+
     # Lecture topics mapped by lecture number
     if lecture_num == 1:
         title = f"Introduction to {name}"
@@ -104,7 +107,7 @@ def generate_lecture_content(course: dict, lecture_num: int, degree_info: dict) 
     elif lecture_num == 12:
         title = f"Synthesis and Comprehensive Review"
         focus = "synthesis"
-    
+
     return f"""{rune} **Lecture {lecture_num}: {title}**
 
 **Course:** {code} — {name}  
