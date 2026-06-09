@@ -423,3 +423,16 @@ Weber, G. W. (2037). "Runestones in Contention: Heritage and Nationalism in the 
 ---
 
 *© 2040 University of Yggdrasil. All rights reserved. Course content prepared by the Department of Viking Studies, Faculty of Humanities.*
+
+## Final Examination Preparation
+
+Choose 4 of the following 8 essay questions. Each answer should be approximately 500-700 words and incorporate primary source evidence, scholarly debate, and 2040 technological contexts where relevant.
+
+1. Analyze the role of women in Viking Age society, drawing on archaeological evidence from graves such as Oseberg and Birka, and textual sources like the sagas and legal codes. How have recent 2040 studies using DNA analysis and isotope mapping revised traditional interpretations?
+2. Discuss the technological innovations in Viking shipbuilding that enabled long-distance exploration. How do 2040 robotic excavation and digital reconstruction techniques (e.g., the Njǫrðr Platform) enhance our understanding of these vessels?
+3. Evaluate the impact of the conversion to Christianity on Viking Age Scandinavia. Consider both the continuity of pagan practices and the transformation of social and political structures, referencing specific sites like Jelling and Ribe.
+4. Compare and contrast the Viking expansions westward (to the British Isles, Ireland, and the North Atlantic) and eastward (into Russia and the Byzantine Empire). How do 2040 network analysis tools and GIS mapping reveal patterns in trade, settlement, and cultural interaction?
+5. Examine the concept of "berserkr" and other ecstatic warrior phenomena in Old Norse literature and archaeology. How do neurophenomenological approaches in 2040 research help us understand these experiences?
+6. Assess the legacy of Viking Age art and aesthetics in modern Scandinavian culture, from the 19th-century romantic revival to contemporary Heathenry and digital art. How do 2040 virtual reality reconstructions and AI-assisted design influence modern interpretations?
+7. Discuss the challenges and ethical considerations of preserving Viking Age archaeological sites in the face of climate change and coastal erosion. How do 2040 preventive conservation strategies and community-based archaeology projects address these threats?
+8. The Viking Age is often portrayed as a period of violent raids and conquest. To what extent is this image accurate, and how do recent 2040 studies of settlement patterns, trade goods, and agro-pastoral economies reveal a more complex picture?
